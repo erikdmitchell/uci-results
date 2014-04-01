@@ -17,18 +17,6 @@ class Top25_cURL {
 	function __construct() {
 		$this->url='http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=485&StartDateSort=20130907&EndDateSort=20140223&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8';
 		
-/*
-		$curl=curl_init();
-		curl_setopt($curl,CURLOPT_URL,$this->url);
-		curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
-		curl_setopt($curl,CURLOPT_HEADER,false);
-			
-		$this->result=curl_exec($curl);
-		$this->result_arr=explode("\n",utf8_encode($this->result));
-			
-		curl_close($curl);
-*/
-		
 		add_action('admin_menu',array($this,'admin_page'));
 		add_action('admin_enqueue_scripts',array($this,'admin_scripts_styles'));
 	}
@@ -39,33 +27,33 @@ class Top25_cURL {
 	}
 	
 	function admin_scripts_styles() {
-		wp_enqueue_script('uci-curl-admin',plugins_url('/js/admin.js',__FILE__),array('jquery'),$this->version);
+		//wp_enqueue_script('uci-curl-admin',plugins_url('/js/admin.js',__FILE__),array('jquery'),$this->version);
 		
-		wp_enqueue_style('uci-curl-admin',plugins_url('/css/admin.css',__FILE__),array(),$this->version);
+		//wp_enqueue_style('uci-curl-admin',plugins_url('/css/admin.css',__FILE__),array(),$this->version);
 	}
 	
 	function display_admin_page() {
 		$html=null;
 
-		if (isset($_POST['get-race-data']) && $_POST['get-race-data']='yes') :
+		//if (isset($_POST['get-race-data']) && $_POST['get-race-data']='yes') :
 			$results=$this->get_race_data();
-		endif;
+		//endif;
 				
 		$html.='<div class="uci-curl">';
 			$html.='<h3>cURL</h3>';
 		
-			$html.='<form method="POST">';
-				$html.='<button type="submit" name="get-race-data" id="get-race-data" value="yes">Get Data</button>';
-			$html.='</form>';
+			//$html.='<form method="POST">';
+				//$html.='<button type="submit" name="get-race-data" id="get-race-data" value="yes">Get Data</button>';
+			//$html.='</form>';
 		
-			if (isset($results)) :
+			//if (isset($results)) :
 				foreach ($results as $result) :
 					$html.=$result;
 				endforeach;
-			endif;
+			//endif;
 		$html.='</div>';
 		
-		$html.='<div class="modal></div>';
+		//$html.='<div class="modal></div>';
 		
 		echo $html;	
 	}
@@ -81,10 +69,8 @@ class Top25_cURL {
 		curl_setopt($ch, CURLOPT_URL, $this->url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-		//curl_setopt($ch,CURLOPT_HEADER,false); //
 		
 		$html = curl_exec($ch);
-		//$html=utf8_encode($html);
 		
 		curl_close($ch);
 		
@@ -179,10 +165,13 @@ class Top25_cURL {
 		// Use the Curl extension to query Google and get back a page of results
 		$ch = curl_init();
 		$timeout = 5;
+
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+
 		$html = curl_exec($ch);
+
 		curl_close($ch);
 		
 		// Create a DOM parser object
@@ -203,7 +192,7 @@ class Top25_cURL {
 		
 		$nodes = $finder->query("//*[contains(@class, '$results_class_name')]");
 		
-		$rows=$nodes->item(0)->getElementsByTagName('tr'); //get all rows from the table
+		$rows=$nodes->item(0)->getElementsByTagName('tr'); //get all rows from the table -- this seems to cause an ERROR sometimes
 		
 		// loop over the table rows
 		$row_count=0;
@@ -248,7 +237,7 @@ class Top25_cURL {
 		
 		// build data array ..
 		$data=array(
-			'data' => serialize($race_data),
+			'data' => base64_encode(serialize($race_data)),
 			'code' => $this->build_race_code($race_data),
 		);
 
@@ -319,7 +308,7 @@ class Top25_cURL {
 	
 	function display_race_table($race) {
 		$html=null;
-		$data=unserialize($race->data);
+		$data=unserialize(base64_decode($race->data));
 
 /*
 echo '<pre>';
@@ -372,8 +361,19 @@ endif;
 		
 		return $html;
 	}
+	
+	/*
+	$GLOBALS['normalizeChars'] = array(
+	'?'=>'S', '?'=>'s', 'Ð'=>'Dj','?'=>'Z', '?'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A',
+	'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E', 'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I',
+	'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U', 'Ú'=>'U',
+	'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss','à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a',
+	'å'=>'a', 'æ'=>'a', 'ç'=>'c', 'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i',
+	'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o', 'ö'=>'o', 'ø'=>'o', 'ù'=>'u',
+	'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', '?'=>'f');
+	$string = strtr($string, $GLOBALS['normalizeChars']);
+	*/	
 }
 
 $uci_curl=new Top25_cURL();
-
 ?>
