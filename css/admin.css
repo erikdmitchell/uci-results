@@ -1,30 +1,77 @@
-/* Start by setting display:none to make this hidden.
-   Then we position it in relation to the viewport window
-   with position:fixed. Width, height, top and left speak
-   speak for themselves. Background we set to 80% white with
-   our animation centered, and no-repeating */
-.modal {
-    display:    none;
-    position:   fixed;
-    z-index:    1000;
-    top:        0;
-    left:       0;
-    height:     100%;
-    width:      100%;
-    background: rgba( 255, 255, 255, .8 ) 
-                url('http://i.stack.imgur.com/FhHRx.gif') 
-                50% 50% 
-                no-repeat;
+.loading-modal {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 9999;
+	width: 100%;
+	height: 100%;
+	background: rgba( 255, 255, 255, .8 ) 
+  						url('http://i.stack.imgur.com/FhHRx.gif') 
+              50% 50% 
+              no-repeat;
+	display: none;	
+}
+/* default race data table
+-------------------------- */
+.uci-curl .race-table {
+	width: 100%;
+}
+.uci-curl .race-table tr {
+	padding: 3px 0;
+	overflow: hidden;
+}
+.uci-curl .race-table tr.header {
+	font-weight: bold;
+}
+.uci-curl .race-table tr td {
+	
 }
 
-/* When the body has the loading class, we turn
-   the scrollbar off with overflow:hidden */
-body.loading {
-    overflow: hidden;   
+/* default race results table
+----------------------------- */
+.uci-curl .race-results-table {
+	width: 100%;
+	padding: 10px 0;
+	overflow: hidden;
+}
+.uci-curl .race-results-table tr {
+	padding: 3px 0;
+	overflow: hidden;
+}
+.uci-curl .race-results-table tr.header {
+	font-weight: bold;
+}
+.uci-curl .race-results-table tr td {
+	
 }
 
-/* Anytime the body has the loading class, our
-   modal element will be visible */
-body.loading .modal {
-    display: block;
+/* full race results table (view db)
+------------------------------------ */
+.race-table {
+	width: 100%;
+}
+.race-table tr {
+	padding: 3px 0;
+	overflow: hidden;
+}
+.race-table tr.header {
+	font-weight: bold;
+}
+.race-table tr td {
+	
+}
+.race-results-full-table {
+	width: 100%;
+	padding: 10px 0;
+	overflow: hidden;
+}
+.race-results-full-table tr {
+	padding: 3px 0;
+	overflow: hidden;
+}
+.race-results-full-table tr.header {
+	font-weight: bold;
+}
+.race-results-full-table tr td {
+	
 }

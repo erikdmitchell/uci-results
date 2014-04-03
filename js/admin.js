@@ -1,16 +1,33 @@
-/*
 jQuery(document).ready(function($) {
-	$('.uci-curl #get-race-data').click(function(e) {
-		e.preventDefault();
-		
+	var $modal=$('.loading-modal');
+	
+	$('#get-race-data').click(function(){
+		$modal.show();
+		var data={ 
+			action:'get-data' ,
+			type:'all'	
+		};
+		$.post(ajaxurl,data, function(response) {
+	  	response=$.parseJSON(response);
+	  	$('.uci-curl .data-results').html(response);
+	  	//console.log(response);
+	  	$modal.hide();
+		});
 	});
-});
-*/
-/* our "modal" -- loading animation */
-$=jQuery.noConflict();
-$body = $("body");
 
-$(document).on({
-    ajaxStart: function() { $body.addClass("loading");    },
-     ajaxStop: function() { $body.removeClass("loading"); }    
+	$('.race-table .race-link a').click(function() {
+		$modal.show();
+		var data={ 
+			action:'get-data',
+			type:'race',
+			link:$(this).data('link')
+		};
+		$.post(ajaxurl,data, function(response) {
+	  	response=$.parseJSON(response);
+	  	$('.uci-curl .data-results').html(response);
+	  	//console.log(response);
+	  	$modal.hide();
+		});
+	});
+	      
 });
