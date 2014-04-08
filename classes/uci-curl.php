@@ -18,9 +18,9 @@ class Top25_cURL {
 	}
 	
 	function admin_scripts_styles() {
-		wp_enqueue_script('uci-curl-admin',plugins_url('/js/admin.js',__FILE__),array('jquery'),$this->version,true);
+		wp_enqueue_script('uci-curl-admin',UCICURLBASE.'/js/admin.js',array('jquery'),$this->version,true);
 		
-		wp_enqueue_style('uci-curl-admin',plugins_url('/css/admin.css',__FILE__),array(),$this->version);
+		wp_enqueue_style('uci-curl-admin',UCICURLBASE.'/css/admin.css',array(),$this->version);
 	}
 	
 	function display_admin_page() {
@@ -74,7 +74,7 @@ class Top25_cURL {
 		@$dom->loadHTML($html);
 		
 		//discard white space 
-		$dom->preserveWhiteSpace = false; 
+		@$dom->preserveWhiteSpace = false; 
 		
 		$finder = new DomXPath($dom);
 		
@@ -97,8 +97,9 @@ class Top25_cURL {
 		  	$cols = $row->getElementsByTagName('td'); 	// get each column by tag name
 			  foreach ($cols as $key => $col) :
 					if ($key==0) {
-						$date=$col->nodeValue;
-						$races[$row_count]->date=$date;
+						//$races[$row_count]->date=$this->get_race_date($link);
+						$races[$row_count]->date=$this->reformat_date($col->nodeValue);
+/* 						$race_data->date=$this->reformat_date($race_data->date); */
 					} else if ($key==1) {
 						$races[$row_count]->event=$col->nodeValue;
 					} else if ($key==2) {
@@ -193,7 +194,7 @@ class Top25_cURL {
 		
 		// get our results table //
 		$finder = new DomXPath($dom);
-	
+		
 		$nodes = $finder->query("//*[contains(@class, '$results_class_name')]");
 
 		// if for some reason we can't find that class, we bail and return an empty object //
@@ -250,12 +251,12 @@ class Top25_cURL {
 
 		$message=null;
 		$table='uci_races';
-		
+	
 		// build data array ..
 		$data=array(
 			'data' => base64_encode(serialize($race_data)),
 			'code' => $this->build_race_code($race_data),
-		);
+		);	
 
 		if (!$this->check_for_dups($data['code'])) :
 			if ($wpdb->insert($table,$data)) :
@@ -305,7 +306,74 @@ class Top25_cURL {
 		
 		return false;
 	}
+	
+	/**
+ 	 * @param string $url - results url
+	 * the date comes in with hidden &nbsp; this gets a 'clean' date from the results page
+	
+	**/
+	function get_race_date($url) {
+		// Use the Curl extension to query Google and get back a page of results
+		$timeout = 5;
+		$race_results=array();
+		$race_results_obj=new stdClass();
+		$results_class_name="datatable";		
+
+		// get header so that we can get the charset ? //
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		//$html = curl_exec_utf8($ch); // external function in this file //
+		$html=curl_exec($ch);
+		curl_close($ch);
+
+		// modify html //
+		$html=preg_replace('/<script\b[^>]*>(.*?)<\/script>/is',"",$html); // remove js
+
+		// Create a DOM parser object
+		$dom = new DOMDocument();
+		
+		// Parse HTML - The @ before the method call suppresses any warnings that loadHTML might throw because of invalid HTML in the page.
+		@$dom->loadHTML($html);
+		
+		//discard white space 
+		$dom->preserveWhiteSpace = false; 
+		
+		// get our results table //
+		$finder = new DomXPath($dom);
+		
+		$nodes = $finder->query("//*[contains(@class, 'subtitlered')]");
+		$date=explode(':',$nodes->item(0)->nodeValue);
+
+		return trim($date[0]);
+	}
 	//----------------------------- end add_race_to_db helper functions -----------------------------//
+
+	function reformat_date($date) {
+		$date=utf8_encode($date);
+		$date_arr=explode('Â',$date);
+
+		foreach ($date_arr as $key => $value) :
+			switch ($key) :
+				case 0:
+					$new_value=substr($value,0,-2);
+					break;
+				case 1:
+					$new_value=null;
+					$new_value=substr($value,1,-2);
+					break;
+				case 2:
+					$new_value=substr($value,1);
+					break;
+			endswitch;
+			$date_arr[$key]=$new_value;
+		endforeach;
+		
+		$date=$date_arr[0].' '.$date_arr[1].' '.$date_arr[2];
+		
+		return $date;
+	}
 
 	function build_default_race_table($obj) {
 		$html=null;
@@ -385,22 +453,28 @@ class Top25_cURL {
 	function display_view_db_page() {
 		global $wpdb;
 		$html=null;
+		//$limit=3;
 		
 		$html.='<h3>View DB</h3>';
 		
 		$races=$wpdb->get_results("SELECT * FROM ".$this->table);
 		
-		foreach ($races as $race) :
-			$html.=$this->display_race_table($race);
+		foreach ($races as $key => $race) :
+			$html.=$this->display_race_table($race,false);
+			//if ($key==$limit-1)
+				//break;
 		endforeach;
 		
 		echo $html;
 	}
 	
-	function display_race_table($race) {
+	function display_race_table($race,$results=true) {
+		global $field_quality;
 		$html=null;
 		$alt=0;
 		$data=unserialize(base64_decode($race->data));
+		set_time_limit(0); // unlimited max execution time //
+		$math=$field_quality->get_race_math($data);
 	
 		if (!isset($data->results)) :
 			$html.=$race->id.'<br />';
@@ -416,6 +490,7 @@ class Top25_cURL {
 				$html.='<td>Class</td>';
 				$html.='<td>Winner</td>';
 				$html.='<td>Link</td>';
+				$html.='<td>Race Total</td>';
 			$html.='</tr>';
 
 			$html.='<tr>';
@@ -425,42 +500,49 @@ class Top25_cURL {
 				$html.='<td>'.$data->class.'</td>';
 				$html.='<td>'.$data->winner.'</td>';
 				$html.='<td class="race-link"><a href="#" data-link="'.$data->link.'">Results</a></td>';
+				$html.='<td>';
+					foreach ($math as $k => $v) :
+						$html.= $k.': '.$v.'<br />';
+					endforeach;
+				$html.='</td>';
 			$html.='</tr>';
 		$html.='</table>';
 
-		$html.='<table class="race-results-full-table">';
-			$html.='<tr class="header">';
-				$html.='<td>Age</td>';
-				$html.='<td>Name</td>';
-				$html.='<td>Nat.</td>';
-				$html.='<td>PAR</td>';
-				$html.='<td>PCR</td>';
-				$html.='<td>Place</td>';
-				$html.='<td>Result</td>';
-			$html.='</tr>';
-			
-			if (isset($data->results)) :
-				foreach ($data->results as $result) :
-					if ($alt%2) :
-						$class='alt';
-					else :
-						$class=null;
-					endif;
-					$html.='<tr class="'.$class.'">';
-						$html.='<td>'.$result->place.'</td>';
-						$html.='<td>'.$result->name.'</td>';
-						$html.='<td>'.$result->nat.'</td>';
-						$html.='<td>'.$result->age.'</td>';
-						$html.='<td>'.$result->result.'</td>';
-						$html.='<td>'.$result->par.'</td>';
-						$html.='<td>'.$result->pcr.'</td>';
-					$html.='</tr>';
-					$alt++;
-				endforeach;
-			else :
-				$html.=$race->id.' - This race had no results<br />';				
-			endif;
-		$html.='</table>';
+		if ($results) :
+			$html.='<table class="race-results-full-table">';
+				$html.='<tr class="header">';
+					$html.='<td>Age</td>';
+					$html.='<td>Name</td>';
+					$html.='<td>Nat.</td>';
+					$html.='<td>PAR</td>';
+					$html.='<td>PCR</td>';
+					$html.='<td>Place</td>';
+					$html.='<td>Result</td>';
+				$html.='</tr>';
+				
+				if (isset($data->results)) :
+					foreach ($data->results as $result) :
+						if ($alt%2) :
+							$class='alt';
+						else :
+							$class=null;
+						endif;
+						$html.='<tr class="'.$class.'">';
+							$html.='<td>'.$result->place.'</td>';
+							$html.='<td>'.$result->name.'</td>';
+							$html.='<td>'.$result->nat.'</td>';
+							$html.='<td>'.$result->age.'</td>';
+							$html.='<td>'.$result->result.'</td>';
+							$html.='<td>'.$result->par.'</td>';
+							$html.='<td>'.$result->pcr.'</td>';
+						$html.='</tr>';
+						$alt++;
+					endforeach;
+				else :
+					$html.=$race->id.' - This race had no results<br />';				
+				endif;
+			$html.='</table>';
+		endif;
 		
 		$html.='<hr />';
 		

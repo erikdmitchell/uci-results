@@ -27,3 +27,19 @@ added a strip js to get_race_results() $html after cURL
 there are still utf8 encoding issues
 added loading modal for 'load all data' and 'results' click(s)
 formatted db view page output
+
+4/4
+moved things into classes folder
+fixed some minor file glitches after move
+added get_race_date() to UCI cURL class -- function slows down things a lot
+added UCICURLBASE constant for plugin url
+
+4/8
+fixed date issue, added reformat_date() to the cURL class
+cleaned up Field_Quality and built out the class completly
+TODO: set Field_Quality() -> $start_of_season dynamically or something.
+Added get_uci_multiplier() and get_world_cup_multiplier() to Field_Quality class. They're our auto detect of sorts.
+	- needs testing with multiple seasons in db
+Disabled admin page for Field_Quality class b/c it's no longer needed.
+Note: in some instances "total" in FQis greater than 1. Need to double check.
+Note: dynamic fq generation takes a while, we should hard code it into deb as object, when adding race to db in cURL class.
