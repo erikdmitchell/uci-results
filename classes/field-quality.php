@@ -47,6 +47,46 @@ class Field_Quality {
 		return $this->process_race_fq($race);
 	}
 
+	public function get_race_math_by_id($id,$format=true) {
+		global $wpdb;
+		$race_db=$wpdb->get_row("SELECT * FROM uci_races WHERE id=".$id);
+		$race=$this->decode_race_data($race_db->data);
+		$race=$this->process_race_fq($race);
+		
+		if ($format)
+			$race=$this->format_race_fq_results($race);
+		
+		return $race;
+	}
+
+	function format_race_fq_results($race) {
+		$html=null;
+		
+		$html.='<div class="fq-results">';
+			$html.='<div class="formula">(Field Quality + World Cup Mult. + UCI Points Mult.) / Divider = Race Total</div>';
+			$html.='<table class="math">';
+				$html.='<tr class="header">';
+					$html.='<th>Field Quality</th>';
+					$html.='<th>WC Multi</th>';
+					$html.='<th>UCI Multi</th>';
+					$html.='<th>Total</th>';
+					$html.='<th>Divider</th>';
+					$html.='<th>Race Total</th>';
+				$html.='</tr>';
+				$html.='<tr>';
+					$html.='<td>'.$this->field_quality.'</td>';
+					$html.='<td>'.$this->wcp_mult.'</td>';
+					$html.='<td>'.$this->uci_mult.'</td>';
+					$html.='<td>'.$this->total.'</td>';
+					$html.='<td>'.$this->divider.'</td>';
+					$html.='<td class="race-total">'.$this->race_total.'</td>';
+				$html.='</tr>';
+			$html.='</table>';
+		$html.='</div>';
+		
+		return $html;
+	}
+
 /*
 	function display_filed_quality($race=false) {
 		$race=$this->process_race_fq($race);

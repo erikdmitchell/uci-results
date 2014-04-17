@@ -15,7 +15,7 @@ added base64 to pre db process hoping to fix char issues
 need to use new function to fix char issues
 need a method to display links and add one at a time (like original function)
 
-== LAST DATE IN GIT: 4/3/14 (12pm) ==
+== LAST DATE IN GIT: 4/8/14 (3pm) ==
 
 Changes 4/2-4/3
 removing a lot of junck code
@@ -41,5 +41,10 @@ TODO: set Field_Quality() -> $start_of_season dynamically or something.
 Added get_uci_multiplier() and get_world_cup_multiplier() to Field_Quality class. They're our auto detect of sorts.
 	- needs testing with multiple seasons in db
 Disabled admin page for Field_Quality class b/c it's no longer needed.
-Note: in some instances "total" in FQis greater than 1. Need to double check.
-Note: dynamic fq generation takes a while, we should hard code it into deb as object, when adding race to db in cURL class.
+Note: in some instances "total" in FQis greater than 1. Need to double check. OK EM
+
+TODO: nittany gets a 1.0, this needs to be adjusted using previous years uci points in field (need previous years results).
+TOTO: Once fq ia hard coded, need methods to adjust and update
+TODO: Note: dynamic fq generation takes a while, we should hard code it into deb as object, when adding race to db in cURL class.
+TODO: try accessing 2012/2013 season
+TODO: write functions/code to diplay races and details (shortcode perhaps) and rank riders

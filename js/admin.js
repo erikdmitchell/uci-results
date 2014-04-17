@@ -29,5 +29,20 @@ jQuery(document).ready(function($) {
 	  	$modal.hide();
 		});
 	});
+
+	$('.race-table .race-details a').click(function() {
+		$modal.show();
+		var data={ 
+			action:'get-data',
+			type:'race-data',
+			id:$(this).data('id')
+		};	
+		$.post(ajaxurl,data, function(response) {		
+	  	response=$.parseJSON(response);
+	  	$('#race-data-'+data.id).html(response);
+	  	console.log(response);
+	  	$modal.hide();
+		});
+	});
 	      
 });

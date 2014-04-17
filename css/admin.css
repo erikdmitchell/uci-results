@@ -75,3 +75,34 @@
 .race-results-full-table tr td {
 	
 }
+
+/* field quality restults (formatted)
+------------------------------------- */
+.fq-results {
+	border-top: 1px solid #000;
+	padding-top: 10px;
+	margin-top: 10px;
+}
+.fq-results .formula {
+	font-weight: bold;
+	font-style: inherit;
+	padding: 5px 0;
+}
+.fq-results .math {
+	width: 50%;
+}
+.fq-results .math tr.header {
+	font-weight: bold;
+}
+.fq-results .math tr {
+	
+}
+.fq-results .math tr td,
+.fq-results .math tr th {
+	width: 15%;
+	padding-right: 1%;
+	text-align: center;
+}
+.fq-results .math tr td.race-total {
+	text-decoration: underline;
+}

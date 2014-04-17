@@ -461,20 +461,18 @@ class Top25_cURL {
 		
 		foreach ($races as $key => $race) :
 			$html.=$this->display_race_table($race,false);
-			//if ($key==$limit-1)
-				//break;
 		endforeach;
+		
+		$html.='<div class="loading-modal"></div>';
 		
 		echo $html;
 	}
 	
 	function display_race_table($race,$results=true) {
-		global $field_quality;
 		$html=null;
 		$alt=0;
 		$data=unserialize(base64_decode($race->data));
 		set_time_limit(0); // unlimited max execution time //
-		$math=$field_quality->get_race_math($data);
 	
 		if (!isset($data->results)) :
 			$html.=$race->id.'<br />';
@@ -490,7 +488,6 @@ class Top25_cURL {
 				$html.='<td>Class</td>';
 				$html.='<td>Winner</td>';
 				$html.='<td>Link</td>';
-				$html.='<td>Race Total</td>';
 			$html.='</tr>';
 
 			$html.='<tr>';
@@ -500,11 +497,7 @@ class Top25_cURL {
 				$html.='<td>'.$data->class.'</td>';
 				$html.='<td>'.$data->winner.'</td>';
 				$html.='<td class="race-link"><a href="#" data-link="'.$data->link.'">Results</a></td>';
-				$html.='<td>';
-					foreach ($math as $k => $v) :
-						$html.= $k.': '.$v.'<br />';
-					endforeach;
-				$html.='</td>';
+				$html.='<td class="race-details"><a href="#" data-id="'.$race->id.'">Race Details</a></td>';
 			$html.='</tr>';
 		$html.='</table>';
 
@@ -544,6 +537,8 @@ class Top25_cURL {
 			$html.='</table>';
 		endif;
 		
+		$html.='<div id="race-data-'.$race->id.'"></div>';
+		
 		$html.='<hr />';
 		
 		return $html;
@@ -551,6 +546,7 @@ class Top25_cURL {
 
 	//----------------------------- ajax functions -----------------------------//
 	function ajax_get_data() {
+		global $field_quality;
 		$results=array();
 		
 		switch ($_POST['type']) :
@@ -560,7 +556,10 @@ class Top25_cURL {
 			case 'race':			
 				$results=$this->get_race_results($_POST['link']);	
 				$results=$this->build_default_race_results_table($results);			
-				break;		
+				break;
+			case 'race-data':
+				$results=$field_quality->get_race_math_by_id($_POST['id']);
+				break;
 		endswitch;
 
 		echo json_encode($results);
