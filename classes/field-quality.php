@@ -24,27 +24,12 @@ class Field_Quality {
 	public $start_of_season='07 Sep 2013'; // NOT IN USE YET
 	
 	function __construct() {
-		//add_action('admin_menu',array($this,'admin_page'));
 	}
-/*	
-	function admin_page() {
-		add_options_page('Field Quality','Field Quality','administrator','field-quality',array($this,'display_admin_page'));
-	}
-	
-	function display_admin_page() {
-		global $wpdb;
-		
-		$race_db=$wpdb->get_row("SELECT * FROM uci_races WHERE id=790");
-		$race=$this->decode_race_data($race_db->data);
-		
-		echo $this->display_filed_quality($race);
-	}
-*/
-	/*
-	 * race object
-	*/	
+
 	public function get_race_math($race) {
-		return $this->process_race_fq($race);
+		$race_fq=$this->process_race_fq($race);
+print_r($race_fq);
+		return $race_fq;
 	}
 
 	public function get_race_math_by_id($id,$format=true) {
@@ -86,57 +71,6 @@ class Field_Quality {
 		
 		return $html;
 	}
-
-/*
-	function display_filed_quality($race=false) {
-		$race=$this->process_race_fq($race);
-		$html=null;
-		
-		$html.='<div class="field-quality">';
-			$html.='<p>';
-				$html.='Total World Cup Points: '.$this->wcp_total.'<br/>';
-				$html.='Total World Cup Points in Field: '.$this->wcp_field.'<br/>';
-				$html.='World Cup Points Multiplier: <b>'.$this->wcp_mult.'</b><br/>';
-			$html.='</p>';
-			$html.='<p>';
-				$html.='Total UCI Points: '.$this->uci_total.'<br/>';
-				$html.='Total UCI Points in Field: '.$this->uci_field.'<br/>';
-				$html.='UCI Points Multiplier: <b>'.$this->uci_mult.'</b><br/>';
-			$html.='</p>';
-			$html.='<p>';
-				$html.='Number of finishers: '.$this->number_of_finishers.'<br/>';
-				$html.='Type: '.$this->race_type.'<br/>';
-				$html.='Type Num: '.$this->type_num.'<br/>';
-				$html.='No Finishers Multiplier: <b>'.$this->nof_mult.'</b><br/>';
-			$html.='</p>';
-			$html.='Field Quality: <b>'.$this->field_quality.'</b>';
-			
-			$html.='<div class="notes">';
-				$html.='*The first race of the European/US season gets a modified race quality due to lack of UCI points<br />';
-				$html.='**If no World Cup races have occurred, we need override<br />';
-				$html.='Divider: '.$this->divider.' (3 as base)';
-			$html.='</div>';
-
-			$html.='<table class="math">';
-				$html.='<tr class="header">';
-					$html.='<th>Field Quality</th>';
-					$html.='<th>WC Multi</th>';
-					$html.='<th>UCI Multi</th>';
-					$html.='<th>Total</th>';
-				$html.='</tr>';
-				$html.='<tr>';
-					$html.='<td>'.$this->field_quality.'</td>';
-					$html.='<td>'.$this->wcp_mult.'</td>';
-					$html.='<td>'.$this->uci_mult.'</td>';
-					$html.='<td>'.$this->total.'</td>';
-				$html.='</tr>';
-			$html.='</table>';
-			$html.='Race Total: '.$this->race_total.'';
-		$html.='</div><!-- .field-quality -->';
-		
-		return $html;
-	}
-*/
 	
 	/**
 	 * @param object $race - race object from db
@@ -144,7 +78,7 @@ class Field_Quality {
 	function process_race_fq($race=false) {
 		if (!$race)
 			return false;
-		
+
 		global $wpdb;
 		$races_table='uci_races';
 		$races_db=$wpdb->get_results("SELECT data FROM $races_table");
@@ -438,6 +372,57 @@ class Field_Quality {
 		
 		return $wcp_mult;
 	}
+	
+/*
+	function display_filed_quality($race=false) {
+		$race=$this->process_race_fq($race);
+		$html=null;
+		
+		$html.='<div class="field-quality">';
+			$html.='<p>';
+				$html.='Total World Cup Points: '.$this->wcp_total.'<br/>';
+				$html.='Total World Cup Points in Field: '.$this->wcp_field.'<br/>';
+				$html.='World Cup Points Multiplier: <b>'.$this->wcp_mult.'</b><br/>';
+			$html.='</p>';
+			$html.='<p>';
+				$html.='Total UCI Points: '.$this->uci_total.'<br/>';
+				$html.='Total UCI Points in Field: '.$this->uci_field.'<br/>';
+				$html.='UCI Points Multiplier: <b>'.$this->uci_mult.'</b><br/>';
+			$html.='</p>';
+			$html.='<p>';
+				$html.='Number of finishers: '.$this->number_of_finishers.'<br/>';
+				$html.='Type: '.$this->race_type.'<br/>';
+				$html.='Type Num: '.$this->type_num.'<br/>';
+				$html.='No Finishers Multiplier: <b>'.$this->nof_mult.'</b><br/>';
+			$html.='</p>';
+			$html.='Field Quality: <b>'.$this->field_quality.'</b>';
+			
+			$html.='<div class="notes">';
+				$html.='*The first race of the European/US season gets a modified race quality due to lack of UCI points<br />';
+				$html.='**If no World Cup races have occurred, we need override<br />';
+				$html.='Divider: '.$this->divider.' (3 as base)';
+			$html.='</div>';
+
+			$html.='<table class="math">';
+				$html.='<tr class="header">';
+					$html.='<th>Field Quality</th>';
+					$html.='<th>WC Multi</th>';
+					$html.='<th>UCI Multi</th>';
+					$html.='<th>Total</th>';
+				$html.='</tr>';
+				$html.='<tr>';
+					$html.='<td>'.$this->field_quality.'</td>';
+					$html.='<td>'.$this->wcp_mult.'</td>';
+					$html.='<td>'.$this->uci_mult.'</td>';
+					$html.='<td>'.$this->total.'</td>';
+				$html.='</tr>';
+			$html.='</table>';
+			$html.='Race Total: '.$this->race_total.'';
+		$html.='</div><!-- .field-quality -->';
+		
+		return $html;
+	}
+*/	
 
 }
 

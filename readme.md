@@ -15,7 +15,7 @@ added base64 to pre db process hoping to fix char issues
 need to use new function to fix char issues
 need a method to display links and add one at a time (like original function)
 
-== LAST DATE IN GIT: 4/8/14 (3pm) ==
+== LAST DATE IN GIT: 4/17/14 (3pm) ==
 
 Changes 4/2-4/3
 removing a lot of junck code
@@ -43,8 +43,22 @@ Added get_uci_multiplier() and get_world_cup_multiplier() to Field_Quality class
 Disabled admin page for Field_Quality class b/c it's no longer needed.
 Note: in some instances "total" in FQis greater than 1. Need to double check. OK EM
 
-TODO: nittany gets a 1.0, this needs to be adjusted using previous years uci points in field (need previous years results).
-TOTO: Once fq ia hard coded, need methods to adjust and update
-TODO: Note: dynamic fq generation takes a while, we should hard code it into deb as object, when adding race to db in cURL class.
-TODO: try accessing 2012/2013 season
-TODO: write functions/code to diplay races and details (shortcode perhaps) and rank riders
+4/17
+Fixed FQ, all set, need to hard code.
+
+3. TODO: nittany gets a 1.0, this needs to be adjusted using previous years uci points in field (need previous years results).
+2. TOTO: Once fq ia hard coded, need methods to adjust and update
+4. TODO: try accessing 2012/2013 season
+5. TODO: write functions/code to diplay races and details (shortcode perhaps) and rank riders
+TODO: add db setup
+Error:? Warning: Division by zero in /Users/erik/Sites/wordpress/wp-content/plugins/uci-curl/classes/field-quality.php on line 250
+
+4/18
+Fixed: Notice: Array to string conversion in /Users/erik/Sites/wordpress/wp-content/plugins/uci-curl/classes/uci-curl.php on line 37
+
+4/28
+Added sperate admin menu/section for plugin.
+Hard coded FQ when race is accessed via cURL.
+ERROR: fq WC and UCI pts are outputting zero stuff is producing results of zero.
+ - This is based on previous races, so we need to make sure the first few races are going in properly.
+ - Will need to come up with some sort of mod for this testing.

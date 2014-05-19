@@ -16,6 +16,7 @@ jQuery(document).ready(function($) {
 	});
 
 	$('.race-table .race-link a').click(function() {
+/*
 		$modal.show();
 		var data={ 
 			action:'get-data',
@@ -28,9 +29,14 @@ jQuery(document).ready(function($) {
 	  	//console.log(response);
 	  	$modal.hide();
 		});
+*/	
+		var id=$(this).data('id');
+		
+		$('.race-results-full-table#'+id).show();
 	});
 
 	$('.race-table .race-details a').click(function() {
+/*
 		$modal.show();
 		var data={ 
 			action:'get-data',
@@ -43,6 +49,10 @@ jQuery(document).ready(function($) {
 	  	console.log(response);
 	  	$modal.hide();
 		});
+*/
+		var id=$(this).data('id');
+
+		$('.race-fq#'+id).show();
 	});
 	      
 });

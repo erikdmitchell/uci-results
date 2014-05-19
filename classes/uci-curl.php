@@ -13,8 +13,9 @@ class Top25_cURL {
 	}	
 
 	function admin_page() {
-		add_options_page('UCI cURL', 'UCI cURL', 'administrator', 'uci-curl',array($this,'display_admin_page'));
-		add_options_page('UCI View DB', 'UCI View DB', 'administrator', 'uci-view-db',array($this,'display_view_db_page'));
+		add_menu_page('UCI Cross','UCI Cross','administrator','uci-cross',array($this,'display_admin_page'));
+		add_submenu_page('uci-cross','UCI cURL','UCI cURL','administrator','uci-curl',array($this,'display_curl_page'));
+		add_submenu_page('uci-cross','UCI View DB','UCI View DB','administrator','uci-view-db',array($this,'display_view_db_page'));
 	}
 	
 	function admin_scripts_styles() {
@@ -22,8 +23,18 @@ class Top25_cURL {
 		
 		wp_enqueue_style('uci-curl-admin',UCICURLBASE.'/css/admin.css',array(),$this->version);
 	}
-	
+
 	function display_admin_page() {
+		$html=null;
+
+		$html.='<div class="uci-cross">';
+			$html.='<h3>UCI Cross</h3>';
+		$html.='</div>';
+		
+		echo $html;
+	}	
+
+	function display_curl_page() {
 		$html=null;
 		$results=array();
 
@@ -34,7 +45,7 @@ class Top25_cURL {
 			
 			$html.='<div class="data-results"></div>';
 			
-			$html.=$this->get_race_data(false);
+			$html.=$this->get_race_data(true);
 			
 			$html.='<div class="db-results"></div>';
 			
@@ -52,6 +63,7 @@ class Top25_cURL {
 	 *		the default is a table of race data for individual adding/info 
 	**/
 	function get_race_data($add_to_db=true) {
+		set_time_limit(0); // mex ececution time
 		$races=array();
 		$races_class_name="datatable";
 		$races_obj=new stdClass();
@@ -97,9 +109,7 @@ class Top25_cURL {
 		  	$cols = $row->getElementsByTagName('td'); 	// get each column by tag name
 			  foreach ($cols as $key => $col) :
 					if ($key==0) {
-						//$races[$row_count]->date=$this->get_race_date($link);
 						$races[$row_count]->date=$this->reformat_date($col->nodeValue);
-/* 						$race_data->date=$this->reformat_date($race_data->date); */
 					} else if ($key==1) {
 						$races[$row_count]->event=$col->nodeValue;
 					} else if ($key==2) {
@@ -114,11 +124,18 @@ class Top25_cURL {
 				
 				// check for code in db, only get results if not in db //
 				$code=$this->build_race_code($races[$row_count]);
-				if (!$this->check_for_dups($code)) :
+				//if (!$this->check_for_dups($code)) :
 					$races[$row_count]->results=$this->get_race_results($races[$row_count]->link); // run our curl result page stuff //
-				endif;
+					$fq=new Field_Quality();
+					$races[$row_count]->field_quality=$fq->get_race_math($races[$row_count]);	
+echo '<pre>';
+print_r($races[$row_count]->field_quality);		
+echo '</pre>';
+				//endif;
 			endif;
 			$row_count++;		
+if ($row_count==5)
+	break;			
 		endforeach;
 		
 		foreach ($races as $key => $value) :
@@ -129,8 +146,6 @@ class Top25_cURL {
 			foreach ($races_obj as $race) :
 				$arr[]=$this->add_race_to_db($race);
 			endforeach;
-			
-			return $arr;
 		endif;
 		
 		return $this->build_default_race_table($races_obj);
@@ -247,11 +262,14 @@ class Top25_cURL {
 	}
 
 	function add_race_to_db($race_data) {
+echo 'add to race db<br>';	
 		global $wpdb;
 
 		$message=null;
 		$table='uci_races';
-	
+echo '<pre>';
+print_r($race_data->field_quality);
+echo '</pre>';
 		// build data array ..
 		$data=array(
 			'data' => base64_encode(serialize($race_data)),
@@ -460,7 +478,7 @@ class Top25_cURL {
 		$races=$wpdb->get_results("SELECT * FROM ".$this->table);
 		
 		foreach ($races as $key => $race) :
-			$html.=$this->display_race_table($race,false);
+			$html.=$this->display_race_table($race,false,false);
 		endforeach;
 		
 		$html.='<div class="loading-modal"></div>';
@@ -468,11 +486,19 @@ class Top25_cURL {
 		echo $html;
 	}
 	
-	function display_race_table($race,$results=true) {
+	function display_race_table($race,$results=true,$fq=true) {
 		$html=null;
 		$alt=0;
 		$data=unserialize(base64_decode($race->data));
 		set_time_limit(0); // unlimited max execution time //
+		$fq_class=null;
+		$results_class=null;
+		
+		if ($results)
+			$results_class='show';
+		
+		if ($fq)
+			$fq_class='show';
 	
 		if (!isset($data->results)) :
 			$html.=$race->id.'<br />';
@@ -496,46 +522,75 @@ class Top25_cURL {
 				$html.='<td>'.$data->nat.'</td>';
 				$html.='<td>'.$data->class.'</td>';
 				$html.='<td>'.$data->winner.'</td>';
-				$html.='<td class="race-link"><a href="#" data-link="'.$data->link.'">Results</a></td>';
-				$html.='<td class="race-details"><a href="#" data-id="'.$race->id.'">Race Details</a></td>';
+				$html.='<td class="race-link"><a href="#" data-link="'.$data->link.'" data-id="race-'.$race->id.'">Results</a></td>';
+				$html.='<td class="race-details"><a href="#" data-id="race-'.$race->id.'">Race Details</a></td>';
 			$html.='</tr>';
-		$html.='</table>';
-
-		if ($results) :
-			$html.='<table class="race-results-full-table">';
-				$html.='<tr class="header">';
-					$html.='<td>Age</td>';
-					$html.='<td>Name</td>';
-					$html.='<td>Nat.</td>';
-					$html.='<td>PAR</td>';
-					$html.='<td>PCR</td>';
-					$html.='<td>Place</td>';
-					$html.='<td>Result</td>';
-				$html.='</tr>';
-				
-				if (isset($data->results)) :
-					foreach ($data->results as $result) :
-						if ($alt%2) :
-							$class='alt';
-						else :
-							$class=null;
-						endif;
+			// race results //			
+			$html.='<tr><td colspan="7">';
+				$html.='<table id="race-'.$race->id.'" class="race-results-full-table '.$results_class.'">';
+					$html.='<tr class="header">';
+						$html.='<td>Place</td>';
+						$html.='<td>Name</td>';
+						$html.='<td>Nat.</td>';
+						$html.='<td>PAR</td>';
+						$html.='<td>PCR</td>';
+						$html.='<td>Place</td>';
+						$html.='<td>Result</td>';
+					$html.='</tr>';
+					
+					if (isset($data->results)) :
+						foreach ($data->results as $result) :
+							if ($alt%2) :
+								$class='alt';
+							else :
+								$class=null;
+							endif;
+							$html.='<tr class="'.$class.'">';
+								$html.='<td>'.$result->place.'</td>';
+								$html.='<td>'.$result->name.'</td>';
+								$html.='<td>'.$result->nat.'</td>';
+								$html.='<td>'.$result->age.'</td>';
+								$html.='<td>'.$result->result.'</td>';
+								$html.='<td>'.$result->par.'</td>';
+								$html.='<td>'.$result->pcr.'</td>';
+							$html.='</tr>';
+							$alt++;
+						endforeach;
+					else :
+						$html.=$race->id.' - This race had no results<br />';				
+					endif;
+				$html.='</table>';
+			$html.='</td></tr>';
+			// field quality //
+			$html.='<tr><td colspan="7">';
+				$html.='<table id="race-'.$race->id.'" class="race-fq '.$fq_class.'">';
+					$html.='<tr class="header">';
+						$html.='<td>WC Mult.</td>';
+						$html.='<td>UCI Mult.</td>';
+						$html.='<td>Field Quality</td>';
+						$html.='<td>Total</td>';
+						$html.='<td>Divider</td>';
+						$html.='<td>Race Total</td>';
+					$html.='</tr>';
+					
+					if (isset($data->field_quality)) :
+//print_r($data->field_quality);					
 						$html.='<tr class="'.$class.'">';
-							$html.='<td>'.$result->place.'</td>';
-							$html.='<td>'.$result->name.'</td>';
-							$html.='<td>'.$result->nat.'</td>';
-							$html.='<td>'.$result->age.'</td>';
-							$html.='<td>'.$result->result.'</td>';
-							$html.='<td>'.$result->par.'</td>';
-							$html.='<td>'.$result->pcr.'</td>';
+							$html.='<td>'.$data->field_quality->wcp_mult.'</td>';
+							$html.='<td>'.$data->field_quality->uci_mult.'</td>';
+							$html.='<td>'.$data->field_quality->field_quality.'</td>';
+							$html.='<td>'.$data->field_quality->total.'</td>';
+							$html.='<td>'.$data->field_quality->divider.'</td>';
+							$html.='<td>'.$data->field_quality->race_total.'</td>';
 						$html.='</tr>';
-						$alt++;
-					endforeach;
-				else :
-					$html.=$race->id.' - This race had no results<br />';				
-				endif;
+					else :
+						$html.=$race->id.' - This race had no field quality<br />';				
+					endif;
 			$html.='</table>';
-		endif;
+		$html.='</td></tr>';
+			
+
+		$html.='</table><!-- .race-table -->';
 		
 		$html.='<div id="race-data-'.$race->id.'"></div>';
 		

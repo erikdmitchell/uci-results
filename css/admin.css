@@ -75,6 +75,14 @@
 .race-results-full-table tr td {
 	
 }
+.race-table .race-results-full-table,
+.race-table .race-fq {
+	display: none;
+}
+.race-table .race-results-full-table.show,
+.race-table .race-fq.show {
+	display: table;
+}
 
 /* field quality restults (formatted)
 ------------------------------------- */
