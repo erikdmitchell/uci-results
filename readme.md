@@ -62,3 +62,9 @@ Hard coded FQ when race is accessed via cURL.
 ERROR: fq WC and UCI pts are outputting zero stuff is producing results of zero.
  - This is based on previous races, so we need to make sure the first few races are going in properly.
  - Will need to come up with some sort of mod for this testing.
+ 
+8/12
+ Pulled out view db functions
+ TODO: The new goal is to just straight upload results, then in a second step calculate all the other data (FQ class)
+ TODO: Will develop an automater class (semi exists in curl class with get_race_data())
+ TODO: clean up js and css for new classes

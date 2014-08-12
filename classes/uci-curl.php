@@ -2,7 +2,7 @@
 class Top25_cURL {
 
 	public $table='uci_races';
-	public $version='1.0.0';
+	public $version='1.0.2';
 	public $url='http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=485&StartDateSort=20130907&EndDateSort=20140223&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8';
 
 	function __construct() {
@@ -15,7 +15,7 @@ class Top25_cURL {
 	function admin_page() {
 		add_menu_page('UCI Cross','UCI Cross','administrator','uci-cross',array($this,'display_admin_page'));
 		add_submenu_page('uci-cross','UCI cURL','UCI cURL','administrator','uci-curl',array($this,'display_curl_page'));
-		add_submenu_page('uci-cross','UCI View DB','UCI View DB','administrator','uci-view-db',array($this,'display_view_db_page'));
+		add_submenu_page('uci-cross','UCI View DB','UCI View DB','administrator','uci-view-db',array(new ViewDB(),'display_view_db_page'));
 	}
 	
 	function admin_scripts_styles() {
@@ -41,13 +41,19 @@ class Top25_cURL {
 		$html.='<div class="uci-curl">';
 			$html.='<h3>cURL</h3>';
 		
-			$html.='<button type="button" name="get-race-data" id="get-race-data" value="yes">Load All Data</button>';
+			//$html.='<button type="button" name="get-race-data" id="get-race-data" value="yes">Load All Data</button>';
 			
-			$html.='<div class="data-results"></div>';
+			if (isset($_POST['submit']) && $_POST['submit']=='Add to DB' && isset($_POST['races'])) :	
+				foreach ($_POST['races'] as $race) :		
+					echo $this->add_race_to_db(unserialize(base64_decode($race)));
+				endforeach;
+			endif;
 			
-			$html.=$this->get_race_data(true);
+			$html.='<div class="data-results"></div>'; // empty?
 			
-			$html.='<div class="db-results"></div>';
+			$html.=$this->get_race_data(false);
+			
+			$html.='<div class="db-results"></div>'; // empty?
 			
 		$html.='</div>';
 		
@@ -65,7 +71,7 @@ class Top25_cURL {
 	function get_race_data($add_to_db=true) {
 		set_time_limit(0); // mex ececution time
 		$races=array();
-		$races_class_name="datatable";
+		$races_class_name='datatable';
 		$races_obj=new stdClass();
 		$arr=array();
 		$timeout = 5;
@@ -124,30 +130,27 @@ class Top25_cURL {
 				
 				// check for code in db, only get results if not in db //
 				$code=$this->build_race_code($races[$row_count]);
-				//if (!$this->check_for_dups($code)) :
+				if (!$this->check_for_dups($code)) :
 					$races[$row_count]->results=$this->get_race_results($races[$row_count]->link); // run our curl result page stuff //
-					$fq=new Field_Quality();
-					$races[$row_count]->field_quality=$fq->get_race_math($races[$row_count]);	
-echo '<pre>';
-print_r($races[$row_count]->field_quality);		
-echo '</pre>';
-				//endif;
+					//$fq=new Field_Quality();
+					//$races[$row_count]->field_quality=$fq->get_race_math($races[$row_count]);	
+				else :
+					unset($races[$row_count]); // remove duplicate so it doesn't display
+				endif;
 			endif;
-			$row_count++;		
-if ($row_count==5)
-	break;			
+			$row_count++;			
 		endforeach;
-		
+	
 		foreach ($races as $key => $value) :
 			$races_obj->$key=$value;
 		endforeach;
 
 		if ($add_to_db) :
-			foreach ($races_obj as $race) :
+			foreach ($races_obj as $race) :		
 				$arr[]=$this->add_race_to_db($race);
 			endforeach;
 		endif;
-		
+	
 		return $this->build_default_race_table($races_obj);
 	}
 	
@@ -262,14 +265,11 @@ if ($row_count==5)
 	}
 
 	function add_race_to_db($race_data) {
-echo 'add to race db<br>';	
 		global $wpdb;
 
 		$message=null;
 		$table='uci_races';
-echo '<pre>';
-print_r($race_data->field_quality);
-echo '</pre>';
+
 		// build data array ..
 		$data=array(
 			'data' => base64_encode(serialize($race_data)),
@@ -316,9 +316,8 @@ echo '</pre>';
 		
 		if (count($races_in_db)!=0) :
 			foreach ($races_in_db as $race) :
-				if ($race->code==$code) :
+				if ($race->code==$code)
 					return true;
-				endif;
 			endforeach;
 		endif;
 		
@@ -396,39 +395,53 @@ echo '</pre>';
 	function build_default_race_table($obj) {
 		$html=null;
 		$alt=0;
-
-		$html.='<table class="race-table">';
-			$html.='<tr class="header">';
-				$html.='<td>Date</td>';
-				$html.='<td>Event</td>';
-				$html.='<td>Nat.</td>';
-				$html.='<td>Class</td>';
-				$html.='<td>Winner</td>';
-				$html.='<td>Link</td>';
-			$html.='</tr>';
-			
-			foreach ($obj as $result) :
-				if ($alt%2) :
-					$class='alt';
-				else :
-					$class=null;
-				endif;
-				$html.='<tr class="'.$class.'">';
-					$html.='<td>'.$result->date.'</td>';
-					$html.='<td>'.$result->event.'</td>';
-					$html.='<td>'.$result->nat.'</td>';
-					$html.='<td>'.$result->class.'</td>';
-					$html.='<td>'.$result->winner.'</td>';
-					$html.='<td class="race-link"><a href="#" data-link="'.$result->link.'">Results</a></td>';
-				$html.='</tr>';
-				$alt++;
-			endforeach;
-			
-		$html.='</table>';
 		
+		$html.='<form name="add-races-to-db" method="post">';
+			$html.='<table class="race-table">';
+				$html.='<tr class="header">';
+					$html.='<td>&nbsp;</td>';
+					$html.='<td>Date</td>';
+					$html.='<td>Event</td>';
+					$html.='<td>Nat.</td>';
+					$html.='<td>Class</td>';
+					$html.='<td>Winner</td>';
+				$html.='</tr>';
+				
+				foreach ($obj as $result) :
+					if ($alt%2) :
+						$class='alt';
+					else :
+						$class=null;
+					endif;
+					$html.='<tr class="'.$class.'">';
+						$html.='<td><input class="race-checkbox" type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" /></td>';
+						$html.='<td>'.$result->date.'</td>';
+						$html.='<td>'.$result->event.'</td>';
+						$html.='<td>'.$result->nat.'</td>';
+						$html.='<td>'.$result->class.'</td>';
+						$html.='<td>'.$result->winner.'</td>';
+					$html.='</tr>';
+					$alt++;
+				endforeach;
+				
+				$html.='<tr>';
+					$html.='<td colspan="2"><input type="checkbox" id="selectall" />Select All</td>';
+				$html.='</tr>';
+				
+			$html.='</table>';
+			
+			$html.='<p class="submit">';
+				$html.='<input type="submit" name="submit" id="submit" class="button button-primary" value="Add to DB">';
+			$html.='</p>';
+		$html.='</form>';
+				
 		return $html;
 	}
-
+	
+	/**
+	 * builds our default results table on curl page
+	 * called by ajax function
+	 */
 	function build_default_race_results_table($obj) {
 		$html=null;
 		$alt=0;
@@ -467,138 +480,6 @@ echo '</pre>';
 		return $html;
 	}
 
-	//----------------------------- UCI View DB Page functions -----------------------------//
-	function display_view_db_page() {
-		global $wpdb;
-		$html=null;
-		//$limit=3;
-		
-		$html.='<h3>View DB</h3>';
-		
-		$races=$wpdb->get_results("SELECT * FROM ".$this->table);
-		
-		foreach ($races as $key => $race) :
-			$html.=$this->display_race_table($race,false,false);
-		endforeach;
-		
-		$html.='<div class="loading-modal"></div>';
-		
-		echo $html;
-	}
-	
-	function display_race_table($race,$results=true,$fq=true) {
-		$html=null;
-		$alt=0;
-		$data=unserialize(base64_decode($race->data));
-		set_time_limit(0); // unlimited max execution time //
-		$fq_class=null;
-		$results_class=null;
-		
-		if ($results)
-			$results_class='show';
-		
-		if ($fq)
-			$fq_class='show';
-	
-		if (!isset($data->results)) :
-			$html.=$race->id.'<br />';
-			$html.=$race->code.'<br />';
-			$html.='This has no results<br>';
-		endif;
-		
-		$html.='<table class="race-table">';
-			$html.='<tr class="header">';
-				$html.='<td>Date</td>';
-				$html.='<td>Event</td>';
-				$html.='<td>Nat.</td>';
-				$html.='<td>Class</td>';
-				$html.='<td>Winner</td>';
-				$html.='<td>Link</td>';
-			$html.='</tr>';
-
-			$html.='<tr>';
-				$html.='<td>'.$data->date.'</td>';
-				$html.='<td>'.$data->event.'</td>';
-				$html.='<td>'.$data->nat.'</td>';
-				$html.='<td>'.$data->class.'</td>';
-				$html.='<td>'.$data->winner.'</td>';
-				$html.='<td class="race-link"><a href="#" data-link="'.$data->link.'" data-id="race-'.$race->id.'">Results</a></td>';
-				$html.='<td class="race-details"><a href="#" data-id="race-'.$race->id.'">Race Details</a></td>';
-			$html.='</tr>';
-			// race results //			
-			$html.='<tr><td colspan="7">';
-				$html.='<table id="race-'.$race->id.'" class="race-results-full-table '.$results_class.'">';
-					$html.='<tr class="header">';
-						$html.='<td>Place</td>';
-						$html.='<td>Name</td>';
-						$html.='<td>Nat.</td>';
-						$html.='<td>PAR</td>';
-						$html.='<td>PCR</td>';
-						$html.='<td>Place</td>';
-						$html.='<td>Result</td>';
-					$html.='</tr>';
-					
-					if (isset($data->results)) :
-						foreach ($data->results as $result) :
-							if ($alt%2) :
-								$class='alt';
-							else :
-								$class=null;
-							endif;
-							$html.='<tr class="'.$class.'">';
-								$html.='<td>'.$result->place.'</td>';
-								$html.='<td>'.$result->name.'</td>';
-								$html.='<td>'.$result->nat.'</td>';
-								$html.='<td>'.$result->age.'</td>';
-								$html.='<td>'.$result->result.'</td>';
-								$html.='<td>'.$result->par.'</td>';
-								$html.='<td>'.$result->pcr.'</td>';
-							$html.='</tr>';
-							$alt++;
-						endforeach;
-					else :
-						$html.=$race->id.' - This race had no results<br />';				
-					endif;
-				$html.='</table>';
-			$html.='</td></tr>';
-			// field quality //
-			$html.='<tr><td colspan="7">';
-				$html.='<table id="race-'.$race->id.'" class="race-fq '.$fq_class.'">';
-					$html.='<tr class="header">';
-						$html.='<td>WC Mult.</td>';
-						$html.='<td>UCI Mult.</td>';
-						$html.='<td>Field Quality</td>';
-						$html.='<td>Total</td>';
-						$html.='<td>Divider</td>';
-						$html.='<td>Race Total</td>';
-					$html.='</tr>';
-					
-					if (isset($data->field_quality)) :
-//print_r($data->field_quality);					
-						$html.='<tr class="'.$class.'">';
-							$html.='<td>'.$data->field_quality->wcp_mult.'</td>';
-							$html.='<td>'.$data->field_quality->uci_mult.'</td>';
-							$html.='<td>'.$data->field_quality->field_quality.'</td>';
-							$html.='<td>'.$data->field_quality->total.'</td>';
-							$html.='<td>'.$data->field_quality->divider.'</td>';
-							$html.='<td>'.$data->field_quality->race_total.'</td>';
-						$html.='</tr>';
-					else :
-						$html.=$race->id.' - This race had no field quality<br />';				
-					endif;
-			$html.='</table>';
-		$html.='</td></tr>';
-			
-
-		$html.='</table><!-- .race-table -->';
-		
-		$html.='<div id="race-data-'.$race->id.'"></div>';
-		
-		$html.='<hr />';
-		
-		return $html;
-	}
-
 	//----------------------------- ajax functions -----------------------------//
 	function ajax_get_data() {
 		global $field_quality;
@@ -621,17 +502,6 @@ echo '</pre>';
 		
 		exit;
 	}
-	/*
-	$GLOBALS['normalizeChars'] = array(
-	'?'=>'S', '?'=>'s', 'Ð'=>'Dj','?'=>'Z', '?'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A',
-	'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E', 'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I',
-	'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U', 'Ú'=>'U',
-	'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss','à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a',
-	'å'=>'a', 'æ'=>'a', 'ç'=>'c', 'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i',
-	'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o', 'ö'=>'o', 'ø'=>'o', 'ù'=>'u',
-	'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', '?'=>'f');
-	$string = strtr($string, $GLOBALS['normalizeChars']);
-	*/	
 }
 
 $uci_curl=new Top25_cURL();

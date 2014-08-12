@@ -28,7 +28,7 @@ class Field_Quality {
 
 	public function get_race_math($race) {
 		$race_fq=$this->process_race_fq($race);
-print_r($race_fq);
+//print_r($race_fq);
 		return $race_fq;
 	}
 
