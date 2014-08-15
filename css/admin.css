@@ -45,44 +45,7 @@
 	
 }
 
-/* full race results table (view db)
------------------------------------- */
-.race-table {
-	width: 100%;
-}
-.race-table tr {
-	padding: 3px 0;
-	overflow: hidden;
-}
-.race-table tr.header {
-	font-weight: bold;
-}
-.race-table tr td {
-	
-}
-.race-results-full-table {
-	width: 100%;
-	padding: 10px 0;
-	overflow: hidden;
-}
-.race-results-full-table tr {
-	padding: 3px 0;
-	overflow: hidden;
-}
-.race-results-full-table tr.header {
-	font-weight: bold;
-}
-.race-results-full-table tr td {
-	
-}
-.race-table .race-results-full-table,
-.race-table .race-fq {
-	display: none;
-}
-.race-table .race-results-full-table.show,
-.race-table .race-fq.show {
-	display: table;
-}
+
 
 /* field quality restults (formatted)
 ------------------------------------- */

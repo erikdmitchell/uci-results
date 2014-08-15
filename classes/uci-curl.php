@@ -3,13 +3,15 @@ class Top25_cURL {
 
 	public $table='uci_races';
 	public $version='1.0.2';
-	public $url='http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=485&StartDateSort=20130907&EndDateSort=20140223&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8';
+	public $config=array();
 
-	function __construct() {
+	function __construct($config=array()) {
 		add_action('admin_menu',array($this,'admin_page'));
 		add_action('admin_enqueue_scripts',array($this,'admin_scripts_styles'));
 		
 		add_action('wp_ajax_get-data',array($this,'ajax_get_data'));
+
+		$this->config=(object) $config;
 	}	
 
 	function admin_page() {
@@ -30,7 +32,7 @@ class Top25_cURL {
 		$html.='<div class="uci-cross">';
 			$html.='<h3>UCI Cross</h3>';
 		$html.='</div>';
-		
+
 		echo $html;
 	}	
 
@@ -77,7 +79,7 @@ class Top25_cURL {
 		$timeout = 5;
 				
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $this->url);
+		curl_setopt($ch, CURLOPT_URL, $this->config->url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 		
@@ -503,10 +505,6 @@ class Top25_cURL {
 		exit;
 	}
 }
-
-$uci_curl=new Top25_cURL();
-
-
 
 /** The same as curl_exec except tries its best to convert the output to utf8 **/
 function curl_exec_utf8($ch) {

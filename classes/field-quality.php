@@ -21,6 +21,8 @@ class Field_Quality {
 	public $divider=3;
 	public $rider_points=array();
 	
+	private $races_table='uci_races';
+	
 	public $start_of_season='07 Sep 2013'; // NOT IN USE YET
 	
 	function __construct() {
@@ -28,7 +30,7 @@ class Field_Quality {
 
 	public function get_race_math($race) {
 		$race_fq=$this->process_race_fq($race);
-//print_r($race_fq);
+
 		return $race_fq;
 	}
 
@@ -43,34 +45,6 @@ class Field_Quality {
 		
 		return $race;
 	}
-
-	function format_race_fq_results($race) {
-		$html=null;
-		
-		$html.='<div class="fq-results">';
-			$html.='<div class="formula">(Field Quality + World Cup Mult. + UCI Points Mult.) / Divider = Race Total</div>';
-			$html.='<table class="math">';
-				$html.='<tr class="header">';
-					$html.='<th>Field Quality</th>';
-					$html.='<th>WC Multi</th>';
-					$html.='<th>UCI Multi</th>';
-					$html.='<th>Total</th>';
-					$html.='<th>Divider</th>';
-					$html.='<th>Race Total</th>';
-				$html.='</tr>';
-				$html.='<tr>';
-					$html.='<td>'.$this->field_quality.'</td>';
-					$html.='<td>'.$this->wcp_mult.'</td>';
-					$html.='<td>'.$this->uci_mult.'</td>';
-					$html.='<td>'.$this->total.'</td>';
-					$html.='<td>'.$this->divider.'</td>';
-					$html.='<td class="race-total">'.$this->race_total.'</td>';
-				$html.='</tr>';
-			$html.='</table>';
-		$html.='</div>';
-		
-		return $html;
-	}
 	
 	/**
 	 * @param object $race - race object from db
@@ -83,8 +57,8 @@ class Field_Quality {
 		$races_table='uci_races';
 		$races_db=$wpdb->get_results("SELECT data FROM $races_table");
 		$race_date=$race->date;
-		$races_before_data=array();
-		$wcp_races_before_data=array();
+		//$races_before_data=array();
+		//$wcp_races_before_data=array();
 		$all_races_data=array();
 		$rider_uci_points=array();
 		$rider_wcp_points=array();
@@ -97,22 +71,11 @@ class Field_Quality {
 		$nof_race_mult=0; // finisher multiplier
 		$this->race_type=$race->class;
 		$final_object=new stdClass();
-		
-		// get all races and all world cup races that occured before this one //
-		foreach ($races_db as $race) :
-			$race=$this->decode_race_data($race->data);
-		
-			if (strtotime($race->date)<strtotime($race_date)) :
-				array_push($races_before_data,$race->results);
-				if ($race->class=="CDM") :
-					array_push($wcp_races_before_data,$race->results);
-				endif;
-			endif;
-		endforeach;
-		
-		$rider_uci_points=$this->get_previous_races_points($races_before_data); // all uci points
-		$rider_wcp_points=$this->get_previous_races_points($wcp_races_before_data); // world cup points
-		$this->rider_points=$this->merge_rider_points_arrays($races_before_data,$rider_uci_points,$rider_wcp_points); // combine uci and wcp points arrays
+		$races_before_data=$this->get_all_prior_races($race_date);
+
+		$rider_uci_points=$this->get_previous_races_points($races_before_data['all']); // all uci points
+		$rider_wcp_points=$this->get_previous_races_points($races_before_data['wcp']); // world cup points		
+		$this->rider_points=$this->merge_rider_points_arrays($races_before_data['all'],$rider_uci_points,$rider_wcp_points); // combine uci and wcp points arrays
 		$this->wcp_field=$this->get_world_cup_points_in_field($race->results); // wc points in race
 
 		// get our point totals //
@@ -120,29 +83,12 @@ class Field_Quality {
 			$this->wcp_total=$this->wcp_total+$rider['wcp_points'];
 			$this->uci_total=$this->uci_total+$rider['uci_points'];
 		endforeach;
-		
-		// get world cup points in field //
-		foreach ($racers_in_field as $rider) :
-			foreach ($this->rider_points as $points) :
-				if ($rider==$points['name']) :
-					$this->wcp_field=$this->wcp_field+$points['wcp_points'];
-				endif;
-			endforeach;
-		endforeach;
-		
-		$this->wcp_mult=$this->get_world_cup_multiplier(); // get the wcp multiplyer //
-	
-		// get uci points in field //
-		foreach ($racers_in_field as $rider) :
-			foreach ($this->rider_points as $points) :
-				if ($rider==$points['name']) :
-					$this->uci_field=$this->uci_field+$points["uci_points"];
-				endif;
-			endforeach;
-		endforeach;
-	
-		$this->uci_mult=$this->get_uci_multiplier(); // get uci multiplier //
-		
+
+		$this->wcp_field=$this->get_points_in_field($this->rider_points,$racers_in_field,'wcp_points'); // get world cup points in field //
+		$this->wcp_mult=$this->get_multiplier($this->wcp_field,$this->wcp_total); // get the wcp multiplyer //
+		$this->uci_field=$this->get_points_in_field($this->rider_points,$racers_in_field,'uci_points'); // get uci points in field //
+		$this->uci_mult=$this->get_multiplier($this->uci_field,$this->uci_total); // uci multiplyer //
+
 		// get race type conversion //
 		switch ($race->class) :
 			case 'C1':
@@ -159,12 +105,6 @@ class Field_Quality {
 				break;
 		endswitch;
 	
-		// build finisher multiplier //
-		/*
-		$nof_mult=$number_of_finishers/$type_num; //no of finisher multiplyer
-		$nof_mult=$nof_mult/$number_of_finishers; //divide multiplyer by field to get percentage
-		$nof_mult=round($nof_mult,3);
-		*/
 		// finisher multiplier new -- TODO : Calculate previous years averages automatically //
 		switch ($race->class) :
 			case 'C1':
@@ -187,28 +127,21 @@ class Field_Quality {
 
 		$this->nof_mult=round($this->nof_mult,3);
 		$this->nof_mult=number_format($this->nof_mult,3);
-	
-		// we need a mod for no wc and/or uci races - we remove invalid values and change the divider //
-		if (!$this->wcp_mult) :	
-			$this->wcp_mult=0;
-			$this->divider--;
-		endif;
-		
-		if (!$this->uci_mult) :
-			$this->uci_mult=0;
-			$this->divider--;
-		endif;
-	
+
+		// if no uci total, change some values - first race of season //
+		if ($this->uci_total==0)
+			$this->get_modified_uci_data($racers_in_field);
+
 		// field quality = (wc mult + uci mult + nof mult) / 3 //
 		$this->field_quality=($this->wcp_mult+$this->uci_mult+$this->nof_mult)/$this->divider;
 		$this->field_quality=round($this->field_quality,3);
 		$this->field_quality=number_format($this->field_quality,3);
-		
+
 		// final math //
 		$this->total=$this->field_quality+$this->wcp_mult+$this->uci_mult;
 		$this->race_total=round(($this->total/$this->divider),3);
 		$this->race_total=number_format($this->race_total,3);	
-		
+
 		// build our return object //
 		$final_object->field_quality=$this->field_quality;
 		$final_object->total=$this->total;
@@ -216,7 +149,24 @@ class Field_Quality {
 		$final_object->wcp_mult=$this->wcp_mult;
 		$final_object->uci_mult=$this->uci_mult;
 		$final_object->divider=$this->divider;
-		
+/*
+echo '<pre>';
+echo 'Race: '.$race->event.' - '.$race->date.'<br>';
+echo 'WCP Total - '.$this->wcp_total.'<br>';
+echo 'UCI Total - '.$this->uci_total.'<br>';
+echo 'WCP Total (Field) - '.$this->wcp_field.'<br>';
+echo 'WCP Mult - '.$this->wcp_mult.'<br>';
+echo 'UCI Total (Field) - '.$this->uci_field.'<br>';
+echo 'UCI Mult - '.$this->uci_mult.'<br>';
+echo 'finishers - '.$this->number_of_finishers.'<br>';
+echo 'finisher multiplier - '.$this->nof_mult.'<br>';	
+echo 'Field Quality - ('.$this->wcp_mult.'+'.$this->uci_mult.'+'.$this->nof_mult.')/'.$this->divider.' = '.$this->field_quality.'<br>';
+echo 'Total - '.$this->total.'<br>';
+echo 'Race Total - '.$this->race_total.'<br>';		
+echo 'Final Object<br>';
+print_r($final_object);
+echo '</pre>';
+*/		
 		return $final_object;		
 	}	
 	
@@ -229,8 +179,8 @@ class Field_Quality {
 	 * takes in array
 	 * returns array w/ name and points
 	**/
-	function get_previous_races_points($races_before_data) {
-		$all_races_data=$this->reformat_race_data($races_before_data);
+	function get_previous_races_points($arr) {
+		$all_races_data=$this->reformat_race_data($arr);
 		$rider_names=$this->get_rider_names($all_races_data);
 
 		// using list of names, get points //
@@ -266,23 +216,27 @@ class Field_Quality {
 	}
 	
 	// reformats our race data for use in getting rider names and bulind a better array //
-	function reformat_race_data($races_before_data) {
+	function reformat_race_data($arr) {
 		$all_races_data=array();
 		
-		foreach ($races_before_data as $race) :
+		foreach ($arr as $race) :
 			foreach ($race as $rider) :
-				$data=array(
-					'name'=>$rider->name,
-					'points'=>$rider->par,
-				);
-				array_push($all_races_data,$data);
+				if (!empty($rider->par)) : // prevents those with no points from being in the arr //
+					$data=array(
+						'name'=>$rider->name,
+						'points'=>$rider->par,
+					);
+					array_push($all_races_data,$data);
+				endif;
 			endforeach;
 		endforeach;
 	
 		return $all_races_data;	
 	}
 	
-	// create one array with uci and wcp points //
+	/**
+	 * create one array with uci and wcp points 
+	 */
 	function merge_rider_points_arrays($races_before_data,$rider_uci_points,$rider_wcp_points) {
 		$all_races_data=$this->reformat_race_data($races_before_data);
 		$rider_names=$this->get_rider_names($all_races_data);
@@ -341,88 +295,91 @@ class Field_Quality {
 		return $wcp_field;
 	}
 	
-	// get the uci multiplier //
-	
-	function get_uci_multiplier() {
-		$uci_mod=0;
-		
-		if ($this->uci_total!=0) :
-			$uci_mult=$this->uci_field/$this->uci_total; //uci multiplyer
+	/**
+	 *
+	 */
+	function get_multiplier($field,$total) {
+		if ($total!=0) :
+			$multiplyer=$field/$total; // multiplyer
 		else :
-			return false; // there are no points
+			return 0; // there are no points
 		endif;
 		
-		$uci_mult=round($uci_mult,3);
-		$uci_mult=number_format($uci_mult,3);
+		$multiplyer=round($multiplyer,3);
+		$multiplyer=number_format($multiplyer,3);
 		
-		return $uci_mult;
+		return $multiplyer;
 	}
 	
-	function get_world_cup_multiplier() {
-		$wcp_mult=0;
+	/**
+	 * get all races and all world cup races that occured before this one
+	 */
+	function get_all_prior_races($race_date) {
+		global $wpdb;
+		$arr=array();
+		$races_before_data=array();
+		$wcp_races_before_data=array();
+		$races_db=$wpdb->get_results("SELECT data FROM ".$this->races_table);
+	
+		foreach ($races_db as $race_db) :
+			$race_data=$this->decode_race_data($race_db->data);
 		
-		if ($this->wcp_total!=0) :
-			$wcp_mult=$this->wcp_field/$this->wcp_total;
-		else :
-			return false;
-		endif;
-
-		$wcp_mult=round($wcp_mult,3);
-		$wcp_mult=number_format($wcp_mult,3);
+			if (strtotime($race_data->date)<strtotime($race_date)) :
+				array_push($races_before_data,$race_data->results);
+				if ($race_data->class=="CDM") :
+					array_push($wcp_races_before_data,$race_data->results);
+				endif;
+			endif;
+		endforeach;
 		
-		return $wcp_mult;
+		$arr['all']=$races_before_data;
+		$arr['wcp']=$wcp_races_before_data;
+		
+		return $arr;
 	}
 	
-/*
-	function display_filed_quality($race=false) {
-		$race=$this->process_race_fq($race);
-		$html=null;
+	/**
+	 *
+	 */
+	function get_points_in_field($rider_points,$riders,$field) {
+		$field_points=0;
 		
-		$html.='<div class="field-quality">';
-			$html.='<p>';
-				$html.='Total World Cup Points: '.$this->wcp_total.'<br/>';
-				$html.='Total World Cup Points in Field: '.$this->wcp_field.'<br/>';
-				$html.='World Cup Points Multiplier: <b>'.$this->wcp_mult.'</b><br/>';
-			$html.='</p>';
-			$html.='<p>';
-				$html.='Total UCI Points: '.$this->uci_total.'<br/>';
-				$html.='Total UCI Points in Field: '.$this->uci_field.'<br/>';
-				$html.='UCI Points Multiplier: <b>'.$this->uci_mult.'</b><br/>';
-			$html.='</p>';
-			$html.='<p>';
-				$html.='Number of finishers: '.$this->number_of_finishers.'<br/>';
-				$html.='Type: '.$this->race_type.'<br/>';
-				$html.='Type Num: '.$this->type_num.'<br/>';
-				$html.='No Finishers Multiplier: <b>'.$this->nof_mult.'</b><br/>';
-			$html.='</p>';
-			$html.='Field Quality: <b>'.$this->field_quality.'</b>';
-			
-			$html.='<div class="notes">';
-				$html.='*The first race of the European/US season gets a modified race quality due to lack of UCI points<br />';
-				$html.='**If no World Cup races have occurred, we need override<br />';
-				$html.='Divider: '.$this->divider.' (3 as base)';
-			$html.='</div>';
-
-			$html.='<table class="math">';
-				$html.='<tr class="header">';
-					$html.='<th>Field Quality</th>';
-					$html.='<th>WC Multi</th>';
-					$html.='<th>UCI Multi</th>';
-					$html.='<th>Total</th>';
-				$html.='</tr>';
-				$html.='<tr>';
-					$html.='<td>'.$this->field_quality.'</td>';
-					$html.='<td>'.$this->wcp_mult.'</td>';
-					$html.='<td>'.$this->uci_mult.'</td>';
-					$html.='<td>'.$this->total.'</td>';
-				$html.='</tr>';
-			$html.='</table>';
-			$html.='Race Total: '.$this->race_total.'';
-		$html.='</div><!-- .field-quality -->';
+		foreach ($riders as $rider) :
+			foreach ($rider_points as $points) :			
+				if ($rider==$points['name']) :
+					$field_points=$field_points+$points[$field];
+				endif;
+			endforeach;
+		endforeach;	
 		
-		return $html;
+		return $field_points;
 	}
-*/	
+	
+	/**
+	 *
+	 */
+	function get_modified_uci_data($riders) {
+		global $wpdb;
+		$uci_total=0;
+		$uci_field=0;
+		$rider_season_rankings=$wpdb->get_results("SELECT name,points FROM uci_season_rankings WHERE season='2013/2014'");
+
+		foreach ($riders as $rider) :
+			foreach ($rider_season_rankings as $r) :
+				if ($rider==$r->name) :		
+					$uci_field=$uci_field+$r->points;
+				endif;
+			endforeach;
+		endforeach;
+	
+		foreach ($rider_season_rankings as $r) :
+			$uci_total=$uci_total+$r->points;
+		endforeach;
+
+		$this->uci_field=$uci_field;
+		$this->uci_total=$uci_total;
+		$this->uci_mult=$this->get_multiplier($uci_field,$uci_total); // uci multiplyer //
+	}
 
 }
 

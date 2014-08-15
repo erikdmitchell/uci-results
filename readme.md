@@ -45,12 +45,6 @@ Note: in some instances "total" in FQis greater than 1. Need to double check. OK
 
 4/17
 Fixed FQ, all set, need to hard code.
-
-3. TODO: nittany gets a 1.0, this needs to be adjusted using previous years uci points in field (need previous years results).
-2. TOTO: Once fq ia hard coded, need methods to adjust and update
-4. TODO: try accessing 2012/2013 season
-5. TODO: write functions/code to diplay races and details (shortcode perhaps) and rank riders
-TODO: add db setup
 Error:? Warning: Division by zero in /Users/erik/Sites/wordpress/wp-content/plugins/uci-curl/classes/field-quality.php on line 250
 
 4/18
@@ -63,8 +57,27 @@ ERROR: fq WC and UCI pts are outputting zero stuff is producing results of zero.
  - This is based on previous races, so we need to make sure the first few races are going in properly.
  - Will need to come up with some sort of mod for this testing.
  
-8/12
+### Version 1.0.3
+
  Pulled out view db functions
- TODO: The new goal is to just straight upload results, then in a second step calculate all the other data (FQ class)
- TODO: Will develop an automater class (semi exists in curl class with get_race_data())
- TODO: clean up js and css for new classes
+ The new goal is to just straight upload results, then in a second step calculate all the other data (FQ class)
+ Cleaned up css and added a seperate css file for the ViewDB class.
+ Added config to primary curl class.
+ FQ can be updated, still no manual adjustment, but it shouldn't be needed under new system.
+ Added a method where we use the previous seasons UCI rankings for the first race of the season. Doesn't help the second race and needs more controls.
+ Fixed various bugs in our FQ class. Wrote some extra functions, cleaned up math and modified it a bit.
+ 
+ Bug: FQ updater (View DB) needs to be run multiple times when super bulky.
+ 
+### Version 1.0.4
+
+
+TODO: clean upand standardize config for curl class
+TODO: Will develop an automater class (semi exists in curl class with get_race_data())
+TODO: clean up js 
+TODO: cURL ajax may no longer be needed
+4. TODO: try accessing 2012/2013 season
+5. TODO: write functions/code to diplay races and details (shortcode perhaps) and rank riders
+TODO:
+TODO: add db setup
+TODO: Spit out add to db stuff first, then load rest or something along those lines

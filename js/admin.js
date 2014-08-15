@@ -18,7 +18,8 @@ jQuery(document).ready(function($) {
 	/**
 	 * this function is used in ViewDB class
 	 */
-	$('.race-table .race-link a').click(function() {
+	$('.race-table .race-link a').click(function(e) {
+		e.preventDefault();
 		var id=$(this).data('id');
 
 		if ($('.race-results-full-table#'+id).is(':visible')) {
@@ -31,7 +32,8 @@ jQuery(document).ready(function($) {
 	/**
 	 * this function is used in ViewDB class
 	 */
-	$('.race-table .race-details a').click(function() {
+	$('.race-table .race-details a').click(function(e) {
+		e.preventDefault();	
 		var id=$(this).data('id');
 
 		if ($('.race-fq#'+id).is(':visible')) {
