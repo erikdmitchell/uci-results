@@ -193,7 +193,7 @@ class ViewDB {
 
 	/**
 	 * sorts our races db object
-	 * right now options are dummy, only does dat in ASC order
+	 * right now options are dummy, only does date in ASC order
 	 */
 	function sort_races($field,$method,$races) {
 		foreach ($races as $race) :

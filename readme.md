@@ -70,6 +70,10 @@ ERROR: fq WC and UCI pts are outputting zero stuff is producing results of zero.
  Bug: FQ updater (View DB) needs to be run multiple times when super bulky.
  
 ### Version 1.0.4
+	
+	Added RaceStats class
+	
+	Fixed code for first weekend of racing - the race ends up w/ a 1/1 in terms of points, so for the whole weekend, we use last years points
 
 
 TODO: clean upand standardize config for curl class

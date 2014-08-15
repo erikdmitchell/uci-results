@@ -28,9 +28,13 @@ class Top25_cURL {
 
 	function display_admin_page() {
 		$html=null;
+		$stats=new RaceStats();
 
 		$html.='<div class="uci-cross">';
-			$html.='<h3>UCI Cross</h3>';
+			$html.='<h2>UCI Cross</h2>';
+			
+			$html.='<h3>Race Stats</h3>';
+			$html.=$stats->get_season_race_rankings(2);
 		$html.='</div>';
 
 		echo $html;
