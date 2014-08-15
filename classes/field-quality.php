@@ -57,8 +57,6 @@ class Field_Quality {
 		$races_table='uci_races';
 		$races_db=$wpdb->get_results("SELECT data FROM $races_table");
 		$race_date=$race->date;
-		//$races_before_data=array();
-		//$wcp_races_before_data=array();
 		$all_races_data=array();
 		$rider_uci_points=array();
 		$rider_wcp_points=array();
@@ -128,9 +126,12 @@ class Field_Quality {
 		$this->nof_mult=round($this->nof_mult,3);
 		$this->nof_mult=number_format($this->nof_mult,3);
 
-		// if no uci total, change some values - first race of season //
-		if ($this->uci_total==0)
+		// if no uci total, change some values - first race of season - or second race with all points //
+		if ($this->uci_total==0) :
 			$this->get_modified_uci_data($racers_in_field);
+		elseif (count($races_before_data['all'])==1 && $this->uci_total==$this->uci_field) :
+			$this->get_modified_uci_data($racers_in_field);	
+		endif;
 
 		// field quality = (wc mult + uci mult + nof mult) / 3 //
 		$this->field_quality=($this->wcp_mult+$this->uci_mult+$this->nof_mult)/$this->divider;
@@ -149,6 +150,7 @@ class Field_Quality {
 		$final_object->wcp_mult=$this->wcp_mult;
 		$final_object->uci_mult=$this->uci_mult;
 		$final_object->divider=$this->divider;
+
 /*
 echo '<pre>';
 echo 'Race: '.$race->event.' - '.$race->date.'<br>';
@@ -166,7 +168,8 @@ echo 'Race Total - '.$this->race_total.'<br>';
 echo 'Final Object<br>';
 print_r($final_object);
 echo '</pre>';
-*/		
+*/
+		
 		return $final_object;		
 	}	
 	
