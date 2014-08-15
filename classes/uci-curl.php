@@ -29,12 +29,16 @@ class Top25_cURL {
 	function display_admin_page() {
 		$html=null;
 		$stats=new RaceStats();
+		$rider_stats=new RiderStats();
 
 		$html.='<div class="uci-cross">';
 			$html.='<h2>UCI Cross</h2>';
 			
-			$html.='<h3>Race Stats</h3>';
-			$html.=$stats->get_season_race_rankings(2);
+			//$html.='<h3>Race Stats</h3>';
+			//$html.=$stats->get_season_race_rankings(2);
+			
+			$html.='<h3>Rider Stats</h3>';
+			$html.=$rider_stats->get_sos('Sven Nys');
 		$html.='</div>';
 
 		echo $html;

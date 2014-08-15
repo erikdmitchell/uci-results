@@ -72,6 +72,7 @@ ERROR: fq WC and UCI pts are outputting zero stuff is producing results of zero.
 ### Version 1.0.4
 	
 	Added RaceStats class
+	Added RiderStats class
 	
 	Fixed code for first weekend of racing - the race ends up w/ a 1/1 in terms of points, so for the whole weekend, we use last years points
 

@@ -13,6 +13,7 @@ include_once(plugin_dir_path(__FILE__).'classes/uci-curl.php');
 include_once(plugin_dir_path(__FILE__).'classes/field-quality.php');
 include_once(plugin_dir_path(__FILE__).'classes/view-db.php');
 include_once(plugin_dir_path(__FILE__).'classes/race-stats.php');
+include_once(plugin_dir_path(__FILE__).'classes/rider-stats.php');
 
 define('UCICURLBASE',plugin_dir_url(__FILE__));
 
