@@ -38,7 +38,7 @@ class Top25_cURL {
 			//$html.=$stats->get_season_race_rankings(2);
 			
 			$html.='<h3>Rider Stats</h3>';
-			$html.=$rider_stats->get_sos('Sven Nys');
+			$html.=$rider_stats->get_season_rider_rankings();
 		$html.='</div>';
 
 		echo $html;
