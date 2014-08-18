@@ -12,7 +12,7 @@ class RiderStats {
 		global $uci_curl;
 		
 		$html=null;
-		$sort_type='sos';
+		$sort_type='total';
 		$sort='desc';
 		$riders=$this->get_list_of_riders($season);
 		$counter=0;
@@ -37,6 +37,7 @@ class RiderStats {
 				$html.='<td class="wcp">WCP Points</td>';
 				$html.='<td class="winning">Winning Perc.</td>';
 				$html.='<td class="sos">SOS</td>';
+				$html.='<td class="total">Total</td>';
 			$html.='</tr>';
 
 			foreach ($riders as $rider) :
@@ -49,6 +50,7 @@ class RiderStats {
 						$html.='<td class="wcp">'.$rider->wcp_points.'</td>';
 						$html.='<td class="winning">'.$rider->winning_perc.'</td>';
 						$html.='<td class="sos">'.$rider->sos.'</td>';
+						$html.='<td class="total">'.$rider->total.'</td>';
 					$html.='</tr>';
 				endif;
 			endforeach;
@@ -86,11 +88,12 @@ class RiderStats {
 			return $false;
 			
 		$obj=new stdClass();
+		$obj->name=$rider;
 		$obj->uci_points=$this->get_rider_points($rider,'uci',$season);
 		$obj->wcp_points=$this->get_rider_points($rider,'cdm',$season);
 		$obj->sos=$this->get_sos($rider);
 		$obj->winning_perc=$this->get_rider_winning_perc($rider,$season);
-		$obj->name=$rider;
+		$obj->total=$this->get_rider_final_number($rider,$season);
 		
 		return $obj;
 	}
@@ -227,6 +230,49 @@ class RiderStats {
 		endforeach;
 		
 		return $points;
+	}
+
+	/**
+	 *
+	 */
+	function get_rider_final_number($rider=false,$season=false) {
+		$uci=$this->get_rider_points($rider,'uci',$season);
+		$wcp=$this->get_rider_points($rider,'cdm',$season);
+		$sos=$this->get_sos($rider);
+		$winning=$this->get_rider_winning_perc($rider,$season);
+		$uci_total=$this->get_total_points('uci',$season);
+		$wcp_total=$this->get_total_points('cdm',$season);
+		
+		$uci=number_format($uci/$uci_total,3);
+		$wcp=number_format($wcp/$wcp_total,3);
+		
+		$total=($uci+$wcp+$sos+$winning)/4;
+		
+		return number_format($total,3);
+	}
+
+	/**
+	 *
+	 */
+	function get_total_points($type,$season) {
+		global $wpdb,$uci_curl;
+		$races_db=$wpdb->get_results("SELECT * FROM ".$uci_curl->table);
+		$points=0;
+		
+		foreach ($races_db as $race) :
+			$data=unserialize(base64_decode($race->data));
+			foreach ($data->results as $result) :
+				if ($type=='cdm') :
+					if ($data->class=='CDM') :
+						$points=$points+$result->par;				
+					endif;
+				else :
+					$points=$points+$result->par;				
+				endif;
+			endforeach;
+		endforeach;		
+		
+		return $points;		
 	}
 
 	/**
