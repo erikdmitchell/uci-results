@@ -38,7 +38,12 @@ class Top25_cURL {
 			//$html.=$stats->get_season_race_rankings(2);
 			
 			$html.='<h3>Rider Stats</h3>';
-			$html.=$rider_stats->get_season_rider_rankings();
+			echo '<pre>';
+			print_r($rider_stats->get_rider_stats('Sven Nys'));
+			print_r($rider_stats->get_rider_stats('Niels Albert'));
+			print_r($rider_stats->get_rider_stats('Jeremy Powers'));
+			echo '</pre>';
+			//$html.=$rider_stats->get_season_rider_rankings();
 		$html.='</div>';
 
 		echo $html;

@@ -21,9 +21,6 @@ class RiderStats {
 		foreach ($riders as $key => $rider) :
 			$riders_x[]=$this->get_rider_stats($rider,$season);
 			$counter++;
-			
-			if ($counter==10)
-				break;	
 		endforeach;
 
 		$riders=$riders_x;
@@ -134,12 +131,16 @@ class RiderStats {
 			$fq_total=$fq_total+$race->fq;
 		endforeach;	
 		
-		$fq_total=$fq_total/$rider_total_races;
-		$races_perc=$rider_total_races/$total_races;
-		
-		$sos=$fq_total+$races_perc;
-		
+		//$fq_total=$fq_total/$rider_total_races;
+		//$races_perc=$rider_total_races/$total_races;
+		$fq_total=$fq_total/100;
+		$sos=$sos/100;
+
+		//$sos=$fq_total+$races_perc;
 		//$sos=($rider_total_races/$total_races)+$sos;
+		//$sos=1/$fq_total;
+		
+		$sos=($fq_total+$sos)/2;
 				
 		return number_format($sos,3);
 	}
