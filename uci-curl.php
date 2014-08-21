@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: UCI cURL
- * Plugin URI: 
+ * Plugin URI: http://erikmitchell.net
  * Description: Pulls in results via cURL from the UCI website.
- * Version: 1.0.4
+ * Version: 1.0.5
  * Author: Erik Mitchell
- * Author URI: erikmitchell.net
+ * Author URI: http://erikmitchell.net
  * License: 
  */
 

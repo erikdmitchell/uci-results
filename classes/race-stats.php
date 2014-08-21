@@ -5,15 +5,20 @@ class RaceStats {
 	
 	}
 	
-	function get_season_race_rankings($season) {
+	function get_season_race_rankings($season=false) {
 		global $wpdb;
 		global $uci_curl;
+		
+		if (!$season)
+			return '<div class="error">Error: No season detected for get season race ranking.</div>';
 		
 		$html=null;
 		$sort_type='race_total';
 		$sort='desc';
-		$races=$wpdb->get_results("SELECT * FROM ".$uci_curl->table);
+		$races=$wpdb->get_results("SELECT * FROM ".$uci_curl->table." WHERE season='$season'");
 		$races=$this->sort_races($sort_type,$sort,$races);
+		
+		$html.='<h3>'.$season.' Rider Rankings</h3>';
 		
 		$html.='<table id="season-race-rankings" class="season-race-rankings">';
 			$html.='<tr class="header">';

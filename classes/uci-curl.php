@@ -35,14 +35,16 @@ class Top25_cURL {
 			$html.='<h2>UCI Cross</h2>';
 			
 			//$html.='<h3>Race Stats</h3>';
-			//$html.=$stats->get_season_race_rankings(2);
+			$html.=$stats->get_season_race_rankings('2013/2014');
 			
 			$html.='<h3>Rider Stats</h3>';
+/*
 			echo '<pre>';
-			print_r($rider_stats->get_rider_stats('Sven Nys'));
-			print_r($rider_stats->get_rider_stats('Niels Albert'));
-			print_r($rider_stats->get_rider_stats('Jeremy Powers'));
+			print_r($rider_stats->get_rider_stats('Sven Nys','2013/2014'));
+			print_r($rider_stats->get_rider_stats('Niels Albert','2013/2014'));
+			print_r($rider_stats->get_rider_stats('Jeremy Powers','2013/2014'));
 			echo '</pre>';
+*/
 			//$html.=$rider_stats->get_season_rider_rankings();
 		$html.='</div>';
 
@@ -289,8 +291,14 @@ class Top25_cURL {
 		$data=array(
 			'data' => base64_encode(serialize($race_data)),
 			'code' => $this->build_race_code($race_data),
+			'season' => $this->get_race_season($race_data),
 		);	
 
+echo '<pre>';
+print_r($data);
+echo '</pre>';
+
+/*
 		if (!$this->check_for_dups($data['code'])) :
 			if ($wpdb->insert($table,$data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
@@ -300,6 +308,7 @@ class Top25_cURL {
 		else :
 			$message='<div class="error">'.$data['code'].' is already in the database</div>';
 		endif;
+*/
 		
 		return $message; 
 	}
@@ -316,6 +325,48 @@ class Top25_cURL {
 		$code=strtolower($code); // make lowercase
 		
 		return $code;
+	}
+	
+	/**
+	 *
+	 */
+	function get_race_season($obj) {
+		$date=$obj->date;
+		$season_arr=$this->build_year_arr();
+
+		foreach ($season_arr as $key => $season) :
+			if (strtotime($date) >= strtotime($season['start'])  && strtotime($date) <= strtotime($season['end']))
+				return $key;
+		endforeach;			
+		
+		return false;
+	}
+	
+	/**
+	 *
+	 */
+	function build_year_arr() {
+		$year=date('Y');
+		$counter_year=$year-20;
+		$max_year=$year+20;
+		$season_start='Sep 1';
+		$season_end='Mar 1';
+		$season_arr=array();
+		
+		while ($counter_year<=$max_year) :
+			$year=$counter_year;
+			$next_year=$counter_year+1;
+			$season=$year.'/'.$next_year;
+			
+			$season_arr[$season]=array(
+				'start' => $season_start.' '.$year,
+				'end' => $season_end.' '.$next_year
+			);
+			
+			$counter_year++;
+		endwhile;
+		
+		return $season_arr;
 	}
 	
 	/**

@@ -1,4 +1,4 @@
-uci-curl.php (99%) - CONTAINS EVERYTHING
+TODO: uci-curl.php (99%) - CONTAINS EVERYTHING
  - works well
  - needs clean up and a lot more functionality
  - need some sort of auto run function to run race results
@@ -76,7 +76,13 @@ ERROR: fq WC and UCI pts are outputting zero stuff is producing results of zero.
 	
 	Fixed code for first weekend of racing - the race ends up w/ a 1/1 in terms of points, so for the whole weekend, we use last years points
 
+### Version 1.0.5
 
+	Added a season field to uci_races db.
+	
+	Updated functionality to support the new 'season' db field in RiderStats class.
+	Updated functionality to support the new 'season' db field in RaceStats class.	
+	
 TODO: clean upand standardize config for curl class
 TODO: Will develop an automater class (semi exists in curl class with get_race_data())
 TODO: clean up js 
