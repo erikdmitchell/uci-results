@@ -3,8 +3,8 @@
 	Added: a season field to uci_races db.
 	Added: season column to uci curl page.
 	
-	Updated: functionality to support the new 'season' db field in RiderStats class.
-	Updated: functionality to support the new 'season' db field in RaceStats class.	
+	Updated: functionality to support the new "season" db field in RiderStats class.
+	Updated: functionality to support the new "season" db field in RaceStats class.	
 	Updated: cURL admin interface to allow inputs of urls as well loading of stored urls.	
 	
 	Removed: ajax functions from ucu curl class. Also removed results table.
@@ -25,9 +25,9 @@
 ### Version 1.0.3
 
 	Added: config to primary curl class.
-	Added: a method where we use the previous seasons UCI rankings for the first race of the season. Doesn't help the second race and needs more controls.
+	Added: a method where we use the previous seasons UCI rankings for the first race of the season. Does not help the second race and needs more controls.
 
-	Fixed: FQ can be updated, still no manual adjustment, but it shouldn't be needed under new system.
+	Fixed: FQ can be updated, still no manual adjustment, but it should not be needed under new system.
 	Fixed: various bugs in our FQ class. Wrote some extra functions, cleaned up math and modified it a bit.
 
 	Updated: Pulled out view db functions
@@ -40,11 +40,11 @@
 ### Version 1.0.2 and Prior
 
 	Added: sperate admin menu/section for plugin.
-	Added: get_uci_multiplier() and get_world_cup_multiplier() to Field_Quality class. They're our auto detect of sorts.	
+	Added: get_uci_multiplier() and get_world_cup_multiplier() to Field_Quality class. They are our auto detect of sorts.	
 	Added: get_race_date() to UCI cURL class -- function slows down things a lot
 	Added: UCICURLBASE constant for plugin url
 	Added: bail out for corrupt data in get_race_results()
-	Added: loading modal for 'load all data' and 'results' click(s)
+	Added: loading modal for "load all data" and "results" click(s)
 	Added: a strip js to get_race_results() $html after cURL
 	Added: code and check into get_race_data() to speed things up and be able to spit out duplicates and issues in debugging mode -- removed in production due to weird error
 	Added: base64 to pre db process hoping to fix char issues
@@ -61,7 +61,7 @@
 	Updated: get_race_results() now uses a switch case for data
 	Updated: formatted db view page output
 
-	Removed: admin page for Field_Quality class b/c it's no longer needed.
+	Removed: admin page for Field_Quality class b/c it iss no longer needed.
 	Removed: lots of junk code.
 
 	Bug: fq WC and UCI pts are outputting zero stuff is producing results of zero.
@@ -83,9 +83,9 @@
 
 	Loaded Years:
 		2013/2014
+		2012/2013
 
 	To Be Loaded
-		2012/2013
 		2011/2012 - Check date format
 		2010/2011
 		2009/2010 - Check date format
