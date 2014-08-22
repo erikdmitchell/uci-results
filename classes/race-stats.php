@@ -18,7 +18,7 @@ class RaceStats {
 		$races=$wpdb->get_results("SELECT * FROM ".$uci_curl->table." WHERE season='$season'");
 		$races=$this->sort_races($sort_type,$sort,$races);
 		
-		$html.='<h3>'.$season.' Rider Rankings</h3>';
+		$html.='<h3>'.$season.' Race Rankings</h3>';
 		
 		$html.='<table id="season-race-rankings" class="season-race-rankings">';
 			$html.='<tr class="header">';

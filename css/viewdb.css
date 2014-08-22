@@ -12,6 +12,11 @@
 }
 .race-table tr.error {
 	background: red;
+	color: #fff;
+}
+.race-table tr.error a,
+.race-table tr.error a:hover {
+	color: #fff;
 }
 .race-table tr td.date {
 	width: 140px;	

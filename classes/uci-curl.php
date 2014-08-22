@@ -9,7 +9,14 @@ class Top25_cURL {
 		add_action('admin_menu',array($this,'admin_page'));
 		add_action('admin_enqueue_scripts',array($this,'admin_scripts_styles'));
 		
-		add_action('wp_ajax_get-data',array($this,'ajax_get_data'));
+		$config['urls']=array(
+			'2013/2014' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=485&StartDateSort=20130907&EndDateSort=20140223&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
+			'2012/2013' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=483&StartDateSort=20120908&EndDateSort=20130224&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
+			'2011/2012' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=481&StartDateSort=20110910&EndDateSort=20120708&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
+			'2010/2011' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=479&StartDateSort=20100911&EndDateSort=20110220&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
+			'2009/2010' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=477&StartDateSort=20090913&EndDateSort=20100221&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
+			'2008/2009' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=475&StartDateSort=20080914&EndDateSort=20090222&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
+		);
 
 		$this->config=(object) $config;
 	}	
@@ -54,6 +61,7 @@ class Top25_cURL {
 	function display_curl_page() {
 		$html=null;
 		$results=array();
+		$url=null;
 
 		$html.='<div class="uci-curl">';
 			$html.='<h3>cURL</h3>';
@@ -65,12 +73,30 @@ class Top25_cURL {
 					echo $this->add_race_to_db(unserialize(base64_decode($race)));
 				endforeach;
 			endif;
+
+			if (isset($_POST['url']) && isset($_POST['submit']) && $_POST['submit']=='Get Races') :
+				$this->config->url=$_POST['url'];
+				$url=$_POST['url'];
+			endif;
 			
-			$html.='<div class="data-results"></div>'; // empty?
+			$html.='<form class="get-races" name="get-races" method="post">';
+				$html.='<label for="url">URL</label>';
+				$html.='<input class="url" type="text" name="url" id="url" value="'.$url.'" /><br />';
+				$html.='<label for="url-dd">Season</label>';
+				$html.='<select class="url-dd" name="url">';
+					$html.='<option>Select Year</option>';
+					foreach ($this->config->urls as $season => $url) :
+						$html.='<option value="'.$url.'">'.$season.'</option>';
+					endforeach;
+				$html.='</select><br />';
+				$html.='<input type="submit" name="submit" id="submit" class="button button-primary" value="Get Races" />';
+			$html.='</form>';
+			
+			//$html.='<div class="data-results"></div>'; // empty?
 			
 			$html.=$this->get_race_data(false);
 			
-			$html.='<div class="db-results"></div>'; // empty?
+			//$html.='<div class="db-results"></div>'; // empty?
 			
 		$html.='</div>';
 		
@@ -86,6 +112,9 @@ class Top25_cURL {
 	 *		the default is a table of race data for individual adding/info 
 	**/
 	function get_race_data($add_to_db=true) {
+		if (!isset($this->config->url))
+			return false;
+			
 		set_time_limit(0); // mex ececution time
 		$races=array();
 		$races_class_name='datatable';
@@ -144,6 +173,7 @@ class Top25_cURL {
 					}
 				endforeach;
 				$races[$row_count]->link=$link;
+				$races[$row_count]->season=$this->get_season_from_date($races[$row_count]->date);
 				
 				// check for code in db, only get results if not in db //
 				$code=$this->build_race_code($races[$row_count]);
@@ -291,14 +321,9 @@ class Top25_cURL {
 		$data=array(
 			'data' => base64_encode(serialize($race_data)),
 			'code' => $this->build_race_code($race_data),
-			'season' => $this->get_race_season($race_data),
+			'season' => $race_data->season,
 		);	
 
-echo '<pre>';
-print_r($data);
-echo '</pre>';
-
-/*
 		if (!$this->check_for_dups($data['code'])) :
 			if ($wpdb->insert($table,$data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
@@ -308,7 +333,6 @@ echo '</pre>';
 		else :
 			$message='<div class="error">'.$data['code'].' is already in the database</div>';
 		endif;
-*/
 		
 		return $message; 
 	}
@@ -326,12 +350,12 @@ echo '</pre>';
 		
 		return $code;
 	}
-	
+
 	/**
-	 *
+	 * @param object $obj - race object
+	 * returns string
 	 */
-	function get_race_season($obj) {
-		$date=$obj->date;
+	function get_season_from_date($date) {
 		$season_arr=$this->build_year_arr();
 
 		foreach ($season_arr as $key => $season) :
@@ -471,6 +495,7 @@ echo '</pre>';
 					$html.='<td>Nat.</td>';
 					$html.='<td>Class</td>';
 					$html.='<td>Winner</td>';
+					$html.='<td>Season</td>';
 				$html.='</tr>';
 				
 				foreach ($obj as $result) :
@@ -486,6 +511,7 @@ echo '</pre>';
 						$html.='<td>'.$result->nat.'</td>';
 						$html.='<td>'.$result->class.'</td>';
 						$html.='<td>'.$result->winner.'</td>';
+						$html.='<td>'.$result->season.'</td>';
 					$html.='</tr>';
 					$alt++;
 				endforeach;
@@ -503,71 +529,7 @@ echo '</pre>';
 				
 		return $html;
 	}
-	
-	/**
-	 * builds our default results table on curl page
-	 * called by ajax function
-	 */
-	function build_default_race_results_table($obj) {
-		$html=null;
-		$alt=0;
 
-		$html.='<table class="race-results-table">';
-			$html.='<tr class="header">';
-				$html.='<td>Age</td>';
-				$html.='<td>Name</td>';
-				$html.='<td>Nat.</td>';
-				$html.='<td>PAR</td>';
-				$html.='<td>PCR</td>';
-				$html.='<td>Place</td>';
-				$html.='<td>Result</td>';
-			$html.='</tr>';
-			
-			foreach ($obj as $result) :
-				if ($alt%2) :
-					$class='alt';
-				else :
-					$class=null;
-				endif;
-				$html.='<tr class="'.$class.'">';
-					$html.='<td>'.$result->place.'</td>';
-					$html.='<td>'.$result->name.'</td>';
-					$html.='<td>'.$result->nat.'</td>';
-					$html.='<td>'.$result->age.'</td>';
-					$html.='<td>'.$result->result.'</td>';
-					$html.='<td>'.$result->par.'</td>';
-					$html.='<td>'.$result->pcr.'</td>';		
-				$html.='</tr>';
-				$alt++;
-			endforeach;
-			
-		$html.='</table>';
-		
-		return $html;
-	}
-
-	//----------------------------- ajax functions -----------------------------//
-	function ajax_get_data() {
-		global $field_quality;
-		$results=array();
-		
-		switch ($_POST['type']) :
-			case 'all':
-				$results=$this->get_race_data();		
-				break;
-			case 'race':			
-				$results=$this->get_race_results($_POST['link']);	
-				$results=$this->build_default_race_results_table($results);			
-				break;
-			case 'race-data':
-				$results=$field_quality->get_race_math_by_id($_POST['id']);
-				break;
-		endswitch;
-
-		echo json_encode($results);
-		
-		exit;
-	}
 }
 
 /** The same as curl_exec except tries its best to convert the output to utf8 **/

@@ -77,3 +77,23 @@
 .fq-results .math tr td.race-total {
 	text-decoration: underline;
 }
+
+/* uci curl page
+-----------------*/
+.get-races {
+
+}
+.get-races label {
+	width: 50px;
+	font-weight: bold;
+	display: inline-block;
+}
+.get-races .url {
+	width: 90%;
+}
+.get-races .url-dd {
+
+}
+.get-races .button {
+
+}

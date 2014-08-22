@@ -9,6 +9,9 @@ class ViewDB {
 	}
 	
 	function viewdb_scripts_styles() {
+		wp_enqueue_script('jquery');
+		wp_enqueue_script('jquery-tablesorter-script',UCICURLBASE.'js/jquery.tablesorter.min.js',array('jquery'),'2.0.5b',true);
+	
 		wp_enqueue_style('viewdb-admin-style',UCICURLBASE.'/css/viewdb.css');
 	}
 
@@ -33,16 +36,19 @@ class ViewDB {
 
 		$html.='<form name="add-races-to-db" method="post">';		
 			$html.='<table class="race-table">';
-				$html.='<tr class="header">';
-					$html.='<td>&nbsp;</td>';
-					$html.='<td class="date">Date</td>';
-					$html.='<td class="event">Event</td>';
-					$html.='<td class="nat">Nat.</td>';
-					$html.='<td class="class">Class</td>';
-					$html.='<td class="winner">Winner</td>';
-					$html.='<td>&nbsp;</td>';
-					$html.='<td>&nbsp;</td>';
-				$html.='</tr>';
+				$html.='<thead>';
+					$html.='<tr class="header">';
+						$html.='<td>&nbsp;</td>';
+						$html.='<td class="date">Date</td>';
+						$html.='<td class="event">Event</td>';
+						$html.='<td class="nat">Nat.</td>';
+						$html.='<td class="class">Class</td>';
+						$html.='<td class="winner">Winner</td>';
+						$html.='<td class="season">Season</td>';
+						$html.='<td>&nbsp;</td>';
+						$html.='<td>&nbsp;</td>';
+					$html.='</tr>';
+				$html.='</thead>';
 
 				foreach ($races as $key => $race) :
 					$html.=$this->display_race_table_data($race,false,false);
@@ -93,6 +99,11 @@ class ViewDB {
 			$html.='<td class="nat">'.$data->nat.'</td>';
 			$html.='<td class="class">'.$data->class.'</td>';
 			$html.='<td class="winner">'.$data->winner.'</td>';
+			if (isset($data->season)) :
+				$html.='<td class="winner">'.$data->season.'</td>';
+			else :
+				$html.='<td>&nbsp;</td>';
+			endif;
 			$html.='<td class="race-link"><a href="#" data-link="'.$data->link.'" data-id="race-'.$race->id.'">Results</a></td>';
 			$html.='<td class="race-details"><a href="#" data-id="race-'.$race->id.'">Details</a></td>';
 		$html.='</tr>';
