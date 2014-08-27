@@ -83,13 +83,16 @@
 
 	Loaded Years:
 		2013/2014
-		2012/2013
+		2012/2013 - FQ
+		2011/2012 - FQ
+		2010/2011 - FQ
 
 	To Be Loaded
-		2011/2012 - Check date format
-		2010/2011
+		
 		2009/2010 - Check date format
 		2008/2009 - Check date format
+		
+	Load previous final standings
 
 ===== OLD README DATA =====
 

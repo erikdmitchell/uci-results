@@ -42,9 +42,9 @@ class Top25_cURL {
 			$html.='<h2>UCI Cross</h2>';
 			
 			//$html.='<h3>Race Stats</h3>';
-			$html.=$stats->get_season_race_rankings('2013/2014');
+			//$html.=$stats->get_season_race_rankings('2013/2014');
 			
-			$html.='<h3>Rider Stats</h3>';
+			//$html.='<h3>Rider Stats</h3>';
 /*
 			echo '<pre>';
 			print_r($rider_stats->get_rider_stats('Sven Nys','2013/2014'));
@@ -62,6 +62,7 @@ class Top25_cURL {
 		$html=null;
 		$results=array();
 		$url=null;
+		$limit=false;
 
 		$html.='<div class="uci-curl">';
 			$html.='<h3>cURL</h3>';
@@ -77,6 +78,7 @@ class Top25_cURL {
 			if (isset($_POST['url']) && isset($_POST['submit']) && $_POST['submit']=='Get Races') :
 				$this->config->url=$_POST['url'];
 				$url=$_POST['url'];
+				$limit=$_POST['limit'];
 			endif;
 			
 			$html.='<form class="get-races" name="get-races" method="post">';
@@ -85,19 +87,20 @@ class Top25_cURL {
 				$html.='<label for="url-dd">Season</label>';
 				$html.='<select class="url-dd" name="url">';
 					$html.='<option>Select Year</option>';
-					foreach ($this->config->urls as $season => $url) :
-						$html.='<option value="'.$url.'">'.$season.'</option>';
+					foreach ($this->config->urls as $season => $s_url) :
+						$html.='<option value="'.$s_url.'" '.selected($url,$s_url).'>'.$season.'</option>';
 					endforeach;
 				$html.='</select><br />';
-				$html.='<input type="submit" name="submit" id="submit" class="button button-primary" value="Get Races" />';
+				$html.='<label for="limit">Limit</label>';
+				$html.='<input class="small-text" type="text" name="limit" id="limit" value="'.$limit.'" /><span class="description">Optional</span><br />';
+				$html.='<p>';
+					$html.='<input type="submit" name="submit" id="submit" class="button button-primary" value="Get Races" />';
+					//$html.='<input type="submit" name="reset" id="reset" class="button button-primary" value="Clear Form" />';
+				$html.='</p>';
 			$html.='</form>';
 			
-			//$html.='<div class="data-results"></div>'; // empty?
-			
-			$html.=$this->get_race_data(false);
-			
-			//$html.='<div class="db-results"></div>'; // empty?
-			
+			$html.=$this->get_race_data(false,$limit);
+						
 		$html.='</div>';
 		
 		$html.='<div class="loading-modal"></div>';
@@ -111,7 +114,7 @@ class Top25_cURL {
 	 * @return array - the results of the db input (formatted for wp-admin)
 	 *		the default is a table of race data for individual adding/info 
 	**/
-	function get_race_data($add_to_db=true) {
+	function get_race_data($add_to_db=true,$limit=false) {
 		if (!isset($this->config->url))
 			return false;
 			
@@ -179,13 +182,14 @@ class Top25_cURL {
 				$code=$this->build_race_code($races[$row_count]);
 				if (!$this->check_for_dups($code)) :
 					$races[$row_count]->results=$this->get_race_results($races[$row_count]->link); // run our curl result page stuff //
-					//$fq=new Field_Quality();
-					//$races[$row_count]->field_quality=$fq->get_race_math($races[$row_count]);	
 				else :
 					unset($races[$row_count]); // remove duplicate so it doesn't display
 				endif;
 			endif;
-			$row_count++;			
+			$row_count++;
+			
+			if ($limit && $row_count==$limit)
+				break;			
 		endforeach;
 	
 		foreach ($races as $key => $value) :
