@@ -11,6 +11,10 @@
               no-repeat;
 	display: none;	
 }
+
+.wrap a.nav-tab {
+	text-transform: capitalize;
+}
 /* default race data table
 -------------------------- */
 .uci-curl .race-table {

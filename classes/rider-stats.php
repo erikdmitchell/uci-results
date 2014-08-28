@@ -2,7 +2,7 @@
 class RiderStats {
 
 	function __construct() {
-	
+		
 	}
 	
 	function get_season_rider_rankings($season=false) {
@@ -293,6 +293,76 @@ class RiderStats {
 	}
 
 	/**
+	 * gets the final uci rankings per season from the db
+	 */
+	public static function get_uci_season_rankings($year=false,$display=true,$sort_field='rank',$sort_type='ASC') {
+		if (!$year)
+			return false;
+			
+		global $wpdb;
+		$html=null;
+		$rankings=$wpdb->get_results("SELECT * FROM uci_season_rankings WHERE season='$year'");
+		
+		if (!$display)
+			return $rankings;
+
+		$rankings=SELF::sort_rankings($sort_field,$sort_type,$rankings);
+
+		$html.='<table>';
+			$html.='<thead>';
+				$html.='<tr>';
+					$html.='<th class="rank">Rank</th>';
+					$html.='<th class="name">Name</th>';
+					$html.='<th class="nation">Nation</th>';
+					$html.='<th class="age">Age</th>';
+					$html.='<th class="points">Points</th>';															
+				$html.='</tr>';
+			$html.='</thead>';
+
+			foreach ($rankings as $rank) :
+				$html.='<tr>';
+					$html.='<td class="rank">'.$rank->rank.'</td>';
+					$html.='<td class="name">'.$rank->name.' </td>';
+					$html.='<td class="nation">'.$rank->nation.'</td>';
+					$html.='<td class="age">'.$rank->age.'</td>';
+					$html.='<td class="points">'.$rank->points.'</td>';															
+				$html.='</tr>';
+			endforeach;
+		$html.='</table>';
+		
+		return $html;
+	}
+
+	/**
+	 * gets the final uci rankings per season from the db
+	 */
+	public static function get_uci_season_ranking_seasons($display='list') {
+		global $wpdb;
+		$html=null;
+		$seasons=$wpdb->get_results("SELECT season FROM uci_season_rankings GROUP BY season");
+		
+		switch ($display) :
+			case 'dropdown' :
+				$html.='<select name="season-ranking-seasons" class="season-ranking-seasons">';
+					$html.='<option>Select Season</option>';
+					foreach ($seasons as $season) :		
+						$html.='<option value="'.$season->season.'">'.$season->season.'</option>';
+					endforeach;
+				$html.='</select>';				
+				break;
+			default :
+				$html.='<ul class="season-ranking-seasons">';
+					foreach ($seasons as $season) :		
+						$html.='<li>'.$season->season.'</li>';
+					endforeach;
+				$html.='</ul>';			
+				break;
+		endswitch;
+		
+		return $html;
+	}
+
+	/**
 	 * sorts our riders
 	 */
 	function sort_riders($field=false,$method=false,$riders=false) {	
@@ -311,11 +381,32 @@ class RiderStats {
 		return $riders;
 	}
 
+	/**
+	 * converts an array to an object (including multidiemsional)
+	 */
 	public static function arrayToObject( $array ) {
 	  foreach( $array as $key => $value ){
 	    if( is_array( $value ) ) $array[ $key ] = SELF::arrayToObject( $value );
 	  }
 	  return (object) $array;
+	}
+
+	/**
+	 * used with get_uci_season_rankings
+	 */
+	public static function sort_rankings($field=false,$method=false,$rankings=false) {	
+		if (!($field) || !($method) || !($rankings))
+			return array();
+
+		$method=constant('SORT_'.strtoupper($method));
+		
+		foreach ($rankings as $rank) :
+    	$arr[] = $rank->$field;
+		endforeach; 
+
+		array_multisort($arr,$method,SORT_NUMERIC,$rankings); 
+
+		return $rankings;
 	}
 
 }

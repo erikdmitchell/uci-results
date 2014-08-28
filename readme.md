@@ -2,6 +2,7 @@
 
 	Added: a season field to uci_races db.
 	Added: season column to uci curl page.
+	Added: tabbed navigation to admin section
 	
 	Updated: functionality to support the new "season" db field in RiderStats class.
 	Updated: functionality to support the new "season" db field in RaceStats class.	

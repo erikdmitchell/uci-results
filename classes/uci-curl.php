@@ -35,28 +35,83 @@ class Top25_cURL {
 
 	function display_admin_page() {
 		$html=null;
+		$tabs=array('uci-cross','races','riders');
+		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'uci-cross';
+				
+		$html.='<div class="wrap">';
+			$html.='<h2>UCI Cross Admin Section</h2>';
+		
+			$html.='<h2 class="nav-tab-wrapper">';
+				foreach ($tabs as $tab) :
+					if ($active_tab==$tab) :
+						$class='nav-tab-active';
+					else :
+						$class=null;
+					endif;
+					
+					$html.='<a href="?page=uci-cross&tab='.$tab.'" class="nav-tab '.$class.'">'.$tab.'</a>';
+				endforeach;
+			$html.='</h2>';
+		
+			switch ($active_tab) :
+				case 'uci-cross':
+					$html.=$this->default_admin_page();
+					break;
+				case 'races':
+					$html.=$this->races_admin_page();
+					break;
+				case 'riders':
+					$html.=$this->riders_admin_page();
+					break;
+				default:
+					$html.=$this->default_admin_page();
+					break;
+			endswitch;
+
+		$html.='</div><!-- /.wrap -->';
+		
+		echo $html;
+	}
+	
+	/**
+	 *
+	 */
+	function default_admin_page() {
+		$html=null;
+
+		$html.='<h3>UCI Cross</h3>';
+
+
+		return $html;
+	}	
+
+	/**
+	 *
+	 */
+	function races_admin_page() {
+		$html=null;
+		$stats=new RaceStats();
+
+		$html.='<h3>Races</h3>';
+
+		return $html;
+	}	
+
+	/**
+	 *
+	 */
+	function riders_admin_page() {
+		$html=null;
 		$stats=new RaceStats();
 		$rider_stats=new RiderStats();
 
-		$html.='<div class="uci-cross">';
-			$html.='<h2>UCI Cross</h2>';
+		$html.='<h3>Riders</h3>';
 			
-			//$html.='<h3>Race Stats</h3>';
-			//$html.=$stats->get_season_race_rankings('2013/2014');
-			
-			//$html.='<h3>Rider Stats</h3>';
-/*
-			echo '<pre>';
-			print_r($rider_stats->get_rider_stats('Sven Nys','2013/2014'));
-			print_r($rider_stats->get_rider_stats('Niels Albert','2013/2014'));
-			print_r($rider_stats->get_rider_stats('Jeremy Powers','2013/2014'));
-			echo '</pre>';
-*/
-			//$html.=$rider_stats->get_season_rider_rankings();
-		$html.='</div>';
+		$html.=RiderStats::get_uci_season_ranking_seasons('dropdown');
+		$html.=RiderStats::get_uci_season_rankings('2013/2014');
 
-		echo $html;
-	}	
+		return $html;
+	}		
 
 	function display_curl_page() {
 		$html=null;
