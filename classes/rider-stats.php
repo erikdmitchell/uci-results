@@ -308,6 +308,8 @@ class RiderStats {
 
 		$rankings=SELF::sort_rankings($sort_field,$sort_type,$rankings);
 
+		$html.='<h3>'.$year.' UCI Season Rankings</h3>';
+
 		$html.='<table>';
 			$html.='<thead>';
 				$html.='<tr>';
