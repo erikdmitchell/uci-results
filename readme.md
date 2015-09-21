@@ -1,4 +1,23 @@
-### Version 1.0.5
+UCI cURL
+===========
+
+Pulls in results via cURL from the UCI website. 
+
+Usage Instructions
+===========
+
+Coming Soon
+
+Changelog
+===========
+
+### 1.0.6
+
+	Preparation for public release.
+	
+	Reformatted and updated readme file.
+
+### 1.0.5
 
 	Added: a season field to uci_races db.
 	Added: season column to uci curl page.
@@ -16,14 +35,14 @@
 	
 	Note: this version involves a heavy amount of testing and tweaks that cannot be documented here.
 
-### Version 1.0.4
+### 1.0.4
 	
 	Added: RaceStats class
 	Added RiderStats class
 	
 	Fixed: code for first weekend of racing - the race ends up w/ a 1/1 in terms of points, so for the whole weekend, we use last years points
 
-### Version 1.0.3
+### 1.0.3
 
 	Added: config to primary curl class.
 	Added: a method where we use the previous seasons UCI rankings for the first race of the season. Does not help the second race and needs more controls.
@@ -38,7 +57,7 @@
 	
 	Todo: The new goal is to just straight upload results, then in a second step calculate all the other data (FQ class)
  
-### Version 1.0.2 and Prior
+### 1.0.2 and Prior
 
 	Added: sperate admin menu/section for plugin.
 	Added: get_uci_multiplier() and get_world_cup_multiplier() to Field_Quality class. They are our auto detect of sorts.	
@@ -71,6 +90,23 @@
 
 	Todo: need to use new function to fix char issues
 	Todo: need a method to display links and add one at a time (like original function)
+
+Credits
+===========
+
+This plugin is built and maintained by [@erikdmitchell](http://erikmitchell.net "@erikdmitchell")
+
+License
+===========
+
+GPL 2 I think
+
+
+
+
+
+
+
 
 ### Todo
 	

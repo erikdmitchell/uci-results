@@ -3,10 +3,10 @@
  * Plugin Name: UCI cURL
  * Plugin URI: http://erikmitchell.net
  * Description: Pulls in results via cURL from the UCI website.
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Erik Mitchell
  * Author URI: http://erikmitchell.net
- * License: 
+ * License:
  */
 
 include_once(plugin_dir_path(__FILE__).'classes/uci-curl.php');
