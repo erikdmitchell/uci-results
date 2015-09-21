@@ -7,34 +7,34 @@ class ViewDB {
 	function __construct() {
 		add_action('admin_enqueue_scripts',array($this,'viewdb_scripts_styles'));
 	}
-	
+
 	function viewdb_scripts_styles() {
 		wp_enqueue_script('jquery');
 		wp_enqueue_script('jquery-tablesorter-script',UCICURLBASE.'js/jquery.tablesorter.min.js',array('jquery'),'2.0.5b',true);
-	
+
 		wp_enqueue_style('viewdb-admin-style',UCICURLBASE.'/css/viewdb.css');
 	}
 
 	function display_view_db_page() {
-		global $wpdb;
-		global $uci_curl;
+		global $wpdb,$uci_curl;
+
 		set_time_limit(0); // mex ececution time
 		$html=null;
 		$sort_type='date';
 		$sort='ASC';
 		$races=$wpdb->get_results("SELECT * FROM ".$uci_curl->table);
-		
+
 		$races=$this->sort_races($sort_type,$sort,$races);
-		
+
 		$html.='<h3>Races In Database</h3>';
-		
-		if (isset($_POST['submit']) && $_POST['submit']=='Add/Update FQ' && isset($_POST['races'])) :	
-			foreach ($_POST['races'] as $race_id) :		
+
+		if (isset($_POST['submit']) && $_POST['submit']=='Add/Update FQ' && isset($_POST['races'])) :
+			foreach ($_POST['races'] as $race_id) :
 				echo $this->update_fq($race_id);
 			endforeach;
 		endif;
 
-		$html.='<form name="add-races-to-db" method="post">';		
+		$html.='<form name="add-races-to-db" method="post">';
 			$html.='<table class="race-table">';
 				$html.='<thead>';
 					$html.='<tr class="header">';
@@ -62,7 +62,7 @@ class ViewDB {
 				$html.='<input type="submit" name="submit" id="submit" class="button button-primary" value="Add/Update FQ">';
 			$html.='</p>';
 		$html.='</form>';
-		
+
 		echo $html;
 	}
 
@@ -73,13 +73,13 @@ class ViewDB {
 		set_time_limit(0); // unlimited max execution time //
 		$fq_class=null;
 		$results_class=null;
-		
+
 		if ($results)
 			$results_class='show';
-		
+
 		if ($fq)
 			$fq_class='show';
-	
+
 		if (!isset($data->results)) :
 			$html.=$race->id.'<br />';
 			$html.=$race->code.'<br />';
@@ -107,8 +107,8 @@ class ViewDB {
 			$html.='<td class="race-link"><a href="#" data-link="'.$data->link.'" data-id="race-'.$race->id.'">Results</a></td>';
 			$html.='<td class="race-details"><a href="#" data-id="race-'.$race->id.'">Details</a></td>';
 		$html.='</tr>';
-		
-		// race results //			
+
+		// race results //
 		$html.='<tr><td colspan="7">';
 			$html.='<table id="race-'.$race->id.'" class="race-results-full-table '.$results_class.'">';
 				$html.='<tr class="header">';
@@ -120,7 +120,7 @@ class ViewDB {
 					$html.='<td>Place</td>';
 					$html.='<td>Result</td>';
 				$html.='</tr>';
-				
+
 				if (isset($data->results)) :
 					foreach ($data->results as $result) :
 						if ($alt%2) :
@@ -140,11 +140,11 @@ class ViewDB {
 						$alt++;
 					endforeach;
 				else :
-					$html.=$race->id.' - This race had no results<br />';				
+					$html.=$race->id.' - This race had no results<br />';
 				endif;
 			$html.='</table>';
 		$html.='</td></tr>';
-		
+
 		// field quality //
 		$html.='<tr><td colspan="7">';
 			$html.='<table id="race-'.$race->id.'" class="race-fq '.$fq_class.'">';
@@ -156,8 +156,8 @@ class ViewDB {
 					$html.='<td>Divider</td>';
 					$html.='<td>Race Total</td>';
 				$html.='</tr>';
-				
-				if (isset($data->field_quality)) :					
+
+				if (isset($data->field_quality)) :
 					$html.='<tr class="'.$class.'">';
 						$html.='<td>'.$data->field_quality->wcp_mult.'</td>';
 						$html.='<td>'.$data->field_quality->uci_mult.'</td>';
@@ -167,11 +167,11 @@ class ViewDB {
 						$html.='<td>'.$data->field_quality->race_total.'</td>';
 					$html.='</tr>';
 				else :
-					$html.='<tr><td colspan="6">'.$race->id.' - This race had no field quality</td></tr>';				
+					$html.='<tr><td colspan="6">'.$race->id.' - This race had no field quality</td></tr>';
 				endif;
 			$html.='</table>';
-		$html.='</td></tr>';	
-		
+		$html.='</td></tr>';
+
 		return $html;
 	}
 
@@ -181,7 +181,7 @@ class ViewDB {
 		$message=null;
 		$fq=new Field_Quality();
 		$race=$wpdb->get_row("SELECT * FROM $uci_curl->table WHERE id=$race_id");
-		
+
 		$race->data=unserialize(base64_decode($race->data));
 
 		$race->data->field_quality=$fq->get_race_math($race->data);
@@ -190,7 +190,7 @@ class ViewDB {
 		$data=array(
 			'data' => base64_encode(serialize($race->data)),
 		);
-		
+
 		$where=array(
 			'id' => $race_id
 		);
@@ -198,8 +198,8 @@ class ViewDB {
 		$wpdb->update($uci_curl->table,$data,$where);
 
 		$message='<div class="updated">Updated '.$race->code.' fq.</div>';
-		
-		return $message; 	
+
+		return $message;
 	}
 
 	/**
@@ -210,18 +210,18 @@ class ViewDB {
 		foreach ($races as $race) :
 			$race->data=unserialize(base64_decode($race->data));
 		endforeach;
-	
-		$dates = array(); 
+
+		$dates = array();
 		foreach ($races as $race) :
     	$dates[] = strtotime($race->data->date);
-		endforeach; 
-	
-		array_multisort($dates,SORT_ASC,$races); 
+		endforeach;
+
+		array_multisort($dates,SORT_ASC,$races);
 
 		foreach ($races as $race) :
 			$race->data=base64_encode(serialize($race->data));
 		endforeach;
-		
+
 		return $races;
 	}
 

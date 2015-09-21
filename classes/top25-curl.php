@@ -1,7 +1,7 @@
 <?php
 class Top25_cURL {
 
-	public $table='uci_races';
+	public $table='top25_races';
 	public $version='1.0.2';
 	public $config=array();
 
@@ -123,7 +123,8 @@ class Top25_cURL {
 						$html.=$rider_stats->get_season_rider_rankings($_POST['season-ranking-seasons']);
 						break;
 					case 'View UCI Season Rankings':
-						$html.=RiderStats::get_uci_season_rankings($_POST['season-ranking-seasons']);
+						//$html.=RiderStats::get_uci_season_rankings($_POST['season-ranking-seasons']);
+						$hmtl.='get_uci_season_rankings() disabled for now';
 						break;
 					default:
 						break;
@@ -332,111 +333,14 @@ echo 'in db';
 		wp_die();
 	}
 
-/*
-	function get_race_data($add_to_db=true,$limit=false) {
-		if (!isset($this->config->url))
-			return false;
-
-		set_time_limit(0); // mex ececution time
-		$races=array();
-		$races_class_name='datatable';
-		$races_obj=new stdClass();
-		$arr=array();
-		$timeout = 5;
-		$row_count=0;
-
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $this->config->url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-
-		$html = curl_exec($ch);
-
-		curl_close($ch);
-
-		// Create a DOM parser object
-		$dom = new DOMDocument();
-
-		// Parse HTML - The @ before the method call suppresses any warnings that loadHTML might throw because of invalid HTML in the page.
-		@$dom->loadHTML($html);
-
-		//discard white space
-		@$dom->preserveWhiteSpace = false;
-
-		$finder = new DomXPath($dom);
-
-		$nodes = $finder->query("//*[contains(@class, '$races_class_name')]");
-
-		$rows=$nodes->item(0)->getElementsByTagName('tr'); //get all rows from the table
-echo '<pre>';
-print_r($rows);
-echo '</pre>';
-		// loop over the table rows
-
-		foreach ($rows as $row) :
-		  if ($row_count!=0) :
-		  	$races[$row_count]=new stdClass();
-
-		  	// get links //
-		  	$links = $row->getElementsByTagName('a');
-				foreach ($links as $tag) :
-					$link=$this->alter_race_link($tag->getAttribute('href'));
-				endforeach;
-
-		  	$cols = $row->getElementsByTagName('td'); 	// get each column by tag name
-			  foreach ($cols as $key => $col) :
-					if ($key==0) {
-						$races[$row_count]->date=$this->reformat_date($col->nodeValue);
-					} else if ($key==1) {
-						$races[$row_count]->event=$col->nodeValue;
-					} else if ($key==2) {
-						$races[$row_count]->nat=$col->nodeValue;
-					} else if ($key==3) {
-						$races[$row_count]->class=$col->nodeValue;
-					} else if ($key==4) {
-						$races[$row_count]->winner=$col->nodeValue;
-					}
-				endforeach;
-				$races[$row_count]->link=$link;
-				$races[$row_count]->season=$this->get_season_from_date($races[$row_count]->date);
-
-				// check for code in db, only get results if not in db //
-				$code=$this->build_race_code($races[$row_count]);
-
-				// only run check code if we are adding to db //
-				if ($add_to_db) :
-					if (!$this->check_for_dups($code)) :
-						$races[$row_count]->results=$this->get_race_results($races[$row_count]->link); // run our curl result page stuff //
-					else :
-						unset($races[$row_count]); // remove duplicate so it doesn't display
-					endif;
-				endif;
-print_r($races[$row_count]);
-			endif;
-
-			$row_count++;
-
-			if ($limit && $row_count==$limit)
-				break;
-
-		endforeach;
-
-		foreach ($races as $key => $value) :
-			$races_obj->$key=$value;
-		endforeach;
-
-		// add race to db //
-		if ($add_to_db) :
-			foreach ($races_obj as $race) :
-				$arr[]=$this->add_race_to_db($race);
-			endforeach;
-		endif;
-
-		return $this->build_default_race_table($races_obj);
-	}
-*/
-
-	function alter_race_link($link) {
+	/**
+	 * alter_race_link function.
+	 *
+	 * @access protected
+	 * @param mixed $link
+	 * @return void
+	 */
+	protected function alter_race_link($link) {
 		$final_url='http://www.uci.infostradasports.com/asp/lib/TheASP.asp?';
 		parse_str($link,$arr);
 
@@ -464,7 +368,14 @@ print_r($races[$row_count]);
 		return $final_url;
 	}
 
-	function get_race_results($url) {
+	/**
+	 * get_race_results function.
+	 *
+	 * @access public
+	 * @param mixed $url
+	 * @return void
+	 */
+	public function get_race_results($url) {
 		// Use the Curl extension to query Google and get back a page of results
 		$timeout = 5;
 		$race_results=array();
@@ -546,7 +457,14 @@ print_r($races[$row_count]);
 		return $race_results_obj;
 	}
 
-	function add_race_to_db($race_data) {
+	/**
+	 * add_race_to_db function.
+	 *
+	 * @access public
+	 * @param mixed $race_data
+	 * @return void
+	 */
+	public function add_race_to_db($race_data) {
 		global $wpdb;
 
 		$message=null;

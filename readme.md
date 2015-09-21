@@ -101,45 +101,4 @@ This plugin is built and maintained by [@erikdmitchell](http://erikmitchell.net 
 License
 ===========
 
-GPL 2 I think
-
-
-
-
-
-
-
-
-### Todo
-	
-	Clean up readme file.
-	Will develop an automater class (semi exists in curl class with get_race_data())
-	clean up js 
-	cURL ajax may no longer be needed
-	write functions/code to diplay races and details (shortcode perhaps) and rank riders
-	add db setup
-	Spit out add to db stuff first, then load rest or something along those lines	
-
-	Loaded Years:
-		2013/2014
-		2012/2013 - FQ
-		2011/2012 - FQ
-		2010/2011 - FQ
-
-	To Be Loaded
-		
-		2009/2010 - Check date format
-		2008/2009 - Check date format
-		
-	Load previous final standings
-
-===== OLD README DATA =====
-
-TODO: uci-curl.php (99%) - CONTAINS EVERYTHING
- - works well
- - needs clean up and a lot more functionality
- - need some sort of auto run function to run race results
- - build in error log and email
- - pull out all variables to class level
- - UTF-8 html before storing in db
- - make a click button in class
+GPL 2
