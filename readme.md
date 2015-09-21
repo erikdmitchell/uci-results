@@ -21,7 +21,10 @@ Changelog
 	Added add_race_results_to_db() to process results as part of curl.
 	Added get_race_results_from_db() to get results from db.
 	
-	Removed legacy folder and files/
+	Removed legacy folder and files
+	
+	Cleaned up race-stats and rider-stats.
+	Cleaned up junk js and css files and code.
 
 
 ### 1.0.6

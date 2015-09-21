@@ -1,25 +1,42 @@
 <?php
+/**
+ * RiderStats class.
+ *
+ * @since Version 1.6.1
+ */
 class RiderStats {
 
-	function __construct() {
+	public $version='0.1.1';
+
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function __construct() {
 
 	}
 
-	function get_season_rider_rankings($season=false) {
-		if (!$season)
-			return '<div class="error">Error: Get rider rankings needs a season.</div>';
-
-		set_time_limit(0);
-
+	/**
+	 * get_season_rider_rankings function.
+	 *
+	 * @access public
+	 * @param array $user_args (default: array())
+	 * @return void
+	 */
+	public function get_season_rider_rankings($user_args=array()) {
 		global $wpdb,$uci_curl;
 
 		$html=null;
 		$sort_type='total';
 		$sort='desc';
-		$riders=$this->get_list_of_riders($season);
-		$counter=0;
-		$riders_x=array();
+		$season=false;
+		$riders=$this->get_list_of_riders();
+		//$counter=0;
+		//$riders_x=array();
 
+/*
 		foreach ($riders as $key => $rider) :
 			$riders_x[]=$this->get_rider_stats($rider,$season);
 			$counter++;
@@ -27,33 +44,34 @@ class RiderStats {
 
 		$riders=$riders_x;
 		$riders=$this->sort_riders($sort_type,$sort,$riders);
+*/
 
 		$html.='<h3>'.$season.' Rider Rankings</h3>';
 
-		$html.='<table id="season-rider-rankings" class="season-rider-rankings">';
-			$html.='<tr class="header">';
-				$html.='<td class="rank">Rank</td>';
-				$html.='<td class="rider">Rider</td>';
-				$html.='<td class="uci">UCI Points</td>';
-				$html.='<td class="wcp">WCP Points</td>';
-				$html.='<td class="winning">Winning Perc.</td>';
-				$html.='<td class="sos">SOS</td>';
-				$html.='<td class="total">Total</td>';
-			$html.='</tr>';
+		$html.='<div id="season-rider-rankings" class="season-rider-rankings">';
+			$html.='<div class="header row">';
+				$html.='<div class="rank col-md-1">Rank</div>';
+				$html.='<div class="rider col-md-2">Rider</div>';
+				$html.='<div class="uci col-md-1">UCI Points</div>';
+				$html.='<div class="wcp col-md-1">WCP Points</div>';
+				$html.='<div class="winning col-md-1">Winning Perc.</div>';
+				$html.='<div class="sos col-md-1">SOS</div>';
+				$html.='<div class="total col-md-1">Total</div>';
+			$html.='</div>';
 
 			foreach ($riders as $rider) :
-				$class=null;
-				if (is_object($rider)) :
-					$html.='<tr class="'.$class.'">';
-						$html.='<td class="rank"></td>';
-						$html.='<td class="rider">'.$rider->name.'</td>';
-						$html.='<td class="uci">'.$rider->uci_points.'</td>';
-						$html.='<td class="wcp">'.$rider->wcp_points.'</td>';
-						$html.='<td class="winning">'.$rider->winning_perc.'</td>';
-						$html.='<td class="sos">'.$rider->sos.'</td>';
-						$html.='<td class="total">'.$rider->total.'</td>';
-					$html.='</tr>';
-				endif;
+				//$class=null;
+				//if (is_object($rider)) :
+					$html.='<div class="row">';
+						$html.='<div class="rank col-md-1"></div>';
+						$html.='<div class="rider col-md-2">'.$rider->name.'</div>';
+						$html.='<div class="uci col-md-1">'.$rider->uci_points.'</div>';
+						$html.='<div class="wcp col-md-1">'.$rider->wcp_points.'</div>';
+						$html.='<div class="winning col-md-1">'.$rider->winning_perc.'</div>';
+						$html.='<div class="sos col-md-1">'.$rider->sos.'</div>';
+						$html.='<div class="total col-md-1">'.$rider->total.'</div>';
+					$html.='</div>';
+				//endif;
 			endforeach;
 
 		$html.='</table>';
@@ -61,60 +79,79 @@ class RiderStats {
 		return $html;
 	}
 
-	/**
-	 *
-	 */
-	function get_list_of_riders($season=false) {
+	public function get_list_of_riders($user_args=array()) {
 		global $wpdb,$uci_curl;
-		$riders=array();
-		$races_db=$wpdb->get_results("SELECT * FROM ".$uci_curl->table." WHERE season='$season'");
 
-		foreach ($races_db as $race) :
-			$data=unserialize(base64_decode($race->data));
-			foreach ($data->results as $result) :
-				array_push($riders,$result->name);
-			endforeach;
+		$riders=array();
+		$where=null;
+		$default_args=array(
+			'season' => false
+		);
+		$args=array_replace_recursive($default_args,$user_args);
+
+		extract($args);
+
+		/*
+		if ($season)
+			$where=" WHERE season='$season'";
+		ARGS -season, race
+		*/
+		$riders_db=$wpdb->get_results("SELECT * FROM ".$uci_curl->results_table." ".$where);
+
+		// get all results for rider by grouping by name //
+		foreach ($riders_db as $rider) :
+			$_clean=str_replace(' ','',$rider->name);
+
+			if (!isset($riders[$_clean]['name']))
+				$riders[$_clean]['name']=$rider->name;
+
+			$riders[$_clean]['races'][$rider->code]=unserialize(base64_decode($rider->data));
 		endforeach;
 
-		$riders=array_unique($riders);
+		// append some more data (stats) //
+		foreach ($riders as $key => $rider) :
+			$riders[$key]['total_races']=count($rider['races']);
+			$riders[$key]['season']=$season;
+			$riders[$key]['uci_points']=$this->get_rider_points($rider['races'],'uci',$season);
+			$riders[$key]['wcp_points']=$this->get_rider_points($rider['races'],'cdm',$season);
+			$riders[$key]['sos']=$this->get_sos($rider['races'],$season);
+			$riders[$key]['winning_perc']=$this->get_rider_winning_perc($rider['races'],$season);
+			$riders[$key]['total']=$this->get_rider_final_number($rider,$season);
+		endforeach;
 
-		return $riders;
+		return $riders=json_decode(json_encode($riders),FALSE);
 	}
 
 	/**
+	 * get_sos function.
 	 *
+	 * @access protected
+	 * @param bool $races (default: false)
+	 * @param bool $season (default: false)
+	 * @return void
 	 */
-	function get_rider_stats($rider=false,$season=false) {
-		if (!$rider || !$season)
-			return '<div class="error">Error: Get rider stats needs a rider and season.</div>';
+	protected function get_sos($races=false,$season=false) {
+		if (!$races)
+			return false;
 
-		$obj=new stdClass();
-		$obj->name=$rider;
-		$obj->uci_points=$this->get_rider_points($rider,'uci',$season);
-		$obj->wcp_points=$this->get_rider_points($rider,'cdm',$season);
-		$obj->sos=$this->get_sos($rider,$season);
-		$obj->winning_perc=$this->get_rider_winning_perc($rider,$season);
-		$obj->total=$this->get_rider_final_number($rider,$season);
-		$obj->season=$season;
-
-		return $obj;
-	}
-
-	/**
-	 * strength of schedule
-	 */
-	function get_sos($rider=false,$season=false) {
-		if (!$rider || !$season)
-			return '<div class="error">Error: Get sos needs a rider and season.</div>';
+		global $wpdb,$uci_curl;
 
 		$sos=0;
 		$fq_total=0;
-		$rider_races=$this->get_rider_races($rider,$season);
 		$total_races=$this->get_total_races($season);
-		$rider_total_races=$this->get_rider_total_races($rider_races);
+		$rider_total_races=count($races);
 
-		foreach ($rider_races as $race) :
-			switch ($race->class) :
+		foreach ($races as $code => $race) :
+			$data=$wpdb->get_var("SELECT data FROM $uci_curl->table WHERE code='$code'");
+			$data=unserialize(base64_decode($data));
+
+			if (isset($data->class)) :
+				$race_class=$data->class;
+			else :
+				$race_class=null;
+			endif;
+
+			switch ($race_class) :
 				case 'CDM' :
 					$pts=4;
 					break;
@@ -133,7 +170,9 @@ class RiderStats {
 			endswitch;
 
 			$sos=$sos+$pts;
-			$fq_total=$fq_total+$race->fq;
+
+			if (isset($race->field_quality))
+				$fq_total=$fq_total+$race->fq;
 		endforeach;
 
 		//$fq_total=$fq_total/$rider_total_races;
@@ -150,76 +189,44 @@ class RiderStats {
 		return number_format($sos,3);
 	}
 
-	function get_rider_races($rider,$season) {
-		if (!$rider || !$season)
-			return '<div class="error">Error: Get rider races needs a rider and season.</div>';
-
-		global $wpdb,$uci_curl;
-		$rider_races=array();
-		$races=array();
-		$races_db=$wpdb->get_results("SELECT * FROM ".$uci_curl->table." WHERE season='$season'");
-
-		foreach ($races_db as $race) :
-			$races[]=unserialize(base64_decode($race->data));
-		endforeach;
-
-		foreach ($races as $race) :
-			foreach ($race->results as $result) :
-				if (strtolower($rider)==strtolower($result->name)) :
-					$rider_races[]=array(
-						'date' => $race->date,
-						'event' => $race->event,
-						'nat' => $race->nat,
-						'class' => $race->class,
-						'fq' => $race->field_quality->total,
-						'place' => $result->place,
-						'points' => $result->par
-					);
-				endif;
-			endforeach;
-		endforeach;
-
-		return RiderStats::arrayToObject($rider_races);
-	}
-
 	/**
+	 * get_total_races function.
 	 *
+	 * @access protected
+	 * @param bool $season (default: false)
+	 * @return void
 	 */
-	function get_total_races($season) {
+	protected function get_total_races($season=false) {
 		global $wpdb,$uci_curl;
 
-		if (!$season)
-			return '<div class="error">Error: Get total races needs a season.</div>';
+		$where=null;
 
-		$races_db=$wpdb->get_results("SELECT * FROM ".$uci_curl->table." WHERE season='$season'");
+		if ($season)
+			$where=" WHERE season='$season'";
+
+		$races_db=$wpdb->get_results("SELECT * FROM ".$uci_curl->table.$where);
 
 		return count($races_db);
 	}
 
 	/**
+	 * get_rider_winning_perc function.
 	 *
+	 * @access protected
+	 * @param bool $races (default: false)
+	 * @param bool $season (default: false)
+	 * @return void
 	 */
-	function get_rider_total_races($races) {
-		$counter=0;
+	protected function get_rider_winning_perc($races=false,$season=false) {
+		if (!$races)
+			return false;
 
-		foreach ($races as $race) :
-			$counter++;
-		endforeach;
-
-		return $counter;
-	}
-
-	/**
-	 *
-	 */
-	function get_rider_winning_perc($rider,$season) {
 		$winning_perc=0;
 		$wins=0;
-		$races=$this->get_rider_races($rider,$season);
-		$rider_total_races=$this->get_rider_total_races($races);
+		$rider_total_races=count($races);
 
 		foreach ($races as $race) :
-			if ($race->place==1)
+			if (isset($race->place) && $race->place==1)
 				$wins++;
 		endforeach;
 
@@ -228,34 +235,49 @@ class RiderStats {
 		return $winning_perc;
 	}
 
-	function get_rider_points($rider,$type,$season) {
-		$points=0;
-		$rider_races=$this->get_rider_races($rider,$season);
+	/**
+	 * get_rider_points function.
+	 *
+	 * @access public
+	 * @param bool $races (default: false)
+	 * @param bool $type (default: false)
+	 * @return void
+	 */
+	public function get_rider_points($races=false,$type=false) {
+		global $wpdb,$uci_curl;
 
-		foreach ($rider_races as $race) :
+		if (!$races)
+			return false;
+
+		$points=0;
+
+		foreach ($races as $code => $race) :
+			$data=$wpdb->get_var("SELECT data FROM $uci_curl->table WHERE code='$code'");
+			$data=unserialize(base64_decode($data));
+
 			if ($type=='cdm') :
-				if ($race->class=='CDM') :
-					$points=$points+$race->points;
+				if (isset($data->class) && $data->class=='CDM') :
+					$points=$points+$race->par;
 				endif;
 			else :
-				$points=$points+$race->points;
+				if (isset($race->par)) :
+					$points=$points+$race->par;
+				endif;
 			endif;
 		endforeach;
 
 		return $points;
 	}
 
-	/**
-	 *
-	 */
-	function get_rider_final_number($rider=false,$season=false) {
-		if (!$rider || !$season)
-			return '<div class="error">Error: Get final number needs a rider and season.</div>';
 
-		$uci=$this->get_rider_points($rider,'uci',$season);
-		$wcp=$this->get_rider_points($rider,'cdm',$season);
-		$sos=$this->get_sos($rider,$season);
-		$winning=$this->get_rider_winning_perc($rider,$season);
+	protected function get_rider_final_number($races=false,$season=false) {
+		if (!$races)
+			return false;
+
+		$uci=$this->get_rider_points($races,'uci',$season);
+		$wcp=$this->get_rider_points($races,'cdm',$season);
+		$sos=$this->get_sos($races,$season);
+		$winning=$this->get_rider_winning_perc($races,$season);
 		$uci_total=$this->get_total_points('uci',$season);
 		$wcp_total=$this->get_total_points('cdm',$season);
 
@@ -268,22 +290,38 @@ class RiderStats {
 	}
 
 	/**
+	 * get_total_points function.
 	 *
+	 * @access protected
+	 * @param bool $type (default: false)
+	 * @param bool $season (default: false)
+	 * @return void
 	 */
-	function get_total_points($type,$season) {
+	protected function get_total_points($type=false,$season=false) {
 		global $wpdb,$uci_curl;
-		$races_db=$wpdb->get_results("SELECT * FROM ".$uci_curl->table." WHERE season='$season'");
+
+		$where=null;
 		$points=0;
+
+		if ($season)
+			$where=" WHERE season='$season'";
+
+		$races_db=$wpdb->get_results("SELECT code,data FROM ".$uci_curl->table.$where);
 
 		foreach ($races_db as $race) :
 			$data=unserialize(base64_decode($race->data));
-			foreach ($data->results as $result) :
+			$race_class=$data->class;
+			$results=$wpdb->get_results("SELECT data FROM $uci_curl->results_table WHERE code='$race->code'");
+
+			foreach ($results as $result) :
+				$results_data=unserialize(base64_decode($result->data));
+
 				if ($type=='cdm') :
-					if ($data->class=='CDM') :
-						$points=$points+$result->par;
+					if ($race_class=='CDM') :
+						$points=$points+$results_data->par;
 					endif;
 				else :
-					$points=$points+$result->par;
+					$points=$points+$results_data->par;
 				endif;
 			endforeach;
 		endforeach;
@@ -291,9 +329,6 @@ class RiderStats {
 		return $points;
 	}
 
-	/**
-	 * gets the final uci rankings per season from the db
-	 */
 	public static function get_uci_season_rankings($year=false,$display=true,$sort_field='rank',$sort_type='ASC') {
 		if (!$year)
 			return false;

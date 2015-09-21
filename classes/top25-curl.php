@@ -53,21 +53,25 @@ class Top25_cURL {
 
 	public function display_admin_page() {
 		$html=null;
-		$tabs=array('uci-cross','races','riders');
+		$tabs=array(
+			'uci-cross' => 'UCI Cross',
+			'races' => 'Races',
+			'riders' => 'Riders'
+		);
 		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'uci-cross';
 
 		$html.='<div class="wrap">';
 			$html.='<h2>UCI Cross Admin Section</h2>';
 
 			$html.='<h2 class="nav-tab-wrapper">';
-				foreach ($tabs as $tab) :
-					if ($active_tab==$tab) :
+				foreach ($tabs as $key => $name) :
+					if ($active_tab==$key) :
 						$class='nav-tab-active';
 					else :
 						$class=null;
 					endif;
 
-					$html.='<a href="?page=uci-cross&tab='.$tab.'" class="nav-tab '.$class.'">'.$tab.'</a>';
+					$html.='<a href="?page=uci-cross&tab='.$key.'" class="nav-tab '.$class.'">'.$name.'</a>';
 				endforeach;
 			$html.='</h2>';
 
@@ -91,19 +95,50 @@ class Top25_cURL {
 		echo $html;
 	}
 
+	/**
+	 * default_admin_page function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function default_admin_page() {
 		$html=null;
 
 		$html.='<h3>UCI Cross</h3>';
 
+		$html.='<p>Details coming soon on how to use this plugin and what to do.</p>';
+
 		return $html;
 	}
 
+	/**
+	 * races_admin_page function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function races_admin_page() {
 		$html=null;
 		$stats=new RaceStats();
+		$years=$this->get_years_in_db();
 
 		$html.='<h3>Races</h3>';
+
+/*
+		$html.='<div class="row">';
+			$html.='<label for="url-dd" class="col-md-1">Season</label>';
+			$html.='<div class="col-md-2">';
+				$html.='<select class="url-dd" id="get-race-season" name="url">';
+					$html.='<option value="0">Select Year</option>';
+					foreach ($years as $year) :
+						$html.='<option value="'.$year.'">'.$year.'</option>';
+					endforeach;
+				$html.='</select>';
+			$html.='</div>';
+		$html.='</div><!-- .row -->';
+*/
+
+		$html.=$stats->get_season_race_rankings();
 
 		return $html;
 	}
@@ -115,6 +150,9 @@ class Top25_cURL {
 		$html.='<div class="riders-wrap">';
 			$html.='<h3>Riders</h3>';
 
+			$html.=$rider_stats->get_season_rider_rankings();
+
+/*
 			$html.='<form name="riders-admin-page-form" method="post">';
 
 				$html.='<div class="season-dropdown">'.RiderStats::get_uci_season_ranking_seasons('dropdown').'</div>';
@@ -136,6 +174,7 @@ class Top25_cURL {
 						break;
 				endswitch;
 			endif;
+*/
 		$html.='</div>';
 
 		return $html;
@@ -767,6 +806,20 @@ class Top25_cURL {
 		$html.='</form>';
 
 		return $html;
+	}
+
+	/**
+	 * get_years_in_db function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function get_years_in_db() {
+		global $wpdb;
+
+		$years=$wpdb->get_col("SELECT season FROM $this->table GROUP BY season");
+
+		return $years;
 	}
 
 }
