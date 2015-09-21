@@ -11,6 +11,13 @@ Coming Soon
 Changelog
 ===========
 
+### 1.0.6.1
+
+	Developed Admin Testing setup.
+	
+	2009/2010 Testing
+
+
 ### 1.0.6
 
 	Preparation for public release.
