@@ -16,6 +16,8 @@ Changelog
 	Preparation for public release.
 	
 	Reformatted and updated readme file.
+	
+	Added bootstrap css for admin structure
 
 ### 1.0.5
 

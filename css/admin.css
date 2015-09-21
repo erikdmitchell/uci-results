@@ -5,11 +5,11 @@
 	z-index: 9999;
 	width: 100%;
 	height: 100%;
-	background: rgba( 255, 255, 255, .8 ) 
-  						url('http://i.stack.imgur.com/FhHRx.gif') 
-              50% 50% 
+	background: rgba( 255, 255, 255, .8 )
+  						url('http://i.stack.imgur.com/FhHRx.gif')
+              50% 50%
               no-repeat;
-	display: none;	
+	display: none;
 }
 
 .wrap a.nav-tab {
@@ -41,7 +41,7 @@
 	font-weight: bold;
 }
 .uci-curl .race-table tr td {
-	
+
 }
 
 /* default race results table
@@ -59,7 +59,7 @@
 	font-weight: bold;
 }
 .uci-curl .race-results-table tr td {
-	
+
 }
 
 
@@ -83,7 +83,7 @@
 	font-weight: bold;
 }
 .fq-results .math tr {
-	
+
 }
 .fq-results .math tr td,
 .fq-results .math tr th {
@@ -97,20 +97,32 @@
 
 /* uci curl page
 -----------------*/
+.uci-curl {
+	width: 98%;
+}
 .get-races {
 
 }
+.get-races .row {
+	margin-bottom: 5px;
+}
 .get-races label {
-	width: 50px;
 	font-weight: bold;
 	display: inline-block;
 }
 .get-races .url {
-	width: 90%;
+	width: 100%;
+	height: 85px;
 }
 .get-races .url-dd {
 
 }
+.get-races .description {
+	margin-left: 5px;
+}
 .get-races .button {
 
+}
+#selectall {
+	font-weight: bold;
 }
