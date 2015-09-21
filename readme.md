@@ -15,7 +15,7 @@ Changelog
 
 	Developed Admin Testing setup.
 	
-	2009/2010 Testing
+	2008/2009 Testing
 
 
 ### 1.0.6

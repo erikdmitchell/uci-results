@@ -120,7 +120,8 @@ class Top25_cURL {
 			if (isset($_POST['submit']) && isset($_POST['riders']) && isset($_POST['riders'])=='g2g') :
 				switch ($_POST['submit']) :
 					case 'View Season Rankings':
-						$html.=$rider_stats->get_season_rider_rankings($_POST['season-ranking-seasons']);
+						//$html.=$rider_stats->get_season_rider_rankings($_POST['season-ranking-seasons']);
+						$html.='get_season_rider_rankings() disabled for now';
 						break;
 					case 'View UCI Season Rankings':
 						//$html.=RiderStats::get_uci_season_rankings($_POST['season-ranking-seasons']);
