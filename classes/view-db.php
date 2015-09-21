@@ -64,9 +64,15 @@ echo "$race_id - update fq<br>";
 	}
 
 	public function display_race_data($race) {
+		global $uci_curl;
+
 		$html=null;
 		$alt=0;
 		$data=unserialize(base64_decode($race->data));
+		$code=$uci_curl->build_race_code($data);
+		$results=$this->get_race_results_from_db($code);
+		$results_classes=array('results');
+		$field_quality_classes=array('race-fq');
 
 		$html.='<div class="row">';
 			$html.='<div class="col-md-1"><input class="race-checkbox" type="checkbox" name="races[]" value="'.$race->id.'" /></div>';
@@ -78,42 +84,50 @@ echo "$race_id - update fq<br>";
 			$html.='<div class="season col-md-1">'.$data->season.'</div>';
 
 			$html.='<div class="race-details col-md-2">';
-				$html.='[<a class="result" href="#" data-link="'.$data->link.'" data-id="race-'.$race->id.'">Results</a>]&nbsp;';
-				$html.='[<a class="details" href="#" data-id="race-'.$race->id.'">Details</a>]';
+				if (!$results) :
+					$html.='NO RESULTS';
+				else :
+					$html.='[<a class="result" href="#" data-link="'.$data->link.'" data-id="race-'.$race->id.'">Results</a>]&nbsp;';
+				endif;
+
+				if (!isset($data->field_quality) || !$data->field_quality) :
+					$html.='NO FQ';
+				else :
+					$html.='[<a class="details" href="#" data-id="race-'.$race->id.'">Details</a>]';
+				endif;
 			$html.='</div>';
 		$html.='</div>';
 
 		// race results //
-		$html.='<div id="race-'.$race->id.'" class="results">';
-			if (isset($data->results)) :
+		$html.='<div id="race-'.$race->id.'" class="'.implode(' ',$results_classes).'">';
+			if ($results) :
 				$html.='<div class="row header">';
 					$html.='<div class="col-md-1">Place</div>';
-					$html.='<div class="col-md-2">Name</div>';
-					$html.='<div class="col-md-2">Nat.</div>';
-					$html.='<div class="col-md-2">PAR</div>';
-					$html.='<div class="col-md-2">PCR</div>';
-					$html.='<div class="col-md-1">Place</div>';
-					$html.='<div class="col-md-2">Result</div>';
+					$html.='<div class="col-md-3">Name</div>';
+					$html.='<div class="col-md-1">Nat.</div>';
+					$html.='<div class="col-md-1">Age</div>';
+					$html.='<div class="col-md-1">Time</div>';
+					$html.='<div class="col-md-1">PAR</div>';
+					$html.='<div class="col-md-1">PCR</div>';
 				$html.='</div>';
 
-				foreach ($data->results as $result) :
+				foreach ($results as $result) :
+					$r=unserialize(base64_decode($result->data));
 					$html.='<div class="row">';
-						$html.='<div class="col-md-1">'.$result->place.'</div>';
-						$html.='<div class="col-md-2">'.$result->name.'</div>';
-						$html.='<div class="col-md-2">'.$result->nat.'</div>';
-						$html.='<div class="col-md-2">'.$result->age.'</div>';
-						$html.='<div class="col-md-2">'.$result->result.'</div>';
-						$html.='<div class="col-md-1">'.$result->par.'</div>';
-						$html.='<div class="col-md-2">'.$result->pcr.'</div>';
-					$html.='</div';
+						$html.='<div class="col-md-1">'.$r->place.'</div>';
+						$html.='<div class="col-md-3">'.$r->name.'</div>';
+						$html.='<div class="col-md-1">'.$r->nat.'</div>';
+						$html.='<div class="col-md-1">'.$r->age.'</div>';
+						$html.='<div class="col-md-1">'.$r->result.'</div>';
+						$html.='<div class="col-md-1">'.$r->par.'</div>';
+						$html.='<div class="col-md-1">'.$r->pcr.'</div>';
+					$html.='</div>';
 				endforeach;
-			else :
-				$html.='<div class="col-md-12">'.$race->id.' - This race had no results</div>';
 			endif;
 		$html.='</div>';
 
 		// race details, including field quality //
-		$html.='<div id="race-'.$race->id.'" class="race-fq">';
+		$html.='<div id="race-'.$race->id.'" class="'.implode(' ',$field_quality_classes).'">';
 			if (isset($data->field_quality)) :
 				$html.='<div class="row header">';
 					$html.='<div class="col-md-2">WC Mult.</div>';
@@ -190,6 +204,24 @@ echo "$race_id - update fq<br>";
 		endforeach;
 
 		return $races;
+	}
+
+	/**
+	 * get_race_results_from_db function.
+	 *
+	 * @access public
+	 * @param bool $code (default: false)
+	 * @return void
+	 */
+	public function get_race_results_from_db($code=false) {
+		global $wpdb,$uci_curl;
+
+		if (!$code)
+			return false;
+
+		$db_results=$wpdb->get_results("SELECT * FROM $uci_curl->results_table WHERE code='$code'");
+
+		return $db_results;
 	}
 
 }

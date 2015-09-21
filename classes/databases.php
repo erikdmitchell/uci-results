@@ -1,7 +1,7 @@
 <?php
 class UCIcURLDB {
 
-	public $db_version='0.0.6';
+	public $db_version='0.0.7';
 	public $wp_option_name='ucicurl_version';
 
 	/**
@@ -89,6 +89,7 @@ class UCIcURLDB {
 		$table_name=$wpdb->prefix.'uci_rider_data';
 		$uci_rider_data_sql="CREATE TABLE $table_name (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `code` tinytext NOT NULL,
 		  `name` varchar(100) NOT NULL,
 		  `data` text NOT NULL,
 		  PRIMARY KEY (`id`)

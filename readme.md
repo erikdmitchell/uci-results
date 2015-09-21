@@ -18,6 +18,8 @@ Changelog
 	2008/2009 Testing
 	
 	Added uci_races,uci_rider_data and uci_season_rankings tables to be. Adjusted prefix issues in code.
+	Added add_race_results_to_db() to process results as part of curl.
+	Added get_race_results_from_db() to get results from db.
 	
 	Removed legacy folder and files/
 

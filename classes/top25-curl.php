@@ -6,7 +6,7 @@ class Top25_cURL {
 	public $version='1.0.2';
 	public $config=array();
 
-	protected $debug=true;
+	protected $debug=false;
 
 	public function __construct($config=array()) {
 		global $wpdb;
@@ -495,11 +495,7 @@ class Top25_cURL {
 		if (!is_object($race_data))
 			$race_data=json_decode(json_encode($race_data),FALSE);
 
-		if ($this->debug) :
-			//echo '<pre>';
-			//print_r($race_data);
-			//echo '</pre>';
-		endif;
+		$race_data->field_quality=0;
 
 		// build data array ..
 		$data=array(
@@ -515,6 +511,7 @@ class Top25_cURL {
 			else :
 				if ($wpdb->insert($this->table,$data)) :
 					$message='<div class="updated">Added '.$data['code'].' to database.</div>';
+					$this->add_race_results_to_db($data['code'],$race_data->link);
 				else :
 					$message='<div class="error">Unable to insert '.$data['code'].' into the database.</div>';
 				endif;
@@ -540,41 +537,16 @@ class Top25_cURL {
 		if (!$code || !$link)
 			return false;
 
-		$names_in_db=$wpdb->get_results("SELECT * FROM $this->results_table");
 		$race_results=$this->get_race_results($link);
 
 		foreach ($race_results as $result) :
-			$id=false;
-			$data=array();
-			$race_data=array();
-
-			// get id if in db //
-			foreach ($names_in_db as $name) :
-				if ($name->name==$result->name) :
-					$id=$name->id;
-					$data=unserialize(base64_decode($name->data));
-				endif;
-			endforeach;
-
-			$data[$code]=$result;
-			$data=base64_encode(serialize($data));
-
 			$insert=array(
+				'code' => $code,
 				'name' => $result->name,
-				'data' => $data
+				'data' => base64_encode(serialize($result)),
 			);
 
-			if ($this->debug) :
-				echo '<pre>';
-				print_r(unserialize(base64_decode($data)));
-				echo '</pre>';
-			else :
-				if ($id) :
-					$wpdb->update($this->results_table,array('data' => $data),array('id' => $id));
-				else :
-					$wpdb->insert($this->results_table,$insert);
-				endif;
-			endif;
+			$wpdb->insert($this->results_table,$insert);
 		endforeach;
 	}
 
@@ -585,11 +557,11 @@ class Top25_cURL {
 	 *
 	 * takes the race name and date to build a string which becomes our "code" to prevent dups
 	 *
-	 * @access protected
+	 * @access public
 	 * @param mixed $obj
 	 * @return void
 	 */
-	protected function build_race_code($obj) {
+	public function build_race_code($obj) {
 		if (!is_object($obj))
 			$obj=json_decode(json_encode($obj),FALSE);
 
