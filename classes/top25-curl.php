@@ -29,9 +29,6 @@ class Top25_cURL {
 		endif;
 
 		$this->config=(object) $config;
-echo '<pre>';
-print_r($this->config);
-echo '</pre>';
 	}
 
 	public function admin_page() {
