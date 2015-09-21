@@ -2,10 +2,11 @@
 class Top25_cURL {
 
 	public $table;
+	public $results_table;
 	public $version='1.0.2';
 	public $config=array();
 
-	protected $debug=false;
+	protected $debug=true;
 
 	public function __construct($config=array()) {
 		global $wpdb;
@@ -34,6 +35,7 @@ class Top25_cURL {
 
 		$this->config=(object) $config;
 		$this->table=$wpdb->prefix.'uci_races';
+		$this->results_table=$wpdb->prefix.'uci_rider_data';
 	}
 
 	public function admin_page() {
@@ -89,7 +91,7 @@ class Top25_cURL {
 		echo $html;
 	}
 
-	function default_admin_page() {
+	public function default_admin_page() {
 		$html=null;
 
 		$html.='<h3>UCI Cross</h3>';
@@ -97,7 +99,7 @@ class Top25_cURL {
 		return $html;
 	}
 
-	function races_admin_page() {
+	public function races_admin_page() {
 		$html=null;
 		$stats=new RaceStats();
 
@@ -106,7 +108,7 @@ class Top25_cURL {
 		return $html;
 	}
 
-	function riders_admin_page() {
+	public function riders_admin_page() {
 		$html=null;
 		$rider_stats=new RiderStats();
 
@@ -509,6 +511,7 @@ class Top25_cURL {
 		if (!$this->check_for_dups($data['code'])) :
 			if ($this->debug) :
 				$message='<div class="updated">Added '.$data['code'].' to database.(debug)</div>';
+				$this->add_race_results_to_db($data['code'],$race_data->link);
 			else :
 				if ($wpdb->insert($this->table,$data)) :
 					$message='<div class="updated">Added '.$data['code'].' to database.</div>';
@@ -521,6 +524,58 @@ class Top25_cURL {
 		endif;
 
 		return $message;
+	}
+
+	/**
+	 * add_race_results_to_db function.
+	 *
+	 * @access public
+	 * @param bool $code (default: false)
+	 * @param bool $link (default: false)
+	 * @return void
+	 */
+	public function add_race_results_to_db($code=false,$link=false) {
+		global $wpdb;
+
+		if (!$code || !$link)
+			return false;
+
+		$names_in_db=$wpdb->get_results("SELECT * FROM $this->results_table");
+		$race_results=$this->get_race_results($link);
+
+		foreach ($race_results as $result) :
+			$id=false;
+			$data=array();
+			$race_data=array();
+
+			// get id if in db //
+			foreach ($names_in_db as $name) :
+				if ($name->name==$result->name) :
+					$id=$name->id;
+					$data=unserialize(base64_decode($name->data));
+				endif;
+			endforeach;
+
+			$data[$code]=$result;
+			$data=base64_encode(serialize($data));
+
+			$insert=array(
+				'name' => $result->name,
+				'data' => $data
+			);
+
+			if ($this->debug) :
+				echo '<pre>';
+				print_r(unserialize(base64_decode($data)));
+				echo '</pre>';
+			else :
+				if ($id) :
+					$wpdb->update($this->results_table,array('data' => $data),array('id' => $id));
+				else :
+					$wpdb->insert($this->results_table,$insert);
+				endif;
+			endif;
+		endforeach;
 	}
 
 	//----------------------------- begin add_race_to_db helper functions -----------------------------//
@@ -594,11 +649,13 @@ class Top25_cURL {
 	}
 
 	/**
-	 * @param string $code - race code
-	 * compares race code to those in db; if true, there's a dup and we do not enter race
-	 * returns true/false
-	**/
-	function check_for_dups($code) {
+	 * check_for_dups function.
+	 *
+	 * @access protected
+	 * @param mixed $code
+	 * @return void
+	 */
+	protected function check_for_dups($code) {
 		global $wpdb;
 
 		$races_in_db=$wpdb->get_results("SELECT code FROM $this->table");
@@ -688,7 +745,7 @@ class Top25_cURL {
 	 * @param mixed $obj
 	 * @return void
 	 */
-	function build_default_race_table($obj) {
+	public function build_default_race_table($obj) {
 		$html=null;
 		$alt=0;
 
