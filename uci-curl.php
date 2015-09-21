@@ -9,6 +9,7 @@
  * License:
  */
 
+include_once(plugin_dir_path(__FILE__).'classes/databases.php');
 include_once(plugin_dir_path(__FILE__).'classes/top25-curl.php');
 include_once(plugin_dir_path(__FILE__).'classes/field-quality.php');
 include_once(plugin_dir_path(__FILE__).'classes/view-db.php');
