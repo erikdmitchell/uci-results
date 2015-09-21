@@ -19,34 +19,6 @@ console.log('a');
 */
 
 	/**
-	 * this function is used in ViewDB class
-	 */
-	$('.race-table .race-link a').click(function(e) {
-		e.preventDefault();
-		var id=$(this).data('id');
-
-		if ($('.race-results-full-table#'+id).is(':visible')) {
-			$('.race-results-full-table#'+id).hide();
-		} else {
-			$('.race-results-full-table#'+id).show();
-		}
-	});
-
-	/**
-	 * this function is used in ViewDB class
-	 */
-	$('.race-table .race-details a').click(function(e) {
-		e.preventDefault();
-		var id=$(this).data('id');
-
-		if ($('.race-fq#'+id).is(':visible')) {
-			$('.race-fq#'+id).hide();
-		} else {
-			$('.race-fq#'+id).show();
-		}
-	});
-
-	/**
 	 * on our curl page, this runs our select all checkbox functionality
 	 */
   $('#selectall').live('change',function(event) {
@@ -127,6 +99,27 @@ console.log('a');
 			}
 
 		});
+	});
+
+	/**
+	 * view db page, race results/details
+	 */
+	$('.race-details a').click(function(e) {
+		e.preventDefault();
+
+		if ($(this).hasClass('details')) {
+			$('.race-table .race-fq').each(function() {
+				$(this).removeClass('active');
+			});
+
+			$('#'+$(this).data('id')+'.race-fq').addClass('active');
+		} else if ($(this).hasClass('result')) {
+			$('.race-table .results').each(function() {
+				$(this).removeClass('active');
+			});
+
+			$('#'+$(this).data('id')+'.results').addClass('active');
+		}
 	});
 
 });

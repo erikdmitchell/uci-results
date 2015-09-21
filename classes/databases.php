@@ -1,7 +1,7 @@
 <?php
 class UCIcURLDB {
 
-	public $db_version='0.0.4';
+	public $db_version='0.0.5';
 	public $wp_option_name='ucicurl_version';
 
 	/**
@@ -79,27 +79,30 @@ class UCIcURLDB {
 
 		$table_name=$wpdb->prefix.'uci_races';
 		$uci_races_sql="CREATE TABLE $table_name (
-		  `id` int(11) NOT NULL,
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `data` longtext NOT NULL,
 		  `code` tinytext NOT NULL,
-		  `season` tinytext NOT NULL
+		  `season` tinytext NOT NULL,
+		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
 		$table_name=$wpdb->prefix.'uci_rider_data';
 		$uci_rider_data_sql="CREATE TABLE $table_name (
-		  `id` int(11) NOT NULL,
-		  `data` text NOT NULL
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `data` text NOT NULL,
+		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
 		$table_name=$wpdb->prefix.'uci_season_rankings';
 		$uci_season_rankings_sql="CREATE TABLE $table_name (
-		  `id` int(11) NOT NULL,
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `rank` varchar(12) NOT NULL,
 		  `name` mediumtext NOT NULL,
 		  `nation` tinytext NOT NULL,
 		  `age` smallint(6) NOT NULL,
 		  `points` smallint(6) NOT NULL,
-		  `season` mediumtext NOT NULL
+		  `season` mediumtext NOT NULL,
+		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
 		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
