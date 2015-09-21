@@ -106,8 +106,12 @@ console.log('a');
 		};
 
 		$.post(ajaxurl,data,function(response) {
-			var races=$.parseJSON(response);
 			$('#get-race-data').html('');
+
+			var races=$.parseJSON(response);
+			var counter=1;
+
+			$('#get-race-data').append('<div id="counter"><span class="ctr">'+counter+'</span> out of '+races.length+' proccessed.');
 
 			for (var i in races) {
 				var data={
@@ -117,9 +121,11 @@ console.log('a');
 
 				$.post(ajaxurl,data,function(response) {
 					$('#get-race-data').append(response);
+					$('#get-race-data').find('#counter span.ctr').text(counter);
+					counter++;
 				});
-
 			}
+
 		});
 	});
 

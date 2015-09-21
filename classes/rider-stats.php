@@ -300,7 +300,7 @@ class RiderStats {
 
 		global $wpdb;
 		$html=null;
-		$rankings=$wpdb->get_results("SELECT * FROM uci_season_rankings WHERE season='$year'");
+		$rankings=$wpdb->get_results("SELECT * FROM ".$wpdb->prefix.'uci_season_rankings'." WHERE season='$year'");
 
 		if (!$display)
 			return $rankings;
@@ -340,7 +340,7 @@ class RiderStats {
 	public static function get_uci_season_ranking_seasons($display='list') {
 		global $wpdb;
 		$html=null;
-		$seasons=$wpdb->get_results("SELECT season FROM uci_season_rankings GROUP BY season");
+		$seasons=$wpdb->get_results("SELECT season FROM ".$wpdb->prefix.'uci_season_rankings'." GROUP BY season");
 
 		switch ($display) :
 			case 'dropdown' :

@@ -16,6 +16,10 @@ Changelog
 	Developed Admin Testing setup.
 	
 	2008/2009 Testing
+	
+	Added uci_races,uci_rider_data and uci_season_rankings tables to be. Adjusted prefix issues in code.
+	
+	Removed legacy folder and files/
 
 
 ### 1.0.6

@@ -17,7 +17,6 @@ class ViewDB {
 
 	function display_view_db_page() {
 		global $wpdb,$uci_curl;
-
 		set_time_limit(0); // mex ececution time
 		$html=null;
 		$sort_type='date';

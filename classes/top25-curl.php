@@ -1,11 +1,13 @@
 <?php
 class Top25_cURL {
 
-	public $table='top25_races';
+	public $table;
 	public $version='1.0.2';
 	public $config=array();
 
 	public function __construct($config=array()) {
+		global $wpdb;
+
 		add_action('admin_menu',array($this,'admin_page'));
 		add_action('admin_enqueue_scripts',array($this,'admin_scripts_styles'));
 
@@ -29,6 +31,7 @@ class Top25_cURL {
 		endif;
 
 		$this->config=(object) $config;
+		$this->table=$wpdb->prefix.'uci_races';
 	}
 
 	public function admin_page() {
@@ -120,12 +123,10 @@ class Top25_cURL {
 			if (isset($_POST['submit']) && isset($_POST['riders']) && isset($_POST['riders'])=='g2g') :
 				switch ($_POST['submit']) :
 					case 'View Season Rankings':
-						//$html.=$rider_stats->get_season_rider_rankings($_POST['season-ranking-seasons']);
-						$html.='get_season_rider_rankings() disabled for now';
+						$html.=$rider_stats->get_season_rider_rankings($_POST['season-ranking-seasons']);
 						break;
 					case 'View UCI Season Rankings':
-						//$html.=RiderStats::get_uci_season_rankings($_POST['season-ranking-seasons']);
-						$hmtl.='get_uci_season_rankings() disabled for now';
+						$html.=RiderStats::get_uci_season_rankings($_POST['season-ranking-seasons']);
 						break;
 					default:
 						break;
@@ -136,7 +137,13 @@ class Top25_cURL {
 		return $html;
 	}
 
-	function display_curl_page() {
+	/**
+	 * display_curl_page function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function display_curl_page() {
 		$html=null;
 		$results=array();
 		$url=null;
@@ -211,12 +218,15 @@ class Top25_cURL {
 	}
 
 	/**
+	 * get_race_data function.
+	 *
 	 * this function does all the magic as far as parseing results and adding them to the db
-	 * @param true/false $add_to_db - whether or not we should run the add db function. NOTE: there will be no preformatted result if false
-	 * @return array - the results of the db input (formatted for wp-admin)
-	 *		the default is a table of race data for individual adding/info
-	**/
-	function get_race_data($limit=false) {
+	 *
+	 * @access public
+	 * @param bool $limit (default: false)
+	 * @return void
+	 */
+	public function get_race_data($limit=false) {
 		if (!isset($this->config->url))
 			return false;
 
@@ -300,6 +310,12 @@ class Top25_cURL {
 		return $this->build_default_race_table($races_obj);
 	}
 
+	/**
+	 * ajax_prepare_add_races_to_db function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function ajax_prepare_add_races_to_db() {
 		if (empty($_POST['races']))
 			return false;
@@ -314,6 +330,12 @@ class Top25_cURL {
 		wp_die();
 	}
 
+	/**
+	 * ajax_add_race_to_db function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function ajax_add_race_to_db() {
 		if (!$_POST['race'])
 			return false;
@@ -322,14 +344,10 @@ class Top25_cURL {
 
 		// add to db //
 		if (!$this->check_for_dups($code)) :
-echo 'adding to db';
-			//$this->add_race_to_db($race_obj);
+			echo '<div class="updated add-race-to-db-message">Adding to db...('.$code.')</div>';
 		else :
-echo 'in db';
-			// already in db //
-			// xxxx
+			echo '<div class="error add-race-to-db-message">Already in db.('.$code.')</div>';
 		endif;
-
 
 		wp_die();
 	}
@@ -469,7 +487,6 @@ echo 'in db';
 		global $wpdb;
 
 		$message=null;
-		$table='uci_races';
 
 		// build data array ..
 		$data=array(
@@ -479,7 +496,7 @@ echo 'in db';
 		);
 
 		if (!$this->check_for_dups($data['code'])) :
-			if ($wpdb->insert($table,$data)) :
+			if ($wpdb->insert($this->table,$data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
 			else :
 				$message='<div class="error">Unable to insert '.$data['code'].' into the database.</div>';
@@ -565,9 +582,8 @@ echo 'in db';
 	**/
 	function check_for_dups($code) {
 		global $wpdb;
-		$table='uci_races';
 
-		$races_in_db=$wpdb->get_results("SELECT code FROM ".$table);
+		$races_in_db=$wpdb->get_results("SELECT code FROM $this->table");
 
 		if (count($races_in_db)!=0) :
 			foreach ($races_in_db as $race) :
