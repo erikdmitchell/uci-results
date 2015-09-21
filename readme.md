@@ -15,9 +15,17 @@ Changelog
 
 	Preparation for public release.
 	
-	Reformatted and updated readme file.
-	
 	Added bootstrap css for admin structure
+	Added ajax based get races table
+	Added ajax races to db on curl page
+	Added UCIcURLDB class to handle our custom databases	
+	
+	Fixed select all bug on get races page
+	Reformatted and updated readme file.	
+	Reworked config setup for urls in curl class
+	Tweaked limit on races per year.
+	Top25_cURL table is top25_races, not supporting a broader uci setup yet
+	get_uci_season_rankings() disabled for now	
 
 ### 1.0.5
 
