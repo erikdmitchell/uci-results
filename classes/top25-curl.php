@@ -5,6 +5,8 @@ class Top25_cURL {
 	public $version='1.0.2';
 	public $config=array();
 
+	protected $debug=true;
+
 	public function __construct($config=array()) {
 		global $wpdb;
 
@@ -344,7 +346,7 @@ class Top25_cURL {
 
 		// add to db //
 		if (!$this->check_for_dups($code)) :
-			echo '<div class="updated add-race-to-db-message">Adding to db...('.$code.')</div>';
+			echo $this->add_race_to_db($_POST['race']);
 		else :
 			echo '<div class="error add-race-to-db-message">Already in db.('.$code.')</div>';
 		endif;
@@ -488,6 +490,15 @@ class Top25_cURL {
 
 		$message=null;
 
+		if (!is_object($race_data))
+			$race_data=json_decode(json_encode($race_data),FALSE);
+
+		if ($this->debug) :
+			//echo '<pre>';
+			//print_r($race_data);
+			//echo '</pre>';
+		endif;
+
 		// build data array ..
 		$data=array(
 			'data' => base64_encode(serialize($race_data)),
@@ -496,10 +507,14 @@ class Top25_cURL {
 		);
 
 		if (!$this->check_for_dups($data['code'])) :
-			if ($wpdb->insert($this->table,$data)) :
-				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
+			if ($this->debug) :
+				$message='<div class="updated">Added '.$data['code'].' to database.(debug)</div>';
 			else :
-				$message='<div class="error">Unable to insert '.$data['code'].' into the database.</div>';
+				if ($wpdb->insert($this->table,$data)) :
+					$message='<div class="updated">Added '.$data['code'].' to database.</div>';
+				else :
+					$message='<div class="error">Unable to insert '.$data['code'].' into the database.</div>';
+				endif;
 			endif;
 		else :
 			$message='<div class="error">'.$data['code'].' is already in the database</div>';
@@ -549,9 +564,12 @@ class Top25_cURL {
 	}
 
 	/**
+	 * build_year_arr function.
 	 *
+	 * @access public
+	 * @return void
 	 */
-	function build_year_arr() {
+	public function build_year_arr() {
 		$year=date('Y');
 		$counter_year=$year-20;
 		$max_year=$year+20;
