@@ -11,11 +11,17 @@ Coming Soon
 Changelog
 ===========
 
+### 1.0.7
+
+	First "public release"
+
 ### 1.0.6.2
 
 	Adjusted rider scoring percentage. Winning percentage is now weighted.
 	
 	Minor format and flow tweaks.
+	
+	Lots of testing and minor tweaks.
 
 ### 1.0.6.1
 
