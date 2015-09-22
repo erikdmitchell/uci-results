@@ -11,6 +11,10 @@ Coming Soon
 Changelog
 ===========
 
+### 1.0.6.2
+
+
+
 ### 1.0.6.1
 
 	Developed Admin Testing (debug) setup.
