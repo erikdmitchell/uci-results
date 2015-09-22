@@ -6,7 +6,7 @@
  */
 class RaceStats {
 
-	public $version='0.1.1';
+	public $version='0.1.2';
 
 	/**
 	 * __construct function.
@@ -26,21 +26,8 @@ class RaceStats {
 	 * @return void
 	 */
 	public function get_season_race_rankings($season=false) {
-		global $wpdb,$uci_curl;
-
-		//if (!$season)
-			//return '<div class="error">Error: No season detected for get season race ranking.</div>';
-
-		$where=null;
-
-		if ($season)
-			$where="WHERE season='$season'";
-
 		$html=null;
-		$sort_type='race_total';
-		$sort='desc';
-		$races=$wpdb->get_results("SELECT * FROM ".$uci_curl->table." ".$where);
-		//$races=$this->sort_races($sort_type,$sort,$races);
+		$races=$this->get_races();
 
 		$html.='<h3>'.$season.' Race Rankings</h3>';
 
@@ -55,18 +42,15 @@ class RaceStats {
 			$html.='</div>';
 
 			foreach ($races as $race) :
-				$data=unserialize(base64_decode($race->data));
-				$class=null;
+				$html.='<div class="row">';
+					$html.='<div class="date col-md-2">'.$race->date.'</div>';
+					$html.='<div class="event col-md-4">'.$race->event.'</div>';
+					$html.='<div class="nat col-md-1">'.$race->nat.'</div>';
+					$html.='<div class="class col-md-1">'.$race->class.'</div>';
+					$html.='<div class="winner col-md-2">'.$race->winner.'</div>';
 
-				$html.='<div class="'.$class.' row">';
-					$html.='<div class="date col-md-2">'.$data->date.'</div>';
-					$html.='<div class="event col-md-4">'.$data->event.'</div>';
-					$html.='<div class="nat col-md-1">'.$data->nat.'</div>';
-					$html.='<div class="class col-md-1">'.$data->class.'</div>';
-					$html.='<div class="winner col-md-2">'.$data->winner.'</div>';
-
-					if (isset($data->field_quality))
-						$html.='<div class="fq col-md-2">'.$data->field_quality->race_total.'</div>';
+					if (isset($race->field_quality))
+						$html.='<div class="fq col-md-2">'.$race->field_quality->race_total.'</div>';
 
 				$html.='</div>';
 			endforeach;
@@ -77,34 +61,72 @@ class RaceStats {
 	}
 
 	/**
-	 * sorts our races db object
-	 * only does fq, need our variable to be more robust
+	 * get_races function.
+	 *
+	 * @access public
+	 * @param array $args (default: array())
+	 * @return void
 	 */
-/*
-	public function sort_races($field=false,$method=false,$races=false) {
-		if (!($field) || !($method) || !($races))
-			return array();
+	public function get_races($args=array()) {
+		global $wpdb,$uci_curl;
 
-		$method=constant('SORT_'.strtoupper($method));
+		$where=null;
+		$default_args=array(
+			'sort' => true,
+			'season' => false,
+		);
 
-		foreach ($races as $race) :
-			$race->data=unserialize(base64_decode($race->data));
-		endforeach;
+		$args=array_merge($default_args,$args);
 
-		$dates = array();
-		foreach ($races as $race) :
-    	$arr[] = $race->data->field_quality->$field;
-		endforeach;
+		extract($args);
 
-		array_multisort($arr,$method,$races);
+		if ($season)
+			$where="WHERE season='$season'";
 
-		foreach ($races as $race) :
-			$race->data=base64_encode(serialize($race->data));
-		endforeach;
+		$races=$wpdb->get_results("SELECT * FROM ".$uci_curl->table.$where);
+
+		if ($sort)
+			$races=$this->sort_races($races);
 
 		return $races;
 	}
-*/
+
+	/**
+	 * sort_races function.
+	 *
+	 * DOES NOTHING @since 0.1.2
+	 *
+	 * @access public
+	 * @param bool $races (default: false)
+	 * @param array $args (default: array())
+	 * @return void
+	 */
+	public function sort_races($races=false,$args=array()) {
+		if (!$races)
+			return false;
+
+		return $races;
+	}
+
+	/**
+	 * get_race_results_from_db function.
+	 *
+	 * @access public
+	 * @param bool $code (default: false)
+	 * @return void
+	 */
+	public function get_race_results_from_db($code=false) {
+		global $wpdb,$uci_curl;
+
+		if (!$code)
+			return false;
+
+		$results=$wpdb->get_results("SELECT * FROM $uci_curl->results_table WHERE code='$code'");
+
+		return $results;
+	}
 
 }
+
+$RaceStats = new RaceStats();
 ?>

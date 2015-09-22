@@ -11,68 +11,9 @@
               no-repeat;
 	display: none;
 }
-
-
-/*
-.riders-wrap,
-.riders-wrap form {
-	overflow: hidden;
-}
-.riders-wrap .season-dropdown {
-	float: left;
-}
-.riders-wrap #submit {
-	float: left;
-	margin-left: 10px;
-}
-*/
-
-/**
- * uci cross - races
- */
-.season-race-rankings  .row.header {
+.row.header {
 	font-weight: bold;
 }
-
-/* default race data table
--------------------------- */
-/*
-.uci-curl .race-table {
-	width: 100%;
-}
-.uci-curl .race-table tr {
-	padding: 3px 0;
-	overflow: hidden;
-}
-.uci-curl .race-table tr.header {
-	font-weight: bold;
-}
-.uci-curl .race-table tr td {
-
-}
-*/
-
-/* default race results table
------------------------------ */
-/*
-.uci-curl .race-results-table {
-	width: 100%;
-	padding: 10px 0;
-	overflow: hidden;
-}
-.uci-curl .race-results-table tr {
-	padding: 3px 0;
-	overflow: hidden;
-}
-.uci-curl .race-results-table tr.header {
-	font-weight: bold;
-}
-.uci-curl .race-results-table tr td {
-
-}
-*/
-
-
 
 /* field quality restults (formatted)
 ------------------------------------- */

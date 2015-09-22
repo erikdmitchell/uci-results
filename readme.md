@@ -13,7 +13,7 @@ Changelog
 
 ### 1.0.6.1
 
-	Developed Admin Testing setup.
+	Developed Admin Testing (debug) setup.
 	
 	2008/2009 Testing
 	
@@ -25,6 +25,8 @@ Changelog
 	
 	Cleaned up race-stats and rider-stats.
 	Cleaned up junk js and css files and code.
+	
+	DB Version: 0.0.9
 
 
 ### 1.0.6

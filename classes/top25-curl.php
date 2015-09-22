@@ -3,7 +3,7 @@ class Top25_cURL {
 
 	public $table;
 	public $results_table;
-	public $version='1.0.2';
+	public $version='1.0.3';
 	public $config=array();
 
 	protected $debug=false;
@@ -28,7 +28,7 @@ class Top25_cURL {
 		);
 
 		if (isset($config['urls'])) :
-			$config['urls']=array_replace_recursive($default_config_urls,$config['urls']);
+			$config['urls']=array_merge($default_config_urls,$config['urls']);
 		else :
 			$config['urls']=$default_config_urls;
 		endif;
@@ -195,6 +195,9 @@ class Top25_cURL {
 		$html.='<div class="uci-curl">';
 
 			$html.='<h3>cURL</h3>';
+
+			if ($this->debug)
+				$html.='<h4><i>Debug Mode</i></h4>';
 
 			$html.='<form class="get-races" name="get-races" method="post">';
 
@@ -534,13 +537,17 @@ class Top25_cURL {
 		if (!is_object($race_data))
 			$race_data=json_decode(json_encode($race_data),FALSE);
 
-		$race_data->field_quality=0;
-
 		// build data array ..
 		$data=array(
-			'data' => base64_encode(serialize($race_data)),
 			'code' => $this->build_race_code($race_data),
 			'season' => $race_data->season,
+			'date' => $race_data->date,
+			'event' => $race_data->event,
+			'nat' => $race_data->nat,
+			'class' => $race_data->class,
+			'winner' => $race_data->winner,
+			'link' => $race_data->link,
+			'fq'  => 0
 		);
 
 		if (!$this->check_for_dups($data['code'])) :
@@ -580,12 +587,23 @@ class Top25_cURL {
 
 		foreach ($race_results as $result) :
 			$insert=array(
-				'code' => $code,
 				'name' => $result->name,
-				'data' => base64_encode(serialize($result)),
+				'code' => $code,
+				'place' => $result->place,
+				'nat' => $result->nat,
+				'age' => $result->age,
+				'time' => $result->result,
+				'par' => $result->par,
+				'pcr' => $result->pcr,
 			);
 
-			$wpdb->insert($this->results_table,$insert);
+			if ($this->debug) :
+				echo '<pre>';
+				print_r($insert);
+				echo '</pre>';
+			else :
+				$wpdb->insert($this->results_table,$insert);
+			endif;
 		endforeach;
 	}
 

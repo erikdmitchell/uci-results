@@ -1,7 +1,7 @@
 <?php
 class UCIcURLDB {
 
-	public $db_version='0.0.7';
+	public $db_version='0.0.9';
 	public $wp_option_name='ucicurl_version';
 
 	/**
@@ -119,6 +119,116 @@ class UCIcURLDB {
 			$uci_season_rankings_sql
 		));
 
+		add_option($this->wp_option_name,$this->db_version);
+	}
+
+	public function db_update() {
+		global $wpdb;
+
+		$table_name=$wpdb->prefix.'top25_races';
+		$top25_races_sql="CREATE TABLE $table_name (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `name` varchar(100) NOT NULL,
+		  `type` varchar(3) NOT NULL,
+		  `quality` float(10,3) NOT NULL,
+		  `total` float(10,3) NOT NULL,
+		  `date` varchar(11) NOT NULL,
+		  `results` text NOT NULL,
+		  `filename` text NOT NULL
+		);";
+
+		$table_name=$wpdb->prefix.'top25_rank';
+		$top25_rank_sql="CREATE TABLE $table_name (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `data` longtext NOT NULL,
+		  `week` tinyint(4) NOT NULL,
+		  `season` varchar(10) NOT NULL
+		);";
+
+		$table_name=$wpdb->prefix.'top25_riders';
+		$top25_riders_sql="CREATE TABLE $table_name (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `name` varchar(100) NOT NULL,
+		  `uci` mediumint(9) NOT NULL,
+		  `wc` mediumint(9) NOT NULL,
+		  `races` mediumint(9) NOT NULL,
+		  `total` mediumint(9) NOT NULL,
+		  `year` mediumint(9) NOT NULL
+		);";
+
+		$table_name=$wpdb->prefix.'top25_seasons';
+		$top25_seasons_sql="CREATE TABLE $table_name (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `season` varchar(10) NOT NULL,
+		  `start` varchar(12) NOT NULL,
+		  `end` varchar(12) NOT NULL
+		);";
+
+		$table_name=$wpdb->prefix.'top25_votes';
+		$top25_votes_sql="CREATE TABLE $table_name (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `date` varchar(11) NOT NULL,
+		  `results` text NOT NULL,
+		  `userID` int(11) NOT NULL
+		);";
+
+		$table_name=$wpdb->prefix.'uci_races';
+		$uci_races_sql="CREATE TABLE $table_name (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `code` tinytext NOT NULL,
+		  `season` tinytext NOT NULL,
+			`date` VARCHAR(30) NOT NULL,
+			`event` TEXT NOT NULL,
+			`nat` VARCHAR(5) NOT NULL,
+			`class` VARCHAR(5) NOT NULL ,
+			`winner` VARCHAR(50) NOT NULL,
+			`season` VARCHAR(30) NOT NULL,
+			`link` TEXT NOT NULL,
+			`fq` VARCHAR(5) NOT NULL
+		);";
+		$alter_races_sql='"ALTER TABLE `'.$table_name.'` DROP `data`;"';
+
+		$table_name=$wpdb->prefix.'uci_rider_data';
+		$uci_rider_data_sql="CREATE TABLE $table_name (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `code` tinytext NOT NULL,
+		  `name` varchar(100) NOT NULL,
+			`place` int(11) NOT NULL,
+			`nat` VARCHAR(5) NOT NULL,
+			`age` int(11) NOT NULL ,
+			`time` VARCHAR(10) NOT NULL,
+			`par` VARCHAR(10) NOT NULL,
+			`pcr` VARCHAR(10) NOT NULL,
+		);";
+		$alter_rider_data_sql='"ALTER TABLE `'.$table_name.'` DROP `data`;"';
+
+		$table_name=$wpdb->prefix.'uci_season_rankings';
+		$uci_season_rankings_sql="CREATE TABLE $table_name (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `rank` varchar(12) NOT NULL,
+		  `name` mediumtext NOT NULL,
+		  `nation` tinytext NOT NULL,
+		  `age` smallint(6) NOT NULL,
+		  `points` smallint(6) NOT NULL,
+		  `season` mediumtext NOT NULL
+		);";
+
+		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+/*
+		dbDelta(array(
+			$top25_races_sql,
+			$top25_rank_sql,
+			$top25_riders_sql,
+			$top25_seasons_sql,
+			$top25_votes_sql,
+			$uci_races_sql,
+			$uci_rider_data_sql,
+			$uci_season_rankings_sql,
+			$alter_races_sql,
+			$alter_rider_data_sql
+		));
+*/
+
 		update_option($this->wp_option_name,$this->db_version);
 	}
 
@@ -130,7 +240,7 @@ class UCIcURLDB {
 	 */
 	public function update_db_check() {
 		if (get_option($this->wp_option_name)!=$this->db_version)
-			$this->db_install();
+			$this->db_update();
 	}
 
 }

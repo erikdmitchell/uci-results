@@ -4,7 +4,7 @@
 **/
 class ViewDB {
 
-	public $version='0.1.1';
+	public $version='0.1.2';
 
 	public function __construct() {
 		add_action('admin_enqueue_scripts',array($this,'viewdb_scripts_styles'));
@@ -15,23 +15,21 @@ class ViewDB {
 	}
 
 	public function display_view_db_page() {
-		global $wpdb,$uci_curl;
-		//set_time_limit(0); // mex ececution time
-		$html=null;
-		$sort_type='date';
-		$sort='ASC';
-		$races=$wpdb->get_results("SELECT * FROM ".$uci_curl->table);
+		global $wpdb,$uci_curl,$RaceStats;
 
-		$races=$this->sort_races($sort_type,$sort,$races);
+		$html=null;
+		$races=$RaceStats->get_races();
 
 		$html.='<h3>Races In Database</h3>';
 
+/*
 		if (isset($_POST['submit']) && $_POST['submit']=='Add/Update FQ' && isset($_POST['races'])) :
 			foreach ($_POST['races'] as $race_id) :
 echo "$race_id - update fq<br>";
 				//echo $this->update_fq($race_id);
 			endforeach;
 		endif;
+*/
 
 		$html.='<form name="add-races-to-db" method="post">';
 			$html.='<div class="race-table">';
@@ -54,43 +52,49 @@ echo "$race_id - update fq<br>";
 
 			$html.='<input type="checkbox" id="selectall" />Select All';
 
+/*
 			$html.='<p class="submit">';
 				$html.='<input type="submit" name="submit" id="submit" class="button button-primary" value="Add/Update FQ">';
 			$html.='</p>';
+*/
 
 		$html.='</form>';
 
 		echo $html;
 	}
 
+	/**
+	 * display_race_data function.
+	 *
+	 * @access public
+	 * @param mixed $race
+	 * @return void
+	 */
 	public function display_race_data($race) {
-		global $uci_curl;
+		global $uci_curl,$RaceStats;
 
 		$html=null;
-		$alt=0;
-		$data=unserialize(base64_decode($race->data));
-		$code=$uci_curl->build_race_code($data);
-		$results=$this->get_race_results_from_db($code);
 		$results_classes=array('results');
 		$field_quality_classes=array('race-fq');
+		$results=$RaceStats->get_race_results_from_db($race->code);
 
 		$html.='<div class="row">';
 			$html.='<div class="col-md-1"><input class="race-checkbox" type="checkbox" name="races[]" value="'.$race->id.'" /></div>';
-			$html.='<div class="date col-md-2">'.$data->date.'</div>';
-			$html.='<div class="event col-md-2">'.$data->event.'</div>';
-			$html.='<div class="nat col-md-1">'.$data->nat.'</div>';
-			$html.='<div class="class col-md-1">'.$data->class.'</div>';
-			$html.='<div class="winner col-md-2">'.$data->winner.'</div>';
-			$html.='<div class="season col-md-1">'.$data->season.'</div>';
+			$html.='<div class="date col-md-2">'.$race->date.'</div>';
+			$html.='<div class="event col-md-2">'.$race->event.'</div>';
+			$html.='<div class="nat col-md-1">'.$race->nat.'</div>';
+			$html.='<div class="class col-md-1">'.$race->class.'</div>';
+			$html.='<div class="winner col-md-2">'.$race->winner.'</div>';
+			$html.='<div class="season col-md-1">'.$race->season.'</div>';
 
 			$html.='<div class="race-details col-md-2">';
 				if (!$results) :
 					$html.='NO RESULTS';
 				else :
-					$html.='[<a class="result" href="#" data-link="'.$data->link.'" data-id="race-'.$race->id.'">Results</a>]&nbsp;';
+					$html.='[<a class="result" href="#" data-link="'.$race->link.'" data-id="race-'.$race->id.'">Results</a>]&nbsp;';
 				endif;
 
-				if (!isset($data->field_quality) || !$data->field_quality) :
+				if (!isset($race->field_quality) || !$race->field_quality) :
 					$html.='NO FQ';
 				else :
 					$html.='[<a class="details" href="#" data-id="race-'.$race->id.'">Details</a>]';
@@ -112,15 +116,14 @@ echo "$race_id - update fq<br>";
 				$html.='</div>';
 
 				foreach ($results as $result) :
-					$r=unserialize(base64_decode($result->data));
 					$html.='<div class="row">';
-						$html.='<div class="col-md-1">'.$r->place.'</div>';
-						$html.='<div class="col-md-3">'.$r->name.'</div>';
-						$html.='<div class="col-md-1">'.$r->nat.'</div>';
-						$html.='<div class="col-md-1">'.$r->age.'</div>';
-						$html.='<div class="col-md-1">'.$r->result.'</div>';
-						$html.='<div class="col-md-1">'.$r->par.'</div>';
-						$html.='<div class="col-md-1">'.$r->pcr.'</div>';
+						$html.='<div class="col-md-1">'.$result->place.'</div>';
+						$html.='<div class="col-md-3">'.$result->name.'</div>';
+						$html.='<div class="col-md-1">'.$result->nat.'</div>';
+						$html.='<div class="col-md-1">'.$result->age.'</div>';
+						$html.='<div class="col-md-1">'.$result->time.'</div>';
+						$html.='<div class="col-md-1">'.$result->par.'</div>';
+						$html.='<div class="col-md-1">'.$result->pcr.'</div>';
 					$html.='</div>';
 				endforeach;
 			endif;
@@ -128,7 +131,7 @@ echo "$race_id - update fq<br>";
 
 		// race details, including field quality //
 		$html.='<div id="race-'.$race->id.'" class="'.implode(' ',$field_quality_classes).'">';
-			if (isset($data->field_quality)) :
+			if (isset($race->field_quality)) :
 				$html.='<div class="row header">';
 					$html.='<div class="col-md-2">WC Mult.</div>';
 					$html.='<div class="col-md-2">UCI Mult.</div>';
@@ -139,12 +142,12 @@ echo "$race_id - update fq<br>";
 				$html.='</div>';
 
 				$html.='<div class="row">';
-					$html.='<div class="col-md-2">'.$data->field_quality->wcp_mult.'</div>';
-					$html.='<div class="col-md-2">'.$data->field_quality->uci_mult.'</div>';
-					$html.='<div class="col-md-2">'.$data->field_quality->field_quality.'</div>';
-					$html.='<div class="col-md-2">'.$data->field_quality->total.'</div>';
-					$html.='<div class="col-md-2">'.$data->field_quality->divider.'</div>';
-					$html.='<div class="col-md-2">'.$data->field_quality->race_total.'</div>';
+					$html.='<div class="col-md-2">'.$race->field_quality->wcp_mult.'</div>';
+					$html.='<div class="col-md-2">'.$race->field_quality->uci_mult.'</div>';
+					$html.='<div class="col-md-2">'.$race->field_quality->field_quality.'</div>';
+					$html.='<div class="col-md-2">'.$race->field_quality->total.'</div>';
+					$html.='<div class="col-md-2">'.$race->field_quality->divider.'</div>';
+					$html.='<div class="col-md-2">'.$race->field_quality->race_total.'</div>';
 				$html.='</div>';
 			else :
 				$html.='<div class="col-md-12">'.$race->id.' - This race had no field quality</div>';
@@ -182,47 +185,6 @@ echo "$race_id - update fq<br>";
 		return $message;
 	}
 */
-
-	/**
-	 * sorts our races db object
-	 * right now options are dummy, only does date in ASC order
-	 */
-	public function sort_races($field,$method,$races) {
-		foreach ($races as $race) :
-			$race->data=unserialize(base64_decode($race->data));
-		endforeach;
-
-		$dates = array();
-		foreach ($races as $race) :
-    	$dates[] = strtotime($race->data->date);
-		endforeach;
-
-		array_multisort($dates,SORT_ASC,$races);
-
-		foreach ($races as $race) :
-			$race->data=base64_encode(serialize($race->data));
-		endforeach;
-
-		return $races;
-	}
-
-	/**
-	 * get_race_results_from_db function.
-	 *
-	 * @access public
-	 * @param bool $code (default: false)
-	 * @return void
-	 */
-	public function get_race_results_from_db($code=false) {
-		global $wpdb,$uci_curl;
-
-		if (!$code)
-			return false;
-
-		$db_results=$wpdb->get_results("SELECT * FROM $uci_curl->results_table WHERE code='$code'");
-
-		return $db_results;
-	}
 
 }
 ?>
