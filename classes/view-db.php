@@ -19,6 +19,7 @@ class ViewDB {
 
 		$html=null;
 		$races=$RaceStats->get_races();
+		$race_years=$uci_curl->get_years_in_db();
 
 		$html.='<h3>Races In Database</h3>';
 
@@ -30,6 +31,21 @@ echo "$race_id - update fq<br>";
 			endforeach;
 		endif;
 */
+
+		$html.='<form name="races-in-db" class="races-in-db form-filter">';
+			$html.='<div class="title">Filter</div>';
+			$html.='<div class="row">';
+				$html.='<label for="season" class="col-md-1">Season</label>';
+				$html.='<div class="col-md-2">';
+					$html.='<select name="season" id="season">';
+						$html.='<option value="0">View All</option>';
+						foreach ($race_years as $year) :
+							$html.='<option value="'.$year.'">'.$year.'</option>';
+						endforeach;
+					$html.='</select>';
+				$html.='</div>';
+			$html.='</div>';
+		$html.='</form>';
 
 		$html.='<form name="add-races-to-db" method="post">';
 			$html.='<div class="race-table">';
@@ -78,7 +94,7 @@ echo "$race_id - update fq<br>";
 		$field_quality_classes=array('race-fq');
 		$results=$RaceStats->get_race_results_from_db($race->code);
 
-		$html.='<div class="row">';
+		$html.='<div id="race-'.$race->id.'" class="row race" data-season="'.$race->season.'">';
 			$html.='<div class="col-md-1"><input class="race-checkbox" type="checkbox" name="races[]" value="'.$race->id.'" /></div>';
 			$html.='<div class="date col-md-2">'.$race->date.'</div>';
 			$html.='<div class="event col-md-2">'.$race->event.'</div>';

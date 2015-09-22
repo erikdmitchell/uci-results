@@ -122,4 +122,24 @@ console.log('a');
 		}
 	});
 
+	/**
+	 * form filter (view db for now)
+	 */
+	$('.form-filter select').change(function() {
+		var dataName=$(this).attr('name');
+		var dataValue=$(this).val();
+
+		$('.race-table .race').each(function() {
+			if (dataValue==0) {
+				$(this).show();
+			} else {
+				$(this).hide();
+
+				if ($(this).data(dataName)==dataValue) {
+					$(this).show();
+				}
+			}
+		});
+	});
+
 });

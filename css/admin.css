@@ -15,6 +15,24 @@
 	font-weight: bold;
 }
 
+/**
+ * form filter
+ */
+.form-filter {
+	border: 1px solid #000;
+	padding: 10px;
+}
+.form-filter .title {
+	margin-top: -15px;
+	background: #f1f1f1;
+	width: 60px;
+	font-weight: bold;
+	padding-left: 10px;
+}
+.form-filter label {
+	font-weight: bold;
+}
+
 /* field quality restults (formatted)
 ------------------------------------- */
 .fq-results {
@@ -102,4 +120,11 @@
 .race-table .race-fq.active div,
 .race-table .results.active div {
 	background: #fff;
+}
+
+/**
+ * uci cross admin
+ */
+.season-rider-rankings > .row:nth-child(even) {
+	background: #ccc;
 }
