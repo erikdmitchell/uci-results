@@ -40,7 +40,7 @@ class RiderStats {
 				$html.='<div class="rider col-md-3">Rider</div>';
 				$html.='<div class="uci col-md-1">UCI</div>';
 				$html.='<div class="wcp col-md-1">WCP</div>';
-				$html.='<div class="winning col-md-1">Win %</div>';
+				$html.='<div class="winning col-md-1">Win %*</div>';
 				$html.='<div class="sos col-md-1">SOS</div>';
 				$html.='<div class="total col-md-1">Total</div>';
 			$html.='</div>';
@@ -51,7 +51,7 @@ class RiderStats {
 					$html.='<div class="rider col-md-3">'.$rider->name.'</div>';
 					$html.='<div class="uci col-md-1">'.$rider->uci_points.'</div>';
 					$html.='<div class="wcp col-md-1">'.$rider->wcp_points.'</div>';
-					$html.='<div class="winning col-md-1">'.$rider->winning_perc.'</div>';
+					$html.='<div class="winning col-md-1">'.$rider->weighted_winning_perc.'</div>';
 					$html.='<div class="sos col-md-1">'.$rider->sos.'</div>';
 					$html.='<div class="total col-md-1">'.$rider->total.'</div>';
 				$html.='</div>';
@@ -111,7 +111,10 @@ class RiderStats {
 			$riders[$key]['wcp_points']=$this->get_rider_points($rider['races'],'cdm');
 			$riders[$key]['winning_perc']=$this->get_rider_winning_perc($rider['races']);
 			$riders[$key]['sos']=$this->get_sos($rider['races'],$season);
-
+			$riders[$key]['uci_perc']=$riders[$key]['uci_points']/$uci_total;
+			$riders[$key]['wcp_perc']=$riders[$key]['wcp_points']/$wcp_total;
+			$riders[$key]['race_perc']=number_format($riders[$key]['total_races']/$this->get_total_races($season),3);
+			$riders[$key]['weighted_winning_perc']=number_format(($riders[$key]['winning_perc']+$riders[$key]['race_perc'])/2,3);
 			$riders[$key]['total']=$this->get_rider_final_number(array(
 				'uci' => $riders[$key]['uci_points'],
 				'wcp' => $riders[$key]['wcp_points'],
@@ -119,6 +122,8 @@ class RiderStats {
 				'sos' => $riders[$key]['sos'],
 				'uci_total' => $uci_total,
 				'wcp_total' => $wcp_total,
+				'rider_total_races' => $riders[$key]['total_races'],
+				'season_total_races' => $this->get_total_races($season),
 			));
 
 		endforeach;
@@ -285,8 +290,11 @@ class RiderStats {
 			'winning_perc' => 0,
 			'uci_total' => 0,
 			'wcp_total' => 0,
+			'rider_total_races' => 0,
+			'season_total_races' => 0
 		);
 		$args=array_merge($default_args,$args);
+		$race_perc=0;
 
 		extract($args);
 
@@ -296,7 +304,13 @@ class RiderStats {
 		if ($wcp_total)
 			$wcp=number_format($wcp/$wcp_total,3);
 
-		$total=($uci+$wcp+$sos+$winning_perc)/4;
+		if ($season_total_races!=0)
+			$race_perc=number_format($rider_total_races/$season_total_races,3);
+
+		$weighted_winning_perc=($winning_perc+$race_perc)/2;
+
+		//$total=($uci+$wcp+$sos+$winning_perc)/4;
+		$total=$uci+$wcp+$sos+$weighted_winning_perc;
 
 		return number_format($total,3);
 	}
