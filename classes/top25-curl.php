@@ -792,7 +792,7 @@ class Top25_cURL {
 
 				$html.='<div class="row">';
 					$html.='<div class="col-md-1"><input type="checkbox" id="selectall" /></div>';
-					$html.='<div class="col-md-1">Select All</div>';
+					$html.='<div class="col-xs-2">Select All</div>';
 				$html.='</div>';
 
 				foreach ($obj as $result) :
@@ -810,7 +810,7 @@ class Top25_cURL {
 
 				$html.='<div class="row">';
 					$html.='<div class="col-md-1"><input type="checkbox" id="selectall" /></div>';
-					$html.='<div class="col-md-1">Select All</div>';
+					$html.='<div class="col-xs-2">Select All</div>';
 				$html.='</div>';
 
 			$html.='</div>';
