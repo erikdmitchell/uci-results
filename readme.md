@@ -13,7 +13,9 @@ Changelog
 
 ### 1.0.6.2
 
-
+	Adjusted rider scoring percentage. Winning percentage is now weighted.
+	
+	Minor format and flow tweaks.
 
 ### 1.0.6.1
 
