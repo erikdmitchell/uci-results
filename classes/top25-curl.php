@@ -779,44 +779,41 @@ class Top25_cURL {
 		$alt=0;
 
 		$html.='<form name="add-races-to-db" id="add-races-to-db" method="post">';
-			$html.='<table class="race-table">';
-				$html.='<tr class="header">';
-					$html.='<td>&nbsp;</td>';
-					$html.='<td>Date</td>';
-					$html.='<td>Event</td>';
-					$html.='<td>Nat.</td>';
-					$html.='<td>Class</td>';
-					$html.='<td>Winner</td>';
-					$html.='<td>Season</td>';
-				$html.='</tr>';
+			$html.='<div class="race-table">';
+				$html.='<div class="header row">';
+					$html.='<div class="col-md-1">&nbsp;</div>';
+					$html.='<div class="col-md-1">Date</div>';
+					$html.='<div class="col-md-3">Event</div>';
+					$html.='<div class="col-md-1">Nat.</div>';
+					$html.='<div class="col-md-1">Class</div>';
+					$html.='<div class="col-md-2">Winner</div>';
+					$html.='<div class="col-md-2">Season</div>';
+				$html.='</div>';
 
-				$html.='<tr>';
-					$html.='<td colspan="2"><input type="checkbox" id="selectall" />Select All</td>';
-				$html.='</tr>';
+				$html.='<div class="row">';
+					$html.='<div class="col-md-1"><input type="checkbox" id="selectall" /></div>';
+					$html.='<div class="col-md-1">Select All</div>';
+				$html.='</div>';
 
 				foreach ($obj as $result) :
-					if ($alt%2) :
-						$class='alt';
-					else :
-						$class=null;
-					endif;
-					$html.='<tr class="'.$class.'">';
-						$html.='<td><input class="race-checkbox" type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" /></td>';
-						$html.='<td>'.$result->date.'</td>';
-						$html.='<td>'.$result->event.'</td>';
-						$html.='<td>'.$result->nat.'</td>';
-						$html.='<td>'.$result->class.'</td>';
-						$html.='<td>'.$result->winner.'</td>';
-						$html.='<td>'.$result->season.'</td>';
-					$html.='</tr>';
+					$html.='<div class="row">';
+						$html.='<div class="col-md-1"><input class="race-checkbox" type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" /></div>';
+						$html.='<div class="col-md-1">'.$result->date.'</div>';
+						$html.='<div class="col-md-3">'.$result->event.'</div>';
+						$html.='<div class="col-md-1">'.$result->nat.'</div>';
+						$html.='<div class="col-md-1">'.$result->class.'</div>';
+						$html.='<div class="col-md-2">'.$result->winner.'</div>';
+						$html.='<div class="col-md-2">'.$result->season.'</div>';
+					$html.='</div>';
 					$alt++;
 				endforeach;
 
-				$html.='<tr>';
-					$html.='<td colspan="2"><input type="checkbox" id="selectall" />Select All</td>';
-				$html.='</tr>';
+				$html.='<div class="row">';
+					$html.='<div class="col-md-1"><input type="checkbox" id="selectall" /></div>';
+					$html.='<div class="col-md-1">Select All</div>';
+				$html.='</div>';
 
-			$html.='</table>';
+			$html.='</div>';
 
 			$html.='<p class="submit">';
 				$html.='<input type="button" name="button" id="add-races-curl-to-db" class="button button-primary" value="Add to DB" />';
