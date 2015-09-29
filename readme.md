@@ -14,6 +14,7 @@ Changelog
 ### 1.0.8
 
 	Added pagination for rider rankings
+	Added shortcodes to display data on user end
 
 ### 1.0.7
 
