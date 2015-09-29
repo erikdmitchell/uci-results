@@ -422,7 +422,7 @@ class RiderStats {
 		$prev_page=$paged-1;
 		$next_page=$paged+1;
 
-		$html.='<div class="rider-pagination">';
+		$html.='<div class="rider-pagination uci-pagination">';
 			if ($paged!=1)
 				$html.='<div class="prev-page"><a href="'.admin_url($this->admin_url_vars).'&paged='.$prev_page.'">Previous</a></div>';
 

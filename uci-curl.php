@@ -34,6 +34,15 @@ $uci_curl=new Top25_cURL($config);
 
 
 
+/**
+ * object_slice function.
+ *
+ * @access public
+ * @param bool $obj (default: false)
+ * @param int $start (default: 0)
+ * @param int $end (default: 10)
+ * @return void
+ */
 function object_slice($obj=false,$start=0,$end=10) {
 	if (!$obj)
 		return false;

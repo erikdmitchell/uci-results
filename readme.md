@@ -13,7 +13,7 @@ Changelog
 
 ### 1.0.8
 
-
+	Added pagination for rider rankings
 
 ### 1.0.7
 

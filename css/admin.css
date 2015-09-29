@@ -131,3 +131,18 @@
 .season-rider-rankings > .row:nth-child(even) {
 	background: #ccc;
 }
+
+/**
+ * pagination
+ */
+.uci-pagination {
+	overflow: hidden;
+	margin: 15px 0;
+}
+.uci-pagination > div {
+	width: 50%;
+	float: left;
+}
+.uci-pagination .next-page {
+	text-align: right;
+}
