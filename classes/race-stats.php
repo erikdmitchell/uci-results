@@ -38,7 +38,7 @@ class RaceStats {
 				$html.='<div class="nat col-md-1">Nat.</div>';
 				$html.='<div class="class col-md-1">Class</div>';
 				$html.='<div class="winner col-md-2">Winner</div>';
-				$html.='<div class="fq col-md-2">Field Quality</div>';
+				$html.='<div class="fq col-md-2">FQ</div>';
 			$html.='</div>';
 
 			foreach ($races as $race) :
@@ -47,10 +47,10 @@ class RaceStats {
 					$html.='<div class="event col-md-4">'.$race->event.'</div>';
 					$html.='<div class="nat col-md-1">'.$race->nat.'</div>';
 					$html.='<div class="class col-md-1">'.$race->class.'</div>';
-					$html.='<div class="winner col-md-2">'.$race->winner.'</div>';
+					$html.='<div class="winner col-md-3">'.$race->winner.'</div>';
 
 					if (isset($race->field_quality))
-						$html.='<div class="fq col-md-2">'.$race->field_quality->race_total.'</div>';
+						$html.='<div class="fq col-md-1">'.$race->field_quality->race_total.'</div>';
 
 				$html.='</div>';
 			endforeach;
