@@ -32,8 +32,6 @@ class RiderStats {
 		$rank=1;
 		$riders=$this->get_riders($args);
 
-		//extract($args);
-
 		$html.='<h3>Rider Rankings</h3>';
 
 		$html.='<div id="season-rider-rankings" class="season-rider-rankings">';
@@ -54,8 +52,8 @@ class RiderStats {
 					$html.='<div class="uci col-md-1">'.$rider->uci_points.'</div>';
 					$html.='<div class="wcp col-md-1">'.$rider->wcp_points.'</div>';
 					$html.='<div class="winning col-md-1">'.$rider->weighted_winning_perc.'</div>';
-					//$html.='<div class="sos col-md-1">'.$rider->sos.'</div>';
-					//$html.='<div class="total col-md-1">'.$rider->total.'</div>';
+					$html.='<div class="sos col-md-1">'.$rider->sos.'</div>';
+					$html.='<div class="total col-md-1">'.$rider->total.'</div>';
 				$html.='</div>';
 				$rank++;
 			endforeach;
@@ -72,7 +70,6 @@ class RiderStats {
 	 * @return void
 	 */
 	public function get_riders($user_args=array()) {
-$start = microtime(true);
 		global $wpdb,$uci_curl;
 
 		$riders=array();
@@ -82,7 +79,7 @@ $start = microtime(true);
 		$default_args=array(
 			'season' => false,
 			'pagination' => true,
-			'per_page' => 5
+			'per_page' => 50
 		);
 		$args=array_merge($default_args,$user_args);
 
@@ -137,7 +134,6 @@ $start = microtime(true);
 			FROM $uci_curl->results_table AS results
 			LEFT JOIN $uci_curl->table AS races
 			ON results.code=races.code
-			WHERE season='2013/2014'
 		";
 
 		/*
@@ -145,9 +141,6 @@ $start = microtime(true);
 			$where=" WHERE season='$season'";
 		*/
 		$total_races=$wpdb->get_var("SELECT COUNT(*) FROM ".$uci_curl->table.$where);
-
-//echo $sql;
-
 		$riders_db=$wpdb->get_results($sql); // filter ie season
 
 		// get all results for rider by grouping by name //
@@ -171,20 +164,12 @@ $start = microtime(true);
 
 			$riders[$key]['uci_points']=$rider_points['uci'];
 			$riders[$key]['wcp_points']=$rider_points['cdm'];
-
-			$riders[$key]['winning_perc']=$this->get_rider_winning_perc($rider['races']); // func
+			$riders[$key]['winning_perc']=$this->get_rider_winning_perc($rider['races']);
 			$riders[$key]['race_perc']=number_format($riders[$key]['total_races']/$total_races,3);
 			$riders[$key]['weighted_winning_perc']=number_format(($riders[$key]['winning_perc']+$riders[$key]['race_perc'])/2,3);
-
-			$riders[$key]['sos']=$this->get_sos($rider['races'],$total_races,$season); // func
-			//
-
-			//$riders[$key]['uci_perc']=$riders[$key]['uci_points']/$uci_total;
-			//$riders[$key]['wcp_perc']=$riders[$key]['wcp_points']/$wcp_total;
-
-			//
-			//$riders[$key]['total']=0;
-/*
+			$riders[$key]['sos']=$this->get_sos($rider['races'],$total_races,$season);
+			$riders[$key]['uci_perc']=$riders[$key]['uci_points']/$uci_total;
+			$riders[$key]['wcp_perc']=$riders[$key]['wcp_points']/$wcp_total;
 			$riders[$key]['total']=$this->get_rider_final_number(array(
 				'uci' => $riders[$key]['uci_points'],
 				'wcp' => $riders[$key]['wcp_points'],
@@ -193,24 +178,16 @@ $start = microtime(true);
 				'uci_total' => $uci_total,
 				'wcp_total' => $wcp_total,
 				'rider_total_races' => $riders[$key]['total_races'],
-				'season_total_races' => $this->get_total_races($season),
+				'season_total_races' => $total_races,
 			));
-*/
 		endforeach;
-		// sort - hardcoded for now //
-/*
-		$arr=array();
-		foreach ($riders as $rider) :
-    	$arr[]=$rider['total'];
-		endforeach;
-		array_multisort($arr,SORT_DESC,SORT_NUMERIC,$riders);
-*/
 
-		//$riders=array_slice($riders,0,$per_page); // limit (pagination)
+		$riders=$this->sort_riders($riders);
+
+		$riders=array_slice($riders,0,$per_page); // limit (pagination)
 
 		$riders=json_decode(json_encode($riders),FALSE); // make object
-$time_elapsed_secs = microtime(true) - $start;
-echo "<p>Script took: ".number_format($time_elapsed_secs,3)."</p>";
+
 		return $riders;
 	}
 
@@ -265,7 +242,15 @@ echo "<p>Script took: ".number_format($time_elapsed_secs,3)."</p>";
 		return $winning_perc;
 	}
 
-
+	/**
+	 * get_sos function.
+	 *
+	 * @access protected
+	 * @param array $races (default: array())
+	 * @param int $total_races (default: 0)
+	 * @param bool $season (default: false)
+	 * @return void
+	 */
 	protected function get_sos($races=array(),$total_races=0,$season=false) {
 		global $wpdb,$uci_curl;
 
@@ -273,10 +258,8 @@ echo "<p>Script took: ".number_format($time_elapsed_secs,3)."</p>";
 		$fq_total=0;
 		$rider_total_races=count($races);
 
-		foreach ($races as $code => $race) :
-			$race_class=$wpdb->get_var("SELECT class FROM $uci_curl->table WHERE code='$code'");
-
-			switch ($race_class) :
+		foreach ($races as $race) :
+			switch ($race->class) :
 				case 'CDM' :
 					$pts=4;
 					break;
@@ -298,16 +281,11 @@ echo "<p>Script took: ".number_format($time_elapsed_secs,3)."</p>";
 
 			if (isset($race->field_quality))
 				$fq_total=$fq_total+$race->fq;
+
 		endforeach;
 
-		//$fq_total=$fq_total/$rider_total_races;
-		//$races_perc=$rider_total_races/$total_races;
 		$fq_total=$fq_total/100;
 		$sos=$sos/100;
-
-		//$sos=$fq_total+$races_perc;
-		//$sos=($rider_total_races/$total_races)+$sos;
-		//$sos=1/$fq_total;
 		$sos=($fq_total+$sos)/2;
 
 		return number_format($sos,3);
@@ -351,6 +329,30 @@ echo "<p>Script took: ".number_format($time_elapsed_secs,3)."</p>";
 		$total=$uci+$wcp+$sos+$weighted_winning_perc;
 
 		return number_format($total,3);
+	}
+
+	public function sort_riders($riders=false,$args=array()) {
+		if (!$riders)
+			return false;
+
+		$default_args=array(
+			'arr' => array(),
+			'sort_order' => SORT_DESC,
+			'sort_flags' => SORT_NUMERIC,
+		);
+		$args=array_merge($default_args,$args);
+
+		extract($args);
+
+		if (empty($arr)) :
+			foreach ($riders as $rider) :
+  	  	$arr[]=$rider['total'];
+			endforeach;
+		endif;
+
+		array_multisort($arr,SORT_DESC,SORT_NUMERIC,$riders);
+
+		return $riders;
 	}
 
 /*

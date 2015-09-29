@@ -11,12 +11,17 @@ Coming Soon
 Changelog
 ===========
 
+### 1.0.8
+
+
+
 ### 1.0.7
 
 	First "public release"
 	
 	Added a setup config function to our admin allowing for more control.
 	Added some admin errors to explain potential issues.
+	Added a sort riders function.
 	
 	Updated "Select All" button for adding races to db.
 	
