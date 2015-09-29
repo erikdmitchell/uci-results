@@ -19,6 +19,8 @@ Changelog
 	Added some admin errors to explain potential issues.
 	
 	Updated "Select All" button for adding races to db.
+	
+	Major rework of RiderStats->get_riders() to increase speed and performance.
 
 ### 1.0.6.2
 

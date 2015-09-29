@@ -6,7 +6,7 @@ class Top25_cURL {
 	public $version='1.0.3';
 	public $config=array();
 
-	protected $debug=true;
+	protected $debug=false;
 
 	public function __construct($config=array()) {
 		global $wpdb;
@@ -137,29 +137,7 @@ class Top25_cURL {
 
 			$html.=$rider_stats->get_season_rider_rankings();
 
-/*
-			$html.='<form name="riders-admin-page-form" method="post">';
 
-				$html.='<div class="season-dropdown">'.RiderStats::get_uci_season_ranking_seasons('dropdown').'</div>';
-				$html.='<input type="submit" name="submit" id="submit" class="button button-primary" value="View Season Rankings">';
-				$html.='<input type="submit" name="submit" id="submit" class="button button-primary" value="View UCI Season Rankings">';
-				$html.='<input type="hidden" name="riders" value="g2g" />';
-
-			$html.='</form>';
-
-			if (isset($_POST['submit']) && isset($_POST['riders']) && isset($_POST['riders'])=='g2g') :
-				switch ($_POST['submit']) :
-					case 'View Season Rankings':
-						$html.=$rider_stats->get_season_rider_rankings($_POST['season-ranking-seasons']);
-						break;
-					case 'View UCI Season Rankings':
-						$html.=RiderStats::get_uci_season_rankings($_POST['season-ranking-seasons']);
-						break;
-					default:
-						break;
-				endswitch;
-			endif;
-*/
 		$html.='</div>';
 
 		return $html;
