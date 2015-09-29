@@ -21,16 +21,20 @@ console.log('a');
 	/**
 	 * on our curl page, this runs our select all checkbox functionality
 	 */
-  $('#selectall').live('change',function(event) {
-  	if (this.checked) {
+  $('#selectall').live('click',function(event) {
+	  event.preventDefault();
+
+	  if ($(this).hasClass('unselect')) {
+		 	$(this).removeClass('unselect');
     	$('.race-checkbox').each(function() {
-      	this.checked = true;  //select all checkboxes
+      	this.checked = false;  //select all checkboxes
       });
-    } else {
+		} else {
+			$(this).addClass('unselect');
     	$('.race-checkbox').each(function() {
-      	this.checked = false; //deselect all checkboxes
+      	this.checked = true; //deselect all checkboxes
       });
-    }
+		}
   });
 
 	/**

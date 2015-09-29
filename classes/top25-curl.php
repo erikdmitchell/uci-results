@@ -6,7 +6,7 @@ class Top25_cURL {
 	public $version='1.0.3';
 	public $config=array();
 
-	protected $debug=false;
+	protected $debug=true;
 
 	public function __construct($config=array()) {
 		global $wpdb;
@@ -18,22 +18,7 @@ class Top25_cURL {
 		add_action('wp_ajax_prepare_add_races_to_db',array($this,'ajax_prepare_add_races_to_db'));
 		add_action('wp_ajax_add_race_to_db',array($this,'ajax_add_race_to_db'));
 
-		$default_config_urls=array(
-			'2013/2014' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=485&StartDateSort=20130907&EndDateSort=20140223&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
-			'2012/2013' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=483&StartDateSort=20120908&EndDateSort=20130224&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
-			'2011/2012' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=481&StartDateSort=20110910&EndDateSort=20120708&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
-			'2010/2011' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=479&StartDateSort=20100911&EndDateSort=20110220&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
-			'2009/2010' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=477&StartDateSort=20090913&EndDateSort=20100221&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
-			'2008/2009' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=475&StartDateSort=20080914&EndDateSort=20090222&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
-		);
-
-		if (isset($config['urls'])) :
-			$config['urls']=array_merge($default_config_urls,$config['urls']);
-		else :
-			$config['urls']=$default_config_urls;
-		endif;
-
-		$this->config=(object) $config;
+		$this->setup_config($config);
 		$this->table=$wpdb->prefix.'uci_races';
 		$this->results_table=$wpdb->prefix.'uci_rider_data';
 	}
@@ -305,6 +290,16 @@ class Top25_cURL {
 		$finder = new DomXPath($dom);
 
 		$nodes = $finder->query("//*[contains(@class, '$races_class_name')]");
+
+		if ($nodes->length==0) :
+			if ($this->debug) :
+				echo '<pre>';
+				print_r($html);
+				echo '</pre>';
+			endif;
+
+			return '<div class="error">No rows (nodes) found. Check the url and the "races class name" ('.$races_class_name.').</div>';
+		endif;
 
 		$rows=$nodes->item(0)->getElementsByTagName('tr'); //get all rows from the table
 
@@ -782,7 +777,7 @@ class Top25_cURL {
 			$html.='<div class="race-table">';
 				$html.='<div class="header row">';
 					$html.='<div class="col-md-1">&nbsp;</div>';
-					$html.='<div class="col-md-1">Date</div>';
+					$html.='<div class="col-md-2">Date</div>';
 					$html.='<div class="col-md-3">Event</div>';
 					$html.='<div class="col-md-1">Nat.</div>';
 					$html.='<div class="col-md-1">Class</div>';
@@ -790,15 +785,14 @@ class Top25_cURL {
 					$html.='<div class="col-md-2">Season</div>';
 				$html.='</div>';
 
-				$html.='<div class="row">';
-					$html.='<div class="col-md-1"><input type="checkbox" id="selectall" /></div>';
-					$html.='<div class="col-xs-2">Select All</div>';
+				$html.='<div class="row select-all">';
+					$html.='<div class="col-xs-2"><a href="" class="select" id="selectall">Select All</a></div>';
 				$html.='</div>';
 
 				foreach ($obj as $result) :
 					$html.='<div class="row">';
 						$html.='<div class="col-md-1"><input class="race-checkbox" type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" /></div>';
-						$html.='<div class="col-md-1">'.$result->date.'</div>';
+						$html.='<div class="col-md-2">'.$result->date.'</div>';
 						$html.='<div class="col-md-3">'.$result->event.'</div>';
 						$html.='<div class="col-md-1">'.$result->nat.'</div>';
 						$html.='<div class="col-md-1">'.$result->class.'</div>';
@@ -808,9 +802,8 @@ class Top25_cURL {
 					$alt++;
 				endforeach;
 
-				$html.='<div class="row">';
-					$html.='<div class="col-md-1"><input type="checkbox" id="selectall" /></div>';
-					$html.='<div class="col-xs-2">Select All</div>';
+				$html.='<div class="row select-all">';
+					$html.='<div class="col-xs-2"><a href="" class="select" id="selectall">Select All</a></div>';
 				$html.='</div>';
 
 			$html.='</div>';
@@ -835,6 +828,35 @@ class Top25_cURL {
 		$years=$wpdb->get_col("SELECT season FROM $this->table GROUP BY season");
 
 		return $years;
+	}
+
+	/**
+	 * setup_config function.
+	 *
+	 * @access protected
+	 * @param array $args (default: array())
+	 * @return void
+	 */
+	protected function setup_config($args=array()) {
+		$default_config_urls=array(
+			'2013/2014' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=485&StartDateSort=20130907&EndDateSort=20140223&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
+			'2012/2013' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=483&StartDateSort=20120908&EndDateSort=20130224&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
+			'2011/2012' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=481&StartDateSort=20110910&EndDateSort=20120708&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
+			'2010/2011' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=479&StartDateSort=20100911&EndDateSort=20110220&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
+			'2009/2010' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=477&StartDateSort=20090913&EndDateSort=20100221&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
+			'2008/2009' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=475&StartDateSort=20080914&EndDateSort=20090222&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
+		);
+
+		if (isset($args['urls'])) :
+			$config['urls']=array_merge($default_config_urls,$args['urls']);
+		else :
+			$config['urls']=$default_config_urls;
+		endif;
+
+		// order urls by key //
+		krsort($config['urls']);
+
+		$this->config=json_decode(json_encode($config),FALSE); // convert to object and store
 	}
 
 }

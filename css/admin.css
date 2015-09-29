@@ -109,6 +109,9 @@
 .race-table > .row:nth-child(even) {
 	background: #ccc;
 }
+.race-table > .row.select-all {
+	background: inherit;
+}
 .race-table .race-fq,
 .race-table .results {
 	display: none;
