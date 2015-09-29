@@ -6,7 +6,7 @@
  * Version: 1.0.8
  * Author: Erik Mitchell
  * Author URI: http://erikmitchell.net
- * License:
+ * License: GPL2
  */
 
 include_once(plugin_dir_path(__FILE__).'classes/databases.php');
@@ -27,4 +27,21 @@ $config=array(
 
 
 $uci_curl=new Top25_cURL($config);
+
+// generic functions //
+
+
+
+
+
+function object_slice($obj=false,$start=0,$end=10) {
+	if (!$obj)
+		return false;
+
+	$counter=0;
+	$obj_arr=(array) $obj;
+	$obj_arr=array_slice($obj_arr,$start,$end);
+
+	return json_decode(json_encode($obj_arr),FALSE);
+}
 ?>

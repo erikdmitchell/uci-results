@@ -7,6 +7,8 @@
 class RiderStats {
 
 	public $version='0.1.2';
+	public $riders_pagination_trainsient_variable='riders_pagination_array';
+	public $admin_url_vars='?page=uci-cross&tab=riders';
 
 	/**
 	 * __construct function.
@@ -30,7 +32,24 @@ class RiderStats {
 
 		$html=null;
 		$rank=1;
+		$pagination=true;
+		$paged=1;
+		$per_page=50;
 		$riders=$this->get_riders($args);
+
+		if (isset($_GET['paged']))
+			$paged=$_GET['paged'];
+
+		if ($pagination) :
+			if ($paged!=1) :
+				$start=($paged-1)*$per_page;
+				$rank=$start+1;
+			else :
+				$start=0;
+			endif;
+
+			$riders=object_slice($riders,$start,$per_page); // limit (pagination)
+		endif;
 
 		$html.='<h3>Rider Rankings</h3>';
 
@@ -57,6 +76,12 @@ class RiderStats {
 				$html.='</div>';
 				$rank++;
 			endforeach;
+
+			$html.=$this->rider_pagination(array(
+				'paged' => $paged,
+				'per_page' => $per_page
+			));
+
 		$html.='</div>';
 
 		return $html;
@@ -77,11 +102,21 @@ class RiderStats {
 		$where=null;
 
 		$default_args=array(
-			'season' => false,
-			'pagination' => true,
-			'per_page' => 50
+			'override' => false, // allows us to force override transient
+			'season' => false
 		);
 		$args=array_merge($default_args,$user_args);
+
+		extract($args);
+
+		if (!$override) :
+			if (false===get_transient($this->riders_pagination_trainsient_variable)) :
+				// do nothing, there is no transient, we will run the whole thing
+			else :
+				return get_transient($this->riders_pagination_trainsient_variable);
+			endif;
+		endif;
+
 
 		$wcp_sql="
 			SELECT total FROM(
@@ -114,8 +149,6 @@ class RiderStats {
 			LIMIT 1
 		";
 		$uci_total=$wpdb->get_var($uci_sql);
-
-		extract($args);
 
 		/*
 		if ($season)
@@ -184,9 +217,11 @@ class RiderStats {
 
 		$riders=$this->sort_riders($riders);
 
-		$riders=array_slice($riders,0,$per_page); // limit (pagination)
+		set_transient('total_riders_count',count($riders),HOUR_IN_SECONDS);
 
 		$riders=json_decode(json_encode($riders),FALSE); // make object
+
+		set_transient($this->riders_pagination_trainsient_variable,$riders,HOUR_IN_SECONDS);
 
 		return $riders;
 	}
@@ -331,6 +366,14 @@ class RiderStats {
 		return number_format($total,3);
 	}
 
+	/**
+	 * sort_riders function.
+	 *
+	 * @access public
+	 * @param bool $riders (default: false)
+	 * @param array $args (default: array())
+	 * @return void
+	 */
 	public function sort_riders($riders=false,$args=array()) {
 		if (!$riders)
 			return false;
@@ -353,6 +396,41 @@ class RiderStats {
 		array_multisort($arr,SORT_DESC,SORT_NUMERIC,$riders);
 
 		return $riders;
+	}
+
+	public function rider_pagination($args=array()) {
+		$html=null;
+		$total_riders=0;
+		$default_args=array(
+			'pagination' => true,
+			'per_page' => 10
+		);
+		$args=array_merge($default_args,$args);
+		extract($args);
+
+		if (!$pagination)
+			return false;
+
+		if (false===get_transient('total_riders_count')) :
+			return false;
+		else :
+			$total_riders=get_transient('total_riders_count');
+		endif;
+
+		$max_pages=$total_riders/$per_page;
+
+		$prev_page=$paged-1;
+		$next_page=$paged+1;
+
+		$html.='<div class="rider-pagination">';
+			if ($paged!=1)
+				$html.='<div class="prev-page"><a href="'.admin_url($this->admin_url_vars).'&paged='.$prev_page.'">Previous</a></div>';
+
+			if ($paged!=$max_pages)
+				$html.='<div class="next-page"><a href="'.admin_url($this->admin_url_vars).'&paged='.$next_page.'">Next</a></div>';
+		$html.='</div>';
+
+		return $html;
 	}
 
 /*
