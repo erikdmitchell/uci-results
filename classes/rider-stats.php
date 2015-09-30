@@ -31,15 +31,20 @@ class RiderStats {
 		global $wpdb,$uci_curl;
 
 		$html=null;
-		$rank=1;
+		//$rank=1;
+/*
 		$pagination=true;
 		$paged=1;
 		$per_page=50;
+*/
 		$riders=$this->get_riders($args);
 
+/*
 		if (isset($_GET['paged']))
 			$paged=$_GET['paged'];
+*/
 
+/*
 		if ($pagination) :
 			if ($paged!=1) :
 				$start=($paged-1)*$per_page;
@@ -50,6 +55,7 @@ class RiderStats {
 
 			$riders=object_slice($riders,$start,$per_page); // limit (pagination)
 		endif;
+*/
 
 		$html.='<h3>Rider Rankings</h3>';
 
@@ -66,7 +72,7 @@ class RiderStats {
 
 			foreach ($riders as $rider) :
 				$html.='<div class="row">';
-					$html.='<div class="rank col-md-1">'.$rank.'</div>';
+					$html.='<div class="rank col-md-1">'.$rider->rank.'</div>';
 					$html.='<div class="rider col-md-3">'.$rider->name.'</div>';
 					$html.='<div class="uci col-md-1">'.$rider->uci_points.'</div>';
 					$html.='<div class="wcp col-md-1">'.$rider->wcp_points.'</div>';
@@ -74,13 +80,14 @@ class RiderStats {
 					$html.='<div class="sos col-md-1">'.$rider->sos.'</div>';
 					$html.='<div class="total col-md-1">'.$rider->total.'</div>';
 				$html.='</div>';
-				$rank++;
 			endforeach;
 
+/*
 			$html.=$this->rider_pagination(array(
 				'paged' => $paged,
 				'per_page' => $per_page
 			));
+*/
 
 		$html.='</div>';
 
@@ -97,18 +104,21 @@ class RiderStats {
 	public function get_riders($user_args=array()) {
 		global $wpdb,$uci_curl;
 
+		ini_set('memory_limit', '-1'); // we would like to remove this soon
+
 		$riders=array();
 		$counter=0;
 		$where=null;
 
 		$default_args=array(
-			'override' => false, // allows us to force override transient
-			'season' => false
+			'override' => true, // allows us to force override transient
+			'season' => '2015/2016'
 		);
 		$args=array_merge($default_args,$user_args);
 
 		extract($args);
 
+/*
 		if (!$override) :
 			if (false===get_transient($this->riders_pagination_trainsient_variable)) :
 				// do nothing, there is no transient, we will run the whole thing
@@ -116,7 +126,10 @@ class RiderStats {
 				return get_transient($this->riders_pagination_trainsient_variable);
 			endif;
 		endif;
+*/
 
+		if ($season)
+			$where=" season='$season'";
 
 		$wcp_sql="
 			SELECT total FROM(
@@ -142,6 +155,7 @@ class RiderStats {
 				LEFT JOIN `wp_uci_rider_data` AS results
 				ON races.code=results.code
 				WHERE results.par !=''
+				AND $where
 				GROUP BY races.code
 				WITH ROLLUP
 			) t
@@ -150,11 +164,6 @@ class RiderStats {
 		";
 		$uci_total=$wpdb->get_var($uci_sql);
 
-		/*
-		if ($season)
-			$where=" WHERE season='$season'";
-		ARGS -season, race
-		*/
 		$sql="
 			SELECT
 				results.name,
@@ -167,13 +176,10 @@ class RiderStats {
 			FROM $uci_curl->results_table AS results
 			LEFT JOIN $uci_curl->table AS races
 			ON results.code=races.code
+			WHERE $where
 		";
 
-		/*
-				if ($season)
-			$where=" WHERE season='$season'";
-		*/
-		$total_races=$wpdb->get_var("SELECT COUNT(*) FROM ".$uci_curl->table.$where);
+		$total_races=$wpdb->get_var("SELECT COUNT(*) FROM ".$uci_curl->table.' WHERE '.$where);
 		$riders_db=$wpdb->get_results($sql); // filter ie season
 
 		// get all results for rider by grouping by name //
@@ -217,11 +223,11 @@ class RiderStats {
 
 		$riders=$this->sort_riders($riders);
 
-		set_transient('total_riders_count',count($riders),HOUR_IN_SECONDS);
+		//set_transient('total_riders_count',count($riders),HOUR_IN_SECONDS);
 
 		$riders=json_decode(json_encode($riders),FALSE); // make object
 
-		set_transient($this->riders_pagination_trainsient_variable,$riders,HOUR_IN_SECONDS);
+		//set_transient($this->riders_pagination_trainsient_variable,$riders,HOUR_IN_SECONDS);
 
 		return $riders;
 	}
@@ -378,6 +384,7 @@ class RiderStats {
 		if (!$riders)
 			return false;
 
+		$rank=1;
 		$default_args=array(
 			'arr' => array(),
 			'sort_order' => SORT_DESC,
@@ -395,19 +402,20 @@ class RiderStats {
 
 		array_multisort($arr,SORT_DESC,SORT_NUMERIC,$riders);
 
+		// append rank //
+		foreach ($riders as $key => $rider) :
+			$riders[$key]['rank']=$rank;
+			$rank++;
+		endforeach;
+
 		return $riders;
 	}
 
-	public function rider_pagination($args=array()) {
+	public function rider_pagination() {
 		$html=null;
-		$total_riders=0;
-		$default_args=array(
-			'pagination' => true,
-			'per_page' => 10
-		);
-		$args=array_merge($default_args,$args);
-		extract($args);
-
+// total riders
+// per page
+// url
 		if (!$pagination)
 			return false;
 
