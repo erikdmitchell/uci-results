@@ -1,0 +1,30 @@
+/**
+ *
+ * stylesheet for the "user" side of things
+ * provides minimum styles so that there's a basic look and feel
+ *
+ */
+
+/**
+ * Rider Rankings
+ */
+.uci-curl-rider-rankings .header {
+	font-weight: bold;
+}
+
+/**
+ * Pagination
+ */
+.uci-pagination > div {
+	width: 50%;
+	float: left;
+}
+.uci-pagination .hide-opacity {
+	opacity: 0;
+}
+.uci-pagination .prev-page {
+
+}
+.uci-pagination .next-page {
+	text-align: right;
+}
