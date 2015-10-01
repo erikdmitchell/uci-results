@@ -9,6 +9,7 @@ class RiderStats {
 	public $version='0.1.2';
 	//public $riders_pagination_trainsient_variable='riders_pagination_array';
 	public $admin_url_vars='?page=uci-cross&tab=riders';
+	public $pagination=array();
 
 	/**
 	 * __construct function.
@@ -17,7 +18,12 @@ class RiderStats {
 	 * @return void
 	 */
 	public function __construct() {
-
+		$this->pagination=array(
+			'active' => true,
+			'paged' => 1,
+			'per_page' => 15,
+			'max' => 0
+		);
 	}
 
 	/**
@@ -31,31 +37,7 @@ class RiderStats {
 		global $wpdb,$uci_curl;
 
 		$html=null;
-		$rank=1;
-/*
-		$pagination=true;
-		$paged=1;
-		$per_page=50;
-*/
 		$riders=$this->get_riders($args);
-
-/*
-		if (isset($_GET['paged']))
-			$paged=$_GET['paged'];
-*/
-
-/*
-		if ($pagination) :
-			if ($paged!=1) :
-				$start=($paged-1)*$per_page;
-				$rank=$start+1;
-			else :
-				$start=0;
-			endif;
-
-			$riders=object_slice($riders,$start,$per_page); // limit (pagination)
-		endif;
-*/
 
 		$html.='<h3>Rider Rankings</h3>';
 
@@ -72,7 +54,7 @@ class RiderStats {
 
 			foreach ($riders as $rider) :
 				$html.='<div class="row">';
-					$html.='<div class="rank col-md-1">'.$rank.'</div>';
+					$html.='<div class="rank col-md-1">'.$rider->rank.'</div>';
 					$html.='<div class="rider col-md-3">'.$rider->rider.'</div>';
 					$html.='<div class="uci col-md-1">'.$rider->uci.'</div>';
 					$html.='<div class="wcp col-md-1">'.$rider->wcp.'</div>';
@@ -80,17 +62,9 @@ class RiderStats {
 					$html.='<div class="sos col-md-1">'.$rider->sos.'</div>';
 					$html.='<div class="total col-md-1">'.number_format($rider->total,3).'</div>';
 				$html.='</div>';
-
-				$rank++;
 			endforeach;
 
-/*
-			$html.=$this->rider_pagination(array(
-				'paged' => $paged,
-				'per_page' => $per_page
-			));
-*/
-
+			$html.=$this->rider_pagination();
 		$html.='</div>';
 
 		return $html;
@@ -107,14 +81,25 @@ class RiderStats {
 		global $wpdb,$uci_curl;
 
 		$riders=array();
-		$counter=0;
-
+		//$counter=0;
+		$limit=null;
+		$rank=1;
 		$default_args=array(
-			'season' => '2015/2016'
+			'season' => '2015/2016',
 		);
 		$args=array_merge($default_args,$user_args);
 
+		if (isset($_GET['paged']))
+			$this->pagination['paged']=$_GET['paged'];
+
 		extract($args);
+
+		if ($this->pagination['active']) :
+			$start=$this->pagination['per_page']*($this->pagination['paged']-1);
+			$end=$this->pagination['per_page'];
+			$limit="LIMIT $start,$end";
+			$rank=$start+1;
+		endif;
 
 		$sql="
 			SELECT
@@ -193,9 +178,17 @@ class RiderStats {
 			) t
 			GROUP BY name
 			ORDER BY total DESC
+			$limit
 		";
 
 		$riders=$wpdb->get_results($sql);
+		//$this->pagination['max']=$wpdb->num_rows;
+
+		// add rank //
+		foreach ($riders as $rider) :
+			$rider->rank=$rank;
+			$rank++;
+		endforeach;
 
 		return $riders;
 	}
@@ -343,30 +336,28 @@ class RiderStats {
 		return number_format($total,3);
 	}
 
+	/**
+	 * rider_pagination function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function rider_pagination() {
 		$html=null;
-// total riders
-// per page
-// url
-		if (!$pagination)
+
+		if (!$this->pagination['active'])
 			return false;
 
-		if (false===get_transient('total_riders_count')) :
-			return false;
-		else :
-			$total_riders=get_transient('total_riders_count');
-		endif;
+		//$max_pages=$total_riders/$per_page; ERROR RIGHT NOW
 
-		$max_pages=$total_riders/$per_page;
-
-		$prev_page=$paged-1;
-		$next_page=$paged+1;
+		$prev_page=$this->pagination['paged']-1;
+		$next_page=$this->pagination['paged']+1;
 
 		$html.='<div class="rider-pagination uci-pagination">';
-			if ($paged!=1)
+			if ($this->pagination['paged']!=1)
 				$html.='<div class="prev-page"><a href="'.admin_url($this->admin_url_vars).'&paged='.$prev_page.'">Previous</a></div>';
 
-			if ($paged!=$max_pages)
+			//if ($paged!=$max_pages)
 				$html.='<div class="next-page"><a href="'.admin_url($this->admin_url_vars).'&paged='.$next_page.'">Next</a></div>';
 		$html.='</div>';
 
