@@ -81,7 +81,6 @@ class RiderStats {
 		global $wpdb,$uci_curl;
 
 		$riders=array();
-		//$counter=0;
 		$limit=null;
 		$rank=1;
 		$default_args=array(
@@ -89,8 +88,17 @@ class RiderStats {
 		);
 		$args=array_merge($default_args,$user_args);
 
-		if (isset($_GET['paged']))
+		if (isset($_GET['paged'])) :
 			$this->pagination['paged']=$_GET['paged'];
+		else :
+			$url_arr=explode('/',$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+
+			foreach ($url_arr as $value) :
+				if (is_numeric($var=array_pop($url_arr))) :
+					$this->pagination['paged']=$var;
+				endif;
+			endforeach;
+		endif;
 
 		extract($args);
 
@@ -344,15 +352,15 @@ class RiderStats {
 	 */
 	public function rider_pagination() {
 		$html=null;
-		$url=$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
-		$next_url='#';
-		$prev_url='#';
 		$prev_page=$this->pagination['paged']-1;
 		$next_page=$this->pagination['paged']+1;
 
 		if (is_admin()) :
-			$prev_url=admin_url($this->admin_url_vars)."&paged=$prev_page";
-			$next_url=admin_url($this->admin_url_vars)."&paged=$next_page";
+			$prev_page=admin_url($this->admin_url_vars)."&paged=$prev_page";
+			$next_page=admin_url($this->admin_url_vars)."&paged=$next_page";
+		else :
+			$prev_page=preg_replace('/[0-9]\/*$/',$prev_page,'http://'.$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+			$next_page=preg_replace('/[0-9]\/*$/',$next_page,'http://'.$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
 		endif;
 
 		if (!$this->pagination['active'])
@@ -360,15 +368,12 @@ class RiderStats {
 
 		//$max_pages=$total_riders/$per_page; ERROR RIGHT NOW
 
-
-//echo $url;
-//echo 'p:'.get_query_var('paged');
 		$html.='<div class="rider-pagination uci-pagination">';
 			if ($this->pagination['paged']!=1)
-				$html.='<div class="prev-page"><a href="'.$prev_url.'">Previous</a></div>';
+				$html.='<div class="prev-page"><a href="'.$prev_page.'">Previous</a></div>';
 
 			//if ($paged!=$max_pages)
-				$html.='<div class="next-page"><a href="'.$next_url.'">Next</a></div>';
+				$html.='<div class="next-page"><a href="'.$next_page.'">Next</a></div>';
 		$html.='</div>';
 
 		return $html;
