@@ -7,7 +7,7 @@
 class RiderStats {
 
 	public $version='0.1.2';
-	public $riders_pagination_trainsient_variable='riders_pagination_array';
+	//public $riders_pagination_trainsient_variable='riders_pagination_array';
 	public $admin_url_vars='?page=uci-cross&tab=riders';
 
 	/**
@@ -31,7 +31,7 @@ class RiderStats {
 		global $wpdb,$uci_curl;
 
 		$html=null;
-		//$rank=1;
+		$rank=1;
 /*
 		$pagination=true;
 		$paged=1;
@@ -72,14 +72,16 @@ class RiderStats {
 
 			foreach ($riders as $rider) :
 				$html.='<div class="row">';
-					$html.='<div class="rank col-md-1">'.$rider->rank.'</div>';
-					$html.='<div class="rider col-md-3">'.$rider->name.'</div>';
-					$html.='<div class="uci col-md-1">'.$rider->uci_points.'</div>';
-					$html.='<div class="wcp col-md-1">'.$rider->wcp_points.'</div>';
-					$html.='<div class="winning col-md-1">'.$rider->weighted_winning_perc.'</div>';
+					$html.='<div class="rank col-md-1">'.$rank.'</div>';
+					$html.='<div class="rider col-md-3">'.$rider->rider.'</div>';
+					$html.='<div class="uci col-md-1">'.$rider->uci.'</div>';
+					$html.='<div class="wcp col-md-1">'.$rider->wcp.'</div>';
+					$html.='<div class="winning col-md-1">'.number_format($rider->weighted_win_perc,3).'</div>';
 					$html.='<div class="sos col-md-1">'.$rider->sos.'</div>';
-					$html.='<div class="total col-md-1">'.$rider->total.'</div>';
+					$html.='<div class="total col-md-1">'.number_format($rider->total,3).'</div>';
 				$html.='</div>';
+
+				$rank++;
 			endforeach;
 
 /*
@@ -104,130 +106,96 @@ class RiderStats {
 	public function get_riders($user_args=array()) {
 		global $wpdb,$uci_curl;
 
-		ini_set('memory_limit', '-1'); // we would like to remove this soon
-
 		$riders=array();
 		$counter=0;
-		$where=null;
 
 		$default_args=array(
-			'override' => true, // allows us to force override transient
 			'season' => '2015/2016'
 		);
 		$args=array_merge($default_args,$user_args);
 
 		extract($args);
 
-/*
-		if (!$override) :
-			if (false===get_transient($this->riders_pagination_trainsient_variable)) :
-				// do nothing, there is no transient, we will run the whole thing
-			else :
-				return get_transient($this->riders_pagination_trainsient_variable);
-			endif;
-		endif;
-*/
-
-		if ($season)
-			$where=" season='$season'";
-
-		$wcp_sql="
-			SELECT total FROM(
-				SELECT
-					SUM(results.par) AS total
-				FROM `wp_uci_races` AS races
-				LEFT JOIN `wp_uci_rider_data` AS results
-				ON races.code=results.code
-				WHERE results.par !='' AND races.class='CDM'
-				GROUP BY races.code
-				WITH ROLLUP
-			) t
-			ORDER BY total DESC
-			LIMIT 1
-		";
-		$wcp_total=$wpdb->get_var($wcp_sql);
-
-		$uci_sql="
-			SELECT total FROM(
-				SELECT
-					SUM(results.par) AS total
-				FROM `wp_uci_races` AS races
-				LEFT JOIN `wp_uci_rider_data` AS results
-				ON races.code=results.code
-				WHERE results.par !=''
-				AND $where
-				GROUP BY races.code
-				WITH ROLLUP
-			) t
-			ORDER BY total DESC
-			LIMIT 1
-		";
-		$uci_total=$wpdb->get_var($uci_sql);
-
 		$sql="
 			SELECT
-				results.name,
-				results.place,
-				results.par,
-				races.code,
-				races.class,
-				races.fq,
-				races.season
+				name AS rider,
+				SUM(uci_total) AS uci,
+				SUM(wcp_total) AS wcp,
+				SUM(wins) AS wins,
+				SUM(races) AS races,
+				SUM(wins/races) AS win_perc,
+				SUM(uci_races) AS uci_races,
+				SUM(races/uci_races) AS race_perc,
+				SUM(((wins/races)+(races/uci_races))/2) AS weighted_win_perc,
+				SUM(max_uci_points) AS max_uci_points,
+				SUM(max_wcp_points) AS max_wcp_points,
+				SUM(uci_total/max_uci_points) AS uci_perc,
+				COALESCE(SUM(wcp_total/max_wcp_points),0) AS wcp_perc,
+				SUM(sos) AS sos,
+				(SELECT SUM( (COALESCE(SUM(wcp_total/max_wcp_points),0) + SUM(sos) + SUM(uci_total/max_uci_points) + SUM((((wins/races)+(races/uci_races))/2))) / 4 ) ) AS total
+			FROM
+
+			(
+			SELECT
+				results.name AS name,
+				SUM(results.par) AS uci_total,
+				0 AS wcp_total,
+				SUM(IF(results.place=1,1,0)) AS wins,
+				COUNT(results.code) AS races,
+				(SELECT COUNT(*) FROM $uci_curl->table WHERE season='$season') AS uci_races,
+				(SELECT total FROM( SELECT SUM(results.par) AS total FROM $uci_curl->table AS races LEFT JOIN $uci_curl->results_table AS results ON races.code=results.code WHERE results.place=1 AND races.season='$season' GROUP BY races.code WITH ROLLUP ) t ORDER BY total DESC LIMIT 1) AS max_uci_points,
+				0 AS max_wcp_points,
+				0 AS sos
 			FROM $uci_curl->results_table AS results
 			LEFT JOIN $uci_curl->table AS races
 			ON results.code=races.code
-			WHERE $where
+			WHERE season='$season'
+			GROUP BY results.name
+
+			UNION
+
+			SELECT
+				results.name AS name,
+				0 AS uci_total,
+				SUM(results.par) AS wcp_total,
+				0 AS wins,
+				0 AS races,
+				0 AS uci_races,
+				0 AS max_uci_points,
+			/* 	(SELECT total FROM( SELECT SUM(results.par) AS total FROM $uci_curl->table AS races LEFT JOIN $uci_curl->results_table AS results ON races.code=results.code WHERE results.place=1 AND races.class='CDM' AND races.season='$season' GROUP BY races.code WITH ROLLUP ) t ORDER BY total DESC LIMIT 1) AS max_wcp_points, */
+				(SELECT	SUM(results.par) AS points FROM $uci_curl->table AS races LEFT JOIN $uci_curl->results_table AS results ON races.code=results.code WHERE results.place=1 AND races.class='CDM' AND races.season='$season') AS max_wcp_points,
+				0 AS sos
+			FROM $uci_curl->results_table AS results
+			LEFT JOIN $uci_curl->table AS races
+			ON results.code=races.code
+			WHERE season='$season'
+				AND races.class='CDM'
+			GROUP BY results.name
+
+			UNION
+
+			SELECT
+				results.name,
+				0 AS uci_total,
+				0 AS wcp_total,
+				0 AS wins,
+				0 AS races,
+				0 AS uci_races,
+				0 AS max_uci_points,
+				0 AS max_wcp_points,
+				(SELECT SUM(((SELECT SUM(SUM(CASE races.class WHEN 'CM' THEN 5 WHEN 'CDM' THEN 4 WHEN 'CN' THEN 3 WHEN 'C1' THEN 2 WHEN 'C2' THEN 1 ELSE 0 END)/100)) + (SELECT SUM(SUM(races.fq)/100)))/2)) AS sos
+			FROM $uci_curl->results_table AS results
+			LEFT JOIN $uci_curl->table AS races
+			ON results.code=races.code
+			WHERE season='$season'
+			GROUP BY results.name
+
+			) t
+			GROUP BY name
+			ORDER BY total DESC
 		";
 
-		$total_races=$wpdb->get_var("SELECT COUNT(*) FROM ".$uci_curl->table.' WHERE '.$where);
-		$riders_db=$wpdb->get_results($sql); // filter ie season
-
-		// get all results for rider by grouping by name //
-		foreach ($riders_db as $rider) :
-			$_clean=str_replace(' ','',$rider->name);
-
-			if (!isset($riders[$_clean]['name']))
-				$riders[$_clean]['name']=$rider->name;
-
-			$riders[$_clean]['races'][$rider->code]=$rider; // would be filtered ie season
-		endforeach;
-
-		// append some more data (stats) //
-		foreach ($riders as $key => $rider) :
-			$riders[$key]['total_races']=count($rider['races']);
-
-			if ($season)
-				$riders[$key]['season']=$season;
-
-			$rider_points=$this->get_rider_points($rider['races']);
-
-			$riders[$key]['uci_points']=$rider_points['uci'];
-			$riders[$key]['wcp_points']=$rider_points['cdm'];
-			$riders[$key]['winning_perc']=$this->get_rider_winning_perc($rider['races']);
-			$riders[$key]['race_perc']=number_format($riders[$key]['total_races']/$total_races,3);
-			$riders[$key]['weighted_winning_perc']=number_format(($riders[$key]['winning_perc']+$riders[$key]['race_perc'])/2,3);
-			$riders[$key]['sos']=$this->get_sos($rider['races'],$total_races,$season);
-			$riders[$key]['uci_perc']=$riders[$key]['uci_points']/$uci_total;
-			$riders[$key]['wcp_perc']=$riders[$key]['wcp_points']/$wcp_total;
-			$riders[$key]['total']=$this->get_rider_final_number(array(
-				'uci' => $riders[$key]['uci_points'],
-				'wcp' => $riders[$key]['wcp_points'],
-				'winning_perc' => $riders[$key]['winning_perc'],
-				'sos' => $riders[$key]['sos'],
-				'uci_total' => $uci_total,
-				'wcp_total' => $wcp_total,
-				'rider_total_races' => $riders[$key]['total_races'],
-				'season_total_races' => $total_races,
-			));
-		endforeach;
-
-		$riders=$this->sort_riders($riders);
-
-		//set_transient('total_riders_count',count($riders),HOUR_IN_SECONDS);
-
-		$riders=json_decode(json_encode($riders),FALSE); // make object
-
-		//set_transient($this->riders_pagination_trainsient_variable,$riders,HOUR_IN_SECONDS);
+		$riders=$wpdb->get_results($sql);
 
 		return $riders;
 	}
@@ -301,6 +269,9 @@ class RiderStats {
 
 		foreach ($races as $race) :
 			switch ($race->class) :
+				case 'CM' :
+					$pts=5;
+					break;
 				case 'CDM' :
 					$pts=4;
 					break;
@@ -370,45 +341,6 @@ class RiderStats {
 		$total=$uci+$wcp+$sos+$weighted_winning_perc;
 
 		return number_format($total,3);
-	}
-
-	/**
-	 * sort_riders function.
-	 *
-	 * @access public
-	 * @param bool $riders (default: false)
-	 * @param array $args (default: array())
-	 * @return void
-	 */
-	public function sort_riders($riders=false,$args=array()) {
-		if (!$riders)
-			return false;
-
-		$rank=1;
-		$default_args=array(
-			'arr' => array(),
-			'sort_order' => SORT_DESC,
-			'sort_flags' => SORT_NUMERIC,
-		);
-		$args=array_merge($default_args,$args);
-
-		extract($args);
-
-		if (empty($arr)) :
-			foreach ($riders as $rider) :
-  	  	$arr[]=$rider['total'];
-			endforeach;
-		endif;
-
-		array_multisort($arr,SORT_DESC,SORT_NUMERIC,$riders);
-
-		// append rank //
-		foreach ($riders as $key => $rider) :
-			$riders[$key]['rank']=$rank;
-			$rank++;
-		endforeach;
-
-		return $riders;
 	}
 
 	public function rider_pagination() {

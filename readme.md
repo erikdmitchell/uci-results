@@ -15,6 +15,9 @@ Changelog
 
 	Added pagination for rider rankings
 	Added shortcodes to display data on user end
+	
+	Major Update to get_riders
+	removed riders_sort
 
 ### 1.0.7
 
