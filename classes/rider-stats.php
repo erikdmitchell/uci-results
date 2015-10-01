@@ -6,7 +6,7 @@
  */
 class RiderStats {
 
-	public $version='0.1.2';
+	//public $version='0.1.2';
 	//public $riders_pagination_trainsient_variable='riders_pagination_array';
 	public $admin_url_vars='?page=uci-cross&tab=riders';
 	public $pagination=array();
@@ -344,21 +344,31 @@ class RiderStats {
 	 */
 	public function rider_pagination() {
 		$html=null;
+		$url=$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+		$next_url='#';
+		$prev_url='#';
+		$prev_page=$this->pagination['paged']-1;
+		$next_page=$this->pagination['paged']+1;
+
+		if (is_admin()) :
+			$prev_url=admin_url($this->admin_url_vars)."&paged=$prev_page";
+			$next_url=admin_url($this->admin_url_vars)."&paged=$next_page";
+		endif;
 
 		if (!$this->pagination['active'])
 			return false;
 
 		//$max_pages=$total_riders/$per_page; ERROR RIGHT NOW
 
-		$prev_page=$this->pagination['paged']-1;
-		$next_page=$this->pagination['paged']+1;
 
+//echo $url;
+//echo 'p:'.get_query_var('paged');
 		$html.='<div class="rider-pagination uci-pagination">';
 			if ($this->pagination['paged']!=1)
-				$html.='<div class="prev-page"><a href="'.admin_url($this->admin_url_vars).'&paged='.$prev_page.'">Previous</a></div>';
+				$html.='<div class="prev-page"><a href="'.$prev_url.'">Previous</a></div>';
 
 			//if ($paged!=$max_pages)
-				$html.='<div class="next-page"><a href="'.admin_url($this->admin_url_vars).'&paged='.$next_page.'">Next</a></div>';
+				$html.='<div class="next-page"><a href="'.$next_url.'">Next</a></div>';
 		$html.='</div>';
 
 		return $html;

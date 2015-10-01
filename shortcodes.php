@@ -25,7 +25,7 @@ function riders_shortcode($atts) {
 
 	$html=null;
 	extract(shortcode_atts(array(
-		'season' => false,
+		'season' => '2015/2016',
 	),$atts));
 
 	$html.=$RiderStats->get_season_rider_rankings(array(
