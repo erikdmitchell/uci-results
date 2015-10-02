@@ -11,6 +11,7 @@
 global $RiderStats,$wp_query;
 
 $paged=get_query_var('paged',1);
+$season=get_query_var('season','2015/2016');
 $riders=$RiderStats->get_riders(array(
 	'paged' => $paged,
 	'per_page' => 15
@@ -41,7 +42,7 @@ $riders=$RiderStats->get_riders(array(
 					<?php foreach ($riders as $rider) : ?>
 						<div class="row">
 							<div class="rank col-md-1"><?php echo $rider->rank; ?></div>
-							<div class="rider col-md-4"><a href=""><?php echo $rider->rider; ?></a></div>
+							<div class="rider col-md-4"><a href="rider/?rider=<?php echo urlencode($rider->rider); ?>&season=<?php echo $season; ?>"><?php echo $rider->rider; ?></a></div>
 							<div class="nat col-md-1"><a href=""><?php echo $rider->nat; ?></a></div>
 							<div class="uci col-md-1"><?php echo $rider->uci; ?></div>
 							<div class="wcp col-md-1"><?php echo $rider->wcp; ?></div>

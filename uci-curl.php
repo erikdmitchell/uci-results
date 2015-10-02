@@ -98,8 +98,6 @@ function uci_curl_pagination() {
 	$ppc=null;
 	$npc=null;
 	$max_pages=ceil($RiderStats->max_riders/$per_page);
-	//$prev_page=preg_replace('/[0-9]\/*$/',$prev_page,'http://'.$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
-	//$next_page=preg_replace('/[0-9]\/*$/',$next_page,'http://'.$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
 
 	if ($paged==1)
 		$ppc='hide-opacity';
@@ -108,14 +106,12 @@ function uci_curl_pagination() {
 		$npc='hide-opacity';
 
 	$html.='<div class="rider-pagination uci-pagination">';
-		$html.='<div class="prev-page"><a class="'.$ppc.'" href="'.$prev_page.'">Previous</a></div>';
+		$html.='<div class="prev-page"><a class="'.$ppc.'" href="?paged='.$prev_page.'">Previous</a></div>';
 		$html.='<div class="next-page"><a class="'.$npc.'" href="?paged='.$next_page.'">Next</a></div>';
 	$html.='</div>';
 
 	echo $html;
 }
-
-//----- add pages to site ----- //
 
 /**
  * uci_curl_add_pages function.
@@ -124,31 +120,43 @@ function uci_curl_pagination() {
  * @return void
  */
 function uci_curl_add_pages() {
-	$pages=array(
-		'riders-rankings' => array(
-			'post_content' => 'No content will be displayed with the usage of the Rider Rankings template.',
-		  'post_title' => 'Rider Rankings',
-		  'post_status' => 'publish',
-		  'post_type' => 'page',
-		  'post_parent' => 0,
-		  'page_template' => 'rider-rankings.php',
-		),
+	$riders_rankings=array(
+		'post_content' => 'No content will be displayed with the usage of the Rider Rankings template.',
+	  'post_title' => 'Rider Rankings',
+	  'post_status' => 'publish',
+	  'post_type' => 'page',
+	  'post_parent' => 0,
+	  'page_template' => 'rider-rankings.php',
 	);
+	$riders_rankings_id=wp_insert_post($riders_rankings);
 
-	foreach ($pages as $page) :
-		wp_insert_post($page);
-	endforeach;
+	$riders_single=array(
+		'post_content' => 'No content will be displayed with the usage of the Rider Rankings template.',
+	  'post_title' => 'Rider',
+	  'post_status' => 'publish',
+	  'post_type' => 'page',
+	  'post_parent' => $riders_rankings_id,
+	  'page_template' => 'rider.php',
+	);
+	$riders_single_id=wp_insert_post($riders_single);
 }
 
-
-/* not used for now
+/**
+ * uci_curl_add_query_vars function.
+ *
+ * custom query vars for use in our template(s)
+ *
+ * @access public
+ * @param mixed $vars
+ * @return void
+ */
 function uci_curl_add_query_vars($vars) {
-	//$vars[]='uci_curl_paged';
+	$vars[]='rider';
+	$vars[]='season';
 	//$vars[]='uci_curl_per_page';
 	//$vars[]='uci_curl_max_pages';
 
 	return $vars;
 }
 add_filter('query_vars','uci_curl_add_query_vars');
-*/
 ?>

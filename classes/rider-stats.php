@@ -233,6 +233,35 @@ class RiderStats {
 		return $riders;
 	}
 
+	public function get_rider($name=0) {
+		global $wpdb,$uci_curl;
+
+		if (!$name)
+			return false;
+
+		$season=get_query_var('season','2015/2016');
+		$sql="
+			SELECT
+				results.place,
+				results.nat AS country,
+				results.par,
+				races.date,
+				races.event AS race,
+				races.class,
+				races.nat AS race_country,
+				races.fq
+						FROM $uci_curl->results_table AS results
+						LEFT JOIN $uci_curl->table AS races
+			ON results.code=races.code
+			WHERE season='$season'
+			AND name='$name'
+			ORDER BY races.date
+		";
+		$results=$wpdb->get_results($sql);
+
+		return $results;
+	}
+
 	/**
 	 * get_rider_points function.
 	 *
