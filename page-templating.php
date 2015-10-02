@@ -91,6 +91,7 @@ class Page_Templates {
 		$this->templates = array(
 			'rider-rankings.php'     => __( 'Rider Rankings', $this->plugin_slug ),
 			'rider.php'     => __( 'Rider (Single)', $this->plugin_slug ),
+			'country.php'     => __( 'Country (Single)', $this->plugin_slug ),
 		);
 
 		// adding support for theme templates to be merged and shown in dropdown

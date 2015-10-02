@@ -139,6 +139,16 @@ function uci_curl_add_pages() {
 	  'page_template' => 'rider.php',
 	);
 	$riders_single_id=wp_insert_post($riders_single);
+
+	$country_single=array(
+		'post_content' => 'No content will be displayed with the usage of the Rider Rankings template.',
+	  'post_title' => 'Country',
+	  'post_status' => 'publish',
+	  'post_type' => 'page',
+	  'post_parent' => $riders_rankings_id,
+	  'page_template' => 'country.php',
+	);
+	$country_single_id=wp_insert_post($country_single);
 }
 
 /**
@@ -153,8 +163,7 @@ function uci_curl_add_pages() {
 function uci_curl_add_query_vars($vars) {
 	$vars[]='rider';
 	$vars[]='season';
-	//$vars[]='uci_curl_per_page';
-	//$vars[]='uci_curl_max_pages';
+	$vars[]='country';
 
 	return $vars;
 }
