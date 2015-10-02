@@ -125,7 +125,11 @@ class RiderStats {
 		extract($args);
 
 		if ($pagination) :
-			$start=$per_page*($paged-1);
+			if ($paged==0) :
+				$start=0;
+			else :
+				$start=$per_page*($paged-1);
+			endif;
 			$end=$per_page;
 			$limit="LIMIT $start,$end";
 			$rank=$start+1;

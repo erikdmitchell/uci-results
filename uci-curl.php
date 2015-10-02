@@ -86,16 +86,20 @@ function object_slice($obj=false,$start=0,$end=10) {
 function uci_curl_pagination() {
 	global $RiderStats;
 
-	$html=null;
 	$paged=get_query_var('paged',1);
+
+	if ($paged==0)
+		$paged=1;
+
+	$html=null;
 	$prev_page=$paged-1;
 	$next_page=$paged+1;
 	$per_page=15; // should be pulled from a central location so user can update
 	$ppc=null;
 	$npc=null;
 	$max_pages=ceil($RiderStats->max_riders/$per_page);
-	$prev_page=preg_replace('/[0-9]\/*$/',$prev_page,'http://'.$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
-	$next_page=preg_replace('/[0-9]\/*$/',$next_page,'http://'.$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+	//$prev_page=preg_replace('/[0-9]\/*$/',$prev_page,'http://'.$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+	//$next_page=preg_replace('/[0-9]\/*$/',$next_page,'http://'.$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
 
 	if ($paged==1)
 		$ppc='hide-opacity';
@@ -105,7 +109,7 @@ function uci_curl_pagination() {
 
 	$html.='<div class="rider-pagination uci-pagination">';
 		$html.='<div class="prev-page"><a class="'.$ppc.'" href="'.$prev_page.'">Previous</a></div>';
-		$html.='<div class="next-page"><a class="'.$npc.'" href="'.$next_page.'">Next</a></div>';
+		$html.='<div class="next-page"><a class="'.$npc.'" href="?paged='.$next_page.'">Next</a></div>';
 	$html.='</div>';
 
 	echo $html;
