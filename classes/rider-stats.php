@@ -9,7 +9,8 @@ class RiderStats {
 	//public $version='0.1.2';
 	//public $riders_pagination_trainsient_variable='riders_pagination_array';
 	public $admin_url_vars='?page=uci-cross&tab=riders';
-	public $pagination=array();
+	//public $pagination=array();
+	public $max_riders=0;
 
 	/**
 	 * __construct function.
@@ -18,12 +19,6 @@ class RiderStats {
 	 * @return void
 	 */
 	public function __construct() {
-		$this->pagination=array(
-			'active' => true,
-			'paged' => 1,
-			'per_page' => 15,
-			'max' => 0
-		);
 	}
 
 	/**
@@ -37,7 +32,24 @@ class RiderStats {
 		global $wpdb,$uci_curl;
 
 		$html=null;
+		$paged=1;
+		$per_page=15;
+
+		if (isset($_GET['paged']))
+			$paged=$_GET['paged'];
+
+		$default_args=array(
+			'pagination' => true,
+			'paged' => $paged,
+			'per_page' => $per_page
+		);
+		$args=array_merge($default_args,$args);
+
 		$riders=$this->get_riders($args);
+
+		$prev_page=$paged-1;
+		$next_page=$paged+1;
+		$max_pages=ceil($this->max_riders/$per_page);
 
 		$html.='<h3>Rider Rankings</h3>';
 
@@ -64,7 +76,14 @@ class RiderStats {
 				$html.='</div>';
 			endforeach;
 
-			$html.=$this->rider_pagination();
+			$html.='<div class="rider-pagination uci-pagination">';
+				if ($paged!=1)
+					$html.='<div class="prev-page"><a href="'.admin_url($this->admin_url_vars).'&paged='.$prev_page.'">Previous</a></div>';
+
+				if ($paged!=$max_pages)
+					$html.='<div class="next-page"><a href="'.admin_url($this->admin_url_vars).'&paged='.$next_page.'">Next</a></div>';
+			$html.='</div>';
+
 		$html.='</div>';
 
 		return $html;
@@ -85,6 +104,9 @@ class RiderStats {
 		$rank=1;
 		$default_args=array(
 			'season' => '2015/2016',
+			'pagination' => true,
+			'paged' => 1,
+			'per_page' => 15
 		);
 		$args=array_merge($default_args,$user_args);
 
@@ -102,9 +124,9 @@ class RiderStats {
 
 		extract($args);
 
-		if ($this->pagination['active']) :
-			$start=$this->pagination['per_page']*($this->pagination['paged']-1);
-			$end=$this->pagination['per_page'];
+		if ($pagination) :
+			$start=$per_page*($paged-1);
+			$end=$per_page;
 			$limit="LIMIT $start,$end";
 			$rank=$start+1;
 		endif;
@@ -112,6 +134,7 @@ class RiderStats {
 		$sql="
 			SELECT
 				name AS rider,
+				nat,
 				SUM(uci_total) AS uci,
 				SUM(wcp_total) AS wcp,
 				SUM(wins) AS wins,
@@ -131,6 +154,7 @@ class RiderStats {
 			(
 			SELECT
 				results.name AS name,
+				results.nat AS nat,
 				SUM(results.par) AS uci_total,
 				0 AS wcp_total,
 				SUM(IF(results.place=1,1,0)) AS wins,
@@ -149,6 +173,7 @@ class RiderStats {
 
 			SELECT
 				results.name AS name,
+				results.nat AS nat,
 				0 AS uci_total,
 				SUM(results.par) AS wcp_total,
 				0 AS wins,
@@ -169,6 +194,7 @@ class RiderStats {
 
 			SELECT
 				results.name,
+				results.nat AS nat,
 				0 AS uci_total,
 				0 AS wcp_total,
 				0 AS wins,
@@ -190,7 +216,9 @@ class RiderStats {
 		";
 
 		$riders=$wpdb->get_results($sql);
-		//$this->pagination['max']=$wpdb->num_rows;
+
+		$max_riders=$wpdb->get_results("SELECT name FROM $uci_curl->results_table GROUP BY name");
+		$this->max_riders=$wpdb->num_rows;
 
 		// add rank //
 		foreach ($riders as $rider) :
@@ -342,41 +370,6 @@ class RiderStats {
 		$total=$uci+$wcp+$sos+$weighted_winning_perc;
 
 		return number_format($total,3);
-	}
-
-	/**
-	 * rider_pagination function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function rider_pagination() {
-		$html=null;
-		$prev_page=$this->pagination['paged']-1;
-		$next_page=$this->pagination['paged']+1;
-
-		if (is_admin()) :
-			$prev_page=admin_url($this->admin_url_vars)."&paged=$prev_page";
-			$next_page=admin_url($this->admin_url_vars)."&paged=$next_page";
-		else :
-			$prev_page=preg_replace('/[0-9]\/*$/',$prev_page,'http://'.$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
-			$next_page=preg_replace('/[0-9]\/*$/',$next_page,'http://'.$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
-		endif;
-
-		if (!$this->pagination['active'])
-			return false;
-
-		//$max_pages=$total_riders/$per_page; ERROR RIGHT NOW
-
-		$html.='<div class="rider-pagination uci-pagination">';
-			if ($this->pagination['paged']!=1)
-				$html.='<div class="prev-page"><a href="'.$prev_page.'">Previous</a></div>';
-
-			//if ($paged!=$max_pages)
-				$html.='<div class="next-page"><a href="'.$next_page.'">Next</a></div>';
-		$html.='</div>';
-
-		return $html;
 	}
 
 /*

@@ -8,8 +8,13 @@
 ?>
 
 <?php
-global $RiderStats;
-$riders=$RiderStats->get_riders(); // pass season here if need be
+global $RiderStats,$wp_query;
+
+$paged=get_query_var('paged',1);
+$riders=$RiderStats->get_riders(array(
+	'paged' => $paged,
+	'per_page' => 15
+));
 ?>
 
 <?php get_header(); ?>
@@ -24,7 +29,8 @@ $riders=$RiderStats->get_riders(); // pass season here if need be
 				<div id="season-rider-rankings" class="season-rider-rankings">
 					<div class="header row">
 						<div class="rank col-md-1">Rank</div>
-						<div class="rider col-md-3">Rider</div>
+						<div class="rider col-md-4">Rider</div>
+						<div class="nat col-md-1">Nat</div>
 						<div class="uci col-md-1">UCI</div>
 						<div class="wcp col-md-1">WCP</div>
 						<div class="winning col-md-1">Win %*</div>
@@ -35,7 +41,8 @@ $riders=$RiderStats->get_riders(); // pass season here if need be
 					<?php foreach ($riders as $rider) : ?>
 						<div class="row">
 							<div class="rank col-md-1"><?php echo $rider->rank; ?></div>
-							<div class="rider col-md-3"><a href=""><?php echo $rider->rider; ?></a></div>
+							<div class="rider col-md-4"><a href=""><?php echo $rider->rider; ?></a></div>
+							<div class="nat col-md-1"><a href=""><?php echo $rider->nat; ?></a></div>
 							<div class="uci col-md-1"><?php echo $rider->uci; ?></div>
 							<div class="wcp col-md-1"><?php echo $rider->wcp; ?></div>
 							<div class="winning col-md-1"><?php echo number_format($rider->weighted_win_perc,3); ?></div>
@@ -45,7 +52,7 @@ $riders=$RiderStats->get_riders(); // pass season here if need be
 					<?php endforeach; ?>
 				</div>
 
-				PAGINATION
+				<?php uci_curl_pagination(); ?>
 
 			</div><!-- .uci-curl-rider-rankings -->
 

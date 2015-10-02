@@ -77,6 +77,40 @@ function object_slice($obj=false,$start=0,$end=10) {
 	return json_decode(json_encode($obj_arr),FALSE);
 }
 
+/**
+ * uci_curl_pagination function.
+ *
+ * @access public
+ * @return void
+ */
+function uci_curl_pagination() {
+	global $RiderStats;
+
+	$html=null;
+	$paged=get_query_var('paged',1);
+	$prev_page=$paged-1;
+	$next_page=$paged+1;
+	$per_page=15; // should be pulled from a central location so user can update
+	$ppc=null;
+	$npc=null;
+	$max_pages=ceil($RiderStats->max_riders/$per_page);
+	$prev_page=preg_replace('/[0-9]\/*$/',$prev_page,'http://'.$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+	$next_page=preg_replace('/[0-9]\/*$/',$next_page,'http://'.$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]);
+
+	if ($paged==1)
+		$ppc='hide-opacity';
+
+	if ($paged==$max_pages)
+		$npc='hide-opacity';
+
+	$html.='<div class="rider-pagination uci-pagination">';
+		$html.='<div class="prev-page"><a class="'.$ppc.'" href="'.$prev_page.'">Previous</a></div>';
+		$html.='<div class="next-page"><a class="'.$npc.'" href="'.$next_page.'">Next</a></div>';
+	$html.='</div>';
+
+	echo $html;
+}
+
 //----- add pages to site ----- //
 
 /**
@@ -101,4 +135,16 @@ function uci_curl_add_pages() {
 		wp_insert_post($page);
 	endforeach;
 }
+
+
+/* not used for now
+function uci_curl_add_query_vars($vars) {
+	//$vars[]='uci_curl_paged';
+	//$vars[]='uci_curl_per_page';
+	//$vars[]='uci_curl_max_pages';
+
+	return $vars;
+}
+add_filter('query_vars','uci_curl_add_query_vars');
+*/
 ?>
