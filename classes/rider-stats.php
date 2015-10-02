@@ -306,6 +306,7 @@ class RiderStats {
 	 * @param bool $races (default: false)
 	 * @return array
 	 */
+/*
 	protected function get_rider_points($races=false) {
 		if (!$races)
 			return false;
@@ -324,6 +325,7 @@ class RiderStats {
 
 		return $points;
 	}
+*/
 
 	/**
 	 * get_rider_winning_perc function.
@@ -332,6 +334,7 @@ class RiderStats {
 	 * @param bool $races (default: false)
 	 * @return void
 	 */
+/*
 	protected function get_rider_winning_perc($races=false) {
 		if (!$races)
 			return 0;
@@ -349,6 +352,7 @@ class RiderStats {
 
 		return $winning_perc;
 	}
+*/
 
 	/**
 	 * get_sos function.
@@ -359,6 +363,7 @@ class RiderStats {
 	 * @param bool $season (default: false)
 	 * @return void
 	 */
+/*
 	protected function get_sos($races=array(),$total_races=0,$season=false) {
 		global $wpdb,$uci_curl;
 
@@ -401,6 +406,7 @@ class RiderStats {
 
 		return number_format($sos,3);
 	}
+*/
 
 	/**
 	 * get_rider_final_number function.
@@ -409,6 +415,7 @@ class RiderStats {
 	 * @param array $args (default: array())
 	 * @return void
 	 */
+/*
 	protected function get_rider_final_number($args=array()) {
 		$default_args=array(
 			'uci' => 0,
@@ -441,6 +448,7 @@ class RiderStats {
 
 		return number_format($total,3);
 	}
+*/
 
 /*
 	public static function get_uci_season_rankings($year=false,$display=true,$sort_field='rank',$sort_type='ASC') {
