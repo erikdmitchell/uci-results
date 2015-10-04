@@ -31,6 +31,26 @@ $uci_curl=new Top25_cURL($config); // this may be initated in the top25 file at 
 add_action('plugins_loaded',array('Page_Templates','get_instance')); // enables our templates to be added
 
 
+// url for click throughs
+function single_rider_link($rider=false,$season=false) {
+	if (!$rider || !$season)
+		return false;
+
+	return 'rider/?rider='.urlencode($rider).'&season='.$season;
+}
+function single_country_link($country=false) {
+	if (!$country)
+		return false;
+
+	return 'country/?country='.$country;
+}
+function single_race_link($code=false) {
+	if (!$code)
+		return false;
+	return 'race/?race='.urlencode($code);
+}
+
+
 
 
 /**
@@ -120,35 +140,65 @@ function uci_curl_pagination() {
  * @return void
  */
 function uci_curl_add_pages() {
+	$uci_cross=array(
+		'post_content' => '',
+		'post_title' => 'UCI Cross Rankings',
+		'post_status' => 'publish',
+		'post_type' => 'page',
+		'post_parent' => 0,
+		'page_template' => 'cross.php',
+	);
+	$uci_cross_id=wp_insert_post($riders_rankings);
+
 	$riders_rankings=array(
 		'post_content' => 'No content will be displayed with the usage of the Rider Rankings template.',
-	  'post_title' => 'Rider Rankings',
-	  'post_status' => 'publish',
-	  'post_type' => 'page',
-	  'post_parent' => 0,
-	  'page_template' => 'rider-rankings.php',
+		'post_title' => 'Rider Rankings',
+		'post_status' => 'publish',
+		'post_type' => 'page',
+		'post_parent' => $uci_cross_id,
+		'page_template' => 'rider-rankings.php',
 	);
 	$riders_rankings_id=wp_insert_post($riders_rankings);
 
 	$riders_single=array(
-		'post_content' => 'No content will be displayed with the usage of the Rider Rankings template.',
-	  'post_title' => 'Rider',
-	  'post_status' => 'publish',
-	  'post_type' => 'page',
-	  'post_parent' => $riders_rankings_id,
-	  'page_template' => 'rider.php',
+		'post_content' => 'No content will be displayed with the usage of the Rider (Single) template.',
+		'post_title' => 'Rider',
+		'post_status' => 'publish',
+		'post_type' => 'page',
+		'post_parent' => $riders_rankings_id,
+		'page_template' => 'rider.php',
 	);
 	$riders_single_id=wp_insert_post($riders_single);
 
 	$country_single=array(
-		'post_content' => 'No content will be displayed with the usage of the Rider Rankings template.',
-	  'post_title' => 'Country',
-	  'post_status' => 'publish',
-	  'post_type' => 'page',
-	  'post_parent' => $riders_rankings_id,
-	  'page_template' => 'country.php',
+		'post_content' => 'No content will be displayed with the usage of the Race Rankings template.',
+		'post_title' => 'Country',
+		'post_status' => 'publish',
+		'post_type' => 'page',
+		'post_parent' => $riders_rankings_id,
+		'page_template' => 'country.php',
 	);
 	$country_single_id=wp_insert_post($country_single);
+
+	$race_rankings=array(
+		'post_content' => 'No content will be displayed with the usage of the Race (Single) template.',
+		'post_title' => 'Race Rankings',
+		'post_status' => 'publish',
+		'post_type' => 'page',
+		'post_parent' => $uci_cross_id,
+		'page_template' => 'race-rankings.php',
+	);
+	$race_rankings_id=wp_insert_post($riders_rankings);
+
+	$race_single=array(
+		'post_content' => 'No content will be displayed with the usage of the Rider Rankings template.',
+		'post_title' => 'Race',
+		'post_status' => 'publish',
+		'post_type' => 'page',
+		'post_parent' => $race_rankings_id,
+		'page_template' => 'race.php',
+	);
+	$race_single_id=wp_insert_post($riders_single);
 }
 
 /**
@@ -164,6 +214,7 @@ function uci_curl_add_query_vars($vars) {
 	$vars[]='rider';
 	$vars[]='season';
 	$vars[]='country';
+	$vars[]='race';
 
 	return $vars;
 }
