@@ -92,6 +92,9 @@ class Page_Templates {
 			'rider-rankings.php'     => __( 'Rider Rankings', $this->plugin_slug ),
 			'rider.php'     => __( 'Rider (Single)', $this->plugin_slug ),
 			'country.php'     => __( 'Country (Single)', $this->plugin_slug ),
+			'race-rankings.php'     => __( 'Race Rankings', $this->plugin_slug ),
+			'race.php'     => __( 'Race (Single)', $this->plugin_slug ),
+			'cross.php'     => __( 'Cross (UCI)', $this->plugin_slug ),
 		);
 
 		// adding support for theme templates to be merged and shown in dropdown
