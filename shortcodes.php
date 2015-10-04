@@ -6,6 +6,7 @@
  * @param mixed $atts
  * @return void
  */
+/*
 function races_shortcode($atts) {
 	global $RaceStats;
 
@@ -19,6 +20,7 @@ function races_shortcode($atts) {
 	return $html;
 }
 add_shortcode('uci-races','races_shortcode');
+*/
 
 /*
 function riders_shortcode($atts) {
