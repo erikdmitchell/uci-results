@@ -6,8 +6,6 @@
  */
 class RaceStats {
 
-	public $version='0.1.2';
-
 	/**
 	 * __construct function.
 	 *
@@ -20,6 +18,8 @@ class RaceStats {
 
 	/**
 	 * get_season_race_rankings function.
+	 *
+	 * Admin Side (may not be used)
 	 *
 	 * @access public
 	 * @param bool $season (default: false)
@@ -70,60 +70,80 @@ class RaceStats {
 	public function get_races($args=array()) {
 		global $wpdb,$uci_curl;
 
-		$where=null;
+		$limit=null;
 		$default_args=array(
-			'sort' => true,
-			'season' => false,
+			'season' => '2015/2016',
+			'pagination' => true,
+			'paged' => 1,
+			'per_page' => 15
 		);
-
 		$args=array_merge($default_args,$args);
+
+
 
 		extract($args);
 
-		if ($season)
-			$where="WHERE season='$season'";
+		$sql="
+			SELECT
+				code,
+				date,
+				event AS name,
+				nat,
+				class,
+				fq
+			FROM $uci_curl->table
+			WHERE season='$season'
+			ORDER BY date
+			$limit
+		";
 
-		$races=$wpdb->get_results("SELECT * FROM ".$uci_curl->table.$where);
-
-		if ($sort)
-			$races=$this->sort_races($races);
-
-		return $races;
-	}
-
-	/**
-	 * sort_races function.
-	 *
-	 * DOES NOTHING @since 0.1.2
-	 *
-	 * @access public
-	 * @param bool $races (default: false)
-	 * @param array $args (default: array())
-	 * @return void
-	 */
-	public function sort_races($races=false,$args=array()) {
-		if (!$races)
-			return false;
+		$races=$wpdb->get_results($sql);
 
 		return $races;
 	}
 
 	/**
-	 * get_race_results_from_db function.
+	 * get_race function.
 	 *
 	 * @access public
 	 * @param bool $code (default: false)
 	 * @return void
 	 */
-	public function get_race_results_from_db($code=false) {
+	public function get_race($code=false) {
 		global $wpdb,$uci_curl;
 
 		if (!$code)
 			return false;
 
-		$results=$wpdb->get_results("SELECT * FROM $uci_curl->results_table WHERE code='$code'");
+		$race=new stdClass();
+		$sql="
+			SELECT
+				results.name AS rider,
+				results.place,
+				results.nat,
+				results.age,
+				results.time,
+				CASE WHEN results.par IS NULL OR results.par='' THEN 0 ELSE results.par END AS points
+			FROM $uci_curl->results_table AS results
+			LEFT JOIN $uci_curl->table AS races
+			ON results.code=races.code
+			WHERE results.code='$code'
+			ORDER BY results.place
+		";
+		$race_sql="
+			SELECT
+				event AS race,
+				date,
+				class,
+				season
+			FROM $uci_curl->table
+			WHERE code='$code'
+		";
 
-		return $results;
+		$race->results=$wpdb->get_results($sql);
+		$race->details=$wpdb->get_row($race_sql);
+
+		return $race;
 	}
 
 }
