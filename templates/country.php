@@ -42,7 +42,7 @@ $results=$RiderStats->get_country($country);
 								<div class="place col-md-1"><?php echo $result->place; ?></div>
 								<div class="points col-md-1"><?php echo $result->points; ?></div>
 								<div class="date col-md-2"><?php echo $result->date; ?></div>
-								<div class="race col-md-4"><a href=""><?php echo $result->race; ?></a></div>
+								<div class="race col-md-4"><a href="<?php echo single_race_link($result->code); ?>"><?php echo $result->race; ?></a></div>
 								<div class="class col-md-1"><?php echo $result->class; ?></div>
 								<div class="fq col-md-1"><?php echo $result->fq; ?></div>
 							</div>

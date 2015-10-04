@@ -41,8 +41,8 @@ $riders=$RiderStats->get_riders(array(
 					<?php foreach ($riders as $rider) : ?>
 						<div class="row">
 							<div class="rank col-md-1"><?php echo $rider->rank; ?></div>
-							<div class="rider col-md-4"><a href="rider/?rider=<?php echo urlencode($rider->rider); ?>&season=<?php echo $season; ?>"><?php echo $rider->rider; ?></a></div>
-							<div class="nat col-md-1"><a href="country/?country=<?php echo $rider->nat; ?>"><?php echo $rider->nat; ?></a></div>
+							<div class="rider col-md-4"><a href="<?php echo single_rider_link($rider->rider,$season); ?>"><?php echo $rider->rider; ?></a></div>
+							<div class="nat col-md-1"><a href="<?php echo single_country_link($rider->nat); ?>"><?php echo $rider->nat; ?></a></div>
 							<div class="uci col-md-1"><?php echo $rider->uci; ?></div>
 							<div class="wcp col-md-1"><?php echo $rider->wcp; ?></div>
 							<div class="winning col-md-1"><?php echo number_format($rider->weighted_win_perc,3); ?></div>
