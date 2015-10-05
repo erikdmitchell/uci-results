@@ -11,6 +11,17 @@ Coming Soon
 Changelog
 ===========
 
+### 1.0.9
+
+	First "public release"
+
+	SQL fixes issue with calculating all uci AND wcp NOT max which is only 1st places
+	SOS now includes worlds (CN) as max value
+	Cleaned up admin
+	Built out templates and template system including default page generation.
+	Added uci_curl_pagination()
+	Lots of bug fixes and build out of templates.
+
 ### 1.0.8
 
 	Added pagination for rider rankings
@@ -20,8 +31,6 @@ Changelog
 	removed riders_sort
 
 ### 1.0.7
-
-	First "public release"
 	
 	Added a setup config function to our admin allowing for more control.
 	Added some admin errors to explain potential issues.
