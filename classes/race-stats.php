@@ -6,6 +6,8 @@
  */
 class RaceStats {
 
+	public $max_rows=0;
+
 	/**
 	 * __construct function.
 	 *
@@ -68,7 +70,7 @@ class RaceStats {
 	 * @return void
 	 */
 	public function get_races($args=array()) {
-		global $wpdb,$uci_curl;
+		global $wpdb,$uci_curl,$wp_query;
 
 		$limit=null;
 		$default_args=array(
@@ -79,9 +81,18 @@ class RaceStats {
 		);
 		$args=array_merge($default_args,$args);
 
-
-
 		extract($args);
+
+		if ($pagination) :
+			if ($paged==0) :
+				$start=0;
+			else :
+				$start=$per_page*($paged-1);
+			endif;
+			$end=$per_page;
+			$limit="LIMIT $start,$end";
+			$rank=$start+1;
+		endif;
 
 		$sql="
 			SELECT
@@ -98,6 +109,9 @@ class RaceStats {
 		";
 
 		$races=$wpdb->get_results($sql);
+
+		$max_races=$wpdb->get_results("SELECT DISTINCT(code) FROM $uci_curl->table WHERE season='$season'");
+		$wp_query->uci_curl_max_pages=$wpdb->num_rows; // set max
 
 		return $races;
 	}

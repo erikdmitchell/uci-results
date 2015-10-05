@@ -15,6 +15,7 @@ $riders=$RiderStats->get_riders(array(
 	'paged' => $paged,
 	'per_page' => 15
 ));
+$wp_query->uci_curl_max_pages;
 ?>
 
 <?php get_header(); ?>

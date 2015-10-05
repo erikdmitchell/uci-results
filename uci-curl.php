@@ -104,7 +104,7 @@ function object_slice($obj=false,$start=0,$end=10) {
  * @return void
  */
 function uci_curl_pagination() {
-	global $RiderStats;
+	global $wp_query;
 
 	$paged=get_query_var('paged',1);
 
@@ -117,12 +117,12 @@ function uci_curl_pagination() {
 	$per_page=15; // should be pulled from a central location so user can update
 	$ppc=null;
 	$npc=null;
-	$max_pages=ceil($RiderStats->max_riders/$per_page);
+	$max_pages=ceil($wp_query->uci_curl_max_pages/$per_page);
 
 	if ($paged==1)
 		$ppc='hide-opacity';
 
-	if ($paged==$max_pages)
+	if ($paged==$max_pages || $max_pages==0)
 		$npc='hide-opacity';
 
 	$html.='<div class="rider-pagination uci-pagination">';
@@ -215,6 +215,7 @@ function uci_curl_add_query_vars($vars) {
 	$vars[]='season';
 	$vars[]='country';
 	$vars[]='race';
+	$vars[]='uci_curl_max_pages';
 
 	return $vars;
 }

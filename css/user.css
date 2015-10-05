@@ -28,3 +28,8 @@
 .uci-pagination .next-page {
 	text-align: right;
 }
+
+.view-all {
+	display: inline-block;
+	margin: 5px 0;
+}

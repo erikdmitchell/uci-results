@@ -7,7 +7,7 @@
 class RiderStats {
 
 	public $admin_url_vars='?page=uci-cross&tab=riders';
-	public $max_riders=0;
+	//public $max_rows=0;
 
 	/**
 	 * __construct function.
@@ -94,7 +94,7 @@ class RiderStats {
 	 * @return void
 	 */
 	public function get_riders($user_args=array()) {
-		global $wpdb,$uci_curl;
+		global $wpdb,$uci_curl,$wp_query;
 
 		$riders=array();
 		$limit=null;
@@ -206,7 +206,7 @@ class RiderStats {
 		$riders=$wpdb->get_results($sql);
 
 		$max_riders=$wpdb->get_results("SELECT name FROM $uci_curl->results_table GROUP BY name");
-		$this->max_riders=$wpdb->num_rows;
+		$wp_query->uci_curl_max_pages=$wpdb->num_rows; // set max
 
 		// add rank //
 		foreach ($riders as $rider) :
@@ -290,6 +290,24 @@ class RiderStats {
 		$results=$wpdb->get_results($sql);
 
 		return $results;
+	}
+
+	// rider not used yet
+	public function get_rank_seasons($rider=false) {
+		global $wpdb,$uci_curl;
+
+		$sql="
+			SELECT
+				season
+			FROM $uci_curl->table
+			WHERE season!=false
+			GROUP BY season
+			ORDER BY season ASC
+		";
+
+		$seasons=$wpdb->get_results($sql);
+
+		return $seasons;
 	}
 
 }
