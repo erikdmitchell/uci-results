@@ -11,6 +11,8 @@ Coming Soon
 Changelog
 ===========
 
+### 1.1.0
+
 ### 1.0.9
 
 	First "public release"
