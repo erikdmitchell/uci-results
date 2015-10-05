@@ -6,7 +6,7 @@ class Top25_cURL {
 	public $version='1.0.3';
 	public $config=array();
 
-	protected $debug=false;
+	protected $debug=true;
 
 	public function __construct($config=array()) {
 		global $wpdb;

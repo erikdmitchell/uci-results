@@ -36,13 +36,13 @@ function single_rider_link($rider=false,$season=false) {
 	if (!$rider || !$season)
 		return false;
 
-	return 'rider/?rider='.urlencode($rider).'&season='.$season;
+	return 'rider/?rider='.urlencode($rider).'&season='.urlencode($season);
 }
-function single_country_link($country=false) {
-	if (!$country)
-		return false;
+function single_country_link($country=false,$season=false) {
+	if (!$country || !$season)
+		return '#';
 
-	return 'country/?country='.$country;
+	return 'country/?country='.$country.'&season='.urlencode($season);
 }
 function single_race_link($code=false) {
 	if (!$code)
@@ -73,6 +73,7 @@ register_activation_hook(__FILE__,'ucicurl_activate');
  * @return void
  */
 function uci_curl_scripts_styles($hook) {
+	wp_enqueue_script('uci-curl-core',plugins_url('/js/core.js',__FILE__),array('jquery'));
 	wp_enqueue_style('uci-curl-style',plugins_url('/css/user.css',__FILE__));
 }
 add_action('wp_enqueue_scripts','uci_curl_scripts_styles');
@@ -107,6 +108,7 @@ function uci_curl_pagination() {
 	global $wp_query;
 
 	$paged=get_query_var('paged',1);
+	$season=get_query_var('season','2015/2016');
 
 	if ($paged==0)
 		$paged=1;
@@ -126,8 +128,8 @@ function uci_curl_pagination() {
 		$npc='hide-opacity';
 
 	$html.='<div class="rider-pagination uci-pagination">';
-		$html.='<div class="prev-page"><a class="'.$ppc.'" href="?paged='.$prev_page.'">Previous</a></div>';
-		$html.='<div class="next-page"><a class="'.$npc.'" href="?paged='.$next_page.'">Next</a></div>';
+		$html.='<div class="prev-page"><a class="'.$ppc.'" href="?paged='.$prev_page.'&season='.urlencode($season).'">Previous</a></div>';
+		$html.='<div class="next-page"><a class="'.$npc.'" href="?paged='.$next_page.'&season='.urlencode($season).'">Next</a></div>';
 	$html.='</div>';
 
 	echo $html;

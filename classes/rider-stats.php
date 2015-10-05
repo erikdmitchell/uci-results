@@ -7,7 +7,6 @@
 class RiderStats {
 
 	public $admin_url_vars='?page=uci-cross&tab=riders';
-	//public $max_rows=0;
 
 	/**
 	 * __construct function.
@@ -305,7 +304,7 @@ class RiderStats {
 			ORDER BY season ASC
 		";
 
-		$seasons=$wpdb->get_results($sql);
+		$seasons=$wpdb->get_col($sql);
 
 		return $seasons;
 	}

@@ -10,6 +10,7 @@
 global $RiderStats,$wp_query;
 
 $rider_name=get_query_var('rider',0);
+$season=get_query_var('season','2015/2016');
 $results=$RiderStats->get_rider($rider_name);
 ?>
 
@@ -22,7 +23,7 @@ $results=$RiderStats->get_rider($rider_name);
 				Rider/results not found.
 			<?php else : ?>
 				<div class="uci-curl-rider-rankings">
-					<h3><?php echo $rider_name; ?> (<a href="<?php echo single_country_link($results[0]->country); ?>"><?php echo $results[0]->country; ?></a>)</h3>
+					<h3><?php echo $rider_name; ?> (<a href="<?php echo single_country_link($results[0]->country,$season); ?>"><?php echo $results[0]->country; ?></a>)</h3>
 
 					<div id="season-rider-rankings" class="season-rider-rankings">
 						<div class="header row">

@@ -39,7 +39,7 @@ $race=$RaceStats->get_race($race_code);
 								<div class="place col-md-1"><?php echo $result->place; ?></div>
 								<div class="rider col-md-4"><a href="<?php echo single_rider_link($result->rider,$race->details->season); ?>"><?php echo $result->rider; ?></a></div>
 								<div class="points col-md-1"><?php echo $result->points; ?></div>
-								<div class="nat col-md-1"><a href="<?php echo single_country_link($result->nat); ?>"><?php echo $result->nat; ?></a></div>
+								<div class="nat col-md-1"><a href="<?php echo single_country_link($result->nat,$race->details->season); ?>"><?php echo $result->nat; ?></a></div>
 								<div class="age col-md-1"><?php echo $result->age; ?></div>
 								<div class="time col-md-2"><?php echo $result->time; ?></div>
 							</div>

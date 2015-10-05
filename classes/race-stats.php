@@ -160,6 +160,24 @@ class RaceStats {
 		return $race;
 	}
 
+	// race not used yet
+	public function get_rank_seasons($race=false) {
+		global $wpdb,$uci_curl;
+
+		$sql="
+			SELECT
+				season
+			FROM $uci_curl->table
+			WHERE season!=false
+			GROUP BY season
+			ORDER BY season ASC
+		";
+
+		$seasons=$wpdb->get_col($sql);
+
+		return $seasons;
+	}
+
 }
 
 $RaceStats = new RaceStats();

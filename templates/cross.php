@@ -14,7 +14,7 @@ $rider_seasons=$RiderStats->get_rank_seasons();
 $rider_results=$RiderStats->get_riders(array(
 	'per_page' => 10
 ));
-$race_seasons=null;
+$race_seasons=$RaceStats->get_rank_seasons();
 $race_results=$RaceStats->get_races(array(
 	'per_page' => 10
 ));
@@ -45,6 +45,18 @@ $race_results=$RaceStats->get_races(array(
 							</div>
 						<?php endforeach; ?>
 						<a class="view-all" href="">View All Riders &raquo;</a>
+
+						<div class="row">
+							<div class="col-md-4"><strong>Previous Seasons</strong></div>
+							<div class="col-md-3">
+								<select name="previous-rider-seasons" id="previous-rider-seasons" class="riders">
+									<option value="">Select One</option>
+									<?php foreach ($rider_seasons as $season) : ?>
+										<option value="<?php echo $season; ?>"><?php echo $season; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+						</div>
 					</div>
 					<div class="race-rankings-list col-md-6">
 						<h3>Race Rankings</h3>
@@ -67,6 +79,18 @@ $race_results=$RaceStats->get_races(array(
 								</div>
 							<?php endforeach; ?>
 							<a class="view-all" href="">View All Races &raquo;</a>
+
+							<div class="row">
+								<div class="col-md-4"><strong>Previous Seasons</strong></div>
+								<div class="col-md-3">
+									<select name="previous-race-seasons" id="previous-race-seasons" class="races">
+										<option value="">Select One</option>
+										<?php foreach ($rider_seasons as $season) : ?>
+											<option value="<?php echo $season; ?>"><?php echo $season; ?></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div><!-- .uci-curl-rider-rankings -->

@@ -12,6 +12,7 @@ global $RaceStats,$wp_query;
 $paged=get_query_var('paged',1);
 $season=get_query_var('season','2015/2016');
 $races=$RaceStats->get_races(array(
+	'season' => $season,
 	'paged' => $paged,
 	'per_page' => 15
 ));
@@ -24,7 +25,7 @@ $races=$RaceStats->get_races(array(
 		<div class="col-md-12">
 
 			<div class="uci-curl-race-rankings">
-				<h3>Race Rankings</h3>
+				<h3>Race Rankings (<?php echo $season; ?>)</h3>
 
 				<div id="season-race-rankings" class="season-race-rankings">
 					<div class="header row">

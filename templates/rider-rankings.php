@@ -12,6 +12,7 @@ global $RiderStats,$wp_query;
 $paged=get_query_var('paged',1);
 $season=get_query_var('season','2015/2016');
 $riders=$RiderStats->get_riders(array(
+	'season' => $season,
 	'paged' => $paged,
 	'per_page' => 15
 ));
@@ -25,7 +26,7 @@ $wp_query->uci_curl_max_pages;
 		<div class="col-md-12">
 
 			<div class="uci-curl-rider-rankings">
-				<h3>Rider Rankings</h3>
+				<h3>Rider Rankings (<?php echo $season; ?>)</h3>
 
 				<div id="season-rider-rankings" class="season-rider-rankings">
 					<div class="header row">
@@ -43,7 +44,7 @@ $wp_query->uci_curl_max_pages;
 						<div class="row">
 							<div class="rank col-md-1"><?php echo $rider->rank; ?></div>
 							<div class="rider col-md-4"><a href="<?php echo single_rider_link($rider->rider,$season); ?>"><?php echo $rider->rider; ?></a></div>
-							<div class="nat col-md-1"><a href="<?php echo single_country_link($rider->nat); ?>"><?php echo $rider->nat; ?></a></div>
+							<div class="nat col-md-1"><a href="<?php echo single_country_link($rider->nat,$season); ?>"><?php echo $rider->nat; ?></a></div>
 							<div class="uci col-md-1"><?php echo $rider->uci; ?></div>
 							<div class="wcp col-md-1"><?php echo $rider->wcp; ?></div>
 							<div class="winning col-md-1"><?php echo number_format($rider->weighted_win_perc,3); ?></div>
