@@ -13,6 +13,8 @@ Changelog
 
 ### 1.1.0
 
+	Added fantasy class/extension.
+
 ### 1.0.9
 
 	First "public release"

@@ -1,4 +1,9 @@
 <?php
+/**
+ * UCIcURLDB class.
+ *
+ * @since Version 1.0.1
+ */
 class UCIcURLDB {
 
 	public $db_version='0.0.9';

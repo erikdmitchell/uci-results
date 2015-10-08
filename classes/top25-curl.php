@@ -1,4 +1,9 @@
 <?php
+/**
+ * Top25_cURL class.
+ *
+ * @since Version 1.0.0
+ */
 class Top25_cURL {
 
 	public $table;

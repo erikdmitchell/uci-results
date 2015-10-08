@@ -2,7 +2,7 @@
 /**
  * RiderStats class.
  *
- * @since Version 1.6.1
+ * @since Version 1.0.1
  */
 class RiderStats {
 
