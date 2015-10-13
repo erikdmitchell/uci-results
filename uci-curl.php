@@ -33,28 +33,63 @@ $uci_curl=new Top25_cURL($config); // this may be initated in the top25 file at 
 
 add_action('plugins_loaded',array('Page_Templates','get_instance')); // enables our templates to be added
 
+// need to be auto done or something //
+$core_page_slug='uci-cross-rankings';
+$rider_page_slug='rider-rankings';
+$race_page_slug='race-rankings';
+
 
 // url for click throughs
+
+/**
+ * single_rider_link function.
+ *
+ * @access public
+ * @param bool $rider (default: false)
+ * @param bool $season (default: false)
+ * @return void
+ */
 function single_rider_link($rider=false,$season=false) {
+	global $core_page_slug,$rider_page_slug;
+
 	if (!$rider || !$season)
 		return false;
 
-	return 'rider/?rider='.urlencode($rider).'&season='.urlencode($season);
+	return "/{$core_page_slug}/{$rider_page_slug}/rider/?rider=".urlencode($rider)."&season=".urlencode($season);
 }
+
+/**
+ * single_country_link function.
+ *
+ * @access public
+ * @param bool $country (default: false)
+ * @param bool $season (default: false)
+ * @return void
+ */
 function single_country_link($country=false,$season=false) {
+	global $core_page_slug,$rider_page_slug;
+
 	if (!$country || !$season)
 		return '#';
 
-	return 'country/?country='.$country.'&season='.urlencode($season);
+	return "/{$core_page_slug}/{$rider_page_slug}/country/?country={$country}&season=".urlencode($season);
 }
+
+/**
+ * single_race_link function.
+ *
+ * @access public
+ * @param bool $code (default: false)
+ * @return void
+ */
 function single_race_link($code=false) {
+	global $core_page_slug,$race_page_slug;
+
 	if (!$code)
 		return false;
-	return 'race/?race='.urlencode($code);
+
+	return "/{$core_page_slug}/{$race_page_slug}/race/?race=".urlencode($code);
 }
-
-
-
 
 /**
  * ucicurl_activate function.
