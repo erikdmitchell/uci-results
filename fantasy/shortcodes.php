@@ -5,6 +5,10 @@ function fantasy_cycling($atts) {
 	),$atts));
 
 	$html.='<h3>Fantasy Cycling</h3>';
+	$html.=wp_register('<li>','</li>',false);
+	$html.=wp_login_form();
+	// login - register //
+	// if logged in, goto team page //
 
 	return $html;
 }
@@ -18,8 +22,6 @@ function fantasy_cycling_team($atts) {
 	fc_login_protect_page();
 
 	$html.='<h3>Fantasy Cycling - Team</h3>';
-	//Lists Roster
-	//Add/Edit Roster
 
 	return $html;
 }

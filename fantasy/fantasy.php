@@ -86,7 +86,8 @@ class FantasyCycling {
 }
 
 new FantasyCycling();
-?>
+
+/*
 <!--
 Workflow
 User Register/Login
@@ -105,3 +106,5 @@ Utilized by UCI Points (no limit)
 Single Team Page
 Rider Click Through to rider page
 -->
+*/
+?>
