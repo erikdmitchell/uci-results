@@ -2,7 +2,7 @@
 /**
  * FantasyCycling class.
  *
- * @since Version 1.1.0
+ * @since Version 0.0.1
  */
 class FantasyCycling {
 
@@ -10,6 +10,7 @@ class FantasyCycling {
 	public $wp_option_version='fantasy_cycling_version';
 
 	public function __construct() {
+		include_once(plugin_dir_path(__FILE__).'databases.php');
 		include_once(plugin_dir_path(__FILE__).'functions.php');
 		include_once(plugin_dir_path(__FILE__).'shortcodes.php');
 
@@ -86,3 +87,21 @@ class FantasyCycling {
 
 new FantasyCycling();
 ?>
+<!--
+Workflow
+User Register/Login
+Team Page
+Lists Roster
+Add/Edit Roster
+Rider Name, UCI Points, WCP, SOS and overall ranking
+Roster Limits
+6 riders
+Must chose 2 from Top 10 Last Season
+1 From top 20
+1 From top 30
+2 From rest
+Ranking Page
+Utilized by UCI Points (no limit)
+Single Team Page
+Rider Click Through to rider page
+-->
