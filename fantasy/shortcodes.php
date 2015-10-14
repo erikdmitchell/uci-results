@@ -1,14 +1,8 @@
 <?php
-function fantasy_cycling($atts) {
-	$html=null;
-	extract(shortcode_atts(array(
-	),$atts));
-
-	$html.='<h3>Fantasy Cycling</h3>';
-	// login - register //
-	// if logged in, goto team page //
-
-	return $html;
+function fantasy_cycling() {
+	ob_start();
+	include_once(plugin_dir_path(__FILE__).'templates/fantasy-main.php');
+	return ob_get_clean();
 }
 add_shortcode('fantasy-cycling','fantasy_cycling');
 
