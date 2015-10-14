@@ -10,4 +10,12 @@ function fc_login_protect_page() {
 		exit;
 	endif;
 }
+
+function fc_fantasy_page_redirect() {
+	if (!is_user_logged_in())
+		return false;
+
+	wp_redirect('/fantasy/');
+	exit;
+}
 ?>
