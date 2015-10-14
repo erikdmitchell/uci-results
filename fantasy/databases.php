@@ -6,7 +6,7 @@
  */
 class FantasyCyclingDB {
 
-	public $db_version='0.0.2';
+	public $db_version='0.0.3';
 	public $wp_option_name='fantasy_cycling_db_version';
 	public $table_name='';
 
@@ -19,7 +19,7 @@ class FantasyCyclingDB {
 	public function __construct() {
 		global $wpdb;
 
-		$this->table_name=$wpdb->prefix.'fc_teams';
+		$this->table_name=$wpdb->prefix.'$FantasyCyclingDB';
 		add_action('plugins_loaded',array($this,'update_db_check'));
 	}
 
@@ -39,6 +39,7 @@ class FantasyCyclingDB {
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `wp_user_id` int(11) NOT NULL,
 		  `data` text NOT NULL,
+		  `team` varchar(250) NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
@@ -62,6 +63,7 @@ class FantasyCyclingDB {
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `wp_user_id` int(11) NOT NULL,
 		  `data` text NOT NULL,
+		  `team` varchar(250) NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 

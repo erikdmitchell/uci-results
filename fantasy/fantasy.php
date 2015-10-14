@@ -18,10 +18,12 @@ class FantasyCycling {
 			$this->add_pages();
 			update_option($this->wp_option_version,$this->version);
 		endif;
+
+		add_action('wp_enqueue_scripts',array($this,'scripts_styles'));
 	}
 
 	public function scripts_styles() {
-
+		wp_enqueue_style('fantasy-cycling-style',plugins_url('/css/style.css',__FILE__));
 	}
 
 	/**

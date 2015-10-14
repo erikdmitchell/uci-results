@@ -102,7 +102,8 @@ class RiderStats {
 			'season' => '2015/2016',
 			'pagination' => true,
 			'paged' => 1,
-			'per_page' => 15
+			'per_page' => 15,
+			'limit' => false
 		);
 		$args=array_merge($default_args,$user_args);
 
@@ -117,6 +118,8 @@ class RiderStats {
 			$end=$per_page;
 			$limit="LIMIT $start,$end";
 			$rank=$start+1;
+		elseif ($limit) :
+			$limit="LIMIT $limit";
 		endif;
 
 		$sql="
