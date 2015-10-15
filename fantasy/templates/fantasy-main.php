@@ -12,12 +12,6 @@
 		<?php echo fc_get_create_team_page(); ?>
 	<?php else: ?>
 		<?php fc_user_teams(get_current_user_id()); ?>
-
-<p>
-	List teams
-		Roster link
-	Show top 10 teams
-	Show where you are (x out of x)
-</p>
 	<?php endif; ?>
+	<?php fc_team_standings(); ?>
 </div>

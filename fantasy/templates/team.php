@@ -15,12 +15,14 @@
 		$team_name=$_GET['team'];
 	endif;
 	?>
-	<?php $team=fc_get_team($team_name); ?>
-
-	<h3><?php echo $team_name; ?></h3>
-	<ul class="roster">
-		<?php foreach ($team->data as $rider) : ?>
-			<li class="rider"><a href=""><?php echo $rider; ?></a></li>
-		<?php endforeach; ?>
-	</ul>
+	<?php if ($team=fc_get_team($team_name)) : ?>
+		<h3><?php echo $team_name; ?></h3>
+		<ul class="roster">
+			<?php foreach ($team->data as $rider) : ?>
+				<li class="rider"><a href=""><?php echo $rider; ?></a></li>
+			<?php endforeach; ?>
+		</ul>
+	<?php else : ?>
+		<?php fc_user_teams(get_current_user_id()); ?>
+	<?php endif; ?>
 </div>

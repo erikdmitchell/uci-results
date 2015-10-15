@@ -5,7 +5,8 @@
 	width: 80%;
 }
 
-.fantasy-cycling-team .roster {
+.fantasy-cycling-team .roster,
+.fantasy-cycling-user-teams {
 	list-style-type: none;
 	margin: 0;
 }

@@ -53,9 +53,22 @@ function fc_get_user_teams($user_id=0) {
 		return $html;
 	endif;
 
+	$html.='<ul class="fantasy-cycling-user-teams">';
+		foreach ($teams as $team) :
+			$html.='<li id="team-'.$team->id.'"><a href="/fantasy/team?team='.urlencode($team->team).'">'.$team->team.'</a> (0 out of 0)</li>';
+		endforeach;
+	$html.='</ul>';
+
 	return $html;
 }
 
+/**
+ * fc_user_teams function.
+ *
+ * @access public
+ * @param int $user_id (default: 0)
+ * @return void
+ */
 function fc_user_teams($user_id=0) {
 	echo fc_get_user_teams($user_id);
 }
@@ -185,7 +198,6 @@ function fc_get_team($team=false) {
 
 	if (!$team)
 		return false;
-	// find teams by user id
 
 	$team=$wpdb->get_row("SELECT * FROM wp_fc_teams WHERE team='{$team}'");
 	$team->data=unserialize($team->data);
@@ -196,6 +208,14 @@ function fc_get_team($team=false) {
 	endforeach;
 
 	return $team;
+}
+
+function fc_get_team_standings() {
+
+}
+
+function fc_team_standings() {
+	echo fc_get_team_standings();
 }
 
 /**
