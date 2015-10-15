@@ -20,7 +20,7 @@
 	<h3><?php echo $team_name; ?></h3>
 	<ul class="roster">
 		<?php foreach ($team->data as $rider) : ?>
-			<li class="rider"><?php echo $rider; ?></li>
+			<li class="rider"><a href=""><?php echo $rider; ?></a></li>
 		<?php endforeach; ?>
 	</ul>
 </div>

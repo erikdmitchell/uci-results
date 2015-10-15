@@ -14,7 +14,7 @@ endif;
 ?>
 
 <div class="fantasy-cycling-create-team">
-	<h3>Create Team</h3>
+	<h3>Create Team for Valkenburg World Cup</h3>
 	<form name="new-team" method="post" action="">
 		<div class="row">
 			<div class="col-md-2">
@@ -26,50 +26,50 @@ endif;
 		</div>
 		<div class="row">
 			<div class="col-md-2">
-				<label for="team-name">Rider 1:</label>
+				<label for="team-name">Top 10 Rider:</label>
 			</div>
 			<div class="col-md-6">
-				<?php fc_rider_list_dropdown_race(array('name' => 'riders[]')); ?>
+				<?php echo fc_rider_list_dropdown('riders[]'); ?>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-2">
-				<label for="team-name">Rider 2:</label>
+				<label for="team-name">Top 10 Rider:</label>
 			</div>
 			<div class="col-md-6">
-				<?php fc_rider_list_dropdown_race(array('name' => 'riders[]')); ?>
+				<?php echo fc_rider_list_dropdown('riders[]'); ?>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-2">
-				<label for="team-name">Rider 3:</label>
+				<label for="team-name">Top 20 Rider:</label>
 			</div>
 			<div class="col-md-6">
-				<?php fc_rider_list_dropdown_race(array('name' => 'riders[]')); ?>
+				<?php echo fc_rider_list_dropdown('riders[]',10,10); ?>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-2">
-				<label for="team-name">Rider 4:</label>
+				<label for="team-name">Top 20 Rider:</label>
 			</div>
 			<div class="col-md-6">
-				<?php fc_rider_list_dropdown_race(array('name' => 'riders[]')); ?>
+				<?php echo fc_rider_list_dropdown('riders[]',10,10); ?>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-2">
-				<label for="team-name">Rider 5:</label>
+				<label for="team-name">Top 30 Rider:</label>
 			</div>
 			<div class="col-md-6">
-				<?php fc_rider_list_dropdown_race(array('name' => 'riders[]')); ?>
+				<?php echo fc_rider_list_dropdown('riders[]',20,10); ?>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-2">
-				<label for="team-name">Rider 6:</label>
+				<label for="team-name">Rider (Not Top 10):</label>
 			</div>
 			<div class="col-md-6">
-				<?php fc_rider_list_dropdown_race(array('name' => 'riders[]')); ?>
+				<?php echo fc_rider_list_dropdown('riders[]',10,500); ?>
 			</div>
 		</div>
 

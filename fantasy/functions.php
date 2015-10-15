@@ -97,6 +97,46 @@ function fc_rider_list_dropdown($name=false,$min_rank=0,$max_rank=10,$select_tit
 	endif;
 }
 
+function fc_rider_list_dropdown_race($args=array()) {
+	global $wpdb,$RiderStats;
+
+	$default_args=array(
+		'id' => 1,
+		'name' => false,
+		'min_rank' => 0,
+		'max_rank' => 10,
+		'select_title' => 'Select a Rider',
+		'echo' => true
+	);
+	$args=array_merge($default_args,$args);
+	$html=null;
+
+	extract($args);
+
+	$riders=$wpdb->get_col("SELECT start_list FROM wp_fc_races WHERE id=$id");
+	$riders=unserialize($riders[0]);
+
+	// Sort the array by name //
+	sort($riders);
+
+	if (!$name)
+		$name=generateRandomString();
+
+	$html.='<select name="'.$name.'" id="'.$name.'">';
+		$html.='<option value="0">'.$select_title.'</option>';
+		foreach ($riders as $rider) :
+			$country=$wpdb->get_var("SELECT nat FROM wp_uci_rider_data WHERE name='$rider' GROUP BY nat");
+			$html.='<option value="'.$rider.'">'.$rider.' ('.$country.')</option>';
+		endforeach;
+	$html.='</select>';
+
+	if ($echo) :
+		echo $html;
+	else :
+		return $html;
+	endif;
+}
+
 /**
  * fc_get_create_team_page function.
  *
@@ -133,14 +173,27 @@ function fc_process_create_team($form) {
 	exit;
 }
 
+/**
+ * fc_get_team function.
+ *
+ * @access public
+ * @param bool $team (default: false)
+ * @return void
+ */
 function fc_get_team($team=false) {
 	global $wpdb;
 
 	if (!$team)
 		return false;
+	// find teams by user id
 
 	$team=$wpdb->get_row("SELECT * FROM wp_fc_teams WHERE team='{$team}'");
 	$team->data=unserialize($team->data);
+
+	foreach ($team->data as $key => $rider) :
+		$country=$wpdb->get_var("SELECT nat FROM wp_uci_rider_data WHERE name='$rider' GROUP BY nat");
+		$team->data[$key]=$rider.' ('.$country.')';
+	endforeach;
 
 	return $team;
 }

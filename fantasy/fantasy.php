@@ -11,6 +11,7 @@ class FantasyCycling {
 
 	public function __construct() {
 		include_once(plugin_dir_path(__FILE__).'databases.php');
+		include_once(plugin_dir_path(__FILE__).'admin.php');
 		include_once(plugin_dir_path(__FILE__).'functions.php');
 		include_once(plugin_dir_path(__FILE__).'shortcodes.php');
 

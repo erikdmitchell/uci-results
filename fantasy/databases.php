@@ -43,8 +43,21 @@ class FantasyCyclingDB {
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
+		$table_name=$wpdb->prefix.'fc_races';
+		$fc_races_table="CREATE TABLE $table_name (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `name` varchar(250) NOT NULL,
+		  `season` varchar(15) NOT NULL,
+		  `code` tinytext NOT NULL,
+		  `start_list` text NOT NULL,
+		  PRIMARY KEY (`id`)
+		) $charset_collate;";
+
 		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
-		dbDelta($fc_teams_table);
+		dbDelta(array(
+			$fc_teams_table,
+			$fc_races_table
+		));
 
 		add_option($this->wp_option_name,$this->db_version);
 	}
@@ -67,8 +80,21 @@ class FantasyCyclingDB {
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
+		$table_name=$wpdb->prefix.'fc_races';
+		$fc_races_table="CREATE TABLE $table_name (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `name` varchar(250) NOT NULL,
+		  `season` varchar(15) NOT NULL,
+		  `code` tinytext NOT NULL,
+		  `start_list` text NOT NULL,
+		  PRIMARY KEY (`id`)
+		) $charset_collate;";
+
 		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
-		dbDelta($fc_teams_table);
+		dbDelta(array(
+			$fc_teams_table,
+			$fc_races_table
+		));
 
 		update_option($this->wp_option_name,$this->db_version);
 	}

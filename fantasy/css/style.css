@@ -4,3 +4,8 @@
 .fantasy-cycling-create-team .longtext {
 	width: 80%;
 }
+
+.fantasy-cycling-team .roster {
+	list-style-type: none;
+	margin: 0;
+}
