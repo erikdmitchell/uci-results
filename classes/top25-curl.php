@@ -29,7 +29,10 @@ class Top25_cURL {
 	}
 
 	public function admin_page() {
+		global $FantasyCyclingAdmin;
+
 		add_menu_page('UCI Cross','UCI Cross','administrator','uci-cross',array($this,'display_admin_page'));
+		add_submenu_page('uci-cross','Fantasy','Fantasy','manage_options','fantasy-cycling',array(new FantasyCyclingAdmin(),'admin_page'));
 		add_submenu_page('uci-cross','UCI cURL','UCI cURL','administrator','uci-curl',array($this,'display_curl_page'));
 		add_submenu_page('uci-cross','UCI View DB','UCI View DB','administrator','uci-view-db',array(new ViewDB(),'display_view_db_page'));
 	}
@@ -808,7 +811,7 @@ class Top25_cURL {
 	public function get_years_in_db() {
 		global $wpdb;
 
-		$years=$wpdb->get_col("SELECT season FROM $this->table GROUP BY season");
+		$years=$wpdb->get_col("SELECT season FROM $this->table WHERE season!='false' GROUP BY season");
 
 		return $years;
 	}

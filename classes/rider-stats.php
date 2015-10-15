@@ -103,7 +103,8 @@ class RiderStats {
 			'pagination' => true,
 			'paged' => 1,
 			'per_page' => 15,
-			'limit' => false
+			'limit' => false,
+			'order_by' => 'total DESC'
 		);
 		$args=array_merge($default_args,$user_args);
 
@@ -201,7 +202,7 @@ class RiderStats {
 
 			) t
 			GROUP BY name
-			ORDER BY total DESC
+			ORDER BY $order_by
 			$limit
 		";
 
