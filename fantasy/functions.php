@@ -37,6 +37,33 @@ function fc_fantasy_page_redirect() {
 	exit;
 }
 
+/**
+ * fc_template_redirect function.
+ *
+ * redirects specific pages to our properly templated pages
+ *
+ * @access public
+ * @param mixed $original_template
+ * @return void
+ */
+function fc_template_redirect($original_template) {
+	global $post;
+
+	if ($post->post_name=='fantasy') :
+		return plugin_dir_path(__FILE__).'/templates/fantasy-main.php';
+	else :
+    return $original_template;
+  endif;
+}
+add_filter('template_include','fc_template_redirect');
+
+/**
+ * fc_get_user_teams function.
+ *
+ * @access public
+ * @param int $user_id (default: 0)
+ * @return void
+ */
 function fc_get_user_teams($user_id=0) {
 	global $wpdb;
 
@@ -210,12 +237,36 @@ function fc_get_team($team=false) {
 	return $team;
 }
 
-function fc_get_team_standings() {
+function fc_get_team_standings($limit=10) {
+	global $wpdb;
 
+	$html=null;
+	$teams=$wpdb->get_results("SELECT team,data FROM wp_fc_teams");
+
+	$html.='<div class="fantasy-cycling-team-standings">';
+		$html.='<h3>Team Standings</h3>';
+		$html.='<div class="team-standings">';
+			$html.='<div class="row header">';
+				$html.='<div class="rank col-md-3">Rank</div>';
+				$html.='<div class="name col-md-6">Team</div>';
+				$html.='<div class="points col-md-3">Points</div>';
+			$html.='</div>';
+			foreach ($teams as $team) :
+				$html.='<div class="row">';
+					$html.='<div class="rank col-md-3">1</div>';
+					$html.='<div class="name col-md-6"><a href="">'.$team->team.'</a></div>';
+					$html.='<div class="points col-md-3">0</div>';
+				$html.='</div>';
+			endforeach;
+		$html.='</div>';
+		$html.='<a href="" class="more">View All &raquo;</a>';
+	$html.='</div>';
+
+	return $html;
 }
 
-function fc_team_standings() {
-	echo fc_get_team_standings();
+function fc_team_standings($limit=10) {
+	echo fc_get_team_standings($limit);
 }
 
 /**

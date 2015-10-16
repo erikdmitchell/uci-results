@@ -5,7 +5,6 @@
  * @since Version 0.0.1
  */
 ?>
-<?php get_header(); ?>
 
 <?php
 if (isset($_POST['create_team']) && $_POST['create_team']) :
