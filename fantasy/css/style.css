@@ -29,3 +29,8 @@
 .login-register li:last-child {
 	border-right-width: 0;
 }
+
+.fc-posts {
+	list-style-type: none;
+	margin: 0;
+}

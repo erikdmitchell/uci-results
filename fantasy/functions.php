@@ -49,7 +49,7 @@ function fc_fantasy_page_redirect() {
 function fc_template_redirect($original_template) {
 	global $post;
 
-	if ($post->post_name=='fantasy') :
+	if (isset($post->post_name) && $post->post_name=='fantasy') :
 		return plugin_dir_path(__FILE__).'/templates/fantasy-main.php';
 	else :
     return $original_template;
@@ -265,8 +265,77 @@ function fc_get_team_standings($limit=10) {
 	return $html;
 }
 
+/**
+ * fc_team_standings function.
+ *
+ * @access public
+ * @param int $limit (default: 10)
+ * @return void
+ */
 function fc_team_standings($limit=10) {
 	echo fc_get_team_standings($limit);
+}
+
+function fc_get_fantasy_cycling_posts($limit=5) {
+	$html=null;
+	$args=array(
+		'posts_per_page' => $limit+1,
+		'post_type' => 'fantasy-cycling',
+		'tax_query' => array(
+			array(
+				'taxonomy' => 'posttype',
+				'field' => 'slug',
+				'terms' => 'sticky',
+				'operator' => 'NOT IN',
+			),
+		),
+	);
+	$posts=get_posts($args);
+	$sticky_args=array(
+		'posts_per_page' => 1,
+		'post_type' => 'fantasy-cycling',
+		'tax_query' => array(
+			array(
+				'taxonomy' => 'posttype',
+				'field' => 'slug',
+				'terms' => 'sticky'
+			),
+		),
+	);
+	$sticky_posts=get_posts($sticky_args);
+
+	if (!count($posts))
+		return false;
+
+	// merge and slice posts //
+	$posts=array_merge($sticky_posts,$posts);
+	$posts=array_slice($posts,0,$limit);
+
+	$html.='<ul class="fc-posts">';
+		foreach ($posts as $post) :
+			$terms=wp_get_post_terms($post->ID,'posttype',array('fields' => 'names'));
+			$class='';
+			$sticky=false;
+
+			if (in_array('Sticky',$terms)) :
+				$class.=' sticky';
+				$sticky=true;
+			endif;
+
+			$html.='<li id="post-'.$post->ID.'" class="'.$class.'">';
+				$html.='<a href="'.get_permalink($post->ID).'">'.get_the_title($post->ID).'</a>';
+				if ($sticky) :
+					$html.=': '.$post->post_content;
+				endif;
+			$html.='</li>';
+		endforeach;
+	$html.='</ul>';
+
+	return $html;
+}
+
+function fc_fantasy_cycling_posts($limit=5) {
+	echo fc_get_fantasy_cycling_posts($limit);
 }
 
 /**

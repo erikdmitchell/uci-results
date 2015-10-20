@@ -35,6 +35,7 @@
 
 						<div class="news-notes col-md-4">
 							<h3>News &amp; Notes</h3>
+							<?php fc_fantasy_cycling_posts(); ?>
 						</div>
 
 						<div class="login-register-wrap col-md-4">

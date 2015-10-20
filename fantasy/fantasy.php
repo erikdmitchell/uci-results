@@ -20,6 +20,8 @@ class FantasyCycling {
 			update_option($this->wp_option_version,$this->version);
 		endif;
 
+		add_action('init',array($this,'add_cpt'));
+		add_action('init',array($this,'add_taxonomies'));
 		add_action('wp_enqueue_scripts',array($this,'scripts_styles'));
 	}
 
@@ -86,28 +88,44 @@ class FantasyCycling {
 		*/
 	}
 
+	/**
+	 * add_categories function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function add_cpt() {
+		register_post_type('fantasy-cycling',
+			array(
+				'labels' => array(
+					'name' => __('Fantasy Cycling'),
+					'singular_name' => __('Fantasy Cycling')
+				),
+				'public' => true,
+				'has_archive' => true,
+			)
+		);
+	}
+
+	/**
+	 * add_taxonomies function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function add_taxonomies() {
+		register_taxonomy(
+			'posttype',
+			'fantasy-cycling',
+			array(
+				'label' => __( 'Post Type' ),
+				//'rewrite' => array( 'slug' => 'person' ),
+				'hierarchical' => true,
+			)
+		);
+	}
+
 }
 
 new FantasyCycling();
-
-/*
-<!--
-Workflow
-User Register/Login
-Team Page
-Lists Roster
-Add/Edit Roster
-Rider Name, UCI Points, WCP, SOS and overall ranking
-Roster Limits
-6 riders
-Must chose 2 from Top 10 Last Season
-1 From top 20
-1 From top 30
-2 From rest
-Ranking Page
-Utilized by UCI Points (no limit)
-Single Team Page
-Rider Click Through to rider page
--->
-*/
 ?>
