@@ -73,8 +73,6 @@ function fc_get_user_teams($user_id=0) {
 	$html=null;
 	$teams=$wpdb->get_results("SELECT team,id FROM wp_fc_teams WHERE wp_user_id=$user_id");
 
-	$html.='<h3>Teams</h3>';
-
 	if (!count($teams)) :
 		$html.='No teams found. Click <a href="?action=create-team">here</a> to create one.';
 		return $html;
@@ -244,7 +242,6 @@ function fc_get_team_standings($limit=10) {
 	$teams=$wpdb->get_results("SELECT team,data FROM wp_fc_teams");
 
 	$html.='<div class="fantasy-cycling-team-standings">';
-		$html.='<h3>Team Standings</h3>';
 		$html.='<div class="team-standings">';
 			$html.='<div class="row header">';
 				$html.='<div class="rank col-md-3">Rank</div>';
@@ -334,8 +331,34 @@ function fc_get_fantasy_cycling_posts($limit=5) {
 	return $html;
 }
 
+/**
+ * fc_fantasy_cycling_posts function.
+ *
+ * @access public
+ * @param int $limit (default: 5)
+ * @return void
+ */
 function fc_fantasy_cycling_posts($limit=5) {
 	echo fc_get_fantasy_cycling_posts($limit);
+}
+
+function fc_get_upcoming_races($limit=3) {
+	global $wpdb;
+
+	$html=null;
+	$races=$wpdb->get_results("SELECT * FROM wp_fc_races WHERE race_start > CURDATE() ORDER BY race_start ASC LIMIT $limit");
+
+	$html.='<ul class="fc-upcoming-races">';
+		foreach ($races as $race) :
+			$html.='<li id="race-'.$race->id.'">'.date('M. j, Y',strtotime($race->race_start)).': '.$race->name.' ('.$race->series.')</li>';
+		endforeach;
+	$html.='</ul>';
+
+	return $html;
+}
+
+function fc_upcoming_races($limit=3) {
+	echo fc_get_upcoming_races($limit);
 }
 
 /**

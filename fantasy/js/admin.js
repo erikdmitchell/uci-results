@@ -5,6 +5,11 @@ jQuery(document).ready(function($) {
 		getStartList($(this).val());
 	});
 
+	$('.add-race .date').datepicker({
+		changeMonth: true,
+		changeYear: true
+	});
+
 });
 
 function getStartList(id) {

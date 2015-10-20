@@ -77,6 +77,8 @@ class FantasyCyclingDB {
 		  `wp_user_id` int(11) NOT NULL,
 		  `data` text NOT NULL,
 		  `team` varchar(250) NOT NULL,
+			`series` VARCHAR(250) NOT NULL,
+			`race_start` DATE NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
@@ -87,6 +89,8 @@ class FantasyCyclingDB {
 		  `season` varchar(15) NOT NULL,
 		  `code` tinytext NOT NULL,
 		  `start_list` text NOT NULL,
+			`series` VARCHAR(250) NOT NULL,
+			`race_start` DATE NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 

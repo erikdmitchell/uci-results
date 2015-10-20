@@ -10,7 +10,9 @@ class FantasyCyclingAdmin {
 		if ($hook!='uci-cross_page_fantasy-cycling')
 			return false;
 
-		wp_enqueue_script('fantasy-cycling-admin',plugins_url('/js/admin.js',__FILE__),array('jquery'));
+		wp_enqueue_script('jquery');
+		wp_enqueue_script('jquery-ui-datepicker');
+		wp_enqueue_script('fantasy-cycling-admin',plugins_url('/js/admin.js',__FILE__),array('jquery','jquery-ui-datepicker'));
 
 		wp_enqueue_style('fantasy-cycling-admin',plugins_url('/css/admin.css',__FILE__));
 	}
@@ -73,6 +75,29 @@ class FantasyCyclingAdmin {
 							$html.='<option value="cn">CN</option>';
 							$html.='<option value="c1">C1</option>';
 							$html.='<option value="c2">C2</option>';
+						$html.='</select>';
+					$html.='</div>';
+				$html.='</div>';
+
+				$html.='<div class="row">';
+					$html.='<div class="col-md-1">';
+						$html.='<label for="date">Date</label>';
+					$html.='</div>';
+					$html.='<div class="col-md-6">';
+						$html.='<input type="text" name="date" id="date" class="date" value="" />';
+					$html.='</div>';
+				$html.='</div>';
+
+				$html.='<div class="row">';
+					$html.='<div class="col-md-1">';
+						$html.='<label for="series">Series</label>';
+					$html.='</div>';
+					$html.='<div class="col-md-6">';
+						$html.='<select name="series" id="series">';
+							$html.='<option value="single">Single</option>';
+							$html.='<option value="Superprestige">Superprestige</option>';
+							$html.='<option value="bPost Bank">bPost Bank</option>';
+							$html.='<option value="World Cup">World Cup</option>';
 						$html.='</select>';
 					$html.='</div>';
 				$html.='</div>';
@@ -181,7 +206,9 @@ class FantasyCyclingAdmin {
 			'name' => $form['name'],
 			'season' => $form['season'],
 			'type' => $form['type'],
-			'code' => $form['code']
+			'code' => $form['code'],
+			'series' => $form['series'],
+			'race_start' => date('Y-m-d H:i:s', strtotime($form['date'])),
 		);
 
 		$wpdb->insert('wp_fc_races',$data);
