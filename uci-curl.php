@@ -33,23 +33,62 @@ $uci_curl=new Top25_cURL($config); // this may be initated in the top25 file at 
 add_action('plugins_loaded',array('Page_Templates','get_instance')); // enables our templates to be added
 
 
+// need to be auto done or something //
+$core_page_slug='uci-cross-rankings';
+$rider_page_slug='rider-rankings';
+$race_page_slug='race-rankings';
+
+
 // url for click throughs
+
+/**
+ * single_rider_link function.
+ *
+ * @access public
+ * @param bool $rider (default: false)
+ * @param bool $season (default: false)
+ * @return void
+ */
 function single_rider_link($rider=false,$season=false) {
+	global $core_page_slug,$rider_page_slug;
+
 	if (!$rider || !$season)
 		return false;
 
-	return 'rider/?rider='.urlencode($rider).'&season='.urlencode($season);
+	return "/{$core_page_slug}/{$rider_page_slug}/rider/?rider=".urlencode($rider)."&season=".urlencode($season);
 }
+
+/**
+ * single_country_link function.
+ *
+ * @access public
+ * @param bool $country (default: false)
+ * @param bool $season (default: false)
+ * @return void
+ */
 function single_country_link($country=false,$season=false) {
+	global $core_page_slug,$rider_page_slug;
+
 	if (!$country || !$season)
 		return '#';
 
-	return 'country/?country='.$country.'&season='.urlencode($season);
+	return "/{$core_page_slug}/{$rider_page_slug}/country/?country={$country}&season=".urlencode($season);
 }
+
+/**
+ * single_race_link function.
+ *
+ * @access public
+ * @param bool $code (default: false)
+ * @return void
+ */
 function single_race_link($code=false) {
+	global $core_page_slug,$race_page_slug;
+
 	if (!$code)
 		return false;
-	return 'race/?race='.urlencode($code);
+
+	return "/{$core_page_slug}/{$race_page_slug}/race/?race=".urlencode($code);
 }
 
 
@@ -227,14 +266,16 @@ function uci_curl_add_query_vars($vars) {
 }
 add_filter('query_vars','uci_curl_add_query_vars');
 
+
 /**
- * fc_get_country_flag function.
+ * get_country_flag function.
  *
  * @access public
  * @param bool $country (default: false)
+ * @param bool $addon (default: false)
  * @return void
  */
-function fc_get_country_flag($country=false) {
+function get_country_flag($country=false,$addon=false) {
 	if (!$country)
 		return false;
 
@@ -512,7 +553,16 @@ function fc_get_country_flag($country=false) {
 		default:
 			$code=strtolower($country);
 	endswitch;
-	$html.='<span class="flag-icon flag-icon-'.$code.'"></span>';
+
+	switch ($addon) :
+		case 'full':
+			$html.='<span class="flag-icon flag-icon-'.$code.'"></span> '.$countries_arr[strtoupper($code)][0];
+			break;
+		default :
+			$html.='<span class="flag-icon flag-icon-'.$code.'"></span>';
+	endswitch;
+
+
 
 	return $html;
 }

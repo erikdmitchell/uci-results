@@ -22,7 +22,11 @@ $race=$RaceStats->get_race($race_code);
 				Race not found.
 			<?php else : ?>
 				<div class="uci-curl-rider-rankings">
-					<h3><?php echo $race->details->race; ?> (<?php echo $race->details->date; ?>) (<?php echo $race->details->class; ?>)</h3>
+					<h3><?php echo $race->details->race; ?> <?php echo get_country_flag($race->details->nat); ?></h3>
+					<div class="race-details">
+						<div class="race-date"><?php echo $race->details->date; ?></div>
+						<div class="race-class"><?php echo $race->details->class; ?></div>
+					</div>
 
 					<div id="season-rider-rankings" class="season-rider-rankings">
 						<div class="header row">

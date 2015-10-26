@@ -40,7 +40,7 @@ $races=$RaceStats->get_races(array(
 						<div class="row">
 							<div class="name col-md-4"><a href="<?php echo single_race_link($race->code); ?>"><?php echo $race->name; ?></a></div>
 							<div class="date col-md-2"><?php echo $race->date; ?></div>
-							<div class="nat col-md-1"><?php echo $race->nat; ?></div>
+							<div class="nat col-md-1"><?php echo get_country_flag($race->nat); ?></div>
 							<div class="class col-md-1"><?php echo $race->class; ?></div>
 							<div class="fq col-md-1"><?php echo $race->fq; ?></div>
 						</div>

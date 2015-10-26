@@ -11,6 +11,12 @@ Coming Soon
 Changelog
 ===========
 
+### 1.0.9.1
+
+	Added country flags.
+	
+	Tweaked url link functions.
+
 ### 1.0.9
 
 	First "public release"
