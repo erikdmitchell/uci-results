@@ -377,4 +377,231 @@ function generateRandomString($length = 10) {
   }
   return $randomString;
 }
+
+/**
+ * fc_login_template_redirect function.
+ *
+ * redirects the 'login' page to our custom template
+ *
+ * @access public
+ * @param mixed $original_template
+ * @return void
+ */
+function fc_login_template_redirect($original_template) {
+	global $post;
+
+	if (isset($post->post_name) && $post->post_name=='login') :
+		return plugin_dir_path(__FILE__).'/templates/login-page.php';
+	else :
+    return $original_template;
+  endif;
+}
+add_filter('template_include','fc_login_template_redirect');
+
+/**
+ * fc_redirect_login_page function.
+ *
+ * redirects the default wp login page to our login page (template done in fc_login_template_redirect())
+ *
+ * @access public
+ * @return void
+ */
+function fc_redirect_login_page() {
+	$login_page  = home_url( '/login/' );
+	$page_viewed = basename($_SERVER['REQUEST_URI']);
+
+	if( $page_viewed == "wp-login.php" && $_SERVER['REQUEST_METHOD'] == 'GET') {
+		wp_redirect($login_page);
+		exit;
+	}
+}
+add_action('init','fc_redirect_login_page');
+
+/**
+ * fc_login_failed function.
+ *
+ * redirects failed login to our page
+ *
+ * @access public
+ * @return void
+ */
+function fc_login_failed() {
+    $login_page  = home_url( '/login/' );
+    wp_redirect( $login_page . '?login=failed' );
+    exit;
+}
+add_action( 'wp_login_failed', 'fc_login_failed' );
+
+/**
+ * fc_verify_username_password function.
+ *
+ * redirects login errors to our page
+ *
+ * @access public
+ * @param mixed $user
+ * @param mixed $username
+ * @param mixed $password
+ * @return void
+ */
+function fc_verify_username_password( $user, $username, $password ) {
+    $login_page  = home_url( '/login/' );
+    if( $username == "" || $password == "" ) {
+        wp_redirect( $login_page . "?login=empty" );
+        exit;
+    }
+}
+add_filter( 'authenticate', 'fc_verify_username_password', 1, 3);
+
+/**
+ * logout_page function.
+ *
+ * redirects logout to our page
+ *
+ * @access public
+ * @return void
+ */
+function logout_page() {
+    $login_page  = home_url( '/login/' );
+    wp_redirect( $login_page . "?login=false" );
+    exit;
+}
+add_action('wp_logout','logout_page');
+
+
+// registration form fields
+function fc_registration_form_fields() {
+	fc_add_new_user();
+//print_r($_POST);
+	?>
+		<?php
+		// show any error messages after form submission
+		fc_login_show_error_messages(); ?>
+
+	<form id="fc_registration_form" class="fc_form" action="" method="POST">
+		<fieldset>
+			<p>
+				<label for="fc_user_Login"><?php _e('Username'); ?></label>
+				<input name="fc_user_login" id="fc_user_login" class="required" type="text"/>
+			</p>
+			<p>
+				<label for="fc_user_email"><?php _e('Email'); ?></label>
+				<input name="fc_user_email" id="fc_user_email" class="required" type="email"/>
+			</p>
+			<p>
+				<label for="fc_user_first"><?php _e('First Name'); ?></label>
+				<input name="fc_user_first" id="fc_user_first" type="text"/>
+			</p>
+			<p>
+				<label for="fc_user_last"><?php _e('Last Name'); ?></label>
+				<input name="fc_user_last" id="fc_user_last" type="text"/>
+			</p>
+			<p>
+				<label for="password"><?php _e('Password'); ?></label>
+				<input name="fc_user_pass" id="password" class="required" type="password"/>
+			</p>
+			<p>
+				<label for="password_again"><?php _e('Password Again'); ?></label>
+				<input name="fc_user_pass_confirm" id="password_again" class="required" type="password"/>
+			</p>
+			<p>
+				<input type="hidden" name="fc_register_nonce" value="<?php echo wp_create_nonce('fc-register-nonce'); ?>"/>
+				<input type="submit" value="<?php _e('Register'); ?>"/>
+			</p>
+		</fieldset>
+	</form>
+	<?php
+}
+
+function fc_add_new_user() {
+  if (isset($_POST["fc_user_login"]) && wp_verify_nonce($_POST['fc_register_nonce'],'fc-register-nonce')) :
+		$user_login=$_POST["fc_user_login"];
+		$user_email=$_POST["fc_user_email"];
+		$user_first=$_POST["fc_user_first"];
+		$user_last=$_POST["fc_user_last"];
+		$user_pass=$_POST["fc_user_pass"];
+		$pass_confirm=$_POST["fc_user_pass_confirm"];
+
+		// this is required for username checks - not as of 3.1
+		//require_once(ABSPATH . WPINC . '/registration.php');
+
+		if(username_exists($user_login)) {
+			// Username already registered
+			fc_login_errors()->add('username_unavailable', __('Username already taken'));
+		}
+		if(!validate_username($user_login)) {
+			// invalid username
+			fc_login_errors()->add('username_invalid', __('Invalid username'));
+		}
+		if($user_login == '') {
+			// empty username
+			fc_login_errors()->add('username_empty', __('Please enter a username'));
+		}
+		if(!is_email($user_email)) {
+			//invalid email
+			fc_login_errors()->add('email_invalid', __('Invalid email'));
+		}
+		if(email_exists($user_email)) {
+			//Email address already registered
+			fc_login_errors()->add('email_used', __('Email already registered'));
+		}
+		if($user_pass == '') {
+			// passwords do not match
+			fc_login_errors()->add('password_empty', __('Please enter a password'));
+		}
+		if($user_pass != $pass_confirm) {
+			// passwords do not match
+			fc_login_errors()->add('password_mismatch', __('Passwords do not match'));
+		}
+
+		$errors = fc_login_errors()->get_error_messages();
+
+		// only create the user in if there are no errors
+		if(empty($errors)) {
+
+			$new_user_id = wp_insert_user(array(
+					'user_login'		=> $user_login,
+					'user_pass'	 		=> $user_pass,
+					'user_email'		=> $user_email,
+					'first_name'		=> $user_first,
+					'last_name'			=> $user_last,
+					'user_registered'	=> date('Y-m-d H:i:s'),
+					'role'				=> 'subscriber'
+				)
+			);
+			if($new_user_id) {
+				// send an email to the admin alerting them of the registration
+				wp_new_user_notification($new_user_id);
+
+				// log the new user in
+				wp_setcookie($user_login, $user_pass, true);
+				wp_set_current_user($new_user_id, $user_login);
+				do_action('wp_login', $user_login);
+
+				// send the newly created user to the home page after logging them in
+				wp_redirect(home_url()); exit;
+			}
+
+		}
+
+	endif;
+}
+
+// used for tracking error messages
+function fc_login_errors(){
+	static $wp_error; // Will hold global variable safely
+	return isset($wp_error) ? $wp_error : ($wp_error = new WP_Error(null, null, null));
+}
+
+// displays error messages from form submissions
+function fc_login_show_error_messages() {
+	if($codes = fc_login_errors()->get_error_codes()) {
+		echo '<div class="fc_errors">';
+		    // Loop error codes and display errors
+		   foreach($codes as $code){
+		        $message = fc_login_errors()->get_error_message($code);
+		        echo '<span class="error"><strong>' . __('Error') . '</strong>: ' . $message . '</span><br/>';
+		    }
+		echo '</div>';
+	}
+}
 ?>
