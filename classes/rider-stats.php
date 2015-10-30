@@ -6,8 +6,6 @@
  */
 class RiderStats {
 
-	public $admin_url_vars='?page=uci-cross&tab=riders';
-
 	/**
 	 * __construct function.
 	 *
@@ -15,74 +13,6 @@ class RiderStats {
 	 * @return void
 	 */
 	public function __construct() {
-	}
-
-	/**
-	 * get_season_rider_rankings function.
-	 *
-	 * @access public
-	 * @param array $user_args (default: array())
-	 * @return void
-	 */
-	public function get_season_rider_rankings($args=array()) {
-		global $wpdb,$uci_curl;
-
-		$html=null;
-		$paged=1;
-		$per_page=15;
-
-		if (isset($_GET['paged']))
-			$paged=$_GET['paged'];
-
-		$default_args=array(
-			'pagination' => true,
-			'paged' => $paged,
-			'per_page' => $per_page
-		);
-		$args=array_merge($default_args,$args);
-
-		$riders=$this->get_riders($args);
-
-		$prev_page=$paged-1;
-		$next_page=$paged+1;
-		$max_pages=ceil($this->max_riders/$per_page);
-
-		$html.='<h3>Rider Rankings</h3>';
-
-		$html.='<div id="season-rider-rankings" class="season-rider-rankings">';
-			$html.='<div class="header row">';
-				$html.='<div class="rank col-md-1">Rank</div>';
-				$html.='<div class="rider col-md-3">Rider</div>';
-				$html.='<div class="uci col-md-1">UCI</div>';
-				$html.='<div class="wcp col-md-1">WCP</div>';
-				$html.='<div class="winning col-md-1">Win %*</div>';
-				$html.='<div class="sos col-md-1">SOS</div>';
-				$html.='<div class="total col-md-1">Total</div>';
-			$html.='</div>';
-
-			foreach ($riders as $rider) :
-				$html.='<div class="row">';
-					$html.='<div class="rank col-md-1">'.$rider->rank.'</div>';
-					$html.='<div class="rider col-md-3">'.$rider->rider.'</div>';
-					$html.='<div class="uci col-md-1">'.$rider->uci.'</div>';
-					$html.='<div class="wcp col-md-1">'.$rider->wcp.'</div>';
-					$html.='<div class="winning col-md-1">'.number_format($rider->weighted_win_perc,3).'</div>';
-					$html.='<div class="sos col-md-1">'.$rider->sos.'</div>';
-					$html.='<div class="total col-md-1">'.number_format($rider->total,3).'</div>';
-				$html.='</div>';
-			endforeach;
-
-			$html.='<div class="rider-pagination uci-pagination">';
-				if ($paged!=1)
-					$html.='<div class="prev-page"><a href="'.admin_url($this->admin_url_vars).'&paged='.$prev_page.'">Previous</a></div>';
-
-				if ($paged!=$max_pages)
-					$html.='<div class="next-page"><a href="'.admin_url($this->admin_url_vars).'&paged='.$next_page.'">Next</a></div>';
-			$html.='</div>';
-
-		$html.='</div>';
-
-		return $html;
 	}
 
 	/**

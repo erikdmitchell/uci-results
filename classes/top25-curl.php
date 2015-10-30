@@ -49,7 +49,6 @@ class Top25_cURL {
 		$tabs=array(
 			'uci-cross' => 'UCI Cross',
 			'races' => 'Races',
-			'riders' => 'Riders'
 		);
 		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'uci-cross';
 
@@ -74,9 +73,6 @@ class Top25_cURL {
 					break;
 				case 'races':
 					$html.=$this->races_admin_page();
-					break;
-				case 'riders':
-					$html.=$this->riders_admin_page();
 					break;
 				default:
 					$html.=$this->default_admin_page();
