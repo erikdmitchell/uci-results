@@ -74,6 +74,16 @@ class FantasyCycling {
 				wp_insert_post($standings);
 		endif;
 
+		if (get_page_by_title('Login')==NULL) :
+				$team=array(
+					'post_content' => '',
+					'post_title' => 'Login',
+					'post_status' => 'publish',
+					'post_type' => 'page',
+				);
+				wp_insert_post($team);
+		endif;
+
 		/*
 		if (get_page_by_title('Rider')==NULL) :
 				$rider=array(

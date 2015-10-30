@@ -460,12 +460,12 @@ add_filter( 'authenticate', 'fc_verify_username_password', 1, 3);
  * @access public
  * @return void
  */
-function logout_page() {
+function fc_logout_page() {
     $login_page  = home_url( '/login/' );
     wp_redirect( $login_page . "?login=false" );
     exit;
 }
-add_action('wp_logout','logout_page');
+add_action('wp_logout','fc_logout_page');
 
 
 // login form fields
