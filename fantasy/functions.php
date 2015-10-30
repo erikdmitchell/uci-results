@@ -468,6 +468,74 @@ function logout_page() {
 add_action('wp_logout','logout_page');
 
 
+// login form fields
+function fc_login_form_fields() {
+	fc_login_member();
+	?>
+	<?php
+	// show any error messages after form submission
+	fc_login_show_error_messages(); ?>
+
+	<form id="fc_login_form"  class="fc_form"action="" method="post">
+		<fieldset>
+			<p>
+				<label for="fc_user_Login">Username</label>
+				<input name="fc_user_login" id="fc_user_login" class="required" type="text"/>
+			</p>
+			<p>
+				<label for="fc_user_pass">Password</label>
+				<input name="fc_user_pass" id="fc_user_pass" class="required" type="password"/>
+			</p>
+			<p>
+				<input type="hidden" name="fc_login_nonce" value="<?php echo wp_create_nonce('fc-login-nonce'); ?>"/>
+				<input id="fc_login_submit" type="submit" value="Login"/>
+			</p>
+		</fieldset>
+	</form>
+	<?php
+}
+
+// logs a member in after submitting a form
+function fc_login_member() {
+
+	if(isset($_POST['fc_user_login']) && wp_verify_nonce($_POST['fc_login_nonce'], 'fc-login-nonce')) {
+
+		// this returns the user ID and other info from the user name
+		$user = get_user_by('login',$_POST['fc_user_login']);
+
+		if(!$user) {
+			// if the user name doesn't exist
+			fc_login_errors()->add('empty_username', __('Invalid username'));
+		}
+
+		if(!isset($_POST['fc_user_pass']) || $_POST['fc_user_pass'] == '') {
+			// if no password was entered
+			fc_login_errors()->add('empty_password', __('Please enter a password'));
+		}
+
+		// check the user's login with their password
+		if(!isset($user->user_pass) || !wp_check_password($_POST['fc_user_pass'], $user->user_pass, $user->ID)) {
+			// if the password is incorrect for the specified user
+			fc_login_errors()->add('empty_password', __('Incorrect password'));
+		}
+
+		// retrieve all error messages
+		$errors = fc_login_errors()->get_error_messages();
+
+		// only log the user in if there are no errors
+		if(empty($errors)) {
+
+			wp_setcookie($_POST['fc_user_login'], $_POST['fc_user_pass'], true);
+			wp_set_current_user($user->ID, $_POST['fc_user_login']);
+			do_action('wp_login', $_POST['fc_user_login']);
+
+			wp_redirect(home_url());
+			exit;
+		}
+	}
+}
+
+
 // registration form fields
 function fc_registration_form_fields() {
 	fc_add_new_user();
@@ -475,13 +543,13 @@ function fc_registration_form_fields() {
 	?>
 		<?php
 		// show any error messages after form submission
-		fc_login_show_error_messages(); ?>
+		fc_register_show_error_messages(); ?>
 
 	<form id="fc_registration_form" class="fc_form" action="" method="POST">
 		<fieldset>
 			<p>
-				<label for="fc_user_Login"><?php _e('Username'); ?></label>
-				<input name="fc_user_login" id="fc_user_login" class="required" type="text"/>
+				<label for="fc_user_login_reg"><?php _e('Username'); ?></label>
+				<input name="fc_user_login_reg" id="fc_user_login_reg" class="required" type="text"/>
 			</p>
 			<p>
 				<label for="fc_user_email"><?php _e('Email'); ?></label>
@@ -513,8 +581,8 @@ function fc_registration_form_fields() {
 }
 
 function fc_add_new_user() {
-  if (isset($_POST["fc_user_login"]) && wp_verify_nonce($_POST['fc_register_nonce'],'fc-register-nonce')) :
-		$user_login=$_POST["fc_user_login"];
+  if (isset($_POST["fc_user_login_reg"]) && wp_verify_nonce($_POST['fc_register_nonce'],'fc-register-nonce')) :
+		$user_login=$_POST["fc_user_login_reg"];
 		$user_email=$_POST["fc_user_email"];
 		$user_first=$_POST["fc_user_first"];
 		$user_last=$_POST["fc_user_last"];
@@ -526,11 +594,11 @@ function fc_add_new_user() {
 
 		if(username_exists($user_login)) {
 			// Username already registered
-			fc_login_errors()->add('username_unavailable', __('Username already taken'));
+			fc_register_errors()->add('username_unavailable', __('Username already taken'));
 		}
 		if(!validate_username($user_login)) {
 			// invalid username
-			fc_login_errors()->add('username_invalid', __('Invalid username'));
+			fc_register_errors()->add('username_invalid', __('Invalid username'));
 		}
 		if($user_login == '') {
 			// empty username
@@ -538,7 +606,7 @@ function fc_add_new_user() {
 		}
 		if(!is_email($user_email)) {
 			//invalid email
-			fc_login_errors()->add('email_invalid', __('Invalid email'));
+			fc_register_errors()->add('email_invalid', __('Invalid email'));
 		}
 		if(email_exists($user_email)) {
 			//Email address already registered
@@ -546,14 +614,14 @@ function fc_add_new_user() {
 		}
 		if($user_pass == '') {
 			// passwords do not match
-			fc_login_errors()->add('password_empty', __('Please enter a password'));
+			fc_register_errors()->add('password_empty', __('Please enter a password'));
 		}
 		if($user_pass != $pass_confirm) {
 			// passwords do not match
-			fc_login_errors()->add('password_mismatch', __('Passwords do not match'));
+			fc_register_errors()->add('password_mismatch', __('Passwords do not match'));
 		}
 
-		$errors = fc_login_errors()->get_error_messages();
+		$errors = fc_register_errors()->get_error_messages();
 
 		// only create the user in if there are no errors
 		if(empty($errors)) {
@@ -587,7 +655,13 @@ function fc_add_new_user() {
 }
 
 // used for tracking error messages
-function fc_login_errors(){
+function fc_login_errors() {
+	static $wp_error; // Will hold global variable safely
+	return isset($wp_error) ? $wp_error : ($wp_error = new WP_Error(null, null, null));
+}
+
+// used for tracking error messages
+function fc_register_errors() {
 	static $wp_error; // Will hold global variable safely
 	return isset($wp_error) ? $wp_error : ($wp_error = new WP_Error(null, null, null));
 }
@@ -599,6 +673,18 @@ function fc_login_show_error_messages() {
 		    // Loop error codes and display errors
 		   foreach($codes as $code){
 		        $message = fc_login_errors()->get_error_message($code);
+		        echo '<span class="error"><strong>' . __('Error') . '</strong>: ' . $message . '</span><br/>';
+		    }
+		echo '</div>';
+	}
+}
+
+function fc_register_show_error_messages() {
+	if($codes = fc_register_errors()->get_error_codes()) {
+		echo '<div class="fc_errors">';
+		    // Loop error codes and display errors
+		   foreach($codes as $code){
+		        $message = fc_register_errors()->get_error_message($code);
 		        echo '<span class="error"><strong>' . __('Error') . '</strong>: ' . $message . '</span><br/>';
 		    }
 		echo '</div>';

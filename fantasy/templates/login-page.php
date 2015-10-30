@@ -12,17 +12,7 @@
 	<div class="row">
 		<div class="col-md-6 login">
 			<h3>Login</h3>
-			<?php $login=(isset($_GET['login']) ) ? $_GET['login'] : 0; ?>
-			<?php
-			if ( $login === "failed" ) {
-				echo '<p class="error login-msg"><strong>Error:</strong> Invalid username and/or password.</p>';
-			} elseif ( $login === "empty" ) {
-				echo '<p class="error login-msg"><strong>Error:</strong> Username and/or Password is empty.</p>';
-			} elseif ( $login === "false" ) {
-				echo '<p class="error login-msg"><strong>Error:</strong> You are logged out.</p>';
-			}
-			?>
-			<?php wp_login_form(); ?>
+			<?php fc_login_form_fields(); ?>
 		</div><!-- .login -->
 
 		<div class="col-md-6 register">
@@ -31,10 +21,4 @@
 		</div><!-- .register -->
 	</div><!-- .row -->
 </div><!-- .container -->
-
-
-
-
-
-
 <?php get_footer(); ?>
