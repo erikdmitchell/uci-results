@@ -19,8 +19,6 @@ $win_perc=$RiderStats->get_rider_winning_perc($rider_name,$season);
 $rider_stats=$RiderStats->get_rider_total($rider_name,$season);
 ?>
 
-<?php  ?>
-
 <?php get_header(); ?>
 <div class="container">
 	<div class="row content">
@@ -31,7 +29,7 @@ $rider_stats=$RiderStats->get_rider_total($rider_name,$season);
 			<?php else : ?>
 				<div class="uci-curl-rider-rankings">
 					<h3><?php echo $rider_name; ?> <a href="<?php echo single_country_link($results[0]->country,$season); ?>"><?php echo get_country_flag($results[0]->country); ?></a></h3>
-
+ADD GRAPH
 					<div id="season-rider-stats" class="season-rider-stats">
 						<div class="row">
 							<div class="header col-md-3">Current Rank:</div>
