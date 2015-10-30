@@ -447,7 +447,7 @@ class RiderStats {
 		return $total;
 	}
 
-
+// SLOW //
 	public function get_total_points($user_args=array()) {
 		global $wpdb,$uci_curl;
 
