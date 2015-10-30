@@ -12,7 +12,26 @@ global $RiderStats,$wp_query;
 $rider_name=get_query_var('rider',0);
 $season=get_query_var('season','2015/2016');
 $results=$RiderStats->get_rider($rider_name);
+$uci=$RiderStats->get_rider_uci_points($rider_name,$season);
+$wcp=$RiderStats->get_rider_uci_points($rider_name,$season,'wcp');
+$sos=$RiderStats->get_rider_sos($rider_name,$season);
+$win_perc=$RiderStats->get_rider_winning_perc($rider_name,$season);
+$rider_stats=$RiderStats->get_rider_total($rider_name,$season);
+print_r($sos);
+echo '<br>';
+print_r($uci);
+echo '<br>';
+print_r($wcp);
+echo '<br>';
+print_r($win_perc);
+echo '<br>';
+print_r($rider_stats);
+/*
+total
+*/
 ?>
+
+<?php  ?>
 
 <?php get_header(); ?>
 <div class="container">

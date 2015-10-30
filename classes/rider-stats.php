@@ -243,6 +243,208 @@ class RiderStats {
 		return $seasons;
 	}
 
+	/**
+	 * get_rider_sos function.
+	 *
+	 * @access public
+	 * @param bool $rider (default: false)
+	 * @param bool $season (default: false)
+	 * @return void
+	 */
+	public function get_rider_sos($rider=false,$season=false) {
+		global $wpdb,$uci_curl;
+
+		if (!$rider || !$season)
+			return false;
+
+		$sql="
+			SELECT
+				results.name AS rider,
+				(SELECT SUM(((SELECT SUM(SUM(CASE races.class WHEN 'CM' THEN 5 WHEN 'CDM' THEN 4 WHEN 'CN' THEN 3 WHEN 'C1' THEN 2 WHEN 'C2' THEN 1 ELSE 0 END)/100)) + (SELECT SUM(SUM(races.fq)/100)))/2)) AS sos
+			FROM $uci_curl->results_table AS results
+			LEFT JOIN $uci_curl->table AS races
+			ON results.code=races.code
+			WHERE races.season='{$season}'
+			GROUP BY rider
+			ORDER BY sos DESC
+		";
+		$db_results=$wpdb->get_results($sql);
+		$counter=1;
+		$sos=false;
+
+		// append rank //
+		foreach ($db_results as $result) :
+			$result->rank=$counter;
+
+			if ($result->rider==$rider) :
+				$sos=$result;
+				break;
+			endif;
+
+			$counter++;
+		endforeach;
+
+		return $sos;
+	}
+
+	/**
+	 * get_rider_uci_points function.
+	 *
+	 * @access public
+	 * @param bool $rider (default: false)
+	 * @param bool $season (default: false)
+	 * @param string $type (default: 'uci')
+	 * @return void
+	 */
+	public function get_rider_uci_points($rider=false,$season=false,$type='uci') {
+		global $wpdb,$uci_curl;
+
+		if (!$rider || !$season)
+			return false;
+
+		$where='';
+		if ($type=='wcp')
+			$where="AND races.class='CDM'";
+
+		$sql="
+			SELECT
+				results.name AS rider,
+				SUM(results.par) AS total
+			FROM $uci_curl->results_table AS results
+			LEFT JOIN $uci_curl->table AS races
+			ON results.code=races.code
+			WHERE races.season='{$season}'
+			{$where}
+			GROUP BY rider
+			ORDER BY total DESC
+		";
+		$db_results=$wpdb->get_results($sql);
+		$counter=1;
+		$uci_point=false;
+
+		// append rank //
+		foreach ($db_results as $result) :
+			$result->rank=$counter;
+
+			if ($result->rider==$rider) :
+				$uci_point=$result;
+				break;
+			endif;
+
+			$counter++;
+		endforeach;
+
+		return $uci_point;
+	}
+
+	/**
+	 * get_rider_winning_perc function.
+	 *
+	 * @access public
+	 * @param bool $rider (default: false)
+	 * @param bool $season (default: false)
+	 * @return void
+	 */
+	public function get_rider_winning_perc($rider=false,$season=false) {
+		global $wpdb,$uci_curl;
+
+		if (!$rider || !$season)
+			return false;
+
+		$sql="
+			SELECT
+				rider,
+				SUM(wins/races) AS winning_perc
+			FROM (
+				SELECT
+					results.name AS rider,
+					SUM(IF(results.place=1,1,0)) AS wins,
+					COUNT(results.code) AS races
+				FROM $uci_curl->results_table AS results
+				LEFT JOIN $uci_curl->table AS races
+				ON results.code=races.code
+				WHERE races.season='{$season}'
+				GROUP BY rider
+			) t
+			GROUP BY rider
+			ORDER BY winning_perc DESC, races DESC
+		";
+		$db_results=$wpdb->get_results($sql);
+		$counter=1;
+		$win_perc=false;
+
+		// append rank //
+		foreach ($db_results as $result) :
+			$result->rank=$counter;
+
+			if ($result->rider==$rider) :
+				$win_perc=$result;
+				break;
+			endif;
+
+			$counter++;
+		endforeach;
+
+		return $win_perc;
+	}
+
+	public function get_rider_total($rider=false,$season=false) {
+		global $wpdb,$uci_curl;
+
+		if (!$rider || !$season)
+			return false;
+
+		$riders=$this->get_riders(array(
+			'season' => $season,
+			'pagination' => false
+		));
+		$total=false;
+
+		// get rider //
+		foreach ($riders as $_rider) :
+			if ($_rider->rider==$rider) :
+				$total=$_rider;
+				break;
+			endif;
+		endforeach;
+
+		return $total;
+	}
+
+	/**
+	 * get_total_points function.
+	 *
+	 * @access public
+	 * @param string $type (default: 'uci')
+	 * @param bool $year (default: false)
+	 * @return void
+	 */
+	public function get_total_points($type='uci',$year=false) {
+		global $wpdb,$uci_curl;
+
+		$where='';
+
+		if ($year)
+			$where=" AND races.season='{$year}'";
+
+		if ($type=='wcp')
+			$where.=" AND races.class='CDM'";
+
+
+		$sql="
+			SELECT
+				SUM(results.par) AS uci_total
+			FROM wp_uci_races AS races
+			LEFT JOIN wp_uci_rider_data AS results
+			ON races.code=results.code
+			WHERE results.place=1
+			$where
+		";
+		$points=$wpdb->get_var($sql);
+
+		return $points;
+	}
+
 }
 
 $RiderStats=new RiderStats();
