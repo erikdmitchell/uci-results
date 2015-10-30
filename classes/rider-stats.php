@@ -27,14 +27,19 @@ class RiderStats {
 
 		$riders=array();
 		$limit=null;
+		$where='';
 		$rank=1;
+		$total_divider=4;
+		$dates='';
 		$default_args=array(
 			'season' => '2015/2016',
 			'pagination' => true,
 			'paged' => 1,
 			'per_page' => 15,
 			'limit' => false,
-			'order_by' => 'total DESC'
+			'order_by' => 'total DESC',
+			'start_date' => false,
+			'end_date' => false
 		);
 		$args=array_merge($default_args,$user_args);
 
@@ -51,6 +56,26 @@ class RiderStats {
 			$rank=$start+1;
 		elseif ($limit) :
 			$limit="LIMIT $limit";
+		endif;
+
+		if ($start_date && $end_date) :
+			$dates=" AND (STR_TO_DATE(races.date,'%e %M %Y') BETWEEN '{$start_date}' AND '{$end_date}')";
+
+			if ($this->get_total_points(array('type' => 'wcp','season' => $season,'start_date' => $start_date,'end_date' => $end_date))==0) :
+				$total_divider--;
+			endif;
+		elseif ($start_date) :
+			$dates=" AND (STR_TO_DATE(races.date,'%e %M %Y') >= '{$start_date}')";
+
+			if ($this->get_total_points(array('type' => 'wcp','season' => $season,'start_date' => $start_date))==0) :
+				$total_divider--;
+			endif;
+		elseif ($end_date) :
+			$dates=" AND (STR_TO_DATE(races.date,'%e %M %Y') <= '{$end_date}')";
+
+			if ($this->get_total_points(array('type' => 'wcp','season' => $season,'end_date' => $end_date))==0) :
+				$total_divider--;
+			endif;
 		endif;
 
 		$sql="
@@ -70,7 +95,7 @@ class RiderStats {
 				SUM(uci_total/max_uci_points) AS uci_perc,
 				COALESCE(SUM(wcp_total/max_wcp_points),0) AS wcp_perc,
 				SUM(sos) AS sos,
-				(SELECT SUM( (COALESCE(SUM(wcp_total/max_wcp_points),0) + SUM(sos) + SUM(uci_total/max_uci_points) + SUM((((wins/races)+(races/uci_races))/2))) / 4 ) ) AS total
+				(SELECT SUM( (COALESCE(SUM(wcp_total/max_wcp_points),0) + SUM(sos) + SUM(uci_total/max_uci_points) + SUM((((wins/races)+(races/uci_races))/2))) / {$total_divider} ) ) AS total
 			FROM
 
 			(
@@ -82,13 +107,14 @@ class RiderStats {
 				SUM(IF(results.place=1,1,0)) AS wins,
 				COUNT(results.code) AS races,
 				(SELECT COUNT(*) FROM $uci_curl->table WHERE season='$season') AS uci_races,
-				(SELECT total FROM( SELECT SUM(results.par) AS total FROM $uci_curl->table AS races LEFT JOIN $uci_curl->results_table AS results ON races.code=results.code WHERE results.place=1 AND races.season='$season' GROUP BY races.code WITH ROLLUP ) t ORDER BY total DESC LIMIT 1) AS max_uci_points,
+				(SELECT total FROM( SELECT SUM(results.par) AS total FROM $uci_curl->table AS races LEFT JOIN $uci_curl->results_table AS results ON races.code=results.code WHERE results.place=1 AND races.season='$season' {$dates} GROUP BY races.code WITH ROLLUP ) t ORDER BY total DESC LIMIT 1) AS max_uci_points,
 				0 AS max_wcp_points,
 				0 AS sos
 			FROM $uci_curl->results_table AS results
 			LEFT JOIN $uci_curl->table AS races
 			ON results.code=races.code
 			WHERE season='$season'
+				{$dates}
 			GROUP BY results.name
 
 			UNION
@@ -102,13 +128,14 @@ class RiderStats {
 				0 AS races,
 				0 AS uci_races,
 				0 AS max_uci_points,
-				(SELECT	SUM(results.par) AS points FROM $uci_curl->table AS races LEFT JOIN $uci_curl->results_table AS results ON races.code=results.code WHERE results.place=1 AND races.class='CDM' AND races.season='$season') AS max_wcp_points,
+				(SELECT	SUM(results.par) AS points FROM $uci_curl->table AS races LEFT JOIN $uci_curl->results_table AS results ON races.code=results.code WHERE results.place=1 AND races.class='CDM' AND races.season='$season' {$dates}) AS max_wcp_points,
 				0 AS sos
 			FROM $uci_curl->results_table AS results
 			LEFT JOIN $uci_curl->table AS races
 			ON results.code=races.code
 			WHERE season='$season'
 				AND races.class='CDM'
+				{$dates}
 			GROUP BY results.name
 
 			UNION
@@ -128,6 +155,7 @@ class RiderStats {
 			LEFT JOIN $uci_curl->table AS races
 			ON results.code=races.code
 			WHERE season='$season'
+				{$dates}
 			GROUP BY results.name
 
 			) t
@@ -388,6 +416,14 @@ class RiderStats {
 		return $win_perc;
 	}
 
+	/**
+	 * get_rider_total function.
+	 *
+	 * @access public
+	 * @param bool $rider (default: false)
+	 * @param bool $season (default: false)
+	 * @return void
+	 */
 	public function get_rider_total($rider=false,$season=false) {
 		global $wpdb,$uci_curl;
 
@@ -411,29 +447,39 @@ class RiderStats {
 		return $total;
 	}
 
-	/**
-	 * get_total_points function.
-	 *
-	 * @access public
-	 * @param string $type (default: 'uci')
-	 * @param bool $year (default: false)
-	 * @return void
-	 */
-	public function get_total_points($type='uci',$year=false) {
+
+	public function get_total_points($user_args=array()) {
 		global $wpdb,$uci_curl;
+
+		$default_args=array(
+			'type' => 'uci',
+			'season' => false,
+			'start_date' => false,
+			'end_date' => false
+		);
+		$args=array_merge($default_args,$user_args);
+
+		extract($args);
 
 		$where='';
 
-		if ($year)
-			$where=" AND races.season='{$year}'";
+		if ($season)
+			$where=" AND races.season='{$season}'";
 
 		if ($type=='wcp')
 			$where.=" AND races.class='CDM'";
 
+		if ($start_date && $end_date) :
+			$where.=" AND (STR_TO_DATE(races.date,'%e %M %Y') BETWEEN '{$start_date}' AND '{$end_date}')";
+		elseif ($start_date) :
+			$where.=" AND (STR_TO_DATE(races.date,'%e %M %Y') >= '{$start_date}')";
+		elseif ($end_date) :
+			$where.=" AND (STR_TO_DATE(races.date,'%e %M %Y') <= '{$end_date}')";
+		endif;
 
 		$sql="
 			SELECT
-				SUM(results.par) AS uci_total
+				COALESCE(SUM(results.par),0) AS uci_total
 			FROM wp_uci_races AS races
 			LEFT JOIN wp_uci_rider_data AS results
 			ON races.code=results.code
@@ -443,6 +489,52 @@ class RiderStats {
 		$points=$wpdb->get_var($sql);
 
 		return $points;
+	}
+
+	public function get_total_rank_per_week($rider_name=false,$season=false) {
+		global $wpdb;
+
+		if (!$rider_name || !$season)
+			return false;
+
+		$CrossSeasons=new CrossSeasons();
+		$weeks=$CrossSeasons->get_weeks($season);
+		$rider=array();
+
+
+		foreach ($weeks as $week) :
+			$flag=0;
+			$riders=$this->get_riders(array(
+				'season' => $season,
+				'pagination' => false,
+				'end_date' => $week[1]
+			));
+
+			foreach ($riders as $r) :
+				if ($r->rider==$rider_name) :
+					$rider[]=$r;
+					$flag=1;
+					break;
+				endif;
+			endforeach;
+
+			// set an empty if nothing for that week
+			if (!$flag)
+				$rider[]=array();
+
+			if (strtotime($week[1])>strtotime(date('Y-m-d')))
+				break;
+		endforeach;
+
+
+
+
+
+
+echo '<pre>';
+print_r($rider);
+echo '</pre>';
+
 	}
 
 }
