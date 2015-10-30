@@ -17,18 +17,6 @@ $wcp=$RiderStats->get_rider_uci_points($rider_name,$season,'wcp');
 $sos=$RiderStats->get_rider_sos($rider_name,$season);
 $win_perc=$RiderStats->get_rider_winning_perc($rider_name,$season);
 $rider_stats=$RiderStats->get_rider_total($rider_name,$season);
-print_r($sos);
-echo '<br>';
-print_r($uci);
-echo '<br>';
-print_r($wcp);
-echo '<br>';
-print_r($win_perc);
-echo '<br>';
-print_r($rider_stats);
-/*
-total
-*/
 ?>
 
 <?php  ?>
@@ -43,6 +31,29 @@ total
 			<?php else : ?>
 				<div class="uci-curl-rider-rankings">
 					<h3><?php echo $rider_name; ?> <a href="<?php echo single_country_link($results[0]->country,$season); ?>"><?php echo get_country_flag($results[0]->country); ?></a></h3>
+
+					<div id="season-rider-stats" class="season-rider-stats">
+						<div class="row">
+							<div class="header col-md-3">Current Rank:</div>
+							<div class="current-rank col-md-2"><?php echo $rider_stats->rank; ?> (<?php echo number_format($rider_stats->total,3); ?>)</div>
+						</div>
+						<div class="row">
+							<div class="header col-md-3">UCI Points:</div>
+							<div class="current-rank col-md-2"><?php echo $uci->rank; ?> (<?php echo $uci->total; ?>)</div>
+						</div>
+						<div class="row">
+							<div class="header col-md-3">World Cup Points:</div>
+							<div class="current-rank col-md-2"><?php echo $wcp->rank; ?> (<?php echo $wcp->total; ?>)</div>
+						</div>
+						<div class="row">
+							<div class="header col-md-3">Winning Percentage:</div>
+							<div class="current-rank col-md-2"><?php echo $win_perc->rank; ?> (<?php echo number_format($win_perc->winning_perc,3); ?>)</div>
+						</div>
+						<div class="row">
+							<div class="header col-md-3">Strength of Schedule:</div>
+							<div class="current-rank col-md-2"><?php echo $sos->rank; ?> (<?php echo $sos->sos; ?>)</div>
+						</div>
+					</div><!-- .season-rider-stats -->
 
 					<div id="season-rider-rankings" class="season-rider-rankings">
 						<div class="header row">
