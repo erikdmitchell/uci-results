@@ -31,6 +31,7 @@ $rider_stats=$RiderStats->get_rider_total($rider_name,$season);
 					<h3><?php echo $rider_name; ?> <a href="<?php echo single_country_link($results[0]->country,$season); ?>"><?php echo get_country_flag($results[0]->country); ?></a></h3>
 ADD GRAPH
 					<div id="season-rider-stats" class="season-rider-stats">
+						<h3>Rider Stats</h3>
 						<div class="row">
 							<div class="header col-md-3">Current Rank:</div>
 							<div class="current-rank col-md-2"><?php echo $rider_stats->rank; ?> (<?php echo number_format($rider_stats->total,3); ?>)</div>
@@ -54,6 +55,7 @@ ADD GRAPH
 					</div><!-- .season-rider-stats -->
 
 					<div id="season-rider-rankings" class="season-rider-rankings">
+						<h3>Results</h3>
 						<div class="header row">
 							<div class="place col-md-1">Place</div>
 							<div class="points col-md-1">Points</div>
