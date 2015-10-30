@@ -33,3 +33,17 @@
 	display: inline-block;
 	margin: 5px 0;
 }
+
+/**
+ * single race
+ */
+.race-details {
+	overflow: hidden;
+}
+.race-details > div {
+	float: left;
+	margin-right: 5px;
+}
+.race-date {
+	font-style: italic;
+}

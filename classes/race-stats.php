@@ -151,6 +151,7 @@ class RaceStats {
 				event AS race,
 				date,
 				class,
+				nat,
 				season
 			FROM $uci_curl->table
 			WHERE code='$code'

@@ -14,6 +14,9 @@ Changelog
 ### 1.1.0
 
 	Added fantasy class/extension.
+	Added country flags.
+	
+	Tweaked url link functions.
 
 ### 1.0.9
 
