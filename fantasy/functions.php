@@ -470,7 +470,7 @@ add_action('wp_logout','logout_page');
 
 // login form fields
 function fc_login_form_fields() {
-	fc_login_member();
+	fc_login_member('/fantasy/');
 	?>
 	<?php
 	// show any error messages after form submission
@@ -496,7 +496,7 @@ function fc_login_form_fields() {
 }
 
 // logs a member in after submitting a form
-function fc_login_member() {
+function fc_login_member($redirect='') {
 
 	if(isset($_POST['fc_user_login']) && wp_verify_nonce($_POST['fc_login_nonce'], 'fc-login-nonce')) {
 
@@ -529,7 +529,7 @@ function fc_login_member() {
 			wp_set_current_user($user->ID, $_POST['fc_user_login']);
 			do_action('wp_login', $_POST['fc_user_login']);
 
-			wp_redirect(home_url());
+			wp_redirect(home_url($redirect));
 			exit;
 		}
 	}
