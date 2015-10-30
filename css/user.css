@@ -51,6 +51,10 @@
 /**
  * single rider
  */
-.season-rider-stats {
-
+.season-rider-stats .current-rank .total,
+.season-rider-stats .uci-points .rank,
+.season-rider-stats .world-cup-points .rank,
+.season-rider-stats .winning-percent .rank,
+.season-rider-stats .sos .total {
+	display: none;
 }

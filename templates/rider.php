@@ -31,26 +31,26 @@ $rider_stats=$RiderStats->get_rider_total($rider_name,$season);
 					<h3><?php echo $rider_name; ?> <a href="<?php echo single_country_link($results[0]->country,$season); ?>"><?php echo get_country_flag($results[0]->country); ?></a></h3>
 ADD GRAPH
 					<div id="season-rider-stats" class="season-rider-stats">
-						<h3>Rider Stats</h3>
+						<h3>Rider Rankings</h3>
 						<div class="row">
 							<div class="header col-md-3">Current Rank:</div>
-							<div class="current-rank col-md-2"><?php echo $rider_stats->rank; ?> (<?php echo number_format($rider_stats->total,3); ?>)</div>
+							<div class="current-rank col-md-2"><?php echo $rider_stats->rank; ?> <span class="total">(<?php echo number_format($rider_stats->total,3); ?>)</span></div>
 						</div>
 						<div class="row">
 							<div class="header col-md-3">UCI Points:</div>
-							<div class="current-rank col-md-2"><?php echo $uci->rank; ?> (<?php echo $uci->total; ?>)</div>
+							<div class="uci-points col-md-2"><?php echo $uci->total; ?> <span class="rank">(<?php echo $uci->rank; ?>)</span></div>
 						</div>
 						<div class="row">
 							<div class="header col-md-3">World Cup Points:</div>
-							<div class="current-rank col-md-2"><?php echo $wcp->rank; ?> (<?php echo $wcp->total; ?>)</div>
+							<div class="world-cup-points col-md-2"><?php echo $wcp->total; ?> <span class="rank">(<?php echo $wcp->rank; ?>)</span></div>
 						</div>
 						<div class="row">
 							<div class="header col-md-3">Winning Percentage:</div>
-							<div class="current-rank col-md-2"><?php echo $win_perc->rank; ?> (<?php echo number_format($win_perc->winning_perc,3); ?>)</div>
+							<div class="winning-percent col-md-2"><?php echo number_format($win_perc->winning_perc,3); ?> <span class="rank">(<?php echo $win_perc->rank; ?>)</span></div>
 						</div>
 						<div class="row">
 							<div class="header col-md-3">Strength of Schedule:</div>
-							<div class="current-rank col-md-2"><?php echo $sos->rank; ?> (<?php echo $sos->sos; ?>)</div>
+							<div class="sos col-md-2"><?php echo $sos->rank; ?> <span class="total">(<?php echo $sos->sos; ?>)</span></div>
 						</div>
 					</div><!-- .season-rider-stats -->
 
