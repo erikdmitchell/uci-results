@@ -447,7 +447,7 @@ class RiderStats {
 		return $total;
 	}
 
-// SLOW //
+// SLOW??? //
 	public function get_total_points($user_args=array()) {
 		global $wpdb,$uci_curl;
 
@@ -491,19 +491,54 @@ class RiderStats {
 		return $points;
 	}
 
-	public function get_total_rank_per_week($rider_name=false,$season=false) {
-		global $wpdb;
+
+	public function get_riders_in_season($season=false) {
+		global $wpdb,$uci_curl;
+
+		if (!$season)
+			return false;
+
+		$sql="
+			SELECT
+				results.name
+			FROM $uci_curl->results_table AS results
+			LEFT JOIN $uci_curl->table AS races
+			ON results.code=races.code
+			WHERE races.season='{$season}'
+			GROUP BY results.name
+		";
+		$riders=$wpdb->get_col($sql);
+
+		return $riders;
+	}
+
+	/**
+	 * generate_total_rank_per_week function.
+	 *
+	 * @access public
+	 * @param bool $rider_name (default: false)
+	 * @param bool $season (default: false)
+	 * @return void
+	 */
+	public function generate_total_rank_per_week($rider_name=false,$season=false) {
+		global $wpdb,$uci_curl;
 
 		if (!$rider_name || !$season)
 			return false;
 
 		$CrossSeasons=new CrossSeasons();
 		$weeks=$CrossSeasons->get_weeks($season);
-		$rider=array();
-
+		$rider_weeks_in_db=$wpdb->get_col("SELECT week FROM $uci_curl->weekly_rider_rankings_table WHERE name=\"{$rider_name}\" AND season='{$season}'");
+		$week_counter=1;
 
 		foreach ($weeks as $week) :
 			$flag=0;
+			$rider_data=array();
+
+			// skip if week already in db //
+			if (in_array($week_counter,$rider_weeks_in_db))
+				continue;
+
 			$riders=$this->get_riders(array(
 				'season' => $season,
 				'pagination' => false,
@@ -512,29 +547,36 @@ class RiderStats {
 
 			foreach ($riders as $r) :
 				if ($r->rider==$rider_name) :
-					$rider[]=$r;
+					$rider_data=$r;
 					$flag=1;
 					break;
 				endif;
 			endforeach;
 
 			// set an empty if nothing for that week
-			if (!$flag)
-				$rider[]=array();
+			if (!$flag) :
+				$rider_data=new stdClass();
+				$rider_data->rank=0;
+			endif;
+
+			$data=array(
+				'name' => $rider_name,
+				'season' => $_POST['season'],
+				'week' => $week_counter,
+				'start_date' => $week[0],
+				'end_date' => $week[1],
+				'data' => serialize($rider_data),
+			);
+
+			$wpdb->insert($uci_curl->weekly_rider_rankings_table,$data);
 
 			if (strtotime($week[1])>strtotime(date('Y-m-d')))
 				break;
+
+			$week_counter++;
 		endforeach;
 
-
-
-
-
-
-echo '<pre>';
-print_r($rider);
-echo '</pre>';
-
+		return;
 	}
 
 }

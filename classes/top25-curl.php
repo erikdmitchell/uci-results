@@ -8,10 +8,11 @@ class Top25_cURL {
 
 	public $table;
 	public $results_table;
+	public $weekly_rider_rankings_table;
 	public $version='1.0.3';
 	public $config=array();
 
-	protected $debug=true;
+	protected $debug=false;
 
 	public function __construct($config=array()) {
 		global $wpdb;
@@ -22,10 +23,13 @@ class Top25_cURL {
 		add_action('wp_ajax_get_race_data_non_db',array($this,'ajax_get_race_data_non_db'));
 		add_action('wp_ajax_prepare_add_races_to_db',array($this,'ajax_prepare_add_races_to_db'));
 		add_action('wp_ajax_add_race_to_db',array($this,'ajax_add_race_to_db'));
+		add_action('wp_ajax_get_all_riders',array($this,'ajax_get_all_riders'));
+		add_action('wp_ajax_add_riders_weekly_rankings',array($this,'ajax_add_riders_weekly_rankings'));
 
 		$this->setup_config($config);
 		$this->table=$wpdb->prefix.'uci_races';
 		$this->results_table=$wpdb->prefix.'uci_rider_data';
+		$this->weekly_rider_rankings_table=$wpdb->prefix.'uci_weekly_rider_rankings';
 	}
 
 	public function admin_page() {
@@ -334,6 +338,25 @@ class Top25_cURL {
 			echo $this->add_race_to_db($_POST['race']);
 		else :
 			echo '<div class="error add-race-to-db-message">Already in db.('.$code.')</div>';
+		endif;
+
+		wp_die();
+	}
+
+	public function ajax_get_all_riders() {
+		global $RiderStats;
+
+		echo json_encode($RiderStats->get_riders_in_season($_POST['season']));
+
+		wp_die();
+	}
+
+	public function ajax_add_riders_weekly_rankings() {
+		global $RiderStats;
+
+		if (!$this->debug) :
+			$RiderStats->generate_total_rank_per_week($_POST['rider'],$_POST['season']); // SLOW???
+			echo '<div class="updated rider-weekly-rankings">'.$_POST['rider'].' - weekly rankings updated.</div>';
 		endif;
 
 		wp_die();
