@@ -17,7 +17,7 @@ $wcp=$RiderStats->get_rider_uci_points($rider_name,$season,'wcp');
 $sos=$RiderStats->get_rider_sos($rider_name,$season);
 $win_perc=$RiderStats->get_rider_winning_perc($rider_name,$season);
 $rider_stats=$RiderStats->get_rider_total($rider_name,$season);
-print_r($RiderStats->get_total_rank_per_week($rider_name,$season)); // SLOW
+//print_r($RiderStats->get_total_rank_per_week($rider_name,$season)); // SLOW
 ?>
 
 <?php
