@@ -6,7 +6,7 @@
  */
 class UCIcURLDB {
 
-	public $db_version='0.0.9';
+	public $db_version='0.1.1';
 	public $wp_option_name='ucicurl_version';
 
 	/**
@@ -60,11 +60,21 @@ class UCIcURLDB {
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
+		$table_name=$wpdb->prefix.'uci_weekly_rider_rankings';
+		$uci_weekly_rider_rankings_sql="CREATE TABLE $table_name (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `name` mediumtext NOT NULL,
+		  `season` mediumtext NOT NULL,
+		  `data` text NOT NULL,
+		  PRIMARY KEY (`id`)
+		) $charset_collate;";
+
 		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 		dbDelta(array(
 			$uci_races_sql,
 			$uci_rider_data_sql,
-			$uci_season_rankings_sql
+			$uci_season_rankings_sql,
+			$uci_weekly_rider_rankings_sql
 		));
 
 		add_option($this->wp_option_name,$this->db_version);
@@ -114,16 +124,22 @@ class UCIcURLDB {
 		  `season` mediumtext NOT NULL
 		);";
 
+		$table_name=$wpdb->prefix.'uci_weekly_rider_rankings';
+		$uci_weekly_rider_rankings_sql="CREATE TABLE $table_name (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `name` mediumtext NOT NULL,
+		  `season` mediumtext NOT NULL,
+		  `data` text NOT NULL,
+		  PRIMARY KEY (`id`)
+		) $charset_collate;";
+
 		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
-/*
 		dbDelta(array(
 			$uci_races_sql,
 			$uci_rider_data_sql,
 			$uci_season_rankings_sql,
-			$alter_races_sql,
-			$alter_rider_data_sql
+			$uci_weekly_rider_rankings_sql
 		));
-*/
 
 		update_option($this->wp_option_name,$this->db_version);
 	}
