@@ -65,6 +65,9 @@ class UCIcURLDB {
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `name` mediumtext NOT NULL,
 		  `season` mediumtext NOT NULL,
+			`week` INT NOT NULL,
+			`start_date` DATE NOT NULL,
+			`end_date` DATE NOT NULL,
 		  `data` text NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
@@ -129,6 +132,9 @@ class UCIcURLDB {
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `name` mediumtext NOT NULL,
 		  `season` mediumtext NOT NULL,
+			`week` INT NOT NULL,
+			`start_date` DATE NOT NULL,
+			`end_date` DATE NOT NULL,
 		  `data` text NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
