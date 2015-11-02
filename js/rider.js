@@ -4,7 +4,7 @@ var dataset=[];
 console.log(wpOptions);
 // build weeks //
 for (var i in wpOptions.weekly_ranks) {
-	weeks.push(wpOptions.weekly_ranks[i].week);
+	weeks.push('Wk. '+wpOptions.weekly_ranks[i].week);
 }
 
 // build data //
@@ -12,7 +12,13 @@ for (var i in wpOptions.weekly_ranks) {
 	dataset.push(wpOptions.weekly_ranks[i].rank);
 }
 
-console.log(dataset);
+var datasetMax=Math.max.apply(Math,dataset);
+var datasetMin=Math.min.apply(Math,dataset);
+
+// make dataset negative //
+for (var i in dataset) {
+	//dataset[i]=-Math.abs(dataset[i]);
+}
 
 var lineChartData = {
 	labels: weeks,
@@ -30,15 +36,12 @@ var lineChartData = {
 	]
 };
 
-console.log(lineChartData.datasets);
-
 window.onload=function() {
 	var ctx = document.getElementById("weekly-rankings").getContext("2d");
+
 	window.myLine = new Chart(ctx).Line(lineChartData, {
 		responsive: true,
-		scaleOverride: true,
-		scaleSteps: 5,
-		scaleStepWidth: 10,
-		scaleStartValue: 0
+		maintainAspectRatio: false
+		//scaleOverride: false,
 	});
 }

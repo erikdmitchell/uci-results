@@ -178,11 +178,12 @@ function uci_curl_pagination() {
 
 
 function uci_template_scripts_styles() {
-	global $RiderStats;
+	global $RiderStats,$wpdb;
 	if ( is_page_template('rider.php') ) :
 		wp_register_script('uci-riders-script',plugins_url('/js/rider.js',__FILE__),array('chart-js'));
 
 		$wpOptions=array(
+			'max_rank' => $wpdb->get_var("SELECT MAX(rank) AS max FROM wp_uci_weekly_rider_rankings WHERE season='".$_GET['season']."'"),
 			'weekly_ranks' => $RiderStats->get_rider_weekly_rank($_GET['rider'],$_GET['season']),
 		);
 

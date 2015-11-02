@@ -30,7 +30,10 @@ $rider_stats=$RiderStats->get_rider_total($rider_name,$season);
 				<div class="uci-curl-rider-rankings">
 					<h3><?php echo $rider_name; ?> <a href="<?php echo single_country_link($results[0]->country,$season); ?>"><?php echo get_country_flag($results[0]->country); ?></a></h3>
 					<div id="rider-graphs">
-						<canvas id="weekly-rankings"></canvas>
+						<div id="weekly-rankings-wrap">
+							<div class="chart-title">Weekly Rank</div>
+							<canvas id="weekly-rankings"></canvas>
+						</div>
 					</div>
 					<div id="season-rider-stats" class="season-rider-stats">
 						<h3>Rider Rankings</h3>

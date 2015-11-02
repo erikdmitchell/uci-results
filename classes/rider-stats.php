@@ -348,7 +348,7 @@ class RiderStats {
 		";
 		$db_results=$wpdb->get_results($sql);
 		$counter=1;
-		$uci_point=false;
+		$uci_point=new stdClass();
 
 		// append rank //
 		foreach ($db_results as $result) :
@@ -361,6 +361,12 @@ class RiderStats {
 
 			$counter++;
 		endforeach;
+
+		if (!isset($uci_point->rank)) :
+			$uci_point->rider=$rider;
+			$uci_point->total=0;
+			$uci_point->rank='n/a';
+		endif;
 
 		return $uci_point;
 	}
