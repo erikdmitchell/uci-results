@@ -176,6 +176,24 @@ function uci_curl_pagination() {
 	echo $html;
 }
 
+
+function uci_template_scripts_styles() {
+	global $RiderStats;
+	if ( is_page_template('rider.php') ) :
+		wp_register_script('uci-riders-script',plugins_url('/js/rider.js',__FILE__),array('chart-js'));
+
+		$wpOptions=array(
+			'weekly_ranks' => $RiderStats->get_rider_weekly_rank($_GET['rider'],$_GET['season']),
+		);
+
+		wp_localize_script('uci-riders-script','wpOptions',$wpOptions);
+
+		wp_enqueue_script('chart-js','https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js',array('jquery'),'1.0.2');
+		wp_enqueue_script('uci-riders-script');
+	endif;
+}
+add_action('wp_enqueue_scripts','uci_template_scripts_styles');
+
 /**
  * uci_curl_add_pages function.
  *

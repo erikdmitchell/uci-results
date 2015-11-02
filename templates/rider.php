@@ -17,11 +17,6 @@ $wcp=$RiderStats->get_rider_uci_points($rider_name,$season,'wcp');
 $sos=$RiderStats->get_rider_sos($rider_name,$season);
 $win_perc=$RiderStats->get_rider_winning_perc($rider_name,$season);
 $rider_stats=$RiderStats->get_rider_total($rider_name,$season);
-//print_r($RiderStats->get_total_rank_per_week($rider_name,$season)); // SLOW
-?>
-
-<?php
-
 ?>
 
 <?php get_header(); ?>
@@ -34,7 +29,9 @@ $rider_stats=$RiderStats->get_rider_total($rider_name,$season);
 			<?php else : ?>
 				<div class="uci-curl-rider-rankings">
 					<h3><?php echo $rider_name; ?> <a href="<?php echo single_country_link($results[0]->country,$season); ?>"><?php echo get_country_flag($results[0]->country); ?></a></h3>
-ADD GRAPH
+					<div id="rider-graphs">
+						<canvas id="weekly-rankings"></canvas>
+					</div>
 					<div id="season-rider-stats" class="season-rider-stats">
 						<h3>Rider Rankings</h3>
 						<div class="row">

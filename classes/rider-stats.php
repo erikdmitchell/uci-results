@@ -491,7 +491,13 @@ class RiderStats {
 		return $points;
 	}
 
-
+	/**
+	 * get_riders_in_season function.
+	 *
+	 * @access public
+	 * @param bool $season (default: false)
+	 * @return void
+	 */
 	public function get_riders_in_season($season=false) {
 		global $wpdb,$uci_curl;
 
@@ -557,6 +563,17 @@ class RiderStats {
 			if (!$flag) :
 				$rider_data=new stdClass();
 				$rider_data->rank=0;
+				$rider_data->race_perc=0;
+				$rider_data->races=0;
+				$rider_data->rank=0;
+				$rider_data->sos=0;
+				$rider_data->total=0;
+				$rider_data->uci=0;
+				$rider_data->uci_perc=0;
+				$rider_data->wcp=0;
+				$rider_data->wcp_perc=0;
+				$rider_data->win_perc=0;
+				$rider_data->wins=0;
 			endif;
 
 			$data=array(
@@ -565,9 +582,18 @@ class RiderStats {
 				'week' => $week_counter,
 				'start_date' => $week[0],
 				'end_date' => $week[1],
-				'data' => serialize($rider_data),
+				'race_perc' => $rider_data->race_perc,
+				'races' => $rider_data->races,
+				'rank' => $rider_data->rank,
+				'sos' => $rider_data->sos,
+				'total' => $rider_data->total,
+				'uci' => $rider_data->uci,
+				'uci_perc' => $rider_data->uci_perc,
+				'wcp' => $rider_data->wcp,
+				'wcp_perc' => $rider_data->wcp_perc,
+				'win_perc' => $rider_data->win_perc,
+				'wins' => $rider_data->wins,
 			);
-
 			$wpdb->insert($uci_curl->weekly_rider_rankings_table,$data);
 
 			if (strtotime($week[1])>strtotime(date('Y-m-d')))
@@ -577,6 +603,17 @@ class RiderStats {
 		endforeach;
 
 		return;
+	}
+
+	function get_rider_weekly_rank($rider_name=false,$season=false,$week=false) {
+		global $wpdb,$uci_curl;
+
+		if (!$rider_name || !$season)
+			return false;
+
+		$weekly_rankings=$wpdb->get_results("SELECT * FROM $uci_curl->weekly_rider_rankings_table WHERE name=\"{$rider_name}\" AND season='{$season}'");
+
+		return $weekly_rankings;
 	}
 
 }
