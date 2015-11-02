@@ -70,6 +70,13 @@ class CrossSeasons {
     return $return;
 	}
 
+	/**
+	 * get_races_in_season_by_week function.
+	 *
+	 * @access public
+	 * @param bool $season (default: false)
+	 * @return void
+	 */
 	public function get_races_in_season_by_week($season=false) {
 		if (!$season)
 			return false;
@@ -84,6 +91,14 @@ class CrossSeasons {
 		return $races;
 	}
 
+	/**
+	 * get_races_in_dates function.
+	 *
+	 * @access public
+	 * @param bool $start_date (default: false)
+	 * @param bool $end_date (default: false)
+	 * @return void
+	 */
 	public function get_races_in_dates($start_date=false,$end_date=false) {
 		global $wpdb;
 		if (!$start_date || !$end_date)
