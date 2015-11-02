@@ -48,7 +48,6 @@ class Top25_cURL {
 		$html=null;
 		$tabs=array(
 			'uci-cross' => 'UCI Cross',
-			'races' => 'Races',
 		);
 		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'uci-cross';
 
@@ -70,9 +69,6 @@ class Top25_cURL {
 			switch ($active_tab) :
 				case 'uci-cross':
 					$html.=$this->default_admin_page();
-					break;
-				case 'races':
-					$html.=$this->races_admin_page();
 					break;
 				default:
 					$html.=$this->default_admin_page();
@@ -96,38 +92,6 @@ class Top25_cURL {
 		$html.='<h3>UCI Cross</h3>';
 
 		$html.='<p>Details coming soon on how to use this plugin and what to do.</p>';
-
-		return $html;
-	}
-
-	/**
-	 * races_admin_page function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function races_admin_page() {
-		$html=null;
-		$stats=new RaceStats();
-		$years=$this->get_years_in_db();
-
-		$html.='<h3>Races</h3>';
-
-/*
-		$html.='<div class="row">';
-			$html.='<label for="url-dd" class="col-md-1">Season</label>';
-			$html.='<div class="col-md-2">';
-				$html.='<select class="url-dd" id="get-race-season" name="url">';
-					$html.='<option value="0">Select Year</option>';
-					foreach ($years as $year) :
-						$html.='<option value="'.$year.'">'.$year.'</option>';
-					endforeach;
-				$html.='</select>';
-			$html.='</div>';
-		$html.='</div><!-- .row -->';
-*/
-
-		$html.=$stats->get_season_race_rankings();
 
 		return $html;
 	}
