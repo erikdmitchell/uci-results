@@ -11,7 +11,7 @@ class Top25_cURL {
 	public $version='1.0.3';
 	public $config=array();
 
-	protected $debug=false;
+	protected $debug=true;
 
 	public function __construct($config=array()) {
 		global $wpdb;
@@ -563,7 +563,12 @@ class Top25_cURL {
 		if (!is_object($obj))
 			$obj=json_decode(json_encode($obj),FALSE);
 
-		$code=$obj->event.$obj->date; // combine name and date
+		if (!$obj->date || !$obj->event) :
+			return false;
+		else :
+			$code=$obj->event.$obj->date; // combine name and date
+		endif;
+
 		$code=str_replace(' ','',$code); // remove spaces
 		$code=strtolower($code); // make lowercase
 
@@ -703,6 +708,9 @@ class Top25_cURL {
 			$date_arr[$key]=$new_value;
 		endforeach;
 
+		if (count($date_arr)<3)
+			return false;
+
 		$date=$date_arr[0].' '.$date_arr[1].' '.$date_arr[2];
 
 		return $date;
@@ -736,14 +744,34 @@ class Top25_cURL {
 				$html.='</div>';
 
 				foreach ($obj as $result) :
+					$disabled='';
+					$date=$result->date;
+
+					if (!isset($result->event)) :
+						$result->event=false;
+					else :
+						$event=$result->event;
+					endif;
+
+					if (!$result->date || !$result->event)
+						$disabled='disabled';
+
+					if (!$result->date)
+						$date='No Date';
+
+					if (!$result->event)
+						$event='No Event';
+
 					$html.='<div class="row">';
-						$html.='<div class="col-md-1"><input class="race-checkbox" type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" /></div>';
-						$html.='<div class="col-md-2">'.$result->date.'</div>';
-						$html.='<div class="col-md-3">'.$result->event.'</div>';
-						$html.='<div class="col-md-1">'.$result->nat.'</div>';
-						$html.='<div class="col-md-1">'.$result->class.'</div>';
-						$html.='<div class="col-md-2">'.$result->winner.'</div>';
-						$html.='<div class="col-md-2">'.$result->season.'</div>';
+						$html.='<div class="col-md-1"><input class="race-checkbox" type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" '.$disabled.' /></div>';
+						$html.='<div class="col-md-2">'.$date.'</div>';
+						$html.='<div class="col-md-3">'.$event.'</div>';
+						if ($result->event) :
+							$html.='<div class="col-md-1">'.$result->nat.'</div>';
+							$html.='<div class="col-md-1">'.$result->class.'</div>';
+							$html.='<div class="col-md-2">'.$result->winner.'</div>';
+							$html.='<div class="col-md-2">'.$result->season.'</div>';
+						endif;
 					$html.='</div>';
 					$alt++;
 				endforeach;

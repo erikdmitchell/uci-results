@@ -1,23 +1,6 @@
 jQuery(document).ready(function($) {
 	var $modal=$('.loading-modal');
 
-/*
-	$('#get-race-data').click(function(){
-console.log('a');
-		$modal.show();
-		var data={
-			action:'get-data' ,
-			type:'all'
-		};
-		$.post(ajaxurl,data, function(response) {
-	  	response=$.parseJSON(response);
-	  	$('.uci-curl .data-results').html(response);
-	  	//console.log(response);
-	  	$modal.hide();
-		});
-	});
-*/
-
 	/**
 	 * on our curl page, this runs our select all checkbox functionality
 	 */
@@ -32,7 +15,9 @@ console.log('a');
 		} else {
 			$(this).addClass('unselect');
     	$('.race-checkbox').each(function() {
-      	this.checked = true; //deselect all checkboxes
+	    	if (!$(this).is(':disabled')) {
+	      	this.checked = true; //deselect all checkboxes
+	      }
       });
 		}
   });
