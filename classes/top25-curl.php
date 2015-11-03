@@ -36,7 +36,10 @@ class Top25_cURL {
 		global $FantasyCyclingAdmin;
 
 		add_menu_page('UCI Cross','UCI Cross','administrator','uci-cross',array($this,'display_admin_page'));
-		add_submenu_page('uci-cross','Fantasy','Fantasy','manage_options','fantasy-cycling',array(new FantasyCyclingAdmin(),'admin_page'));
+
+		if (class_exists('FantasyCyclingAdmin')) :
+			add_submenu_page('uci-cross','Fantasy','Fantasy','manage_options','fantasy-cycling',array(new FantasyCyclingAdmin(),'admin_page'));
+		endif;
 		add_submenu_page('uci-cross','UCI cURL','UCI cURL','administrator','uci-curl',array($this,'display_curl_page'));
 		add_submenu_page('uci-cross','UCI View DB','UCI View DB','administrator','uci-view-db',array(new ViewDB(),'display_view_db_page'));
 	}
