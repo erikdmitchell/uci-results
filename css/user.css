@@ -58,6 +58,7 @@
 .season-rider-stats .sos .total {
 	display: none;
 }
+.season-rider-stats h4,
 #rider-graphs .chart-title {
 	font-size: 20px;
 	font-weight: bold;
