@@ -57,6 +57,7 @@ $rider_stats=$RiderStats->get_rider_total($rider_name,$season);
 							<div id="weekly-rankings-wrap">
 								<div class="chart-title">Weekly Rank</div>
 								<canvas id="weekly-rankings"></canvas>
+								<div id="chartjs-tooltip"></div>
 							</div>
 						</div><!-- #rider-graphs -->
 					</div><!-- .row -->
