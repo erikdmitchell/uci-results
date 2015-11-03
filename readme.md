@@ -17,8 +17,10 @@ Added rider stats/rankings
 
 	Added fantasy class/extension.
 	Added country flags.
+	Added graphs and stats for rider rankings.
 	
 	Tweaked url link functions.
+	Fantasy class brings in custom login/register functionality.
 
 ### 1.0.9
 
