@@ -1,0 +1,41 @@
+.fantasy-cycling-create-team .row {
+	margin-bottom: 5px;
+}
+.fantasy-cycling-create-team .longtext {
+	width: 80%;
+}
+
+.fantasy-cycling-team .roster,
+.fantasy-cycling-user-teams {
+	list-style-type: none;
+	margin: 0;
+}
+
+.team-standings .header {
+	font-weight: bold;
+}
+
+
+.login-register {
+	list-style-type: none;
+	margin: 0;
+}
+.login-register li {
+	float: left;
+	padding-right: 15px;
+	margin-right: 15px;
+	border-right: 1px solid #000;
+}
+.login-register li:last-child {
+	border-right-width: 0;
+}
+
+.fc-posts {
+	list-style-type: none;
+	margin: 0;
+}
+
+.fc-upcoming-races {
+	list-style-type: none;
+	margin: 0;
+}

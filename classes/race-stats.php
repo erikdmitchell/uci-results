@@ -2,7 +2,7 @@
 /**
  * RaceStats class.
  *
- * @since Version 1.6.1
+ * @since Version 1.0.1
  */
 class RaceStats {
 
@@ -77,7 +77,9 @@ class RaceStats {
 			'season' => '2015/2016',
 			'pagination' => true,
 			'paged' => 1,
-			'per_page' => 15
+			'per_page' => 15,
+			'order_by' => 'date',
+			'order' => 'DESC'
 		);
 		$args=array_merge($default_args,$args);
 
@@ -97,14 +99,14 @@ class RaceStats {
 		$sql="
 			SELECT
 				code,
-				date,
+				STR_TO_DATE(date,'%e %M %Y') AS date,
 				event AS name,
 				nat,
 				class,
 				fq
 			FROM $uci_curl->table
 			WHERE season='$season'
-			ORDER BY date
+			ORDER BY $order_by $order
 			$limit
 		";
 
@@ -149,6 +151,7 @@ class RaceStats {
 				event AS race,
 				date,
 				class,
+				nat,
 				season
 			FROM $uci_curl->table
 			WHERE code='$code'

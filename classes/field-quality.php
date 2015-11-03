@@ -1,7 +1,9 @@
 <?php
 /**
- @since Version 1.0.1
-**/
+ * Top25_cURL class.
+ *
+ * @since Version 1.0.1
+ */
 
 class Field_Quality {
 

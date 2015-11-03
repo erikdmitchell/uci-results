@@ -1,23 +1,6 @@
 jQuery(document).ready(function($) {
 	var $modal=$('.loading-modal');
 
-/*
-	$('#get-race-data').click(function(){
-console.log('a');
-		$modal.show();
-		var data={
-			action:'get-data' ,
-			type:'all'
-		};
-		$.post(ajaxurl,data, function(response) {
-	  	response=$.parseJSON(response);
-	  	$('.uci-curl .data-results').html(response);
-	  	//console.log(response);
-	  	$modal.hide();
-		});
-	});
-*/
-
 	/**
 	 * on our curl page, this runs our select all checkbox functionality
 	 */
@@ -32,7 +15,9 @@ console.log('a');
 		} else {
 			$(this).addClass('unselect');
     	$('.race-checkbox').each(function() {
-      	this.checked = true; //deselect all checkboxes
+	    	if (!$(this).is(':disabled')) {
+	      	this.checked = true; //deselect all checkboxes
+	      }
       });
 		}
   });
@@ -45,7 +30,7 @@ console.log('a');
 	});
 
 	/**
-	 * gets an out put of races via the season selected
+	 * gets an output of races via the season selected
 	 */
 	$('#get-races-curl').click(function(e) {
 		$modal.show();
@@ -99,12 +84,40 @@ console.log('a');
 					$('#get-race-data').append(response);
 					$('#get-race-data').find('#counter span.ctr').text(counter);
 					counter++;
+
+					// after we are done races //
+					if (counter>=races.length) {
+						var endData={
+							'action' : 'get_all_riders',
+							'season' : '2015/2016' // NEEDS TO BE DYNAMIC
+						};
+						var cntr=1;
+
+						$.post(ajaxurl,endData,function(riders) {
+							riders=$.parseJSON(riders); // gets all riders
+
+							$('#get-race-data').append('<div id="rider-counter"><span class="ctr">'+cntr+'</span> out of '+riders.length+' proccessed.');
+
+							for (var i in riders) {
+								var ridersData={
+									'action' : 'add_riders_weekly_rankings',
+									'season' : '2015/2016', // NEEDS TO BE DYNAMIC
+									'rider' : riders[i]
+								};
+								// prcoess our riders for weekly rankings //
+								$.post(ajaxurl,ridersData,function(response) {
+									$('#get-race-data').append(response);
+									$('#get-race-data').find('#rider-counter span.ctr').text(cntr);
+									cntr++;
+								});
+							}
+						});
+					}
 				});
 			}
-
 		});
 	});
-
+///////
 	/**
 	 * view db page, race results/details
 	 */

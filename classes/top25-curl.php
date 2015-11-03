@@ -1,8 +1,14 @@
 <?php
+/**
+ * Top25_cURL class.
+ *
+ * @since Version 1.0.0
+ */
 class Top25_cURL {
 
 	public $table;
 	public $results_table;
+	public $weekly_rider_rankings_table;
 	public $version='1.0.3';
 	public $config=array();
 
@@ -17,14 +23,20 @@ class Top25_cURL {
 		add_action('wp_ajax_get_race_data_non_db',array($this,'ajax_get_race_data_non_db'));
 		add_action('wp_ajax_prepare_add_races_to_db',array($this,'ajax_prepare_add_races_to_db'));
 		add_action('wp_ajax_add_race_to_db',array($this,'ajax_add_race_to_db'));
+		add_action('wp_ajax_get_all_riders',array($this,'ajax_get_all_riders'));
+		add_action('wp_ajax_add_riders_weekly_rankings',array($this,'ajax_add_riders_weekly_rankings'));
 
 		$this->setup_config($config);
 		$this->table=$wpdb->prefix.'uci_races';
 		$this->results_table=$wpdb->prefix.'uci_rider_data';
+		$this->weekly_rider_rankings_table=$wpdb->prefix.'uci_weekly_rider_rankings';
 	}
 
 	public function admin_page() {
+		global $FantasyCyclingAdmin;
+
 		add_menu_page('UCI Cross','UCI Cross','administrator','uci-cross',array($this,'display_admin_page'));
+		add_submenu_page('uci-cross','Fantasy','Fantasy','manage_options','fantasy-cycling',array(new FantasyCyclingAdmin(),'admin_page'));
 		add_submenu_page('uci-cross','UCI cURL','UCI cURL','administrator','uci-curl',array($this,'display_curl_page'));
 		add_submenu_page('uci-cross','UCI View DB','UCI View DB','administrator','uci-view-db',array(new ViewDB(),'display_view_db_page'));
 	}
@@ -40,8 +52,6 @@ class Top25_cURL {
 		$html=null;
 		$tabs=array(
 			'uci-cross' => 'UCI Cross',
-			'races' => 'Races',
-			'riders' => 'Riders'
 		);
 		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'uci-cross';
 
@@ -63,12 +73,6 @@ class Top25_cURL {
 			switch ($active_tab) :
 				case 'uci-cross':
 					$html.=$this->default_admin_page();
-					break;
-				case 'races':
-					$html.=$this->races_admin_page();
-					break;
-				case 'riders':
-					$html.=$this->riders_admin_page();
 					break;
 				default:
 					$html.=$this->default_admin_page();
@@ -92,38 +96,6 @@ class Top25_cURL {
 		$html.='<h3>UCI Cross</h3>';
 
 		$html.='<p>Details coming soon on how to use this plugin and what to do.</p>';
-
-		return $html;
-	}
-
-	/**
-	 * races_admin_page function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function races_admin_page() {
-		$html=null;
-		$stats=new RaceStats();
-		$years=$this->get_years_in_db();
-
-		$html.='<h3>Races</h3>';
-
-/*
-		$html.='<div class="row">';
-			$html.='<label for="url-dd" class="col-md-1">Season</label>';
-			$html.='<div class="col-md-2">';
-				$html.='<select class="url-dd" id="get-race-season" name="url">';
-					$html.='<option value="0">Select Year</option>';
-					foreach ($years as $year) :
-						$html.='<option value="'.$year.'">'.$year.'</option>';
-					endforeach;
-				$html.='</select>';
-			$html.='</div>';
-		$html.='</div><!-- .row -->';
-*/
-
-		$html.=$stats->get_season_race_rankings();
 
 		return $html;
 	}
@@ -371,6 +343,25 @@ class Top25_cURL {
 		wp_die();
 	}
 
+	public function ajax_get_all_riders() {
+		global $RiderStats;
+
+		echo json_encode($RiderStats->get_riders_in_season($_POST['season']));
+
+		wp_die();
+	}
+
+	public function ajax_add_riders_weekly_rankings() {
+		global $RiderStats;
+
+		if (!$this->debug) :
+			$RiderStats->generate_total_rank_per_week($_POST['rider'],$_POST['season']); // SLOW???
+			echo '<div class="updated rider-weekly-rankings">'.$_POST['rider'].' - weekly rankings updated.</div>';
+		endif;
+
+		wp_die();
+	}
+
 	/**
 	 * alter_race_link function.
 	 *
@@ -595,7 +586,12 @@ class Top25_cURL {
 		if (!is_object($obj))
 			$obj=json_decode(json_encode($obj),FALSE);
 
-		$code=$obj->event.$obj->date; // combine name and date
+		if (!$obj->date || !$obj->event) :
+			return false;
+		else :
+			$code=$obj->event.$obj->date; // combine name and date
+		endif;
+
 		$code=str_replace(' ','',$code); // remove spaces
 		$code=strtolower($code); // make lowercase
 
@@ -735,6 +731,9 @@ class Top25_cURL {
 			$date_arr[$key]=$new_value;
 		endforeach;
 
+		if (count($date_arr)<3)
+			return false;
+
 		$date=$date_arr[0].' '.$date_arr[1].' '.$date_arr[2];
 
 		return $date;
@@ -768,14 +767,34 @@ class Top25_cURL {
 				$html.='</div>';
 
 				foreach ($obj as $result) :
+					$disabled='';
+					$date=$result->date;
+
+					if (!isset($result->event)) :
+						$result->event=false;
+					else :
+						$event=$result->event;
+					endif;
+
+					if (!$result->date || !$result->event)
+						$disabled='disabled';
+
+					if (!$result->date)
+						$date='No Date';
+
+					if (!$result->event)
+						$event='No Event';
+
 					$html.='<div class="row">';
-						$html.='<div class="col-md-1"><input class="race-checkbox" type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" /></div>';
-						$html.='<div class="col-md-2">'.$result->date.'</div>';
-						$html.='<div class="col-md-3">'.$result->event.'</div>';
-						$html.='<div class="col-md-1">'.$result->nat.'</div>';
-						$html.='<div class="col-md-1">'.$result->class.'</div>';
-						$html.='<div class="col-md-2">'.$result->winner.'</div>';
-						$html.='<div class="col-md-2">'.$result->season.'</div>';
+						$html.='<div class="col-md-1"><input class="race-checkbox" type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" '.$disabled.' /></div>';
+						$html.='<div class="col-md-2">'.$date.'</div>';
+						$html.='<div class="col-md-3">'.$event.'</div>';
+						if ($result->event) :
+							$html.='<div class="col-md-1">'.$result->nat.'</div>';
+							$html.='<div class="col-md-1">'.$result->class.'</div>';
+							$html.='<div class="col-md-2">'.$result->winner.'</div>';
+							$html.='<div class="col-md-2">'.$result->season.'</div>';
+						endif;
 					$html.='</div>';
 					$alt++;
 				endforeach;
@@ -803,7 +822,7 @@ class Top25_cURL {
 	public function get_years_in_db() {
 		global $wpdb;
 
-		$years=$wpdb->get_col("SELECT season FROM $this->table GROUP BY season");
+		$years=$wpdb->get_col("SELECT season FROM $this->table WHERE season!='false' GROUP BY season");
 
 		return $years;
 	}

@@ -23,7 +23,7 @@ $results=$RiderStats->get_country($country);
 				Results not found.
 			<?php else : ?>
 				<div class="uci-curl-rider-rankings">
-					<h3><?php echo $country; ?> (<?php echo $season; ?>)</h3>
+					<h3><?php echo get_country_flag($country,'full'); ?> (<?php echo $season; ?>)</h3>
 
 					<div id="season-rider-rankings" class="season-rider-rankings">
 						<div class="header row">
