@@ -42,7 +42,7 @@ class FieldQuality {
 		//$previous_races=$this->get_previous_races($race_details->season,$race_details->date); // may not need
 		$uci_points=$this->get_points_before_race($race_details->season,$race_details->date);
 		$wcp_points=$this->get_points_before_race($race_details->season,$race_details->date,'wcp');
-		$race_results=$this->append_previous_race_points($race_details->season,$race_details->date,$race_results);
+		$race_results=$this->append_previous_race_points($race_details->season,$race_details->date,$race_results); // SLOW
 		$uci_points_in_field=0;
 		$wcp_points_in_field=0;
 		$uci_multiplier=0;
@@ -81,6 +81,8 @@ class FieldQuality {
 			default:
 				$race_class_number=0;
 		endswitch;
+
+		$this->get_average_finishers();
 
 echo '<pre>';
 //print_r($race_details);
@@ -170,6 +172,82 @@ MATH
 		endforeach;
 
 		return $results;
+	}
+
+	protected function get_average_finishers($season=false,$class=false) {
+		global $wpdb,$uci_curl;
+
+		$CrossSeasons=new CrossSeasons();
+		$seasons=$CrossSeasons->seasons;
+		$where=array();
+		$finishers=array();
+
+		if ($season)
+			$where[]="races.season='{$season}'";
+
+		if ($class)
+			$where="class='{$class}'";
+
+		if (!empty($where))
+			$where='WHERE '.implode(' AND ',$where);
+
+		if (!$season) :
+			foreach ($seasons as $s) :
+				$where="WHERE season='{$s}'";
+				$sql="
+					SELECT
+						SUM(finishers) AS total_finishers,
+						SUM(total_races) AS total_races
+					FROM (
+						SELECT
+							COUNT(results.name) AS finishers,
+							0 AS total_races
+						FROM $uci_curl->table AS races
+						LEFT JOIN $uci_curl->results_table AS results
+						ON races.code=results.code
+						$where
+						GROUP BY races.code
+
+						UNION ALL
+
+						SELECT
+							0 AS finishers,
+							COUNT(*) AS total_races
+						FROM $uci_curl->table AS races
+						$where
+					) t
+				";
+				$finishers[$season]=$wpdb->get_results($sql);
+			endforeach;
+		else :
+		echo $sql="
+			SELECT
+				SUM(finishers) AS total_finishers,
+				SUM(total_races) AS total_races
+			FROM (
+				SELECT
+					COUNT(results.name) AS finishers,
+					0 AS total_races
+				FROM $uci_curl->table AS races
+				LEFT JOIN $uci_curl->results_table AS results
+				ON races.code=results.code
+				$where
+				GROUP BY races.code
+
+				UNION ALL
+
+				SELECT
+					0 AS finishers,
+					COUNT(*) AS total_races
+				FROM $uci_curl->table AS races
+				$where
+			) t
+		";
+		endif;
+
+echo '<pre>';
+print_r($finishers);
+echo '</pre>';
 	}
 /*
 
