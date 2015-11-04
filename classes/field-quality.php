@@ -7,7 +7,7 @@
 
 class Field_Quality {
 
-	public $version='0.1.0';
+	public $version='0.1.1';
 	public $wcp_total=0;
 	public $wcp_field;
 	public $wcp_mult;
