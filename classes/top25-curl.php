@@ -94,11 +94,15 @@ class Top25_cURL {
 	 * @return void
 	 */
 	public function default_admin_page() {
+		global $FieldQuality;
+
 		$html=null;
 
 		$html.='<h3>UCI Cross</h3>';
 
 		$html.='<p>Details coming soon on how to use this plugin and what to do.</p>';
+
+		$FieldQuality->generate_field_quality('nittanylioncross12sep2015');
 
 		return $html;
 	}
