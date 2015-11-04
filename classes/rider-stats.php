@@ -6,6 +6,8 @@
  */
 class RiderStats {
 
+	public $date_format='M. j Y';
+
 	/**
 	 * __construct function.
 	 *
@@ -211,6 +213,12 @@ class RiderStats {
 			ORDER BY races.date
 		";
 		$results=$wpdb->get_results($sql);
+
+		// clean up some misc db slashes and formatting //
+		foreach ($results as $result) :
+			$result->name=stripslashes($result->name);
+			$result->date=date($this->date_format,strtotime($result->date));
+		endforeach;
 
 		return $results;
 	}

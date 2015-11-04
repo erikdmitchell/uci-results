@@ -7,6 +7,7 @@
 class RaceStats {
 
 	public $max_rows=0;
+	public $date_format='M. j Y';
 
 	/**
 	 * __construct function.
@@ -114,6 +115,12 @@ class RaceStats {
 
 		$max_races=$wpdb->get_results("SELECT DISTINCT(code) FROM $uci_curl->table WHERE season='$season'");
 		$wp_query->uci_curl_max_pages=$wpdb->num_rows; // set max
+
+		// clean up some misc db slashes and formatting //
+		foreach ($races as $race) :
+			$race->name=stripslashes($race->name);
+			$race->date=date($this->date_format,strtotime($race->date));
+		endforeach;
 
 		return $races;
 	}
