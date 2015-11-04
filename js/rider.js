@@ -1,5 +1,6 @@
 var weeks=[];
 var dataset=[];
+var inverted=[];
 
 // build weeks //
 for (var i in wpOptions.weekly_ranks) {
@@ -8,12 +9,25 @@ for (var i in wpOptions.weekly_ranks) {
 
 // build data //
 for (var i in wpOptions.weekly_ranks) {
-	dataset.push(wpOptions.weekly_ranks[i].rank);
+	dataset.push(parseInt(wpOptions.weekly_ranks[i].rank));
 }
 
-var max=max = Math.max.apply(Math, dataset);
-var steps=5;
-var inverted=[];
+var max=Math.max.apply(Math,dataset);
+
+// in cases where a rider went from 0 to X and X remained the same, it can skew the graph
+// we check for the unique values and if there's 2 or less, we can assume that their is either 1 or 2 changes
+// if 1 change, do nothing for now NOT SETUP
+// if 2 changes and one is Zero (0), then we create some dummy numbers
+if (arrayUnique(dataset).length==2) {
+	for (var i in dataset) {
+		if (dataset[i]==0) {
+			dataset[i]=max+(max+1);
+		}
+	}
+	max=Math.max.apply(Math,dataset); // redo max
+}
+
+console.log(dataset);
 
 // make inverted //
 for (var i in dataset) {
@@ -37,10 +51,22 @@ var lineChartData = {
 			pointStrokeColor: "#fff",
 			pointHighlightFill: "#fff",
 			pointHighlightStroke: "rgba(151,187,205,1)",
-			data: inverted
+			data: inverted //[5, 5, 3, 3, 3, 3, 3, 3, 3, 3]
 		}
 	]
 };
+
+
+console.log(inverted);
+
+var steps=5;
+var scaleWidth=Math.ceil(max/steps);
+//var scaleWidth=Math.floor(max/steps);
+var scaleStart=0;
+
+console.log('m: '+max);
+console.log('s: '+steps);
+console.log('w: '+scaleWidth);
 
 window.onload=function() {
 	var ctx = document.getElementById("weekly-rankings").getContext("2d");
@@ -84,8 +110,8 @@ window.onload=function() {
 			});
 		},
 		scaleOverride: true,
-		scaleStartValue: 0,
-		scaleStepWidth: Math.ceil(max/steps),
+		scaleStartValue: scaleStart,
+		scaleStepWidth: scaleWidth,
 		scaleSteps: steps,
 		responsive:true,
 		scaleLabel: function(object) {
@@ -100,3 +126,11 @@ window.onload=function() {
 	});
 
 }
+
+
+function arrayUnique(a) {
+	return a.reduce(function(p, c) {
+	  if (p.indexOf(c) < 0) p.push(c);
+	  return p;
+	}, []);
+};

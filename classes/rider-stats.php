@@ -216,7 +216,7 @@ class RiderStats {
 
 		// clean up some misc db slashes and formatting //
 		foreach ($results as $result) :
-			$result->name=stripslashes($result->name);
+			$result->race=stripslashes($result->race);
 			$result->date=date($this->date_format,strtotime($result->date));
 		endforeach;
 
