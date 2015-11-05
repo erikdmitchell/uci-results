@@ -69,21 +69,25 @@ if (diffInverted<steps) {
 }
 //////////////////////////////////////// END WEEKLY RANKING ////////////////////////////////////////
 //////////////////////////////////////// BEGIN UCI POINTS PIE ////////////////////////////////////////
-console.log(latestWeek);
-//var remainder=100-latestWeek.uci_perc;
 var UCIChartData = [
-    {
-        value: latestWeek.uci,
-        color:"#F7464A",
-        highlight: "#FF5A5E",
-        label: "UCI"
-    },
-    {
-        value: latestWeek.wcp,
-        color: "#46BFBD",
-        highlight: "#5AD3D1",
-        label: "Word Cup"
-    }
+	{
+		value: latestWeek.c1,
+		color:"#F7464A",
+		highlight: "#FF5A5E",
+		label: "C1"
+	},
+	{
+		value: latestWeek.c2,
+		color: "#46BFBD",
+		highlight: "#5AD3D1",
+		label: "C2"
+	},
+	{
+		value: latestWeek.wcp,
+		color: "#FDB45C",
+		highlight: "#FFC870",
+		label: "Word Cup"
+	}
 ];
 //////////////////////////////////////// END UCI POINTS PIE ////////////////////////////////////////
 

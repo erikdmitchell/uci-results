@@ -6,7 +6,7 @@
  */
 class UCIcURLDB {
 
-	public $db_version='0.1.4';
+	public $db_version='0.1.5';
 	public $wp_option_name='ucicurl_version';
 
 	/**
@@ -77,6 +77,9 @@ class UCIcURLDB {
 		  `uci_perc` DECIMAL(7,3) NOT NULL,
 		  `wcp` int(11) NOT NULL,
 		  `wcp_perc` DECIMAL(7,3) NOT NULL,
+		  `c1` int(11) NOT NULL,
+		  `c2` int(11) NOT NULL,
+		  `cn` int(11) NOT NULL,
 		  `win_perc` DECIMAL(7,3) NOT NULL,
 		  `wins` int(11) NOT NULL,
 		  PRIMARY KEY (`id`)
@@ -154,6 +157,9 @@ class UCIcURLDB {
 		  `uci_perc` DECIMAL(7,3) NOT NULL,
 		  `wcp` int(11) NOT NULL,
 		  `wcp_perc` DECIMAL(7,3) NOT NULL,
+		  `c1` int(11) NOT NULL,
+		  `c2` int(11) NOT NULL,
+		  `cn` int(11) NOT NULL,
 		  `win_perc` DECIMAL(7,3) NOT NULL,
 		  `wins` int(11) NOT NULL,
 		  PRIMARY KEY (`id`)
