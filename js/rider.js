@@ -27,8 +27,6 @@ if (arrayUnique(dataset).length==2) {
 	max=Math.max.apply(Math,dataset); // redo max
 }
 
-console.log(dataset);
-
 // make inverted //
 for (var i in dataset) {
 	var newValue=max-dataset[i];
@@ -56,17 +54,16 @@ var lineChartData = {
 	]
 };
 
-
-console.log(inverted);
-
 var steps=5;
 var scaleWidth=Math.ceil(max/steps);
-//var scaleWidth=Math.floor(max/steps);
 var scaleStart=0;
+var maxInverted=Math.max.apply(Math,inverted);
+var minInverted=Math.min.apply(Math,inverted);
+var diffInverted=maxInverted-minInverted;
 
-console.log('m: '+max);
-console.log('s: '+steps);
-console.log('w: '+scaleWidth);
+if (diffInverted<steps) {
+	steps=diffInverted;
+}
 
 window.onload=function() {
 	var ctx = document.getElementById("weekly-rankings").getContext("2d");
