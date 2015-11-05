@@ -1,3 +1,6 @@
+var latestWeek=wpOptions.weekly_ranks[wpOptions.weekly_ranks.length-1];
+
+//////////////////////////////////////// BEGIN WEEKLY RANKING ////////////////////////////////////////
 var weeks=[];
 var dataset=[];
 var inverted=[];
@@ -64,10 +67,31 @@ var diffInverted=maxInverted-minInverted;
 if (diffInverted<steps) {
 	steps=diffInverted;
 }
+//////////////////////////////////////// END WEEKLY RANKING ////////////////////////////////////////
+//////////////////////////////////////// BEGIN UCI POINTS PIE ////////////////////////////////////////
+console.log(latestWeek);
+//var remainder=100-latestWeek.uci_perc;
+var UCIChartData = [
+    {
+        value: latestWeek.uci,
+        color:"#F7464A",
+        highlight: "#FF5A5E",
+        label: "UCI"
+    },
+    {
+        value: latestWeek.wcp,
+        color: "#46BFBD",
+        highlight: "#5AD3D1",
+        label: "Word Cup"
+    }
+];
+//////////////////////////////////////// END UCI POINTS PIE ////////////////////////////////////////
 
 window.onload=function() {
 	var ctx = document.getElementById("weekly-rankings").getContext("2d");
+	var UCIctx = document.getElementById("uci-points").getContext("2d");
 
+	// weekly ranking chart //
 	var chartInverted=new Chart(ctx).Line(lineChartData, {
 		customTooltips: function(tooltip) {
 			var tooltipEl = jQuery('#chartjs-tooltip');
@@ -122,8 +146,13 @@ window.onload=function() {
 		}
 	});
 
+	// uci points pie chart //
+	var UCIPieChart=new Chart(UCIctx).Pie(UCIChartData, {
+
+	});
 }
 
+//////////////////////////////////////// GENERAL FUNCTIONS ////////////////////////////////////////
 
 function arrayUnique(a) {
 	return a.reduce(function(p, c) {

@@ -619,6 +619,15 @@ class RiderStats {
 		return;
 	}
 
+	/**
+	 * get_rider_weekly_rank function.
+	 *
+	 * @access public
+	 * @param bool $rider_name (default: false)
+	 * @param bool $season (default: false)
+	 * @param bool $week (default: false)
+	 * @return void
+	 */
 	function get_rider_weekly_rank($rider_name=false,$season=false,$week=false) {
 		global $wpdb,$uci_curl;
 

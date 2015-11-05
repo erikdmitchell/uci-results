@@ -59,6 +59,11 @@ $rider_stats=$RiderStats->get_rider_total($rider_name,$season);
 								<canvas id="weekly-rankings"></canvas>
 								<div id="chartjs-tooltip"></div>
 							</div>
+							<div id="uci-points-wrap">
+								<div class="chart-title">UCI Points</div>
+								<canvas id="uci-points"></canvas>
+								<!-- <div id="chartjs-tooltip"></div> -->
+							</div>
 						</div><!-- #rider-graphs -->
 					</div><!-- .row -->
 					<div id="season-rider-rankings" class="season-rider-rankings">

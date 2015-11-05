@@ -6,7 +6,7 @@
  */
 class UCIcURLDB {
 
-	public $db_version='0.1.3';
+	public $db_version='0.1.4';
 	public $wp_option_name='ucicurl_version';
 
 	/**
