@@ -698,10 +698,8 @@ class RiderStats {
 				'win_perc' => $rider_data->win_perc,
 				'wins' => $rider_data->wins,
 			);
-echo '<pre>';
-print_r($data);
-echo '</pre>';
-			//$wpdb->insert($uci_curl->weekly_rider_rankings_table,$data);
+
+			$wpdb->insert($uci_curl->weekly_rider_rankings_table,$data);
 
 			if (strtotime($week[1])>strtotime(date('Y-m-d')))
 				break;
