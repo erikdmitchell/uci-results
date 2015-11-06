@@ -152,8 +152,10 @@ window.onload=function() {
 
 	// uci points pie chart //
 	var UCIPieChart=new Chart(UCIctx).Pie(UCIChartData, {
-
+		legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
 	});
+
+	document.getElementById('uci-points-chart-legend').innerHTML=UCIPieChart.generateLegend();
 }
 
 //////////////////////////////////////// GENERAL FUNCTIONS ////////////////////////////////////////
