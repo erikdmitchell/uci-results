@@ -82,10 +82,10 @@ class FieldQuality {
 				$race_class_number=0;
 		endswitch;
 
-		$this->get_average_finishers();
+		$finishers=$this->get_average_finishers($race_details->season,$race_details->class);
 
 echo '<pre>';
-//print_r($race_details);
+print_r($race_details);
 echo "$uci_points<br>";
 echo "$wcp_points<br>";
 echo "$uci_points_in_field<br>";
@@ -93,6 +93,7 @@ echo "$wcp_points_in_field<br>";
 echo "$uci_multiplier<br>";
 echo "$wcp_multiplier<br>";
 echo "$race_class_number<br>";
+print_r($finishers);
 echo '</pre>';
 /*
 -get all uci points before race date
@@ -186,68 +187,85 @@ MATH
 			$where[]="races.season='{$season}'";
 
 		if ($class)
-			$where="class='{$class}'";
+			$where[]="class='{$class}'";
 
 		if (!empty($where))
 			$where='WHERE '.implode(' AND ',$where);
 
 		if (!$season) :
 			foreach ($seasons as $s) :
-				$where="WHERE season='{$s}'";
 				$sql="
 					SELECT
+						class,
 						SUM(finishers) AS total_finishers,
 						SUM(total_races) AS total_races
-					FROM (
+					FROM
+					(
 						SELECT
+							races.class AS class,
+							0 AS finishers,
+							COUNT(*) AS total_races
+						FROM $uci_curl->table AS races
+						WHERE season='{$s}'
+						GROUP BY class
+
+						UNION
+
+						SELECT
+							races.class AS class,
 							COUNT(results.name) AS finishers,
 							0 AS total_races
 						FROM $uci_curl->table AS races
 						LEFT JOIN $uci_curl->results_table AS results
 						ON races.code=results.code
-						$where
-						GROUP BY races.code
-
-						UNION ALL
-
-						SELECT
-							0 AS finishers,
-							COUNT(*) AS total_races
-						FROM $uci_curl->table AS races
-						$where
+						WHERE races.season='{$s}'
+						GROUP BY class
 					) t
+					GROUP BY class
 				";
-				$finishers[$season]=$wpdb->get_results($sql);
+				$finishers[$s]=$wpdb->get_results($sql);
 			endforeach;
 		else :
-		echo $sql="
-			SELECT
-				SUM(finishers) AS total_finishers,
-				SUM(total_races) AS total_races
-			FROM (
+			$sql="
 				SELECT
-					COUNT(results.name) AS finishers,
-					0 AS total_races
-				FROM $uci_curl->table AS races
-				LEFT JOIN $uci_curl->results_table AS results
-				ON races.code=results.code
-				$where
-				GROUP BY races.code
+					class,
+					SUM(finishers) AS total_finishers,
+					SUM(total_races) AS total_races
+				FROM
+				(
+					SELECT
+						races.class AS class,
+						0 AS finishers,
+						COUNT(*) AS total_races
+					FROM $uci_curl->table AS races
+					$where
+					GROUP BY class
 
-				UNION ALL
+					UNION
 
-				SELECT
-					0 AS finishers,
-					COUNT(*) AS total_races
-				FROM $uci_curl->table AS races
-				$where
-			) t
-		";
+					SELECT
+						races.class AS class,
+						COUNT(results.name) AS finishers,
+						0 AS total_races
+					FROM $uci_curl->table AS races
+					LEFT JOIN $uci_curl->results_table AS results
+					ON races.code=results.code
+					$where
+					GROUP BY class
+				) t
+				GROUP BY class
+			";
+			$finishers[$season]=$wpdb->get_results($sql);
 		endif;
 
-echo '<pre>';
-print_r($finishers);
-echo '</pre>';
+		// append average finishers //
+		foreach ($finishers as $classes) :
+			foreach ($classes as $class) :
+				$class->average_finishers=ceil($class->total_finishers/$class->total_races);
+			endforeach;
+		endforeach;
+
+		return $finishers;
 	}
 /*
 
