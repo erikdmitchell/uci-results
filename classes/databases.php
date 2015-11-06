@@ -6,7 +6,7 @@
  */
 class UCIcURLDB {
 
-	public $db_version='0.1.3';
+	public $db_version='0.1.5';
 	public $wp_option_name='ucicurl_version';
 
 	/**
@@ -68,16 +68,19 @@ class UCIcURLDB {
 			`week` INT NOT NULL,
 			`start_date` DATE NOT NULL,
 			`end_date` DATE NOT NULL,
-		  `race_perc` int(11) NOT NULL,
+		  `race_perc` DECIMAL(7,3) NOT NULL,
 		  `races` int(11) NOT NULL,
 		  `rank` int(11) NOT NULL,
-		  `sos` int(11) NOT NULL,
-		  `total` int(11) NOT NULL,
+		  `sos` DECIMAL(7,3) NOT NULL,
+		  `total` DECIMAL(7,3) NOT NULL,
 		  `uci` int(11) NOT NULL,
-		  `uci_perc` int(11) NOT NULL,
+		  `uci_perc` DECIMAL(7,3) NOT NULL,
 		  `wcp` int(11) NOT NULL,
-		  `wcp_perc` int(11) NOT NULL,
-		  `win_perc` int(11) NOT NULL,
+		  `wcp_perc` DECIMAL(7,3) NOT NULL,
+		  `c1` int(11) NOT NULL,
+		  `c2` int(11) NOT NULL,
+		  `cn` int(11) NOT NULL,
+		  `win_perc` DECIMAL(7,3) NOT NULL,
 		  `wins` int(11) NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
@@ -145,16 +148,19 @@ class UCIcURLDB {
 			`week` INT NOT NULL,
 			`start_date` DATE NOT NULL,
 			`end_date` DATE NOT NULL,
-		  `race_perc` int(11) NOT NULL,
+		  `race_perc` DECIMAL(7,3) NOT NULL,
 		  `races` int(11) NOT NULL,
 		  `rank` int(11) NOT NULL,
-		  `sos` int(11) NOT NULL,
-		  `total` int(11) NOT NULL,
+		  `sos` DECIMAL(7,3) NOT NULL,
+		  `total` DECIMAL(7,3) NOT NULL,
 		  `uci` int(11) NOT NULL,
-		  `uci_perc` int(11) NOT NULL,
+		  `uci_perc` DECIMAL(7,3) NOT NULL,
 		  `wcp` int(11) NOT NULL,
-		  `wcp_perc` int(11) NOT NULL,
-		  `win_perc` int(11) NOT NULL,
+		  `wcp_perc` DECIMAL(7,3) NOT NULL,
+		  `c1` int(11) NOT NULL,
+		  `c2` int(11) NOT NULL,
+		  `cn` int(11) NOT NULL,
+		  `win_perc` DECIMAL(7,3) NOT NULL,
 		  `wins` int(11) NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
