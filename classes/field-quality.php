@@ -36,17 +36,21 @@ class FieldQuality {
 		if (!$race_code)
 			return false;
 
+		$CrossSeasons=new CrossSeasons();
+		$seasons=$CrossSeasons->seasons;
 		$race_data=$RaceStats->get_race($race_code);
 		$race_results=$race_data->results;
 		$race_details=$race_data->details;
-		//$previous_races=$this->get_previous_races($race_details->season,$race_details->date); // may not need
 		$uci_points=$this->get_points_before_race($race_details->season,$race_details->date);
 		$wcp_points=$this->get_points_before_race($race_details->season,$race_details->date,'wcp');
 		$race_results=$this->append_previous_race_points($race_details->season,$race_details->date,$race_results); // SLOW
+		$number_of_finishers=count($race_results);
 		$uci_points_in_field=0;
 		$wcp_points_in_field=0;
 		$uci_multiplier=0;
 		$wcp_multiplier=0;
+		$previous_season=0;
+		$divider=1;
 
 		// get total uci and wcp points //
 		foreach ($race_results as $result) :
@@ -55,11 +59,15 @@ class FieldQuality {
 		endforeach;
 
 		// get our multipliers //
-		if ($uci_points!=0)
+		if ($uci_points!=0) :
 			$uci_multiplier=$uci_points_in_field/$uci_points;
+			$divider++;
+		endif;
 
-		if ($wcp_points!=0)
+		if ($wcp_points!=0) :
 			$wcp_multiplier=$wcp_points_in_field/$wcp_points;
+			$divider++;
+		endif;
 
 		// race class number //
 		switch ($race_details->class) :
@@ -82,32 +90,42 @@ class FieldQuality {
 				$race_class_number=0;
 		endswitch;
 
-		$finishers=$this->get_average_finishers($race_details->season,$race_details->class);
+		// get previous season //
+		foreach ($seasons as $key => $season) :
+			if ($season==$race_details->season && isset($seasons[$key-1]))
+				$previous_season=$seasons[$key-1];
+		endforeach;
+
+		// get finishers multiplier //
+		$finishers=$this->get_average_finishers($previous_season,$race_details->class);
+		$finishers_multiplier=$number_of_finishers/$finishers[$previous_season][0]->average_finishers;
+
+		if ($finishers_multiplier>1)
+			$finishers_multiplier=1;
+
+
 
 echo '<pre>';
-print_r($race_details);
-echo "$uci_points<br>";
-echo "$wcp_points<br>";
-echo "$uci_points_in_field<br>";
-echo "$wcp_points_in_field<br>";
-echo "$uci_multiplier<br>";
-echo "$wcp_multiplier<br>";
-echo "$race_class_number<br>";
-print_r($finishers);
+//echo "$uci_points<br>";
+//echo "$wcp_points<br>";
+//echo "$uci_points_in_field<br>";
+//echo "wcp: $wcp_points_in_field<br>";
+echo "uci: $uci_multiplier<br>";
+echo "wcp: $wcp_multiplier<br>";
+echo "race class: $race_class_number*<br>";
+echo "finishers: $finishers_multiplier<br>";
 echo '</pre>';
-/*
--get all uci points before race date
--get all world cup points before race date
--rider uci points
--rider wcp points
--uci points in field
--world cup points in field
--multiplier*
--race class conversion* --- NOT USED IN MATH YET
-finisher multiplier*
-MATH
-*/
 
+$fq=($wcp_multiplier+$uci_multiplier+$finishers_multiplier)/$divider;
+$final_fq=($fq+$wcp_multiplier+$finishers_multiplier)/$divider;
+echo "FQ: ( $wcp_multiplier + $uci_multiplier + $finishers_multiplier ) / $divider [$fq]<br>";
+echo "FINAL FQ: ( $fq + $wcp_multiplier + $finishers_multiplier ) / $divider [$final_fq]<br>";
+/*
+FQ=(wcp multiplier + uci multiplier + finisher multiplier) / divider
+divider - 3,2,1  -- depends on if wcp or uci race yet
+FINAL: (fq + wcp multiplier + finisher multiplier) / divider
+*/
+echo '<p>* NOT USED</p>';
 	}
 
 	public function get_previous_races($season=false,$race_date=false) {
