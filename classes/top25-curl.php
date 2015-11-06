@@ -94,15 +94,65 @@ class Top25_cURL {
 	 * @return void
 	 */
 	public function default_admin_page() {
-		global $FieldQuality;
+		global $RaceStats;
 
 		$html=null;
+		$races=$RaceStats->get_races(array(
+			'season' => '2015/2016',
+			'pagination' => true,
+			'per_page' => 30,
+			'order' => 'ASC'
+		));
 
 		$html.='<h3>UCI Cross</h3>';
 
 		$html.='<p>Details coming soon on how to use this plugin and what to do.</p>';
+//
+		$html.='<h3>Field Quality Test</h3>';
 
-		$FieldQuality->generate_field_quality('nittanylioncross12sep2015');
+/*
+			$FieldQuality=new FieldQuality('charmcitycross10oct2015');
+			$html.='<p>';
+				$html.='<code>charmcitycross10oct2015</code>';
+				$html.='<pre>';
+					$html.=print_r($FieldQuality,true);
+				$html.='</pre>';
+			$html.='</p>';
+*/
+			$FieldQuality=new FieldQuality("championnatnationald'islande10oct2015");
+			$html.='<p>';
+				$html.="<code>championnatnationald'islande10oct2015</code>";
+				$html.='<pre>';
+					$html.=print_r($FieldQuality,true);
+				$html.='</pre>';
+			$html.='</p>';
+			$FieldQuality=new FieldQuality("trekcxccup11oct2015");
+			$html.='<p>';
+				$html.='<code>trekcxccup11oct2015</code>';
+				$html.='<pre>';
+					$html.=print_r($FieldQuality,true);
+				$html.='</pre>';
+			$html.='</p>';
+			$FieldQuality=new FieldQuality("championnatnationald'estonie11oct2015");
+			$html.='<p>';
+				$html.="<code>championnatnationald'estonie11oct2015</code>";
+				$html.='<pre>';
+					$html.=print_r($FieldQuality,true);
+				$html.='</pre>';
+			$html.='</p>';
+
+/*
+		foreach ($races as $race) :
+			$FieldQuality=new FieldQuality($race->code);
+			$html.='<p>';
+				$html.='<code>'.$race->code.'</code> ('.$race->date.')';
+				$html.='<pre>';
+					$html.=print_r($FieldQuality,true);
+				$html.='</pre>';
+			$html.='</p>';
+		endforeach;
+*/
+//
 
 		return $html;
 	}

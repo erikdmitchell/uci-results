@@ -118,6 +118,7 @@ class RaceStats {
 
 		// clean up some misc db slashes and formatting //
 		foreach ($races as $race) :
+			$race->code=stripslashes($race->code);
 			$race->name=stripslashes($race->name);
 			$race->date=date($this->date_format,strtotime($race->date));
 		endforeach;
@@ -150,7 +151,7 @@ class RaceStats {
 			FROM $uci_curl->results_table AS results
 			LEFT JOIN $uci_curl->table AS races
 			ON results.code=races.code
-			WHERE results.code='$code'
+			WHERE results.code=\"$code\"
 			ORDER BY results.place
 		";
 		$race_sql="
@@ -161,7 +162,7 @@ class RaceStats {
 				nat,
 				season
 			FROM $uci_curl->table
-			WHERE code='$code'
+			WHERE code=\"$code\"
 		";
 
 		$race->results=$wpdb->get_results($sql);
