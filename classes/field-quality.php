@@ -25,13 +25,17 @@ class FieldQuality {
 		global $uci_curl,$RaceStats;
 
 		if (!$race_code)
-			return false;
+			return 0;
 
 		$CrossSeasons=new CrossSeasons();
 		$seasons=$CrossSeasons->seasons;
 		$race_data=$RaceStats->get_race($race_code);
 		$race_results=$race_data->results;
 		$race_details=$race_data->details;
+
+		if (empty($race_data) || empty($race_data->results) || empty($race_data->details))
+			return 0;
+
 		$uci_points=$this->get_points_before_race($race_details->season,$race_details->date);
 		$wcp_points=$this->get_points_before_race($race_details->season,$race_details->date,'wcp');
 		$race_results=$this->append_previous_race_points($race_details->season,$race_details->date,$race_results); // SLOW
@@ -43,10 +47,7 @@ class FieldQuality {
 		$previous_season=0;
 		$divider=1;
 		$fq_obj=new stdClass();
-echo "$race_code<br>";
-echo '<pre>';
-print_r($race_details);
-echo '</pre>';
+
 		// get total uci and wcp points //
 		foreach ($race_results as $result) :
 			$uci_points_in_field=$uci_points_in_field+$result->total_uci_points;
@@ -110,9 +111,7 @@ echo '</pre>';
 		$fq_obj->divider=$divider;
 		$fq_obj->math_fq=$fq;
 		$fq_obj->fq=$final_fq;
-echo '<pre>';
-print_r($fq_obj);
-echo '</pre>';
+
 		return $fq_obj;
 	}
 

@@ -110,38 +110,6 @@ class Top25_cURL {
 //
 		$html.='<h3>Field Quality Test</h3>';
 
-/*
-			$FieldQuality=new FieldQuality('charmcitycross10oct2015');
-			$html.='<p>';
-				$html.='<code>charmcitycross10oct2015</code>';
-				$html.='<pre>';
-					$html.=print_r($FieldQuality,true);
-				$html.='</pre>';
-			$html.='</p>';
-*/
-			$FieldQuality=new FieldQuality("championnatnationald'islande10oct2015");
-			$html.='<p>';
-				$html.="<code>championnatnationald'islande10oct2015</code>";
-				$html.='<pre>';
-					$html.=print_r($FieldQuality,true);
-				$html.='</pre>';
-			$html.='</p>';
-			$FieldQuality=new FieldQuality("trekcxccup11oct2015");
-			$html.='<p>';
-				$html.='<code>trekcxccup11oct2015</code>';
-				$html.='<pre>';
-					$html.=print_r($FieldQuality,true);
-				$html.='</pre>';
-			$html.='</p>';
-			$FieldQuality=new FieldQuality("championnatnationald'estonie11oct2015");
-			$html.='<p>';
-				$html.="<code>championnatnationald'estonie11oct2015</code>";
-				$html.='<pre>';
-					$html.=print_r($FieldQuality,true);
-				$html.='</pre>';
-			$html.='</p>';
-
-/*
 		foreach ($races as $race) :
 			$FieldQuality=new FieldQuality($race->code);
 			$html.='<p>';
@@ -151,7 +119,7 @@ class Top25_cURL {
 				$html.='</pre>';
 			$html.='</p>';
 		endforeach;
-*/
+
 //
 
 		return $html;
