@@ -6,7 +6,7 @@
  */
 class UCIcURLDB {
 
-	public $db_version='0.1.5';
+	public $db_version='0.1.6';
 	public $wp_option_name='ucicurl_version';
 
 	/**
@@ -36,6 +36,14 @@ class UCIcURLDB {
 		  `data` longtext NOT NULL,
 		  `code` tinytext NOT NULL,
 		  `season` tinytext NOT NULL,
+			`date` VARCHAR(30) NOT NULL,
+			`event` TEXT NOT NULL,
+			`nat` VARCHAR(5) NOT NULL,
+			`class` VARCHAR(5) NOT NULL ,
+			`winner` VARCHAR(50) NOT NULL,
+			`season` VARCHAR(30) NOT NULL,
+			`link` TEXT NOT NULL,
+			`fq` VARCHAR(5) NOT NULL
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
@@ -85,12 +93,27 @@ class UCIcURLDB {
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
+		$table_name=$wpdb->prefix.'uci_fq_rankings';
+		$uci_fq_rankings_sql="CREATE TABLE $table_name (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `code` tinytext NOT NULL,
+		  `uci_multiplier` DECIMAL(7,10) NOT NULL,
+          `wcp_multiplier` DECIMAL(7,10) NOT NULL,
+          `race_class_number` int(11) NOT NULL,
+          `finishers_multiplier` DECIMAL(7,10) NOT NULL,
+          `divider` int(11) NOT NULL,
+		  `math_fq` DECIMAL(7,10) NOT NULL,
+		  `fq` DECIMAL(7,10) NOT NULL,
+		  PRIMARY KEY (`id`)
+		) $charset_collate;";
+
 		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 		dbDelta(array(
 			$uci_races_sql,
 			$uci_rider_data_sql,
 			$uci_season_rankings_sql,
-			$uci_weekly_rider_rankings_sql
+			$uci_weekly_rider_rankings_sql,
+			$uci_fq_rankings_sql
 		));
 
 		add_option($this->wp_option_name,$this->db_version);
@@ -165,12 +188,27 @@ class UCIcURLDB {
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
+		$table_name=$wpdb->prefix.'uci_fq_rankings';
+		$uci_fq_rankings_sql="CREATE TABLE $table_name (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `code` tinytext NOT NULL,
+		  `uci_multiplier` DECIMAL(7,10) NOT NULL,
+          `wcp_multiplier` DECIMAL(7,10) NOT NULL,
+          `race_class_number` int(11) NOT NULL,
+          `finishers_multiplier` DECIMAL(7,10) NOT NULL,
+          `divider` int(11) NOT NULL,
+		  `math_fq` DECIMAL(7,10) NOT NULL,
+		  `fq` DECIMAL(7,10) NOT NULL,
+		  PRIMARY KEY (`id`)
+		) $charset_collate;";
+
 		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 		dbDelta(array(
 			$uci_races_sql,
 			$uci_rider_data_sql,
 			$uci_season_rankings_sql,
-			$uci_weekly_rider_rankings_sql
+			$uci_weekly_rider_rankings_sql,
+			$uci_fq_rankings_sql
 		));
 
 		update_option($this->wp_option_name,$this->db_version);
