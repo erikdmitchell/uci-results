@@ -135,7 +135,7 @@ class FieldQuality {
 		$where='';
 
 		if ($type=='wcp')
-			$where=" AND races.class='wcp'";
+			$where=" AND races.class='cdm'";
 
 		if ($rider_name)
 			$where.=" AND results.name=\"{$rider_name}\"";
@@ -150,7 +150,7 @@ class FieldQuality {
 				AND STR_TO_DATE(races.date,'%e %M %Y') < '{$race_date}'
 				$where
 		";
-
+//echo $sql.'<br>';
 		$points=$wpdb->get_var($sql);
 
 		return $points;
