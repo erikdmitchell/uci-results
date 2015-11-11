@@ -7,7 +7,6 @@
 
 class FieldQuality {
 
-	public $version='0.2.0';
 	public $field_quality;
 
 	public function __construct($race_code=false) {
@@ -104,6 +103,8 @@ class FieldQuality {
 		$final_fq=($fq+$wcp_multiplier+$finishers_multiplier)/$divider;
 
 		// build final object //
+		$fq_obj->uci_points_in_field=$uci_points_in_field;
+		$fq_obj->wcp_points_in_field=$wcp_points_in_field;
 		$fq_obj->uci_multiplier=$uci_multiplier;
 		$fq_obj->wcp_multiplier=$wcp_multiplier;
 		$fq_obj->race_class_number=$race_class_number;
