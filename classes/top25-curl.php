@@ -115,11 +115,12 @@ class Top25_cURL {
 				$html.='<div class="row">';
 					$html.='<div class="col-md-4">Name</div>';
 					$html.='<div class="col-md-2">Date</div>';
-					$html.='<div class="col-md-1">FQ</div>';
-					$html.='<div class="col-md-1">Math FQ</div>';
-					$html.='<div class="col-md-1">Divider</div>';
 					$html.='<div class="col-md-1">UCI Pts</div>';
+					$html.='<div class="col-md-1">WCP Pts</div>';
+					$html.='<div class="col-md-1">Race #</div>';
 					$html.='<div class="col-md-1">Fin. Mult.</div>';
+					$html.='<div class="col-md-1">Divider</div>';
+					$html.='<div class="col-md-1">New FQ</div>';
 				$html.='</div>';
 
 		foreach ($races as $race) :
@@ -129,18 +130,19 @@ class Top25_cURL {
 				$html.='<div class="col-md-4">'.$race->name.' ('.$race->class.')</div>';
 				$html.='<div class="col-md-2">'.$race->date.'</div>';
 
-				if (isset($FieldQuality->field_quality->fq))
-					$html.='<div class="col-md-1">'.number_format($FieldQuality->field_quality->fq,3).'</div>';
-				if (isset($FieldQuality->field_quality->math_fq))
-					$html.='<div class="col-md-1">'.number_format($FieldQuality->field_quality->math_fq,3).'</div>';
-				if (isset($FieldQuality->field_quality->divider))
-					$html.='<div class="col-md-1">'.$FieldQuality->field_quality->divider.'</div>';
 				if (isset($FieldQuality->field_quality->uci_points_in_field))
 					$html.='<div class="col-md-1">'.$FieldQuality->field_quality->uci_points_in_field.'</div>';
-				//if (isset($FieldQuality->field_quality->wcp_points_in_field))
-					//$html.='<div class="col-md-1">'.$FieldQuality->field_quality->wcp_points_in_field.'</div>';
+				if (isset($FieldQuality->field_quality->wcp_points_in_field))
+					$html.='<div class="col-md-1">'.$FieldQuality->field_quality->wcp_points_in_field.'</div>';
+				if (isset($FieldQuality->field_quality->race_class_number))
+					$html.='<div class="col-md-1">'.$FieldQuality->field_quality->race_class_number.'</div>';
 				if (isset($FieldQuality->field_quality->finishers_multiplier))
-					$html.='<div class="col-md-1">'.$FieldQuality->field_quality->finishers_multiplier.'</div>';
+					$html.='<div class="col-md-1">'.number_format($FieldQuality->field_quality->finishers_multiplier,3).'</div>';
+				if (isset($FieldQuality->field_quality->divider))
+					$html.='<div class="col-md-1">'.$FieldQuality->field_quality->divider.'</div>';
+				if (isset($FieldQuality->field_quality->new_fq))
+					$html.='<div class="col-md-1">'.round($FieldQuality->field_quality->new_fq).'</div>';
+
 			$html.='</div>';
 		endforeach;
 

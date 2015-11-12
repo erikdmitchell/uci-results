@@ -44,7 +44,10 @@ class FieldQuality {
 		$uci_multiplier=0;
 		$wcp_multiplier=0;
 		$previous_season=0;
-		$divider=1;
+		$divider=0;
+		$fq=0;
+		$final_fq=0;
+		$new_fq=0;
 		$fq_obj=new stdClass();
 
 		// get total uci and wcp points //
@@ -95,23 +98,29 @@ class FieldQuality {
 		$finishers=$this->get_average_finishers($previous_season,$race_details->class);
 		$finishers_multiplier=$number_of_finishers/$finishers[$previous_season][0]->average_finishers;
 
-		if ($finishers_multiplier>1)
-			$finishers_multiplier=1;
+		//if ($finishers_multiplier>1)
+			//$finishers_multiplier=1;
 
 		// do our fq calcultaions //
-		$fq=($wcp_multiplier+$uci_multiplier+$finishers_multiplier)/$divider;
-		$final_fq=($fq+$wcp_multiplier+$finishers_multiplier)/$divider;
+		if ($divider!=0) :
+			$fq=($wcp_multiplier+$uci_multiplier+$finishers_multiplier)/$divider;
+			$final_fq=($fq+$wcp_multiplier+$finishers_multiplier)/$divider;
+
+// ( (UCI/Race Class + WCP/Race Class) / Divider ) * Finisher Multiplier
+			$new_fq=( ( ($uci_points_in_field/$race_class_number)+($wcp_points_in_field/$race_class_number) ) / $divider ) * $finishers_multiplier;
+		endif;
 
 		// build final object //
 		$fq_obj->uci_points_in_field=$uci_points_in_field;
 		$fq_obj->wcp_points_in_field=$wcp_points_in_field;
-		$fq_obj->uci_multiplier=$uci_multiplier;
-		$fq_obj->wcp_multiplier=$wcp_multiplier;
+		//$fq_obj->uci_multiplier=$uci_multiplier;
+		//$fq_obj->wcp_multiplier=$wcp_multiplier;
 		$fq_obj->race_class_number=$race_class_number;
 		$fq_obj->finishers_multiplier=$finishers_multiplier;
 		$fq_obj->divider=$divider;
-		$fq_obj->math_fq=$fq;
-		$fq_obj->fq=$final_fq;
+		//$fq_obj->math_fq=$fq;
+		//$fq_obj->fq=$final_fq;
+		$fq_obj->new_fq=$new_fq;
 
 		return $fq_obj;
 	}
