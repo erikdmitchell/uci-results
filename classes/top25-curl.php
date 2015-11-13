@@ -425,7 +425,7 @@ class Top25_cURL {
 		global $RiderStats;
 
 		if (!$this->debug) :
-			$RiderStats->generate_total_rank_per_week($_POST['rider'],$_POST['season']); // SLOW???
+			//$RiderStats->generate_total_rank_per_week($_POST['rider'],$_POST['season']); // SLOW???
 			echo '<div class="updated rider-weekly-rankings">'.$_POST['rider'].' - weekly rankings updated.</div>';
 		endif;
 
