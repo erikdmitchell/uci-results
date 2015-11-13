@@ -6,7 +6,7 @@
  */
 class UCIcURLDB {
 
-	public $db_version='0.2.0';
+	public $db_version='0.2.1';
 	public $wp_option_name='ucicurl_version';
 
 	/**
@@ -185,7 +185,7 @@ class UCIcURLDB {
 		  `cm` int(11) NOT NULL,
 		  `win_perc` DECIMAL(7,3) NOT NULL,
 		  `wins` int(11) NOT NULL
-		);";
+		)";
 
 		$table_name=$wpdb->prefix.'uci_fq_rankings';
 		$uci_fq_rankings_sql="CREATE TABLE $table_name (
@@ -196,8 +196,8 @@ class UCIcURLDB {
       `race_class_number` int(11) NOT NULL,
       `finishers_multiplier` DECIMAL(7,4) NOT NULL,
       `divider` int(11) NOT NULL,
-		  `fq` DECIMAL(7,4) NOT NULL,
-		);";
+		  `fq` DECIMAL(7,4) NOT NULL
+		)";
 
 		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 		dbDelta(array(

@@ -89,6 +89,8 @@ class RiderStats {
 				SUM(c1_total) AS c1,
 				SUM(c2_total) AS c2,
 				SUM(cn_total) AS cn,
+				SUM(cc_total) AS cc,
+				SUM(cm_total) AS cm,
 				SUM(wins) AS wins,
 				SUM(races) AS races,
 				SUM(wins/races) AS win_perc,
@@ -112,6 +114,8 @@ class RiderStats {
 				0 AS c1_total,
 				0 AS c2_total,
 				0 AS cn_total,
+				0 AS cc_total,
+				0 AS cm_total,
 				SUM(IF(results.place=1,1,0)) AS wins,
 				COUNT(results.code) AS races,
 				(SELECT COUNT(*) FROM $uci_curl->table WHERE season='$season') AS uci_races,
@@ -135,6 +139,8 @@ class RiderStats {
 				0 AS c1_total,
 				0 AS c2_total,
 				0 AS cn_total,
+				0 AS cc_total,
+				0 AS cm_total,
 				0 AS wins,
 				0 AS races,
 				0 AS uci_races,
@@ -159,6 +165,8 @@ class RiderStats {
 				0 AS c1_total,
 				0 AS c2_total,
 				0 AS cn_total,
+				0 AS cc_total,
+				0 AS cm_total,
 				0 AS wins,
 				0 AS races,
 				0 AS uci_races,
@@ -184,6 +192,8 @@ class RiderStats {
 				COALESCE(SUM(results.par),0) AS c1_total,
 				0 AS c2_total,
 				0 AS cn_total,
+				0 AS cc_total,
+				0 AS cm_total,
 				0 AS wins,
 				0 AS races,
 				0 AS uci_races,
@@ -208,6 +218,8 @@ class RiderStats {
 				0 AS c1_total,
 				COALESCE(SUM(results.par),0) AS c2_total,
 				0 AS cn_total,
+				0 AS cc_total,
+				0 AS cm_total,
 				0 AS wins,
 				0 AS races,
 				0 AS uci_races,
@@ -232,6 +244,8 @@ class RiderStats {
 				0 AS c1_total,
 				0 AS c2_total,
 				COALESCE(SUM(results.par),0) AS cn_total,
+				0 AS cc_total,
+				0 AS cm_total,
 				0 AS wins,
 				0 AS races,
 				0 AS uci_races,
@@ -243,6 +257,58 @@ class RiderStats {
 			ON results.code=races.code
 			WHERE season='{$season}'
 				AND races.class='cn'
+				{$dates}
+			GROUP BY results.name
+
+			UNION
+
+			SELECT
+				results.name AS name,
+				results.nat AS nat,
+				0 AS uci_total,
+				0 AS wcp_total,
+				0 AS c1_total,
+				0 AS c2_total,
+				0 AS cn_total,
+				COALESCE(SUM(results.par),0) AS cc_total,
+				0 AS cm_total,
+				0 AS wins,
+				0 AS races,
+				0 AS uci_races,
+				0 AS max_uci_points,
+				0 AS max_wcp_points,
+				0 AS sos
+			FROM $uci_curl->results_table AS results
+			LEFT JOIN $uci_curl->table AS races
+			ON results.code=races.code
+			WHERE season='{$season}'
+				AND races.class='cc'
+				{$dates}
+			GROUP BY results.name
+
+			UNION
+
+			SELECT
+				results.name AS name,
+				results.nat AS nat,
+				0 AS uci_total,
+				0 AS wcp_total,
+				0 AS c1_total,
+				0 AS c2_total,
+				0 AS cn_total,
+				0 AS cc_total,
+				COALESCE(SUM(results.par),0) AS cm_total,
+				0 AS wins,
+				0 AS races,
+				0 AS uci_races,
+				0 AS max_uci_points,
+				0 AS max_wcp_points,
+				0 AS sos
+			FROM $uci_curl->results_table AS results
+			LEFT JOIN $uci_curl->table AS races
+			ON results.code=races.code
+			WHERE season='{$season}'
+				AND races.class='cm'
 				{$dates}
 			GROUP BY results.name
 
@@ -647,8 +713,8 @@ class RiderStats {
 			$rider_data=array();
 
 			// skip if week already in db //
-			//if (in_array($week_counter,$rider_weeks_in_db))
-				//continue;
+			if (in_array($week_counter,$rider_weeks_in_db))
+				continue;
 
 			$riders=$this->get_riders(array(
 				'season' => $season,
@@ -705,8 +771,10 @@ class RiderStats {
 				'win_perc' => $rider_data->win_perc,
 				'wins' => $rider_data->wins,
 			);
-
-			$wpdb->insert($uci_curl->weekly_rider_rankings_table,$data);
+echo '<pre>';
+print_r($data);
+echo '</pre>';
+			//$wpdb->insert($uci_curl->weekly_rider_rankings_table,$data);
 
 			if (strtotime($week[1])>strtotime(date('Y-m-d')))
 				break;
