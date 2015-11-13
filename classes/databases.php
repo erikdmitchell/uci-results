@@ -6,7 +6,7 @@
  */
 class UCIcURLDB {
 
-	public $db_version='0.1.6';
+	public $db_version='0.1.7';
 	public $wp_option_name='ucicurl_version';
 
 	/**
@@ -43,7 +43,6 @@ class UCIcURLDB {
 			`winner` VARCHAR(50) NOT NULL,
 			`season` VARCHAR(30) NOT NULL,
 			`link` TEXT NOT NULL,
-			`fq` VARCHAR(5) NOT NULL
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
@@ -97,13 +96,13 @@ class UCIcURLDB {
 		$uci_fq_rankings_sql="CREATE TABLE $table_name (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `code` tinytext NOT NULL,
-		  `uci_multiplier` DECIMAL(7,10) NOT NULL,
-          `wcp_multiplier` DECIMAL(7,10) NOT NULL,
-          `race_class_number` int(11) NOT NULL,
-          `finishers_multiplier` DECIMAL(7,10) NOT NULL,
-          `divider` int(11) NOT NULL,
-		  `math_fq` DECIMAL(7,10) NOT NULL,
-		  `fq` DECIMAL(7,10) NOT NULL,
+		  `uci_multiplier` DECIMAL(7,4) NOT NULL,
+      `wcp_multiplier` DECIMAL(7,4) NOT NULL,
+      `race_class_number` int(11) NOT NULL,
+      `finishers_multiplier` DECIMAL(7,4) NOT NULL,
+      `divider` int(11) NOT NULL,
+		  `math_fq` DECIMAL(7,4) NOT NULL,
+		  `fq` DECIMAL(7,4) NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
@@ -122,8 +121,7 @@ class UCIcURLDB {
 	public function db_update() {
 		global $wpdb;
 
-		$table_name=$wpdb->prefix.'uci_races';
-		$uci_races_sql="CREATE TABLE $table_name (
+		$uci_races_sql="CREATE TABLE ".$wpdb->prefix."uci_races (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `code` tinytext NOT NULL,
 		  `season` tinytext NOT NULL,
@@ -133,10 +131,9 @@ class UCIcURLDB {
 			`class` VARCHAR(5) NOT NULL ,
 			`winner` VARCHAR(50) NOT NULL,
 			`season` VARCHAR(30) NOT NULL,
-			`link` TEXT NOT NULL,
-			`fq` VARCHAR(5) NOT NULL
-		);";
-		$alter_races_sql='"ALTER TABLE `'.$table_name.'` DROP `data`;"';
+			`link` TEXT NOT NULL
+		)";
+		$alter_races_sql='"ALTER TABLE `'.$wpdb->prefix.'uci_races` DROP `data`;"';
 
 		$table_name=$wpdb->prefix.'uci_rider_data';
 		$uci_rider_data_sql="CREATE TABLE $table_name (
@@ -148,7 +145,7 @@ class UCIcURLDB {
 			`age` int(11) NOT NULL ,
 			`time` VARCHAR(10) NOT NULL,
 			`par` VARCHAR(10) NOT NULL,
-			`pcr` VARCHAR(10) NOT NULL,
+			`pcr` VARCHAR(10) NOT NULL
 		);";
 		$alter_rider_data_sql='"ALTER TABLE `'.$table_name.'` DROP `data`;"';
 
@@ -184,23 +181,23 @@ class UCIcURLDB {
 		  `c2` int(11) NOT NULL,
 		  `cn` int(11) NOT NULL,
 		  `win_perc` DECIMAL(7,3) NOT NULL,
-		  `wins` int(11) NOT NULL,
+		  `wins` int(11) NOT NULL
 		  PRIMARY KEY (`id`)
-		) $charset_collate;";
+		);";
 
 		$table_name=$wpdb->prefix.'uci_fq_rankings';
 		$uci_fq_rankings_sql="CREATE TABLE $table_name (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `code` tinytext NOT NULL,
-		  `uci_multiplier` DECIMAL(7,10) NOT NULL,
-          `wcp_multiplier` DECIMAL(7,10) NOT NULL,
-          `race_class_number` int(11) NOT NULL,
-          `finishers_multiplier` DECIMAL(7,10) NOT NULL,
-          `divider` int(11) NOT NULL,
-		  `math_fq` DECIMAL(7,10) NOT NULL,
-		  `fq` DECIMAL(7,10) NOT NULL,
+		  `uci_multiplier` DECIMAL(7,4) NOT NULL,
+	    `wcp_multiplier` DECIMAL(7,4) NOT NULL,
+	    `race_class_number` int(11) NOT NULL,
+	    `finishers_multiplier` DECIMAL(7,4) NOT NULL,
+	    `divider` int(11) NOT NULL,
+		  `math_fq` DECIMAL(7,4) NOT NULL,
+		  `fq` DECIMAL(7,4) NOT NULL,
 		  PRIMARY KEY (`id`)
-		) $charset_collate;";
+		);";
 
 		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 		dbDelta(array(
