@@ -96,7 +96,12 @@ class FieldQuality {
 
 		// get finishers multiplier //
 		$finishers=$this->get_average_finishers($previous_season,$race_details->class);
-		$finishers_multiplier=$number_of_finishers/$finishers[$previous_season][0]->average_finishers;
+
+		if (!empty($finishers[$previous_season])) :
+			$finishers_multiplier=$number_of_finishers/$finishers[$previous_season][0]->average_finishers;
+		else :
+			$finishers_multiplier=1;
+		endif;
 
 		// early season or super small races that have no points, we get the total points given in the race and take 10% off
 		// we aslo eliminate the finisher bonus
