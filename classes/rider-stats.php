@@ -288,10 +288,12 @@ class RiderStats {
 				races.event AS race,
 				races.class,
 				races.nat AS race_country,
-				races.fq
+				fq_table.fq
 			FROM $uci_curl->results_table AS results
 			LEFT JOIN $uci_curl->table AS races
 			ON results.code=races.code
+			LEFT JOIN $uci_curl->fq_table AS fq_table
+			ON fq_table.code=races.code
 			WHERE season='$season'
 			AND name='$name'
 			ORDER BY races.date
@@ -302,6 +304,7 @@ class RiderStats {
 		foreach ($results as $result) :
 			$result->race=stripslashes($result->race);
 			$result->date=date($this->date_format,strtotime($result->date));
+			$result->fq=round($result->fq);
 		endforeach;
 
 		return $results;
