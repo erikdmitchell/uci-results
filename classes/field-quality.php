@@ -75,6 +75,9 @@ class FieldQuality {
 			case 'CN':
 				$race_class_number=3;
 				break;
+			case 'CC':
+				$race_class_number=2;
+				break;
 			case 'CDM':
 				$race_class_number=2;
 				break;
