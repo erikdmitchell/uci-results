@@ -8,6 +8,7 @@ class Top25_cURL {
 
 	public $table;
 	public $results_table;
+	public $fq_table;
 	public $weekly_rider_rankings_table;
 	public $version='1.0.3';
 	public $config=array();
@@ -30,6 +31,7 @@ class Top25_cURL {
 		$this->table=$wpdb->prefix.'uci_races';
 		$this->results_table=$wpdb->prefix.'uci_rider_data';
 		$this->weekly_rider_rankings_table=$wpdb->prefix.'uci_weekly_rider_rankings';
+		$this->fq_table=$wpdb->prefix.'uci_fq_rankings';
 	}
 
 	public function admin_page() {
@@ -108,19 +110,20 @@ class Top25_cURL {
 
 		$html.='<p>Details coming soon on how to use this plugin and what to do.</p>';
 //
+/*
 		$html.='<h3>Field Quality Test</h3>';
 
-		$html.='<div class="container">';
+		$html.='<div class="xcontainer">';
 
 				$html.='<div class="row">';
 					$html.='<div class="col-md-4">Name</div>';
-					$html.='<div class="col-md-2">Date</div>';
+					//$html.='<div class="col-md-2">Date</div>';
 					$html.='<div class="col-md-1">UCI Pts</div>';
 					$html.='<div class="col-md-1">WCP Pts</div>';
 					$html.='<div class="col-md-1">Race #</div>';
 					$html.='<div class="col-md-1">Fin. Mult.</div>';
 					$html.='<div class="col-md-1">Divider</div>';
-					$html.='<div class="col-md-1">New FQ</div>';
+					$html.='<div class="col-md-1">FQ</div>';
 				$html.='</div>';
 
 		foreach ($races as $race) :
@@ -128,7 +131,7 @@ class Top25_cURL {
 			//$html.='<tr><td><code>'.$race->code.'</code> ('.$race->date.')</td></tr>';
 			$html.='<div class="row">';
 				$html.='<div class="col-md-4">'.$race->name.' ('.$race->class.')</div>';
-				$html.='<div class="col-md-2">'.$race->date.'</div>';
+				//$html.='<div class="col-md-2">'.$race->date.'</div>';
 
 				if (isset($FieldQuality->field_quality->uci_points_in_field))
 					$html.='<div class="col-md-1">'.$FieldQuality->field_quality->uci_points_in_field.'</div>';
@@ -140,13 +143,14 @@ class Top25_cURL {
 					$html.='<div class="col-md-1">'.number_format($FieldQuality->field_quality->finishers_multiplier,3).'</div>';
 				if (isset($FieldQuality->field_quality->divider))
 					$html.='<div class="col-md-1">'.$FieldQuality->field_quality->divider.'</div>';
-				if (isset($FieldQuality->field_quality->new_fq))
-					$html.='<div class="col-md-1">'.round($FieldQuality->field_quality->new_fq).'</div>';
+				if (isset($FieldQuality->field_quality->fq))
+					$html.='<div class="col-md-1">'.round($FieldQuality->field_quality->fq).'</div>';
 
 			$html.='</div>';
 		endforeach;
 
 		$html.='</div>';
+*/
 //
 
 		return $html;
@@ -388,6 +392,8 @@ class Top25_cURL {
 		// add to db //
 		if (!$this->check_for_dups($code)) :
 			echo $this->add_race_to_db($_POST['race']);
+		elseif (!$this->has_fq($code)) :
+			echo $this->add_fq($code);
 		else :
 			echo '<div class="error add-race-to-db-message">Already in db.('.$code.')</div>';
 		endif;
@@ -395,6 +401,12 @@ class Top25_cURL {
 		wp_die();
 	}
 
+	/**
+	 * ajax_get_all_riders function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function ajax_get_all_riders() {
 		global $RiderStats;
 
@@ -403,13 +415,21 @@ class Top25_cURL {
 		wp_die();
 	}
 
+	/**
+	 * ajax_add_riders_weekly_rankings function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function ajax_add_riders_weekly_rankings() {
 		global $RiderStats;
 
+/*
 		if (!$this->debug) :
 			$RiderStats->generate_total_rank_per_week($_POST['rider'],$_POST['season']); // SLOW???
 			echo '<div class="updated rider-weekly-rankings">'.$_POST['rider'].' - weekly rankings updated.</div>';
 		endif;
+*/
 
 		wp_die();
 	}
@@ -562,18 +582,19 @@ class Top25_cURL {
 			'nat' => $race_data->nat,
 			'class' => $race_data->class,
 			'winner' => $race_data->winner,
-			'link' => $race_data->link,
-			'fq'  => 0
+			'link' => $race_data->link
 		);
 
 		if (!$this->check_for_dups($data['code'])) :
 			if ($this->debug) :
 				$message='<div class="updated">Added '.$data['code'].' to database.(debug)</div>';
 				$this->add_race_results_to_db($data['code'],$race_data->link);
+				$this->add_fq($data['code']);
 			else :
 				if ($wpdb->insert($this->table,$data)) :
 					$message='<div class="updated">Added '.$data['code'].' to database.</div>';
 					$this->add_race_results_to_db($data['code'],$race_data->link);
+					$this->add_fq($data['code']);
 				else :
 					$message='<div class="error">Unable to insert '.$data['code'].' into the database.</div>';
 				endif;
@@ -863,6 +884,55 @@ class Top25_cURL {
 		$html.='</form>';
 
 		return $html;
+	}
+
+	/**
+	 * has_fq function.
+	 *
+	 * @access public
+	 * @param string $code (default: '')
+	 * @return void
+	 */
+	public function has_fq($code='') {
+		global $wpdb;
+
+		$has_fq=$wpdb->get_var("SELECT IFNULL(code,0) AS code FROM $this->fq_table WHERE code=\"{$code}\"");
+
+		return $has_fq;
+	}
+
+	/**
+	 * add_fq function.
+	 *
+	 * @access public
+	 * @param string $code (default: '')
+	 * @return void
+	 */
+	public function add_fq($code='') {
+		global $wpdb;
+
+		if ($this->has_fq($code) || $this->debug)
+			return false;
+
+		$FieldQuality=new FieldQuality($code);
+		$message='';
+		$data=array(
+			'code' => $code,
+			'uci_points_in_field' => $FieldQuality->field_quality->uci_points_in_field,
+			'wcp_points_in_field' => $FieldQuality->field_quality->wcp_points_in_field,
+			'race_class_number' => $FieldQuality->field_quality->race_class_number,
+			'finishers_multiplier' => $FieldQuality->field_quality->finishers_multiplier,
+			'divider' => $FieldQuality->field_quality->divider,
+			'fq' => $FieldQuality->field_quality->fq
+		);
+
+		if ($wpdb->insert($this->fq_table,$data)) :
+			$message='<div class="updated">Added '.$code.' FQ to database.</div>';
+		else :
+			$message='<div class="error">Error adding '.$code.' FQ to database.</div>';
+		endif;
+
+		return $message;
 	}
 
 	/**

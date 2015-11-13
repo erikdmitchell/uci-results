@@ -39,15 +39,16 @@ class FieldQuality {
 		$wcp_points=$this->get_points_before_race($race_details->season,$race_details->date,'wcp');
 		$race_results=$this->append_previous_race_points($race_details->season,$race_details->date,$race_results); // SLOW
 		$number_of_finishers=count($race_results);
-		$uci_points_in_field=0;
-		$wcp_points_in_field=0;
-		$uci_multiplier=0;
-		$wcp_multiplier=0;
+		$uci_points_in_field=0; //
+		$wcp_points_in_field=0; //
+		//$uci_multiplier=0;
+		//$wcp_multiplier=0;
 		$previous_season=0;
-		$divider=0;
-		$fq=0;
-		$final_fq=0;
-		$new_fq=0;
+		$divider=0; //
+		$finishers_multiplier=0; //
+		//$fq=0;
+		//$final_fq=0;
+		$fq=0; //
 		$fq_obj=new stdClass();
 
 		// get total uci and wcp points //
@@ -56,18 +57,14 @@ class FieldQuality {
 			$wcp_points_in_field=$wcp_points_in_field+$result->total_wcp_points;
 		endforeach;
 
-		// get our multipliers //
-		if ($uci_points!=0) :
-			$uci_multiplier=$uci_points_in_field/$uci_points;
+		// setup divider //
+		if ($uci_points!=0)
 			$divider++;
-		endif;
 
-		if ($wcp_points!=0) :
-			$wcp_multiplier=$wcp_points_in_field/$wcp_points;
+		if ($wcp_points!=0)
 			$divider++;
-		endif;
 
-		// race class number // --- NOT USED YET
+		// race class number //
 		switch ($race_details->class) :
 			case 'C2':
 				$race_class_number=5;
@@ -98,29 +95,28 @@ class FieldQuality {
 		$finishers=$this->get_average_finishers($previous_season,$race_details->class);
 		$finishers_multiplier=$number_of_finishers/$finishers[$previous_season][0]->average_finishers;
 
-		//if ($finishers_multiplier>1)
-			//$finishers_multiplier=1;
+		// early season or super small races that have no points, we get the total points given in the race and take 10% off
+		// we aslo eliminate the finisher bonus
+		if ($uci_points_in_field==0) :
+			$uci_points_in_field=($this->get_uci_points_none_in_field($race_code)*0.9);
+			$finishers_multiplier=1;
+		endif;
+
+		// check if we have the first race of the season and bump the divider //
+		if ($divider==0 && $uci_points==0)
+			$divider++;
 
 		// do our fq calcultaions //
-		if ($divider!=0) :
-			$fq=($wcp_multiplier+$uci_multiplier+$finishers_multiplier)/$divider;
-			$final_fq=($fq+$wcp_multiplier+$finishers_multiplier)/$divider;
-
-// ( (UCI/Race Class + WCP/Race Class) / Divider ) * Finisher Multiplier
-			$new_fq=( ( ($uci_points_in_field/$race_class_number)+($wcp_points_in_field/$race_class_number) ) / $divider ) * $finishers_multiplier;
-		endif;
+		if ($divider!=0)
+			$fq=( ( ($uci_points_in_field/$race_class_number)+($wcp_points_in_field/$race_class_number) ) / $divider ) * $finishers_multiplier;
 
 		// build final object //
 		$fq_obj->uci_points_in_field=$uci_points_in_field;
 		$fq_obj->wcp_points_in_field=$wcp_points_in_field;
-		//$fq_obj->uci_multiplier=$uci_multiplier;
-		//$fq_obj->wcp_multiplier=$wcp_multiplier;
 		$fq_obj->race_class_number=$race_class_number;
 		$fq_obj->finishers_multiplier=$finishers_multiplier;
 		$fq_obj->divider=$divider;
-		//$fq_obj->math_fq=$fq;
-		//$fq_obj->fq=$final_fq;
-		$fq_obj->new_fq=$new_fq;
+		$fq_obj->fq=$fq;
 
 		return $fq_obj;
 	}
@@ -286,6 +282,21 @@ class FieldQuality {
 		endforeach;
 
 		return $finishers;
+	}
+
+	protected function get_uci_points_none_in_field($code=false) {
+		global $wpdb;
+
+		$sql="
+			SELECT
+				IFNULL(SUM(results.par),0) AS points
+			FROM wp_uci_races AS races
+			LEFT JOIN wp_uci_rider_data AS results
+			ON races.code=results.code
+			WHERE races.code=\"{$code}\"
+		";
+
+		return $wpdb->get_var($sql);
 	}
 
 }
