@@ -164,10 +164,12 @@ class RiderStats {
 				0 AS uci_races,
 				0 AS max_uci_points,
 				0 AS max_wcp_points,
-				(SELECT SUM(((SELECT SUM(SUM(CASE races.class WHEN 'CM' THEN 5 WHEN 'CDM' THEN 4 WHEN 'CN' THEN 4 WHEN 'CC' THEN 3 WHEN 'C1' THEN 2 WHEN 'C2' THEN 1 ELSE 0 END)/100)) + (SELECT SUM(SUM(races.fq)/100)))/2)) AS sos
+				(SELECT SUM(((SELECT SUM(SUM(CASE races.class WHEN 'CM' THEN 5 WHEN 'CDM' THEN 4 WHEN 'CN' THEN 4 WHEN 'CC' THEN 3 WHEN 'C1' THEN 2 WHEN 'C2' THEN 1 ELSE 0 END)/100)) + (SELECT SUM(SUM(fq_table.fq)/100)))/2)) AS sos
 			FROM $uci_curl->results_table AS results
 			LEFT JOIN $uci_curl->table AS races
 			ON results.code=races.code
+			LEFT JOIN $uci_curl->fq_table AS fq_table
+			ON fq_table.code=races.code
 			WHERE season='$season'
 				{$dates}
 			GROUP BY results.name
@@ -380,13 +382,15 @@ class RiderStats {
 		if (!$rider || !$season)
 			return false;
 
-		$sql="
+		echo $sql="
 			SELECT
 				results.name AS rider,
-				(SELECT SUM(((SELECT SUM(SUM(CASE races.class WHEN 'CM' THEN 5 WHEN 'CDM' THEN 4 WHEN 'CN' THEN 4 WHEN 'CC' THEN 3 WHEN 'C1' THEN 2 WHEN 'C2' THEN 1 ELSE 0 END)/100)) + (SELECT SUM(SUM(races.fq)/100)))/2)) AS sos
+				(SELECT SUM(((SELECT SUM(SUM(CASE races.class WHEN 'CM' THEN 5 WHEN 'CDM' THEN 4 WHEN 'CN' THEN 4 WHEN 'CC' THEN 3 WHEN 'C1' THEN 2 WHEN 'C2' THEN 1 ELSE 0 END)/100)) + (SELECT SUM(SUM(fq_table.fq)/100)))/2)) AS sos
 			FROM $uci_curl->results_table AS results
 			LEFT JOIN $uci_curl->table AS races
 			ON results.code=races.code
+			LEFT JOIN $uci_curl->fq_table AS fq_table
+			ON fq_table.code=races.code
 			WHERE races.season='{$season}'
 			GROUP BY rider
 			ORDER BY sos DESC
