@@ -79,7 +79,7 @@ class RaceStats {
 			'pagination' => true,
 			'paged' => 1,
 			'per_page' => 15,
-			'order_by' => 'date',
+			'order_by' => 'fq',
 			'order' => 'DESC'
 		);
 		$args=array_merge($default_args,$args);
@@ -99,13 +99,15 @@ class RaceStats {
 
 		$sql="
 			SELECT
-				code,
+				races.code AS code,
 				STR_TO_DATE(date,'%e %M %Y') AS date,
 				event AS name,
 				nat,
 				class,
-				fq
-			FROM $uci_curl->table
+				IFNULL(fq_table.fq,0) AS fq
+			FROM $uci_curl->table AS races
+			LEFT JOIN $uci_curl->fq_table AS fq_table
+			ON races.code=fq_table.code
 			WHERE season='$season'
 			ORDER BY $order_by $order
 			$limit
@@ -121,6 +123,7 @@ class RaceStats {
 			$race->code=stripslashes($race->code);
 			$race->name=stripslashes($race->name);
 			$race->date=date($this->date_format,strtotime($race->date));
+			$race->fq=round($race->fq);
 		endforeach;
 
 		return $races;

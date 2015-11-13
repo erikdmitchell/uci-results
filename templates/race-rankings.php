@@ -29,7 +29,7 @@ $races=$RaceStats->get_races(array(
 
 				<div id="season-race-rankings" class="season-race-rankings">
 					<div class="header row">
-						<div class="name col-md-4">Name</div>
+						<div class="name col-md-5">Name</div>
 						<div class="date col-md-2">Date</div>
 						<div class="nat col-md-1">Nat</div>
 						<div class="class col-md-1">Class</div>
@@ -38,7 +38,7 @@ $races=$RaceStats->get_races(array(
 
 					<?php foreach ($races as $race) : ?>
 						<div class="row">
-							<div class="name col-md-4"><a href="<?php echo single_race_link($race->code); ?>"><?php echo $race->name; ?></a></div>
+							<div class="name col-md-5"><a href="<?php echo single_race_link($race->code); ?>"><?php echo $race->name; ?></a></div>
 							<div class="date col-md-2"><?php echo $race->date; ?></div>
 							<div class="nat col-md-1"><?php echo get_country_flag($race->nat); ?></div>
 							<div class="class col-md-1"><?php echo $race->class; ?></div>
