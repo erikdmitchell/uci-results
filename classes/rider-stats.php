@@ -382,7 +382,7 @@ class RiderStats {
 		if (!$rider || !$season)
 			return false;
 
-		echo $sql="
+		$sql="
 			SELECT
 				results.name AS rider,
 				(SELECT SUM(((SELECT SUM(SUM(CASE races.class WHEN 'CM' THEN 5 WHEN 'CDM' THEN 4 WHEN 'CN' THEN 4 WHEN 'CC' THEN 3 WHEN 'C1' THEN 2 WHEN 'C2' THEN 1 ELSE 0 END)/100)) + (SELECT SUM(SUM(fq_table.fq)/100)))/2)) AS sos
