@@ -38,9 +38,13 @@ class FantasyCyclingAdmin {
 
 		$html=null;
 		$years_in_db=array_reverse($uci_curl->get_years_in_db());
+		//$db_codes=$this->get_codes_from_db(true);
 
 		$html.='<div class="fantasy-cycling-admin">';
 			$html.='<h2>Fantasy Cycling</h2>';
+
+			if (isset($_POST['add-results']) && $_POST['add-results'])
+				$html.=$this->update_race_in_db($_POST);
 
 			if (isset($_POST['add-race']) && $_POST['add-race'])
 				$html.=$this->add_race_to_db($_POST);
@@ -141,8 +145,8 @@ class FantasyCyclingAdmin {
 						$html.='<div class="col-md-1">';
 							$html.='<label for="code">Code</label>';
 						$html.='</div>';
-						$html.='<div class="col-md-6">';
-							$html.='<input type="text" name="code" id="code" class="longtext" value="" />';
+						$html.='<div class="col-md-5">';
+							$html.=$this->get_codes_from_db(true);
 						$html.='</div>';
 					$html.='</div>';
 
@@ -329,6 +333,26 @@ class FantasyCyclingAdmin {
 		return '<div class="updated">Race added.</div>';
 	}
 
+	protected function update_race_in_db($form) {
+		global $wpdb;
+
+		if ($form['name']=='')
+			return '<div class="error">No name entered.</div>';
+//print_r($form);
+		$data=array(
+			'name' => $form['name'],
+			'season' => $form['season'],
+			'type' => $form['type'],
+			'code' => $form['codes-from-db'],
+			'series' => $form['series'],
+			'race_start' => date('Y-m-d H:i:s', strtotime($form['date'])),
+		);
+
+		$wpdb->update('wp_fc_races',$data,array('id' => $form['race']));
+
+		return '<div class="updated">Race added.</div>';
+	}
+
 	/**
 	 * get_races_from_db function.
 	 *
@@ -384,8 +408,23 @@ class FantasyCyclingAdmin {
 		wp_die();
 	}
 
-	protected function get_codes_from_db() {
-		global $wpdb;
+	protected function get_codes_from_db($dropdown=false) {
+		global $wpdb,$uci_curl;
+
+		$html=null;
+		$races=$wpdb->get_results("SELECT code,event,season FROM $uci_curl->table ORDER BY event");
+
+		if (!$dropdown)
+			return $races;
+
+		$html.='<select name="codes-from-db" id="codes-from-db">';
+			$html.='<option value="0">Select Code</option>';
+			foreach ($races as $race) :
+				$html.='<option value="'.$race->code.'" data-season="'.$race->season.'">'.$race->event.' ('.$race->season.')</option>';
+			endforeach;
+		$html.='</select>';
+
+		return $html;
 	}
 
 }
