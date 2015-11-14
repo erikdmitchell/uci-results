@@ -10,6 +10,22 @@ jQuery(document).ready(function($) {
 		changeYear: true
 	});
 
+	// append db data to results form //
+	$('#add-results #race').change(function() {
+		var id=$(this).val();
+
+		for (var i in FCAdminWPOptions.FCRaces) {
+			if (FCAdminWPOptions.FCRaces[i].id==id) {
+				$('#add-results #name').val(FCAdminWPOptions.FCRaces[i].name);
+				$('#add-results #season').val(FCAdminWPOptions.FCRaces[i].season);
+				$('#add-results #type').val(FCAdminWPOptions.FCRaces[i].type);
+				$('#add-results #date').val(FCAdminWPOptions.FCRaces[i].race_start);
+				$('#add-results #series').val(FCAdminWPOptions.FCRaces[i].series);
+				$('#add-results #code').val(FCAdminWPOptions.FCRaces[i].code);
+			}
+		}
+	});
+
 });
 
 function getStartList(id) {

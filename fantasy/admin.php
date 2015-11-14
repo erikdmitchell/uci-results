@@ -1,7 +1,16 @@
 <?php
+/**
+ * FantasyCyclingAdmin class.
+ *
+ * @since 0.0.2
+ */
 class FantasyCyclingAdmin {
 
+	public $fc_races=array();
+
 	public function __construct() {
+		$this->fc_races=$this->get_races_from_db();
+
 		add_action('admin_enqueue_scripts',array($this,'admin_scripts_styles'));
 		add_action('wp_ajax_load_start_list',array($this,'ajax_load_start_list'));
 	}
@@ -10,9 +19,16 @@ class FantasyCyclingAdmin {
 		if ($hook!='uci-cross_page_fantasy-cycling')
 			return false;
 
+		wp_register_script('fantasy-cycling-admin',plugins_url('/js/admin.js',__FILE__),array('jquery','jquery-ui-datepicker'));
+
+		$fc_admin_options=array(
+			'FCRaces' => $this->fc_races
+		);
+		wp_localize_script('fantasy-cycling-admin','FCAdminWPOptions',$fc_admin_options);
+
 		wp_enqueue_script('jquery');
 		wp_enqueue_script('jquery-ui-datepicker');
-		wp_enqueue_script('fantasy-cycling-admin',plugins_url('/js/admin.js',__FILE__),array('jquery','jquery-ui-datepicker'));
+		wp_enqueue_script('fantasy-cycling-admin');
 
 		wp_enqueue_style('fantasy-cycling-admin',plugins_url('/css/admin.css',__FILE__));
 	}
@@ -37,9 +53,106 @@ class FantasyCyclingAdmin {
 					$html.='<ul class="admin-nav">';
 						$html.='<li><a href="">Add Race</a></li>';
 						$html.='<li><a href="">Add Start List</a></li>';
+						$html.='<li><a href="">Add Results</a></li>';
 					$html.='</ul>';
 				$html.='</div>';
 			$html.='</div>';
+
+			$html.='<form name="add-results" id="add-results" class="add-results" method="post">';
+				$html.='<h3>Add Results</h3>';
+				if (count($this->fc_races)) :
+					$html.='<div class="row">';
+						$html.='<div class="col-md-1">';
+							$html.='<label for="race">Race</label>';
+						$html.='</div>';
+						$html.='<div class="col-md-6">';
+							$html.='<select name="race" id="race">';
+								$html.='<option value="0">Select Race</option>';
+								foreach ($this->fc_races as $race) :
+									$html.='<option value="'.$race->id.'">'.$race->name.'</option>';
+								endforeach;
+							$html.='</select>';
+						$html.='</div>';
+					$html.='</div>';
+
+					$html.='<div class="row">';
+						$html.='<div class="col-md-1">';
+							$html.='<label for="name">Name</label>';
+						$html.='</div>';
+						$html.='<div class="col-md-6">';
+							$html.='<input type="text" name="name" id="name" class="longtext" value="" />';
+						$html.='</div>';
+					$html.='</div>';
+
+					$html.='<div class="row">';
+						$html.='<div class="col-md-1">';
+							$html.='<label for="season">Season</label>';
+						$html.='</div>';
+						$html.='<div class="col-md-6">';
+							$html.='<select name="season" id="season">';
+								$html.='<option value="0">Select Season</option>';
+								foreach ($years_in_db as $year) :
+									$html.='<option value="'.$year.'">'.$year.'</option>';
+								endforeach;
+							$html.='</select>';
+						$html.='</div>';
+					$html.='</div>';
+
+					$html.='<div class="row">';
+						$html.='<div class="col-md-1">';
+							$html.='<label for="type">Type</label>';
+						$html.='</div>';
+						$html.='<div class="col-md-6">';
+							$html.='<select name="type" id="type">';
+								$html.='<option value="0">Select Type</option>';
+								$html.='<option value="cdm">CDM</option>';
+								$html.='<option value="cn">CN</option>';
+								$html.='<option value="c1">C1</option>';
+								$html.='<option value="c2">C2</option>';
+							$html.='</select>';
+						$html.='</div>';
+					$html.='</div>';
+
+					$html.='<div class="row">';
+						$html.='<div class="col-md-1">';
+							$html.='<label for="date">Date</label>';
+						$html.='</div>';
+						$html.='<div class="col-md-6">';
+							$html.='<input type="text" name="date" id="date" class="date" value="" />';
+						$html.='</div>';
+					$html.='</div>';
+
+					$html.='<div class="row">';
+						$html.='<div class="col-md-1">';
+							$html.='<label for="series">Series</label>';
+						$html.='</div>';
+						$html.='<div class="col-md-6">';
+							$html.='<select name="series" id="series">';
+								$html.='<option value="0">Select Series</option>';
+								$html.='<option value="single">Single</option>';
+								$html.='<option value="Superprestige">Superprestige</option>';
+								$html.='<option value="bPost Bank">bPost Bank</option>';
+								$html.='<option value="World Cup">World Cup</option>';
+							$html.='</select>';
+						$html.='</div>';
+					$html.='</div>';
+
+					$html.='<div class="row">';
+						$html.='<div class="col-md-1">';
+							$html.='<label for="code">Code</label>';
+						$html.='</div>';
+						$html.='<div class="col-md-6">';
+							$html.='<input type="text" name="code" id="code" class="longtext" value="" />';
+						$html.='</div>';
+					$html.='</div>';
+
+					$html.='<input type="hidden" name="add-results" value="1" />';
+
+					$html.='<p><input type="submit" name="submit" id="submit" class="button button-primary" value="Add Results"></p>';
+				else :
+					$html.='No races to add.';
+				endif;
+			$html.='</form>';
 
 			$html.='<form name="add-race" id="add-race" class="add-race" method="post">';
 				$html.='<h3>Add Race</h3>';
@@ -269,6 +382,10 @@ class FantasyCyclingAdmin {
 		echo json_encode($race);
 
 		wp_die();
+	}
+
+	protected function get_codes_from_db() {
+		global $wpdb;
 	}
 
 }
