@@ -6,7 +6,7 @@
  */
 class FantasyCyclingDB {
 
-	public $db_version='0.0.4';
+	public $db_version='0.0.5';
 	public $wp_option_name='fantasy_cycling_db_version';
 	public $table_name='';
 
@@ -40,6 +40,7 @@ class FantasyCyclingDB {
 		  `wp_user_id` int(11) NOT NULL,
 		  `data` text NOT NULL,
 		  `team` varchar(250) NOT NULL,
+		  `race_id` int(11) NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
@@ -78,9 +79,7 @@ class FantasyCyclingDB {
 		  `wp_user_id` int(11) NOT NULL,
 		  `data` text NOT NULL,
 		  `team` varchar(250) NOT NULL,
-			`series` VARCHAR(250) NOT NULL,
-			`race_start` DATE NOT NULL,
-		  PRIMARY KEY (`id`)
+		  `race_id` int(11) NOT NULL,
 		);";
 
 		$table_name=$wpdb->prefix.'fc_races';
@@ -92,8 +91,7 @@ class FantasyCyclingDB {
 		  `code` tinytext NOT NULL,
 		  `start_list` text NOT NULL,
 			`series` VARCHAR(250) NOT NULL,
-			`race_start` DATE NOT NULL,
-		  PRIMARY KEY (`id`)
+			`race_start` DATE NOT NULL
 		);";
 
 		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
