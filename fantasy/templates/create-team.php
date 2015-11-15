@@ -13,7 +13,6 @@ endif;
 ?>
 
 <div class="fantasy-cycling-create-team">
-	<h3>Create Team</h3>
 	<form name="new-team" method="post" action="">
 		<div class="row">
 			<div class="col-md-2">

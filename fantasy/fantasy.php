@@ -52,6 +52,17 @@ class FantasyCycling {
 			$fantasy_id=$page->ID;
 		endif;
 
+		if (get_page_by_title('Create Team')==NULL) :
+			$create_team=array(
+				'post_content' => '[fantasy-cycling-create-team]',
+				'post_title' => 'Create Team',
+				'post_status' => 'publish',
+				'post_type' => 'page',
+				'post_parent' => $fantasy_id,
+			);
+			wp_insert_post($team);
+		endif;
+
 		if (get_page_by_title('Team')==NULL) :
 				$team=array(
 					'post_content' => '[fantasy-cycling-team]',

@@ -1,29 +1,5 @@
 <?php
 /**
- * fc_output_buffer function.
- *
- * @access public
- * @return void
- */
-function fc_output_buffer() {
-	ob_start();
-}
-add_action('init','fc_output_buffer');
-
-/**
- * fc_login_protect_page function.
- *
- * @access public
- * @return void
- */
-function fc_login_protect_page() {
-	if (!is_user_logged_in()) :
-		wp_redirect('/login/');
-		exit;
-	endif;
-}
-
-/**
  * fc_fantasy_page_redirect function.
  *
  * @access public
@@ -36,26 +12,6 @@ function fc_fantasy_page_redirect() {
 	wp_redirect('/fantasy/');
 	exit;
 }
-
-/**
- * fc_template_redirect function.
- *
- * redirects specific pages to our properly templated pages
- *
- * @access public
- * @param mixed $original_template
- * @return void
- */
-function fc_template_redirect($original_template) {
-	global $post;
-
-	if (isset($post->post_name) && $post->post_name=='fantasy') :
-		return plugin_dir_path(__FILE__).'/templates/fantasy-main.php';
-	else :
-    return $original_template;
-  endif;
-}
-add_filter('template_include','fc_template_redirect');
 
 /**
  * fc_get_user_teams function.
@@ -74,7 +30,7 @@ function fc_get_user_teams($user_id=0) {
 	$teams=$wpdb->get_results("SELECT team,id FROM wp_fc_teams WHERE wp_user_id=$user_id");
 
 	if (!count($teams)) :
-		$html.='No teams found. Click <a href="?action=create-team">here</a> to create one.';
+		$html.='No teams found. Click <a href="/fantasy/create-team/">here</a> to create one.';
 		return $html;
 	endif;
 
@@ -256,7 +212,7 @@ function fc_get_team_standings($limit=10) {
 				$html.='</div>';
 			endforeach;
 		$html.='</div>';
-		$html.='<a href="" class="more">View All &raquo;</a>';
+		$html.='<a href="/fantasy/standings/" class="more">View All &raquo;</a>';
 	$html.='</div>';
 
 	return $html;
@@ -689,5 +645,31 @@ function fc_register_show_error_messages() {
 		    }
 		echo '</div>';
 	}
+}
+
+/**
+ * fc_get_template_html function.
+ *
+ * @access public
+ * @param bool $template_name (default: false)
+ * @return void
+ */
+function fc_get_template_html($template_name=false) {
+	if (!$template_name)
+		return false;
+
+	ob_start();
+
+	do_action('emcl_before_'.$template_name);
+
+	require('templates/'.$template_name.'.php');
+
+	do_action('emcl_after_'.$template_name);
+
+	$html=ob_get_contents();
+
+	ob_end_clean();
+
+	return $html;
 }
 ?>
