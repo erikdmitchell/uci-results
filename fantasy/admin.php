@@ -8,6 +8,12 @@ class FantasyCyclingAdmin {
 
 	public $fc_races=array();
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		$this->fc_races=$this->get_races_from_db();
 
@@ -15,6 +21,13 @@ class FantasyCyclingAdmin {
 		add_action('wp_ajax_load_start_list',array($this,'ajax_load_start_list'));
 	}
 
+	/**
+	 * admin_scripts_styles function.
+	 *
+	 * @access public
+	 * @param mixed $hook
+	 * @return void
+	 */
 	public function admin_scripts_styles($hook) {
 		if ($hook!='uci-cross_page_fantasy-cycling')
 			return false;
@@ -33,6 +46,12 @@ class FantasyCyclingAdmin {
 		wp_enqueue_style('fantasy-cycling-admin',plugins_url('/css/admin.css',__FILE__));
 	}
 
+	/**
+	 * admin_page function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function admin_page() {
 		global $uci_curl,$RiderStats;
 
@@ -333,12 +352,19 @@ class FantasyCyclingAdmin {
 		return '<div class="updated">Race added.</div>';
 	}
 
+	/**
+	 * update_race_in_db function.
+	 *
+	 * @access protected
+	 * @param mixed $form
+	 * @return void
+	 */
 	protected function update_race_in_db($form) {
 		global $wpdb;
 
 		if ($form['name']=='')
 			return '<div class="error">No name entered.</div>';
-//print_r($form);
+
 		$data=array(
 			'name' => $form['name'],
 			'season' => $form['season'],
@@ -396,6 +422,12 @@ class FantasyCyclingAdmin {
 		return '<div class="updated">Start list updated.</div>';
 	}
 
+	/**
+	 * ajax_load_start_list function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function ajax_load_start_list() {
 		global $wpdb;
 
@@ -408,6 +440,13 @@ class FantasyCyclingAdmin {
 		wp_die();
 	}
 
+	/**
+	 * get_codes_from_db function.
+	 *
+	 * @access protected
+	 * @param bool $dropdown (default: false)
+	 * @return void
+	 */
 	protected function get_codes_from_db($dropdown=false) {
 		global $wpdb,$uci_curl;
 

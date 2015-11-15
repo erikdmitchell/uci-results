@@ -20,8 +20,6 @@
 						<?php	the_content( __( 'Continue reading <span class="meta-nav">&raquo;</span>', 'mdw-theme' ) ); ?>
 					</div><!-- .entry-content -->
 
-
-
 					<div class="row">
 						<div class="col-md-4">
 							<?php if (is_user_logged_in()) : ?>
