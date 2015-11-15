@@ -5,15 +5,17 @@
  * @since Version 0.0.1
  */
 ?>
-
-<?php
-if (isset($_POST['create_team']) && $_POST['create_team']) :
-	fc_process_create_team($_POST);
-endif;
-?>
-
 <div class="fantasy-cycling-create-team">
 	<form name="new-team" method="post" action="">
+		<div class="row">
+			<div class="col-md-2">
+				<label for="race">Race:</label>
+			</div>
+			<div class="col-md-6">
+				<span class="race-name"></div>
+				<input type="hidden" name="race" value="" />
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-md-2">
 				<label for="team-name">Team Name:</label>

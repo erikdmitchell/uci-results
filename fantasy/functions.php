@@ -147,25 +147,27 @@ function fc_get_create_team_page() {
  * fc_process_create_team function.
  *
  * @access public
- * @param mixed $form
  * @return void
  */
-function fc_process_create_team($form) {
+function fc_process_create_team() {
 	global $wpdb;
 
-	$table='wp_fc_teams';
+	if (isset($_POST['create_team']) && $_POST['create_team']) :
+		$table='wp_fc_teams';
 
-	$data=array(
-		'wp_user_id' => $form['wp_user_id'],
-		'data' => serialize($form['riders']),
-		'team' => $form['team_name'],
-	);
+		$data=array(
+			'wp_user_id' => $_POST['wp_user_id'],
+			'data' => serialize($_POST['riders']),
+			'team' => $_POST['team_name'],
+		);
 
-	$wpdb->insert($table,$data);
+		$wpdb->insert($table,$data);
 
-	wp_redirect('/fantasy/team?team='.urlencode($form['team_name']));
-	exit;
+		wp_redirect('/fantasy/team?team='.urlencode($_POST['team_name']));
+		exit;
+	endif;
 }
+add_action('init','fc_process_create_team');
 
 /**
  * fc_get_team function.
@@ -315,6 +317,10 @@ function fc_get_upcoming_races($limit=3) {
 
 function fc_upcoming_races($limit=3) {
 	echo fc_get_upcoming_races($limit);
+}
+
+function __AAAAA() {
+// this function will do some of our hackpad stuff
 }
 
 /**
