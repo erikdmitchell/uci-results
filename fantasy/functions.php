@@ -170,13 +170,8 @@ function fc_get_team($team=false) {
 	if (!$team)
 		return false;
 
-	$team=$wpdb->get_row("SELECT * FROM wp_fc_teams WHERE team='{$team}'");
-	$team->data=explode('|',$team->data);
-
-	foreach ($team->data as $key => $rider) :
-		$country=$wpdb->get_var("SELECT nat FROM wp_uci_rider_data WHERE name='$rider' GROUP BY nat");
-		$team->data[$key]=$rider.' ('.$country.')';
-	endforeach;
+	$team_db=$wpdb->get_row("SELECT race_id,team FROM wp_fc_teams WHERE team='{$team}'");
+	$team=fc_get_teams_results($team_db->race_id,$team_db->team);
 
 	return $team;
 }
@@ -220,18 +215,25 @@ function fc_get_race_standings($race_id=0) {
  *
  * @access public
  * @param int $race_id (default: 0)
+ * @param bool $team_name (default: false)
  * @return void
  */
-function fc_get_teams_results($race_id=0) {
+function fc_get_teams_results($race_id=0,$team_name=false) {
 	global $wpdb;
 
 	if (!$race_id)
 		return false;
 
+	if ($team_name) :
+		$where="WHERE race_id={$race_id} AND team='{$team_name}'";
+	else :
+		$where="WHERE race_id={$race_id}";
+	endif;
+
 	$html=null;
 	$race=$wpdb->get_row("SELECT name,code FROM wp_fc_races WHERE id={$race_id}");
-	$teams=$wpdb->get_results("SELECT team AS team_name,data AS riders FROM wp_fc_teams WHERE race_id={$race_id}");
-	$results=$wpdb->get_results("SELECT name,place,par AS points FROM wp_uci_rider_data WHERE code=\"{$race->code}\"");
+	$teams=$wpdb->get_results("SELECT team AS team_name,data AS riders FROM wp_fc_teams $where");
+	$results=$wpdb->get_results("SELECT name,place,nat,par AS points FROM wp_uci_rider_data WHERE code=\"{$race->code}\"");
 	$teams_final=new stdClass();
 
 	// split out riders into array and get points //
@@ -260,7 +262,12 @@ function fc_get_teams_results($race_id=0) {
 	return $teams_final;
 }
 
-// if there's an id, display teams, else display races
+/**
+ * fc_get_standings function.
+ *
+ * @access public
+ * @return void
+ */
 function fc_get_standings() {
 	if (isset($_GET['race_id'])) :
 		return fc_get_race_standings($_GET['race_id']);
