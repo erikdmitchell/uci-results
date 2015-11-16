@@ -154,7 +154,7 @@ function fc_process_create_team() {
 			'wp_user_id' => $_POST['wp_user_id'],
 			'data' => implode('|',$_POST['riders']),
 			'team' => $_POST['team_name'],
-			'race_id' => $_POST['race_id'],
+			'race_id' => $_POST['race'],
 		);
 
 		$wpdb->insert($table,$data);
@@ -174,6 +174,9 @@ add_action('init','fc_process_create_team');
  */
 function fc_get_team($team=false) {
 	global $wpdb;
+
+	if (!$team && isset($_GET['team']))
+		$team=$_GET['team'];
 
 	if (!$team || $team=='')
 		return false;
@@ -296,6 +299,13 @@ function fc_get_teams_results($team_name=false,$race_id=false) {
 		$team->riders=explode('|',$team->riders);
 		foreach ($team->riders as $key => $rider) :
 			$results=$wpdb->get_row("SELECT name, place, nat, par AS points FROM wp_uci_rider_data	WHERE code=\"{$team->code}\" AND name='{$rider}'");
+			if (empty($results)) :
+				$results=new stdClass();
+				$results->name=$rider;
+				$results->place=0;
+				$results->nat='';
+				$results->points=0;
+			endif;
 			$team->riders[$key]=$results;
 			$total=$total+$results->points;
 		endforeach;
@@ -472,31 +482,25 @@ function fc_fantasy_cycling_posts($limit=5) {
 	echo fc_get_fantasy_cycling_posts($limit);
 }
 
+/**
+ * fc_get_upcoming_races function.
+ *
+ * @access public
+ * @param int $limit (default: 3)
+ * @return void
+ */
 function fc_get_upcoming_races($limit=3) {
 	global $wpdb;
 
 	$html=null;
+	//$races=$wpdb->get_results("SELECT * FROM wp_fc_races ORDER BY race_start ASC LIMIT $limit");
 	$races=$wpdb->get_results("SELECT * FROM wp_fc_races WHERE race_start > CURDATE() ORDER BY race_start ASC LIMIT $limit");
 
-	$html.='<ul class="fc-upcoming-races">';
-		foreach ($races as $race) :
-			$html.='<li id="race-'.$race->id.'">'.date('M. j, Y',strtotime($race->race_start)).': '.$race->name.' ('.$race->series.')</li>';
-		endforeach;
-	$html.='</ul>';
-
-	return $html;
-}
-
-function fc_upcoming_races($limit=3) {
-	echo fc_get_upcoming_races($limit);
-}
-
-function fc_get_add_rosters($limit=3) {
-	global $wpdb;
-
-	$html=null;
-	//$races=$wpdb->get_results("SELECT * FROM wp_fc_races WHERE race_start > CURDATE() ORDER BY race_start ASC LIMIT $limit");
-	$races=$wpdb->get_results("SELECT * FROM wp_fc_races ORDER BY race_start ASC LIMIT $limit");
+	if (isset($_GET['team'])) :
+		$team=$_GET['team'];
+	else :
+		$team=fc_get_user_team(get_current_user_id());
+	endif;
 
 	$html.='<div class="fc-upcoming-races">';
 		foreach ($races as $race) :
@@ -508,17 +512,25 @@ function fc_get_add_rosters($limit=3) {
 
 			$html.='<div id="race-'.$race->id.'" class="row">';
 				$html.='<div class="date col-md-4">'.date('M. j, Y',strtotime($race->race_start)).': </div>';
-				$html.='<div class="race-name col-md-8"><a href="/fantasy/create-team/?team='.urlencode($_GET['team']).'&race_id='.$race->id.'">'.$race->name.'</a></div>';
+				$html.='<div class="race-name col-md-8"><a href="/fantasy/create-team/?team='.urlencode($team).'&race_id='.$race->id.'">'.$race->name.'</a></div>';
 				$html.=$series;
 			$html.='</div>';
 		endforeach;
 	$html.='</div>';
 
 	return $html;
+
 }
 
-function fc_add_rosters($limit=3) {
-	echo fc_get_add_rosters($limit);
+/**
+ * fc_upcoming_races function.
+ *
+ * @access public
+ * @param int $limit (default: 3)
+ * @return void
+ */
+function fc_upcoming_races($limit=3) {
+	echo fc_get_upcoming_races($limit);
 }
 
 /**
@@ -892,5 +904,23 @@ function fc_get_race($race_id) {
 	$race=$wpdb->get_row("SELECT * FROM wp_fc_races WHERE id={$race_id}");
 
 	return $race;
+}
+
+/**
+ * fc_get_user_team function.
+ *
+ * @access public
+ * @param bool $user_id (default: false)
+ * @return void
+ */
+function fc_get_user_team($user_id=false) {
+	global $wpdb;
+
+	if (!$user_id)
+		$user_id=get_current_user_id();
+
+	$team=$wpdb->get_var("SELECT DISTINCT team FROM wp_fc_teams WHERE wp_user_id={$user_id}");
+
+	return $team;
 }
 ?>
