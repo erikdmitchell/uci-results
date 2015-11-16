@@ -358,7 +358,7 @@ function fc_login_template_redirect($original_template) {
     return $original_template;
   endif;
 }
-add_filter('template_include','fc_login_template_redirect');
+//add_filter('template_include','fc_login_template_redirect');
 
 /**
  * fc_redirect_login_page function.
@@ -377,7 +377,7 @@ function fc_redirect_login_page() {
 		exit;
 	}
 }
-add_action('init','fc_redirect_login_page');
+//add_action('init','fc_redirect_login_page');
 
 /**
  * fc_login_failed function.
@@ -392,7 +392,7 @@ function fc_login_failed() {
     wp_redirect( $login_page . '?login=failed' );
     exit;
 }
-add_action( 'wp_login_failed', 'fc_login_failed' );
+//add_action( 'wp_login_failed', 'fc_login_failed' );
 
 /**
  * fc_verify_username_password function.
@@ -412,7 +412,7 @@ function fc_verify_username_password( $user, $username, $password ) {
         exit;
     }
 }
-add_filter( 'authenticate', 'fc_verify_username_password', 1, 3);
+//add_filter( 'authenticate', 'fc_verify_username_password', 1, 3);
 
 /**
  * logout_page function.
@@ -427,7 +427,7 @@ function fc_logout_page() {
     wp_redirect( $login_page . "?login=false" );
     exit;
 }
-add_action('wp_logout','fc_logout_page');
+//add_action('wp_logout','fc_logout_page');
 
 
 // login form fields
@@ -487,7 +487,9 @@ function fc_login_member($redirect='') {
 		// only log the user in if there are no errors
 		if(empty($errors)) {
 
-			wp_setcookie($_POST['fc_user_login'], $_POST['fc_user_pass'], true);
+			//wp_setcookie($_POST['fc_user_login'], $_POST['fc_user_pass'], true);
+			// wp_setcookie( $username, $password, $already_md5, $home, $siteurl, $remember )
+			wp_set_auth_cookie($user->ID);
 			wp_set_current_user($user->ID, $_POST['fc_user_login']);
 			do_action('wp_login', $_POST['fc_user_login']);
 
