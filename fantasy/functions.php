@@ -313,6 +313,7 @@ function fc_get_final_standings($limt=10) {
 		FROM wp_fc_races AS races
 		LEFT JOIN wp_fc_teams AS teams
 		ON races.id=teams.race_id
+		GROUP BY races.id
 		ORDER BY races.race_start
 	";
 	$races=$wpdb->get_results($sql);
