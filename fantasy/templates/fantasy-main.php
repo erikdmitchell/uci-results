@@ -24,8 +24,8 @@
 	</div>
 
 	<div class="team-standings-wrap col-md-4">
-		<h3>Overall Standings</h3>
-		<?php fc_team_standings(); ?>
+		<h3>Final Standings</h3>
+		<?php fc_final_standings(); ?>
 	</div>
 
 	<div class="col-md-4 next-race">

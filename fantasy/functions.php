@@ -132,18 +132,6 @@ function fc_rider_list_dropdown_race($args=array()) {
 }
 
 /**
- * fc_get_create_team_page function.
- *
- * @access public
- * @return void
- */
-function fc_get_create_team_page() {
-	ob_start();
-	include_once(plugin_dir_path(__FILE__).'templates/create-team.php');
-	return ob_get_clean();
-}
-
-/**
  * fc_process_create_team function.
  *
  * @access public
@@ -157,7 +145,7 @@ function fc_process_create_team() {
 
 		$data=array(
 			'wp_user_id' => $_POST['wp_user_id'],
-			'data' => serialize($_POST['riders']),
+			'data' => implode('|',$_POST['riders']),
 			'team' => $_POST['team_name'],
 		);
 
@@ -183,7 +171,7 @@ function fc_get_team($team=false) {
 		return false;
 
 	$team=$wpdb->get_row("SELECT * FROM wp_fc_teams WHERE team='{$team}'");
-	$team->data=unserialize($team->data);
+	$team->data=explode('|',$team->data);
 
 	foreach ($team->data as $key => $rider) :
 		$country=$wpdb->get_var("SELECT nat FROM wp_uci_rider_data WHERE name='$rider' GROUP BY nat");
@@ -193,6 +181,7 @@ function fc_get_team($team=false) {
 	return $team;
 }
 
+/*
 function fc_get_team_standings($limit=10) {
 	global $wpdb;
 
@@ -220,15 +209,92 @@ function fc_get_team_standings($limit=10) {
 	return $html;
 }
 
+function fc_team_standings($limit=10) {
+	echo fc_get_team_standings($limit);
+}
+*/
+
+function fc_get_race_standings($race_id=0) {
+	global $wpdb;
+
+	if (!$race_id)
+		return false;
+
+	$html=null;
+	$race=$wpdb->get_results("SELECT * FROM wp_fc_races WHERE id={$race_id}");
+	$teams=$wpdb->get_results("SELECT * FROM wp_fc_teams WHERE race_id={$race_id}");
+}
+
+// if there's an id, display teams, else display races
+function fc_get_standings() {
+	if (isset($_GET['race_id'])) :
+
+	else :
+		return fc_get_final_standings();
+	endif;
+}
+
 /**
- * fc_team_standings function.
+ * fc_standings function.
+ *
+ * @access public
+ * @return void
+ */
+function fc_standings() {
+	echo fc_get_standings();
+}
+
+/**
+ * fc_get_final_standings function.
+ *
+ * @access public
+ * @param int $limt (default: 10)
+ * @return void
+ */
+function fc_get_final_standings($limt=10) {
+	global $wpdb;
+
+	$html=null;
+	$sql="
+		SELECT
+			name,
+			races.id,
+			COUNT(teams.id) AS total_teams
+		FROM wp_fc_races AS races
+		LEFT JOIN wp_fc_teams AS teams
+		ON races.id=teams.race_id
+		ORDER BY races.race_start
+	";
+	$races=$wpdb->get_results($sql);
+
+	$html.='<div class="fantasy-cycling-final-standings">';
+		$html.='<div class="final-standings">';
+			$html.='<div class="row header">';
+				$html.='<div class="name col-md-9">Race</div>';
+				$html.='<div class="points col-md-3">Teams</div>';
+			$html.='</div>';
+			foreach ($races as $race) :
+				$html.='<div class="row">';
+					$html.='<div class="name col-md-9"><a href="/fantasy/standings?race_id='.$race->id.'">'.$race->name.'</a></div>';
+					$html.='<div class="points col-md-3">'.$race->total_teams.'</div>';
+				$html.='</div>';
+			endforeach;
+		$html.='</div>';
+		$html.='<a href="/fantasy/standings/" class="more">View All &raquo;</a>';
+	$html.='</div>';
+
+	return $html;
+}
+
+/**
+ * fc_final_standings function.
  *
  * @access public
  * @param int $limit (default: 10)
  * @return void
  */
-function fc_team_standings($limit=10) {
-	echo fc_get_team_standings($limit);
+function fc_final_standings($limit=10) {
+	echo fc_get_final_standings($limit);
 }
 
 function fc_get_fantasy_cycling_posts($limit=5) {
