@@ -57,16 +57,12 @@ class FantasyCyclingAdmin {
 
 		$html=null;
 		$years_in_db=array_reverse($uci_curl->get_years_in_db());
-		//$db_codes=$this->get_codes_from_db(true);
 
 		$html.='<div class="fantasy-cycling-admin">';
 			$html.='<h2>Fantasy Cycling</h2>';
 
-			if (isset($_POST['add-results']) && $_POST['add-results'])
-				$html.=$this->update_race_in_db($_POST);
-
-			if (isset($_POST['add-race']) && $_POST['add-race'])
-				$html.=$this->add_race_to_db($_POST);
+			if (isset($_POST['setup-races']) && $_POST['setup-races'])
+				$html.=$this->setup_race_in_db($_POST);
 
 			if (isset($_POST['add-start-list']) && $_POST['add-start-list'])
 				$html.=$this->add_start_list_to_db($_POST);
@@ -74,15 +70,14 @@ class FantasyCyclingAdmin {
 			$html.='<div class="row">';
 				$html.='<div class="col-md-12">';
 					$html.='<ul class="admin-nav">';
-						$html.='<li><a href="">Add Race</a></li>';
+						$html.='<li><a href="">Races</a></li>';
 						$html.='<li><a href="">Add Start List</a></li>';
-						$html.='<li><a href="">Add Results</a></li>';
 					$html.='</ul>';
 				$html.='</div>';
 			$html.='</div>';
 
-			$html.='<form name="add-results" id="add-results" class="add-results" method="post">';
-				$html.='<h3>Add Results</h3>';
+			$html.='<form name="setup-races" id="setup-races" class="setup-races" method="post">';
+				$html.='<h3>Setup Races</h3>';
 				if (count($this->fc_races)) :
 					$html.='<div class="row">';
 						$html.='<div class="col-md-1">';
@@ -169,89 +164,14 @@ class FantasyCyclingAdmin {
 						$html.='</div>';
 					$html.='</div>';
 
-					$html.='<input type="hidden" name="add-results" value="1" />';
+					$html.='<input type="hidden" name="setup-races" value="1" />';
 
-					$html.='<p><input type="submit" name="submit" id="submit" class="button button-primary" value="Add Results"></p>';
+					$html.='<p><input type="submit" name="submit" id="submit" class="button button-primary" value="Setup Race"></p>';
 				else :
 					$html.='No races to add.';
 				endif;
 			$html.='</form>';
-
-			$html.='<form name="add-race" id="add-race" class="add-race" method="post">';
-				$html.='<h3>Add Race</h3>';
-				$html.='<div class="row">';
-					$html.='<div class="col-md-1">';
-						$html.='<label for="name">Name</label>';
-					$html.='</div>';
-					$html.='<div class="col-md-6">';
-						$html.='<input type="text" name="name" id="name" class="longtext" value="" />';
-					$html.='</div>';
-				$html.='</div>';
-
-				$html.='<div class="row">';
-					$html.='<div class="col-md-1">';
-						$html.='<label for="season">Season</label>';
-					$html.='</div>';
-					$html.='<div class="col-md-6">';
-						$html.='<select name="season" id="season">';
-							foreach ($years_in_db as $year) :
-								$html.='<option value="'.$year.'">'.$year.'</option>';
-							endforeach;
-						$html.='</select>';
-					$html.='</div>';
-				$html.='</div>';
-
-				$html.='<div class="row">';
-					$html.='<div class="col-md-1">';
-						$html.='<label for="type">Type</label>';
-					$html.='</div>';
-					$html.='<div class="col-md-6">';
-						$html.='<select name="type" id="type">';
-							$html.='<option value="cdm">CDM</option>';
-							$html.='<option value="cn">CN</option>';
-							$html.='<option value="c1">C1</option>';
-							$html.='<option value="c2">C2</option>';
-						$html.='</select>';
-					$html.='</div>';
-				$html.='</div>';
-
-				$html.='<div class="row">';
-					$html.='<div class="col-md-1">';
-						$html.='<label for="date">Date</label>';
-					$html.='</div>';
-					$html.='<div class="col-md-6">';
-						$html.='<input type="text" name="date" id="date" class="date" value="" />';
-					$html.='</div>';
-				$html.='</div>';
-
-				$html.='<div class="row">';
-					$html.='<div class="col-md-1">';
-						$html.='<label for="series">Series</label>';
-					$html.='</div>';
-					$html.='<div class="col-md-6">';
-						$html.='<select name="series" id="series">';
-							$html.='<option value="single">Single</option>';
-							$html.='<option value="Superprestige">Superprestige</option>';
-							$html.='<option value="bPost Bank">bPost Bank</option>';
-							$html.='<option value="World Cup">World Cup</option>';
-						$html.='</select>';
-					$html.='</div>';
-				$html.='</div>';
-
-				$html.='<div class="row">';
-					$html.='<div class="col-md-1">';
-						$html.='<label for="code">Code</label>';
-					$html.='</div>';
-					$html.='<div class="col-md-6">';
-						$html.='<input type="text" name="code" id="code" class="longtext" value="" />';
-					$html.='</div>';
-				$html.='</div>';
-
-				$html.='<input type="hidden" name="add-race" value="1" />';
-
-				$html.='<p><input type="submit" name="submit" id="submit" class="button button-primary" value="Add Race"></p>';
-			$html.='</form>';
-
+//
 			$races=$this->get_races_from_db();
 			$riders=$RiderStats->get_riders(array(
 				'pagination' => false,
@@ -325,58 +245,40 @@ class FantasyCyclingAdmin {
 		echo $html;
 	}
 
-	/**
-	 * add_race_to_db function.
-	 *
-	 * @access protected
-	 * @param mixed $form
-	 * @return void
-	 */
-	protected function add_race_to_db($form) {
+	protected function setup_race_in_db($form) {
 		global $wpdb;
 
 		if ($form['name']=='')
 			return '<div class="error">No name entered.</div>';
 
-		$data=array(
-			'name' => $form['name'],
-			'season' => $form['season'],
-			'type' => $form['type'],
-			'code' => $form['code'],
-			'series' => $form['series'],
-			'race_start' => date('Y-m-d H:i:s', strtotime($form['date'])),
-		);
+		// if we have a race set, we update, else we insert //
+		if (isset($form['race']) && $form['race']!=0) :
+			$data=array(
+				'name' => $form['name'],
+				'season' => $form['season'],
+				'type' => $form['type'],
+				'code' => $form['codes-from-db'],
+				'series' => $form['series'],
+				'race_start' => date('Y-m-d H:i:s', strtotime($form['date'])),
+			);
 
-		$wpdb->insert('wp_fc_races',$data);
+			$wpdb->update('wp_fc_races',$data,array('id' => $form['race']));
 
-		return '<div class="updated">Race added.</div>';
-	}
+			return '<div class="updated">Race updated.</div>';
+		else :
+			$data=array(
+				'name' => $form['name'],
+				'season' => $form['season'],
+				'type' => $form['type'],
+				'code' => $form['codes-from-db'],
+				'series' => $form['series'],
+				'race_start' => date('Y-m-d H:i:s', strtotime($form['date'])),
+			);
 
-	/**
-	 * update_race_in_db function.
-	 *
-	 * @access protected
-	 * @param mixed $form
-	 * @return void
-	 */
-	protected function update_race_in_db($form) {
-		global $wpdb;
+			$wpdb->insert('wp_fc_races',$data);
 
-		if ($form['name']=='')
-			return '<div class="error">No name entered.</div>';
-
-		$data=array(
-			'name' => $form['name'],
-			'season' => $form['season'],
-			'type' => $form['type'],
-			'code' => $form['codes-from-db'],
-			'series' => $form['series'],
-			'race_start' => date('Y-m-d H:i:s', strtotime($form['date'])),
-		);
-
-		$wpdb->update('wp_fc_races',$data,array('id' => $form['race']));
-
-		return '<div class="updated">Race added.</div>';
+			return '<div class="updated">Race added.</div>';
+		endif;
 	}
 
 	/**

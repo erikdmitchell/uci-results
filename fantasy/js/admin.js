@@ -5,23 +5,23 @@ jQuery(document).ready(function($) {
 		getStartList($(this).val());
 	});
 
-	$('.add-race .date').datepicker({
+	$('#setup-races .date').datepicker({
 		changeMonth: true,
 		changeYear: true
 	});
 
 	// append db data to results form //
-	$('#add-results #race').change(function() {
+	$('#setup-races #race').change(function() {
 		var id=$(this).val();
 
 		for (var i in FCAdminWPOptions.FCRaces) {
 			if (FCAdminWPOptions.FCRaces[i].id==id) {
-				$('#add-results #name').val(FCAdminWPOptions.FCRaces[i].name);
-				$('#add-results #season').val(FCAdminWPOptions.FCRaces[i].season);
-				$('#add-results #type').val(FCAdminWPOptions.FCRaces[i].type);
-				$('#add-results #date').val(FCAdminWPOptions.FCRaces[i].race_start);
-				$('#add-results #series').val(FCAdminWPOptions.FCRaces[i].series);
-				$('#add-results #code').val(FCAdminWPOptions.FCRaces[i].code);
+				$('#setup-races #name').val(FCAdminWPOptions.FCRaces[i].name);
+				$('#setup-races #season').val(FCAdminWPOptions.FCRaces[i].season);
+				$('#setup-races #type').val(FCAdminWPOptions.FCRaces[i].type);
+				$('#setup-races #date').val(FCAdminWPOptions.FCRaces[i].race_start);
+				$('#setup-races #series').val(FCAdminWPOptions.FCRaces[i].series);
+				$('#setup-races #codes-from-db').val(FCAdminWPOptions.FCRaces[i].code);
 			}
 		}
 	});
@@ -53,7 +53,8 @@ function loadStartList(startList) {
 					startList.splice(key,1);
 				}
 			}
-
+		} else {
+			jQuery(this).prop('checked',false);
 		}
 	});
 
