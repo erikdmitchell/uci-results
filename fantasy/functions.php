@@ -154,6 +154,7 @@ function fc_process_create_team() {
 			'wp_user_id' => $_POST['wp_user_id'],
 			'data' => implode('|',$_POST['riders']),
 			'team' => $_POST['team_name'],
+			'race_id' => $_POST['race_id'],
 		);
 
 		$wpdb->insert($table,$data);
