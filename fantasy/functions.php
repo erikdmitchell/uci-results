@@ -221,14 +221,57 @@ function fc_get_race_standings($race_id=0) {
 		return false;
 
 	$html=null;
-	$race=$wpdb->get_results("SELECT * FROM wp_fc_races WHERE id={$race_id}");
-	$teams=$wpdb->get_results("SELECT * FROM wp_fc_teams WHERE race_id={$race_id}");
+	$race=$wpdb->get_row("SELECT name,code FROM wp_fc_races WHERE id={$race_id}");
+	$teams=$wpdb->get_results("SELECT team AS team_name,data AS riders FROM wp_fc_teams WHERE race_id={$race_id}");
+	$results=$wpdb->get_results("SELECT name,place,par AS points FROM wp_uci_rider_data WHERE code=\"{$race->code}\"");
+	$place=1;
+
+	// split out riders into array and get points //
+	foreach ($teams as $team) :
+		$total=0;
+		$team->riders=explode('|',$team->riders);
+		foreach ($team->riders as $key => $rider) :
+			foreach ($results as $result) :
+				if ($rider==$result->name) :
+					$team->riders[$key]=$result;
+					$total=$total+$result->points;
+				endif;
+			endforeach;
+		endforeach;
+		$team->total=$total;
+	endforeach;
+
+	// order by points //
+	usort($teams, function ($a, $b) {
+		return strcmp($b->total,$a->total);
+	});
+
+	$html.='<div class="fantasy-cycling-team-standings">';
+		$html.='<h2>'.$race->name.'</h2>';
+		$html.='<div class="team-standings">';
+			$html.='<div class="row header">';
+				$html.='<div class="rank col-md-3">Rank</div>';
+				$html.='<div class="name col-md-6">Team</div>';
+				$html.='<div class="points col-md-3">Points</div>';
+			$html.='</div>';
+			foreach ($teams as $team) :
+				$html.='<div class="row">';
+					$html.='<div class="rank col-md-3">'.$place.'</div>';
+					$html.='<div class="name col-md-6"><a href="#">'.$team->team_name.'</a></div>';
+					$html.='<div class="points col-md-3">'.$team->total.'</div>';
+				$html.='</div>';
+				$place++;
+			endforeach;
+		$html.='</div>';
+	$html.='</div>';
+
+	return $html;
 }
 
 // if there's an id, display teams, else display races
 function fc_get_standings() {
 	if (isset($_GET['race_id'])) :
-
+		return fc_get_race_standings($_GET['race_id']);
 	else :
 		return fc_get_final_standings();
 	endif;
