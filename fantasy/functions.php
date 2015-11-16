@@ -117,6 +117,10 @@ function fc_rider_list_dropdown_race($args=array()) {
 	$riders=$wpdb->get_col("SELECT start_list FROM wp_fc_races WHERE id=$id");
 	$riders=unserialize($riders[0]);
 
+	// if we have no start list //
+	if (empty($riders))
+		return '<div class="no-start-list">No start list yet, check back soon.</div>';
+
 	// Sort the array by name //
 	sort($riders);
 
