@@ -175,13 +175,37 @@ add_action('init','fc_process_create_team');
 function fc_get_team($team=false) {
 	global $wpdb;
 
-	if (!$team)
+	if (!$team || $team=='')
 		return false;
 
-	$team_db=$wpdb->get_row("SELECT race_id,team FROM wp_fc_teams WHERE team='{$team}'");
-	$team=fc_get_teams_results($team_db->race_id,$team_db->team);
+	$html=null;
+	$team_results=fc_get_teams_results($team);
 
-	return $team;
+	$html.='<div class="team">';
+		$html.='<h3>'.$team.'</h3>';
+
+		$html.='<div class="results">';
+			foreach ($team_results as $results) :
+				$html.='<div class="row">';
+					$html.='<div class="race-name col-md-6"><a href="/fantasy/standings/?race_id='.$results->race_id.'">'.$results->race_name.'</a></div>';
+					$html.='<div class="total-points col-md-2">'.$results->total.'</div>';
+				$html.='</div>';
+
+				$html.='<div class="riders">';
+					foreach ($results->riders as $rider) :
+						$html.='<div class="rider row">';
+							$html.='<div class="name col-md-6">'.$rider->name.'<span class="nat">'.get_country_flag($rider->nat).'</span></div>';
+							$html.='<div class="place col-md-2">'.$rider->place.'</div>';
+							$html.='<div class="points col-md-2">'.$rider->points.'</div>';
+						$html.='</div>';
+					endforeach;
+				$html.='</div>';
+
+			endforeach;
+		$html.='</div>';
+	$html.='</div>';
+
+	return $html;
 }
 
 /**
@@ -193,7 +217,7 @@ function fc_get_team($team=false) {
  */
 function fc_get_race_standings($race_id=0) {
 	$html=null;
-	$teams=fc_get_teams_results($race_id);
+	$teams=fc_get_teams_results(false,$race_id);
 	$place=1;
 
 	$html.='<div class="fantasy-cycling-team-standings">';
@@ -222,39 +246,58 @@ function fc_get_race_standings($race_id=0) {
  * fc_get_teams_results function.
  *
  * @access public
- * @param int $race_id (default: 0)
  * @param bool $team_name (default: false)
+ * @param int $race_id (default: 0)
  * @return void
  */
-function fc_get_teams_results($race_id=0,$team_name=false) {
+function fc_get_teams_results($team_name=false,$race_id=false) {
 	global $wpdb;
 
-	if (!$race_id)
+	if (!$team_name && !$race_id)
 		return false;
 
-	if ($team_name) :
-		$where="WHERE race_id={$race_id} AND team='{$team_name}'";
-	else :
-		$where="WHERE race_id={$race_id}";
+	$where=array();
+
+	if ($team_name)
+		$where[]="team='{$team_name}'";
+
+	if ($race_id)
+		$where[]="race_id={$race_id}";
+
+	if (!empty($where)) :
+		if (count($where)==1) :
+			$where='WHERE '.implode('',$where);
+		else :
+			$where='WHERE '.implode(' AND ',$where);
+		endif;
 	endif;
 
 	$html=null;
-	$race=$wpdb->get_row("SELECT name,code FROM wp_fc_races WHERE id={$race_id}");
-	$teams=$wpdb->get_results("SELECT team AS team_name,data AS riders FROM wp_fc_teams $where");
-	$results=$wpdb->get_results("SELECT name,place,nat,par AS points FROM wp_uci_rider_data WHERE code=\"{$race->code}\"");
 	$teams_final=new stdClass();
+	$fc_data_sql="
+		SELECT
+			team AS team_name,
+			data AS riders,
+			race_id,
+			races.code,
+			uci_races.event AS race_name
+		FROM wp_fc_teams AS teams
+		LEFT JOIN wp_fc_races AS races
+		ON teams.race_id=races.id
+		LEFT JOIN wp_uci_races AS uci_races
+		ON races.code=uci_races.code
+		$where
+	";
+	$teams=$wpdb->get_results($fc_data_sql);
 
 	// split out riders into array and get points //
 	foreach ($teams as $team) :
 		$total=0;
 		$team->riders=explode('|',$team->riders);
 		foreach ($team->riders as $key => $rider) :
-			foreach ($results as $result) :
-				if ($rider==$result->name) :
-					$team->riders[$key]=$result;
-					$total=$total+$result->points;
-				endif;
-			endforeach;
+			$results=$wpdb->get_row("SELECT name, place, nat, par AS points FROM wp_uci_rider_data	WHERE code=\"{$team->code}\" AND name='{$rider}'");
+			$team->riders[$key]=$results;
+			$total=$total+$results->points;
 		endforeach;
 		$team->total=$total;
 	endforeach;
@@ -264,8 +307,20 @@ function fc_get_teams_results($race_id=0,$team_name=false) {
 		return strcmp($b->total,$a->total);
 	});
 
-	$teams_final->race_name=$race->name;
-	$teams_final->teams=$teams;
+	if ($team_name) :
+		$teams_final=$teams;
+	endif;
+
+	if ($race_id) :
+		$teams_final->race_name=$wpdb->get_var("SELECT event AS race_name FROM wp_fc_races AS fcraces LEFT JOIN wp_uci_races AS races ON fcraces.code=races.code WHERE fcraces.id={$race_id}");
+		$teams_final->teams=$teams;
+	endif;
+
+/*
+echo '<pre>';
+print_r($teams_final);
+echo '</pre>';
+*/
 
 	return $teams_final;
 }
