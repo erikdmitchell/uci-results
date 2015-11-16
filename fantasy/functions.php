@@ -36,7 +36,7 @@ function fc_get_user_teams($user_id=0) {
 
 	$html.='<ul class="fantasy-cycling-user-teams">';
 		foreach ($teams as $team) :
-			$html.='<li id="team-'.$team->id.'"><a href="/fantasy/team?team='.urlencode($team->team).'">'.$team->team.'</a> (0 out of 0)</li>';
+			$html.='<li id="team-'.$team->id.'"><a href="/fantasy/team?team='.urlencode($team->team).'">'.$team->team.'</a></li>';
 		endforeach;
 	$html.='</ul>';
 
@@ -91,6 +91,13 @@ function fc_rider_list_dropdown($name=false,$min_rank=0,$max_rank=10,$select_tit
 	endif;
 }
 
+/**
+ * fc_rider_list_dropdown_race function.
+ *
+ * @access public
+ * @param array $args (default: array())
+ * @return void
+ */
 function fc_rider_list_dropdown_race($args=array()) {
 	global $wpdb,$RiderStats;
 
@@ -427,8 +434,34 @@ function fc_upcoming_races($limit=3) {
 	echo fc_get_upcoming_races($limit);
 }
 
-function __AAAAA() {
-// this function will do some of our hackpad stuff
+function fc_get_add_rosters($limit=3) {
+	global $wpdb;
+
+	$html=null;
+	//$races=$wpdb->get_results("SELECT * FROM wp_fc_races WHERE race_start > CURDATE() ORDER BY race_start ASC LIMIT $limit");
+	$races=$wpdb->get_results("SELECT * FROM wp_fc_races ORDER BY race_start ASC LIMIT $limit");
+
+	$html.='<div class="fc-upcoming-races">';
+		foreach ($races as $race) :
+			if ($race->series!='single') :
+				$series='<div class="series">('.$race->series.')';
+			else :
+				$series='';
+			endif;
+
+			$html.='<div id="race-'.$race->id.'" class="row">';
+				$html.='<div class="date col-md-4">'.date('M. j, Y',strtotime($race->race_start)).': </div>';
+				$html.='<div class="race-name col-md-8"><a href="/fantasy/create-team/?team='.urlencode($_GET['team']).'&race_id='.$race->id.'">'.$race->name.'</a></div>';
+				$html.=$series;
+			$html.='</div>';
+		endforeach;
+	$html.='</div>';
+
+	return $html;
+}
+
+function fc_add_rosters($limit=3) {
+	echo fc_get_add_rosters($limit);
 }
 
 /**
@@ -787,5 +820,20 @@ function fc_get_template_html($template_name=false) {
 	ob_end_clean();
 
 	return $html;
+}
+
+/**
+ * fc_get_race function.
+ *
+ * @access public
+ * @param mixed $race_id
+ * @return void
+ */
+function fc_get_race($race_id) {
+	global $wpdb;
+
+	$race=$wpdb->get_row("SELECT * FROM wp_fc_races WHERE id={$race_id}");
+
+	return $race;
 }
 ?>
