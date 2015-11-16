@@ -27,7 +27,7 @@ function fc_get_user_teams($user_id=0) {
 		return 'No user found.';
 
 	$html=null;
-	$teams=$wpdb->get_results("SELECT team,id FROM wp_fc_teams WHERE wp_user_id=$user_id");
+	$teams=$wpdb->get_results("SELECT team,id FROM wp_fc_teams WHERE wp_user_id=$user_id GROUP BY team");
 
 	if (!count($teams)) :
 		$html.='No teams found. Click <a href="/fantasy/create-team/">here</a> to create one.';
