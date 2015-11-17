@@ -26,7 +26,7 @@ $wp_query->uci_curl_max_pages;
 		<div class="col-md-12">
 
 			<div class="uci-curl-rider-rankings">
-				<h3>Rider Rankings (<?php echo $season; ?>)</h3>
+				<h1 class="entry-title">Rider Rankings (<?php echo $season; ?>)</h1>
 
 				<div id="season-rider-rankings" class="season-rider-rankings">
 					<div class="header row">

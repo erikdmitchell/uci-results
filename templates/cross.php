@@ -21,10 +21,11 @@ $race_results=$RaceStats->get_races(array(
 ?>
 
 <?php get_header(); ?>
+
 <div class="container">
 	<div class="row content">
 		<div class="col-md-12">
-			<h3>UCI Cross Rankings</h3>
+			<?php the_title( '<h1 class="entry-title">', '</h1>' );	?>
 
 				<div class="uci-curl-cross-rankings row">
 					<div class="rider-rankings-list col-md-6">

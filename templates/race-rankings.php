@@ -25,7 +25,7 @@ $races=$RaceStats->get_races(array(
 		<div class="col-md-12">
 
 			<div class="uci-curl-race-rankings">
-				<h3>Race Rankings (<?php echo $season; ?>)</h3>
+				<h1 class="entry-title">Race Rankings (<?php echo $season; ?>)</h1>
 
 				<div id="season-race-rankings" class="season-race-rankings">
 					<div class="header row">

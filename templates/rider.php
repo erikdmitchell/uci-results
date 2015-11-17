@@ -28,7 +28,7 @@ $rider_stats=$RiderStats->get_rider_total($rider_name,$season);
 				Rider/results not found.
 			<?php else : ?>
 				<div class="uci-curl-rider-rankings">
-					<h3><?php echo $rider_name; ?> <a href="<?php echo single_country_link($results[0]->country,$season); ?>"><?php echo get_country_flag($results[0]->country); ?></a></h3>
+					<h1 class="entry-title"><?php echo $rider_name; ?> <a href="<?php echo single_country_link($results[0]->country,$season); ?>"><?php echo get_country_flag($results[0]->country); ?></a></h1>
 					<div class="row">
 						<div class="col-md-4">
 							<div class="row">
