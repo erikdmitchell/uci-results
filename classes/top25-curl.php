@@ -109,49 +109,6 @@ class Top25_cURL {
 		$html.='<h3>UCI Cross</h3>';
 
 		$html.='<p>Details coming soon on how to use this plugin and what to do.</p>';
-//
-/*
-		$html.='<h3>Field Quality Test</h3>';
-
-		$html.='<div class="xcontainer">';
-
-				$html.='<div class="row">';
-					$html.='<div class="col-md-4">Name</div>';
-					//$html.='<div class="col-md-2">Date</div>';
-					$html.='<div class="col-md-1">UCI Pts</div>';
-					$html.='<div class="col-md-1">WCP Pts</div>';
-					$html.='<div class="col-md-1">Race #</div>';
-					$html.='<div class="col-md-1">Fin. Mult.</div>';
-					$html.='<div class="col-md-1">Divider</div>';
-					$html.='<div class="col-md-1">FQ</div>';
-				$html.='</div>';
-
-		foreach ($races as $race) :
-			$FieldQuality=new FieldQuality($race->code);
-			//$html.='<tr><td><code>'.$race->code.'</code> ('.$race->date.')</td></tr>';
-			$html.='<div class="row">';
-				$html.='<div class="col-md-4">'.$race->name.' ('.$race->class.')</div>';
-				//$html.='<div class="col-md-2">'.$race->date.'</div>';
-
-				if (isset($FieldQuality->field_quality->uci_points_in_field))
-					$html.='<div class="col-md-1">'.$FieldQuality->field_quality->uci_points_in_field.'</div>';
-				if (isset($FieldQuality->field_quality->wcp_points_in_field))
-					$html.='<div class="col-md-1">'.$FieldQuality->field_quality->wcp_points_in_field.'</div>';
-				if (isset($FieldQuality->field_quality->race_class_number))
-					$html.='<div class="col-md-1">'.$FieldQuality->field_quality->race_class_number.'</div>';
-				if (isset($FieldQuality->field_quality->finishers_multiplier))
-					$html.='<div class="col-md-1">'.number_format($FieldQuality->field_quality->finishers_multiplier,3).'</div>';
-				if (isset($FieldQuality->field_quality->divider))
-					$html.='<div class="col-md-1">'.$FieldQuality->field_quality->divider.'</div>';
-				if (isset($FieldQuality->field_quality->fq))
-					$html.='<div class="col-md-1">'.round($FieldQuality->field_quality->fq).'</div>';
-
-			$html.='</div>';
-		endforeach;
-
-		$html.='</div>';
-*/
-//
 
 		return $html;
 	}

@@ -11,7 +11,13 @@ Coming Soon
 Changelog
 ===========
 
-Added rider stats/rankings
+### 1.1.1
+	
+	Added rider stats/rankings
+	
+	Reworked our FQ
+	
+	removed all custom login integration. Using EM Custom Login to do this.
 
 ### 1.1.0
 
