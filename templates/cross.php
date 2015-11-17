@@ -44,7 +44,7 @@ $race_results=$RaceStats->get_races(array(
 								<div class="total col-md-1"><?php echo number_format($rider->total,3); ?></div>
 							</div>
 						<?php endforeach; ?>
-						<a class="view-all" href="">View All Riders &raquo;</a>
+						<a class="view-all" href="/uci-cross-rankings/rider-rankings/">View All Riders &raquo;</a>
 
 						<div class="row">
 							<div class="col-md-4"><strong>Previous Seasons</strong></div>
@@ -78,7 +78,7 @@ $race_results=$RaceStats->get_races(array(
 <!-- 									<div class="fq col-md-1"><?php echo $race->fq; ?></div> -->
 								</div>
 							<?php endforeach; ?>
-							<a class="view-all" href="">View All Races &raquo;</a>
+							<a class="view-all" href="/uci-cross-rankings/race-rankings/">View All Races &raquo;</a>
 
 							<div class="row">
 								<div class="col-md-4"><strong>Previous Seasons</strong></div>
