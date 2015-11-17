@@ -13,16 +13,11 @@ function fc_get_user_teams($user_id=0) {
 		return 'No user found.';
 
 	$html=null;
-	$teams=$wpdb->get_results("SELECT team,id FROM wp_fc_teams WHERE wp_user_id=$user_id GROUP BY team");
-
-	if (!count($teams)) :
-		$html.='Click <a href="/fantasy/create-team/">here</a> to create your team.';
-		return $html;
-	endif;
+	$teams=$wpdb->get_results("SELECT meta_value AS team FROM wp_usermeta WHERE user_id=$user_id AND meta_key='team_name'");
 
 	$html.='<ul class="fantasy-cycling-user-teams">';
 		foreach ($teams as $team) :
-			$html.='<li id="team-'.$team->id.'"><a href="/fantasy/team?team='.urlencode($team->team).'">'.$team->team.'</a></li>';
+			$html.='<li><a href="/fantasy/team?team='.urlencode($team->team).'">'.$team->team.'</a></li>';
 		endforeach;
 	$html.='</ul>';
 
@@ -484,13 +479,12 @@ function fc_get_upcoming_races($limit=3) {
 	global $wpdb;
 
 	$html=null;
-	//$races=$wpdb->get_results("SELECT * FROM wp_fc_races ORDER BY race_start ASC LIMIT $limit");
 	$races=$wpdb->get_results("SELECT * FROM wp_fc_races WHERE race_start > CURDATE() ORDER BY race_start ASC LIMIT $limit");
 
 	if (isset($_GET['team'])) :
 		$team=$_GET['team'];
 	else :
-		$team=fc_get_user_team(get_current_user_id());
+		$team=$wpdb->get_var("SELECT meta_value FROM wp_usermeta WHERE user_id=".get_current_user_id()." AND meta_key='team_name'");
 	endif;
 
 	$html.='<div class="fc-upcoming-races">';
@@ -635,4 +629,45 @@ function fc_get_next_race_id() {
 		return false;
 	endif;
 }
+
+/**
+ * fc_addon_profile_fields function.
+ *
+ * @access public
+ * @param mixed $user
+ * @return void
+ */
+function fc_addon_profile_fields($user) {
+	$html=null;
+
+	$html.='<h3>Fantasy Cycling</h3>';
+	$html.='<table class="form-table fantasy-cycling-profile-fields">';
+		$html.='<tr>';
+			$html.='<th><label for="team_name">Team Name</label></th>';
+			$html.='<td><input type="text" name="team_name" value="'.esc_attr(get_the_author_meta('team_name',$user->ID)).'" class="regular-text" /></td>';
+		$html.='</tr>';
+		$html.='<tr>';
+			$html.='<th><label for="team_country">Country</label></th>';
+			$html.='<td><input type="text" name="team_country" value="'.esc_attr(get_the_author_meta('team_country',$user->ID)).'" class="regular-text" /></td>';
+		$html.='</tr>';
+	$html.='</table>';
+
+	echo $html;
+}
+add_action('show_user_profile','fc_addon_profile_fields');
+add_action('edit_user_profile','fc_addon_profile_fields');
+
+/**
+ * fc_save_addon_profile_fields function.
+ *
+ * @access public
+ * @param mixed $user_id
+ * @return void
+ */
+function fc_save_addon_profile_fields($user_id) {
+	update_user_meta($user_id,'team_name',sanitize_text_field($_POST['team_name']));
+	update_user_meta($user_id,'team_country',sanitize_text_field($_POST['team_country']));
+}
+add_action('personal_options_update','fc_save_addon_profile_fields');
+add_action('edit_user_profile_update','fc_save_addon_profile_fields');
 ?>

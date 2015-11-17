@@ -10,9 +10,9 @@
 		<form name="new-team" id="new-team" method="post" action="">
 			<?php
 			if (isset($_GET['team'])) :
-				$team='<input type="text" name="team_name" id="team-name" class="longtext" value="'.$_GET['team'].'" maxlength="250" readonly />';
+				$team=$_GET['team'];
 			else :
-				$team='<input type="text" name="team_name" id="team-name" class="longtext" value="" maxlength="250" />';
+				$team=$wpdb->get_var("SELECT meta_value FROM wp_usermeta WHERE user_id=".get_current_user_id()." AND meta_key='team_name'");
 			endif;
 
 			$dd_list=fc_rider_list_dropdown_race(array(
