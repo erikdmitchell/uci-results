@@ -15,6 +15,9 @@ function fc_get_user_teams($user_id=0) {
 	$html=null;
 	$teams=$wpdb->get_results("SELECT meta_value AS team FROM wp_usermeta WHERE user_id=$user_id AND meta_key='team_name'");
 
+	if (!count($teams) || empty($teams[0]->team))
+		return '<a href="'.get_edit_user_link().'">Please add a team name first.</a>';
+
 	$html.='<ul class="fantasy-cycling-user-teams">';
 		foreach ($teams as $team) :
 			$html.='<li><a href="/fantasy/team?team='.urlencode($team->team).'">'.$team->team.'</a></li>';

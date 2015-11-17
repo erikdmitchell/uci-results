@@ -15,6 +15,11 @@
 				$team=$wpdb->get_var("SELECT meta_value FROM wp_usermeta WHERE user_id=".get_current_user_id()." AND meta_key='team_name'");
 			endif;
 
+			if (!$team || $team=='') :
+				echo '<a href="'.get_edit_user_link().'">Please add a team name first.</a>';
+				return;
+			endif;
+
 			$dd_list=fc_rider_list_dropdown_race(array(
 				'id' => $race_id,
 				'name' => 'riders[]',
