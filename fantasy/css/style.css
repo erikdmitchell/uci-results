@@ -1,4 +1,20 @@
 /**
+ * fantasy main
+ */
+.login-register-wrap .login-register {
+	list-style-type: none;
+	margin: 0;
+}
+.login-register-wrap .login-register li {
+	float: left;
+	margin-right: 5px;
+	padding-right: 5px;
+	border-right: 1px solid #000;
+}
+.login-register-wrap .login-register li:last-child {
+	border-right: 0;
+}
+/**
  * create team
  */
 .fantasy-cycling-create-team .row {
@@ -20,6 +36,28 @@
  */
 .team-standings .header {
 	font-weight: bold;
+}
+/**
+ * team page
+ */
+.fantasy-cycling-team .results .race-name,
+.fantasy-cycling-team .results .total-points {
+	font-weight: bold;
+	padding-bottom: 5px;
+}
+.fantasy-cycling-team .results .race-results {
+	border-bottom: 1px solid #ccc;
+	margin-bottom: 7px;
+	padding-bottom: 7px;
+}
+.fantasy-cycling-team .results .race-results:last-child {
+	border-bottom: none;
+}
+.fantasy-cycling-team .results .rider {
+	margin-bottom: 5px;
+}
+.fantasy-cycling-team .results .rider .nat {
+	margin-left: 15px;
 }
 /**
  * fc posts

@@ -9,6 +9,11 @@
 	<?php if ($race_id=fc_get_race_id()) : ?>
 		<form name="new-team" id="new-team" method="post" action="">
 			<?php
+			if (!is_user_logged_in()) :
+				echo '<a href="/login/">Please login first.</a>';
+				return;
+			endif;
+
 			if (isset($_GET['team'])) :
 				$team=$_GET['team'];
 			else :

@@ -169,6 +169,9 @@ function fc_get_team($team=false) {
 	if (!$team || $team=='')
 		$team=$wpdb->get_var("SELECT meta_value FROM wp_usermeta WHERE user_id=".get_current_user_id()." AND meta_key='team_name'");
 
+	if (!$team || $team=='')
+		return false;
+
 	$html=null;
 	$team_results=fc_get_teams_results($team);
 
@@ -177,21 +180,22 @@ function fc_get_team($team=false) {
 
 		$html.='<div class="results">';
 			foreach ($team_results as $results) :
-				$html.='<div class="row">';
-					$html.='<div class="race-name col-md-6"><a href="/fantasy/standings/?race_id='.$results->race_id.'">'.$results->race_name.'</a></div>';
-					$html.='<div class="total-points col-md-2">'.$results->total.'</div>';
-				$html.='</div>';
+				$html.='<div class="race-results">';
+					$html.='<div class="row">';
+						$html.='<div class="race-name col-md-6"><a href="/fantasy/standings/?race_id='.$results->race_id.'">'.$results->race_name.'</a></div>';
+						$html.='<div class="total-points col-md-2">'.$results->total.'</div>';
+					$html.='</div>';
 
-				$html.='<div class="riders">';
-					foreach ($results->riders as $rider) :
-						$html.='<div class="rider row">';
-							$html.='<div class="name col-md-6">'.$rider->name.'<span class="nat">'.get_country_flag($rider->nat).'</span></div>';
-							$html.='<div class="place col-md-2">'.$rider->place.'</div>';
-							$html.='<div class="points col-md-2">'.$rider->points.'</div>';
-						$html.='</div>';
-					endforeach;
+					$html.='<div class="riders">';
+						foreach ($results->riders as $rider) :
+							$html.='<div class="rider row">';
+								$html.='<div class="name col-md-6">'.$rider->name.'<span class="nat">'.get_country_flag($rider->nat).'</span></div>';
+								$html.='<div class="place col-md-2">'.$rider->place.'</div>';
+								$html.='<div class="points col-md-2">'.$rider->points.'</div>';
+							$html.='</div>';
+						endforeach;
+					$html.='</div>';
 				$html.='</div>';
-
 			endforeach;
 		$html.='</div>';
 	$html.='</div>';
