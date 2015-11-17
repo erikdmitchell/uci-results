@@ -29,6 +29,8 @@ class FantasyCyclingAdmin {
 	 * @return void
 	 */
 	public function admin_scripts_styles($hook) {
+		wp_enqueue_style('fantasy-cycling-user-admin',plugins_url('/css/admin-user.css',__FILE__));
+
 		if ($hook!='uci-cross_page_fantasy-cycling')
 			return false;
 

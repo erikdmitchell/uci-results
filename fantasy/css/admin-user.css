@@ -1,0 +1,9 @@
+/**
+ * User Profile
+ */
+.user_not_admin #wordpress-seo,
+.user_not_admin #social-accounts,
+.user_not_admin .user-admin-color-wrap,
+.user_not_admin .user-admin-bar-front-wrap {
+	display: none;
+}

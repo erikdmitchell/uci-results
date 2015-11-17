@@ -682,4 +682,12 @@ function fc_registration_proccess_addon_profile_fields($user_id,$form) {
 	update_user_meta($user_id,'team_country',sanitize_text_field($_POST['team_country']));
 }
 add_action('emcl-after-user-registration','fc_registration_proccess_addon_profile_fields',10,2);
+
+function fc_admin_body_class($classes) {
+	if (!current_user_can('manage_options'))
+		$classes.='user_not_admin';
+
+	return $classes;
+}
+add_filter('admin_body_class','fc_admin_body_class');
 ?>
