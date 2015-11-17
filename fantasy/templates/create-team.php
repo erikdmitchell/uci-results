@@ -42,6 +42,7 @@
 				</div>
 				<div class="col-md-6">
 					<?php echo $team; ?>
+					<input type="hidden" name="team_name" value="<?php echo $team; ?>" />
 				</div>
 			</div>
 			<div class="row">

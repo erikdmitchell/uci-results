@@ -163,11 +163,11 @@ add_action('init','fc_process_create_team');
 function fc_get_team($team=false) {
 	global $wpdb;
 
-	if (!$team && isset($_GET['team']))
+	if (!$team && isset($_GET['team']) && $_GET['team']!='')
 		$team=$_GET['team'];
 
 	if (!$team || $team=='')
-		return false;
+		$team=$wpdb->get_var("SELECT meta_value FROM wp_usermeta WHERE user_id=".get_current_user_id()." AND meta_key='team_name'");
 
 	$html=null;
 	$team_results=fc_get_teams_results($team);
