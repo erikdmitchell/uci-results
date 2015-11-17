@@ -670,4 +670,18 @@ function fc_save_addon_profile_fields($user_id) {
 }
 add_action('personal_options_update','fc_save_addon_profile_fields');
 add_action('edit_user_profile_update','fc_save_addon_profile_fields');
+
+/**
+ * fc_registration_proccess_addon_profile_fields function.
+ *
+ * @access public
+ * @param mixed $user_id
+ * @param mixed $form
+ * @return void
+ */
+function fc_registration_proccess_addon_profile_fields($user_id,$form) {
+	update_user_meta($user_id,'team_name',sanitize_text_field($_POST['team_name']));
+	update_user_meta($user_id,'team_country',sanitize_text_field($_POST['team_country']));
+}
+add_action('emcl-after-user-registration','fc_registration_proccess_addon_profile_fields',10,2);
 ?>
