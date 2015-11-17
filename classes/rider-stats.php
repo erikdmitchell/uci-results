@@ -318,6 +318,8 @@ class RiderStats {
 			$limit
 		";
 
+		$wpdb->query("SET SQL_BIG_SELECTS=1"); // fixes a minor sql bug
+
 		$riders=$wpdb->get_results($sql);
 
 		$max_riders=$wpdb->get_results("SELECT name FROM $uci_curl->results_table GROUP BY name");

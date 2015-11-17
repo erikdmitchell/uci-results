@@ -99,10 +99,10 @@ class UCIcURLDB {
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `code` tinytext NOT NULL,
 		  `uci_points_in_field` int(11) NOT NULL,
-      `wcp_points_in_field` int(11) NOT NULL,
-      `race_class_number` int(11) NOT NULL,
-      `finishers_multiplier` DECIMAL(7,4) NOT NULL,
-      `divider` int(11) NOT NULL,
+		  `wcp_points_in_field` int(11) NOT NULL,
+		  `race_class_number` int(11) NOT NULL,
+		  `finishers_multiplier` DECIMAL(7,4) NOT NULL,
+		  `divider` int(11) NOT NULL,
 		  `fq` DECIMAL(7,4) NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
@@ -196,7 +196,8 @@ class UCIcURLDB {
       `race_class_number` int(11) NOT NULL,
       `finishers_multiplier` DECIMAL(7,4) NOT NULL,
       `divider` int(11) NOT NULL,
-		  `fq` DECIMAL(7,4) NOT NULL
+		  `fq` DECIMAL(7,4) NOT NULL,
+		  PRIMARY KEY (`id`)
 		)";
 
 		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
