@@ -17,6 +17,7 @@ include_once(plugin_dir_path(__FILE__).'classes/race-stats.php');
 include_once(plugin_dir_path(__FILE__).'classes/rider-stats.php');
 include_once(plugin_dir_path(__FILE__).'classes/seasons.php');
 require_once(plugin_dir_path(__FILE__).'page-templating.php' );
+include_once(plugin_dir_path(__FILE__).'fantasy/fantasy.php');
 
 define('UCICURLBASE',plugin_dir_url(__FILE__));
 
