@@ -368,21 +368,22 @@ function fc_get_final_standings($limt=10) {
 		FROM wp_fc_races AS races
 		LEFT JOIN wp_fc_teams AS teams
 		ON races.id=teams.race_id
+		WHERE races.race_start < CURDATE()
 		GROUP BY races.id
-		ORDER BY races.race_start
+		ORDER BY races.race_start DESC
 	";
 	$races=$wpdb->get_results($sql);
 
 	$html.='<div class="fantasy-cycling-final-standings">';
 		$html.='<div class="final-standings">';
-			$html.='<div class="row header">';
-				$html.='<div class="name col-md-9">Race</div>';
-				$html.='<div class="points col-md-3">Teams</div>';
-			$html.='</div>';
+			//$html.='<div class="row header">';
+				//$html.='<div class="name col-md-12">Race</div>';
+				//$html.='<div class="points col-md-3">Teams</div>';
+			//$html.='</div>';
 			foreach ($races as $race) :
 				$html.='<div class="row">';
-					$html.='<div class="name col-md-9"><a href="/fantasy/standings?race_id='.$race->id.'">'.$race->name.'</a></div>';
-					$html.='<div class="points col-md-3">'.$race->total_teams.'</div>';
+					$html.='<div class="name col-md-12"><a href="/fantasy/standings?race_id='.$race->id.'">'.$race->name.'</a></div>';
+					//$html.='<div class="points col-md-3">'.$race->total_teams.'</div>';
 				$html.='</div>';
 			endforeach;
 		$html.='</div>';

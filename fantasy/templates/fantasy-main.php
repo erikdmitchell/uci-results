@@ -9,7 +9,7 @@
 <div class="row">
 	<div class="col-md-3">
 		<?php if (is_user_logged_in()) : ?>
-			<h3>My Teams</h3>
+			<h3>Teams</h3>
 			<?php fc_user_teams(get_current_user_id()); ?>
 		<?php else : ?>
 			<div class="login-register-wrap">
