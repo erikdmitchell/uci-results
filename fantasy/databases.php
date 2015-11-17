@@ -6,7 +6,7 @@
  */
 class FantasyCyclingDB {
 
-	public $db_version='0.0.5';
+	public $db_version='0.0.6';
 	public $wp_option_name='fantasy_cycling_db_version';
 	public $table_name='';
 

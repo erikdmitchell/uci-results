@@ -78,7 +78,7 @@ class FantasyCyclingAdmin {
 
 			$html.='<form name="setup-races" id="setup-races" class="setup-races" method="post">';
 				$html.='<h3>Setup Races</h3>';
-				if (count($this->fc_races)) :
+				//if (count($this->fc_races)) :
 					$html.='<div class="row">';
 						$html.='<div class="col-md-1">';
 							$html.='<label for="race">Race</label>';
@@ -167,9 +167,9 @@ class FantasyCyclingAdmin {
 					$html.='<input type="hidden" name="setup-races" value="1" />';
 
 					$html.='<p><input type="submit" name="submit" id="submit" class="button button-primary" value="Setup Race"></p>';
-				else :
-					$html.='No races to add.';
-				endif;
+				//else :
+					//$html.='No races to add.';
+				//endif;
 			$html.='</form>';
 //
 			$races=$this->get_races_from_db();
