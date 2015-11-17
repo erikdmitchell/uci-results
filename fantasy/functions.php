@@ -16,7 +16,7 @@ function fc_get_user_teams($user_id=0) {
 	$teams=$wpdb->get_results("SELECT team,id FROM wp_fc_teams WHERE wp_user_id=$user_id GROUP BY team");
 
 	if (!count($teams)) :
-		$html.='No teams found. Click <a href="/fantasy/create-team/">here</a> to create one.';
+		$html.='Click <a href="/fantasy/create-team/">here</a> to create your team.';
 		return $html;
 	endif;
 
@@ -496,14 +496,14 @@ function fc_get_upcoming_races($limit=3) {
 	$html.='<div class="fc-upcoming-races">';
 		foreach ($races as $race) :
 			if ($race->series!='single') :
-				$series='<div class="series">('.$race->series.')';
+				$series='<span class="series">('.$race->series.')</span>';
 			else :
 				$series='';
 			endif;
 
-			$html.='<div id="race-'.$race->id.'" class="row">';
-				$html.='<div class="date col-md-4">'.date('M. j, Y',strtotime($race->race_start)).': </div>';
-				$html.='<div class="race-name col-md-8"><a href="/fantasy/create-team/?team='.urlencode($team).'&race_id='.$race->id.'">'.$race->name.'</a></div>';
+			$html.='<div id="race-'.$race->id.'" class="">';
+				$html.='<span class="date">'.date('M. j, Y',strtotime($race->race_start)).': </span>';
+				$html.='<span class="race-name"><a href="/fantasy/create-team/?team='.urlencode($team).'&race_id='.$race->id.'">'.$race->name.'</a></span>';
 				$html.=$series;
 			$html.='</div>';
 		endforeach;
