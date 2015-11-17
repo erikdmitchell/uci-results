@@ -480,12 +480,7 @@ function fc_get_upcoming_races($limit=3) {
 
 	$html=null;
 	$races=$wpdb->get_results("SELECT * FROM wp_fc_races WHERE race_start > CURDATE() ORDER BY race_start ASC LIMIT $limit");
-
-	if (isset($_GET['team'])) :
-		$team=$_GET['team'];
-	else :
-		$team=$wpdb->get_var("SELECT meta_value FROM wp_usermeta WHERE user_id=".get_current_user_id()." AND meta_key='team_name'");
-	endif;
+	$team=$wpdb->get_var("SELECT meta_value FROM wp_usermeta WHERE user_id=".get_current_user_id()." AND meta_key='team_name'");
 
 	$html.='<div class="fc-upcoming-races">';
 		foreach ($races as $race) :
