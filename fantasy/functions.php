@@ -214,7 +214,7 @@ function fc_get_race_standings($race_id=0) {
 	$place=1;
 
 	$html.='<div class="fantasy-cycling-team-standings">';
-		$html.='<h2>'.$teams->race_name.'</h2>';
+		$html.='<h3>'.$teams->race_name.'</h3>';
 		$html.='<div class="team-standings">';
 			$html.='<div class="row header">';
 				$html.='<div class="rank col-md-3">Rank</div>';
@@ -598,5 +598,41 @@ function fc_get_user_team($user_id=false) {
 	$team=$wpdb->get_var("SELECT DISTINCT team FROM wp_fc_teams WHERE wp_user_id={$user_id}");
 
 	return $team;
+}
+
+/**
+ * fc_get_race_id function.
+ *
+ * @access public
+ * @return void
+ */
+function fc_get_race_id() {
+	global $wpdb;
+
+	if (isset($_GET['race_id']) && $_GET['race_id']!=0)
+		return $_GET['race_id'];
+
+	if ($race_id=fc_get_next_race_id())
+		return $race_id;
+
+	return false;
+}
+
+/**
+ * fc_get_next_race_id function.
+ *
+ * @access public
+ * @return void
+ */
+function fc_get_next_race_id() {
+	global $wpdb;
+
+	$race_id=$wpdb->get_var("SELECT races.id	FROM wp_fc_races AS races	WHERE races.race_start > CURDATE() LIMIT 1");
+
+	if ($race_id!=NULL) :
+		return $race_id;
+	else :
+		return false;
+	endif;
 }
 ?>

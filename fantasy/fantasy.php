@@ -9,6 +9,12 @@ class FantasyCycling {
 	public $version='0.0.2';
 	public $wp_option_version='fantasy_cycling_version';
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		include_once(plugin_dir_path(__FILE__).'databases.php');
 		include_once(plugin_dir_path(__FILE__).'admin.php');
@@ -25,6 +31,12 @@ class FantasyCycling {
 		add_action('wp_enqueue_scripts',array($this,'scripts_styles'));
 	}
 
+	/**
+	 * scripts_styles function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function scripts_styles() {
 		wp_enqueue_style('fantasy-cycling-style',plugins_url('/css/style.css',__FILE__));
 	}

@@ -9,6 +9,7 @@
 
 <div class="row">
 	<div class="col-md-7 fantasy-cycling-team">
+		<h3>Teams</h3>
 		<?php if ($team=fc_get_team()) : ?>
 			<?php echo $team; ?>
 		<?php else : ?>

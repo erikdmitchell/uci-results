@@ -6,8 +6,8 @@
  */
 ?>
 <div class="fantasy-cycling-create-team">
-	<?php if (isset($_GET['race_id']) && $_GET['race_id']!=0) : ?>
-		<form name="new-team" method="post" action="">
+	<?php if ($race_id=fc_get_race_id()) : ?>
+		<form name="new-team" id="new-team" method="post" action="">
 			<?php
 			if (isset($_GET['team'])) :
 				$team='<input type="text" name="team_name" id="team-name" class="longtext" value="'.$_GET['team'].'" maxlength="250" readonly />';
@@ -16,19 +16,19 @@
 			endif;
 
 			$dd_list=fc_rider_list_dropdown_race(array(
-				'id' => $_GET['race_id'],
+				'id' => $race_id,
 				'name' => 'riders[]',
 				'echo' => false
 			));
-			$race=fc_get_race($_GET['race_id']);
+			$race=fc_get_race($race_id);
 			?>
 			<div class="row">
 				<div class="col-md-2">
 					<label for="race">Race:</label>
 				</div>
 				<div class="col-md-6">
-					<span class="race-name"><?php echo $race->name; ?></div>
-					<input type="hidden" name="race" value="<?php echo $_GET['race_id']; ?>" />
+					<span class="race-name"><?php echo $race->name; ?></span>
+					<input type="hidden" name="race" value="<?php echo $race_id; ?>" />
 				</div>
 			</div>
 			<div class="row">
