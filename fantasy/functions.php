@@ -64,9 +64,9 @@ function fc_get_upcoming_race_add_riders_link($user_id=0,$race_id=false,$team=fa
 	$db_results=$wpdb->get_var($sql);
 
 	if ($db_results) :
-		$link=$before.'<a class="roster edit" href="/fantasy/create-team/?team='.urlencode($team).'&race_id='.$race_id.'">Edit Roster</a>'.$after;
+		$link=$before.'<a class="roster edit" href="/fantasy/create-team/?race_id='.$race_id.'">Edit Roster</a>'.$after;
 	else :
-		$link=$before.'<a class="roster add" href="/fantasy/create-team/?team='.urlencode($team).'&race_id='.$race_id.'">Add Roster</a>'.$after;
+		$link=$before.'<a class="roster add" href="/fantasy/create-team/?race_id='.$race_id.'">Add Roster</a>'.$after;
 	endif;
 
 	return $link;
@@ -574,7 +574,7 @@ function fc_get_upcoming_races($limit=3) {
 
 			$html.='<div id="race-'.$race->id.'" class="">';
 				$html.='<span class="date">'.date('M. j, Y',strtotime($race->race_start)).': </span>';
-				$html.='<span class="race-name"><a href="/fantasy/create-team/?team='.urlencode($team).'&race_id='.$race->id.'">'.$race->name.'</a></span>';
+				$html.='<span class="race-name"><a href="/fantasy/create-team/?race_id='.$race->id.'">'.$race->name.'</a></span>';
 				$html.=$series;
 
 				if (is_user_logged_in())
@@ -801,6 +801,14 @@ function fc_scripts_styles() {
 }
 add_action('wp_enqueue_scripts','fc_scripts_styles');
 
+/**
+ * fc_check_if_roster_edit function.
+ *
+ * @access public
+ * @param bool $team (default: false)
+ * @param bool $race_id (default: false)
+ * @return void
+ */
 function fc_check_if_roster_edit($team=false,$race_id=false) {
 	global $wpdb;
 

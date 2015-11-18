@@ -14,11 +14,7 @@
 				return;
 			endif;
 
-			if (isset($_GET['team'])) :
-				$team=$_GET['team'];
-			else :
-				$team=$wpdb->get_var("SELECT meta_value FROM wp_usermeta WHERE user_id=".get_current_user_id()." AND meta_key='team_name'");
-			endif;
+			$team=fc_get_user_team();
 
 			if (!$team || $team=='') :
 				echo '<a href="'.get_edit_user_link().'">Please add a team name first.</a>';
