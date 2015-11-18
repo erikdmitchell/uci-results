@@ -369,7 +369,7 @@ function fc_get_teams_results($team_name=false,$race_id=false) {
 				$results=new stdClass();
 				$results->name=$rider;
 				$results->place=0;
-				$results->nat='';
+				$results->nat=fc_find_rider_nat($rider);
 				$results->points=0;
 			endif;
 			$team->riders[$key]=$results;
@@ -392,12 +392,6 @@ function fc_get_teams_results($team_name=false,$race_id=false) {
 		$teams_final->race_name=$wpdb->get_var("SELECT event AS race_name FROM wp_fc_races AS fcraces LEFT JOIN wp_uci_races AS races ON fcraces.code=races.code WHERE fcraces.id={$race_id}");
 		$teams_final->teams=$teams;
 	endif;
-
-/*
-echo '<pre>';
-print_r($teams_final);
-echo '</pre>';
-*/
 
 	return $teams_final;
 }
@@ -838,5 +832,23 @@ function fc_check_if_roster_edit($team=false,$race_id=false) {
 		return $db_results;
 
 	return false;
+}
+
+/**
+ * fc_find_rider_nat function.
+ *
+ * @access public
+ * @param bool $rider (default: false)
+ * @return void
+ */
+function fc_find_rider_nat($rider=false) {
+	global $wpdb;
+
+	if (!$rider)
+		return false;
+
+	$nat=$wpdb->get_var("SELECT DISTINCT nat FROM wp_uci_rider_data	WHERE name='{$rider}'");
+
+	return $nat;
 }
 ?>

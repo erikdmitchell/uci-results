@@ -4,18 +4,15 @@ jQuery(document).ready(function($) {
 
 	// prevents dup user by diabiling name on other drop downs //
 	$selects.on('change', function() {
+    // enable all options
+    $selects.find('option').prop('disabled', false);
 
-	    // enable all options
-	    $selects.find('option').prop('disabled', false);
-
-	    // loop over each select, use its value to
-	    // disable the options in the other selects
-	    $selects.each(function() {
-	       $selects.not(this)
-	               .find('option[value="' + this.value + '"]')
-	               .prop('disabled', true);
-	    });
-
+    // loop over each select, use its value to disable the options in the other selects
+		$selects.each(function() {
+	    $selects.not(this)
+	  		.find('option[value="' + this.value + '"]')
+	      .prop('disabled', true);
+	  });
 	});
 
 	// populate roster (edit) //
@@ -23,8 +20,17 @@ jQuery(document).ready(function($) {
 		var rosterArr=createTeamOptions.roster.split('|');
 
 		$selects.each(function(i) {
-			$(this).val(rosterArr[i]);
+			$(this).val(rosterArr[i]); // add val
+
+			// disable on others //
+			$selects.each(function() {
+		    $selects.not(this)
+		  		.find('option[value="' + rosterArr[i] + '"]')
+		      .prop('disabled', true);
+		  });
 		});
+
+		$('.fantasy-cycling-create-team #submit').val('Edit Team');
 	}
 
 });
