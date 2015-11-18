@@ -1,5 +1,9 @@
 jQuery(document).ready(function($) {
 
+	$('.run-fake-teams #race').change(function() {
+		$('.run-fake-teams #race-id').val($(this).val());
+	});
+
 	$('.add-start-list #race').change(function() {
 		$('#race-id').val($(this).val());
 		getStartList($(this).val());

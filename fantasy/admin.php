@@ -69,11 +69,15 @@ class FantasyCyclingAdmin {
 			if (isset($_POST['add-start-list']) && $_POST['add-start-list'])
 				$html.=$this->add_start_list_to_db($_POST);
 
+			if (isset($_POST['run-fake-teams']) && $_POST['run-fake-teams'])
+				$html.=$this->add_fake_teams_to_db($_POST);
+
 			$html.='<div class="row">';
 				$html.='<div class="col-md-12">';
 					$html.='<ul class="admin-nav">';
 						$html.='<li><a href="">Races</a></li>';
 						$html.='<li><a href="">Add Start List</a></li>';
+						$html.='<li><a href="#runfaketeams">Run Fake Teams</a></li>';
 					$html.='</ul>';
 				$html.='</div>';
 			$html.='</div>';
@@ -242,11 +246,50 @@ class FantasyCyclingAdmin {
 				$html.='<p><input type="submit" name="submit" id="submit" class="button button-primary" value="Update Start List"></p>';
 			$html.='</form>';
 
+			$html.='<form name="run-fake-teams" id="run-fake-teams" class="run-fake-teams" method="post">';
+				$html.='<a name="runfaketeams"></a>';
+				$html.='<h3>Run Fake Teams</h3>';
+				$html.='<div class="row">';
+					$html.='<div class="col-md-1">';
+						$html.='<label for="race">Race</label>';
+					$html.='</div>';
+					$html.='<div class="col-md-6">';
+						$html.='<select name="race" id="race">';
+								$html.='<option value="0">Select Race</option>';
+							foreach ($races as $race) :
+								$html.='<option value="'.$race->id.'">'.$race->name.'</option>';
+							endforeach;
+						$html.='</select>';
+					$html.='</div>';
+				$html.='</div>';
+
+				$html.='<div class="row">';
+					$html.='<div class="col-md-1">';
+						$html.='<label for="users">User IDs</label>';
+					$html.='</div>';
+					$html.='<div class="col-md-6">';
+						$html.='<input type="text" name="users" class="mediumtext" value="" /> (comma separated)';
+					$html.='</div>';
+				$html.='</div>';
+
+				$html.='<input type="hidden" name="run-fake-teams" value="1" />';
+				$html.='<input type="hidden" name="id" id="race-id" value="0" />';
+
+				$html.='<p><input type="submit" name="submit" id="submit" class="button button-primary" value="Run"></p>';
+			$html.='</form>';
+
 		$html.='</div>';
 
 		echo $html;
 	}
 
+	/**
+	 * setup_race_in_db function.
+	 *
+	 * @access protected
+	 * @param mixed $form
+	 * @return void
+	 */
 	protected function setup_race_in_db($form) {
 		global $wpdb;
 
@@ -368,6 +411,58 @@ class FantasyCyclingAdmin {
 		$html.='</select>';
 
 		return $html;
+	}
+
+	/**
+	 * add_fake_teams_to_db function.
+	 *
+	 * @access protected
+	 * @param mixed $form
+	 * @return void
+	 */
+	protected function add_fake_teams_to_db($form) {
+		global $wpdb;
+
+		$user_ids=explode(',',$_POST['users']);
+
+		foreach ($user_ids as $user) :
+			$team=$wpdb->get_var("SELECT meta_value FROM wp_usermeta WHERE user_id={$user} AND meta_key='team_name'");
+			$data=$this->generate_fake_roster($form['race']);
+
+			$data=array(
+				'wp_user_id' => $user,
+				'data' => $data,
+				'team' => $team,
+				'race_id' => $form['race'],
+			);
+
+			$wpdb->insert('wp_fc_teams',$data);
+		endforeach;
+
+		return '<div class="updated">Teams added.</div>';
+	}
+
+	/**
+	 * generate_fake_roster function.
+	 *
+	 * @access protected
+	 * @param int $race_id (default: 0)
+	 * @param int $total_riders (default: 6)
+	 * @return void
+	 */
+	protected function generate_fake_roster($race_id=0,$total_riders=6) {
+		global $wpdb;
+
+		$riders=$wpdb->get_col("SELECT start_list FROM wp_fc_races WHERE id={$race_id}");
+		$riders=unserialize($riders[0]);
+		$max_riders=count($riders);
+		$roster=array();
+
+		for ($i=0;$i<$total_riders;$i++) :
+			$roster[]=$riders[mt_rand(0,$max_riders-1)];
+		endfor;
+
+		return implode('|',$roster);
 	}
 
 }
