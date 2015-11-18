@@ -10,11 +10,9 @@
 global $RiderStats,$RaceStats;
 
 $season=get_query_var('season','2015/2016');
-$rider_seasons=$RiderStats->get_rank_seasons();
 $rider_results=$RiderStats->get_riders(array(
 	'per_page' => 10
 ));
-$race_seasons=$RaceStats->get_rank_seasons();
 $race_results=$RaceStats->get_races(array(
 	'per_page' => 10
 ));

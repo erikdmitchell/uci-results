@@ -99,30 +99,17 @@
 /**
  * view db
  */
-.race-table .row.header {
-	font-weight: bold;
+.view-db-filter #race-search {
+	width: 50%;
 }
-.race-table .row {
-	padding-top: 3px;
-	padding-bottom: 3px;
-}
-.race-table > .row:nth-child(even) {
-	background: #ccc;
-}
-.race-table > .row.select-all {
-	background: inherit;
-}
-.race-table .race-fq,
-.race-table .results {
+#race-search-results-text {
+	border: 1px solid #000;
+	background: #fff;
+	padding: 5px;
 	display: none;
 }
-.race-table .race-fq.active,
-.race-table .results.active {
-	display: block;
-}
-.race-table .race-fq.active div,
-.race-table .results.active div {
-	background: #fff;
+.results .result input {
+	width: 100%;
 }
 
 /**

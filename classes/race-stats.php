@@ -174,22 +174,18 @@ class RaceStats {
 		return $race;
 	}
 
-	// race not used yet
-	public function get_rank_seasons($race=false) {
+	/**
+	 * get_race_classes function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function get_race_classes() {
 		global $wpdb,$uci_curl;
 
-		$sql="
-			SELECT
-				season
-			FROM $uci_curl->table
-			WHERE season!=false
-			GROUP BY season
-			ORDER BY season ASC
-		";
+		$classes=$wpdb->get_col("SELECT DISTINCT class FROM $uci_curl->table");
 
-		$seasons=$wpdb->get_col($sql);
-
-		return $seasons;
+		return $classes;
 	}
 
 }

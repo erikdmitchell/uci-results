@@ -419,24 +419,6 @@ class RiderStats {
 		return $results;
 	}
 
-	// rider not used yet
-	public function get_rank_seasons($rider=false) {
-		global $wpdb,$uci_curl;
-
-		$sql="
-			SELECT
-				season
-			FROM $uci_curl->table
-			WHERE season!=false
-			GROUP BY season
-			ORDER BY season ASC
-		";
-
-		$seasons=$wpdb->get_col($sql);
-
-		return $seasons;
-	}
-
 	/**
 	 * get_rider_sos function.
 	 *

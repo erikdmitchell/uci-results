@@ -4,203 +4,272 @@
 **/
 class ViewDB {
 
-	public $version='0.1.2';
+	public $version='0.1.3';
+	public $url='';
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		add_action('admin_enqueue_scripts',array($this,'viewdb_scripts_styles'));
-	}
+		add_action('wp_ajax_race_search',array($this,'ajax_race_search'));
+		add_action('wp_ajax_race_seasons',array($this,'ajax_race_seasons'));
 
-	public function viewdb_scripts_styles() {
-
-	}
-
-	public function display_view_db_page() {
-		global $wpdb,$uci_curl,$RaceStats;
-
-		$html=null;
-		$races=$RaceStats->get_races();
-		$race_years=$uci_curl->get_years_in_db();
-
-		$html.='<h3>Races In Database</h3>';
-
-/*
-		if (isset($_POST['submit']) && $_POST['submit']=='Add/Update FQ' && isset($_POST['races'])) :
-			foreach ($_POST['races'] as $race_id) :
-echo "$race_id - update fq<br>";
-				//echo $this->update_fq($race_id);
-			endforeach;
-		endif;
-*/
-
-		$html.='<form name="races-in-db" class="races-in-db form-filter">';
-			$html.='<div class="title">Filter</div>';
-			$html.='<div class="row">';
-				$html.='<label for="season" class="col-md-1">Season</label>';
-				$html.='<div class="col-md-2">';
-					$html.='<select name="season" id="season">';
-						$html.='<option value="0">View All</option>';
-						foreach ($race_years as $year) :
-							$html.='<option value="'.$year.'">'.$year.'</option>';
-						endforeach;
-					$html.='</select>';
-				$html.='</div>';
-			$html.='</div>';
-		$html.='</form>';
-
-		$html.='<form name="add-races-to-db" method="post">';
-			$html.='<div class="race-table">';
-				$html.='<div class="header row">';
-					$html.='<div class="checkbox col-md-1">&nbsp;</div>';
-					$html.='<div class="date col-md-2">Date</div>';
-					$html.='<div class="event col-md-2">Event</div>';
-					$html.='<div class="nat col-md-1">Nat.</div>';
-					$html.='<div class="class col-md-1">Class</div>';
-					$html.='<div class="winner col-md-2">Winner</div>';
-					$html.='<div class="season col-md-1">Season</div>';
-					$html.='<div class="race-details col-md-2">&nbsp;</div>';
-				$html.='</div>';
-
-				foreach ($races as $key => $race) :
-					$html.=$this->display_race_data($race,false,false);
-				endforeach;
-
-			$html.='</div><!-- .race-table -->';
-
-			$html.='<input type="checkbox" id="selectall" />Select All';
-
-/*
-			$html.='<p class="submit">';
-				$html.='<input type="submit" name="submit" id="submit" class="button button-primary" value="Add/Update FQ">';
-			$html.='</p>';
-*/
-
-		$html.='</form>';
-
-		echo $html;
+		$this->url=admin_url('admin.php?page=uci-view-db');
 	}
 
 	/**
-	 * display_race_data function.
+	 * viewdb_scripts_styles function.
 	 *
 	 * @access public
-	 * @param mixed $race
+	 * @param mixed $hook
 	 * @return void
 	 */
-	public function display_race_data($race) {
-		global $uci_curl,$RaceStats;
+	public function viewdb_scripts_styles($hook) {
+		if ($hook!='uci-cross_page_uci-view-db')
+			return false;
+
+		wp_enqueue_script('uci-view-db-script',plugin_dir_url(basename(__FILE__)).'/uci-curl-wp-plugin/js/view-db.js',array('jquery'));
+	}
+
+	/**
+	 * display_view_db_page function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function display_view_db_page() {
+		global $wpdb,$uci_curl;
+
+		$seasons=$wpdb->get_col("SELECT season FROM $uci_curl->table GROUP BY season");
+
+		if (isset($_POST['update-race']) && $_POST['update-race'])
+			$this->update_race();
+		?>
+
+		<div class="wrap uci-view-db">
+			<h1>UCI View DB</h1>
+
+			<div class="view-db-filter">
+				<div class="row">
+					<div class="races col-md-6">
+						<h3>Races</h3>
+						<div class="filters">
+							<div class="row">
+								<div class="season col-md-4">
+									<h4>Season</h4>
+									<select name="race-season" id="race-season">
+										<option value="0">-- Select One --</option>
+										<?php foreach ($seasons as $season) : ?>
+											<option value="<?php echo $season; ?>"><?php echo $season; ?></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+								<div class="type col-md-4">
+									<h4>Type</h4>
+								</div>
+								<div class="country col-md-4">
+									<h4>Country</h4>
+								</div>
+							</div><!-- .row -->
+							<div class="row">
+								<div class="race-search col-md-12">
+									<h4>Search</h4>
+									<input id="race-search" type="text" />
+									<div id="race-search-results-text">Search Results...</div>
+								</div>
+							</div><!-- .row -->
+						</div><!-- .filters -->
+					</div><!-- .races -->
+					<div class="races col-md-6">
+						<h3>Riders</h3>
+					</div><!-- .riders -->
+				</div>
+				<div class="row data">
+					<?php if (isset($_GET['race_code'])) : ?>
+						<?php echo $this->get_race_data($_GET['race_code']); ?>
+					<?php endif; ?>
+				</div>
+			</div>
+
+		</div><!-- .wrap -->
+
+		<?php
+	}
+
+	/**
+	 * get_race_data function.
+	 *
+	 * @access protected
+	 * @param mixed $race_code
+	 * @return void
+	 */
+	protected function get_race_data($race_code) {
+		global $RaceStats;
 
 		$html=null;
-		$results_classes=array('results');
-		$field_quality_classes=array('race-fq');
-		$results=$RaceStats->get_race_results_from_db($race->code);
+		$race=$RaceStats->get_race($race_code);
+		$race_classes=$RaceStats->get_race_classes();
+		$CrossSeasons=new CrossSeasons();
+		$counter=0;
 
-		$html.='<div id="race-'.$race->id.'" class="row race" data-season="'.$race->season.'">';
-			$html.='<div class="col-md-1"><input class="race-checkbox" type="checkbox" name="races[]" value="'.$race->id.'" /></div>';
-			$html.='<div class="date col-md-2">'.$race->date.'</div>';
-			$html.='<div class="event col-md-2">'.$race->event.'</div>';
-			$html.='<div class="nat col-md-1">'.$race->nat.'</div>';
-			$html.='<div class="class col-md-1">'.$race->class.'</div>';
-			$html.='<div class="winner col-md-2">'.$race->winner.'</div>';
-			$html.='<div class="season col-md-1">'.$race->season.'</div>';
+		$html.='<div class="view-db-single-race col-md-12">';
 
-			$html.='<div class="race-details col-md-2">';
-				if (!$results) :
-					$html.='NO RESULTS';
-				else :
-					$html.='[<a class="result" href="#" data-link="'.$race->link.'" data-id="race-'.$race->id.'">Results</a>]&nbsp;';
-				endif;
+			$html.='<h4>'.$race->details->race.'</h4>';
 
-				if (!isset($race->field_quality) || !$race->field_quality) :
-					$html.='NO FQ';
-				else :
-					$html.='[<a class="details" href="#" data-id="race-'.$race->id.'">Details</a>]';
-				endif;
-			$html.='</div>';
-		$html.='</div>';
-
-		// race results //
-		$html.='<div id="race-'.$race->id.'" class="'.implode(' ',$results_classes).'">';
-			if ($results) :
+			$html.='<form name="edit-race" id="edit-race" method="post" action="'.$this->url.'">';
 				$html.='<div class="row header">';
-					$html.='<div class="col-md-1">Place</div>';
-					$html.='<div class="col-md-3">Name</div>';
-					$html.='<div class="col-md-1">Nat.</div>';
-					$html.='<div class="col-md-1">Age</div>';
-					$html.='<div class="col-md-1">Time</div>';
-					$html.='<div class="col-md-1">PAR</div>';
-					$html.='<div class="col-md-1">PCR</div>';
+					$html.='<div class="date col-md-2">Date</div>';
+					$html.='<div class="class col-md-2">Class</div>';
+					$html.='<div class="nat col-md-2">Nat</div>';
+					$html.='<div class="season col-md-2">Season</div>';
 				$html.='</div>';
-
-				foreach ($results as $result) :
-					$html.='<div class="row">';
-						$html.='<div class="col-md-1">'.$result->place.'</div>';
-						$html.='<div class="col-md-3">'.$result->name.'</div>';
-						$html.='<div class="col-md-1">'.$result->nat.'</div>';
-						$html.='<div class="col-md-1">'.$result->age.'</div>';
-						$html.='<div class="col-md-1">'.$result->time.'</div>';
-						$html.='<div class="col-md-1">'.$result->par.'</div>';
-						$html.='<div class="col-md-1">'.$result->pcr.'</div>';
+				$html.='<div class="row race-details">';
+					$html.='<div class="date col-md-2"><input name="race[date]" id="race-date" value="'.$race->details->date.'" /></div>';
+					$html.='<div class="class col-md-2">';
+						$html.='<select name="race[class]" id="race-class">';
+							foreach ($race_classes as $class) :
+								$html.='<option value="'.$class.'" '.selected($race->details->class,$class,false).'>'.$class.'</option>';
+							endforeach;
+						$html.='</select>';
 					$html.='</div>';
-				endforeach;
-			endif;
-		$html.='</div>';
-
-		// race details, including field quality //
-		$html.='<div id="race-'.$race->id.'" class="'.implode(' ',$field_quality_classes).'">';
-			if (isset($race->field_quality)) :
+					$html.='<div class="nat col-md-2"><input name="race[date]" id="race-date" value="'.$race->details->nat.'" /></div>';
+					$html.='<div class="season col-md-2">';
+						$html.='<select name="race[season]" id="race-season">';
+							foreach ($CrossSeasons->seasons as $season) :
+								$html.='<option value="'.$season.'" '.selected($race->details->season,$season,false).'>'.$season.'</option>';
+							endforeach;
+						$html.='</select>';
+					$html.='</div>';
+				$html.='</div>';
 				$html.='<div class="row header">';
-					$html.='<div class="col-md-2">WC Mult.</div>';
-					$html.='<div class="col-md-2">UCI Mult.</div>';
-					$html.='<div class="col-md-2">Field Quality</div>';
-					$html.='<div class="col-md-2">Total</div>';
-					$html.='<div class="col-md-2">Divider</div>';
-					$html.='<div class="col-md-2">Race Total</div>';
+					$html.='<div class="place col-md-1">Place</div>';
+					$html.='<div class="rider col-md-3">Rider</div>';
+					$html.='<div class="nat col-md-1">Nat</div>';
+					$html.='<div class="age col-md-1">Age</div>';
+					$html.='<div class="time col-md-1">Time</div>';
+					$html.='<div class="points col-md-1">Points</div>';
 				$html.='</div>';
+				$html.='<div class="results">';
+					foreach ($race->results as $result) :
+						$html.='<div id="rider-'.$counter.'" class="row result">';
+							$html.='<div class="place col-md-1"><input type="text" name="rider['.$counter.'][place]" id="rider-place" value="'.$result->place.'" /></div>';
+							$html.='<div class="rider col-md-3"><input type="text" name="rider['.$counter.'][rider]" id="rider-rider" value="'.$result->rider.'" /></div>';
+							$html.='<div class="nat col-md-1"><input type="text" name="rider['.$counter.'][nat]" id="rider-nat" value="'.$result->nat.'" /></div>';
+							$html.='<div class="age col-md-1"><input type="text" name="rider['.$counter.'][age]" id="rider-age" value="'.$result->age.'" /></div>';
+							$html.='<div class="time col-md-1"><input type="text" name="rider['.$counter.'][time]" id="rider-time" value="'.$result->time.'" /></div>';
+							$html.='<div class="points col-md-1"><input type="text" name="rider['.$counter.'][points]" id="rider-points" value="'.$result->points.'" /></div>';
+						$html.='</div>';
+						$counter++;
+					endforeach;
+				$html.='</div>';
+				$html.='<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes"></p>';
+				$html.='<input type="hidden" name="race-code" value="'.$race_code.'" />';
+				$html.='<input type="hidden" name="update-race" value="1" />';
+			$html.='</form>';
 
-				$html.='<div class="row">';
-					$html.='<div class="col-md-2">'.$race->field_quality->wcp_mult.'</div>';
-					$html.='<div class="col-md-2">'.$race->field_quality->uci_mult.'</div>';
-					$html.='<div class="col-md-2">'.$race->field_quality->field_quality.'</div>';
-					$html.='<div class="col-md-2">'.$race->field_quality->total.'</div>';
-					$html.='<div class="col-md-2">'.$race->field_quality->divider.'</div>';
-					$html.='<div class="col-md-2">'.$race->field_quality->race_total.'</div>';
-				$html.='</div>';
-			else :
-				$html.='<div class="col-md-12">'.$race->id.' - This race had no field quality</div>';
-			endif;
 		$html.='</div>';
 
 		return $html;
 	}
 
-/*
-	function update_fq($race_id) {
-		global $wpdb;
-		global $uci_curl;
-		$message=null;
-		$fq=new Field_Quality();
-		$race=$wpdb->get_row("SELECT * FROM $uci_curl->table WHERE id=$race_id");
-
-		$race->data=unserialize(base64_decode($race->data));
-
-		$race->data->field_quality=$fq->get_race_math($race->data);
-
-		// build data array //
-		$data=array(
-			'data' => base64_encode(serialize($race->data)),
-		);
-
-		$where=array(
-			'id' => $race_id
-		);
-
-		$wpdb->update($uci_curl->table,$data,$where);
-
-		$message='<div class="updated">Updated '.$race->code.' fq.</div>';
-
-		return $message;
+	protected function update_race() {
+echo '<pre>';
+print_r($_POST);
+echo '</pre>';
 	}
-*/
+
+	/**
+	 * ajax_race_search function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function ajax_race_search() {
+		global $wpdb,$uci_curl;
+
+		$html=null;
+		$sql="
+			SELECT
+				code,
+				season,
+				event AS name,
+				nat,
+				class
+			FROM $uci_curl->table
+			WHERE event LIKE '%".$_POST['search']."%'
+			ORDER BY date
+		";
+		$results=$wpdb->get_results($sql);
+
+		if (!count($results)) :
+			echo 'No races found.';
+			return;
+		endif;
+
+		$html.='<div class="races">';
+			foreach ($results as $race) :
+				$html.='<div id="race-'.$race->code.'" class="row race">';
+					$html.='<div class="name col-md-7"><a href="'.$this->url.'&race_code='.urlencode($race->code).'">'.stripslashes($race->name).'</a></div>';
+					$html.='<div class="season col-md-2">'.$race->season.'</div>';
+					$html.='<div class="class col-md-1">'.$race->class.'</div>';
+					$html.='<div class="nat col-md-1">'.$race->nat.'</div>';
+				$html.='</div>';
+			endforeach;
+		$html.='</div>';
+
+		echo $html;
+
+		wp_die();
+	}
+
+	/**
+	 * ajax_race_seasons function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function ajax_race_seasons() {
+		global $RaceStats;
+
+		$html=null;
+		$races=$RaceStats->get_races(array(
+			'season' => $_POST['season'],
+			'pagination' => false
+		));
+
+		$html.='<div class="view-db-races col-md-12">';
+
+			$html.='<h4>Races</h4>';
+
+			$html.='<div class="row header">';
+				$html.='<div class="date col-md-2">Date</div>';
+				$html.='<div class="name col-md-5">Name</div>';
+				$html.='<div class="nat col-md-1">Nat</div>';
+				$html.='<div class="class col-md-1">Class</div>';
+				$html.='<div class="fq col-md-1">FQ</div>';
+			$html.='</div>';
+
+			foreach ($races as $race) :
+				$html.='<div class="row race-details">';
+					$html.='<div class="date col-md-2">'.$race->date.'</div>';
+					$html.='<div class="name col-md-5"><a href="'.$this->url.'&race_code='.urlencode($race->code).'">'.$race->name.'</a></div>';
+					$html.='<div class="nat col-md-1">'.$race->nat.'</div>';
+					$html.='<div class="class col-md-1">'.$race->class.'</div>';
+					$html.='<div class="fq col-md-1">'.$race->fq.'</div>';
+				$html.='</div>';
+			endforeach;
+		$html.='</div>';
+
+		echo $html;
+
+		wp_die();
+	}
 
 }
+
+new ViewDB();
 ?>
