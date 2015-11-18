@@ -113,7 +113,7 @@ class FantasyCycling {
 				),
 				'public' => true,
 				'has_archive' => true,
-				'supports' => array('title','editor','author','thumbnail','revisions')
+				'supports' => array('title','editor','excerpt','author','thumbnail','revisions')
 			)
 		);
 	}

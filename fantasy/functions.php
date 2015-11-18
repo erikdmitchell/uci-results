@@ -478,10 +478,19 @@ function fc_final_standings($limit=10) {
 function fc_get_fantasy_cycling_posts($limit=5) {
 	$html=null;
 	$args=array(
-		'posts_per_page' => $limit,
+		'posts_per_page' => 1,
 		'post_type' => 'fantasy-cycling',
+		'posttype' => 'featured'
+	);
+	$featured_posts=get_posts($args);
+	$featured_posts_id=$featured_posts[0]->ID;
+	$args=array(
+		'posts_per_page' => $limit-1,
+		'post_type' => 'fantasy-cycling',
+		'post__not_in' => array($featured_posts_id),
 	);
 	$posts=get_posts($args);
+	$posts=array_merge($featured_posts,$posts);
 
 	if (!count($posts))
 		return false;
@@ -489,8 +498,10 @@ function fc_get_fantasy_cycling_posts($limit=5) {
 	$html.='<ul class="fc-posts">';
 		foreach ($posts as $post) :
 			$class='';
-			$html.='<li id="post-'.$post->ID.'" class="'.$class.'">';
-				$html.='<a href="'.get_permalink($post->ID).'">'.get_the_title($post->ID).'</a>';
+			$html.='<li id="post-'.$post->ID.'" class="post '.$class.'">';
+				$html.='<h4><a href="'.get_permalink($post->ID).'">'.get_the_title($post->ID).'</a></h4>';
+				$html.=get_the_post_thumbnail($post->ID,'thumbnail');
+				$html.='<div class="excerpt">'.fc_excerpt_by_id($post->ID,100,'<a><em><strong>','...<a href="'.get_permalink($post->ID).'">more &raquo;</a>').'</div>';
 			$html.='</li>';
 		endforeach;
 	$html.='</ul>';
@@ -498,6 +509,13 @@ function fc_get_fantasy_cycling_posts($limit=5) {
 	return $html;
 }
 
+/**
+ * fc_fantasy_cycling_posts function.
+ *
+ * @access public
+ * @param int $limit (default: 5)
+ * @return void
+ */
 function fc_fantasy_cycling_posts($limit=5) {
 	echo fc_get_fantasy_cycling_posts($limit);
 }
@@ -808,5 +826,39 @@ function fc_find_rider_nat($rider=false) {
 	$nat=$wpdb->get_var("SELECT DISTINCT nat FROM wp_uci_rider_data	WHERE name='{$rider}'");
 
 	return $nat;
+}
+
+/**
+ * fc_excerpt_by_id function.
+ *
+ * @access public
+ * @param mixed $post
+ * @param int $length (default: 10)
+ * @param string $tags (default: '<a><em><strong>')
+ * @param string $extra (default: ' . . .')
+ * @return void
+ */
+function fc_excerpt_by_id($post, $length = 10, $tags = '<a><em><strong>', $extra = ' . . .') {
+	if (is_int($post)) {
+		// get the post object of the passed ID
+		$post = get_post($post);
+	} elseif(!is_object($post)) {
+		return false;
+	}
+
+	if(has_excerpt($post->ID)) {
+		$the_excerpt = $post->post_excerpt;
+		//return apply_filters('the_content', $the_excerpt);
+	} else {
+		$the_excerpt = $post->post_content;
+	}
+
+	$the_excerpt = strip_shortcodes(strip_tags($the_excerpt), $tags);
+	$the_excerpt = preg_split('/\b/', $the_excerpt, $length * 2+1);
+	$excerpt_waste = array_pop($the_excerpt);
+	$the_excerpt = implode($the_excerpt);
+	$the_excerpt .= $extra;
+
+	return apply_filters('the_content', $the_excerpt);
 }
 ?>
