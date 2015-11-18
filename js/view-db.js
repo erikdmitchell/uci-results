@@ -22,10 +22,22 @@ jQuery(document).ready(function($) {
 	});
 
 	// season filter //
-	$('#race-season').change(function() {
+	$('#race-season, #race-class').change(function() {
 			var data={
-				'action' : 'race_seasons',
+				'action' : 'race_filter',
 				'season' : $(this).val()
+			};
+
+			$.post(ajaxurl,data,function(response) {
+				$('.row.data').html(response);
+			});
+	});
+
+	// class filter //
+	$('#race-class').change(function() {
+			var data={
+				'action' : 'race_filter',
+				'class' : $(this).val()
 			};
 
 			$.post(ajaxurl,data,function(response) {

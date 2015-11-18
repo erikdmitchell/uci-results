@@ -74,13 +74,15 @@ class RaceStats {
 		global $wpdb,$uci_curl,$wp_query;
 
 		$limit=null;
+		$where=array();
 		$default_args=array(
-			'season' => '2015/2016',
 			'pagination' => true,
 			'paged' => 1,
 			'per_page' => 15,
 			'order_by' => 'fq',
-			'order' => 'DESC'
+			'order' => 'DESC',
+			'class' => false,
+			'season' => false,
 		);
 		$args=array_merge($default_args,$args);
 
@@ -97,6 +99,18 @@ class RaceStats {
 			$rank=$start+1;
 		endif;
 
+		if ($class)
+			$where[]="class='{$class}'";
+
+		if ($season)
+			$where[]="season='{$season}'";
+
+		if (!empty($where)) :
+			$where=' WHERE '.implode(' AND ',$where);
+		else :
+			$where='';
+		endif;
+
 		$sql="
 			SELECT
 				races.code AS code,
@@ -108,7 +122,7 @@ class RaceStats {
 			FROM $uci_curl->table AS races
 			LEFT JOIN $uci_curl->fq_table AS fq_table
 			ON races.code=fq_table.code
-			WHERE season='$season'
+			$where
 			ORDER BY $order_by $order
 			$limit
 		";

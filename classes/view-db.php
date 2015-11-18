@@ -16,7 +16,7 @@ class ViewDB {
 	public function __construct() {
 		add_action('admin_enqueue_scripts',array($this,'viewdb_scripts_styles'));
 		add_action('wp_ajax_race_search',array($this,'ajax_race_search'));
-		add_action('wp_ajax_race_seasons',array($this,'ajax_race_seasons'));
+		add_action('wp_ajax_race_filter',array($this,'ajax_race_filter'));
 
 		$this->url=admin_url('admin.php?page=uci-view-db');
 	}
@@ -45,6 +45,7 @@ class ViewDB {
 		global $wpdb,$uci_curl;
 
 		$seasons=$wpdb->get_col("SELECT season FROM $uci_curl->table GROUP BY season");
+		$classes=$wpdb->get_col("SELECT class FROM $uci_curl->table GROUP BY class");
 
 		if (isset($_POST['update-race']) && $_POST['update-race'])
 			$this->update_race();
@@ -68,8 +69,14 @@ class ViewDB {
 										<?php endforeach; ?>
 									</select>
 								</div>
-								<div class="type col-md-4">
-									<h4>Type</h4>
+								<div class="class col-md-4">
+									<h4>Class</h4>
+									<select name="race-class" id="race-class">
+										<option value="0">-- Select One --</option>
+										<?php foreach ($classes as $class) : ?>
+											<option value="<?php echo $class; ?>"><?php echo $class; ?></option>
+										<?php endforeach; ?>
+									</select>
 								</div>
 								<div class="country col-md-4">
 									<h4>Country</h4>
@@ -232,14 +239,17 @@ echo '</pre>';
 	 * @access public
 	 * @return void
 	 */
-	public function ajax_race_seasons() {
+	public function ajax_race_filter() {
 		global $RaceStats;
 
 		$html=null;
-		$races=$RaceStats->get_races(array(
-			'season' => $_POST['season'],
-			'pagination' => false
-		));
+		$args=array(
+			'pagination' => false,
+			'order_by' => 'date'
+		);
+		$args=array_merge($args,$_POST);
+
+		$races=$RaceStats->get_races($args);
 
 		$html.='<div class="view-db-races col-md-12">';
 
