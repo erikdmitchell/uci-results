@@ -152,11 +152,12 @@ class FantasyCyclingAdmin {
 						$html.='</div>';
 						$html.='<div class="col-md-6">';
 							$html.='<select name="series" id="series">';
-								$html.='<option value="0">Select Series</option>';
+								//$html.='<option value="0">Select Series</option>';
 								$html.='<option value="single">Single</option>';
 								$html.='<option value="Superprestige">Superprestige</option>';
 								$html.='<option value="bPost Bank">bPost Bank</option>';
 								$html.='<option value="World Cup">World Cup</option>';
+								$html.='<option value="Holy Week">Holy Week</option>';
 							$html.='</select>';
 						$html.='</div>';
 					$html.='</div>';
