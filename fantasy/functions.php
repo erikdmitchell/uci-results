@@ -22,7 +22,7 @@ function fc_get_user_teams($user_id=0) {
 		foreach ($teams as $team) :
 			$html.='<li>';
 				$html.='<a class="team-name" href="/fantasy/team?team='.urlencode($team->team).'">'.$team->team.'</a>';
-				$html.=fc_get_upcoming_race_add_riders_link($user_id,false,false,'[',']');
+				//$html.=fc_get_upcoming_race_add_riders_link($user_id,false,false,'[',']');
 			$html.='</li>';
 		endforeach;
 	$html.='</ul>';
@@ -47,8 +47,8 @@ function fc_get_upcoming_race_add_riders_link($user_id=0,$race_id=false,$team=fa
 	if (!$user_id)
 		$user_id=get_current_user_id();
 
-	if (!$race_id=fc_get_next_race_id())
-		return false;
+	if (!$race_id)
+		$race_id=fc_get_next_race_id();
 
 	if (!$team)
 		$team=$wpdb->get_var("SELECT meta_value FROM wp_usermeta WHERE user_id=$user_id AND meta_key='team_name'");
