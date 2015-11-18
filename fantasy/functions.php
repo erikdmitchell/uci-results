@@ -238,6 +238,7 @@ function fc_get_team($team=false) {
 
 		$html.='<div class="results">';
 			foreach ($team_results as $results) :
+//print_r($results);
 				$html.='<div class="race-results">';
 					$html.='<div class="row">';
 						$html.='<div class="race-name col-md-6"><a href="/fantasy/standings/?race_id='.$results->race_id.'">'.$results->race_name.'</a></div>';
@@ -333,13 +334,14 @@ function fc_get_teams_results($team_name=false,$race_id=false) {
 			data AS riders,
 			race_id,
 			races.code,
-			uci_races.event AS race_name
+			races.name AS race_name
 		FROM wp_fc_teams AS teams
 		LEFT JOIN wp_fc_races AS races
 		ON teams.race_id=races.id
 		LEFT JOIN wp_uci_races AS uci_races
 		ON races.code=uci_races.code
 		$where
+		ORDER BY races.race_start DESC
 	";
 	$teams=$wpdb->get_results($fc_data_sql);
 
@@ -362,10 +364,11 @@ function fc_get_teams_results($team_name=false,$race_id=false) {
 		$team->total=$total;
 	endforeach;
 
-	// order by points //
-	usort($teams, function ($a, $b) {
-		return strcmp($b->total,$a->total);
-	});
+	// if not a single team, order by points //
+	if (!$team_name)
+		usort($teams, function ($a, $b) {
+			return strcmp($b->total,$a->total);
+		});
 
 	if ($team_name) :
 		$teams_final=$teams;
