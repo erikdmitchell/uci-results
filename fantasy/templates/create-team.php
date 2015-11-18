@@ -46,7 +46,7 @@
 					<label for="team-name">Team Name:</label>
 				</div>
 				<div class="col-md-6">
-					<?php echo $team; ?>
+					<?php echo stripslashes($team); ?>
 					<input type="hidden" name="team_name" value="<?php echo $team; ?>" />
 				</div>
 			</div>

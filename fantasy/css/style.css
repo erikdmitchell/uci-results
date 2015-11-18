@@ -54,6 +54,9 @@
 /**
  * team page
  */
+.fantasy-cycling-team .header {
+	font-weight: bold;
+}
 .fantasy-cycling-team .results .race-name,
 .fantasy-cycling-team .results .total-points {
 	font-weight: bold;

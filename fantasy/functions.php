@@ -30,7 +30,17 @@ function fc_get_user_teams($user_id=0) {
 	return $html;
 }
 
-
+/**
+ * fc_get_upcoming_race_add_riders_link function.
+ *
+ * @access public
+ * @param int $user_id (default: 0)
+ * @param bool $race_id (default: false)
+ * @param bool $team (default: false)
+ * @param string $before (default: '')
+ * @param string $after (default: '')
+ * @return void
+ */
 function fc_get_upcoming_race_add_riders_link($user_id=0,$race_id=false,$team=false,$before='',$after='') {
 	global $wpdb;
 
@@ -234,18 +244,22 @@ function fc_get_team($team=false) {
 	$team_results=fc_get_teams_results($team);
 
 	$html.='<div class="team">';
-		$html.='<h3>'.$team.'</h3>';
+		$html.='<h3>'.stripslashes($team).'</h3>';
 
 		$html.='<div class="results">';
 			foreach ($team_results as $results) :
-//print_r($results);
 				$html.='<div class="race-results">';
 					$html.='<div class="row">';
-						$html.='<div class="race-name col-md-6"><a href="/fantasy/standings/?race_id='.$results->race_id.'">'.$results->race_name.'</a></div>';
+						$html.='<div class="race-name col-md-7"><a href="/fantasy/standings/?race_id='.$results->race_id.'">'.$results->race_name.'</a></div>';
 						$html.='<div class="total-points col-md-2">'.$results->total.'</div>';
 					$html.='</div>';
 
 					$html.='<div class="riders">';
+						$html.='<div class="header row">';
+							$html.='<div class="name col-md-7">Rider</div>';
+							$html.='<div class="place col-md-2">Place</div>';
+							$html.='<div class="points col-md-2">Points</div>';
+						$html.='</div>';
 						foreach ($results->riders as $rider) :
 							$html.='<div class="rider row">';
 								$html.='<div class="name col-md-7">'.$rider->name.'<span class="nat">'.get_country_flag($rider->nat).'</span></div>';
@@ -752,6 +766,13 @@ function fc_registration_proccess_addon_profile_fields($user_id,$form) {
 }
 add_action('emcl-after-user-registration','fc_registration_proccess_addon_profile_fields',10,2);
 
+/**
+ * fc_admin_body_class function.
+ *
+ * @access public
+ * @param mixed $classes
+ * @return void
+ */
 function fc_admin_body_class($classes) {
 	if (!current_user_can('manage_options'))
 		$classes.='user_not_admin';
@@ -760,9 +781,54 @@ function fc_admin_body_class($classes) {
 }
 add_filter('admin_body_class','fc_admin_body_class');
 
+/**
+ * fc_scripts_styles function.
+ *
+ * @access public
+ * @return void
+ */
 function fc_scripts_styles() {
-	if (is_page(get_page_by_title('Create Team')->ID))
-		wp_enqueue_script('fc-create-team-script',plugins_url('/js/create-team.js',__FILE__),array('jquery'));
+	if (is_page(get_page_by_title('Create Team')->ID)) :
+		wp_register_script('fc-create-team-script',plugins_url('/js/create-team.js',__FILE__),array('jquery'));
+
+		wp_localize_script('fc-create-team-script','createTeamOptions',array(
+			'roster'=> fc_check_if_roster_edit()
+		));
+
+		wp_enqueue_script('fc-create-team-script');
+
+	endif;
 }
 add_action('wp_enqueue_scripts','fc_scripts_styles');
+
+function fc_check_if_roster_edit($team=false,$race_id=false) {
+	global $wpdb;
+
+	if (!$team && isset($_GET['team']))
+		$team=$_GET['team'];
+
+	if (!$race_id && isset($_GET['race_id']))
+		$race_id=$_GET['race_id'];
+
+	if (!$team)
+		$team=$wpdb->get_var("SELECT meta_value FROM wp_usermeta WHERE user_id=".get_current_user_id()." AND meta_key='team_name'");
+
+	if (!$race_id)
+		$race_id=fc_get_next_race_id();
+
+	$sql="
+		SELECT
+			data AS roster
+		FROM wp_fc_teams
+		WHERE team=\"{$team}\"
+		AND race_id={$race_id}
+	";
+
+	$db_results=$wpdb->get_var($sql);
+
+	if ($db_results)
+		return $db_results;
+
+	return false;
+}
 ?>

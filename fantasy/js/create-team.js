@@ -1,8 +1,8 @@
 jQuery(document).ready(function($) {
 
-	// prevents dup user by diabiling name on other drop downs //
 	var $selects = $('.fc-riders-dd');
 
+	// prevents dup user by diabiling name on other drop downs //
 	$selects.on('change', function() {
 
 	    // enable all options
@@ -17,5 +17,14 @@ jQuery(document).ready(function($) {
 	    });
 
 	});
+
+	// populate roster (edit) //
+	if (createTeamOptions.roster) {
+		var rosterArr=createTeamOptions.roster.split('|');
+
+		$selects.each(function(i) {
+			$(this).val(rosterArr[i]);
+		});
+	}
 
 });
