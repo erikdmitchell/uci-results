@@ -99,7 +99,7 @@
 				</div>
 			</div>
 
-			<?php if (fc_race_has_start_list()) : ?>
+			<?php if (fc_race_has_start_list($_GET['race_id'])) : ?>
 				<input type="submit" name="submit" id="submit" value="Create Team" />
 			<?php endif; ?>
 

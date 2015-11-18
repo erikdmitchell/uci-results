@@ -146,7 +146,7 @@ function fc_rider_list_dropdown_race($args=array()) {
 	if (!$name)
 		$name=generateRandomString();
 
-	$html.='<select name="'.$name.'" id="'.$name.'">';
+	$html.='<select name="'.$name.'" id="'.$name.'" class="fc-riders-dd">';
 		$html.='<option value="0">'.$select_title.'</option>';
 		foreach ($riders as $rider) :
 			$country=$wpdb->get_var("SELECT nat FROM wp_uci_rider_data WHERE name='$rider' GROUP BY nat");
@@ -756,4 +756,10 @@ function fc_admin_body_class($classes) {
 	return $classes;
 }
 add_filter('admin_body_class','fc_admin_body_class');
+
+function fc_scripts_styles() {
+	if (is_page(get_page_by_title('Create Team')->ID))
+		wp_enqueue_script('fc-create-team-script',plugins_url('/js/create-team.js',__FILE__),array('jquery'));
+}
+add_action('wp_enqueue_scripts','fc_scripts_styles');
 ?>
