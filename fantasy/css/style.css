@@ -15,6 +15,20 @@
 	border-right: 0;
 }
 /**
+ * user teams list
+ */
+.fantasy-cycling-user-teams li a.team-name {
+	display: inline-block;
+	margin-right: 10px;
+}
+/**
+ * upcoming races
+ */
+.fc-upcoming-races .race-name {
+	display: inline-block;
+	margin-right: 10px;
+}
+/**
  * create team
  */
 .fantasy-cycling-create-team .row {

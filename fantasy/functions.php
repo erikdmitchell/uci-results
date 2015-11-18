@@ -20,11 +20,46 @@ function fc_get_user_teams($user_id=0) {
 
 	$html.='<ul class="fantasy-cycling-user-teams">';
 		foreach ($teams as $team) :
-			$html.='<li><a href="/fantasy/team?team='.urlencode($team->team).'">'.$team->team.'</a></li>';
+			$html.='<li>';
+				$html.='<a class="team-name" href="/fantasy/team?team='.urlencode($team->team).'">'.$team->team.'</a>';
+				$html.=fc_get_upcoming_race_add_riders_link($user_id,false,false,'[',']');
+			$html.='</li>';
 		endforeach;
 	$html.='</ul>';
 
 	return $html;
+}
+
+
+function fc_get_upcoming_race_add_riders_link($user_id=0,$race_id=false,$team=false,$before='',$after='') {
+	global $wpdb;
+
+	if (!$user_id)
+		$user_id=get_current_user_id();
+
+	if (!$race_id=fc_get_next_race_id())
+		return false;
+
+	if (!$team)
+		$team=$wpdb->get_var("SELECT meta_value FROM wp_usermeta WHERE user_id=$user_id AND meta_key='team_name'");
+
+	$sql="
+		SELECT
+			data AS roster
+		FROM wp_fc_teams
+		WHERE wp_user_id={$user_id}
+		AND race_id={$race_id}
+	";
+
+	$db_results=$wpdb->get_var($sql);
+
+	if ($db_results) :
+		$link=$before.'<a class="roster edit" href="/fantasy/create-team/?team='.urlencode($team).'&race_id='.$race_id.'">Edit Roster</a>'.$after;
+	else :
+		$link=$before.'<a class="roster add" href="/fantasy/create-team/?team='.urlencode($team).'&race_id='.$race_id.'">Add Roster</a>'.$after;
+	endif;
+
+	return $link;
 }
 
 /**
@@ -127,6 +162,29 @@ function fc_rider_list_dropdown_race($args=array()) {
 }
 
 /**
+ * fc_race_has_start_list function.
+ *
+ * @access public
+ * @param int $race_id (default: 0)
+ * @return void
+ */
+function fc_race_has_start_list($race_id=0) {
+	global $wpdb;
+
+	if (!$race_id)
+		return false;
+
+	$riders=$wpdb->get_col("SELECT start_list FROM wp_fc_races WHERE id=$race_id");
+	$riders=unserialize($riders[0]);
+
+	// if we have no start list //
+	if (empty($riders))
+		return false;
+
+	return true;
+}
+
+/**
  * fc_process_create_team function.
  *
  * @access public
@@ -189,7 +247,7 @@ function fc_get_team($team=false) {
 					$html.='<div class="riders">';
 						foreach ($results->riders as $rider) :
 							$html.='<div class="rider row">';
-								$html.='<div class="name col-md-6">'.$rider->name.'<span class="nat">'.get_country_flag($rider->nat).'</span></div>';
+								$html.='<div class="name col-md-7">'.$rider->name.'<span class="nat">'.get_country_flag($rider->nat).'</span></div>';
 								$html.='<div class="place col-md-2">'.$rider->place.'</div>';
 								$html.='<div class="points col-md-2">'.$rider->points.'</div>';
 							$html.='</div>';
@@ -501,6 +559,10 @@ function fc_get_upcoming_races($limit=3) {
 				$html.='<span class="date">'.date('M. j, Y',strtotime($race->race_start)).': </span>';
 				$html.='<span class="race-name"><a href="/fantasy/create-team/?team='.urlencode($team).'&race_id='.$race->id.'">'.$race->name.'</a></span>';
 				$html.=$series;
+
+				if (is_user_logged_in())
+					$html.=fc_get_upcoming_race_add_riders_link(0,$race->id,false,'[',']');
+
 			$html.='</div>';
 		endforeach;
 	$html.='</div>';

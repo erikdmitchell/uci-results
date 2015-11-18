@@ -99,7 +99,10 @@
 				</div>
 			</div>
 
-			<input type="submit" name="submit" id="submit" value="Create Team" />
+			<?php if (fc_race_has_start_list()) : ?>
+				<input type="submit" name="submit" id="submit" value="Create Team" />
+			<?php endif; ?>
+
 			<input type="hidden" name="wp_user_id" value="<?php echo get_current_user_id(); ?>" />
 			<input type="hidden" name="create_team" value="1" />
 		</form>
