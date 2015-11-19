@@ -334,20 +334,22 @@ class RiderStats {
 		return $riders;
 	}
 
-	/**
-	 * get_rider function.
-	 *
-	 * @access public
-	 * @param int $name (default: 0)
-	 * @return void
-	 */
-	public function get_rider($name=0) {
+/*
+	public function get_rider($args) {
 		global $wpdb,$uci_curl;
 
 		if (!$name)
 			return false;
 
-		$season=get_query_var('season','2015/2016');
+		$default_args=array(
+			'order_by' => 'date',
+			'order' => 'DESC',
+			'class' => false,
+			'season' => get_query_var('season','2015/2016'),
+			'nat' => false,
+		);
+		$args=array_merge($default_args,$args);
+
 		$sql="
 			SELECT
 				results.place,
@@ -380,6 +382,7 @@ class RiderStats {
 
 		return $results;
 	}
+*/
 
 	/**
 	 * get_country function.
@@ -718,6 +721,7 @@ class RiderStats {
 			// set an empty if nothing for that week
 			if (!$flag) :
 				$rider_data=new stdClass();
+				$rider_data->nat='';
 				$rider_data->rank=0;
 				$rider_data->race_perc=0;
 				$rider_data->races=0;
@@ -728,6 +732,8 @@ class RiderStats {
 				$rider_data->c1=0;
 				$rider_data->c2=0;
 				$rider_data->cn=0;
+				$rider_data->cc=0;
+				$rider_data->cm=0;
 				$rider_data->uci_perc=0;
 				$rider_data->wcp=0;
 				$rider_data->wcp_perc=0;
@@ -737,6 +743,7 @@ class RiderStats {
 
 			$data=array(
 				'name' => $rider_name,
+				'nat' => $rider_data->nat,
 				'season' => $season,
 				'week' => $week_counter,
 				'start_date' => $week[0],
@@ -750,6 +757,8 @@ class RiderStats {
 				'c1' => $rider_data->c1,
 				'c2' => $rider_data->c2,
 				'cn' => $rider_data->cn,
+				'cc' => $rider_data->cc,
+				'cm' => $rider_data->cm,
 				'uci_perc' => $rider_data->uci_perc,
 				'wcp' => $rider_data->wcp,
 				'wcp_perc' => $rider_data->wcp_perc,
