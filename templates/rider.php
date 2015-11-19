@@ -11,7 +11,7 @@ global $RiderStats,$wp_query;
 
 $rider_name=get_query_var('rider',0);
 $season=get_query_var('season','2015/2016');
-$results=$RiderStats->get_rider($rider_name);
+//$results=$RiderStats->get_rider($rider_name); DEPRECATED
 $uci=$RiderStats->get_rider_uci_points($rider_name,$season);
 $wcp=$RiderStats->get_rider_uci_points($rider_name,$season,'wcp');
 $sos=$RiderStats->get_rider_sos($rider_name,$season);
