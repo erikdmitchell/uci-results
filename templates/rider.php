@@ -11,20 +11,23 @@ global $RiderStats,$wp_query;
 
 $rider_name=get_query_var('rider',0);
 $season=get_query_var('season','2015/2016');
-//$results=$RiderStats->get_rider($rider_name); DEPRECATED
-
-$results=$RiderStats->get_riders_from_weekly_rank(array(
+$current_week=uci_get_current_week($season);
+$results=$RiderStats->get_rider_results(array(
 	'season' => $season,
-	'name' => $rider_name,
-	'per_page' => -1
+	'name' => $rider_name
 ));
-$wp_query->uci_curl_max_pages;
+$riders=$RiderStats->get_riders_from_weekly_rank(array(
+	'season' => $season,
+	'paged' => $paged,
+	'per_page' => 15,
+	'week' => $current_week,
+	'name' => $rider_name
+));
 
 $uci=$RiderStats->get_rider_uci_points($rider_name,$season);
 $wcp=$RiderStats->get_rider_uci_points($rider_name,$season,'wcp');
 $sos=$RiderStats->get_rider_sos($rider_name,$season);
 $win_perc=$RiderStats->get_rider_winning_perc($rider_name,$season);
-//$rider_stats=$RiderStats->get_rider_total($rider_name,$season); DEPRECATED
 ?>
 
 <?php get_header(); ?>
@@ -36,7 +39,7 @@ $win_perc=$RiderStats->get_rider_winning_perc($rider_name,$season);
 				Rider/results not found.
 			<?php else : ?>
 				<div class="uci-curl-rider-rankings">
-					<h1 class="entry-title"><?php echo $rider_name; ?> <a href="<?php echo single_country_link($results[0]->nat,$season); ?>"><?php echo get_country_flag($results[0]->nat); ?></a></h1>
+					<h1 class="entry-title"><?php echo $rider_name; ?> <a href="<?php echo single_country_link($riders[0]->nat,$season); ?>"><?php echo get_country_flag($riders[0]->nat); ?></a></h1>
 					<div class="row">
 						<div class="col-md-4">
 							<div class="row">
@@ -44,7 +47,7 @@ $win_perc=$RiderStats->get_rider_winning_perc($rider_name,$season);
 									<h4>Rider Rankings</h4>
 									<div class="row">
 										<div class="header col-md-7">Current Rank:</div>
-										<div class="current-rank col-md-2"><?php echo $results[0]->rank; ?> <span class="total">(<?php echo number_format($results[0]->total,3); ?>)</span></div>
+										<div class="current-rank col-md-2"><?php echo $riders[0]->rank; ?> <span class="total">(<?php echo number_format($riders[0]->total,3); ?>)</span></div>
 									</div>
 									<div class="row">
 										<div class="header col-md-7">UCI Points:</div>
@@ -98,13 +101,13 @@ $win_perc=$RiderStats->get_rider_winning_perc($rider_name,$season);
 
 						<?php foreach ($results as $result) : ?>
 							<div class="row">
-							<div class="place col-md-1"><?php echo $result->place; ?></div>
-							<div class="points col-md-1"><?php echo $result->par; ?></div>
-							<div class="date col-md-2"><?php echo $result->date; ?></div>
-							<div class="race col-md-4"><a href="<?php echo single_race_link($result->code); ?>"><?php echo $result->race; ?></a></div>
-							<div class="class col-md-1"><?php echo $result->class; ?></div>
-							<div class="country col-md-1"><?php echo $result->race_country; ?></div>
-							<div class="fq col-md-1"><?php echo $result->fq; ?></div>
+								<div class="place col-md-1"><?php echo $result->place; ?></div>
+								<div class="points col-md-1"><?php echo $result->points; ?></div>
+								<div class="date col-md-2"><?php echo $result->date; ?></div>
+								<div class="race col-md-4"><a href="<?php echo single_race_link($result->code); ?>"><?php echo $result->event; ?></a></div>
+								<div class="class col-md-1"><?php echo $result->class; ?></div>
+								<div class="country col-md-1"><?php echo $result->race_country; ?></div>
+								<div class="fq col-md-1"><?php echo round($result->fq); ?></div>
 							</div>
 						<?php endforeach; ?>
 					</div>

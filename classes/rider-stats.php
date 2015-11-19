@@ -366,15 +366,10 @@ class RiderStats {
 			'nat' => false,
 		);
 		$args=array_merge($default_args,$args);
-echo '<pre>';
-print_r($args);
-echo '</pre>';
 
 		extract($args);
 
 		// setup our potential where statement //
-		$where[]="rankings.week=(SELECT MAX(week) FROM $uci_curl->weekly_rider_rankings_table)"; // default
-
 		if ($name)
 			$where[]="name='{$name}'";
 
@@ -387,10 +382,20 @@ echo '</pre>';
 		if ($nat)
 			$where[]="nat='{$nat}'";
 
+		if ($week)
+			$where[]="week='{$week}'";
+
 		if (!empty($where)) :
 			$where=' WHERE '.implode(' AND ',$where);
 		else :
 			$where="";
+		endif;
+
+		// we need some tweaks to our order by statement //
+		if ($order_by=='rank') :
+			$order_by="CASE rank WHEN 0 THEN 99999 ELSE rank END $order";
+		else :
+			$order_by="$order_by $order";
 		endif;
 
 		// setup our pagination aka limit //
@@ -409,77 +414,134 @@ echo '</pre>';
 			//
 		endif;
 
-		// we need some tweaks to our order by statement //
-		if ($order_by=='rank') :
-			$order_by="CASE rankings.rank WHEN 0 THEN 99999 ELSE rankings.rank END $order";
-		else :
-			$order_by="$order_by $order";
-		endif;
-
-		echo $sql="
+		$sql="
 			SELECT
-				*
-			FROM $uci_curl->weekly_rider_rankings_table AS rankings
+				name,
+				MAX(nat) AS nat,
+				GROUP_CONCAT(season) AS season,
+				GROUP_CONCAT(week) AS week,
+				GROUP_CONCAT(start_date) AS start_date,
+				GROUP_CONCAT(end_date) AS end_date,
+				GROUP_CONCAT(race_perc) AS race_perc,
+				GROUP_CONCAT(races) AS races,
+				GROUP_CONCAT(rank) AS rank,
+				GROUP_CONCAT(sos) AS sos,
+				GROUP_CONCAT(total) AS total,
+				GROUP_CONCAT(uci) AS uci,
+				GROUP_CONCAT(uci_perc) AS uci_perc,
+				GROUP_CONCAT(wcp) AS wcp,
+				GROUP_CONCAT(wcp_perc) AS wcp_perc,
+				GROUP_CONCAT(wins) AS wins,
+				GROUP_CONCAT(win_perc) AS win_perc,
+				GROUP_CONCAT(c1) AS c1,
+				GROUP_CONCAT(c2) AS c2,
+				GROUP_CONCAT(cn) AS cn,
+				GROUP_CONCAT(cc) AS cc,
+				GROUP_CONCAT(cm) AS cm
+			FROM $uci_curl->weekly_rider_rankings_table
 			$where
+			GROUP BY name
 			ORDER BY $order_by
 			$limit
 		";
-
+		$sql_max="
+			SELECT
+				name,
+				MAX(nat) AS nat,
+				GROUP_CONCAT(season) AS season,
+				GROUP_CONCAT(week) AS week,
+				GROUP_CONCAT(start_date) AS start_date,
+				GROUP_CONCAT(end_date) AS end_date,
+				GROUP_CONCAT(race_perc) AS race_perc,
+				GROUP_CONCAT(races) AS races,
+				GROUP_CONCAT(rank) AS rank,
+				GROUP_CONCAT(sos) AS sos,
+				GROUP_CONCAT(total) AS total,
+				GROUP_CONCAT(uci) AS uci,
+				GROUP_CONCAT(uci_perc) AS uci_perc,
+				GROUP_CONCAT(wcp) AS wcp,
+				GROUP_CONCAT(wcp_perc) AS wcp_perc,
+				GROUP_CONCAT(wins) AS wins,
+				GROUP_CONCAT(win_perc) AS win_perc,
+				GROUP_CONCAT(c1) AS c1,
+				GROUP_CONCAT(c2) AS c2,
+				GROUP_CONCAT(cn) AS cn,
+				GROUP_CONCAT(cc) AS cc,
+				GROUP_CONCAT(cm) AS cm
+			FROM $uci_curl->weekly_rider_rankings_table
+			$where
+			GROUP BY name
+		";
 		$riders=$wpdb->get_results($sql);
-		$wp_query->uci_curl_max_pages=$wpdb->get_var("SELECT COUNT(*) FROM $uci_curl->weekly_rider_rankings_table AS rankings $where ORDER BY $order_by"); // set max
+		$wp_query->uci_curl_max_pages=count($wpdb->get_results($sql_max));
 
 		return $riders;
 	}
 
-/*
-	public function get_rider($args) {
+	function get_rider_results($args=array()) {
 		global $wpdb,$uci_curl;
 
-		if (!$name)
-			return false;
-
+		$html=null;
+		$where=array();
 		$default_args=array(
 			'order_by' => 'date',
 			'order' => 'DESC',
-			'class' => false,
-			'season' => get_query_var('season','2015/2016'),
+			'name' => false,
+			'season' => false, // lj
+			'class' => false, // lj
 			'nat' => false,
+			'place' => false
 		);
 		$args=array_merge($default_args,$args);
 
+		extract($args);
+
+		// setup our potential where statement //
+		if ($name)
+			$where[]="name='{$name}'";
+
+		if ($season)
+			$where[]="season='{$season}'";
+
+		if ($class)
+			$where[]="class='{$class}'";
+
+		if ($nat)
+			$where[]="nat='{$nat}'";
+
+		if ($place)
+			$where[]="place='{$place}'";
+
+		if (!empty($where)) :
+			$where=' WHERE '.implode(' AND ',$where);
+		else :
+			$where="";
+		endif;
+
 		$sql="
 			SELECT
-				results.place,
-				results.nat AS country,
-				results.par,
-				races.code,
-				races.date,
-				races.event AS race,
-				races.class,
+				name,
+				place,
+				results.nat,
+				par AS points,
+				season,
+				STR_TO_DATE(date,'%e %M %Y') AS date,
+				event,
+				class,
 				races.nat AS race_country,
 				fq_table.fq
 			FROM $uci_curl->results_table AS results
 			LEFT JOIN $uci_curl->table AS races
 			ON results.code=races.code
 			LEFT JOIN $uci_curl->fq_table AS fq_table
-			ON fq_table.code=races.code
-			WHERE season='$season'
-			AND name='$name'
-			ORDER BY races.date
+			ON results.code=fq_table.code
+			$where
+			ORDER BY $order_by $order
 		";
-		$wpdb->query("SET SQL_BIG_SELECTS=1"); // fixes a minor sql bug
 		$results=$wpdb->get_results($sql);
-
-		// clean up some misc db slashes and formatting //
-		foreach ($results as $result) :
-			$result->race=stripslashes($result->race);
-			$result->date=date($this->date_format,strtotime($result->date));
-			$result->fq=round($result->fq);
-		endforeach;
 
 		return $results;
 	}
-*/
 
 	/**
 	 * get_country function.

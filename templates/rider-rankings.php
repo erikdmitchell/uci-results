@@ -11,12 +11,13 @@ global $RiderStats,$wp_query;
 
 $paged=get_query_var('paged',1);
 $season=get_query_var('season','2015/2016');
+$current_week=uci_get_current_week($season);
 $riders=$RiderStats->get_riders_from_weekly_rank(array(
 	'season' => $season,
 	'paged' => $paged,
-	'per_page' => 15
+	'per_page' => 15,
+	'week' => $current_week
 ));
-$wp_query->uci_curl_max_pages;
 ?>
 
 <?php get_header(); ?>
