@@ -327,9 +327,10 @@ class RiderStats {
 		$max_riders=$wpdb->get_results("SELECT name FROM $uci_curl->results_table GROUP BY name");
 		$wp_query->uci_curl_max_pages=$wpdb->num_rows; // set max
 
-		// add rank //
+		// add rank and clean //
 		foreach ($riders as $rider) :
 			$rider->rank=$rank;
+			$rider->sos=number_format($rider->sos,3);
 			$rank++;
 		endforeach;
 
@@ -347,7 +348,7 @@ class RiderStats {
 	 * @return void
 	 */
 	public function get_riders_from_weekly_rank($args=array()) {
-		global $wpdb,$uci_curl;
+		global $wpdb,$uci_curl,$wp_query;
 
 		$limit=null;
 		$where=array();
@@ -425,6 +426,7 @@ echo '</pre>';
 		";
 
 		$riders=$wpdb->get_results($sql);
+		$wp_query->uci_curl_max_pages=$wpdb->get_var("SELECT COUNT(*) FROM $uci_curl->weekly_rider_rankings_table AS rankings $where ORDER BY $order_by"); // set max
 
 		return $riders;
 	}
