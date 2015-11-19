@@ -94,11 +94,12 @@ function fc_user_teams($user_id=0) {
  * @param bool $echo (default: true)
  * @return void
  */
+/*
 function fc_rider_list_dropdown($name=false,$min_rank=0,$max_rank=10,$select_title='Select a Rider',$echo=true) {
 	global $wpdb,$RiderStats;
 
 	$html=null;
-	$riders=$RiderStats->get_riders(array(
+	$riders=$RiderStats->get_riders(array( // DEPRECATED
 		'pagination' => false,
 		'limit' => "$min_rank,$max_rank"
 	));
@@ -119,6 +120,7 @@ function fc_rider_list_dropdown($name=false,$min_rank=0,$max_rank=10,$select_tit
 		return $html;
 	endif;
 }
+*/
 
 /**
  * fc_rider_list_dropdown_race function.
