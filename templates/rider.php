@@ -16,7 +16,7 @@ $uci=$RiderStats->get_rider_uci_points($rider_name,$season);
 $wcp=$RiderStats->get_rider_uci_points($rider_name,$season,'wcp');
 $sos=$RiderStats->get_rider_sos($rider_name,$season);
 $win_perc=$RiderStats->get_rider_winning_perc($rider_name,$season);
-$rider_stats=$RiderStats->get_rider_total($rider_name,$season);
+// $rider_stats=$RiderStats->get_rider_total($rider_name,$season); DEPRECATED
 ?>
 
 <?php get_header(); ?>

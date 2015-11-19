@@ -583,6 +583,7 @@ class RiderStats {
 	 * @param bool $season (default: false)
 	 * @return void
 	 */
+/*
 	public function get_rider_total($rider=false,$season=false) {
 		global $wpdb,$uci_curl;
 
@@ -605,6 +606,7 @@ class RiderStats {
 
 		return $total;
 	}
+*/
 
 // SLOW??? //
 	public function get_total_points($user_args=array()) {
