@@ -99,16 +99,16 @@
 /**
  * view db
  */
-.view-db-filter #race-search {
-	width: 100%;
-}
-#race-search-results-text {
+#race-search-results-text,
+#rider-search-results-text {
 	border: 1px solid #000;
 	background: #fff;
 	padding: 5px;
 	display: none;
 }
-.results .result input {
+.results input,
+.filters input,
+.results #rider-rider {
 	width: 100%;
 }
 
