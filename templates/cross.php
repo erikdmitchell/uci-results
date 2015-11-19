@@ -10,8 +10,9 @@
 global $RiderStats,$RaceStats;
 
 $season=get_query_var('season','2015/2016');
-$rider_results=$RiderStats->get_riders(array(
-	'per_page' => 10
+$rider_results=$RiderStats->get_riders_from_weekly_rank(array(
+	'per_page' => 10,
+	'season' => $season
 ));
 $race_results=$RaceStats->get_races(array(
 	'per_page' => 10
@@ -38,7 +39,7 @@ $race_results=$RaceStats->get_races(array(
 						<?php foreach ($rider_results as $rider) : ?>
 							<div class="row">
 								<div class="rank col-md-1"><?php echo $rider->rank; ?></div>
-								<div class="rider col-md-5"><a href="<?php echo single_rider_link($rider->rider,$season); ?>"><?php echo $rider->rider; ?></a></div>
+								<div class="rider col-md-5"><a href="<?php echo single_rider_link($rider->name,$season); ?>"><?php echo $rider->name; ?></a></div>
 								<div class="nat col-md-1"><a href="<?php echo single_country_link($rider->nat); ?>"><?php echo get_country_flag($rider->nat); ?></a></div>
 								<div class="total col-md-1"><?php echo number_format($rider->total,3); ?></div>
 							</div>
