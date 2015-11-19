@@ -87,12 +87,6 @@ class RaceStats {
 		);
 		$args=array_merge($default_args,$args);
 
-/*
-echo '<pre>';
-print_r($args);
-echo '</pre>';
-*/
-
 		extract($args);
 
 		if ($pagination) :
@@ -136,7 +130,7 @@ echo '</pre>';
 			ORDER BY $order_by $order
 			$limit
 		";
-//echo $sql;
+
 		$races=$wpdb->get_results($sql);
 
 		$max_races=$wpdb->get_results("SELECT DISTINCT(code) FROM $uci_curl->table WHERE season='$season'");
