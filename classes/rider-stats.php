@@ -376,7 +376,7 @@ echo '</pre>';
 		$where[]="rankings.week=(SELECT MAX(week) FROM $uci_curl->weekly_rider_rankings_table)"; // default
 
 		if ($name)
-			$where[]="class='{$name}'";
+			$where[]="name='{$name}'";
 
 		if ($season)
 			$where[]="season='{$season}'";
@@ -394,7 +394,7 @@ echo '</pre>';
 		endif;
 
 		// setup our pagination aka limit //
-		if ($per_page) :
+		if ($per_page>0) :
 			if ($paged==0) :
 				$start=0;
 			else :

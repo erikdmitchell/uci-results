@@ -12,11 +12,19 @@ global $RiderStats,$wp_query;
 $rider_name=get_query_var('rider',0);
 $season=get_query_var('season','2015/2016');
 //$results=$RiderStats->get_rider($rider_name); DEPRECATED
+
+$results=$RiderStats->get_riders_from_weekly_rank(array(
+	'season' => $season,
+	'name' => $rider_name,
+	'per_page' => -1
+));
+$wp_query->uci_curl_max_pages;
+
 $uci=$RiderStats->get_rider_uci_points($rider_name,$season);
 $wcp=$RiderStats->get_rider_uci_points($rider_name,$season,'wcp');
 $sos=$RiderStats->get_rider_sos($rider_name,$season);
 $win_perc=$RiderStats->get_rider_winning_perc($rider_name,$season);
-// $rider_stats=$RiderStats->get_rider_total($rider_name,$season); DEPRECATED
+//$rider_stats=$RiderStats->get_rider_total($rider_name,$season); DEPRECATED
 ?>
 
 <?php get_header(); ?>
@@ -28,7 +36,7 @@ $win_perc=$RiderStats->get_rider_winning_perc($rider_name,$season);
 				Rider/results not found.
 			<?php else : ?>
 				<div class="uci-curl-rider-rankings">
-					<h1 class="entry-title"><?php echo $rider_name; ?> <a href="<?php echo single_country_link($results[0]->country,$season); ?>"><?php echo get_country_flag($results[0]->country); ?></a></h1>
+					<h1 class="entry-title"><?php echo $rider_name; ?> <a href="<?php echo single_country_link($results[0]->nat,$season); ?>"><?php echo get_country_flag($results[0]->nat); ?></a></h1>
 					<div class="row">
 						<div class="col-md-4">
 							<div class="row">
@@ -36,7 +44,7 @@ $win_perc=$RiderStats->get_rider_winning_perc($rider_name,$season);
 									<h4>Rider Rankings</h4>
 									<div class="row">
 										<div class="header col-md-7">Current Rank:</div>
-										<div class="current-rank col-md-2"><?php echo $rider_stats->rank; ?> <span class="total">(<?php echo number_format($rider_stats->total,3); ?>)</span></div>
+										<div class="current-rank col-md-2"><?php echo $results[0]->rank; ?> <span class="total">(<?php echo number_format($results[0]->total,3); ?>)</span></div>
 									</div>
 									<div class="row">
 										<div class="header col-md-7">UCI Points:</div>
