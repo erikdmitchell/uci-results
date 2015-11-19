@@ -6,7 +6,7 @@
  */
 class UCIcURLDB {
 
-	public $db_version='0.2.1';
+	public $db_version='0.2.2';
 	public $wp_option_name='ucicurl_version';
 
 	/**
@@ -71,6 +71,7 @@ class UCIcURLDB {
 		$uci_weekly_rider_rankings_sql="CREATE TABLE $table_name (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `name` mediumtext NOT NULL,
+		  `nat` tinytext NOT NULL,
 		  `season` mediumtext NOT NULL,
 			`week` INT NOT NULL,
 			`start_date` DATE NOT NULL,
@@ -165,6 +166,7 @@ class UCIcURLDB {
 		$uci_weekly_rider_rankings_sql="CREATE TABLE $table_name (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `name` mediumtext NOT NULL,
+		  `nat` tinytext NOT NULL,
 		  `season` mediumtext NOT NULL,
 			`week` INT NOT NULL,
 			`start_date` DATE NOT NULL,
