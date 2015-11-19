@@ -46,6 +46,7 @@ class ViewDB {
 
 		$seasons=$wpdb->get_col("SELECT season FROM $uci_curl->table GROUP BY season");
 		$classes=$wpdb->get_col("SELECT class FROM $uci_curl->table GROUP BY class");
+		$countries=$wpdb->get_col("SELECT nat FROM $uci_curl->table GROUP BY nat ORDER BY nat");
 
 		if (isset($_POST['update-race']) && $_POST['update-race'])
 			$this->update_race();
@@ -59,33 +60,59 @@ class ViewDB {
 					<div class="races col-md-6">
 						<h3>Races</h3>
 						<div class="filters">
+							<form name="race_filters" id="race_filters">
+								<div class="row">
+									<div class="season col-md-4">
+										<h4>Season</h4>
+										<select name="season" class="season">
+											<option value="0">-- Select One --</option>
+											<?php foreach ($seasons as $season) : ?>
+												<option value="<?php echo $season; ?>"><?php echo $season; ?></option>
+											<?php endforeach; ?>
+										</select>
+									</div>
+									<div class="class col-md-4">
+										<h4>Class</h4>
+										<select name="class" class="class">
+											<option value="0">-- Select One --</option>
+											<?php foreach ($classes as $class) : ?>
+												<option value="<?php echo $class; ?>"><?php echo $class; ?></option>
+											<?php endforeach; ?>
+										</select>
+									</div>
+									<div class="country col-md-4">
+										<h4>Country</h4>
+										<select name="nat" class="nat">
+											<option value="0">-- Select One --</option>
+											<?php foreach ($countries as $country) : ?>
+												<option value="<?php echo $country; ?>"><?php echo $country; ?></option>
+											<?php endforeach; ?>
+										</select>
+									</div>
+								</div><!-- .row -->
+
+								<div class="row">
+									<div class="race-search-buttons col-md-12">
+										<p>
+											<button type="reset" id="form-reset" value="Reset">Reset</button>
+										</p>
+									</div>
+								</div><!-- .row -->
+
+							</form>
 							<div class="row">
-								<div class="season col-md-4">
-									<h4>Season</h4>
-									<select name="race-season" id="race-season">
-										<option value="0">-- Select One --</option>
-										<?php foreach ($seasons as $season) : ?>
-											<option value="<?php echo $season; ?>"><?php echo $season; ?></option>
-										<?php endforeach; ?>
-									</select>
+								<div class="col-md-12">
+									<h4>Search</h4>
 								</div>
-								<div class="class col-md-4">
-									<h4>Class</h4>
-									<select name="race-class" id="race-class">
-										<option value="0">-- Select One --</option>
-										<?php foreach ($classes as $class) : ?>
-											<option value="<?php echo $class; ?>"><?php echo $class; ?></option>
-										<?php endforeach; ?>
-									</select>
+								<div class="race-search col-md-6">
+									<input id="race-search" type="text" />
 								</div>
-								<div class="country col-md-4">
-									<h4>Country</h4>
+								<div class="race-search col-md-6">
+									<button type="reset" id="clear-race-search" value="Clear">Clear</button>
 								</div>
 							</div><!-- .row -->
 							<div class="row">
-								<div class="race-search col-md-12">
-									<h4>Search</h4>
-									<input id="race-search" type="text" />
+								<div class="race-search-results col-md-12">
 									<div id="race-search-results-text">Search Results...</div>
 								</div>
 							</div><!-- .row -->
@@ -242,12 +269,14 @@ echo '</pre>';
 	public function ajax_race_filter() {
 		global $RaceStats;
 
+		parse_str($_POST['form'],$form);
+
 		$html=null;
 		$args=array(
 			'pagination' => false,
 			'order_by' => 'date'
 		);
-		$args=array_merge($args,$_POST);
+		$args=array_merge($args,$form);
 
 		$races=$RaceStats->get_races($args);
 

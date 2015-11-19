@@ -100,7 +100,7 @@
  * view db
  */
 .view-db-filter #race-search {
-	width: 50%;
+	width: 100%;
 }
 #race-search-results-text {
 	border: 1px solid #000;

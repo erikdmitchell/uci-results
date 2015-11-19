@@ -83,8 +83,15 @@ class RaceStats {
 			'order' => 'DESC',
 			'class' => false,
 			'season' => false,
+			'nat' => false,
 		);
 		$args=array_merge($default_args,$args);
+
+/*
+echo '<pre>';
+print_r($args);
+echo '</pre>';
+*/
 
 		extract($args);
 
@@ -104,6 +111,9 @@ class RaceStats {
 
 		if ($season)
 			$where[]="season='{$season}'";
+
+		if ($nat)
+			$where[]="nat='{$nat}'";
 
 		if (!empty($where)) :
 			$where=' WHERE '.implode(' AND ',$where);
@@ -126,7 +136,7 @@ class RaceStats {
 			ORDER BY $order_by $order
 			$limit
 		";
-
+//echo $sql;
 		$races=$wpdb->get_results($sql);
 
 		$max_races=$wpdb->get_results("SELECT DISTINCT(code) FROM $uci_curl->table WHERE season='$season'");

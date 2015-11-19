@@ -21,11 +21,11 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 
-	// season filter //
-	$('#race-season, #race-class').change(function() {
+	// race filters //
+	$('#race_filters .season, #race_filters .class, #race_filters .nat').change(function() {
 			var data={
 				'action' : 'race_filter',
-				'season' : $(this).val()
+				'form' : $('#race_filters').serialize()
 			};
 
 			$.post(ajaxurl,data,function(response) {
@@ -33,16 +33,14 @@ jQuery(document).ready(function($) {
 			});
 	});
 
-	// class filter //
-	$('#race-class').change(function() {
-			var data={
-				'action' : 'race_filter',
-				'class' : $(this).val()
-			};
+	// form reset //
+	$('#clear-race-search').click(function(e) {
+		e.preventDefault();
 
-			$.post(ajaxurl,data,function(response) {
-				$('.row.data').html(response);
-			});
+		$('#race-search').val(''); // clear search box
+		$('#race-search-results-text').html('').hide(); // clear results box and hide
+
+		return false;
 	});
 
 });
