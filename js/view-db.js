@@ -1,5 +1,7 @@
 jQuery(document).ready(function($) {
 
+	var $loader=$('#loader');
+
 	// race search //
 	$("input#race-search").live("keyup", function(e) {
 		// Set Search String
@@ -62,6 +64,28 @@ jQuery(document).ready(function($) {
 		}
 
 		return false;
+	});
+
+	// race click //
+	$('.view-db-single-rider .race a').click(function() {
+		window.location=$(this).attr('href');
+	});
+
+	// rider table sort //
+	$(".tablesorter").tablesorter();
+
+	// rider filters //
+	$('#rider_filters .season, #rider_filters .class, #rider_filters .nat').change(function() {
+		$loader.show();
+		var data={
+			'action' : 'rider_filter',
+			'form' : $('#rider_filters').serialize()
+		};
+
+		$.post(ajaxurl,data,function(response) {
+			$('.row.data').html(response);
+			$loader.hide();
+		});
 	});
 
 });

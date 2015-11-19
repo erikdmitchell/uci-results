@@ -99,6 +99,21 @@
 /**
  * view db
  */
+#loader {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: #fff;
+	opacity: 0.6;
+	display: none;
+}
+#loader .inner {
+	position: absolute;
+  top: 50%;
+  left: 50%;
+}
 #race-search-results-text,
 #rider-search-results-text {
 	border: 1px solid #000;
@@ -111,7 +126,32 @@
 .results #rider-rider {
 	width: 100%;
 }
-
+.tablesorter,
+.tablesorter th,
+.tablesorter td {
+	border: 1px solid #000;
+}
+.tablesorter th,
+.tablesorter td {
+	padding: 5px 8px 5px 8px;
+}
+.tablesorter tbody tr:nth-child(odd) {
+		background: #e3e2e2;
+}
+.tablesorter th.header {
+	margin-left: 5px;
+	background-image: url('../images/bg.gif');
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+	padding-right: 20px;
+}
+.tablesorter th.headerSortUp {
+	background-image: url('../images/asc.gif');
+}
+.tablesorter th.headerSortDown {
+	background-image: url('../images/desc.gif');
+}
 /**
  * uci cross admin
  */

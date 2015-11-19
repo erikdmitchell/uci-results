@@ -18,6 +18,7 @@ class ViewDB {
 		add_action('wp_ajax_race_search',array($this,'ajax_race_search'));
 		add_action('wp_ajax_race_filter',array($this,'ajax_race_filter'));
 		add_action('wp_ajax_rider_search',array($this,'ajax_rider_search'));
+		add_action('wp_ajax_rider_filter',array($this,'ajax_rider_filter'));
 
 		$this->url=admin_url('admin.php?page=uci-view-db');
 	}
@@ -33,7 +34,8 @@ class ViewDB {
 		if ($hook!='uci-cross_page_uci-view-db')
 			return false;
 
-		wp_enqueue_script('uci-view-db-script',plugin_dir_url(basename(__FILE__)).'/uci-curl-wp-plugin/js/view-db.js',array('jquery'));
+		wp_enqueue_script('jquery-tablesorter-script',plugin_dir_url(basename(__FILE__)).'/uci-curl-wp-plugin/js/jquery.tablesorter.min.js',array('jquery'),'2.0.5');
+		wp_enqueue_script('uci-view-db-script',plugin_dir_url(basename(__FILE__)).'/uci-curl-wp-plugin/js/view-db.js',array('jquery','jquery-tablesorter-script'));
 	}
 
 	/**
@@ -133,6 +135,7 @@ class ViewDB {
 											<?php endforeach; ?>
 										</select>
 									</div>
+<!--
 									<div class="class col-md-4">
 										<h4>Class</h4>
 										<select name="class" class="class">
@@ -142,6 +145,8 @@ class ViewDB {
 											<?php endforeach; ?>
 										</select>
 									</div>
+-->
+<!--
 									<div class="country col-md-4">
 										<h4>Country</h4>
 										<select name="nat" class="nat">
@@ -151,6 +156,7 @@ class ViewDB {
 											<?php endforeach; ?>
 										</select>
 									</div>
+-->
 								</div><!-- .row -->
 
 								<div class="row">
@@ -190,7 +196,11 @@ class ViewDB {
 					<?php endif; ?>
 				</div>
 			</div>
-
+			<div id="loader">
+				<div class="inner">
+					<img src="<?php echo plugins_url('../images/ajax-loader.gif',__FILE__); ?>" />
+				</div>
+			</div>
 		</div><!-- .wrap -->
 
 		<?php
@@ -282,67 +292,37 @@ echo '</pre>';
 		global $RiderStats;
 
 		$html=null;
-		//$rider=$RiderStats->get_riders(array('name' => $rider_name));
-		//$race=$RaceStats->get_race($race_code);
-		//$race_classes=$RaceStats->get_race_classes();
-		$CrossSeasons=new CrossSeasons();
-		$counter=0;
+		$results=$RiderStats->get_rider_results(array('name' => $rider_name));
 
 		$html.='<div class="view-db-single-rider col-md-12">';
+			$html.='<h4>'.$rider_name.' ('.$results[0]->nat.')</h4>';
 
-			$html.='<h4>'.$race->details->race.'</h4>';
-
-			$html.='<form name="edit-race" id="edit-race" method="post" action="'.$this->url.'">';
-				$html.='<div class="row header">';
-					$html.='<div class="date col-md-2">Date</div>';
-					$html.='<div class="class col-md-2">Class</div>';
-					$html.='<div class="nat col-md-2">Nat</div>';
-					$html.='<div class="season col-md-2">Season</div>';
-				$html.='</div>';
-				$html.='<div class="row race-details">';
-					$html.='<div class="date col-md-2"><input name="race[date]" id="race-date" value="'.$race->details->date.'" /></div>';
-					$html.='<div class="class col-md-2">';
-						$html.='<select name="race[class]" id="race-class">';
-							foreach ($race_classes as $class) :
-								$html.='<option value="'.$class.'" '.selected($race->details->class,$class,false).'>'.$class.'</option>';
-							endforeach;
-						$html.='</select>';
-					$html.='</div>';
-					$html.='<div class="nat col-md-2"><input name="race[date]" id="race-date" value="'.$race->details->nat.'" /></div>';
-					$html.='<div class="season col-md-2">';
-						$html.='<select name="race[season]" id="race-season">';
-							foreach ($CrossSeasons->seasons as $season) :
-								$html.='<option value="'.$season.'" '.selected($race->details->season,$season,false).'>'.$season.'</option>';
-							endforeach;
-						$html.='</select>';
-					$html.='</div>';
-				$html.='</div>';
-				$html.='<div class="row header">';
-					$html.='<div class="place col-md-1">Place</div>';
-					$html.='<div class="rider col-md-3">Rider</div>';
-					$html.='<div class="nat col-md-1">Nat</div>';
-					$html.='<div class="age col-md-1">Age</div>';
-					$html.='<div class="time col-md-1">Time</div>';
-					$html.='<div class="points col-md-1">Points</div>';
-				$html.='</div>';
-				$html.='<div class="results">';
-					foreach ($race->results as $result) :
-						$html.='<div id="rider-'.$counter.'" class="row result">';
-							$html.='<div class="place col-md-1"><input type="text" name="rider['.$counter.'][place]" id="rider-place" value="'.$result->place.'" /></div>';
-							$html.='<div class="rider col-md-3"><input type="text" name="rider['.$counter.'][rider]" id="rider-rider" value="'.$result->rider.'" /></div>';
-							$html.='<div class="nat col-md-1"><input type="text" name="rider['.$counter.'][nat]" id="rider-nat" value="'.$result->nat.'" /></div>';
-							$html.='<div class="age col-md-1"><input type="text" name="rider['.$counter.'][age]" id="rider-age" value="'.$result->age.'" /></div>';
-							$html.='<div class="time col-md-1"><input type="text" name="rider['.$counter.'][time]" id="rider-time" value="'.$result->time.'" /></div>';
-							$html.='<div class="points col-md-1"><input type="text" name="rider['.$counter.'][points]" id="rider-points" value="'.$result->points.'" /></div>';
-						$html.='</div>';
-						$counter++;
+			$html.='<table id="single-rider" class="single-rider tablesorter">';
+				$html.='<thead>';
+					$html.='<tr class="">';
+						$html.='<th class="date">Date</th>';
+						$html.='<th class="race">Race</th>';
+						$html.='<th class="place">Place</th>';
+						$html.='<th class="points">Points</th>';
+						$html.='<th class="class">Class</th>';
+						$html.='<th class="season">Season</th>';
+						$html.='<th class="fq">FQ</th>';
+					$html.='</tr>';
+				$html.='</thead>';
+				$html.='<tbody>';
+					foreach ($results as $result) :
+						$html.='<tr class="race-details">';
+							$html.='<td class="date">'.$result->date.'</td>';
+							$html.='<td class="race"><a href="'.$this->url.'&race_code='.urlencode($result->code).'">'.$result->event.' ('.$result->race_country.')</a></td>';
+							$html.='<td class="place">'.$result->place.'</td>';
+							$html.='<td class="points">'.$result->points.'</td>';
+							$html.='<td class="class">'.$result->class.'</td>';
+							$html.='<td class="season">'.$result->season.'</td>';
+							$html.='<td class="fq">'.round($result->fq).'</td>';
+						$html.='</tr>';
 					endforeach;
-				$html.='</div>';
-				$html.='<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes"></p>';
-				$html.='<input type="hidden" name="race-code" value="'.$race_code.'" />';
-				$html.='<input type="hidden" name="update-race" value="1" />';
-			$html.='</form>';
-
+				$html.='</tbody>';
+			$html.='</table>';
 		$html.='</div>';
 
 		return $html;
@@ -475,6 +455,46 @@ echo '</pre>';
 			endforeach;
 		$html.='</div>';
 
+		echo $html;
+
+		wp_die();
+	}
+
+	public function ajax_rider_filter() {
+		global $RiderStats;
+
+		parse_str($_POST['form'],$form);
+
+		$html=null;
+		$args=array(
+			'pagination' => false,
+			'order_by' => 'rider'
+		);
+		$args=array_merge($args,$form);
+		$riders=$RiderStats->get_riders($args);
+
+		$html.='<div class="view-db-riders col-md-12">';
+			$html.='<h4>Riders</h4>';
+
+			$html.='<table id="riders-filter" class="riders-filter tablesorter">';
+				$html.='<thead>';
+					$html.='<tr class="">';
+						$html.='<th class="name">Name</th>';
+						$html.='<th class="nat">Country</th>';
+						$html.='<th class="rank">Rank</th>';
+					$html.='</tr>';
+				$html.='</thead>';
+				$html.='<tbody>';
+					foreach ($riders as $rider) :
+						$html.='<tr class="race-details">';
+							$html.='<td class="name">'.$rider->rider.'</td>';
+							$html.='<td class="nat">'.$rider->nat.'</td>';
+							$html.='<td class="rank">'.$rider->rank.'</td>';
+						$html.='</tr>';
+					endforeach;
+				$html.='</tbody>';
+			$html.='</table>';
+			$html.='<script>jQuery(".tablesorter").tablesorter();</script>';
 		echo $html;
 
 		wp_die();

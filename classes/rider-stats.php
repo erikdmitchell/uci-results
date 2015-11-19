@@ -35,13 +35,15 @@ class RiderStats {
 		$rank=1;
 		$total_divider=4;
 		$dates='';
+		$org_orderby=false;
 		$default_args=array(
 			'season' => '2015/2016',
 			'pagination' => true,
 			'paged' => 1,
 			'per_page' => 15,
 			'limit' => false,
-			'order_by' => 'total DESC',
+			'order_by' => 'total',
+			'order' => 'DESC',
 			'start_date' => false,
 			'end_date' => false
 		);
@@ -62,6 +64,7 @@ class RiderStats {
 			$limit="LIMIT $limit";
 		endif;
 
+		// setup if we have start and/or end date //
 		if ($start_date && $end_date) :
 			$dates=" AND (STR_TO_DATE(races.date,'%e %M %Y') BETWEEN '{$start_date}' AND '{$end_date}')";
 
@@ -80,6 +83,12 @@ class RiderStats {
 			if ($this->get_total_points(array('type' => 'wcp','season' => $season,'end_date' => $end_date))==0) :
 				$total_divider--;
 			endif;
+		endif;
+
+		// our rank can be off if we sort by anything besides total, so we do that now //
+		if ($order_by!='total') :
+			$org_orderby=$order_by;
+			$order_by='total';
 		endif;
 
 		$sql="
@@ -316,7 +325,7 @@ class RiderStats {
 
 			) t
 			GROUP BY name
-			ORDER BY $order_by
+			ORDER BY $order_by $order
 			$limit
 		";
 
@@ -333,6 +342,15 @@ class RiderStats {
 			$rider->sos=number_format($rider->sos,3);
 			$rank++;
 		endforeach;
+
+		// if order by is not rank, do that here //
+		if ($org_orderby) :
+			$order=array();
+			foreach ($riders as $rider) :
+				$order[]=$rider->$org_orderby;
+			endforeach;
+			array_multisort($order,SORT_ASC,$riders);
+		endif;
 
 		return $riders;
 	}
@@ -478,6 +496,13 @@ class RiderStats {
 		return $riders;
 	}
 
+	/**
+	 * get_rider_results function.
+	 *
+	 * @access public
+	 * @param array $args (default: array())
+	 * @return void
+	 */
 	function get_rider_results($args=array()) {
 		global $wpdb,$uci_curl;
 
@@ -487,8 +512,8 @@ class RiderStats {
 			'order_by' => 'date',
 			'order' => 'DESC',
 			'name' => false,
-			'season' => false, // lj
-			'class' => false, // lj
+			'season' => false,
+			'class' => false,
 			'nat' => false,
 			'place' => false
 		);
@@ -527,6 +552,7 @@ class RiderStats {
 				season,
 				STR_TO_DATE(date,'%e %M %Y') AS date,
 				event,
+				races.code,
 				class,
 				races.nat AS race_country,
 				fq_table.fq
@@ -733,39 +759,6 @@ class RiderStats {
 
 		return $win_perc;
 	}
-
-	/**
-	 * get_rider_total function.
-	 *
-	 * @access public
-	 * @param bool $rider (default: false)
-	 * @param bool $season (default: false)
-	 * @return void
-	 */
-/*
-	public function get_rider_total($rider=false,$season=false) {
-		global $wpdb,$uci_curl;
-
-		if (!$rider || !$season)
-			return false;
-
-		$riders=$this->get_riders(array(
-			'season' => $season,
-			'pagination' => false
-		));
-		$total=false;
-
-		// get rider //
-		foreach ($riders as $_rider) :
-			if ($_rider->rider==$rider) :
-				$total=$_rider;
-				break;
-			endif;
-		endforeach;
-
-		return $total;
-	}
-*/
 
 // SLOW??? //
 	public function get_total_points($user_args=array()) {
