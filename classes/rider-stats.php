@@ -20,6 +20,8 @@ class RiderStats {
 	/**
 	 * get_riders function.
 	 *
+	 * get_riders() is no longer used on public site and needs to be renamed
+	 *
 	 * @access public
 	 * @param array $user_args (default: array())
 	 * @return void
@@ -330,6 +332,99 @@ class RiderStats {
 			$rider->rank=$rank;
 			$rank++;
 		endforeach;
+
+		return $riders;
+	}
+
+	/**
+	 * get_riders_from_weekly_rank function.
+	 *
+	 * This is a user facing get_riders() type function
+	 * get_riders() is no longer used on public site and needs to be renamed
+	 *
+	 * @access public
+	 * @param array $args (default: array())
+	 * @return void
+	 */
+	public function get_riders_from_weekly_rank($args=array()) {
+		global $wpdb,$uci_curl;
+
+		$limit=null;
+		$where=array();
+		$default_args=array(
+			'per_page' => 15,
+			'paged' => 1,
+			'order_by' => 'rank',
+			'order' => 'ASC',
+			'name' => false,
+			'season' => false,
+			'start_date' => false, // not setup yet
+			'end_date' => false, // not setup yet
+			'week' => false, // not setup yet
+			'class' => false,
+			'nat' => false,
+		);
+		$args=array_merge($default_args,$args);
+echo '<pre>';
+print_r($args);
+echo '</pre>';
+
+		extract($args);
+
+		// setup our potential where statement //
+		$where[]="rankings.week=(SELECT MAX(week) FROM $uci_curl->weekly_rider_rankings_table)"; // default
+
+		if ($name)
+			$where[]="class='{$name}'";
+
+		if ($season)
+			$where[]="season='{$season}'";
+
+		if ($class)
+			$where[]="class='{$class}'";
+
+		if ($nat)
+			$where[]="nat='{$nat}'";
+
+		if (!empty($where)) :
+			$where=' WHERE '.implode(' AND ',$where);
+		else :
+			$where="";
+		endif;
+
+		// setup our pagination aka limit //
+		if ($per_page) :
+			if ($paged==0) :
+				$start=0;
+			else :
+				$start=$per_page*($paged-1);
+			endif;
+			$end=$per_page;
+			$limit="LIMIT $start,$end";
+			$rank=$start+1;
+		//elseif ($limit) :
+			//$limit="LIMIT $limit";
+		else :
+			//
+		endif;
+
+		// we need some tweaks to our order by statement //
+		if ($order_by=='rank') :
+			$order_by="CASE rankings.rank WHEN 0 THEN 99999 ELSE rankings.rank END $order";
+		else :
+			$order_by="$order_by $order";
+		endif;
+
+		echo $sql="
+			SELECT
+				*
+			FROM $uci_curl->weekly_rider_rankings_table AS rankings
+			$where
+			ORDER BY $order_by
+			$limit
+		";
+
+		$riders=$wpdb->get_results($sql);
 
 		return $riders;
 	}
