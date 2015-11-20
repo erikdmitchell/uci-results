@@ -490,6 +490,9 @@ class RiderStats {
 			$where
 			GROUP BY name
 		";
+
+		$wpdb->query("SET SQL_BIG_SELECTS=1"); // fixes a minor sql bug
+
 		$riders=$wpdb->get_results($sql);
 		$wp_query->uci_curl_max_pages=count($wpdb->get_results($sql_max));
 
@@ -564,6 +567,7 @@ class RiderStats {
 			$where
 			ORDER BY $order_by $order
 		";
+		$wpdb->query("SET SQL_BIG_SELECTS=1"); // fixes a minor sql bug
 		$results=$wpdb->get_results($sql);
 
 		return $results;
