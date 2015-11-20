@@ -106,7 +106,7 @@ $win_perc=$RiderStats->get_rider_winning_perc($rider_name,$season);
 								<div class="date col-md-2"><?php echo $result->date; ?></div>
 								<div class="race col-md-4"><a href="<?php echo single_race_link($result->code); ?>"><?php echo $result->event; ?></a></div>
 								<div class="class col-md-1"><?php echo $result->class; ?></div>
-								<div class="country col-md-1"><?php echo $result->race_country; ?></div>
+								<div class="country col-md-1"><?php echo get_country_flag($result->race_country); ?></div>
 								<div class="fq col-md-1"><?php echo round($result->fq); ?></div>
 							</div>
 						<?php endforeach; ?>
