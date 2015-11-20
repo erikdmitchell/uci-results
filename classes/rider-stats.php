@@ -345,11 +345,13 @@ class RiderStats {
 
 		// if order by is not rank, do that here //
 		if ($org_orderby) :
-			$order=array();
-			foreach ($riders as $rider) :
-				$order[]=$rider->$org_orderby;
-			endforeach;
-			array_multisort($order,SORT_ASC,$riders);
+			if (strpos($org_orderby,',') === false) : // checks if we have multiple sorts -- NEED A METHOD FOR THIS
+				$order=array();
+				foreach ($riders as $rider) :
+					$order[]=$rider->$org_orderby;
+				endforeach;
+				array_multisort($order,SORT_ASC,$riders);
+			endif;
 		endif;
 
 		return $riders;

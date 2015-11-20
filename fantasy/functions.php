@@ -867,4 +867,51 @@ function fc_excerpt_by_id($post, $length = 10, $tags = '<a><em><strong>', $extra
 
 	return apply_filters('the_content', $the_excerpt);
 }
+
+/**
+ * fc_get_race_results function.
+ *
+ * @access public
+ * @param bool $race_code (default: false)
+ * @param float $limit (default: -1)
+ * @return void
+ */
+function fc_get_race_results($race_code=false,$limit=-1) {
+	global $wpdb,$uci_curl;
+
+	if (!$race_code)
+		return false;
+
+	if ($limit>0) :
+		$limit="LIMIT $limit";
+	else :
+		$limit='';
+	endif;
+
+	$sql="
+		SELECT
+			*
+		FROM $uci_curl->results_table AS results
+		WHERE code=\"{$race_code}\"
+		$limit
+	";
+	$results=$wpdb->get_results($sql);
+
+	return $results;
+}
+
+/**
+ * fc_get_last_years_code function.
+ *
+ * @access public
+ * @param int $race_id (default: 0)
+ * @return void
+ */
+function fc_get_last_years_code($race_id=0) {
+	global $wpdb;
+
+	$code=$wpdb->get_var("SELECT last_year_code FROM wp_fc_races WHERE id={$race_id}");
+
+	return $code;
+}
 ?>

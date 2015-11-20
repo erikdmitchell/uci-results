@@ -37,6 +37,12 @@
 .fantasy-cycling-create-team .longtext {
 	width: 80%;
 }
+.last-year-results .row.header {
+	font-weight: bold;
+}
+.last-year-results h3 {
+	margin-top: 0;
+}
 /**
  * team rosters
  */

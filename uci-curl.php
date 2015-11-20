@@ -569,6 +569,9 @@ function get_country_flag($country=false,$addon=false) {
 		case 'SUI':
 			$country='CHE';
 			break;
+		case 'GER':
+			$country='DEU';
+			break;
 	endswitch;
 
 	switch (strlen($country)):

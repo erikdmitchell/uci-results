@@ -19,6 +19,7 @@ class FantasyCyclingAdmin {
 
 		add_action('admin_enqueue_scripts',array($this,'admin_scripts_styles'));
 		add_action('wp_ajax_load_start_list',array($this,'ajax_load_start_list'));
+		add_action('wp_ajax_fantasy_race_search',array($this,'ajax_race_search'));
 	}
 
 	/**
@@ -84,101 +85,119 @@ class FantasyCyclingAdmin {
 
 			$html.='<form name="setup-races" id="setup-races" class="setup-races" method="post">';
 				$html.='<h3>Setup Races</h3>';
-				//if (count($this->fc_races)) :
-					$html.='<div class="row">';
-						$html.='<div class="col-md-1">';
-							$html.='<label for="race">Race</label>';
+
+				$html.='<div class="row">';
+					$html.='<div class="col-md-1">';
+						$html.='<label for="race">Race</label>';
+					$html.='</div>';
+					$html.='<div class="col-md-6">';
+						$html.='<select name="race" id="race">';
+							$html.='<option value="0">Select Race</option>';
+							foreach ($this->fc_races as $race) :
+								$html.='<option value="'.$race->id.'">'.$race->name.'</option>';
+							endforeach;
+						$html.='</select>';
+					$html.='</div>';
+				$html.='</div>';
+
+				$html.='<div class="row">';
+					$html.='<div class="col-md-1">';
+						$html.='<label for="name">Name</label>';
+					$html.='</div>';
+					$html.='<div class="col-md-6">';
+						$html.='<input type="text" name="name" id="name" class="longtext" value="" />';
+					$html.='</div>';
+				$html.='</div>';
+
+				$html.='<div class="row">';
+					$html.='<div class="col-md-1">';
+						$html.='<label for="season">Season</label>';
+					$html.='</div>';
+					$html.='<div class="col-md-6">';
+						$html.='<select name="season" id="season">';
+							$html.='<option value="0">Select Season</option>';
+							foreach ($years_in_db as $year) :
+								$html.='<option value="'.$year.'">'.$year.'</option>';
+							endforeach;
+						$html.='</select>';
+					$html.='</div>';
+				$html.='</div>';
+
+				$html.='<div class="row">';
+					$html.='<div class="col-md-1">';
+						$html.='<label for="type">Type</label>';
+					$html.='</div>';
+					$html.='<div class="col-md-6">';
+						$html.='<select name="type" id="type">';
+							$html.='<option value="0">Select Type</option>';
+							$html.='<option value="cdm">CDM</option>';
+							$html.='<option value="cn">CN</option>';
+							$html.='<option value="c1">C1</option>';
+							$html.='<option value="c2">C2</option>';
+						$html.='</select>';
+					$html.='</div>';
+				$html.='</div>';
+
+				$html.='<div class="row">';
+					$html.='<div class="col-md-1">';
+						$html.='<label for="date">Date</label>';
+					$html.='</div>';
+					$html.='<div class="col-md-6">';
+						$html.='<input type="text" name="date" id="date" class="date" value="" />';
+					$html.='</div>';
+				$html.='</div>';
+
+				$html.='<div class="row">';
+					$html.='<div class="col-md-1">';
+						$html.='<label for="series">Series</label>';
+					$html.='</div>';
+					$html.='<div class="col-md-6">';
+						$html.='<select name="series" id="series">';
+							//$html.='<option value="0">Select Series</option>';
+							$html.='<option value="single">Single</option>';
+							$html.='<option value="Superprestige">Superprestige</option>';
+							$html.='<option value="bPost Bank">bPost Bank</option>';
+							$html.='<option value="World Cup">World Cup</option>';
+							$html.='<option value="Holy Week">Holy Week</option>';
+						$html.='</select>';
+					$html.='</div>';
+				$html.='</div>';
+
+				$html.='<div class="row">';
+					$html.='<div class="col-md-1">';
+						$html.='<label for="code">Code</label>';
+					$html.='</div>';
+					$html.='<div class="col-md-5">';
+						$html.=$this->get_codes_from_db(true);
+					$html.='</div>';
+				$html.='</div>';
+
+				$html.='<div class="row">';
+					$html.='<div class="col-md-1">';
+						$html.='<label for="code">Last Years</label>';
+					$html.='</div>';
+					$html.='<div class="col-md-5">';
+						$html.='<div class="row ">';
+							$html.='<div class="race-search col-md-9">';
+								$html.='<input name="last_year_code" id="fantasy-race-search" type="text" placeholder="Search..." />';
+							$html.='</div>';
+							$html.='<div class="col-md-3">';
+								$html.='<button type="button" id="clear-race-search" value="Clear">Clear Results</button>';
+							$html.='</div>';
 						$html.='</div>';
-						$html.='<div class="col-md-6">';
-							$html.='<select name="race" id="race">';
-								$html.='<option value="0">Select Race</option>';
-								foreach ($this->fc_races as $race) :
-									$html.='<option value="'.$race->id.'">'.$race->name.'</option>';
-								endforeach;
-							$html.='</select>';
+						$html.='<div class="row ">';
+							$html.='<div class="search-results col-md-12">';
+								$html.='<div id="fantasy-search-results-text">Search Results...</div>';
+							$html.='</div>';
 						$html.='</div>';
 					$html.='</div>';
+				$html.='</div>';
 
-					$html.='<div class="row">';
-						$html.='<div class="col-md-1">';
-							$html.='<label for="name">Name</label>';
-						$html.='</div>';
-						$html.='<div class="col-md-6">';
-							$html.='<input type="text" name="name" id="name" class="longtext" value="" />';
-						$html.='</div>';
-					$html.='</div>';
+				$html.='<input type="hidden" name="setup-races" value="1" />';
 
-					$html.='<div class="row">';
-						$html.='<div class="col-md-1">';
-							$html.='<label for="season">Season</label>';
-						$html.='</div>';
-						$html.='<div class="col-md-6">';
-							$html.='<select name="season" id="season">';
-								$html.='<option value="0">Select Season</option>';
-								foreach ($years_in_db as $year) :
-									$html.='<option value="'.$year.'">'.$year.'</option>';
-								endforeach;
-							$html.='</select>';
-						$html.='</div>';
-					$html.='</div>';
-
-					$html.='<div class="row">';
-						$html.='<div class="col-md-1">';
-							$html.='<label for="type">Type</label>';
-						$html.='</div>';
-						$html.='<div class="col-md-6">';
-							$html.='<select name="type" id="type">';
-								$html.='<option value="0">Select Type</option>';
-								$html.='<option value="cdm">CDM</option>';
-								$html.='<option value="cn">CN</option>';
-								$html.='<option value="c1">C1</option>';
-								$html.='<option value="c2">C2</option>';
-							$html.='</select>';
-						$html.='</div>';
-					$html.='</div>';
-
-					$html.='<div class="row">';
-						$html.='<div class="col-md-1">';
-							$html.='<label for="date">Date</label>';
-						$html.='</div>';
-						$html.='<div class="col-md-6">';
-							$html.='<input type="text" name="date" id="date" class="date" value="" />';
-						$html.='</div>';
-					$html.='</div>';
-
-					$html.='<div class="row">';
-						$html.='<div class="col-md-1">';
-							$html.='<label for="series">Series</label>';
-						$html.='</div>';
-						$html.='<div class="col-md-6">';
-							$html.='<select name="series" id="series">';
-								//$html.='<option value="0">Select Series</option>';
-								$html.='<option value="single">Single</option>';
-								$html.='<option value="Superprestige">Superprestige</option>';
-								$html.='<option value="bPost Bank">bPost Bank</option>';
-								$html.='<option value="World Cup">World Cup</option>';
-								$html.='<option value="Holy Week">Holy Week</option>';
-							$html.='</select>';
-						$html.='</div>';
-					$html.='</div>';
-
-					$html.='<div class="row">';
-						$html.='<div class="col-md-1">';
-							$html.='<label for="code">Code</label>';
-						$html.='</div>';
-						$html.='<div class="col-md-5">';
-							$html.=$this->get_codes_from_db(true);
-						$html.='</div>';
-					$html.='</div>';
-
-					$html.='<input type="hidden" name="setup-races" value="1" />';
-
-					$html.='<p><input type="submit" name="submit" id="submit" class="button button-primary" value="Setup Race"></p>';
-				//else :
-					//$html.='No races to add.';
-				//endif;
+				$html.='<p><input type="submit" name="submit" id="submit" class="button button-primary" value="Setup Race"></p>';
 			$html.='</form>';
-//
+
 			$races=$this->get_races_from_db();
 			$riders=$RiderStats->get_riders(array(
 				'pagination' => false,
@@ -306,6 +325,7 @@ class FantasyCyclingAdmin {
 				'code' => $form['codes-from-db'],
 				'series' => $form['series'],
 				'race_start' => date('Y-m-d H:i:s', strtotime($form['date'])),
+				'last_year_code' => $form['last_year_code'],
 			);
 
 			$wpdb->update('wp_fc_races',$data,array('id' => $form['race']));
@@ -319,6 +339,7 @@ class FantasyCyclingAdmin {
 				'code' => $form['codes-from-db'],
 				'series' => $form['series'],
 				'race_start' => date('Y-m-d H:i:s', strtotime($form['date'])),
+				'last_year_code' => $form['last_year_code'],
 			);
 
 			$wpdb->insert('wp_fc_races',$data);
@@ -464,6 +485,50 @@ class FantasyCyclingAdmin {
 		endfor;
 
 		return implode('|',$roster);
+	}
+
+	/**
+	 * ajax_race_search function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function ajax_race_search() {
+		global $wpdb,$uci_curl;
+
+		$html=null;
+		$sql="
+			SELECT
+				code,
+				season,
+				event AS name,
+				nat,
+				class
+			FROM $uci_curl->table
+			WHERE event LIKE '%".$_POST['search']."%'
+			ORDER BY date
+		";
+		$results=$wpdb->get_results($sql);
+
+		if (!count($results)) :
+			echo 'No races found.';
+			return;
+		endif;
+
+		$html.='<div class="fantasy-races">';
+			foreach ($results as $race) :
+				$html.='<div id="race-'.$race->code.'" class="row race">';
+					$html.='<div class="name col-md-7"><a href="'.$race->code.'">'.stripslashes($race->name).'</a></div>';
+					$html.='<div class="season col-md-2">'.$race->season.'</div>';
+					$html.='<div class="class col-md-1">'.$race->class.'</div>';
+					$html.='<div class="nat col-md-1">'.$race->nat.'</div>';
+				$html.='</div>';
+			endforeach;
+		$html.='</div>';
+
+		echo $html;
+
+		wp_die();
 	}
 
 }

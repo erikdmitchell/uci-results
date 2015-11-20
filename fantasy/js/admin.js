@@ -30,6 +30,39 @@ jQuery(document).ready(function($) {
 		}
 	});
 
+	// race search //
+	$("input#fantasy-race-search").live("keyup", function(e) {
+		// Set Search String
+		var search_string = $(this).val();
+
+		// Do Search
+		if (search_string !== '' && search_string.length>=3) {
+			var data={
+				'action' : 'fantasy_race_search',
+				'search' : search_string
+			};
+
+			$.post(ajaxurl,data,function(response) {
+				$('#fantasy-search-results-text').show();
+				$('#fantasy-search-results-text').html(response);
+			});
+		}
+
+		return false;
+	});
+
+	// clear search //
+	$('#clear-race-search').click(function() {
+		$('#fantasy-search-results-text').html('').hide();
+	});
+
+	// search/code onclick //
+	$('#fantasy-search-results-text .race .name a').live('click', function(e) {
+		e.preventDefault();
+		$('#fantasy-race-search').val($(this).attr('href'));
+		$('#fantasy-search-results-text').html('').hide();
+	});
+
 });
 
 function getStartList(id) {

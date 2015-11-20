@@ -25,3 +25,9 @@
 .fantasy-cycling-admin .longtext {
 	width: 90%;
 }
+.fantasy-cycling-admin #fantasy-race-search {
+	width: 90%;
+}
+.fantasy-cycling-admin #fantasy-search-results-text {
+	display: none;
+}
