@@ -479,13 +479,17 @@ function fc_final_standings($limit=10) {
 
 function fc_get_fantasy_cycling_posts($limit=5) {
 	$html=null;
+	$featured_posts_id=0;
 	$args=array(
 		'posts_per_page' => 1,
 		'post_type' => 'fantasy-cycling',
 		'posttype' => 'featured'
 	);
 	$featured_posts=get_posts($args);
-	$featured_posts_id=$featured_posts[0]->ID;
+
+	if (isset($featured_posts[0]))
+		$featured_posts_id=$featured_posts[0]->ID;
+
 	$args=array(
 		'posts_per_page' => $limit-1,
 		'post_type' => 'fantasy-cycling',
