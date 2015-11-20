@@ -37,9 +37,11 @@
 .fantasy-cycling-create-team .longtext {
 	width: 80%;
 }
+.world-cup-standings .row.header,
 .last-year-results .row.header {
 	font-weight: bold;
 }
+.world-cup-standings h3,
 .last-year-results h3 {
 	margin-top: 0;
 }

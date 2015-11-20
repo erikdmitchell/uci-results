@@ -100,7 +100,6 @@ function ucicurl_activate() {
 	uci_curl_add_pages();
 }
 register_activation_hook(__FILE__,'ucicurl_activate');
-//add_action('wp_loaded','ucicurl_activate');
 
 /**
  * uci_curl_scripts_styles function.
@@ -173,7 +172,6 @@ function uci_curl_pagination() {
 
 	echo $html;
 }
-
 
 function uci_template_scripts_styles() {
 	global $RiderStats,$wpdb;
@@ -599,8 +597,48 @@ function get_country_flag($country=false,$addon=false) {
 			$html.='<span class="flag-icon flag-icon-'.$code.'"></span>';
 	endswitch;
 
-
-
 	return $html;
+}
+
+/**
+ * get_wcp_standings function.
+ *
+ * @access public
+ * @param string $year (default: '2015/2016')
+ * @param int $limit (default: 10)
+ * @return void
+ */
+function get_wcp_standings($year='2015/2016',$limit=10) {
+	global $wpdb,$uci_curl;
+
+	if ($limit>0) :
+		$limit="LIMIT $limit";
+	else :
+		$limit='';
+	endif;
+
+	$sql="
+		SELECT
+			results.name,
+			SUM(results.par) AS points
+		FROM wp_uci_races AS races
+		LEFT JOIN wp_uci_rider_data AS results
+		ON races.code=results.code
+		WHERE races.season='2015/2016'
+		AND races.class='CDM'
+		GROUP BY results.name
+		ORDER BY points DESC
+		$limit
+	";
+	$standings=$wpdb->get_results($sql);
+
+	// add rank //
+	$counter=1;
+	foreach ($standings as $standing) :
+		$standing->rank=$counter;
+		$counter++;
+	endforeach;
+
+	return $standings;
 }
 ?>

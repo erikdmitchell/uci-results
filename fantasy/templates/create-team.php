@@ -125,4 +125,20 @@
 			</div>
 		<?php endforeach; ?>
 	</div>
+	<div class="world-cup-standings col-md-3">
+		<?php $standings=get_wcp_standings(); ?>
+		<h3>World Cup Standings</h3>
+		<div class="row header">
+			<div class="place col-md-2">Place</div>
+			<div class="rider-name col-md-7">Name</div>
+			<div class="points col-md-2">Points</div>
+		</div>
+		<?php foreach ($standings as $standing) : ?>
+			<div class="row">
+				<div class="place col-md-2"><?php echo $standing->rank; ?></div>
+				<div class="rider-name col-md-7"><?php echo $standing->name; ?></div>
+				<div class="points col-md-2"><?php echo $standing->points; ?></div>
+			</div>
+		<?php endforeach; ?>
+	</div>
 </div><!-- .row -->
