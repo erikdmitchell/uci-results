@@ -69,6 +69,7 @@ if (diffInverted<steps) {
 }
 //////////////////////////////////////// END WEEKLY RANKING ////////////////////////////////////////
 //////////////////////////////////////// BEGIN UCI POINTS PIE ////////////////////////////////////////
+console.log(latestWeek);
 var UCIChartData = [
 	{
 		value: latestWeek.c1,
@@ -83,10 +84,28 @@ var UCIChartData = [
 		label: "C2"
 	},
 	{
-		value: latestWeek.wcp,
+		value: latestWeek.cn,
+		color: "#FDB45C",
+		highlight: "#FFC870",
+		label: "National Champ."
+	},
+	{
+		value: latestWeek.cc,
+		color: "#FDB45C",
+		highlight: "#FFC870",
+		label: "Cont. Champ."
+	},
+	{
+		value: latestWeek.cm,
 		color: "#FDB45C",
 		highlight: "#FFC870",
 		label: "Word Cup"
+	},
+	{
+		value: latestWeek.wcp,
+		color: "#FDB45C",
+		highlight: "#FFC870",
+		label: "World Champ."
 	}
 ];
 //////////////////////////////////////// END UCI POINTS PIE ////////////////////////////////////////
