@@ -648,6 +648,11 @@ function fc_get_user_team($user_id=false) {
 
 	$team=$wpdb->get_var("SELECT DISTINCT team FROM wp_fc_teams WHERE wp_user_id={$user_id}");
 
+	// not in fc, check user profile
+	if (!$team) :
+		$team=$wpdb->get_var("SELECT meta_value AS team FROM $wpdb->usermeta WHERE user_id={$user_id} AND meta_key='team_name'");
+	endif;
+
 	return $team;
 }
 
