@@ -10,6 +10,7 @@ class Top25_cURL {
 	public $results_table;
 	public $fq_table;
 	public $weekly_rider_rankings_table;
+	public $rider_season_uci_points;
 	public $version='1.0.3';
 	public $config=array();
 
@@ -32,6 +33,7 @@ class Top25_cURL {
 		$this->results_table=$wpdb->prefix.'uci_rider_data';
 		$this->weekly_rider_rankings_table=$wpdb->prefix.'uci_weekly_rider_rankings';
 		$this->fq_table=$wpdb->prefix.'uci_fq_rankings';
+		$this->rider_season_uci_points=$wpdb->prefix.'uci_rider_season_points';
 	}
 
 	public function admin_page() {
@@ -595,8 +597,55 @@ class Top25_cURL {
 				echo '</pre>';
 			else :
 				$wpdb->insert($this->results_table,$insert);
+				$this->add_rider_season_uci_points($result->name,false,false,$result->par);
 			endif;
 		endforeach;
+	}
+
+	/**
+	 * add_rider_season_uci_points function.
+	 *
+	 * @access public
+	 * @param bool $name (default: false)
+	 * @param bool $season (default: false)
+	 * @param bool $type (default: false)
+	 * @param int $points (default: 0)
+	 * @return void
+	 */
+	public function add_rider_season_uci_points($name=false,$season=false,$type=false,$points=0) {
+		global $wpdb;
+
+		if (!$name || !$season || !$type)
+			return false;
+
+		$rider_id=$wpdb->get_var("SELECT id FROM $this->rider_season_uci_points WHERE name='{$name}' AND season='{$season}'");
+
+		if ($rider_id) :
+			$current_points=$wpdb->get_var("SELECT $type FROM $this->rider_season_uci_points WHERE id={$rider_id}");
+			$data=array(
+				$type => $points+$current_points
+			);
+
+			if ($rows=$wpdb->update($this->rider_season_uci_points,$data,array('id' => $rider_id))) :
+				return "<div class=\"updated\">Updated points for $name.</div>";
+			elseif ($rows===false) :
+				return "<div class=\"error\">Failed to update points for $name.</div>";
+			elseif ($rows==0) :
+				return "<div class=\"updated\">Updated points for $name.</div>";
+			endif;
+		else :
+			$data=array(
+				'name' => $name,
+				'season' => $season,
+				$type => $points
+			);
+
+			if ($wpdb->insert($this->rider_season_uci_points,$data)) :
+				return "<div class=\"updated\">Added points for $name.</div>";
+			else :
+				return "<div class=\"error\">Failed to add points for $name.</div>";
+			endif;
+		endif;
 	}
 
 	//----------------------------- begin add_race_to_db helper functions -----------------------------//

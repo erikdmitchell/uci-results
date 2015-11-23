@@ -117,46 +117,5 @@ jQuery(document).ready(function($) {
 			}
 		});
 	});
-///////
-	/**
-	 * view db page, race results/details
-	 */
-	$('.race-details a').click(function(e) {
-		e.preventDefault();
-
-		if ($(this).hasClass('details')) {
-			$('.race-table .race-fq').each(function() {
-				$(this).removeClass('active');
-			});
-
-			$('#'+$(this).data('id')+'.race-fq').addClass('active');
-		} else if ($(this).hasClass('result')) {
-			$('.race-table .results').each(function() {
-				$(this).removeClass('active');
-			});
-
-			$('#'+$(this).data('id')+'.results').addClass('active');
-		}
-	});
-
-	/**
-	 * form filter (view db for now)
-	 */
-	$('.form-filter select').change(function() {
-		var dataName=$(this).attr('name');
-		var dataValue=$(this).val();
-
-		$('.race-table .race').each(function() {
-			if (dataValue==0) {
-				$(this).show();
-			} else {
-				$(this).hide();
-
-				if ($(this).data(dataName)==dataValue) {
-					$(this).show();
-				}
-			}
-		});
-	});
 
 });
