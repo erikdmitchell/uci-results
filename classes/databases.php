@@ -6,7 +6,7 @@
  */
 class UCIcURLDB {
 
-	public $db_version='0.2.2';
+	public $db_version='0.2.3';
 	public $wp_option_name='ucicurl_version';
 
 	/**
@@ -108,13 +108,27 @@ class UCIcURLDB {
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
+		$rider_season_points="CREATE TABLE '".$wpdb->prefix."uci_rider_season_points' (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `name` mediumtext NOT NULL,
+		  `season` mediumtext NOT NULL,
+		  `c2` int(11) NOT NULL,
+		  `c1` int(11) NOT NULL,
+		  `cn` int(11) NOT NULL,
+		  `cc` int(11) NOT NULL,
+		  `cdm` int(11) NOT NULL,
+		  `cm` int(11) NOT NULL,
+		  PRIMARY KEY (`id`)
+		) $charset_collate;";
+
 		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 		dbDelta(array(
 			$uci_races_sql,
 			$uci_rider_data_sql,
 			$uci_season_rankings_sql,
 			$uci_weekly_rider_rankings_sql,
-			$uci_fq_rankings_sql
+			$uci_fq_rankings_sql,
+			$rider_season_points
 		));
 
 		add_option($this->wp_option_name,$this->db_version);
@@ -189,6 +203,19 @@ class UCIcURLDB {
 		  `wins` int(11) NOT NULL
 		)";
 
+		$rider_season_points="CREATE TABLE '".$wpdb->prefix."uci_rider_season_points' (
+		  `id` int(11) NOT NULL AUTO_INCREMENT,
+		  `name` mediumtext NOT NULL,
+		  `season` mediumtext NOT NULL,
+		  `c2` int(11) NOT NULL,
+		  `c1` int(11) NOT NULL,
+		  `cn` int(11) NOT NULL,
+		  `cc` int(11) NOT NULL,
+		  `cdm` int(11) NOT NULL,
+		  `cm` int(11) NOT NULL,
+		  PRIMARY KEY (`id`)
+		);";
+
 		$table_name=$wpdb->prefix.'uci_fq_rankings';
 		$uci_fq_rankings_sql="CREATE TABLE $table_name (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -208,7 +235,8 @@ class UCIcURLDB {
 			$uci_rider_data_sql,
 			$uci_season_rankings_sql,
 			$uci_weekly_rider_rankings_sql,
-			$uci_fq_rankings_sql
+			$uci_fq_rankings_sql,
+			$rider_season_points
 		));
 
 		update_option($this->wp_option_name,$this->db_version);
