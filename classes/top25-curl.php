@@ -688,13 +688,20 @@ class Top25_cURL {
 		$riders=$wpdb->get_results($sql);
 
 		// do some math to get sos //
-		//$rank=1;
 		foreach ($riders as $rider) :
 			$divider=$total_races/$rider->races;
-			$$rider->sos=$rider->fq_avg/$divider;
-			//$rider->rank=$rank;
-			//$rank++;
+
+			if ($rider->fq_avg==0 && $rider->races==0) :
+				$rider->sos=0;
+			else :
+				$rider->sos=$rider->fq_avg/$divider;
+			endif;
 		endforeach;
+
+		// Sort the array by sos.
+		usort($riders, function($a,$b) {
+			return strcmp($b->sos,$a->sos);
+		});
 //echo "$total_races<br>";
 echo '<pre>';
 print_r($riders);
