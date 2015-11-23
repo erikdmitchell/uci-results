@@ -135,4 +135,27 @@ jQuery(document).ready(function($) {
 		});
 	});
 
+	// update rider sos //
+  $('#update_rider_sos').live('click',function(e) {
+	  e.preventDefault();
+
+		$loader.show();
+
+		// get checked values //
+
+
+		$('#get-race-rider').html('');
+
+		var data={
+			'action' : 'update_season_sos',
+			'season' : $('#rider_filters .season-dd').val(),
+			'rider' : ''
+		};
+
+		$.post(ajaxurl,data,function(response) {
+			$('#get-race-rider').html(response);
+			$loader.hide();
+		});
+	});
+
 });

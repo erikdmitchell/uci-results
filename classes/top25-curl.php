@@ -11,6 +11,7 @@ class Top25_cURL {
 	public $fq_table;
 	public $weekly_rider_rankings_table;
 	public $rider_season_uci_points;
+	public $uci_rider_season_sos;
 	public $version='1.0.3';
 	public $config=array();
 
@@ -34,6 +35,7 @@ class Top25_cURL {
 		$this->weekly_rider_rankings_table=$wpdb->prefix.'uci_weekly_rider_rankings';
 		$this->fq_table=$wpdb->prefix.'uci_fq_rankings';
 		$this->rider_season_uci_points=$wpdb->prefix.'uci_rider_season_points';
+		$this->uci_rider_season_sos=$wpdb->prefix.'uci_rider_season_sos';
 	}
 
 	public function admin_page() {
@@ -597,9 +599,11 @@ class Top25_cURL {
 				echo '</pre>';
 			else :
 				$wpdb->insert($this->results_table,$insert);
-				$this->add_rider_season_uci_points($result->name,false,false,$result->par);
+				echo $this->add_rider_season_uci_points($result->name,false,false,$result->par);
 			endif;
 		endforeach;
+
+		echo $this->update_rider_season_sos('',false);
 	}
 
 	/**
@@ -622,8 +626,11 @@ class Top25_cURL {
 
 		if ($rider_id) :
 			$current_points=$wpdb->get_var("SELECT $type FROM $this->rider_season_uci_points WHERE id={$rider_id}");
+			$current_total=$wpdb->get_var("SELECT SUM(c2+c1+cn+cc+cdm+cm) FROM $this->rider_season_uci_points WHERE id={$rider_id}");
+
 			$data=array(
-				$type => $points+$current_points
+				$type => $points+$current_points,
+				'total' => $points+$current_total
 			);
 
 			if ($rows=$wpdb->update($this->rider_season_uci_points,$data,array('id' => $rider_id))) :
@@ -637,7 +644,8 @@ class Top25_cURL {
 			$data=array(
 				'name' => $name,
 				'season' => $season,
-				$type => $points
+				$type => $points,
+				'total' => $points
 			);
 
 			if ($wpdb->insert($this->rider_season_uci_points,$data)) :
@@ -646,6 +654,70 @@ class Top25_cURL {
 				return "<div class=\"error\">Failed to add points for $name.</div>";
 			endif;
 		endif;
+	}
+
+	public function update_rider_season_sos($rider=false,$season=false) {
+		global $wpdb;
+
+		if (!$season)
+			return false;
+
+		$sos=0;
+		$sql="
+			SELECT
+				results.name,
+				(SELECT SUM(CASE races.class WHEN 'CM' THEN 5 WHEN 'CDM' THEN 4 WHEN 'CN' THEN 4 WHEN 'CC' THEN 3 WHEN 'C1' THEN 2 WHEN 'C2' THEN 1 ELSE 0 END)) AS race_class_total,
+				COALESCE((SELECT SUM(fq_table.fq) / COUNT(fq_table.fq) ),0) AS fq_avg
+			FROM $this->results_table AS results
+			LEFT JOIN $this->table AS races
+			ON results.code=races.code
+			LEFT JOIN $this->fq_table AS fq_table
+			ON fq_table.code=races.code
+			WHERE season='{$season}'
+			GROUP BY results.name
+			ORDER BY race_class_total DESC, fq_avg DESC, name ASC
+		";
+		$riders=$wpdb->get_results($sql);
+
+		// append rank //
+		$rank=1;
+		foreach ($riders as $rider) :
+			$rider->rank=$rank;
+			$rank++;
+		endforeach;
+
+		// add to db //
+		foreach ($riders as $rider) :
+			$rider_id=$wpdb->get_var("SELECT id FROM $this->uci_rider_season_sos WHERE name='{$rider->name}' AND season='{$season}'");
+
+			if ($rider_id) :
+				$data=array(
+					'sos' => $rider->race_class_total,
+					'rank' => $rider->rank
+				);
+
+				if ($rows=$wpdb->update($this->uci_rider_season_sos,$data,array('id' => $rider_id))) :
+					echo "<div class=\"updated\">Updated SOS for $rider->name.</div>";
+				elseif ($rows===false) :
+					echo "<div class=\"error\">Failed to update SOS for $rider->name.</div>";
+				elseif ($rows==0) :
+					echo "<div class=\"updated\">Updated SOS for $rider->name.</div>";
+				endif;
+			else :
+				$data=array(
+					'name' => $rider->name,
+					'season' => $season,
+					'sos' => $rider->race_class_total,
+					'rank' => $rider->rank
+				);
+
+				if ($wpdb->insert($this->uci_rider_season_sos,$data)) :
+					echo "<div class=\"updated\">Added SOS for $rider->name.</div>";
+				else :
+					echo "<div class=\"error\">Failed to add SOS for $rider->name.</div>";
+				endif;
+			endif;
+		endforeach;
 	}
 
 	//----------------------------- begin add_race_to_db helper functions -----------------------------//

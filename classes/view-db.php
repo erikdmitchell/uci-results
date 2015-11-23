@@ -20,6 +20,7 @@ class ViewDB {
 		add_action('wp_ajax_rider_search',array($this,'ajax_rider_search'));
 		add_action('wp_ajax_rider_filter',array($this,'ajax_rider_filter'));
 		add_action('wp_ajax_add_rider_season_uci_points',array($this,'ajax_add_rider_season_uci_points'));
+		add_action('wp_ajax_update_season_sos',array($this,'ajax_update_season_sos'));
 
 		$this->url=admin_url('admin.php?page=uci-view-db');
 	}
@@ -129,7 +130,7 @@ class ViewDB {
 								<div class="row">
 									<div class="season col-md-4">
 										<h4>Season</h4>
-										<select name="season" class="season">
+										<select name="season" class="season-dd">
 											<option value="0">-- Select One --</option>
 											<?php foreach ($seasons as $season) : ?>
 												<option value="<?php echo $season; ?>"><?php echo $season; ?></option>
@@ -476,6 +477,12 @@ echo '</pre>';
 		wp_die();
 	}
 
+	/**
+	 * ajax_rider_filter function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function ajax_rider_filter() {
 		global $RiderStats;
 
@@ -491,6 +498,10 @@ echo '</pre>';
 
 		$html.='<div class="view-db-riders col-md-12">';
 			$html.='<h4>Riders</h4>';
+
+			$html.='<p class="submit">';
+				$html.='<input type="button" name="button" id="update_rider_sos" class="button button-primary" value="Update SOS" />';
+			$html.='</p>';
 
 			$html.='<table id="riders-filter" class="riders-filter tablesorter">';
 				$html.='<thead>';
@@ -516,6 +527,12 @@ echo '</pre>';
 		wp_die();
 	}
 
+	/**
+	 * ajax_add_rider_season_uci_points function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function ajax_add_rider_season_uci_points() {
 		global $uci_curl,$RaceStats;
 
@@ -531,6 +548,18 @@ echo '</pre>';
 				echo $uci_curl->add_rider_season_uci_points($result->rider,$race->details->season,$race->details->class,$result->points);
 			endforeach;
 		endforeach;
+
+		wp_die();
+	}
+
+	public function ajax_update_season_sos() {
+		global $uci_curl;
+
+		if ($_POST['rider']!='') :
+		// single
+		else :
+			echo $uci_curl->update_rider_season_sos(false,$_POST['season']);
+		endif;
 
 		wp_die();
 	}
