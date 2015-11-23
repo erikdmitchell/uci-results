@@ -656,6 +656,14 @@ class Top25_cURL {
 		endif;
 	}
 
+	/**
+	 * update_rider_season_sos function.
+	 *
+	 * @access public
+	 * @param bool $rider (default: false)
+	 * @param bool $season (default: false)
+	 * @return void
+	 */
 	public function update_rider_season_sos($rider=false,$season=false) {
 		global $wpdb;
 
@@ -663,11 +671,12 @@ class Top25_cURL {
 			return false;
 
 		$sos=0;
+		$total_races=$wpdb->get_var("SELECT COUNT(*) FROM $this->table WHERE season='{$season}'");
 		$sql="
 			SELECT
 				results.name,
-				(SELECT SUM(CASE races.class WHEN 'CM' THEN 5 WHEN 'CDM' THEN 4 WHEN 'CN' THEN 4 WHEN 'CC' THEN 3 WHEN 'C1' THEN 2 WHEN 'C2' THEN 1 ELSE 0 END)) AS race_class_total,
-				COALESCE((SELECT SUM(fq_table.fq) / COUNT(fq_table.fq) ),0) AS fq_avg
+				COALESCE((SELECT SUM(fq_table.fq) / COUNT(fq_table.fq) ),0) AS fq_avg,
+				COUNT(fq_table.fq) AS races
 			FROM $this->results_table AS results
 			LEFT JOIN $this->table AS races
 			ON results.code=races.code
@@ -675,24 +684,29 @@ class Top25_cURL {
 			ON fq_table.code=races.code
 			WHERE season='{$season}'
 			GROUP BY results.name
-			ORDER BY race_class_total DESC, fq_avg DESC, name ASC
 		";
 		$riders=$wpdb->get_results($sql);
 
-		// append rank //
-		$rank=1;
+		// do some math to get sos //
+		//$rank=1;
 		foreach ($riders as $rider) :
-			$rider->rank=$rank;
-			$rank++;
+			$divider=$total_races/$rider->races;
+			$$rider->sos=$rider->fq_avg/$divider;
+			//$rider->rank=$rank;
+			//$rank++;
 		endforeach;
-
+//echo "$total_races<br>";
+echo '<pre>';
+print_r($riders);
+echo '</pre>';
 		// add to db //
+/*
 		foreach ($riders as $rider) :
 			$rider_id=$wpdb->get_var("SELECT id FROM $this->uci_rider_season_sos WHERE name='{$rider->name}' AND season='{$season}'");
 
 			if ($rider_id) :
 				$data=array(
-					'sos' => $rider->race_class_total,
+					'sos' => $rider->sos,
 					'rank' => $rider->rank
 				);
 
@@ -707,7 +721,7 @@ class Top25_cURL {
 				$data=array(
 					'name' => $rider->name,
 					'season' => $season,
-					'sos' => $rider->race_class_total,
+					'sos' => $rider->sos,
 					'rank' => $rider->rank
 				);
 
@@ -718,6 +732,7 @@ class Top25_cURL {
 				endif;
 			endif;
 		endforeach;
+*/
 	}
 
 	//----------------------------- begin add_race_to_db helper functions -----------------------------//
