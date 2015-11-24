@@ -21,6 +21,7 @@ class ViewDB {
 		add_action('wp_ajax_rider_filter',array($this,'ajax_rider_filter'));
 		add_action('wp_ajax_add_rider_season_uci_points',array($this,'ajax_add_rider_season_uci_points'));
 		add_action('wp_ajax_update_season_sos',array($this,'ajax_update_season_sos'));
+		add_action('wp_ajax_update_season_wins',array($this,'ajax_update_season_wins'));
 
 		$this->url=admin_url('admin.php?page=uci-view-db');
 	}
@@ -499,9 +500,15 @@ echo '</pre>';
 		$html.='<div class="view-db-riders col-md-12">';
 			$html.='<h4>Riders</h4>';
 
-			$html.='<p class="submit">';
-				$html.='<input type="button" name="button" id="update_rider_sos" class="button button-primary" value="Update SOS" />';
-			$html.='</p>';
+			$html.='<div class="row">';
+				$html.='<div class="submit col-md-2">';
+					$html.='<input type="button" name="button" id="update_rider_sos" class="button button-primary" value="Update SOS" />';
+				$html.='</div>';
+
+				$html.='<div class="submit col-md-2">';
+					$html.='<input type="button" name="button" id="update_rider_wins" class="button button-primary" value="Update Wins" />';
+				$html.='</div>';
+			$html.='</div>';
 
 			$html.='<table id="riders-filter" class="riders-filter tablesorter">';
 				$html.='<thead>';
@@ -559,6 +566,18 @@ echo '</pre>';
 		// single
 		else :
 			echo $uci_curl->update_rider_season_sos(false,$_POST['season']);
+		endif;
+
+		wp_die();
+	}
+
+	public function ajax_update_season_wins() {
+		global $uci_curl;
+
+		if ($_POST['rider']!='') :
+		// single
+		else :
+			echo $uci_curl->update_rider_wins(false,$_POST['season']);
 		endif;
 
 		wp_die();

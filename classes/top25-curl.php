@@ -12,6 +12,7 @@ class Top25_cURL {
 	public $weekly_rider_rankings_table;
 	public $rider_season_uci_points;
 	public $uci_rider_season_sos;
+	public $uci_rider_season_wins;
 	public $version='1.0.3';
 	public $config=array();
 
@@ -30,12 +31,14 @@ class Top25_cURL {
 		add_action('wp_ajax_add_riders_weekly_rankings',array($this,'ajax_add_riders_weekly_rankings'));
 
 		$this->setup_config($config);
+
 		$this->table=$wpdb->prefix.'uci_races';
 		$this->results_table=$wpdb->prefix.'uci_rider_data';
 		$this->weekly_rider_rankings_table=$wpdb->prefix.'uci_weekly_rider_rankings';
 		$this->fq_table=$wpdb->prefix.'uci_fq_rankings';
 		$this->rider_season_uci_points=$wpdb->prefix.'uci_rider_season_points';
 		$this->uci_rider_season_sos=$wpdb->prefix.'uci_rider_season_sos';
+		$this->uci_rider_season_wins=$wpdb->prefix.'uci_rider_season_wins';
 	}
 
 	public function admin_page() {
@@ -604,6 +607,7 @@ class Top25_cURL {
 		endforeach;
 
 		echo $this->update_rider_season_sos('',false);
+		echo $this->update_rider_wins('',false);
 	}
 
 	/**
@@ -739,6 +743,80 @@ class Top25_cURL {
 					echo "<div class=\"updated\">Added SOS for $rider->name.</div>";
 				else :
 					echo "<div class=\"error\">Failed to add SOS for $rider->name.</div>";
+				endif;
+			endif;
+		endforeach;
+	}
+
+	public function update_rider_wins($rider=false,$season=false) {
+		global $wpdb;
+
+		if (!$season)
+			return false;
+
+		$sql="
+			SELECT
+				name,
+				wins,
+				races,
+				SUM(wins/races) AS win_perc
+			FROM (
+
+				SELECT
+					results.name AS name,
+					SUM(IF(results.place=1,1,0)) AS wins,
+					COUNT(results.code) AS races
+				FROM $this->results_table AS results
+				LEFT JOIN $this->table AS races
+				ON results.code=races.code
+				WHERE races.season='{$season}'
+				GROUP BY results.name
+			) t
+			GROUP BY name
+			ORDER BY win_perc DESC, wins DESC, races ASC, name ASC
+		";
+		$riders=$wpdb->get_results($sql);
+
+		// add rank //
+		$rank=1;
+		foreach ($riders as $rider) :
+			$rider->rank=$rank;
+			$rank++;
+		endforeach;
+
+		// add to db //
+		foreach ($riders as $rider) :
+			$rider_id=$wpdb->get_var("SELECT id FROM $this->uci_rider_season_wins WHERE name=\"{$rider->name}\" AND season='{$season}'");
+
+			if ($rider_id) :
+				$data=array(
+					'wins' => $rider->wins,
+					'races' => $rider->races,
+					'win_perc' => $rider->win_perc,
+					'rank' => $rider->rank,
+				);
+
+				if ($rows=$wpdb->update($this->uci_rider_season_wins,$data,array('id' => $rider_id))) :
+					echo "<div class=\"updated\">Updated wins for $rider->name.</div>";
+				elseif ($rows===false) :
+					echo "<div class=\"error\">Failed to update wins for $rider->name.</div>";
+				elseif ($rows==0) :
+					echo "<div class=\"updated\">Updated wins for $rider->name.</div>";
+				endif;
+			else :
+				$data=array(
+					'name' => $rider->name,
+					'season' => $season,
+					'wins' => $rider->wins,
+					'races' => $rider->races,
+					'win_perc' => $rider->win_perc,
+					'rank' => $rider->rank,
+				);
+
+				if ($wpdb->insert($this->uci_rider_season_wins,$data)) :
+					echo "<div class=\"updated\">Added wins for $rider->name.</div>";
+				else :
+					echo "<div class=\"error\">Failed to add wins for $rider->name.</div>";
 				endif;
 			endif;
 		endforeach;

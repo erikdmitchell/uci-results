@@ -158,4 +158,27 @@ jQuery(document).ready(function($) {
 		});
 	});
 
+	// update rider wins //
+  $('#update_rider_wins').live('click',function(e) {
+	  e.preventDefault();
+
+		$loader.show();
+
+		// get checked values //
+
+
+		$('#get-race-rider').html('');
+
+		var data={
+			'action' : 'update_season_wins',
+			'season' : $('#rider_filters .season-dd').val(),
+			'rider' : ''
+		};
+
+		$.post(ajaxurl,data,function(response) {
+			$('#get-race-rider').html(response);
+			$loader.hide();
+		});
+	});
+
 });
