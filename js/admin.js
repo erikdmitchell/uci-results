@@ -75,7 +75,7 @@ jQuery(document).ready(function($) {
 			$('#get-race-data').append('<div id="counter"><span class="ctr">'+counter+'</span> out of '+races.length+' proccessed.');
 
 			for (var i in races) {
-				$modal.show();
+				//$modal.show();
 
 				var data={
 					'action' : 'add_race_to_db',
@@ -86,9 +86,10 @@ jQuery(document).ready(function($) {
 					$('#get-race-data').append(response);
 					$('#get-race-data').find('#counter span.ctr').text(counter);
 					counter++;
-					$modal.hide();
+					//$modal.hide();
 					// after we are done races //
 					if (counter>=races.length) {
+						alert('fin');
 					}
 				});
 			}

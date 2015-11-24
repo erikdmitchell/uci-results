@@ -357,9 +357,10 @@ class Top25_cURL {
 		if (!$this->check_for_dups($code)) :
 			echo $this->add_race_to_db($_POST['race']);
 		elseif (!$this->has_fq($code)) :
+			//echo '<div class="updated add-race-to-db-message">Adding fq...</div>';
 			echo $this->add_fq($code);
 		else :
-			echo '<div class="error add-race-to-db-message">Already in db.('.$code.')</div>';
+			echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';
 		endif;
 
 		wp_die();
@@ -531,7 +532,7 @@ class Top25_cURL {
 				endif;
 			endif;
 		else :
-			$message='<div class="error">'.$data['code'].' is already in the database</div>';
+			$message='<div class="updated">'.$data['code'].' is already in the database</div>';
 		endif;
 
 		return $message;
@@ -1074,7 +1075,7 @@ class Top25_cURL {
 		global $wpdb;
 
 		if ($this->has_fq($code) || $this->debug)
-			return false;
+			return '<div class="error">This code already has an FQ</div>';
 
 		$FieldQuality=new FieldQuality($code);
 		$message='';
