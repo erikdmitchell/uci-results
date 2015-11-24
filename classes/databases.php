@@ -67,6 +67,7 @@ class UCIcURLDB {
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
+/*
 		$table_name=$wpdb->prefix.'uci_weekly_rider_rankings';
 		$uci_weekly_rider_rankings_sql="CREATE TABLE $table_name (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -94,6 +95,7 @@ class UCIcURLDB {
 		  `wins` int(11) NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
+*/
 
 		$table_name=$wpdb->prefix.'uci_fq_rankings';
 		$uci_fq_rankings_sql="CREATE TABLE $table_name (
@@ -148,7 +150,6 @@ class UCIcURLDB {
 			$uci_races_sql,
 			$uci_rider_data_sql,
 			$uci_season_rankings_sql,
-			$uci_weekly_rider_rankings_sql,
 			$uci_fq_rankings_sql,
 			$rider_season_points,
 			$rider_season_sos,
@@ -200,6 +201,7 @@ class UCIcURLDB {
 		  `season` mediumtext NOT NULL
 		);";
 
+/*
 		$table_name=$wpdb->prefix.'uci_weekly_rider_rankings';
 		$uci_weekly_rider_rankings_sql="CREATE TABLE $table_name (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -226,6 +228,7 @@ class UCIcURLDB {
 		  `win_perc` DECIMAL(7,3) NOT NULL,
 		  `wins` int(11) NOT NULL
 		)";
+*/
 
 		$rider_season_points="CREATE TABLE ".$wpdb->prefix."uci_rider_season_points (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -280,7 +283,6 @@ class UCIcURLDB {
 			$uci_races_sql,
 			$uci_rider_data_sql,
 			$uci_season_rankings_sql,
-			$uci_weekly_rider_rankings_sql,
 			$uci_fq_rankings_sql,
 			$rider_season_points,
 			$rider_season_sos,
