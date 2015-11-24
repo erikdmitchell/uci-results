@@ -111,6 +111,7 @@ class UCIcURLDB {
 		$rider_season_points="CREATE TABLE ".$wpdb->prefix."uci_rider_season_points (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `name` mediumtext NOT NULL,
+		  `nat` tinytext NOT NULL,
 		  `season` mediumtext NOT NULL,
 		  `c2` int(11) NOT NULL,
 		  `c1` int(11) NOT NULL,
@@ -229,6 +230,7 @@ class UCIcURLDB {
 		$rider_season_points="CREATE TABLE ".$wpdb->prefix."uci_rider_season_points (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `name` mediumtext NOT NULL,
+		  `nat` tinytext NOT NULL,
 		  `season` mediumtext NOT NULL,
 		  `c2` int(11) NOT NULL,
 		  `c1` int(11) NOT NULL,
