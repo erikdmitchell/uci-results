@@ -19,20 +19,6 @@ $results=$RiderStats->get_rider_results(array(
 	'season' => $season,
 	'name' => $rider_name
 ));
-/*
-$riders=$RiderStats->get_riders_from_weekly_rank(array(
-	'season' => $season,
-	'paged' => $paged,
-	'per_page' => 15,
-	'week' => $current_week,
-	'name' => $rider_name
-));
-*/
-
-//$uci=$RiderStats->get_rider_uci_points($rider_name,$season);
-//$wcp=$RiderStats->get_rider_uci_points($rider_name,$season,'wcp');
-//$sos=$RiderStats->get_rider_sos($rider_name,$season);
-//$win_perc=$RiderStats->get_rider_winning_perc($rider_name,$season);
 ?>
 
 <?php get_header(); ?>
@@ -52,23 +38,23 @@ $riders=$RiderStats->get_riders_from_weekly_rank(array(
 									<h4>Rider Rankings</h4>
 									<div class="row">
 										<div class="header col-md-7">Current Rank:</div>
-										<div class="current-rank col-md-2"><?php echo $riders[0]->rank; ?> <span class="total">(<?php echo number_format($riders[0]->total,3); ?>)</span></div>
+										<div class="current-rank col-md-2"><?php echo $rider->rank; ?> <span class="total">(<?php echo $rider->total; ?>)</span></div>
 									</div>
 									<div class="row">
 										<div class="header col-md-7">UCI Points:</div>
-										<div class="uci-points col-md-2"><?php echo $uci->total; ?> <span class="rank">(<?php echo $uci->rank; ?>)</span></div>
+										<div class="uci-points col-md-2"><?php echo $rider->uci_total; ?> <span class="rank">(<?php echo $rider->uci_toal; ?>)</span></div>
 									</div>
 									<div class="row">
 										<div class="header col-md-7">World Cup Points:</div>
-										<div class="world-cup-points col-md-2"><?php echo $wcp->total; ?> <span class="rank">(<?php echo $wcp->rank; ?>)</span></div>
+										<div class="world-cup-points col-md-2"><?php echo $rider->wcp_total; ?> <span class="rank">(<?php echo $rider->wcp_total; ?>)</span></div>
 									</div>
 									<div class="row">
 										<div class="header col-md-7">Winning Percentage:</div>
-										<div class="winning-percent col-md-2"><?php echo number_format($win_perc->winning_perc,3); ?> <span class="rank">(<?php echo $win_perc->rank; ?>)</span></div>
+										<div class="winning-percent col-md-2"><?php echo $rider->win_perc; ?> <span class="rank">(<?php echo $rider->win_perc; ?>)</span></div>
 									</div>
 									<div class="row">
 										<div class="header col-md-7">Strength of Schedule:</div>
-										<div class="sos col-md-2"><?php echo $sos->rank; ?> <span class="total">(<?php echo $sos->sos; ?>)</span></div>
+										<div class="sos col-md-2"><?php echo $rider->sos_rank; ?> <span class="total">(<?php echo $rider->sos; ?>)</span></div>
 									</div>
 								</div>
 							</div><!-- .season-rider-stats -->
