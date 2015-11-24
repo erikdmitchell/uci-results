@@ -108,23 +108,25 @@
 		<?php endif; ?>
 	</div>
 	<div class="last-year-results col-md-4">
-		<?php $prev_results=fc_get_race_results(fc_get_last_years_code($race_id),10); ?>
-		<h3>Last Year's Top Ten</h3>
-		<div class="row header">
-			<div class="place col-md-2">Place</div>
-			<div class="rider-name col-md-6">Name</div>
-			<div class="nat col-md-2">Nat</div>
-			<!-- <div class="time col-md-2">Time</div> -->
-		</div>
-		<?php foreach ($prev_results as $result) : ?>
-			<div class="row">
-				<div class="place col-md-2"><?php echo $result->place; ?></div>
-				<div class="rider-name col-md-6"><?php echo $result->name; ?></div>
-				<div class="nat col-md-2"><?php echo get_country_flag($result->nat); ?></div>
-				<!-- <div class="time col-md-2"><?php echo $result->time; ?></div> -->
+		<?php if ($prev_results=fc_get_race_results(fc_get_last_years_code($race_id),10)) : ?>
+			<h3>Last Year's Top Ten</h3>
+			<div class="row header">
+				<div class="place col-md-2">Place</div>
+				<div class="rider-name col-md-6">Name</div>
+				<div class="nat col-md-2">Nat</div>
+				<!-- <div class="time col-md-2">Time</div> -->
 			</div>
+			<?php foreach ($prev_results as $result) : ?>
+				<div class="row">
+					<div class="place col-md-2"><?php echo $result->place; ?></div>
+					<div class="rider-name col-md-6"><?php echo $result->name; ?></div>
+					<div class="nat col-md-2"><?php echo get_country_flag($result->nat); ?></div>
+					<!-- <div class="time col-md-2"><?php echo $result->time; ?></div> -->
+				</div>
 		<?php endforeach; ?>
+		<?php endif; ?>
 	</div>
+<!--
 	<div class="world-cup-standings col-md-3">
 		<?php $standings=get_wcp_standings(); ?>
 		<h3>World Cup Standings</h3>
@@ -141,4 +143,5 @@
 			</div>
 		<?php endforeach; ?>
 	</div>
+-->
 </div><!-- .row -->
