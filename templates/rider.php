@@ -11,11 +11,15 @@ global $RiderStats,$wp_query;
 
 $rider_name=get_query_var('rider',0);
 $season=get_query_var('season','2015/2016');
-$current_week=uci_get_current_week($season);
+$rider=$RiderStats->get_riders(array(
+	'season' => $season,
+	'name' => $rider_name
+));
 $results=$RiderStats->get_rider_results(array(
 	'season' => $season,
 	'name' => $rider_name
 ));
+/*
 $riders=$RiderStats->get_riders_from_weekly_rank(array(
 	'season' => $season,
 	'paged' => $paged,
@@ -23,11 +27,12 @@ $riders=$RiderStats->get_riders_from_weekly_rank(array(
 	'week' => $current_week,
 	'name' => $rider_name
 ));
+*/
 
-$uci=$RiderStats->get_rider_uci_points($rider_name,$season);
-$wcp=$RiderStats->get_rider_uci_points($rider_name,$season,'wcp');
-$sos=$RiderStats->get_rider_sos($rider_name,$season);
-$win_perc=$RiderStats->get_rider_winning_perc($rider_name,$season);
+//$uci=$RiderStats->get_rider_uci_points($rider_name,$season);
+//$wcp=$RiderStats->get_rider_uci_points($rider_name,$season,'wcp');
+//$sos=$RiderStats->get_rider_sos($rider_name,$season);
+//$win_perc=$RiderStats->get_rider_winning_perc($rider_name,$season);
 ?>
 
 <?php get_header(); ?>
