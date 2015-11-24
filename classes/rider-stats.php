@@ -31,7 +31,7 @@ class RiderStats {
 
 		$riders=array();
 		$limit=null;
-		$where='';
+		$where=array();
 		$rank=1;
 		$total_divider=4;
 		$dates='';
@@ -44,14 +44,23 @@ class RiderStats {
 			'limit' => false,
 			'order_by' => 'total',
 			'order' => 'DESC',
-			'start_date' => false,
-			'end_date' => false
+			'name' => false,
+			//'start_date' => false,
+			//'end_date' => false
 		);
 		$args=array_merge($default_args,$user_args);
-
+/*
+echo '<pre>';
+print_r($args);
+echo '</pre>';
+*/
 		extract($args);
 
-		if ($pagination) :
+		// we have a afew scenarios to alter our limit and/or where - name (single result), paginated result or basic limit //
+		if ($name) :
+			$limit='';
+			$where[]="season_points.name=\"$name\"";
+		elseif ($pagination) :
 			if ($paged==0) :
 				$start=0;
 			else :
@@ -64,25 +73,14 @@ class RiderStats {
 			$limit="LIMIT $limit";
 		endif;
 
-		// setup if we have start and/or end date //
-		if ($start_date && $end_date) :
-			$dates=" AND (STR_TO_DATE(races.date,'%e %M %Y') BETWEEN '{$start_date}' AND '{$end_date}')";
+		// setup some where stuff //
+		$where[]="season_points.season='{$season}'";
 
-			if ($this->get_total_points(array('type' => 'wcp','season' => $season,'start_date' => $start_date,'end_date' => $end_date))==0) :
-				$total_divider--;
-			endif;
-		elseif ($start_date) :
-			$dates=" AND (STR_TO_DATE(races.date,'%e %M %Y') >= '{$start_date}')";
-
-			if ($this->get_total_points(array('type' => 'wcp','season' => $season,'start_date' => $start_date))==0) :
-				$total_divider--;
-			endif;
-		elseif ($end_date) :
-			$dates=" AND (STR_TO_DATE(races.date,'%e %M %Y') <= '{$end_date}')";
-
-			if ($this->get_total_points(array('type' => 'wcp','season' => $season,'end_date' => $end_date))==0) :
-				$total_divider--;
-			endif;
+		// run our where //
+		if (!empty($where)) :
+			$where=implode(' AND ',$where);
+		else :
+			$where='';
 		endif;
 
 		// our rank can be off if we sort by anything besides total, so we do that now //
@@ -93,254 +91,68 @@ class RiderStats {
 
 		$sql="
 			SELECT
-				name AS rider,
-				nat,
-				SUM(uci_total) AS uci,
-				SUM(wcp_total) AS wcp,
-				SUM(c1_total) AS c1,
-				SUM(c2_total) AS c2,
-				SUM(cn_total) AS cn,
-				SUM(cc_total) AS cc,
-				SUM(cm_total) AS cm,
-				SUM(wins) AS wins,
-				SUM(races) AS races,
-				SUM(wins/races) AS win_perc,
-				SUM(uci_races) AS uci_races,
-				SUM(races/uci_races) AS race_perc,
-				SUM(((wins/races)+(races/uci_races))/2) AS weighted_win_perc,
-				SUM(max_uci_points) AS max_uci_points,
-				SUM(max_wcp_points) AS max_wcp_points,
-				SUM(uci_total/max_uci_points) AS uci_perc,
-				COALESCE(SUM(wcp_total/max_wcp_points),0) AS wcp_perc,
-				SUM(sos) AS sos,
-				(SELECT SUM( (COALESCE(SUM(wcp_total/max_wcp_points),0) + SUM(sos) + SUM(uci_total/max_uci_points) + SUM((((wins/races)+(races/uci_races))/2))) / {$total_divider} ) ) AS total
-			FROM
-
-			(
-			SELECT
-				results.name AS name,
-				results.nat AS nat,
-				SUM(results.par) AS uci_total,
-				0 AS wcp_total,
-				0 AS c1_total,
-				0 AS c2_total,
-				0 AS cn_total,
-				0 AS cc_total,
-				0 AS cm_total,
-				SUM(IF(results.place=1,1,0)) AS wins,
-				COUNT(results.code) AS races,
-				(SELECT COUNT(*) FROM $uci_curl->table WHERE season='$season') AS uci_races,
-				(SELECT total FROM( SELECT SUM(results.par) AS total FROM $uci_curl->table AS races LEFT JOIN $uci_curl->results_table AS results ON races.code=results.code WHERE results.place=1 AND races.season='$season' {$dates} GROUP BY races.code WITH ROLLUP ) t ORDER BY total DESC LIMIT 1) AS max_uci_points,
-				0 AS max_wcp_points,
-				0 AS sos
-			FROM $uci_curl->results_table AS results
-			LEFT JOIN $uci_curl->table AS races
-			ON results.code=races.code
-			WHERE season='$season'
-				{$dates}
-			GROUP BY results.name
-
-			UNION
-
-			SELECT
-				results.name AS name,
-				results.nat AS nat,
-				0 AS uci_total,
-				SUM(results.par) AS wcp_total,
-				0 AS c1_total,
-				0 AS c2_total,
-				0 AS cn_total,
-				0 AS cc_total,
-				0 AS cm_total,
-				0 AS wins,
-				0 AS races,
-				0 AS uci_races,
-				0 AS max_uci_points,
-				(SELECT	SUM(results.par) AS points FROM $uci_curl->table AS races LEFT JOIN $uci_curl->results_table AS results ON races.code=results.code WHERE results.place=1 AND races.class='CDM' AND races.season='$season' {$dates}) AS max_wcp_points,
-				0 AS sos
-			FROM $uci_curl->results_table AS results
-			LEFT JOIN $uci_curl->table AS races
-			ON results.code=races.code
-			WHERE season='$season'
-				AND races.class='CDM'
-				{$dates}
-			GROUP BY results.name
-
-			UNION
-
-			SELECT
-				results.name,
-				results.nat AS nat,
-				0 AS uci_total,
-				0 AS wcp_total,
-				0 AS c1_total,
-				0 AS c2_total,
-				0 AS cn_total,
-				0 AS cc_total,
-				0 AS cm_total,
-				0 AS wins,
-				0 AS races,
-				0 AS uci_races,
-				0 AS max_uci_points,
-				0 AS max_wcp_points,
-				(SELECT SUM(((SELECT SUM(SUM(CASE races.class WHEN 'CM' THEN 5 WHEN 'CDM' THEN 4 WHEN 'CN' THEN 4 WHEN 'CC' THEN 3 WHEN 'C1' THEN 2 WHEN 'C2' THEN 1 ELSE 0 END)/100)) + (SELECT SUM(SUM(fq_table.fq)/1000)))/2)) AS sos
-			FROM $uci_curl->results_table AS results
-			LEFT JOIN $uci_curl->table AS races
-			ON results.code=races.code
-			LEFT JOIN $uci_curl->fq_table AS fq_table
-			ON fq_table.code=races.code
-			WHERE season='$season'
-				{$dates}
-			GROUP BY results.name
-
-			UNION
-
-			SELECT
-				results.name AS name,
-				results.nat AS nat,
-				0 AS uci_total,
-				0 AS wcp_total,
-				COALESCE(SUM(results.par),0) AS c1_total,
-				0 AS c2_total,
-				0 AS cn_total,
-				0 AS cc_total,
-				0 AS cm_total,
-				0 AS wins,
-				0 AS races,
-				0 AS uci_races,
-				0 AS max_uci_points,
-				0 AS max_wcp_points,
-				0 AS sos
-			FROM $uci_curl->results_table AS results
-			LEFT JOIN $uci_curl->table AS races
-			ON results.code=races.code
-			WHERE season='{$season}'
-				AND races.class='c1'
-				{$dates}
-			GROUP BY results.name
-
-			UNION
-
-			SELECT
-				results.name AS name,
-				results.nat AS nat,
-				0 AS uci_total,
-				0 AS wcp_total,
-				0 AS c1_total,
-				COALESCE(SUM(results.par),0) AS c2_total,
-				0 AS cn_total,
-				0 AS cc_total,
-				0 AS cm_total,
-				0 AS wins,
-				0 AS races,
-				0 AS uci_races,
-				0 AS max_uci_points,
-				0 AS max_wcp_points,
-				0 AS sos
-			FROM $uci_curl->results_table AS results
-			LEFT JOIN $uci_curl->table AS races
-			ON results.code=races.code
-			WHERE season='{$season}'
-				AND races.class='c2'
-				{$dates}
-			GROUP BY results.name
-
-			UNION
-
-			SELECT
-				results.name AS name,
-				results.nat AS nat,
-				0 AS uci_total,
-				0 AS wcp_total,
-				0 AS c1_total,
-				0 AS c2_total,
-				COALESCE(SUM(results.par),0) AS cn_total,
-				0 AS cc_total,
-				0 AS cm_total,
-				0 AS wins,
-				0 AS races,
-				0 AS uci_races,
-				0 AS max_uci_points,
-				0 AS max_wcp_points,
-				0 AS sos
-			FROM $uci_curl->results_table AS results
-			LEFT JOIN $uci_curl->table AS races
-			ON results.code=races.code
-			WHERE season='{$season}'
-				AND races.class='cn'
-				{$dates}
-			GROUP BY results.name
-
-			UNION
-
-			SELECT
-				results.name AS name,
-				results.nat AS nat,
-				0 AS uci_total,
-				0 AS wcp_total,
-				0 AS c1_total,
-				0 AS c2_total,
-				0 AS cn_total,
-				COALESCE(SUM(results.par),0) AS cc_total,
-				0 AS cm_total,
-				0 AS wins,
-				0 AS races,
-				0 AS uci_races,
-				0 AS max_uci_points,
-				0 AS max_wcp_points,
-				0 AS sos
-			FROM $uci_curl->results_table AS results
-			LEFT JOIN $uci_curl->table AS races
-			ON results.code=races.code
-			WHERE season='{$season}'
-				AND races.class='cc'
-				{$dates}
-			GROUP BY results.name
-
-			UNION
-
-			SELECT
-				results.name AS name,
-				results.nat AS nat,
-				0 AS uci_total,
-				0 AS wcp_total,
-				0 AS c1_total,
-				0 AS c2_total,
-				0 AS cn_total,
-				0 AS cc_total,
-				COALESCE(SUM(results.par),0) AS cm_total,
-				0 AS wins,
-				0 AS races,
-				0 AS uci_races,
-				0 AS max_uci_points,
-				0 AS max_wcp_points,
-				0 AS sos
-			FROM $uci_curl->results_table AS results
-			LEFT JOIN $uci_curl->table AS races
-			ON results.code=races.code
-			WHERE season='{$season}'
-				AND races.class='cm'
-				{$dates}
-			GROUP BY results.name
-
+				@curRow := @curRow + 1 AS rank,
+				t.*
+			FROM (
+				SELECT
+					season_points.name AS name,
+					season_points.total AS uci_total,
+					sos.sos AS sos,
+					wins.win_perc AS win_perc,
+					SUM((season_points.total+sos.sos+wins.win_perc)/3) AS total
+				FROM $uci_curl->rider_season_uci_points AS season_points
+				LEFT JOIN $uci_curl->uci_rider_season_sos AS sos
+				ON season_points.name=sos.name
+				LEFT JOIN $uci_curl->uci_rider_season_wins AS wins
+				ON season_points.name=wins.name
+				WHERE $where
+				GROUP BY season_points.name
 			) t
-			GROUP BY name
+			JOIN (SELECT @curRow := 0) r
 			ORDER BY $order_by $order
 			$limit
 		";
 
-		$wpdb->query("SET SQL_BIG_SELECTS=1"); // fixes a minor sql bug
+		//$wpdb->query("SET SQL_BIG_SELECTS=1"); // fixes a minor sql bug
 
 		$riders=$wpdb->get_results($sql);
 
-		$max_riders=$wpdb->get_results("SELECT name FROM $uci_curl->results_table GROUP BY name");
-		$wp_query->uci_curl_max_pages=$wpdb->num_rows; // set max
+		if ($pagination) :
+			$max_riders=$wpdb->get_var("SELECT COUNT(*) FROM wp_uci_rider_season_points WHERE season='{$season}'");
+			$wp_query->uci_curl_max_pages=$wpdb->num_rows; // set max
+		endif;
 
-		// add rank and clean //
+		// add rank, if no name run rank if name, run all and get rank //
+		if ($name) :
+			$sql="
+				SELECT
+					@curRow := @curRow + 1 AS rank,
+					t.*
+				FROM (
+					SELECT
+						season_points.name AS name,
+						SUM((season_points.total+sos.sos+wins.win_perc)/3) AS total
+					FROM $uci_curl->rider_season_uci_points AS season_points
+					LEFT JOIN $uci_curl->uci_rider_season_sos AS sos
+					ON season_points.name=sos.name
+					LEFT JOIN $uci_curl->uci_rider_season_wins AS wins
+					ON season_points.name=wins.name
+					WHERE season_points.season='{$season}'
+					GROUP BY season_points.name
+				) t
+				JOIN (SELECT @curRow := 0) r
+				ORDER BY $order_by $order
+			";
+			$riders_db=$wpdb->get_results($sql);
+echo '<pre>';
+print_r($riders_db);
+echo '</pre>';
+		endif;
+
+		// clean variables //
 		foreach ($riders as $rider) :
-			$rider->rank=$rank;
 			$rider->sos=number_format($rider->sos,3);
-			$rank++;
+			$rider->total=number_format($rider->total,3);
 		endforeach;
 
 		// if order by is not rank, do that here //
@@ -367,6 +179,7 @@ class RiderStats {
 	 * @param array $args (default: array())
 	 * @return void
 	 */
+/*
 	public function get_riders_from_weekly_rank($args=array()) {
 		global $wpdb,$uci_curl,$wp_query;
 
@@ -500,6 +313,7 @@ class RiderStats {
 
 		return $riders;
 	}
+*/
 
 	/**
 	 * get_rider_results function.
@@ -946,6 +760,7 @@ class RiderStats {
 	 * @param bool $week (default: false)
 	 * @return void
 	 */
+/*
 	function get_rider_weekly_rank($rider_name=false,$season=false,$week=false) {
 		global $wpdb,$uci_curl;
 
@@ -956,6 +771,7 @@ class RiderStats {
 
 		return $weekly_rankings;
 	}
+*/
 
 }
 
