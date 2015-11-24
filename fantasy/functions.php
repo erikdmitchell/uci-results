@@ -919,4 +919,18 @@ function fc_get_last_years_code($race_id=0) {
 
 	return $code;
 }
+
+function fc_is_race_roster_edit_open($race_id=0) {
+	global $wpdb;
+
+	$race_start=$wpdb->get_var("SELECT race_start FROM wp_fc_races WHERE id={$race_id}");
+
+	if (!$race_start)
+		return false;
+
+	if (strtotime($race_start)>strtotime(date('Y-m-d')))
+		return true;
+
+	return false;
+}
 ?>

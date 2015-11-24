@@ -96,7 +96,7 @@
 					</div>
 				</div>
 
-				<?php if (fc_race_has_start_list($_GET['race_id'])) : ?>
+				<?php if (fc_race_has_start_list($_GET['race_id']) && fc_is_race_roster_edit_open($_GET['race_id'])) : ?>
 					<input type="submit" name="submit" id="submit" value="Create Team" />
 				<?php endif; ?>
 
