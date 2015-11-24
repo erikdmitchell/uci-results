@@ -5,6 +5,9 @@
  * @since Version 0.0.1
  */
 ?>
+<?php
+$max_riders=6;
+?>
 <div class="row">
 	<div class="fantasy-cycling-create-team col-md-5">
 		<?php if ($race_id=fc_get_race_id()) : ?>
@@ -145,3 +148,36 @@
 	</div>
 -->
 </div><!-- .row -->
+<div class="fc-team-roster">
+	<div class="row header">
+		<div class="col-md-1">&nbsp;</div>
+		<div class="col-md-3">Rider</div>
+		<div class="col-md-2">Last Year</div>
+		<div class="col-md-2">Last Week</div>
+		<div class="col-md-1">Rank</div>
+		<div class="col-md-3">UCI Points</div>
+	</div>
+	<?php for ($i=0;$i<$max_riders;$i++) : ?>
+		<div class="row riders">
+			<div class="col-md-1">
+				<i class="fa fa-plus"></i>
+				<i class="fa fa-minus"></i>
+			</div>
+			<div class="col-md-3">
+				Rider Name [nat]
+			</div>
+			<div class="col-md-2">
+				Finish
+			</div>
+			<div class="col-md-2">
+				Race/Finish
+			</div>
+			<div class="col-md-1">
+				Current
+			</div>
+			<div class="col-md-3">
+				C2,C1,CC,CN,CDM,CM
+			</div>
+		</div>
+	<?php endfor; ?>
+</div>
