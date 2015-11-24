@@ -66,16 +66,18 @@ $results=$RiderStats->get_rider_results(array(
 											<canvas id="uci-points"></canvas>
 											<div id="uci-points-chart-legend" class=""></div>
 										</div>
-									</div><!-- .row -->
+									</div>
 								</div>
 							</div>
 						</div><!-- .col-md-4 -->
 						<div id="rider-graphs" class="col-md-8 charts">
+<!--
 							<div id="weekly-rankings-wrap">
 								<div class="chart-title">Weekly Rank</div>
 								<canvas id="weekly-rankings"></canvas>
 								<div id="chartjs-tooltip"></div>
 							</div>
+-->
 						</div><!-- #rider-graphs -->
 					</div><!-- .row -->
 					<div id="season-rider-rankings" class="season-rider-rankings">

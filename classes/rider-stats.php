@@ -49,11 +49,7 @@ class RiderStats {
 			//'end_date' => false
 		);
 		$args=array_merge($default_args,$user_args);
-/*
-echo '<pre>';
-print_r($args);
-echo '</pre>';
-*/
+
 		extract($args);
 
 		// we have a afew scenarios to alter our limit and/or where - name (single result), paginated result or basic limit //
@@ -760,6 +756,25 @@ echo '</pre>';
 		endforeach;
 
 		return;
+	}
+
+	public function get_rider_points($name=false,$season=false) {
+		global $wpdb,$uci_curl;
+
+		$where='';
+
+		if (!$name)
+			return false;
+
+		if ($season)
+			$where=" AND season='{$season}'";
+
+		$points=$wpdb->get_results("SELECT * FROM $uci_curl->rider_season_uci_points WHERE name=\"$name\" $where");
+
+		if ($name && $season)
+			$points=$points[0];
+
+		return $points;
 	}
 
 	/**
