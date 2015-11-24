@@ -27,7 +27,7 @@ class Top25_cURL {
 		add_action('wp_ajax_get_race_data_non_db',array($this,'ajax_get_race_data_non_db'));
 		add_action('wp_ajax_prepare_add_races_to_db',array($this,'ajax_prepare_add_races_to_db'));
 		add_action('wp_ajax_add_race_to_db',array($this,'ajax_add_race_to_db'));
-		add_action('wp_ajax_get_all_riders',array($this,'ajax_get_all_riders'));
+		//add_action('wp_ajax_get_all_riders',array($this,'ajax_get_all_riders'));
 		//add_action('wp_ajax_add_riders_weekly_rankings',array($this,'ajax_add_riders_weekly_rankings'));
 
 		$this->setup_config($config);
@@ -371,6 +371,7 @@ class Top25_cURL {
 	 * @access public
 	 * @return void
 	 */
+/*
 	public function ajax_get_all_riders() {
 		global $RiderStats;
 
@@ -378,6 +379,7 @@ class Top25_cURL {
 
 		wp_die();
 	}
+*/
 
 	/**
 	 * ajax_add_riders_weekly_rankings function.

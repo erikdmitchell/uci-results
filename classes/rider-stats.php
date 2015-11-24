@@ -442,6 +442,7 @@ class RiderStats {
 	 * @param bool $season (default: false)
 	 * @return void
 	 */
+/*
 	public function get_rider_sos($rider=false,$season=false) {
 		global $wpdb,$uci_curl;
 
@@ -479,6 +480,7 @@ class RiderStats {
 
 		return $sos;
 	}
+*/
 
 	/**
 	 * get_rider_uci_points function.
@@ -489,6 +491,7 @@ class RiderStats {
 	 * @param string $type (default: 'uci')
 	 * @return void
 	 */
+/*
 	public function get_rider_uci_points($rider=false,$season=false,$type='uci') {
 		global $wpdb,$uci_curl;
 
@@ -535,6 +538,7 @@ class RiderStats {
 
 		return $uci_point;
 	}
+*/
 
 	/**
 	 * get_rider_winning_perc function.
@@ -544,6 +548,7 @@ class RiderStats {
 	 * @param bool $season (default: false)
 	 * @return void
 	 */
+/*
 	public function get_rider_winning_perc($rider=false,$season=false) {
 		global $wpdb,$uci_curl;
 
@@ -586,8 +591,10 @@ class RiderStats {
 
 		return $win_perc;
 	}
+*/
 
 // SLOW??? //
+/*
 	public function get_total_points($user_args=array()) {
 		global $wpdb,$uci_curl;
 
@@ -630,6 +637,7 @@ class RiderStats {
 
 		return $points;
 	}
+*/
 
 	/**
 	 * get_riders_in_season function.
@@ -638,6 +646,7 @@ class RiderStats {
 	 * @param bool $season (default: false)
 	 * @return void
 	 */
+/*
 	public function get_riders_in_season($season=false) {
 		global $wpdb,$uci_curl;
 
@@ -657,6 +666,7 @@ class RiderStats {
 
 		return $riders;
 	}
+*/
 
 	/**
 	 * generate_total_rank_per_week function.
@@ -760,6 +770,7 @@ class RiderStats {
 	}
 */
 
+/*
 	public function get_rider_points($name=false,$season=false) {
 		global $wpdb,$uci_curl;
 
@@ -778,6 +789,7 @@ class RiderStats {
 
 		return $points;
 	}
+*/
 
 	/**
 	 * get_rider_weekly_rank function.
