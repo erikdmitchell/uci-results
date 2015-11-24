@@ -125,6 +125,7 @@ echo '</pre>';
 
 		// add rank, if no name run rank if name, run all and get rank //
 		if ($name) :
+			//$real_rank=0;
 			$sql="
 				SELECT
 					@curRow := @curRow + 1 AS rank,
@@ -145,9 +146,12 @@ echo '</pre>';
 				ORDER BY $order_by $order
 			";
 			$riders_db=$wpdb->get_results($sql);
-echo '<pre>';
-print_r($riders_db);
-echo '</pre>';
+
+			// get real rank //
+			foreach ($riders_db as $rider) :
+				if ($rider->name==$name)
+					$riders[0]->rank=$rider->rank;
+			endforeach;
 		endif;
 
 		// clean variables //
