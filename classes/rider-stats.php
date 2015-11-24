@@ -96,9 +96,12 @@ echo '</pre>';
 			FROM (
 				SELECT
 					season_points.name AS name,
+					season_points.nat AS nat,
 					season_points.total AS uci_total,
-					sos.sos AS sos,
+					season_points.cdm AS wcp_total,
 					wins.win_perc AS win_perc,
+					sos.sos AS sos,
+					sos.rank AS sos_rank,
 					SUM((season_points.total+sos.sos+wins.win_perc)/3) AS total
 				FROM $uci_curl->rider_season_uci_points AS season_points
 				LEFT JOIN $uci_curl->uci_rider_season_sos AS sos
