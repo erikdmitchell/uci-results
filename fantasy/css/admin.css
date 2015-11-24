@@ -31,3 +31,12 @@
 .fantasy-cycling-admin #fantasy-search-results-text {
 	display: none;
 }
+#setup-races #getcode {
+	position: absolute;
+	top: 2%;
+	left: 50%;
+	margin-top: -25px;
+	margin-left: -200px;
+	width: 400px;
+	height: 400px;
+}

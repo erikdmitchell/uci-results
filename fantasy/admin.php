@@ -45,8 +45,10 @@ class FantasyCyclingAdmin {
 		wp_enqueue_script('jquery');
 		wp_enqueue_script('jquery-ui-datepicker');
 		wp_enqueue_script('fantasy-cycling-admin');
+		wp_enqueue_script('bootstrap-modal-script',plugins_url('/js/bootstrap-modal.min.js',__FILE__),array('jquery'));
 
 		wp_enqueue_style('fantasy-cycling-admin',plugins_url('/css/admin.css',__FILE__));
+		wp_enqueue_style('bootstrap-modal-style',plugins_url('/css/bootstrap-modal.min.css',__FILE__));
 	}
 
 	/**
@@ -87,7 +89,7 @@ class FantasyCyclingAdmin {
 				$html.='<h3>Setup Races</h3>';
 
 				$html.='<div class="row">';
-					$html.='<div class="col-md-1">';
+					$html.='<div class="col-md-2">';
 						$html.='<label for="race">Race</label>';
 					$html.='</div>';
 					$html.='<div class="col-md-6">';
@@ -101,7 +103,7 @@ class FantasyCyclingAdmin {
 				$html.='</div>';
 
 				$html.='<div class="row">';
-					$html.='<div class="col-md-1">';
+					$html.='<div class="col-md-2">';
 						$html.='<label for="name">Name</label>';
 					$html.='</div>';
 					$html.='<div class="col-md-6">';
@@ -110,7 +112,7 @@ class FantasyCyclingAdmin {
 				$html.='</div>';
 
 				$html.='<div class="row">';
-					$html.='<div class="col-md-1">';
+					$html.='<div class="col-md-2">';
 						$html.='<label for="season">Season</label>';
 					$html.='</div>';
 					$html.='<div class="col-md-6">';
@@ -124,7 +126,7 @@ class FantasyCyclingAdmin {
 				$html.='</div>';
 
 				$html.='<div class="row">';
-					$html.='<div class="col-md-1">';
+					$html.='<div class="col-md-2">';
 						$html.='<label for="type">Type</label>';
 					$html.='</div>';
 					$html.='<div class="col-md-6">';
@@ -139,7 +141,7 @@ class FantasyCyclingAdmin {
 				$html.='</div>';
 
 				$html.='<div class="row">';
-					$html.='<div class="col-md-1">';
+					$html.='<div class="col-md-2">';
 						$html.='<label for="date">Date</label>';
 					$html.='</div>';
 					$html.='<div class="col-md-6">';
@@ -148,7 +150,7 @@ class FantasyCyclingAdmin {
 				$html.='</div>';
 
 				$html.='<div class="row">';
-					$html.='<div class="col-md-1">';
+					$html.='<div class="col-md-2">';
 						$html.='<label for="series">Series</label>';
 					$html.='</div>';
 					$html.='<div class="col-md-6">';
@@ -164,7 +166,7 @@ class FantasyCyclingAdmin {
 				$html.='</div>';
 
 				$html.='<div class="row">';
-					$html.='<div class="col-md-1">';
+					$html.='<div class="col-md-2">';
 						$html.='<label for="code">Code</label>';
 					$html.='</div>';
 					$html.='<div class="col-md-5">';
@@ -173,8 +175,8 @@ class FantasyCyclingAdmin {
 				$html.='</div>';
 
 				$html.='<div class="row">';
-					$html.='<div class="col-md-1">';
-						$html.='<label for="code">Last Years</label>';
+					$html.='<div class="col-md-2">';
+						$html.='<label for="code">Last Years Code</label>';
 					$html.='</div>';
 					$html.='<div class="col-md-5">';
 						$html.='<div class="row ">';
@@ -182,7 +184,7 @@ class FantasyCyclingAdmin {
 								$html.='<input name="last_year_code" id="fantasy-race-search" type="text" placeholder="Search..." />';
 							$html.='</div>';
 							$html.='<div class="col-md-3">';
-								$html.='<button type="button" id="clear-race-search" value="Clear">Clear Results</button>';
+								$html.='<button type="button" id="clear-race-search" value="Clear">Clear</button>';
 							$html.='</div>';
 						$html.='</div>';
 						$html.='<div class="row ">';
@@ -192,6 +194,55 @@ class FantasyCyclingAdmin {
 						$html.='</div>';
 					$html.='</div>';
 				$html.='</div>';
+
+				$html.='<div class="row">';
+					$html.='<div class="col-md-2">';
+						$html.='<label for="code">Last Weeks Code</label>';
+					$html.='</div>';
+					$html.='<div class="col-md-5">';
+						$html.='<div class="row ">';
+							$html.='<div class="race-search col-md-9">';
+								$html.='<input name="last_week_code" id="fantasy-race-search" type="text" placeholder="Search..." />';
+							$html.='</div>';
+							$html.='<div class="col-md-3">';
+								$html.='<button type="button" id="clear-race-search" value="Clear">Clear</button>';
+							$html.='</div>';
+						$html.='</div>';
+						$html.='<div class="row ">';
+							$html.='<div class="search-results col-md-12">';
+								$html.='<div id="fantasy-search-results-text">Search Results...</div>';
+							$html.='</div>';
+						$html.='</div>';
+					$html.='</div>';
+				$html.='</div>';
+
+// modal //
+$html.='<button type="button" class="button button-primary" data-toggle="modal" data-target="#getcode">';
+  $html.='Get Code';
+$html.='</button>';
+
+$html.='<div class="modal fade" id="getcode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">';
+		$html.='<div class="row ">';
+			$html.='<div class="race-search col-md-9">';
+				$html.='<input name="last_year_code" id="fantasy-race-search" type="text" placeholder="Search..." />';
+			$html.='</div>';
+			$html.='<div class="col-md-3">';
+				$html.='<button type="button" id="clear-race-search" value="Clear">Clear</button>';
+			$html.='</div>';
+		$html.='</div>';
+		$html.='<div class="row ">';
+			$html.='<div class="search-results col-md-12">';
+				$html.='<div id="fantasy-search-results-text">Search Results...</div>';
+			$html.='</div>';
+		$html.='</div>';
+	$html.='</div>';
+	$html.='<div class="row ">';
+		$html.='<div class="search-results col-md-12">';
+			$html.='<div id="fantasy-search-results-text">Search Results...</div>';
+		$html.='</div>';
+	$html.='</div>';
+$html.='</div>';
+
 
 				$html.='<input type="hidden" name="setup-races" value="1" />';
 
