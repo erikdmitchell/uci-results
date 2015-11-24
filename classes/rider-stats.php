@@ -117,9 +117,10 @@ echo '</pre>';
 
 		$riders=$wpdb->get_results($sql);
 
+		// if pagination, set our max pages var //
 		if ($pagination) :
 			$max_riders=$wpdb->get_var("SELECT COUNT(*) FROM wp_uci_rider_season_points WHERE season='{$season}'");
-			$wp_query->uci_curl_max_pages=$wpdb->num_rows; // set max
+			$wp_query->uci_curl_max_pages=$max_riders;
 		endif;
 
 		// add rank, if no name run rank if name, run all and get rank //
