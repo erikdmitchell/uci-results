@@ -622,7 +622,7 @@ class Top25_cURL {
 		if (!$name || !$season || !$type)
 			return false;
 
-		$rider_id=$wpdb->get_var("SELECT id FROM $this->rider_season_uci_points WHERE name='{$name}' AND season='{$season}'");
+		$rider_id=$wpdb->get_var("SELECT id FROM $this->rider_season_uci_points WHERE name=\"{$name}\" AND season='{$season}'");
 
 		if ($rider_id) :
 			$current_points=$wpdb->get_var("SELECT $type FROM $this->rider_season_uci_points WHERE id={$rider_id}");
@@ -702,14 +702,17 @@ class Top25_cURL {
 		usort($riders, function($a,$b) {
 			return strcmp($b->sos,$a->sos);
 		});
-//echo "$total_races<br>";
-echo '<pre>';
-print_r($riders);
-echo '</pre>';
-		// add to db //
-/*
+
+		// add rank //
+		$rank=1;
 		foreach ($riders as $rider) :
-			$rider_id=$wpdb->get_var("SELECT id FROM $this->uci_rider_season_sos WHERE name='{$rider->name}' AND season='{$season}'");
+			$rider->rank=$rank;
+			$rank++;
+		endforeach;
+
+		// add to db //
+		foreach ($riders as $rider) :
+			$rider_id=$wpdb->get_var("SELECT id FROM $this->uci_rider_season_sos WHERE name=\"{$rider->name}\" AND season='{$season}'");
 
 			if ($rider_id) :
 				$data=array(
@@ -739,7 +742,6 @@ echo '</pre>';
 				endif;
 			endif;
 		endforeach;
-*/
 	}
 
 	//----------------------------- begin add_race_to_db helper functions -----------------------------//
