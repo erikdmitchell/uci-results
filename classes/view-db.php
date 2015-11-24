@@ -552,7 +552,7 @@ echo '</pre>';
 
 			// cycle through results //
 			foreach ($results as $result) :
-				echo $uci_curl->add_rider_season_uci_points($result->rider,$race->details->season,$race->details->class,$result->points);
+				echo $uci_curl->add_rider_season_uci_points($result->rider,$result->nat,$race->details->season,$race->details->class,$result->points);
 			endforeach;
 		endforeach;
 

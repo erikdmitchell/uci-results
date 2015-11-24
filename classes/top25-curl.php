@@ -602,7 +602,7 @@ class Top25_cURL {
 				echo '</pre>';
 			else :
 				$wpdb->insert($this->results_table,$insert);
-				echo $this->add_rider_season_uci_points($result->name,false,false,$result->par);
+				echo $this->add_rider_season_uci_points($result->name,$result->nat,false,false,$result->par);
 			endif;
 		endforeach;
 
@@ -610,17 +610,8 @@ class Top25_cURL {
 		echo $this->update_rider_wins('',false);
 	}
 
-	/**
-	 * add_rider_season_uci_points function.
-	 *
-	 * @access public
-	 * @param bool $name (default: false)
-	 * @param bool $season (default: false)
-	 * @param bool $type (default: false)
-	 * @param int $points (default: 0)
-	 * @return void
-	 */
-	public function add_rider_season_uci_points($name=false,$season=false,$type=false,$points=0) {
+
+	public function add_rider_season_uci_points($name=false,$nat=false,$season=false,$type=false,$points=0) {
 		global $wpdb;
 
 		if (!$name || !$season || !$type)
@@ -647,6 +638,7 @@ class Top25_cURL {
 		else :
 			$data=array(
 				'name' => $name,
+				'nat' => $nat,
 				'season' => $season,
 				$type => $points,
 				'total' => $points
@@ -660,14 +652,7 @@ class Top25_cURL {
 		endif;
 	}
 
-	/**
-	 * update_rider_season_sos function.
-	 *
-	 * @access public
-	 * @param bool $rider (default: false)
-	 * @param bool $season (default: false)
-	 * @return void
-	 */
+
 	public function update_rider_season_sos($rider=false,$season=false) {
 		global $wpdb;
 

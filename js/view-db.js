@@ -35,7 +35,7 @@ jQuery(document).ready(function($) {
 		});
 	});
 
-	// form reset //
+	// search form reset //
 	$('#clear-race-search').click(function(e) {
 		e.preventDefault();
 
@@ -164,9 +164,6 @@ jQuery(document).ready(function($) {
 
 		$loader.show();
 
-		// get checked values //
-
-
 		$('#get-race-rider').html('');
 
 		var data={
@@ -179,6 +176,11 @@ jQuery(document).ready(function($) {
 			$('#get-race-rider').html(response);
 			$loader.hide();
 		});
+	});
+
+	// form reset //
+	$('#form-reset').click(function() {
+		$('#get-race-rider').html('');
 	});
 
 });
