@@ -174,6 +174,9 @@ echo '</pre>';
 			endif;
 		endif;
 
+		if ($name)
+			$riders=$riders[0];
+
 		return $riders;
 	}
 
