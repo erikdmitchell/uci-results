@@ -666,6 +666,7 @@ class RiderStats {
 	 * @param bool $season (default: false)
 	 * @return void
 	 */
+/*
 	public function generate_total_rank_per_week($rider_name=false,$season=false) {
 		global $wpdb,$uci_curl;
 
@@ -757,6 +758,7 @@ class RiderStats {
 
 		return;
 	}
+*/
 
 	public function get_rider_points($name=false,$season=false) {
 		global $wpdb,$uci_curl;

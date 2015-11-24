@@ -87,6 +87,7 @@ jQuery(document).ready(function($) {
 
 					// after we are done races //
 					if (counter>=races.length) {
+						/*
 						var endData={
 							'action' : 'get_all_riders',
 							'season' : '2015/2016' // NEEDS TO BE DYNAMIC
@@ -112,6 +113,7 @@ jQuery(document).ready(function($) {
 								});
 							}
 						});
+						*/
 					}
 				});
 			}
