@@ -366,41 +366,6 @@ class Top25_cURL {
 	}
 
 	/**
-	 * ajax_get_all_riders function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-/*
-	public function ajax_get_all_riders() {
-		global $RiderStats;
-
-		echo json_encode($RiderStats->get_riders_in_season($_POST['season']));
-
-		wp_die();
-	}
-*/
-
-	/**
-	 * ajax_add_riders_weekly_rankings function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-/*
-	public function ajax_add_riders_weekly_rankings() {
-		global $RiderStats;
-
-		if (!$this->debug) :
-			$RiderStats->generate_total_rank_per_week($_POST['rider'],$_POST['season']); // SLOW???
-			echo '<div class="updated rider-weekly-rankings">'.$_POST['rider'].' - weekly rankings updated.</div>';
-		endif;
-
-		wp_die();
-	}
-*/
-
-	/**
 	 * alter_race_link function.
 	 *
 	 * @access protected
@@ -587,6 +552,7 @@ class Top25_cURL {
 			return false;
 
 		$race_results=$this->get_race_results($link);
+		$race_data=$wpdb->get_row("SELECT * FROM $this->table WHERE code=\"$code\"");
 
 		foreach ($race_results as $result) :
 			$insert=array(
@@ -606,20 +572,30 @@ class Top25_cURL {
 				echo '</pre>';
 			else :
 				$wpdb->insert($this->results_table,$insert);
-				echo $this->add_rider_season_uci_points($result->name,$result->nat,false,false,$result->par);
+				echo $this->add_rider_season_uci_points($result->name,$result->nat,$race_data->season,$race_data->class,$result->par);
 			endif;
 		endforeach;
 
-		echo $this->update_rider_season_sos('',false);
-		echo $this->update_rider_wins('',false);
+		echo $this->update_rider_season_sos('',$race_data->season);
+		echo $this->update_rider_wins('',$race_data->season);
 	}
 
-
+	/**
+	 * add_rider_season_uci_points function.
+	 *
+	 * @access public
+	 * @param bool $name (default: false)
+	 * @param bool $nat (default: false)
+	 * @param bool $season (default: false)
+	 * @param bool $type (default: false)
+	 * @param int $points (default: 0)
+	 * @return void
+	 */
 	public function add_rider_season_uci_points($name=false,$nat=false,$season=false,$type=false,$points=0) {
 		global $wpdb;
 
 		if (!$name || !$season || !$type)
-			return false;
+			return '<div class="error">More information needs to be passed.</div>';
 
 		$rider_id=$wpdb->get_var("SELECT id FROM $this->rider_season_uci_points WHERE name=\"{$name}\" AND season='{$season}'");
 
@@ -656,12 +632,19 @@ class Top25_cURL {
 		endif;
 	}
 
-
+	/**
+	 * update_rider_season_sos function.
+	 *
+	 * @access public
+	 * @param bool $rider (default: false)
+	 * @param bool $season (default: false)
+	 * @return void
+	 */
 	public function update_rider_season_sos($rider=false,$season=false) {
 		global $wpdb;
 
 		if (!$season)
-			return false;
+			return '<div class="error">Season SOS requires a season to be passed</div>';
 
 		$sos=0;
 		$total_races=$wpdb->get_var("SELECT COUNT(*) FROM $this->table WHERE season='{$season}'");
@@ -682,7 +665,11 @@ class Top25_cURL {
 
 		// do some math to get sos //
 		foreach ($riders as $rider) :
-			$divider=$total_races/$rider->races;
+			if ($rider->races==0) :
+				$divider=0;
+			else :
+				$divider=$total_races/$rider->races;
+			endif;
 
 			if ($rider->fq_avg==0 && $rider->races==0) :
 				$rider->sos=0;
@@ -737,11 +724,19 @@ class Top25_cURL {
 		endforeach;
 	}
 
+	/**
+	 * update_rider_wins function.
+	 *
+	 * @access public
+	 * @param bool $rider (default: false)
+	 * @param bool $season (default: false)
+	 * @return void
+	 */
 	public function update_rider_wins($rider=false,$season=false) {
 		global $wpdb;
 
 		if (!$season)
-			return false;
+			return '<div class="error">Season wins requires a season to be passed</div>';
 
 		$sql="
 			SELECT
@@ -993,18 +988,18 @@ class Top25_cURL {
 		$html.='<form name="add-races-to-db" id="add-races-to-db" method="post">';
 			$html.='<div class="race-table">';
 				$html.='<div class="header row">';
-					$html.='<div class="col-md-1">&nbsp;</div>';
+					$html.='<div class="col-xs-1"><a href="" class="select" id="selectall">All</a></div>';
 					$html.='<div class="col-md-2">Date</div>';
-					$html.='<div class="col-md-3">Event</div>';
+					$html.='<div class="col-md-4">Event</div>';
 					$html.='<div class="col-md-1">Nat.</div>';
 					$html.='<div class="col-md-1">Class</div>';
-					$html.='<div class="col-md-2">Winner</div>';
+					//$html.='<div class="col-md-2">Winner</div>';
 					$html.='<div class="col-md-2">Season</div>';
 				$html.='</div>';
 
-				$html.='<div class="row select-all">';
-					$html.='<div class="col-xs-2"><a href="" class="select" id="selectall">Select All</a></div>';
-				$html.='</div>';
+				//$html.='<div class="row select-all">';
+
+				//$html.='</div>';
 
 				foreach ($obj as $result) :
 					$disabled='';
@@ -1026,13 +1021,13 @@ class Top25_cURL {
 						$event='No Event';
 
 					$html.='<div class="row">';
-						$html.='<div class="col-md-1"><input class="race-checkbox" type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" '.$disabled.' /></div>';
+						$html.='<div class="col-xs-1"><input class="race-checkbox" type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" '.$disabled.' /></div>';
 						$html.='<div class="col-md-2">'.$date.'</div>';
-						$html.='<div class="col-md-3">'.$event.'</div>';
+						$html.='<div class="col-md-4">'.$event.'</div>';
 						if ($result->event) :
 							$html.='<div class="col-md-1">'.$result->nat.'</div>';
 							$html.='<div class="col-md-1">'.$result->class.'</div>';
-							$html.='<div class="col-md-2">'.$result->winner.'</div>';
+							//$html.='<div class="col-md-2">'.$result->winner.'</div>';
 							$html.='<div class="col-md-2">'.$result->season.'</div>';
 						endif;
 					$html.='</div>';
