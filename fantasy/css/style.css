@@ -91,3 +91,14 @@
 	list-style-type: none;
 	margin: 0;
 }
+/**
+ * general
+ */
+.btn.btn-join {
+	font-size: 18px;
+	background: #e7e7e7;
+	padding: 15px 50px;
+}
+.btn.btn-join:hover {
+	background: #a4a4a4;
+}
