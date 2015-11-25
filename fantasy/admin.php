@@ -176,77 +176,52 @@ class FantasyCyclingAdmin {
 
 				$html.='<div class="row">';
 					$html.='<div class="col-md-2">';
-						$html.='<label for="code">Last Years Code</label>';
+						$html.='<label for="last_year_code">Last Years Code</label>';
 					$html.='</div>';
 					$html.='<div class="col-md-5">';
-						$html.='<div class="row ">';
-							$html.='<div class="race-search col-md-9">';
-								$html.='<input name="last_year_code" id="fantasy-race-search" type="text" placeholder="Search..." />';
-							$html.='</div>';
-							$html.='<div class="col-md-3">';
-								$html.='<button type="button" id="clear-race-search" value="Clear">Clear</button>';
-							$html.='</div>';
-						$html.='</div>';
-						$html.='<div class="row ">';
-							$html.='<div class="search-results col-md-12">';
-								$html.='<div id="fantasy-search-results-text">Search Results...</div>';
-							$html.='</div>';
-						$html.='</div>';
+						//$html.='<input name="last_year_code" id="last_year_code" class="longtext" type="text" />';
+						$html.='<input type="text" name="last_year_code" id="last_year_code" class="longtext" value="" />';
 					$html.='</div>';
 				$html.='</div>';
 
 				$html.='<div class="row">';
 					$html.='<div class="col-md-2">';
-						$html.='<label for="code">Last Weeks Code</label>';
+						$html.='<label for="last_week_code">Last Weeks Code</label>';
 					$html.='</div>';
 					$html.='<div class="col-md-5">';
-						$html.='<div class="row ">';
-							$html.='<div class="race-search col-md-9">';
-								$html.='<input name="last_week_code" id="fantasy-race-search" type="text" placeholder="Search..." />';
-							$html.='</div>';
-							$html.='<div class="col-md-3">';
-								$html.='<button type="button" id="clear-race-search" value="Clear">Clear</button>';
-							$html.='</div>';
+						//$html.='<input name="last_week_code" id="last_week_code" class="longtext" type="text" />';
+						$html.='<input type="text" name="last_week_code" id="last_week_code" class="longtext" value="" />';
+					$html.='</div>';
+				$html.='</div>';
+
+				// modal //
+				$html.='<div class="modal fade" id="getcode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">';
+					$html.='<div class="row ">';
+						$html.='<div class="race-search col-md-9">';
+							$html.='<input name="frs" id="fantasy-race-search" type="text" placeholder="Search..." />';
 						$html.='</div>';
-						$html.='<div class="row ">';
-							$html.='<div class="search-results col-md-12">';
-								$html.='<div id="fantasy-search-results-text">Search Results...</div>';
-							$html.='</div>';
+						$html.='<div class="col-md-3">';
+							$html.='<button type="button" id="clear-race-search" value="Clear">Clear</button>';
+						$html.='</div>';
+					$html.='</div>';
+					$html.='<div class="row ">';
+						$html.='<div class="search-results col-md-12">';
+							$html.='<div id="fantasy-search-results-text">Search Results...</div>';
+						$html.='</div>';
+					$html.='</div>';
+					$html.='<div class="row ">';
+						$html.='<div class="col-md-12">';
+							$html.='<input id="fantasy-race-search-code" disabled />';
 						$html.='</div>';
 					$html.='</div>';
 				$html.='</div>';
 
-// modal //
-$html.='<button type="button" class="button button-primary" data-toggle="modal" data-target="#getcode">';
-  $html.='Get Code';
-$html.='</button>';
-
-$html.='<div class="modal fade" id="getcode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">';
-		$html.='<div class="row ">';
-			$html.='<div class="race-search col-md-9">';
-				$html.='<input name="last_year_code" id="fantasy-race-search" type="text" placeholder="Search..." />';
-			$html.='</div>';
-			$html.='<div class="col-md-3">';
-				$html.='<button type="button" id="clear-race-search" value="Clear">Clear</button>';
-			$html.='</div>';
-		$html.='</div>';
-		$html.='<div class="row ">';
-			$html.='<div class="search-results col-md-12">';
-				$html.='<div id="fantasy-search-results-text">Search Results...</div>';
-			$html.='</div>';
-		$html.='</div>';
-	$html.='</div>';
-	$html.='<div class="row ">';
-		$html.='<div class="search-results col-md-12">';
-			$html.='<div id="fantasy-search-results-text">Search Results...</div>';
-		$html.='</div>';
-	$html.='</div>';
-$html.='</div>';
-
-
 				$html.='<input type="hidden" name="setup-races" value="1" />';
 
-				$html.='<p><input type="submit" name="submit" id="submit" class="button button-primary" value="Setup Race"></p>';
+				$html.='<p>';
+					$html.='<input type="submit" name="submit" id="submit" class="button button-primary" value="Setup Race">';
+					$html.='<input type="button" class="button button-getcode button-primary" data-toggle="modal" data-target="#getcode" value="Get Code">';
+				$html.='</p>';
 			$html.='</form>';
 
 			$races=$this->get_races_from_db();
@@ -377,6 +352,7 @@ $html.='</div>';
 				'series' => $form['series'],
 				'race_start' => date('Y-m-d H:i:s', strtotime($form['date'])),
 				'last_year_code' => $form['last_year_code'],
+				'last_week_code' => $form['last_week_code'],
 			);
 
 			$wpdb->update('wp_fc_races',$data,array('id' => $form['race']));
@@ -391,6 +367,7 @@ $html.='</div>';
 				'series' => $form['series'],
 				'race_start' => date('Y-m-d H:i:s', strtotime($form['date'])),
 				'last_year_code' => $form['last_year_code'],
+				'last_week_code' => $form['last_week_code'],
 			);
 
 			$wpdb->insert('wp_fc_races',$data);

@@ -33,10 +33,23 @@
 }
 #setup-races #getcode {
 	position: absolute;
-	top: 2%;
+	top: 50px;
 	left: 50%;
 	margin-top: -25px;
-	margin-left: -200px;
-	width: 400px;
+	margin-left: -25%;
+	width: 50%;
 	height: 400px;
+}
+#fantasy-race-search-code {
+	display: none;
+	width: 100%;
+}
+.button-primary.button-getcode {
+	margin-left: 15px;
+	background: #ff0000;
+	border-color: #ff3333;
+}
+.button-primary.button-getcode:hover {
+	background: #ff3333;
+	border-color: #ff8080;
 }
