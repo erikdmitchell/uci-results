@@ -196,6 +196,7 @@ class FantasyCyclingAdmin {
 
 				// modal //
 				$html.='<div class="modal fade" id="getcode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">';
+					$html.='<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
 					$html.='<div class="row ">';
 						$html.='<div class="race-search col-md-9">';
 							$html.='<input name="frs" id="fantasy-race-search" type="text" placeholder="Search..." />';

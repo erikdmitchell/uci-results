@@ -45,6 +45,27 @@
 .last-year-results h3 {
 	margin-top: 0;
 }
+
+.add-remove-rider {}
+.add-remove-btn {
+
+}
+.add-remove-btn .text {
+	display: none;
+}
+.add-remove-btn .add {
+	display: none;
+}
+.add-remove-btn .remove {
+	display: none;
+}
+.add-remove-btn .add .text {
+
+}
+.add-remove-btn .remove .text {
+
+}
+
 /**
  * team rosters
  */

@@ -173,6 +173,73 @@ function fc_rider_list_dropdown_race($args=array()) {
 	endif;
 }
 
+function fc_get_fantasy_rider($args=array()) {
+	global $wpdb;
+
+	$default_args=array(
+		'id' => 1,
+		'name' => false,
+		'min_rank' => 0,
+		'max_rank' => 10,
+		'select_title' => 'Select a Rider',
+		'echo' => true
+	);
+	$args=array_merge($default_args,$args);
+
+	extract($args);
+echo '<pre>';
+print_r($args);
+echo '</pre>';
+	$riders=$wpdb->get_var("SELECT start_list FROM wp_fc_races WHERE id=$id");
+	$riders=unserialize($riders);
+
+	// if we have no start list //
+	if (empty($riders))
+		return '<div class="no-start-list">No start list yet, check back soon.</div>';
+
+	// Sort the array by name //
+	sort($riders);
+}
+
+function fc_add_rider_modal_btn() {
+	$html=null;
+
+	//$html.='<input type="button" class="button button-getcode button-primary" data-toggle="modal" data-target="#add-rider-modal" value="Add Rider">';
+	//
+	//
+
+	$html.='<button type="button" class="button button-getcode button-primary add-remove-btn" data-toggle="modal" data-target="#add-rider-modal">';
+		$html.='<span class="add"><i class="fa fa-plus"></i><span class="text">Add Rider</span></span>';
+		$html.='<span class="remove"><i class="fa fa-minus"></i><span class="text">Remove Rider</span></span>';
+	$html.='</button>';
+
+	echo $html;
+}
+
+function fc_add_rider_modal() {
+	$html=null;
+
+	$html.='<div class="modal fade" id="add-rider-modal" tabindex="-1" role="dialog">';
+	  $html.='<div class="modal-dialog">';
+	    $html.='<div class="modal-content">';
+	      $html.='<div class="modal-header">';
+	        $html.='<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+	        $html.='<h4 class="modal-title">Modal title</h4>';
+	      $html.='</div>';
+	      $html.='<div class="modal-body">';
+	        $html.='<p>One fine body&hellip;</p>';
+	      $html.='</div>';
+	      $html.='<div class="modal-footer">';
+	        $html.='<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>';
+	        $html.='<button type="button" class="btn btn-primary">Add Rider</button>';
+	      $html.='</div>';
+	    $html.='</div><!-- /.modal-content -->';
+	  $html.='</div><!-- /.modal-dialog -->';
+	$html.='</div><!-- /.modal -->';
+
+	echo $html;
+}
+
 /**
  * fc_race_has_start_list function.
  *

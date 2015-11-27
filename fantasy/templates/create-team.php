@@ -150,21 +150,23 @@ $max_riders=6;
 </div><!-- .row -->
 <div class="fc-team-roster">
 	<div class="row header">
-		<div class="col-md-1">&nbsp;</div>
-		<div class="col-md-3">Rider</div>
+		<div class="col-md-2">&nbsp;</div>
+		<div class="col-md-2">Rider</div>
 		<div class="col-md-2">Last Year</div>
 		<div class="col-md-2">Last Week</div>
 		<div class="col-md-1">Rank</div>
 		<div class="col-md-3">UCI Points</div>
 	</div>
+	<?php $race_id=fc_get_race_id(); ?>
 	<?php for ($i=0;$i<$max_riders;$i++) : ?>
-		<div class="row riders">
-			<div class="col-md-1">
-				<i class="fa fa-plus"></i>
-				<i class="fa fa-minus"></i>
+		<?php //fc_get_fantasy_rider(array('id' => $race_id)); ?>
+		<div id="rider-<?php echo $i; ?>" class="row add-remove-rider">
+			<div class="col-md-2 add-remove-btn">
+				<i class="fa fa-plus"></i><span>Add Rider</span>
+				<i class="fa fa-minus"></i><span>Remove Rider</span>
 			</div>
-			<div class="col-md-3">
-				Rider Name [nat]
+			<div class="col-md-2 rider-name">
+
 			</div>
 			<div class="col-md-2">
 				Finish
@@ -181,3 +183,5 @@ $max_riders=6;
 		</div>
 	<?php endfor; ?>
 </div>
+<?php fc_add_rider_modal_btn(); ?>
+<?php fc_add_rider_modal(); ?>

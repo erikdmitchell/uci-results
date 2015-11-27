@@ -26,11 +26,15 @@ jQuery(document).ready(function($) {
 			$selects.each(function() {
 		    $selects.not(this)
 		  		.find('option[value="' + rosterArr[i] + '"]')
-		      .prop('disabled', true);
+		  		.prop('disabled', true);
 		  });
 		});
 
 		$('.fantasy-cycling-create-team #submit').val('Edit Team');
 	}
+
+	// add/remove rider modal functionalty //
+	// set up +/- buttons //
+
 
 });
