@@ -35,6 +35,26 @@ jQuery(document).ready(function($) {
 
 	// add/remove rider modal functionalty //
 	// set up +/- buttons //
+	var riderID=0;
 
+	if (createTeamOptions.roster.length!=0) {
+		// we have things to edit
+	}
+	// enable our + button //
+	$('.fc-team-roster .add-remove-rider .add-remove-btn').each(function(i) {
+		$(this).find('.add').show();
+	});
+	// set rider on click before we launch modal //
+	$('.fc-team-roster .add-remove-rider .add-remove-btn').click(function(i) {
+		riderID=$(this).parents('.add-remove-rider').attr('id');
+	});
+	// add rider button click inside modal //
+	$('#add-rider-modal .rider-list .rider a').click(function(e) {
+		e.preventDefault();
+console.log(riderID);
+console.log($(this).data('name'));
+		$('#add-rider-modal').modal('hide'); // hide modal
+		$('#'+riderID+' .rider-name').html($(this).data('name'));
+	});
 
 });

@@ -161,9 +161,14 @@ $max_riders=6;
 	<?php for ($i=0;$i<$max_riders;$i++) : ?>
 		<?php //fc_get_fantasy_rider(array('id' => $race_id)); ?>
 		<div id="rider-<?php echo $i; ?>" class="row add-remove-rider">
+			<!--
 			<div class="col-md-2 add-remove-btn">
 				<i class="fa fa-plus"></i><span>Add Rider</span>
 				<i class="fa fa-minus"></i><span>Remove Rider</span>
+			</div>
+			-->
+			<div class="col-md-2">
+				<?php fc_add_rider_modal_btn(); ?>
 			</div>
 			<div class="col-md-2 rider-name">
 
@@ -183,5 +188,4 @@ $max_riders=6;
 		</div>
 	<?php endfor; ?>
 </div>
-<?php fc_add_rider_modal_btn(); ?>
-<?php fc_add_rider_modal(); ?>
+<?php fc_add_rider_modal(array('id' => $race_id)); ?>

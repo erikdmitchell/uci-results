@@ -173,23 +173,21 @@ function fc_rider_list_dropdown_race($args=array()) {
 	endif;
 }
 
-function fc_get_fantasy_rider($args=array()) {
+function fc_get_fantasy_riders($args=array()) {
 	global $wpdb;
 
 	$default_args=array(
 		'id' => 1,
-		'name' => false,
-		'min_rank' => 0,
-		'max_rank' => 10,
-		'select_title' => 'Select a Rider',
+		'name' => generateRandomString(),
+		//'min_rank' => 0,
+		//'max_rank' => 10,
+		//'select_title' => 'Select a Rider',
 		'echo' => true
 	);
 	$args=array_merge($default_args,$args);
 
 	extract($args);
-echo '<pre>';
-print_r($args);
-echo '</pre>';
+
 	$riders=$wpdb->get_var("SELECT start_list FROM wp_fc_races WHERE id=$id");
 	$riders=unserialize($riders);
 
@@ -197,16 +195,28 @@ echo '</pre>';
 	if (empty($riders))
 		return '<div class="no-start-list">No start list yet, check back soon.</div>';
 
+	// append rider data //
+	foreach ($riders as $key => $rider) :
+		$arr=array();
+		$arr['name']=$rider;
+		$arr['country']=$wpdb->get_var("SELECT nat FROM wp_uci_rider_data WHERE name='$rider' GROUP BY nat");
+		// last year finish
+		// last week finish/race
+		// rank
+		// points - C2,C1,CC,CN,CDM,CM
+		$riders[$key]=$arr;
+	endforeach;
+
 	// Sort the array by name //
 	sort($riders);
+echo '<pre>';
+print_r($riders);
+echo '</pre>';
+	return $riders;
 }
 
 function fc_add_rider_modal_btn() {
 	$html=null;
-
-	//$html.='<input type="button" class="button button-getcode button-primary" data-toggle="modal" data-target="#add-rider-modal" value="Add Rider">';
-	//
-	//
 
 	$html.='<button type="button" class="button button-getcode button-primary add-remove-btn" data-toggle="modal" data-target="#add-rider-modal">';
 		$html.='<span class="add"><i class="fa fa-plus"></i><span class="text">Add Rider</span></span>';
@@ -216,22 +226,36 @@ function fc_add_rider_modal_btn() {
 	echo $html;
 }
 
-function fc_add_rider_modal() {
+function fc_add_rider_modal($args=array()) {
 	$html=null;
+	$riders=fc_get_fantasy_riders($args);
+	$columns=3;
+	$rows_per_col=ceil(count($riders)/$columns);
+	$riders=array_chunk($riders,$rows_per_col);
 
 	$html.='<div class="modal fade" id="add-rider-modal" tabindex="-1" role="dialog">';
 	  $html.='<div class="modal-dialog">';
 	    $html.='<div class="modal-content">';
 	      $html.='<div class="modal-header">';
 	        $html.='<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
-	        $html.='<h4 class="modal-title">Modal title</h4>';
+	        $html.='<h4 class="modal-title">Select a Rider</h4>';
 	      $html.='</div>';
 	      $html.='<div class="modal-body">';
-	        $html.='<p>One fine body&hellip;</p>';
+	        $html.='<div class="rider-list">';
+	        	foreach ($riders as $rider_group) :
+	        		$html.='<div class="col-md-4 rider-group">';
+	        			foreach ($rider_group as $rider) :
+							$html.='<div class="rider">';
+								$html.='<div class="name"><a href="#" data-name="'.$rider.'">'.$rider.'</a></div>';
+							$html.='</div>';
+						endforeach;
+					$html.='</div>'; // rg
+	        	endforeach;
+	        $html.='</div>';
 	      $html.='</div>';
 	      $html.='<div class="modal-footer">';
 	        $html.='<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>';
-	        $html.='<button type="button" class="btn btn-primary">Add Rider</button>';
+	        //$html.='<button type="button" class="btn btn-primary add-rider">Add Rider</button>';
 	      $html.='</div>';
 	    $html.='</div><!-- /.modal-content -->';
 	  $html.='</div><!-- /.modal-dialog -->';
