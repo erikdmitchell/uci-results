@@ -20,12 +20,15 @@ jQuery(document).ready(function($) {
 
 		for (var i in FCAdminWPOptions.FCRaces) {
 			if (FCAdminWPOptions.FCRaces[i].id==id) {
+console.log(FCAdminWPOptions.FCRaces[i]);
 				$('#setup-races #name').val(FCAdminWPOptions.FCRaces[i].name);
 				$('#setup-races #season').val(FCAdminWPOptions.FCRaces[i].season);
 				$('#setup-races #type').val(FCAdminWPOptions.FCRaces[i].type);
 				$('#setup-races #date').val(FCAdminWPOptions.FCRaces[i].race_start);
 				$('#setup-races #series').val(FCAdminWPOptions.FCRaces[i].series);
 				$('#setup-races #codes-from-db').val(FCAdminWPOptions.FCRaces[i].code);
+				$('#setup-races #last_year_code').val(FCAdminWPOptions.FCRaces[i].last_year_code);
+				$('#setup-races #last_week_code').val(FCAdminWPOptions.FCRaces[i].last_week_code);
 			}
 		}
 	});
@@ -54,13 +57,16 @@ jQuery(document).ready(function($) {
 	// clear search //
 	$('#clear-race-search').click(function() {
 		$('#fantasy-search-results-text').html('').hide();
+		$('#fantasy-race-search-code').val('');
+		$('#fantasy-race-search-code').hide();
 	});
+
 
 	// search/code onclick //
 	$('#fantasy-search-results-text .race .name a').live('click', function(e) {
 		e.preventDefault();
-		$('#fantasy-race-search').val($(this).attr('href'));
-		$('#fantasy-search-results-text').html('').hide();
+		$('#fantasy-race-search-code').val($(this).attr('href'));
+		$('#fantasy-race-search-code').show();
 	});
 
 });

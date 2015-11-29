@@ -5,6 +5,9 @@
  * @since Version 0.0.1
  */
 ?>
+<?php
+$max_riders=6;
+?>
 <div class="row">
 	<div class="fantasy-cycling-create-team col-md-5">
 		<?php if ($race_id=fc_get_race_id()) : ?>
@@ -97,7 +100,7 @@
 					</div>
 				</div>
 
-				<?php if (fc_race_has_start_list($_GET['race_id'])) : ?>
+				<?php if (fc_race_has_start_list($_GET['race_id']) && fc_is_race_roster_edit_open($_GET['race_id'])) : ?>
 					<input type="submit" name="submit" id="submit" value="Create Team" />
 				<?php endif; ?>
 
@@ -124,7 +127,7 @@
 					<div class="nat col-md-2"><?php echo get_country_flag($result->nat); ?></div>
 					<!-- <div class="time col-md-2"><?php echo $result->time; ?></div> -->
 				</div>
-			<?php endforeach; ?>
+		<?php endforeach; ?>
 		<?php endif; ?>
 	</div>
 <!--
@@ -146,3 +149,44 @@
 	</div>
 -->
 </div><!-- .row -->
+<div class="fc-team-roster">
+	<div class="row header">
+		<div class="col-md-2">&nbsp;</div>
+		<div class="col-md-2">Rider</div>
+		<div class="col-md-2">Last Year</div>
+		<div class="col-md-2">Last Week</div>
+		<div class="col-md-1">Rank</div>
+		<div class="col-md-3">UCI Points</div>
+	</div>
+	<?php $race_id=fc_get_race_id(); ?>
+	<?php for ($i=0;$i<$max_riders;$i++) : ?>
+		<?php //fc_get_fantasy_rider(array('id' => $race_id)); ?>
+		<div id="rider-<?php echo $i; ?>" class="row add-remove-rider">
+			<!--
+			<div class="col-md-2 add-remove-btn">
+				<i class="fa fa-plus"></i><span>Add Rider</span>
+				<i class="fa fa-minus"></i><span>Remove Rider</span>
+			</div>
+			-->
+			<div class="col-md-2">
+				<?php fc_add_rider_modal_btn(); ?>
+			</div>
+			<div class="col-md-2 rider-name">
+
+			</div>
+			<div class="col-md-2">
+				Finish
+			</div>
+			<div class="col-md-2">
+				Race/Finish
+			</div>
+			<div class="col-md-1">
+				Current
+			</div>
+			<div class="col-md-3">
+				C2,C1,CC,CN,CDM,CM
+			</div>
+		</div>
+	<?php endfor; ?>
+</div>
+<?php fc_add_rider_modal(array('id' => $race_id)); ?>

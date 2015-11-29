@@ -1,8 +1,6 @@
-//console.log(wpOptions);
-//var latestWeek=wpOptions.weekly_ranks[wpOptions.weekly_ranks.length-1];
+var latestWeek=wpOptions.weekly_ranks[wpOptions.weekly_ranks.length-1];
 
 //////////////////////////////////////// BEGIN WEEKLY RANKING ////////////////////////////////////////
-/*
 var weeks=[];
 var dataset=[];
 var inverted=[];
@@ -69,56 +67,54 @@ var diffInverted=maxInverted-minInverted;
 if (diffInverted<steps) {
 	steps=diffInverted;
 }
-*/
 //////////////////////////////////////// END WEEKLY RANKING ////////////////////////////////////////
 //////////////////////////////////////// BEGIN UCI POINTS PIE ////////////////////////////////////////
-console.log(wpOptions.rider_points);
+console.log(latestWeek);
 var UCIChartData = [
 	{
-		value: wpOptions.rider_points.c1,
+		value: latestWeek.c1,
 		color:"#F7464A",
 		highlight: "#FF5A5E",
 		label: "C1"
 	},
 	{
-		value: wpOptions.rider_points.c2,
+		value: latestWeek.c2,
 		color: "#46BFBD",
 		highlight: "#5AD3D1",
 		label: "C2"
 	},
 	{
-		value: wpOptions.rider_points.cc,
-		color: "#33cc33",
-		highlight: "#adebad",
-		label: "Continental"
+		value: latestWeek.cn,
+		color: "#FDB45C",
+		highlight: "#FFC870",
+		label: "National Champ."
 	},
 	{
-		value: wpOptions.rider_points.cdm,
+		value: latestWeek.cc,
+		color: "#FDB45C",
+		highlight: "#FFC870",
+		label: "Cont. Champ."
+	},
+	{
+		value: latestWeek.cm,
 		color: "#FDB45C",
 		highlight: "#FFC870",
 		label: "Word Cup"
 	},
 	{
-		value: wpOptions.rider_points.cn,
-		color: "#6600ff",
-		highlight: "#b380ff",
-		label: "Nationals"
-	},
-	{
-		value: wpOptions.rider_points.cm,
-		color: "#ffff66",
-		highlight: "#ffff80",
-		label: "Worlds"
+		value: latestWeek.wcp,
+		color: "#FDB45C",
+		highlight: "#FFC870",
+		label: "World Champ."
 	}
 ];
 //////////////////////////////////////// END UCI POINTS PIE ////////////////////////////////////////
 
 window.onload=function() {
-	//var ctx = document.getElementById("weekly-rankings").getContext("2d");
+	var ctx = document.getElementById("weekly-rankings").getContext("2d");
 	var UCIctx = document.getElementById("uci-points").getContext("2d");
 
 	// weekly ranking chart //
-/*
 	var chartInverted=new Chart(ctx).Line(lineChartData, {
 		customTooltips: function(tooltip) {
 			var tooltipEl = jQuery('#chartjs-tooltip');
@@ -172,7 +168,6 @@ window.onload=function() {
 			return value;
 		}
 	});
-*/
 
 	// uci points pie chart //
 	var UCIPieChart=new Chart(UCIctx).Pie(UCIChartData, {
