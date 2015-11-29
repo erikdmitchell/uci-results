@@ -10,6 +10,9 @@ class Top25_cURL {
 	public $results_table;
 	public $fq_table;
 	public $weekly_rider_rankings_table;
+	public $rider_season_uci_points;
+	public $uci_rider_season_sos;
+	public $uci_rider_season_wins;
 	public $version='1.0.3';
 	public $config=array();
 
@@ -24,14 +27,18 @@ class Top25_cURL {
 		add_action('wp_ajax_get_race_data_non_db',array($this,'ajax_get_race_data_non_db'));
 		add_action('wp_ajax_prepare_add_races_to_db',array($this,'ajax_prepare_add_races_to_db'));
 		add_action('wp_ajax_add_race_to_db',array($this,'ajax_add_race_to_db'));
-		add_action('wp_ajax_get_all_riders',array($this,'ajax_get_all_riders'));
-		add_action('wp_ajax_add_riders_weekly_rankings',array($this,'ajax_add_riders_weekly_rankings'));
+		//add_action('wp_ajax_get_all_riders',array($this,'ajax_get_all_riders'));
+		//add_action('wp_ajax_add_riders_weekly_rankings',array($this,'ajax_add_riders_weekly_rankings'));
 
 		$this->setup_config($config);
+
 		$this->table=$wpdb->prefix.'uci_races';
 		$this->results_table=$wpdb->prefix.'uci_rider_data';
 		$this->weekly_rider_rankings_table=$wpdb->prefix.'uci_weekly_rider_rankings';
 		$this->fq_table=$wpdb->prefix.'uci_fq_rankings';
+		$this->rider_season_uci_points=$wpdb->prefix.'uci_rider_season_points';
+		$this->uci_rider_season_sos=$wpdb->prefix.'uci_rider_season_sos';
+		$this->uci_rider_season_wins=$wpdb->prefix.'uci_rider_season_wins';
 	}
 
 	public function admin_page() {
@@ -350,40 +357,10 @@ class Top25_cURL {
 		if (!$this->check_for_dups($code)) :
 			echo $this->add_race_to_db($_POST['race']);
 		elseif (!$this->has_fq($code)) :
+			//echo '<div class="updated add-race-to-db-message">Adding fq...</div>';
 			echo $this->add_fq($code);
 		else :
-			echo '<div class="error add-race-to-db-message">Already in db.('.$code.')</div>';
-		endif;
-
-		wp_die();
-	}
-
-	/**
-	 * ajax_get_all_riders function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function ajax_get_all_riders() {
-		global $RiderStats;
-
-		echo json_encode($RiderStats->get_riders_in_season($_POST['season']));
-
-		wp_die();
-	}
-
-	/**
-	 * ajax_add_riders_weekly_rankings function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function ajax_add_riders_weekly_rankings() {
-		global $RiderStats;
-
-		if (!$this->debug) :
-			$RiderStats->generate_total_rank_per_week($_POST['rider'],$_POST['season']); // SLOW???
-			echo '<div class="updated rider-weekly-rankings">'.$_POST['rider'].' - weekly rankings updated.</div>';
+			echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';
 		endif;
 
 		wp_die();
@@ -555,7 +532,7 @@ class Top25_cURL {
 				endif;
 			endif;
 		else :
-			$message='<div class="error">'.$data['code'].' is already in the database</div>';
+			$message='<div class="updated">'.$data['code'].' is already in the database</div>';
 		endif;
 
 		return $message;
@@ -576,6 +553,7 @@ class Top25_cURL {
 			return false;
 
 		$race_results=$this->get_race_results($link);
+		$race_data=$wpdb->get_row("SELECT * FROM $this->table WHERE code=\"$code\"");
 
 		foreach ($race_results as $result) :
 			$insert=array(
@@ -595,6 +573,236 @@ class Top25_cURL {
 				echo '</pre>';
 			else :
 				$wpdb->insert($this->results_table,$insert);
+				echo $this->add_rider_season_uci_points($result->name,$result->nat,$race_data->season,$race_data->class,$result->par);
+			endif;
+		endforeach;
+
+		echo $this->update_rider_season_sos('',$race_data->season);
+		echo $this->update_rider_wins('',$race_data->season);
+	}
+
+	/**
+	 * add_rider_season_uci_points function.
+	 *
+	 * @access public
+	 * @param bool $name (default: false)
+	 * @param bool $nat (default: false)
+	 * @param bool $season (default: false)
+	 * @param bool $type (default: false)
+	 * @param int $points (default: 0)
+	 * @return void
+	 */
+	public function add_rider_season_uci_points($name=false,$nat=false,$season=false,$type=false,$points=0) {
+		global $wpdb;
+
+		if (!$name || !$season || !$type)
+			return '<div class="error">More information needs to be passed.</div>';
+
+		$rider_id=$wpdb->get_var("SELECT id FROM $this->rider_season_uci_points WHERE name=\"{$name}\" AND season='{$season}'");
+
+		if ($rider_id) :
+			$current_points=$wpdb->get_var("SELECT $type FROM $this->rider_season_uci_points WHERE id={$rider_id}");
+			$current_total=$wpdb->get_var("SELECT SUM(c2+c1+cn+cc+cdm+cm) FROM $this->rider_season_uci_points WHERE id={$rider_id}");
+
+			$data=array(
+				$type => $points+$current_points,
+				'total' => $points+$current_total
+			);
+
+			if ($rows=$wpdb->update($this->rider_season_uci_points,$data,array('id' => $rider_id))) :
+				return "<div class=\"updated\">Updated points for $name.</div>";
+			elseif ($rows===false) :
+				return "<div class=\"error\">Failed to update points for $name.</div>";
+			elseif ($rows==0) :
+				return "<div class=\"updated\">Updated points for $name.</div>";
+			endif;
+		else :
+			$data=array(
+				'name' => $name,
+				'nat' => $nat,
+				'season' => $season,
+				$type => $points,
+				'total' => $points
+			);
+
+			if ($wpdb->insert($this->rider_season_uci_points,$data)) :
+				return "<div class=\"updated\">Added points for $name.</div>";
+			else :
+				return "<div class=\"error\">Failed to add points for $name.</div>";
+			endif;
+		endif;
+	}
+
+	/**
+	 * update_rider_season_sos function.
+	 *
+	 * @access public
+	 * @param bool $rider (default: false)
+	 * @param bool $season (default: false)
+	 * @return void
+	 */
+	public function update_rider_season_sos($rider=false,$season=false) {
+		global $wpdb;
+
+		if (!$season)
+			return '<div class="error">Season SOS requires a season to be passed</div>';
+
+		$sos=0;
+		$total_races=$wpdb->get_var("SELECT COUNT(*) FROM $this->table WHERE season='{$season}'");
+		$sql="
+			SELECT
+				results.name,
+				COALESCE((SELECT SUM(fq_table.fq) / COUNT(fq_table.fq) ),0) AS fq_avg,
+				COUNT(fq_table.fq) AS races
+			FROM $this->results_table AS results
+			LEFT JOIN $this->table AS races
+			ON results.code=races.code
+			LEFT JOIN $this->fq_table AS fq_table
+			ON fq_table.code=races.code
+			WHERE season='{$season}'
+			GROUP BY results.name
+		";
+		$riders=$wpdb->get_results($sql);
+
+		// do some math to get sos //
+		foreach ($riders as $rider) :
+			if ($rider->races==0) :
+				$divider=0;
+			else :
+				$divider=$total_races/$rider->races;
+			endif;
+
+			if ($rider->fq_avg==0 && $rider->races==0) :
+				$rider->sos=0;
+			else :
+				$rider->sos=$rider->fq_avg/$divider;
+			endif;
+		endforeach;
+
+		// Sort the array by sos.
+		usort($riders, function($a,$b) {
+			return strcmp($b->sos,$a->sos);
+		});
+
+		// add rank //
+		$rank=1;
+		foreach ($riders as $rider) :
+			$rider->rank=$rank;
+			$rank++;
+		endforeach;
+
+		// add to db //
+		foreach ($riders as $rider) :
+			$rider_id=$wpdb->get_var("SELECT id FROM $this->uci_rider_season_sos WHERE name=\"{$rider->name}\" AND season='{$season}'");
+
+			if ($rider_id) :
+				$data=array(
+					'sos' => $rider->sos,
+					'rank' => $rider->rank
+				);
+
+				if ($rows=$wpdb->update($this->uci_rider_season_sos,$data,array('id' => $rider_id))) :
+					echo "<div class=\"updated\">Updated SOS for $rider->name.</div>";
+				elseif ($rows===false) :
+					echo "<div class=\"error\">Failed to update SOS for $rider->name.</div>";
+				elseif ($rows==0) :
+					echo "<div class=\"updated\">Updated SOS for $rider->name.</div>";
+				endif;
+			else :
+				$data=array(
+					'name' => $rider->name,
+					'season' => $season,
+					'sos' => $rider->sos,
+					'rank' => $rider->rank
+				);
+
+				if ($wpdb->insert($this->uci_rider_season_sos,$data)) :
+					echo "<div class=\"updated\">Added SOS for $rider->name.</div>";
+				else :
+					echo "<div class=\"error\">Failed to add SOS for $rider->name.</div>";
+				endif;
+			endif;
+		endforeach;
+	}
+
+	/**
+	 * update_rider_wins function.
+	 *
+	 * @access public
+	 * @param bool $rider (default: false)
+	 * @param bool $season (default: false)
+	 * @return void
+	 */
+	public function update_rider_wins($rider=false,$season=false) {
+		global $wpdb;
+
+		if (!$season)
+			return '<div class="error">Season wins requires a season to be passed</div>';
+
+		$sql="
+			SELECT
+				name,
+				wins,
+				races,
+				SUM(wins/races) AS win_perc
+			FROM (
+
+				SELECT
+					results.name AS name,
+					SUM(IF(results.place=1,1,0)) AS wins,
+					COUNT(results.code) AS races
+				FROM $this->results_table AS results
+				LEFT JOIN $this->table AS races
+				ON results.code=races.code
+				WHERE races.season='{$season}'
+				GROUP BY results.name
+			) t
+			GROUP BY name
+			ORDER BY win_perc DESC, wins DESC, races ASC, name ASC
+		";
+		$riders=$wpdb->get_results($sql);
+
+		// add rank //
+		$rank=1;
+		foreach ($riders as $rider) :
+			$rider->rank=$rank;
+			$rank++;
+		endforeach;
+
+		// add to db //
+		foreach ($riders as $rider) :
+			$rider_id=$wpdb->get_var("SELECT id FROM $this->uci_rider_season_wins WHERE name=\"{$rider->name}\" AND season='{$season}'");
+
+			if ($rider_id) :
+				$data=array(
+					'wins' => $rider->wins,
+					'races' => $rider->races,
+					'win_perc' => $rider->win_perc,
+					'rank' => $rider->rank,
+				);
+
+				if ($rows=$wpdb->update($this->uci_rider_season_wins,$data,array('id' => $rider_id))) :
+					echo "<div class=\"updated\">Updated wins for $rider->name.</div>";
+				elseif ($rows===false) :
+					echo "<div class=\"error\">Failed to update wins for $rider->name.</div>";
+				elseif ($rows==0) :
+					echo "<div class=\"updated\">Updated wins for $rider->name.</div>";
+				endif;
+			else :
+				$data=array(
+					'name' => $rider->name,
+					'season' => $season,
+					'wins' => $rider->wins,
+					'races' => $rider->races,
+					'win_perc' => $rider->win_perc,
+					'rank' => $rider->rank,
+				);
+
+				if ($wpdb->insert($this->uci_rider_season_wins,$data)) :
+					echo "<div class=\"updated\">Added wins for $rider->name.</div>";
+				else :
+					echo "<div class=\"error\">Failed to add wins for $rider->name.</div>";
+				endif;
 			endif;
 		endforeach;
 	}
@@ -781,18 +989,18 @@ class Top25_cURL {
 		$html.='<form name="add-races-to-db" id="add-races-to-db" method="post">';
 			$html.='<div class="race-table">';
 				$html.='<div class="header row">';
-					$html.='<div class="col-md-1">&nbsp;</div>';
+					$html.='<div class="col-xs-1"><a href="" class="select" id="selectall">All</a></div>';
 					$html.='<div class="col-md-2">Date</div>';
-					$html.='<div class="col-md-3">Event</div>';
+					$html.='<div class="col-md-4">Event</div>';
 					$html.='<div class="col-md-1">Nat.</div>';
 					$html.='<div class="col-md-1">Class</div>';
-					$html.='<div class="col-md-2">Winner</div>';
+					//$html.='<div class="col-md-2">Winner</div>';
 					$html.='<div class="col-md-2">Season</div>';
 				$html.='</div>';
 
-				$html.='<div class="row select-all">';
-					$html.='<div class="col-xs-2"><a href="" class="select" id="selectall">Select All</a></div>';
-				$html.='</div>';
+				//$html.='<div class="row select-all">';
+
+				//$html.='</div>';
 
 				foreach ($obj as $result) :
 					$disabled='';
@@ -814,13 +1022,13 @@ class Top25_cURL {
 						$event='No Event';
 
 					$html.='<div class="row">';
-						$html.='<div class="col-md-1"><input class="race-checkbox" type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" '.$disabled.' /></div>';
+						$html.='<div class="col-xs-1"><input class="race-checkbox" type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" '.$disabled.' /></div>';
 						$html.='<div class="col-md-2">'.$date.'</div>';
-						$html.='<div class="col-md-3">'.$event.'</div>';
+						$html.='<div class="col-md-4">'.$event.'</div>';
 						if ($result->event) :
 							$html.='<div class="col-md-1">'.$result->nat.'</div>';
 							$html.='<div class="col-md-1">'.$result->class.'</div>';
-							$html.='<div class="col-md-2">'.$result->winner.'</div>';
+							//$html.='<div class="col-md-2">'.$result->winner.'</div>';
 							$html.='<div class="col-md-2">'.$result->season.'</div>';
 						endif;
 					$html.='</div>';
@@ -867,7 +1075,7 @@ class Top25_cURL {
 		global $wpdb;
 
 		if ($this->has_fq($code) || $this->debug)
-			return false;
+			return '<div class="error">This code already has an FQ</div>';
 
 		$FieldQuality=new FieldQuality($code);
 		$message='';

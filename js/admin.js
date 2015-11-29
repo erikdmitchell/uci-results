@@ -75,6 +75,8 @@ jQuery(document).ready(function($) {
 			$('#get-race-data').append('<div id="counter"><span class="ctr">'+counter+'</span> out of '+races.length+' proccessed.');
 
 			for (var i in races) {
+				//$modal.show();
+
 				var data={
 					'action' : 'add_race_to_db',
 					'race' : races[i]
@@ -84,77 +86,12 @@ jQuery(document).ready(function($) {
 					$('#get-race-data').append(response);
 					$('#get-race-data').find('#counter span.ctr').text(counter);
 					counter++;
-
+					//$modal.hide();
 					// after we are done races //
 					if (counter>=races.length) {
-						var endData={
-							'action' : 'get_all_riders',
-							'season' : '2015/2016' // NEEDS TO BE DYNAMIC
-						};
-						var cntr=1;
-
-						$.post(ajaxurl,endData,function(riders) {
-							riders=$.parseJSON(riders); // gets all riders
-
-							$('#get-race-data').append('<div id="rider-counter"><span class="ctr">'+cntr+'</span> out of '+riders.length+' proccessed.');
-
-							for (var i in riders) {
-								var ridersData={
-									'action' : 'add_riders_weekly_rankings',
-									'season' : '2015/2016', // NEEDS TO BE DYNAMIC
-									'rider' : riders[i]
-								};
-								// prcoess our riders for weekly rankings //
-								$.post(ajaxurl,ridersData,function(response) {
-									$('#get-race-data').append(response);
-									$('#get-race-data').find('#rider-counter span.ctr').text(cntr);
-									cntr++;
-								});
-							}
-						});
+						alert('fin');
 					}
 				});
-			}
-		});
-	});
-///////
-	/**
-	 * view db page, race results/details
-	 */
-	$('.race-details a').click(function(e) {
-		e.preventDefault();
-
-		if ($(this).hasClass('details')) {
-			$('.race-table .race-fq').each(function() {
-				$(this).removeClass('active');
-			});
-
-			$('#'+$(this).data('id')+'.race-fq').addClass('active');
-		} else if ($(this).hasClass('result')) {
-			$('.race-table .results').each(function() {
-				$(this).removeClass('active');
-			});
-
-			$('#'+$(this).data('id')+'.results').addClass('active');
-		}
-	});
-
-	/**
-	 * form filter (view db for now)
-	 */
-	$('.form-filter select').change(function() {
-		var dataName=$(this).attr('name');
-		var dataValue=$(this).val();
-
-		$('.race-table .race').each(function() {
-			if (dataValue==0) {
-				$(this).show();
-			} else {
-				$(this).hide();
-
-				if ($(this).data(dataName)==dataValue) {
-					$(this).show();
-				}
 			}
 		});
 	});

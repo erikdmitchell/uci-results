@@ -181,7 +181,8 @@ function uci_template_scripts_styles() {
 
 		$wpOptions=array(
 			//'max_rank' => $wpdb->get_var("SELECT MAX(rank) AS max FROM wp_uci_weekly_rider_rankings WHERE season='".$_GET['season']."'"),
-			'weekly_ranks' => $RiderStats->get_rider_weekly_rank($_GET['rider'],$_GET['season']),
+			//'weekly_ranks' => $RiderStats->get_rider_weekly_rank($_GET['rider'],$_GET['season']),
+			'rider_points' => $RiderStats->get_rider_points($_GET['rider'],$_GET['season'])
 		);
 
 		wp_localize_script('uci-riders-script','wpOptions',$wpOptions);

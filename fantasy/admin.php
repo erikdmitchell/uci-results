@@ -533,5 +533,6 @@ class FantasyCyclingAdmin {
 
 }
 
-new FantasyCyclingAdmin();
+if (is_admin())
+	new FantasyCyclingAdmin();
 ?>

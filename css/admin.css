@@ -131,6 +131,12 @@
 .tablesorter td {
 	border: 1px solid #000;
 }
+.tablesorter .checkbox {
+	border: none;
+}
+.tablesorter th.header.checkbox {
+	background-image: none;
+}
 .tablesorter th,
 .tablesorter td {
 	padding: 5px 8px 5px 8px;

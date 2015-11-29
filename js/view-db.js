@@ -35,7 +35,7 @@ jQuery(document).ready(function($) {
 		});
 	});
 
-	// form reset //
+	// search form reset //
 	$('#clear-race-search').click(function(e) {
 		e.preventDefault();
 
@@ -86,6 +86,101 @@ jQuery(document).ready(function($) {
 			$('.row.data').html(response);
 			$loader.hide();
 		});
+	});
+
+	// check all
+  $('#checkall').live('click',function(event) {
+	  event.preventDefault();
+
+	  if ($(this).hasClass('unselect')) {
+		 	$(this).removeClass('unselect');
+    	$('.race-checkbox').each(function() {
+      	this.checked = false;  //select all checkboxes
+      });
+		} else {
+			$(this).addClass('unselect');
+    	$('.race-checkbox').each(function() {
+	    	if (!$(this).is(':disabled')) {
+	      	this.checked = true; //deselect all checkboxes
+	      }
+      });
+		}
+  });
+
+  // add rider uci points button
+  $('#add_rider_season_uci_points').live('click',function(e) {
+	  e.preventDefault();
+
+		$loader.show();
+
+		var values=[];
+
+		// get checked values //
+		$('#race-filter .race-checkbox').each(function () {
+			if ($(this).is(':checked')) {
+				values.push($(this).val());
+			}
+		});
+
+		$('#get-race-rider').html('');
+
+		var data={
+			'action' : 'add_rider_season_uci_points',
+			'value' : values
+		};
+
+		$.post(ajaxurl,data,function(response) {
+			$('#get-race-rider').html(response);
+			$loader.hide();
+		});
+	});
+
+	// update rider sos //
+  $('#update_rider_sos').live('click',function(e) {
+	  e.preventDefault();
+
+		$loader.show();
+
+		// get checked values //
+
+
+		$('#get-race-rider').html('');
+
+		var data={
+			'action' : 'update_season_sos',
+			'season' : $('#rider_filters .season-dd').val(),
+			'rider' : ''
+		};
+
+		$.post(ajaxurl,data,function(response) {
+			$('#get-race-rider').html(response);
+			$loader.hide();
+		});
+	});
+
+	// update rider wins //
+  $('#update_rider_wins').live('click',function(e) {
+	  e.preventDefault();
+
+		$loader.show();
+
+		$('#get-race-rider').html('');
+
+		var data={
+			'action' : 'update_season_wins',
+			'season' : $('#rider_filters .season-dd').val(),
+			'rider' : ''
+		};
+
+		$.post(ajaxurl,data,function(response) {
+			$('#get-race-rider').html(response);
+			$loader.hide();
+		});
+	});
+
+	// form reset //
+	$('#form-reset').click(function() {
+		$('#get-race-rider').html('');
 	});
 
 });
