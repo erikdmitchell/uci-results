@@ -174,22 +174,24 @@ function fc_rider_list_dropdown_race($args=array()) {
 }
 
 function fc_get_fantasy_riders($args=array()) {
-	global $wpdb;
+	global $wpdb,$uci_curl,$RiderStats;
 
+	$season='2015/2016';
 	$default_args=array(
-		'id' => 1,
-		'name' => generateRandomString(),
-		//'min_rank' => 0,
-		//'max_rank' => 10,
-		//'select_title' => 'Select a Rider',
+		'race_id' => 1,
+		'name' => generateRandomString(), // not used
 		'echo' => true
 	);
 	$args=array_merge($default_args,$args);
 
 	extract($args);
 
-	$riders=$wpdb->get_var("SELECT start_list FROM wp_fc_races WHERE id=$id");
-	$riders=unserialize($riders);
+	$race_db=$wpdb->get_row("SELECT * FROM wp_fc_races WHERE id={$race_id}");
+	$riders_db=$RiderStats->get_riders(array(
+		'season' => $season,
+		'pagination' => false
+	));
+	$riders=unserialize($race_db->start_list);
 
 	// if we have no start list //
 	if (empty($riders))
@@ -197,21 +199,35 @@ function fc_get_fantasy_riders($args=array()) {
 
 	// append rider data //
 	foreach ($riders as $key => $rider) :
+		foreach ($riders_db as $rider_db) :
+			if ($rider_db->name==$rider) :
+				$rider_details=$rider_db;
+				break;
+			endif;
+		endforeach;
+
+		$last_year=$wpdb->get_var("SELECT place FROM $uci_curl->results_table WHERE code=\"$race_db->last_year_code\" AND name='{$rider}'");
 		$arr=array();
 		$arr['name']=$rider;
-		$arr['country']=$wpdb->get_var("SELECT nat FROM wp_uci_rider_data WHERE name='$rider' GROUP BY nat");
-		// last year finish
+		$arr['country']=$wpdb->get_var("SELECT nat FROM $uci_curl->results_table WHERE name='{$rider}' GROUP BY nat");
+
+		if ($last_year) :
+			$arr['last_year']=$last_year;
+		else :
+			$arr['last_year']='n/a';
+		endif;
+
 		// last week finish/race
-		// rank
-		// points - C2,C1,CC,CN,CDM,CM
+
+		$arr['rank']=$rider_details->rank;
+		$arr['points']=$wpdb->get_row("SELECT c2,c1,cn,cc,cdm,cm,total FROM $uci_curl->rider_season_uci_points WHERE name='{$rider}' AND season='{$season}'");
+
 		$riders[$key]=$arr;
 	endforeach;
 
 	// Sort the array by name //
 	sort($riders);
-echo '<pre>';
-print_r($riders);
-echo '</pre>';
+
 	return $riders;
 }
 
@@ -246,7 +262,7 @@ function fc_add_rider_modal($args=array()) {
 	        		$html.='<div class="col-md-4 rider-group">';
 	        			foreach ($rider_group as $rider) :
 							$html.='<div class="rider">';
-								$html.='<div class="name"><a href="#" data-name="'.$rider.'">'.$rider.'</a></div>';
+								$html.='<div class="name"><a href="#" data-rider="'.htmlspecialchars(json_encode($rider),ENT_QUOTES,'UTF-8').'">'.$rider['name'].'</a></div>';
 							$html.='</div>';
 						endforeach;
 					$html.='</div>'; // rg

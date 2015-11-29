@@ -171,22 +171,16 @@ $max_riders=6;
 			<div class="col-md-2">
 				<?php fc_add_rider_modal_btn(); ?>
 			</div>
-			<div class="col-md-2 rider-name">
-
-			</div>
-			<div class="col-md-2">
-				Finish
-			</div>
+			<div class="col-md-2 rider-name"></div>
+			<div class="col-md-2 last-year-finish"></div>
 			<div class="col-md-2">
 				Race/Finish
 			</div>
-			<div class="col-md-1">
-				Current
-			</div>
+			<div class="col-md-1 rank"></div>
 			<div class="col-md-3">
 				C2,C1,CC,CN,CDM,CM
 			</div>
 		</div>
 	<?php endfor; ?>
 </div>
-<?php fc_add_rider_modal(array('id' => $race_id)); ?>
+<?php fc_add_rider_modal(array('race_id' => $race_id)); ?>

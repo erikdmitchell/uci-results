@@ -51,10 +51,14 @@ jQuery(document).ready(function($) {
 	// add rider button click inside modal //
 	$('#add-rider-modal .rider-list .rider a').click(function(e) {
 		e.preventDefault();
+
+		var riderData=$(this).data().rider;
 console.log(riderID);
-console.log($(this).data('name'));
+console.log(riderData);
 		$('#add-rider-modal').modal('hide'); // hide modal
-		$('#'+riderID+' .rider-name').html($(this).data('name'));
+		$('#'+riderID+' .rider-name').html(riderData.name+' ('+riderData.country+')');
+		$('#'+riderID+' .last-year-finish').html(riderData.last_year);
+		$('#'+riderID+' .rank').html(riderData.rank);
 	});
 
 });
