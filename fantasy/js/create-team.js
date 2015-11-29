@@ -59,6 +59,12 @@ console.log(riderData);
 		$('#'+riderID+' .rider-name').html(riderData.name+' ('+riderData.country+')');
 		$('#'+riderID+' .last-year-finish').html(riderData.last_year);
 		$('#'+riderID+' .rank').html(riderData.rank);
+		$('#'+riderID+' .season-points .c2').html(riderData.points.c2);
+		$('#'+riderID+' .season-points .c1').html(riderData.points.c1);
+		$('#'+riderID+' .season-points .cc').html(riderData.points.cc);
+		$('#'+riderID+' .season-points .cn').html(riderData.points.cn);
+		$('#'+riderID+' .season-points .cdm').html(riderData.points.cdm);
+		$('#'+riderID+' .season-points .cm').html(riderData.points.cm);
 	});
 
 });
