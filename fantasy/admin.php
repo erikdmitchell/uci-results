@@ -259,17 +259,17 @@ class FantasyCyclingAdmin {
 					$html.='</div>';
 					$html.='<div class="col-md-3">';
 						foreach ($left_col as $rider) :
-							$html.='<input type="checkbox" name="riders[]" class="sl-riders" value="'.$rider->rider.'" /> '.$rider->rider.' ('.$rider->nat.')<br />';
+							$html.='<input type="checkbox" name="riders[]" class="sl-riders" value="'.$rider->name.'" /> '.$rider->name.' ('.$rider->nat.')<br />';
 						endforeach;
 					$html.='</div>';
 					$html.='<div class="col-md-3">';
 						foreach ($center_col as $rider) :
-							$html.='<input type="checkbox" name="riders[]" class="sl-riders" value="'.$rider->rider.'" /> '.$rider->rider.' ('.$rider->nat.')<br />';
+							$html.='<input type="checkbox" name="riders[]" class="sl-riders" value="'.$rider->name.'" /> '.$rider->name.' ('.$rider->nat.')<br />';
 						endforeach;
 					$html.='</div>';
 					$html.='<div class="col-md-3 last-col">';
 						foreach ($right_col as $rider) :
-							$html.='<input type="checkbox" name="riders[]" class="sl-riders" value="'.$rider->rider.'" /> '.$rider->rider.' ('.$rider->nat.')<br />';
+							$html.='<input type="checkbox" name="riders[]" class="sl-riders" value="'.$rider->name.'" /> '.$rider->name.' ('.$rider->nat.')<br />';
 						endforeach;
 					$html.='</div>';
 				$html.='</div>';

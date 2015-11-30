@@ -34,6 +34,7 @@
 .fantasy-cycling-create-team .row {
 	margin-bottom: 5px;
 }
+/*
 .fantasy-cycling-create-team .longtext {
 	width: 80%;
 }
@@ -45,8 +46,23 @@
 .last-year-results h3 {
 	margin-top: 0;
 }
+*/
+.fc-team-roster .header {
+		font-weight: bold;
+}
 .add-remove-rider {
 	margin-bottom: 5px;
+}
+.fc-team-roster .season-points .sub-col div {
+	padding-right: 5px;
+	padding-left: 5px;
+	font-size: 12px;
+}
+.fc-team-roster .season-points .sub-col div.c2 {
+	padding-left: 15px;
+}
+.fc-team-roster .last-week-race-name {
+	font-size: 12px;
 }
 .add-remove-btn {
 	padding: 5px 10px;

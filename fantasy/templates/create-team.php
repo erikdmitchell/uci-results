@@ -149,32 +149,54 @@ $max_riders=6;
 	</div>
 -->
 </div><!-- .row -->
+<?php $race_id=fc_get_race_id(); ?>
 <div class="fc-team-roster">
 	<div class="row header">
-		<div class="col-md-2">&nbsp;</div>
-		<div class="col-md-2">Rider</div>
+		<div class="col-md-1">&nbsp;</div>
+		<div class="col-md-3">Rider</div>
 		<div class="col-md-2">Last Year</div>
-		<div class="col-md-2">Last Week</div>
+		<div class="col-md-2">
+			<div class="row">
+				<div class="col-md-12">Last Week</div>
+			</div>
+			<div class="row last-week-race-name">
+				<div class="col-md-12"><?php echo fc_fantasy_get_last_week_race_name($race_id); ?></div>
+			</div>
+		</div>
 		<div class="col-md-1">Rank</div>
-		<div class="col-md-3">UCI Points</div>
+		<div class="col-md-3 season-points">
+			<div class="row">
+				<div class="col-md-12">
+					UCI Points
+				</div>
+			</div>
+			<div class="row sub-col">
+				<div class="col-md-2 c2">C2</div>
+				<div class="col-md-2 c1">C1</div>
+				<div class="col-md-2 cc">CC</div>
+				<div class="col-md-2 cn">CN</div>
+				<div class="col-md-2 cdm">CDM</div>
+				<div class="col-md-2 cm">CM</div>
+			</div>
+		</div>
+
 	</div>
-	<?php $race_id=fc_get_race_id(); ?>
 	<?php for ($i=0;$i<$max_riders;$i++) : ?>
 		<div id="rider-<?php echo $i; ?>" class="row add-remove-rider">
-			<div class="col-md-2">
-				<?php fc_add_rider_modal_btn(); ?>
-			</div>
-			<div class="col-md-2 rider-name"></div>
+			<div class="col-md-1"><?php fc_add_rider_modal_btn(); ?></div>
+			<div class="col-md-3 rider-name"></div>
 			<div class="col-md-2 last-year-finish"></div>
 			<div class="col-md-2 last-week-finish"></div>
 			<div class="col-md-1 rank"></div>
 			<div class="col-md-3 season-points">
-				<span class="c2"></span>
-				<span class="c1"></span>
-				<span class="cc"></span>
-				<span class="cn"></span>
-				<span class="cdm"></span>
-				<span class="cm"></span>
+				<div class="row sub-col">
+					<div class="col-md-2 c2"></div>
+					<div class="col-md-2 c1"></div>
+					<div class="col-md-2 cc"></div>
+					<div class="col-md-2 cn"></div>
+					<div class="col-md-2 cdm"></div>
+					<div class="col-md-2 cm"></div>
+				</div>
 			</div>
 		</div>
 	<?php endfor; ?>

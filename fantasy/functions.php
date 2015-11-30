@@ -218,6 +218,14 @@ function fc_get_fantasy_riders($args=array()) {
 		endif;
 
 		// last week finish/race
+		$last_week_race_code=$wpdb->get_var("SELECT code FROM wp_fc_races WHERE race_start BETWEEN DATE_SUB('{$race_db->race_start}', INTERVAL 7 DAY) AND '{$race_db->race_start}' AND id!={$race_id}");
+		$last_week=$wpdb->get_var("SELECT place FROM $uci_curl->results_table WHERE code=\"$last_week_race_code\" AND name='{$rider}'");
+
+		if ($last_week) :
+			$arr['last_week']=$last_week;
+		else :
+			$arr['last_week']='n/a';
+		endif;
 
 		$arr['rank']=$rider_details->rank;
 		$arr['points']=$wpdb->get_row("SELECT c2,c1,cn,cc,cdm,cm,total FROM $uci_curl->rider_season_uci_points WHERE name='{$rider}' AND season='{$season}'");
@@ -278,6 +286,15 @@ function fc_add_rider_modal($args=array()) {
 	$html.='</div><!-- /.modal -->';
 
 	echo $html;
+}
+
+function fc_fantasy_get_last_week_race_name($race_id=0) {
+	global $wpdb;
+
+	$race_db=$wpdb->get_row("SELECT * FROM wp_fc_races WHERE id={$race_id}");
+	$name=$wpdb->get_var("SELECT name FROM wp_fc_races WHERE race_start BETWEEN DATE_SUB('{$race_db->race_start}', INTERVAL 7 DAY) AND '{$race_db->race_start}' AND id!={$race_id}");
+
+	return $name;
 }
 
 /**

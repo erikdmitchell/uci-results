@@ -53,11 +53,11 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 
 		var riderData=$(this).data().rider;
-console.log(riderID);
-console.log(riderData);
+
 		$('#add-rider-modal').modal('hide'); // hide modal
 		$('#'+riderID+' .rider-name').html(riderData.name+' ('+riderData.country+')');
 		$('#'+riderID+' .last-year-finish').html(riderData.last_year);
+		$('#'+riderID+' .last-week-finish').html(riderData.last_week);
 		$('#'+riderID+' .rank').html(riderData.rank);
 		$('#'+riderID+' .season-points .c2').html(riderData.points.c2);
 		$('#'+riderID+' .season-points .c1').html(riderData.points.c1);
