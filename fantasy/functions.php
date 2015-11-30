@@ -129,6 +129,7 @@ function fc_rider_list_dropdown($name=false,$min_rank=0,$max_rank=10,$select_tit
  * @param array $args (default: array())
  * @return void
  */
+/*
 function fc_rider_list_dropdown_race($args=array()) {
 	global $wpdb,$RiderStats;
 
@@ -172,7 +173,15 @@ function fc_rider_list_dropdown_race($args=array()) {
 		return $html;
 	endif;
 }
+*/
 
+/**
+ * fc_get_fantasy_riders function.
+ *
+ * @access public
+ * @param array $args (default: array())
+ * @return void
+ */
 function fc_get_fantasy_riders($args=array()) {
 	global $wpdb,$uci_curl,$RiderStats;
 
@@ -239,6 +248,12 @@ function fc_get_fantasy_riders($args=array()) {
 	return $riders;
 }
 
+/**
+ * fc_add_rider_modal_btn function.
+ *
+ * @access public
+ * @return void
+ */
 function fc_add_rider_modal_btn() {
 	$html=null;
 
@@ -250,12 +265,16 @@ function fc_add_rider_modal_btn() {
 	echo $html;
 }
 
+/**
+ * fc_add_rider_modal function.
+ *
+ * @access public
+ * @param array $args (default: array())
+ * @return void
+ */
 function fc_add_rider_modal($args=array()) {
 	$html=null;
 	$riders=fc_get_fantasy_riders($args);
-	$columns=3;
-	$rows_per_col=ceil(count($riders)/$columns);
-	$riders=array_chunk($riders,$rows_per_col);
 
 	$html.='<div class="modal fade" id="add-rider-modal" tabindex="-1" role="dialog">';
 	  $html.='<div class="modal-dialog">';
@@ -266,20 +285,24 @@ function fc_add_rider_modal($args=array()) {
 	      $html.='</div>';
 	      $html.='<div class="modal-body">';
 	        $html.='<div class="rider-list">';
-	        	foreach ($riders as $rider_group) :
-	        		$html.='<div class="col-md-4 rider-group">';
-	        			foreach ($rider_group as $rider) :
-							$html.='<div class="rider">';
-								$html.='<div class="name"><a href="#" data-rider="'.htmlspecialchars(json_encode($rider),ENT_QUOTES,'UTF-8').'">'.$rider['name'].'</a></div>';
+							$html.='<div class="rider header row">';
+								$html.='<div class="name col-md-5">Name</div>';
+								$html.='<div class="rank col-md-2">Rank</div>';
+								$html.='<div class="last-year col-md-2">Last Year</div>';
+								$html.='<div class="last-week col-md-3">Last Week</div>';
 							$html.='</div>';
-						endforeach;
-					$html.='</div>'; // rg
+	        	foreach ($riders as $rider) :
+							$html.='<div class="rider row">';
+								$html.='<div class="name col-md-5"><a href="#" data-rider="'.htmlspecialchars(json_encode($rider),ENT_QUOTES,'UTF-8').'">'.$rider['name'].'</a></div>';
+								$html.='<div class="rank col-md-2">'.$rider['rank'].'</div>';
+								$html.='<div class="last-year col-md-2">'.$rider['last_year'].'</div>';
+								$html.='<div class="last-week col-md-3">'.$rider['last_week'].'</div>';
+							$html.='</div>';
 	        	endforeach;
 	        $html.='</div>';
 	      $html.='</div>';
 	      $html.='<div class="modal-footer">';
 	        $html.='<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>';
-	        //$html.='<button type="button" class="btn btn-primary add-rider">Add Rider</button>';
 	      $html.='</div>';
 	    $html.='</div><!-- /.modal-content -->';
 	  $html.='</div><!-- /.modal-dialog -->';
@@ -288,6 +311,13 @@ function fc_add_rider_modal($args=array()) {
 	echo $html;
 }
 
+/**
+ * fc_fantasy_get_last_week_race_name function.
+ *
+ * @access public
+ * @param int $race_id (default: 0)
+ * @return void
+ */
 function fc_fantasy_get_last_week_race_name($race_id=0) {
 	global $wpdb;
 

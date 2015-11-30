@@ -64,6 +64,10 @@
 .fc-team-roster .last-week-race-name {
 	font-size: 12px;
 }
+.fc-team-roster .last-week,
+.fc-team-roster .uci-points {
+	text-align: center;
+}
 .add-remove-btn {
 	padding: 5px 10px;
 	background: #ccc;
@@ -90,6 +94,9 @@
 }
 #add-rider-modal .rider-list {
 	overflow: hidden;
+}
+#add-rider-modal .row.header {
+	font-weight: bold;
 }
 /**
  * team rosters
