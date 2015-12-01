@@ -383,7 +383,7 @@ function fc_get_teams_results($team_name=false,$race_id=false) {
 	// if not a single team, order by points //
 	if (!$team_name)
 		usort($teams, function ($a, $b) {
-			return strcmp($b->total,$a->total);
+			return strnatcmp($b->total,$a->total);
 		});
 
 	if ($team_name) :
