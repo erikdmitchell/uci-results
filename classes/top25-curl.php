@@ -13,6 +13,7 @@ class Top25_cURL {
 	public $rider_season_uci_points;
 	public $uci_rider_season_sos;
 	public $uci_rider_season_wins;
+	public $uci_rider_rankings;
 	public $version='1.0.3';
 	public $config=array();
 
@@ -39,6 +40,7 @@ class Top25_cURL {
 		$this->rider_season_uci_points=$wpdb->prefix.'uci_rider_season_points';
 		$this->uci_rider_season_sos=$wpdb->prefix.'uci_rider_season_sos';
 		$this->uci_rider_season_wins=$wpdb->prefix.'uci_rider_season_wins';
+		$this->uci_rider_rankings=$wpdb->prefix.'uci_rider_season_rankings';
 	}
 
 	public function admin_page() {
