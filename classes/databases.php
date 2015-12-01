@@ -121,7 +121,8 @@ class UCIcURLDB {
 		  `coutnry` mediumtext NOT NULL,
 		  `season` int(11) NOT NULL,
 		  `rank` int(11) NOT NULL,
-		  `date` DECIMAL(7,3) NOT NULL
+		  `date` DECIMAL(7,3) NOT NULL,
+		  `week` int(11) NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
@@ -236,7 +237,8 @@ class UCIcURLDB {
 		  `coutnry` mediumtext NOT NULL,
 		  `season` int(11) NOT NULL,
 		  `rank` int(11) NOT NULL,
-		  `date` DECIMAL(7,3) NOT NULL
+		  `date` DECIMAL(7,3) NOT NULL,
+		  `week` int(11) NOT NULL,
 		  PRIMARY KEY (`id`)
 		);";
 
