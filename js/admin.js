@@ -89,10 +89,30 @@ jQuery(document).ready(function($) {
 					//$modal.hide();
 					// after we are done races //
 					if (counter>=races.length) {
-						alert('fin');
+						console.log('fin');
+						return false;
 					}
 				});
 			}
+		});
+	});
+
+	/**
+	 * updates our weekly rank based on season
+	 */
+	$('#update-weekly-rank').click(function(e) {
+		$modal.show();
+		$('#get-race-data').html('');
+		e.preventDefault();
+
+		var data={
+			'action' : 'update_weekly_rank',
+			'season' : $('form.get-races #get-race-season option:selected').text()
+		};
+
+		$.post(ajaxurl,data,function(response) {
+			$('#get-race-data').html(response);
+			$modal.hide();
 		});
 	});
 

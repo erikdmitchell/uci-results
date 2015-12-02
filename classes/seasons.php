@@ -81,14 +81,24 @@ class CrossSeasons {
 		if (!$season)
 			return false;
 
-		$races=array();
+		$arr=array();
 		$weeks=$this->get_weeks($season);
+		$counter=1;
 
 		foreach ($weeks as $week) :
-			$races[]=$this->get_races_in_dates($week[0],$week[1]);
+			$races=$this->get_races_in_dates($week[0],$week[1]);
+			$arr[]=array(
+				'week' => $counter,
+				'start_date' => $week[0],
+				'end_date' => $week[1],
+				'races' => $races
+			);
+			$counter++;
 		endforeach;
 
-		return $races;
+		$object=json_decode(json_encode($arr),FALSE); // convert to object
+
+		return $object;
 	}
 
 	/**

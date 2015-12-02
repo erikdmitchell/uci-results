@@ -55,6 +55,7 @@ class UCIcURLDB {
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
+/*
 		$table_name=$wpdb->prefix.'uci_season_rankings';
 		$uci_season_rankings_sql="CREATE TABLE $table_name (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -66,6 +67,7 @@ class UCIcURLDB {
 		  `season` mediumtext NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
+*/
 
 		$table_name=$wpdb->prefix.'uci_fq_rankings';
 		$uci_fq_rankings_sql="CREATE TABLE $table_name (
@@ -118,7 +120,7 @@ class UCIcURLDB {
 		$rider_season_rankings="CREATE TABLE ".$wpdb->prefix."uci_rider_season_rankings (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `name` mediumtext NOT NULL,
-		  `coutnry` mediumtext NOT NULL,
+		  `country` mediumtext NOT NULL,
 		  `season` int(11) NOT NULL,
 		  `rank` int(11) NOT NULL,
 		  `week` int(11) NOT NULL,
@@ -135,7 +137,7 @@ class UCIcURLDB {
 		dbDelta(array(
 			$uci_races_sql,
 			$uci_rider_data_sql,
-			$uci_season_rankings_sql,
+			//$uci_season_rankings_sql,
 			$uci_fq_rankings_sql,
 			$rider_season_points,
 			$rider_season_sos,
@@ -177,6 +179,7 @@ class UCIcURLDB {
 		);";
 		$alter_rider_data_sql='"ALTER TABLE `'.$table_name.'` DROP `data`;"';
 
+/*
 		$table_name=$wpdb->prefix.'uci_season_rankings';
 		$uci_season_rankings_sql="CREATE TABLE $table_name (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -187,6 +190,7 @@ class UCIcURLDB {
 		  `points` smallint(6) NOT NULL,
 		  `season` mediumtext NOT NULL
 		);";
+*/
 
 		$rider_season_points="CREATE TABLE ".$wpdb->prefix."uci_rider_season_points (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -239,7 +243,7 @@ class UCIcURLDB {
 		$rider_season_rankings="CREATE TABLE ".$wpdb->prefix."uci_rider_season_rankings (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `name` mediumtext NOT NULL,
-		  `coutnry` mediumtext NOT NULL,
+		  `country` mediumtext NOT NULL,
 		  `season` int(11) NOT NULL,
 		  `rank` int(11) NOT NULL,
 		  `week` int(11) NOT NULL,
@@ -255,7 +259,7 @@ class UCIcURLDB {
 		dbDelta(array(
 			$uci_races_sql,
 			$uci_rider_data_sql,
-			$uci_season_rankings_sql,
+			//$uci_season_rankings_sql,
 			$uci_fq_rankings_sql,
 			$rider_season_points,
 			$rider_season_sos,

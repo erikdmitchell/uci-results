@@ -28,14 +28,13 @@ class Top25_cURL {
 		add_action('wp_ajax_get_race_data_non_db',array($this,'ajax_get_race_data_non_db'));
 		add_action('wp_ajax_prepare_add_races_to_db',array($this,'ajax_prepare_add_races_to_db'));
 		add_action('wp_ajax_add_race_to_db',array($this,'ajax_add_race_to_db'));
-		//add_action('wp_ajax_get_all_riders',array($this,'ajax_get_all_riders'));
-		//add_action('wp_ajax_add_riders_weekly_rankings',array($this,'ajax_add_riders_weekly_rankings'));
+		add_action('wp_ajax_update_weekly_rank',array($this,'ajax_update_weekly_rank'));
 
 		$this->setup_config($config);
 
 		$this->table=$wpdb->prefix.'uci_races';
 		$this->results_table=$wpdb->prefix.'uci_rider_data';
-		$this->weekly_rider_rankings_table=$wpdb->prefix.'uci_weekly_rider_rankings';
+		//$this->weekly_rider_rankings_table=$wpdb->prefix.'uci_weekly_rider_rankings';
 		$this->fq_table=$wpdb->prefix.'uci_fq_rankings';
 		$this->rider_season_uci_points=$wpdb->prefix.'uci_rider_season_points';
 		$this->uci_rider_season_sos=$wpdb->prefix.'uci_rider_season_sos';
@@ -162,7 +161,7 @@ class Top25_cURL {
 					$html.='<label for="url-dd" class="col-md-1">Season</label>';
 					$html.='<div class="col-md-2">';
 						$html.='<select class="url-dd" id="get-race-season" name="url">';
-							$html.='<option>Select Year</option>';
+							$html.='<option value="0">Select Year</option>';
 							foreach ($this->config->urls as $season => $s_url) :
 								$html.='<option value="'.$s_url.'" '.selected($url,$s_url).'>'.$season.'</option>';
 							endforeach;
@@ -186,6 +185,8 @@ class Top25_cURL {
 				$html.='</div><!-- .row -->';
 				$html.='<p>';
 					$html.='<input type="button" name="button" id="get-races-curl" class="button button-primary" value="Get Races" />';
+					$html.='&nbsp;';
+					$html.='<input type="button" name="button" id="update-weekly-rank" class="button button-primary" value="Weekly Rank" />';
 				$html.='</p>';
 			$html.='</form>';
 
@@ -364,6 +365,122 @@ class Top25_cURL {
 		else :
 			echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';
 		endif;
+
+		wp_die();
+	}
+
+	/**
+	 * ajax_update_weekly_rank function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function ajax_update_weekly_rank() {
+		global $RaceStats,$wpdb;
+
+		$CrossSeasons=new CrossSeasons();
+
+		extract($_POST);
+
+		// setup our season //
+		if (!$season || $season=='' || $season=='Select Year')
+			$season=end($CrossSeasons->seasons);
+
+		$races_per_week=$CrossSeasons->get_races_in_season_by_week($season); // get races per week
+
+		// get race results and total //
+		$codes=array();
+		foreach ($races_per_week as $week) :
+			// this will stop everything when we get to a week without races //
+			if (empty($week->races))
+				break;
+
+			// get race codes and append to array //
+			foreach ($week->races as $race) :
+				$codes[]=$race->code;
+			endforeach;
+
+			$sql="
+				SELECT
+					name,
+					country,
+					uci_total,
+					SUM(wcp_total) AS wcp_total,
+					SUM(wins/rider_races) AS win_perc,
+					SUM(fq_avg/(total_races/rider_races)) AS sos,
+					SUM(uci_total+(wins/rider_races)+(fq_avg/(total_races/rider_races))) AS total
+				FROM (
+					SELECT
+						results.name AS name,
+						results.nat AS country,
+						SUM(results.par) AS uci_total,
+						SUM(IF(results.place=1,1,0)) AS wins,
+						COUNT(results.code) AS rider_races,
+						COALESCE((SELECT SUM(fq_table.fq) / COUNT(fq_table.fq) ),0) AS fq_avg,
+						(SELECT COUNT(*) FROM wp_uci_races AS races WHERE races.code IN (\"".implode('","',$codes)."\")) AS total_races,
+						0 AS wcp_total
+					FROM $this->results_table AS results
+					LEFT JOIN $this->table AS races
+					ON results.code=races.code
+					LEFT JOIN $this->fq_table AS fq_table
+					ON fq_table.code=races.code
+					WHERE results.code IN (\"".implode('","',$codes)."\")
+					GROUP BY name
+
+					UNION
+
+					SELECT
+						results.name AS name,
+						results.nat AS country,
+						0 uci_total,
+						0 AS wins,
+						0 AS rider_races,
+						0 AS fq_avg,
+						0 AS total_races,
+						SUM(results.par) AS wcp_total
+					FROM $this->results_table AS results
+					LEFT JOIN $this->table AS races
+					ON results.code=races.code
+					WHERE results.code IN (\"".implode('","',$codes)."\")
+					AND races.class='CDM'
+					GROUP BY name
+
+				) t
+				GROUP BY name
+				ORDER BY total DESC
+			";
+			$rank=1;
+			$riders=$wpdb->get_results($sql);
+
+			// build data for each rider aka result //
+			foreach ($riders as $rider) :
+				$data=array(
+					'name' => $rider->name,
+					'country' => $rider->country,
+					'season' => $season,
+					'rank' => $rank,
+					'week' => $week->week,
+					'uci_total' => $rider->uci_total,
+					'wcp_total' => $rider->wcp_total,
+					'win_perc' => $rider->win_perc,
+					'sos' => $rider->sos,
+					'sos_rank' => 0,
+					'total' => $rider->total,
+				);
+
+				$rank++;
+
+				// updated if in db, else insert //
+				if ($id=$wpdb->get_var("SELECT id FROM $this->uci_rider_rankings WHERE name=\"{$rider->name}\" AND week=$week->week")) :
+					$wpdb->update($this->uci_rider_rankings,$data,array('id' => $id));
+				else :
+					$wpdb->insert($this->uci_rider_rankings,$data);
+				endif;
+
+				echo '<div class="updated">'.$rider->name.' has been updated in the rider rankings db for week '.$week->week.'</div>';
+
+			endforeach; // riders
+		endforeach; // races per week
 
 		wp_die();
 	}
@@ -574,8 +691,8 @@ class Top25_cURL {
 				print_r($insert);
 				echo '</pre>';
 			else :
-				$wpdb->insert($this->results_table,$insert);
-				echo $this->add_rider_season_uci_points($result->name,$result->nat,$race_data->season,$race_data->class,$result->par);
+				//$wpdb->insert($this->results_table,$insert);
+				//echo $this->add_rider_season_uci_points($result->name,$result->nat,$race_data->season,$race_data->class,$result->par);
 			endif;
 		endforeach;
 
@@ -807,6 +924,10 @@ class Top25_cURL {
 				endif;
 			endif;
 		endforeach;
+	}
+
+	public function update_rider_rankings($rider=false,$season=false) {
+echo 'update raninkgs<br>';
 	}
 
 	//----------------------------- begin add_race_to_db helper functions -----------------------------//
