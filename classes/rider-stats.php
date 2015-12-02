@@ -33,33 +33,33 @@ class RiderStats {
 		global $wpdb,$uci_curl,$wp_query;
 
 		$riders=array();
-		$limit=null;
+		$limit=false;
 		$where=array();
-		$rank=1;
-		$total_divider=4;
-		$dates='';
-		$org_orderby=false;
+		//$rank=1;
+		//$total_divider=4;
+		//$dates='';
+		//$org_orderby=false;
+		$paged=get_query_var('paged',1);
 		$default_args=array(
-			'season' => '2015/2016',
-			'pagination' => true,
-			'paged' => 1,
+			//'pagination' => true,
+			//'paged' => 1,
 			'per_page' => 15,
-			'limit' => false,
+			//'limit' => false,
 			'order_by' => 'total',
 			'order' => 'DESC',
 			'name' => false,
-			//'start_date' => false,
-			//'end_date' => false
+			'season' => '2015/2016',
+			'country' => false, // not used yet
+			'week' => false,
 		);
 		$args=array_merge($default_args,$user_args);
-
+echo '<pre>';
+print_r($args);
+echo '</pre>';
 		extract($args);
 
-		// we have a afew scenarios to alter our limit and/or where - name (single result), paginated result or basic limit //
-		if ($name) :
-			$limit='';
-			$where[]="season_points.name=\"$name\"";
-		elseif ($pagination) :
+		// if we have a limit, setup pagination //
+		if ($per_page>0) :
 			if ($paged==0) :
 				$start=0;
 			else :
@@ -67,13 +67,18 @@ class RiderStats {
 			endif;
 			$end=$per_page;
 			$limit="LIMIT $start,$end";
-			$rank=$start+1;
-		elseif ($limit) :
-			$limit="LIMIT $limit";
+			//$rank=$start+1;
 		endif;
 
-		// setup some where stuff //
-		$where[]="season_points.season='{$season}'";
+		// setup our where stuff //
+		if ($name)
+			$where[]="name='{$name}'";
+
+		if ($season)
+			$where[]="season='{$season}'";
+
+		if ($week)
+			$where[]="week='{$week}'";
 
 		// run our where //
 		if (!empty($where)) :
@@ -82,77 +87,34 @@ class RiderStats {
 			$where='';
 		endif;
 
+/*
 		// our rank can be off if we sort by anything besides total, so we do that now //
 		if ($order_by!='total') :
 			$org_orderby=$order_by;
 			$order_by='total';
 		endif;
+*/
 
-		$sql="
+		echo $sql="
 			SELECT
-				@curRow := @curRow + 1 AS rank,
-				t.*
-			FROM (
-				SELECT
-					season_points.name AS name,
-					season_points.nat AS nat,
-					season_points.total AS uci_total,
-					season_points.cdm AS wcp_total,
-					wins.win_perc AS win_perc,
-					sos.sos AS sos,
-					sos.rank AS sos_rank,
-					SUM((season_points.total+sos.sos+wins.win_perc)/3) AS total
-				FROM $uci_curl->rider_season_uci_points AS season_points
-				LEFT JOIN $uci_curl->uci_rider_season_sos AS sos
-				ON season_points.name=sos.name
-				LEFT JOIN $uci_curl->uci_rider_season_wins AS wins
-				ON season_points.name=wins.name
-				WHERE $where
-				GROUP BY season_points.name
-			) t
-			JOIN (SELECT @curRow := 0) r
+				*
+			FROM $uci_curl->uci_rider_rankings
+			WHERE $where
 			ORDER BY $order_by $order
 			$limit
 		";
 
-		//$wpdb->query("SET SQL_BIG_SELECTS=1"); // fixes a minor sql bug
-
 		$riders=$wpdb->get_results($sql);
 
-		// if pagination, set our max pages var //
-		if ($pagination) :
-			$max_riders=$wpdb->get_var("SELECT COUNT(*) FROM wp_uci_rider_season_points WHERE season='{$season}'");
+		//set our max pages var for pagination //
+		if ($per_page>0) :
+			$max_riders=$wpdb->get_var("SELECT COUNT(*) FROM $uci_curl->uci_rider_rankings WHERE $where");
 			$wp_query->uci_curl_max_pages=$max_riders;
 		endif;
 
 		// add rank, if no name run rank if name, run all and get rank //
 		if ($name) :
-			$sql="
-				SELECT
-					@curRow := @curRow + 1 AS rank,
-					t.*
-				FROM (
-					SELECT
-						season_points.name AS name,
-						SUM((season_points.total+sos.sos+wins.win_perc)/3) AS total
-					FROM $uci_curl->rider_season_uci_points AS season_points
-					LEFT JOIN $uci_curl->uci_rider_season_sos AS sos
-					ON season_points.name=sos.name
-					LEFT JOIN $uci_curl->uci_rider_season_wins AS wins
-					ON season_points.name=wins.name
-					WHERE season_points.season='{$season}'
-					GROUP BY season_points.name
-				) t
-				JOIN (SELECT @curRow := 0) r
-				ORDER BY $order_by $order
-			";
-			$riders_db=$wpdb->get_results($sql);
 
-			// get real rank //
-			foreach ($riders_db as $rider) :
-				if ($rider->name==$name)
-					$riders[0]->rank=$rider->rank;
-			endforeach;
 		endif;
 
 		// clean variables //
@@ -161,6 +123,7 @@ class RiderStats {
 			$rider->total=number_format($rider->total,3);
 		endforeach;
 
+/*
 		// if order by is not rank, do that here //
 		if ($org_orderby) :
 			if (strpos($org_orderby,',') === false) : // checks if we have multiple sorts -- NEED A METHOD FOR THIS
@@ -171,6 +134,7 @@ class RiderStats {
 				array_multisort($order,SORT_ASC,$riders);
 			endif;
 		endif;
+*/
 
 		if ($name)
 			$riders=$riders[0];
