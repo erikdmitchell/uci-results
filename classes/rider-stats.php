@@ -35,27 +35,18 @@ class RiderStats {
 		$riders=array();
 		$limit=false;
 		$where=array();
-		//$rank=1;
-		//$total_divider=4;
-		//$dates='';
-		//$org_orderby=false;
 		$paged=get_query_var('paged',1);
 		$default_args=array(
-			//'pagination' => true,
-			//'paged' => 1,
 			'per_page' => 15,
-			//'limit' => false,
 			'order_by' => 'total',
 			'order' => 'DESC',
 			'name' => false,
 			'season' => '2015/2016',
 			'country' => false, // not used yet
 			'week' => false,
+			'group' => '',
 		);
 		$args=array_merge($default_args,$user_args);
-echo '<pre>';
-print_r($args);
-echo '</pre>';
 		extract($args);
 
 		// if we dont have a name and we have a limit, setup pagination //
@@ -87,19 +78,12 @@ echo '</pre>';
 			$where='';
 		endif;
 
-/*
-		// our rank can be off if we sort by anything besides total, so we do that now //
-		if ($order_by!='total') :
-			$org_orderby=$order_by;
-			$order_by='total';
-		endif;
-*/
-
-		echo $sql="
+		$sql="
 			SELECT
 				*
 			FROM $uci_curl->uci_rider_rankings
 			WHERE $where
+			$group
 			ORDER BY $order_by $order
 			$limit
 		";
@@ -112,29 +96,11 @@ echo '</pre>';
 			$wp_query->uci_curl_max_pages=$max_riders;
 		endif;
 
-		// add rank, if no name run rank if name, run all and get rank //
-		if ($name) :
-
-		endif;
-
 		// clean variables //
 		foreach ($riders as $rider) :
 			$rider->sos=number_format($rider->sos,3);
 			$rider->total=number_format($rider->total,3);
 		endforeach;
-
-/*
-		// if order by is not rank, do that here //
-		if ($org_orderby) :
-			if (strpos($org_orderby,',') === false) : // checks if we have multiple sorts -- NEED A METHOD FOR THIS
-				$order=array();
-				foreach ($riders as $rider) :
-					$order[]=$rider->$org_orderby;
-				endforeach;
-				array_multisort($order,SORT_ASC,$riders);
-			endif;
-		endif;
-*/
 
 		if ($name)
 			$riders=$riders[0];

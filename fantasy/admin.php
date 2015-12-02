@@ -227,8 +227,9 @@ class FantasyCyclingAdmin {
 
 			$races=$this->get_races_from_db();
 			$riders=$RiderStats->get_riders(array(
-				'pagination' => false,
-				'order_by' => 'nat ASC, name'
+				'per_page' => -1,
+				'order_by' => 'country ASC, name',
+				'group' => 'GROUP BY name'
 			));
 
 			// split into 3 "chunks" //
@@ -259,17 +260,17 @@ class FantasyCyclingAdmin {
 					$html.='</div>';
 					$html.='<div class="col-md-3">';
 						foreach ($left_col as $rider) :
-							$html.='<input type="checkbox" name="riders[]" class="sl-riders" value="'.$rider->name.'" /> '.$rider->name.' ('.$rider->nat.')<br />';
+							$html.='<input type="checkbox" name="riders[]" class="sl-riders" value="'.$rider->name.'" /> '.$rider->name.' ('.$rider->country.')<br />';
 						endforeach;
 					$html.='</div>';
 					$html.='<div class="col-md-3">';
 						foreach ($center_col as $rider) :
-							$html.='<input type="checkbox" name="riders[]" class="sl-riders" value="'.$rider->name.'" /> '.$rider->name.' ('.$rider->nat.')<br />';
+							$html.='<input type="checkbox" name="riders[]" class="sl-riders" value="'.$rider->name.'" /> '.$rider->name.' ('.$rider->country.')<br />';
 						endforeach;
 					$html.='</div>';
 					$html.='<div class="col-md-3 last-col">';
 						foreach ($right_col as $rider) :
-							$html.='<input type="checkbox" name="riders[]" class="sl-riders" value="'.$rider->name.'" /> '.$rider->name.' ('.$rider->nat.')<br />';
+							$html.='<input type="checkbox" name="riders[]" class="sl-riders" value="'.$rider->name.'" /> '.$rider->name.' ('.$rider->country.')<br />';
 						endforeach;
 					$html.='</div>';
 				$html.='</div>';
