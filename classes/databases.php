@@ -6,7 +6,7 @@
  */
 class UCIcURLDB {
 
-	public $db_version='0.3.1';
+	public $db_version='0.3.2';
 	public $wp_option_name='ucicurl_version';
 
 	/**
@@ -121,8 +121,13 @@ class UCIcURLDB {
 		  `coutnry` mediumtext NOT NULL,
 		  `season` int(11) NOT NULL,
 		  `rank` int(11) NOT NULL,
-		  `date` DECIMAL(7,3) NOT NULL,
 		  `week` int(11) NOT NULL,
+		  `uci_total` int(11) NOT NULL,
+		  `wcp_total` int(11) NOT NULL,
+		  `win_perc` DECIMAL(7,3) NOT NULL,
+		  `sos` DECIMAL(7,3) NOT NULL,
+		  `sos_rank` int(11) NOT NULL,
+		  `total` int(11) NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
@@ -237,9 +242,13 @@ class UCIcURLDB {
 		  `coutnry` mediumtext NOT NULL,
 		  `season` int(11) NOT NULL,
 		  `rank` int(11) NOT NULL,
-		  `date` DECIMAL(7,3) NOT NULL,
 		  `week` int(11) NOT NULL,
-		  PRIMARY KEY (`id`)
+		  `uci_total` int(11) NOT NULL,
+		  `wcp_total` int(11) NOT NULL,
+		  `win_perc` DECIMAL(7,3) NOT NULL,
+		  `sos` DECIMAL(7,3) NOT NULL,
+		  `sos_rank` int(11) NOT NULL,
+		  `total` int(11) NOT NULL,
 		);";
 
 		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
