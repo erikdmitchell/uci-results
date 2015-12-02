@@ -6,7 +6,7 @@
  */
 class UCIcURLDB {
 
-	public $db_version='0.3.3';
+	public $db_version='0.3.4';
 	public $wp_option_name='ucicurl_version';
 
 	/**
@@ -121,7 +121,7 @@ class UCIcURLDB {
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `name` mediumtext NOT NULL,
 		  `country` mediumtext NOT NULL,
-		  `season` int(11) NOT NULL,
+		  `season` tinytext NOT NULL,
 		  `rank` int(11) NOT NULL,
 		  `week` int(11) NOT NULL,
 		  `uci_total` int(11) NOT NULL,
@@ -244,7 +244,7 @@ class UCIcURLDB {
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `name` mediumtext NOT NULL,
 		  `country` mediumtext NOT NULL,
-		  `season` int(11) NOT NULL,
+		  `season` tinytext NOT NULL,
 		  `rank` int(11) NOT NULL,
 		  `week` int(11) NOT NULL,
 		  `uci_total` int(11) NOT NULL,
