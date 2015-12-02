@@ -484,8 +484,10 @@ echo '</pre>';
 
 		$html=null;
 		$args=array(
-			'pagination' => false,
-			'order_by' => 'rider'
+			'per_page' => -1,
+			'order_by' => 'name',
+			'order' => 'ASC',
+			'group' => 'GROUP BY name'
 		);
 		$args=array_merge($args,$form);
 		$riders=$RiderStats->get_riders($args);
@@ -504,8 +506,8 @@ echo '</pre>';
 				$html.='<tbody>';
 					foreach ($riders as $rider) :
 						$html.='<tr class="rider-details">';
-							$html.='<td class="name">'.$rider->rider.'</td>';
-							$html.='<td class="nat">'.$rider->nat.'</td>';
+							$html.='<td class="name">'.$rider->name.'</td>';
+							$html.='<td class="nat">'.$rider->country.'</td>';
 							$html.='<td class="rank">'.$rider->rank.'</td>';
 						$html.='</tr>';
 					endforeach;
