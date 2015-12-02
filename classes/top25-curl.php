@@ -408,7 +408,7 @@ class Top25_cURL {
 					SUM(wcp_total) AS wcp_total,
 					SUM(wins/rider_races) AS win_perc,
 					SUM(fq_avg/(total_races/rider_races)) AS sos,
-					SUM(uci_total+(wins/rider_races)+(fq_avg/(total_races/rider_races))) AS total
+					SUM((uci_total+(wins/rider_races)+(fq_avg/(total_races/rider_races)))/3) AS total
 				FROM (
 					SELECT
 						results.name AS name,
