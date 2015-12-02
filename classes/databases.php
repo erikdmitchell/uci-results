@@ -6,7 +6,7 @@
  */
 class UCIcURLDB {
 
-	public $db_version='0.3.4';
+	public $db_version='0.3.5';
 	public $wp_option_name='ucicurl_version';
 
 	/**
@@ -82,6 +82,7 @@ class UCIcURLDB {
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
+/*
 		$rider_season_points="CREATE TABLE ".$wpdb->prefix."uci_rider_season_points (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `name` mediumtext NOT NULL,
@@ -96,6 +97,7 @@ class UCIcURLDB {
 		  `total` int(11) NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
+*/
 
 		$rider_season_sos="CREATE TABLE ".$wpdb->prefix."uci_rider_season_sos (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -124,8 +126,14 @@ class UCIcURLDB {
 		  `season` tinytext NOT NULL,
 		  `rank` int(11) NOT NULL,
 		  `week` int(11) NOT NULL,
+		  `c2` int(11) NOT NULL,
+		  `c1` int(11) NOT NULL,
+		  `cn` int(11) NOT NULL,
+		  `cc` int(11) NOT NULL,
+		  `cdm` int(11) NOT NULL,
+		  `cm` int(11) NOT NULL,
+			`wcp_total` int(11) NOT NULL,
 		  `uci_total` int(11) NOT NULL,
-		  `wcp_total` int(11) NOT NULL,
 		  `win_perc` DECIMAL(7,3) NOT NULL,
 		  `sos` DECIMAL(7,3) NOT NULL,
 		  `sos_rank` int(11) NOT NULL,
@@ -139,7 +147,7 @@ class UCIcURLDB {
 			$uci_rider_data_sql,
 			//$uci_season_rankings_sql,
 			$uci_fq_rankings_sql,
-			$rider_season_points,
+			//$rider_season_points,
 			$rider_season_sos,
 			$rider_season_wins,
 			$rider_season_rankings
@@ -192,6 +200,7 @@ class UCIcURLDB {
 		);";
 */
 
+/*
 		$rider_season_points="CREATE TABLE ".$wpdb->prefix."uci_rider_season_points (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `name` mediumtext NOT NULL,
@@ -206,6 +215,7 @@ class UCIcURLDB {
 		  `total` int(11) NOT NULL,
 		  PRIMARY KEY (`id`)
 		);";
+*/
 
 		$table_name=$wpdb->prefix.'uci_fq_rankings';
 		$uci_fq_rankings_sql="CREATE TABLE $table_name (
@@ -247,8 +257,14 @@ class UCIcURLDB {
 		  `season` tinytext NOT NULL,
 		  `rank` int(11) NOT NULL,
 		  `week` int(11) NOT NULL,
+		  `c2` int(11) NOT NULL,
+		  `c1` int(11) NOT NULL,
+		  `cn` int(11) NOT NULL,
+		  `cc` int(11) NOT NULL,
+		  `cdm` int(11) NOT NULL,
+		  `cm` int(11) NOT NULL,
+			`wcp_total` int(11) NOT NULL,
 		  `uci_total` int(11) NOT NULL,
-		  `wcp_total` int(11) NOT NULL,
 		  `win_perc` DECIMAL(7,3) NOT NULL,
 		  `sos` DECIMAL(7,3) NOT NULL,
 		  `sos_rank` int(11) NOT NULL,
@@ -261,7 +277,7 @@ class UCIcURLDB {
 			$uci_rider_data_sql,
 			//$uci_season_rankings_sql,
 			$uci_fq_rankings_sql,
-			$rider_season_points,
+			//$rider_season_points,
 			$rider_season_sos,
 			$rider_season_wins,
 			$rider_season_rankings
