@@ -10,9 +10,10 @@
 global $RiderStats,$wp_query;
 
 $season=get_query_var('season','2015/2016');
+$week=$RiderStats->get_latest_rankings_week($season);
 $riders=$RiderStats->get_riders(array(
 	'season' => $season,
-	'week' => 12
+	'week' => $week
 ));
 ?>
 

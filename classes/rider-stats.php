@@ -58,8 +58,8 @@ print_r($args);
 echo '</pre>';
 		extract($args);
 
-		// if we have a limit, setup pagination //
-		if ($per_page>0) :
+		// if we dont have a name and we have a limit, setup pagination //
+		if (!$name && $per_page>0) :
 			if ($paged==0) :
 				$start=0;
 			else :
@@ -252,6 +252,21 @@ echo '</pre>';
 		$results=$wpdb->get_results($sql);
 
 		return $results;
+	}
+
+	/**
+	 * get_latest_rankings_week function.
+	 *
+	 * @access public
+	 * @param bool $season (default: false)
+	 * @return void
+	 */
+	public function get_latest_rankings_week($season=false) {
+		global $wpdb,$uci_curl;
+
+		$week=$wpdb->get_var("SELECT MAX(week) FROM $uci_curl->uci_rider_rankings	WHERE season='{$season}'");
+
+		return $week;
 	}
 
 }
