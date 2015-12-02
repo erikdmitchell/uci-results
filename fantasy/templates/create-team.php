@@ -29,6 +29,14 @@ $max_riders=6;
 				$race=fc_get_race($race_id);
 				?>
 
+				<?php if (!fc_race_has_start_list($race_id)): ?>
+					<div class="row">
+						<div class="col-md-12">
+							<h4>No start list yet. Check back soon.</h4>
+						</div>
+					</div>
+				<?php endif; ?>
+
 				<div class="row">
 					<div class="col-md-2">
 						<label for="race">Race:</label>

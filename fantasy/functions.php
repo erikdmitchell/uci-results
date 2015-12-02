@@ -204,7 +204,7 @@ function fc_get_fantasy_riders($args=array()) {
 
 	// if we have no start list //
 	if (empty($riders))
-		return '<div class="no-start-list">No start list yet, check back soon.</div>';
+		return false;
 
 	// append rider data //
 	foreach ($riders as $key => $rider) :
@@ -275,6 +275,9 @@ function fc_add_rider_modal_btn() {
 function fc_add_rider_modal($args=array()) {
 	$html=null;
 	$riders=fc_get_fantasy_riders($args);
+
+	if (!$riders)
+		return false;
 
 	$html.='<div class="modal fade" id="add-rider-modal" tabindex="-1" role="dialog">';
 	  $html.='<div class="modal-dialog">';
