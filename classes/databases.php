@@ -6,7 +6,7 @@
  */
 class UCIcURLDB {
 
-	public $db_version='0.3.2';
+	public $db_version='0.3.3';
 	public $wp_option_name='ucicurl_version';
 
 	/**
@@ -127,7 +127,7 @@ class UCIcURLDB {
 		  `win_perc` DECIMAL(7,3) NOT NULL,
 		  `sos` DECIMAL(7,3) NOT NULL,
 		  `sos_rank` int(11) NOT NULL,
-		  `total` int(11) NOT NULL,
+		  `total` DECIMAL(7,3) NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
 
@@ -248,7 +248,7 @@ class UCIcURLDB {
 		  `win_perc` DECIMAL(7,3) NOT NULL,
 		  `sos` DECIMAL(7,3) NOT NULL,
 		  `sos_rank` int(11) NOT NULL,
-		  `total` int(11) NOT NULL,
+		  `total` DECIMAL(7,3) NOT NULL,
 		);";
 
 		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
