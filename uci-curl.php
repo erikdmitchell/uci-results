@@ -180,9 +180,12 @@ function uci_template_scripts_styles() {
 		wp_register_script('uci-riders-script',plugins_url('/js/rider.js',__FILE__),array('chart-js'));
 
 		$wpOptions=array(
-			//'max_rank' => $wpdb->get_var("SELECT MAX(rank) AS max FROM wp_uci_weekly_rider_rankings WHERE season='".$_GET['season']."'"),
-			//'weekly_ranks' => $RiderStats->get_rider_weekly_rank($_GET['rider'],$_GET['season']),
-			//'rider_points' => $RiderStats->get_rider_points($_GET['rider'],$_GET['season'])
+			'rider' => $RiderStats->get_riders(array(
+				'name' => $_GET['rider'],
+				'season' => $_GET['season'],
+				'order_by' => 'week',
+				'order' => 'ASC',
+			))
 		);
 
 		wp_localize_script('uci-riders-script','wpOptions',$wpOptions);

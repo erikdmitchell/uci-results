@@ -102,9 +102,6 @@ class RiderStats {
 			$rider->total=number_format($rider->total,3);
 		endforeach;
 
-		if ($name)
-			$riders=$riders[0];
-
 		return $riders;
 	}
 

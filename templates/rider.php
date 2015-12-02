@@ -17,6 +17,7 @@ $rider=$RiderStats->get_riders(array(
 	'name' => $rider_name,
 	'week' => $week
 ));
+$rider=$rider[0];
 $results=$RiderStats->get_rider_results(array(
 	'season' => $season,
 	'name' => $rider_name
@@ -72,7 +73,7 @@ $results=$RiderStats->get_rider_results(array(
 								</div>
 							</div>
 						</div><!-- .col-md-4 -->
-<!--
+						<!--
 						<div id="rider-graphs" class="col-md-8 charts">
 							<div id="weekly-rankings-wrap">
 								<div class="chart-title">Weekly Rank</div>
@@ -80,8 +81,7 @@ $results=$RiderStats->get_rider_results(array(
 								<div id="chartjs-tooltip"></div>
 							</div>
 						</div>
--->
-
+						-->
 					<div id="season-rider-rankings" class="season-rider-rankings col-md-8">
 						<h4>Results</h4>
 						<div class="header row">

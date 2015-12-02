@@ -1,22 +1,22 @@
-var latestWeek=wpOptions.weekly_ranks[wpOptions.weekly_ranks.length-1];
+var latestWeek=wpOptions.rider[wpOptions.rider.length-1];
 
 //////////////////////////////////////// BEGIN WEEKLY RANKING ////////////////////////////////////////
 var weeks=[];
 var dataset=[];
 var inverted=[];
-
+console.log(wpOptions.rider);
 // build weeks //
-for (var i in wpOptions.weekly_ranks) {
-	weeks.push('Wk. '+wpOptions.weekly_ranks[i].week);
+for (var i in wpOptions.rider) {
+	weeks.push('Wk. '+wpOptions.rider[i].week);
 }
 
 // build data //
-for (var i in wpOptions.weekly_ranks) {
-	dataset.push(parseInt(wpOptions.weekly_ranks[i].rank));
+for (var i in wpOptions.rider) {
+	dataset.push(parseInt(wpOptions.rider[i].rank));
 }
-
+console.log(dataset);
 var max=Math.max.apply(Math,dataset);
-
+console.log(max);
 // in cases where a rider went from 0 to X and X remained the same, it can skew the graph
 // we check for the unique values and if there's 2 or less, we can assume that their is either 1 or 2 changes
 // if 1 change, do nothing for now NOT SETUP
@@ -29,7 +29,7 @@ if (arrayUnique(dataset).length==2) {
 	}
 	max=Math.max.apply(Math,dataset); // redo max
 }
-
+console.log(dataset);
 // make inverted //
 for (var i in dataset) {
 	var newValue=max-dataset[i];
@@ -40,7 +40,7 @@ for (var i in dataset) {
 
 	inverted[i]=newValue;
 }
-
+console.log(inverted);
 var lineChartData = {
 	labels: weeks,
 	datasets: [
@@ -52,7 +52,7 @@ var lineChartData = {
 			pointStrokeColor: "#fff",
 			pointHighlightFill: "#fff",
 			pointHighlightStroke: "rgba(151,187,205,1)",
-			data: inverted //[5, 5, 3, 3, 3, 3, 3, 3, 3, 3]
+			data: inverted
 		}
 	]
 };
@@ -69,7 +69,6 @@ if (diffInverted<steps) {
 }
 //////////////////////////////////////// END WEEKLY RANKING ////////////////////////////////////////
 //////////////////////////////////////// BEGIN UCI POINTS PIE ////////////////////////////////////////
-console.log(latestWeek);
 var UCIChartData = [
 	{
 		value: latestWeek.c1,
@@ -91,30 +90,32 @@ var UCIChartData = [
 	},
 	{
 		value: latestWeek.cc,
-		color: "#FDB45C",
-		highlight: "#FFC870",
+		color: "#3333cc",
+		highlight: "#9999e6",
 		label: "Cont. Champ."
 	},
 	{
 		value: latestWeek.cm,
-		color: "#FDB45C",
-		highlight: "#FFC870",
-		label: "Word Cup"
+		color: "#ffff00",
+		highlight: "#ffff80",
+		label: "Word Champ."
 	},
 	{
-		value: latestWeek.wcp,
-		color: "#FDB45C",
-		highlight: "#FFC870",
-		label: "World Champ."
+		value: latestWeek.wcp_total,
+		color: "#33cc33",
+		highlight: "#99e699",
+		label: "World Cup"
 	}
 ];
+
 //////////////////////////////////////// END UCI POINTS PIE ////////////////////////////////////////
 
 window.onload=function() {
-	var ctx = document.getElementById("weekly-rankings").getContext("2d");
+	//var ctx = document.getElementById("weekly-rankings").getContext("2d");
 	var UCIctx = document.getElementById("uci-points").getContext("2d");
 
 	// weekly ranking chart //
+/*
 	var chartInverted=new Chart(ctx).Line(lineChartData, {
 		customTooltips: function(tooltip) {
 			var tooltipEl = jQuery('#chartjs-tooltip');
@@ -168,6 +169,7 @@ window.onload=function() {
 			return value;
 		}
 	});
+*/
 
 	// uci points pie chart //
 	var UCIPieChart=new Chart(UCIctx).Pie(UCIChartData, {

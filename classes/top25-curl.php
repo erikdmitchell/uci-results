@@ -376,111 +376,7 @@ class Top25_cURL {
 	 * @return void
 	 */
 	public function ajax_update_weekly_rank() {
-		global $RaceStats,$wpdb;
-
-		$CrossSeasons=new CrossSeasons();
-
-		extract($_POST);
-
-		// setup our season //
-		if (!$season || $season=='' || $season=='Select Year')
-			$season=end($CrossSeasons->seasons);
-
-		$races_per_week=$CrossSeasons->get_races_in_season_by_week($season); // get races per week
-
-		// get race results and total //
-		$codes=array();
-		foreach ($races_per_week as $week) :
-			// this will stop everything when we get to a week without races //
-			if (empty($week->races))
-				break;
-
-			// get race codes and append to array //
-			foreach ($week->races as $race) :
-				$codes[]=$race->code;
-			endforeach;
-
-			$sql="
-				SELECT
-					name,
-					country,
-					uci_total,
-					SUM(wcp_total) AS wcp_total,
-					SUM(wins/rider_races) AS win_perc,
-					SUM(fq_avg/(total_races/rider_races)) AS sos,
-					SUM((uci_total+(wins/rider_races)+(fq_avg/(total_races/rider_races)))/3) AS total
-				FROM (
-					SELECT
-						results.name AS name,
-						results.nat AS country,
-						SUM(results.par) AS uci_total,
-						SUM(IF(results.place=1,1,0)) AS wins,
-						COUNT(results.code) AS rider_races,
-						COALESCE((SELECT SUM(fq_table.fq) / COUNT(fq_table.fq) ),0) AS fq_avg,
-						(SELECT COUNT(*) FROM wp_uci_races AS races WHERE races.code IN (\"".implode('","',$codes)."\")) AS total_races,
-						0 AS wcp_total
-					FROM $this->results_table AS results
-					LEFT JOIN $this->table AS races
-					ON results.code=races.code
-					LEFT JOIN $this->fq_table AS fq_table
-					ON fq_table.code=races.code
-					WHERE results.code IN (\"".implode('","',$codes)."\")
-					GROUP BY name
-
-					UNION
-
-					SELECT
-						results.name AS name,
-						results.nat AS country,
-						0 uci_total,
-						0 AS wins,
-						0 AS rider_races,
-						0 AS fq_avg,
-						0 AS total_races,
-						SUM(results.par) AS wcp_total
-					FROM $this->results_table AS results
-					LEFT JOIN $this->table AS races
-					ON results.code=races.code
-					WHERE results.code IN (\"".implode('","',$codes)."\")
-					AND races.class='CDM'
-					GROUP BY name
-
-				) t
-				GROUP BY name
-				ORDER BY total DESC
-			";
-			$rank=1;
-			$riders=$wpdb->get_results($sql);
-
-			// build data for each rider aka result //
-			foreach ($riders as $rider) :
-				$data=array(
-					'name' => $rider->name,
-					'country' => $rider->country,
-					'season' => $season,
-					'rank' => $rank,
-					'week' => $week->week,
-					'uci_total' => $rider->uci_total,
-					'wcp_total' => $rider->wcp_total,
-					'win_perc' => $rider->win_perc,
-					'sos' => $rider->sos,
-					'sos_rank' => 0,
-					'total' => $rider->total,
-				);
-
-				$rank++;
-
-				// updated if in db, else insert //
-				if ($id=$wpdb->get_var("SELECT id FROM $this->uci_rider_rankings WHERE name=\"{$rider->name}\" AND week=$week->week")) :
-					$wpdb->update($this->uci_rider_rankings,$data,array('id' => $id));
-				else :
-					$wpdb->insert($this->uci_rider_rankings,$data);
-				endif;
-
-				echo '<div class="updated">'.$rider->name.' has been updated in the rider rankings db for week '.$week->week.'</div>';
-
-			endforeach; // riders
-		endforeach; // races per week
+		$this->update_rider_rankings($_POST['season']);
 
 		wp_die();
 	}
@@ -711,6 +607,7 @@ class Top25_cURL {
 	 * @param int $points (default: 0)
 	 * @return void
 	 */
+/*
 	public function add_rider_season_uci_points($name=false,$nat=false,$season=false,$type=false,$points=0) {
 		global $wpdb;
 
@@ -751,6 +648,7 @@ class Top25_cURL {
 			endif;
 		endif;
 	}
+*/
 
 	/**
 	 * update_rider_season_sos function.
@@ -760,6 +658,7 @@ class Top25_cURL {
 	 * @param bool $season (default: false)
 	 * @return void
 	 */
+/*
 	public function update_rider_season_sos($rider=false,$season=false) {
 		global $wpdb;
 
@@ -843,6 +742,7 @@ class Top25_cURL {
 			endif;
 		endforeach;
 	}
+*/
 
 	/**
 	 * update_rider_wins function.
@@ -852,6 +752,7 @@ class Top25_cURL {
 	 * @param bool $season (default: false)
 	 * @return void
 	 */
+/*
 	public function update_rider_wins($rider=false,$season=false) {
 		global $wpdb;
 
@@ -925,9 +826,225 @@ class Top25_cURL {
 			endif;
 		endforeach;
 	}
+*/
 
-	public function update_rider_rankings($rider=false,$season=false) {
-echo 'update raninkgs<br>';
+	public function update_rider_rankings($season=false) {
+		global $RaceStats,$wpdb;
+
+		$CrossSeasons=new CrossSeasons();
+
+		// setup our season //
+		if (!$season || $season=='' || $season=='Select Year')
+			$season=end($CrossSeasons->seasons);
+
+		$races_per_week=$CrossSeasons->get_races_in_season_by_week($season); // get races per week
+
+		// get race results and total //
+		$codes=array();
+		foreach ($races_per_week as $week) :
+			// this will stop everything when we get to a week without races //
+			if (empty($week->races))
+				break;
+
+			// get race codes and append to array //
+			foreach ($week->races as $race) :
+				$codes[]=$race->code;
+			endforeach;
+
+			echo $sql="
+				SELECT
+					name,
+					country,
+					SUM(c2) AS c2,
+					SUM(c1) AS c1,
+					SUM(cn) AS cn,
+					SUM(cc) AS cc,
+					SUM(wcp_total) AS wcp_total,
+					SUM(cm) AS cm,
+					SUM(uci_total) AS uci_total,
+					SUM(wins/rider_races) AS win_perc,
+					SUM(fq_avg/(total_races/rider_races)) AS sos,
+					SUM((uci_total+(wins/rider_races)+(fq_avg/(total_races/rider_races)))/3) AS total
+				FROM (
+					SELECT
+						results.name AS name,
+						results.nat AS country,
+						0 AS c2,
+						0 AS c1,
+						0 AS cn,
+						0 AS cc,
+						0 AS cm,
+						SUM(results.par) AS uci_total,
+						SUM(IF(results.place=1,1,0)) AS wins,
+						COUNT(results.code) AS rider_races,
+						COALESCE((SELECT SUM(fq_table.fq) / COUNT(fq_table.fq) ),0) AS fq_avg,
+						(SELECT COUNT(*) FROM $this->table AS races WHERE races.code IN (\"".implode('","',$codes)."\")) AS total_races,
+						0 AS wcp_total
+					FROM $this->results_table AS results
+					LEFT JOIN $this->table AS races
+					ON results.code=races.code
+					LEFT JOIN $this->fq_table AS fq_table
+					ON fq_table.code=races.code
+					WHERE results.code IN (\"".implode('","',$codes)."\")
+					GROUP BY name
+
+					UNION
+
+					SELECT
+						results.name AS name,
+						results.nat AS country,
+						0 AS c2,
+						0 AS c1,
+						0 AS cn,
+						0 AS cc,
+						0 AS cm,
+						0 AS uci_total,
+						0 AS wins,
+						0 AS rider_races,
+						0 AS fq_avg,
+						0 AS total_races,
+						SUM(results.par) AS wcp_total
+					FROM $this->results_table AS results
+					LEFT JOIN $this->table AS races
+					ON results.code=races.code
+					WHERE results.code IN (\"".implode('","',$codes)."\")
+					AND races.class='CDM'
+					GROUP BY name
+
+					UNION
+
+					SELECT
+						results.name AS name,
+						results.nat AS country,
+						SUM(results.par) AS c2,
+						0 AS c1,
+						0 AS cn,
+						0 AS cc,
+						0 AS cm,
+						0 AS uci_total,
+						0 AS wins,
+						0 AS rider_races,
+						0 AS fq_avg,
+						0 AS total_races,
+						0 AS wcp_total
+					FROM $this->results_table AS results
+					LEFT JOIN $this->table AS races
+					ON results.code=races.code
+					WHERE results.code IN (\"".implode('","',$codes)."\")
+					AND races.class='C2'
+					GROUP BY name
+
+					UNION
+
+					SELECT
+						results.name AS name,
+						results.nat AS country,
+						0 AS c2,
+						SUM(results.par) AS c1,
+						0 AS cn,
+						0 AS cc,
+						0 AS cm,
+						0 AS uci_total,
+						0 AS wins,
+						0 AS rider_races,
+						0 AS fq_avg,
+						0 AS total_races,
+						0 AS wcp_total
+					FROM $this->results_table AS results
+					LEFT JOIN $this->table AS races
+					ON results.code=races.code
+					WHERE results.code IN (\"".implode('","',$codes)."\")
+					AND races.class='C1'
+					GROUP BY name
+
+					UNION
+
+					SELECT
+						results.name AS name,
+						results.nat AS country,
+						0 AS c2,
+						0 AS c1,
+						SUM(results.par) AS cn,
+						0 AS cc,
+						0 AS cm,
+						0 AS uci_total,
+						0 AS wins,
+						0 AS rider_races,
+						0 AS fq_avg,
+						0 AS total_races,
+						0 AS wcp_total
+					FROM $this->results_table AS results
+					LEFT JOIN $this->table AS races
+					ON results.code=races.code
+					WHERE results.code IN (\"".implode('","',$codes)."\")
+					AND races.class='CN'
+					GROUP BY name
+
+					UNION
+
+					SELECT
+						results.name AS name,
+						results.nat AS country,
+						0 AS c2,
+						0 AS c1,
+						0 AS cn,
+						0 AS cc,
+						SUM(results.par) AS cm,
+						0 AS uci_total,
+						0 AS wins,
+						0 AS rider_races,
+						0 AS fq_avg,
+						0 AS total_races,
+						0 AS wcp_total
+					FROM $this->results_table AS results
+					LEFT JOIN $this->table AS races
+					ON results.code=races.code
+					WHERE results.code IN (\"".implode('","',$codes)."\")
+					AND races.class='CM'
+					GROUP BY name
+
+				) t
+				GROUP BY name
+				ORDER BY total DESC
+
+			";
+			$rank=1;
+			$riders=$wpdb->get_results($sql);
+
+			// build data for each rider aka result //
+			foreach ($riders as $rider) :
+				$data=array(
+					'name' => $rider->name,
+					'country' => $rider->country,
+					'season' => $season,
+					'rank' => $rank,
+					'week' => $week->week,
+					'c2' => $rider->c2,
+					'c1' => $rider->c1,
+					'cn' => $rider->cn,
+					'cc' => $rider->cc,
+					'cm' => $rider->cm,
+					'uci_total' => $rider->uci_total,
+					'wcp_total' => $rider->wcp_total,
+					'win_perc' => $rider->win_perc,
+					'sos' => $rider->sos,
+					'sos_rank' => 0,
+					'total' => $rider->total,
+				);
+
+				$rank++;
+
+				// updated if in db, else insert //
+				if ($id=$wpdb->get_var("SELECT id FROM $this->uci_rider_rankings WHERE name=\"{$rider->name}\" AND week=$week->week")) :
+					$wpdb->update($this->uci_rider_rankings,$data,array('id' => $id));
+				else :
+					$wpdb->insert($this->uci_rider_rankings,$data);
+				endif;
+
+				echo '<div class="updated">'.$rider->name.' has been updated in the rider rankings db for week '.$week->week.'</div>';
+
+			endforeach; // riders
+		endforeach; // races per week
 	}
 
 	//----------------------------- begin add_race_to_db helper functions -----------------------------//
