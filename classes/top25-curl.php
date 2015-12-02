@@ -36,9 +36,9 @@ class Top25_cURL {
 		$this->results_table=$wpdb->prefix.'uci_rider_data';
 		//$this->weekly_rider_rankings_table=$wpdb->prefix.'uci_weekly_rider_rankings';
 		$this->fq_table=$wpdb->prefix.'uci_fq_rankings';
-		$this->rider_season_uci_points=$wpdb->prefix.'uci_rider_season_points';
-		$this->uci_rider_season_sos=$wpdb->prefix.'uci_rider_season_sos';
-		$this->uci_rider_season_wins=$wpdb->prefix.'uci_rider_season_wins';
+		//$this->rider_season_uci_points=$wpdb->prefix.'uci_rider_season_points';
+		//$this->uci_rider_season_sos=$wpdb->prefix.'uci_rider_season_sos';
+		//$this->uci_rider_season_wins=$wpdb->prefix.'uci_rider_season_wins';
 		$this->uci_rider_rankings=$wpdb->prefix.'uci_rider_season_rankings';
 	}
 

@@ -99,6 +99,7 @@ class UCIcURLDB {
 		) $charset_collate;";
 */
 
+/*
 		$rider_season_sos="CREATE TABLE ".$wpdb->prefix."uci_rider_season_sos (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `name` mediumtext NOT NULL,
@@ -107,7 +108,9 @@ class UCIcURLDB {
 		  `rank` int(11) NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
+*/
 
+/*
 		$rider_season_wins="CREATE TABLE ".$wpdb->prefix."uci_rider_season_wins (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `name` mediumtext NOT NULL,
@@ -118,6 +121,7 @@ class UCIcURLDB {
 		  `rank` int(11) NOT NULL,
 		  PRIMARY KEY (`id`)
 		) $charset_collate;";
+*/
 
 		$rider_season_rankings="CREATE TABLE ".$wpdb->prefix."uci_rider_season_rankings (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -147,8 +151,8 @@ class UCIcURLDB {
 			//$uci_season_rankings_sql,
 			$uci_fq_rankings_sql,
 			//$rider_season_points,
-			$rider_season_sos,
-			$rider_season_wins,
+			//$rider_season_sos,
+			//$rider_season_wins,
 			$rider_season_rankings
 		));
 
@@ -229,6 +233,7 @@ class UCIcURLDB {
 		  PRIMARY KEY (`id`)
 		)";
 
+/*
 		$rider_season_sos="CREATE TABLE ".$wpdb->prefix."uci_rider_season_sos (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `name` mediumtext NOT NULL,
@@ -237,7 +242,9 @@ class UCIcURLDB {
 		  `rank` int(11) NOT NULL,
 		  PRIMARY KEY (`id`)
 		) ;";
+*/
 
+/*
 		$rider_season_wins="CREATE TABLE ".$wpdb->prefix."uci_rider_season_wins (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
 		  `name` mediumtext NOT NULL,
@@ -248,6 +255,7 @@ class UCIcURLDB {
 		  `rank` int(11) NOT NULL,
 		  PRIMARY KEY (`id`)
 		);";
+*/
 
 		$rider_season_rankings="CREATE TABLE ".$wpdb->prefix."uci_rider_season_rankings (
 		  `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -276,8 +284,8 @@ class UCIcURLDB {
 			//$uci_season_rankings_sql,
 			$uci_fq_rankings_sql,
 			//$rider_season_points,
-			$rider_season_sos,
-			$rider_season_wins,
+			//$rider_season_sos,
+			//$rider_season_wins,
 			$rider_season_rankings
 		));
 
