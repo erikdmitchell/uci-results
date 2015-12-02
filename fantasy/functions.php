@@ -84,98 +84,6 @@ function fc_user_teams($user_id=0) {
 }
 
 /**
- * fc_rider_list_dropdown function.
- *
- * @access public
- * @param bool $name (default: false)
- * @param int $min_rank (default: 0)
- * @param int $max_rank (default: 10)
- * @param string $select_title (default: 'Select a Rider')
- * @param bool $echo (default: true)
- * @return void
- */
-/*
-function fc_rider_list_dropdown($name=false,$min_rank=0,$max_rank=10,$select_title='Select a Rider',$echo=true) {
-	global $wpdb,$RiderStats;
-
-	$html=null;
-	$riders=$RiderStats->get_riders(array( // DEPRECATED
-		'pagination' => false,
-		'limit' => "$min_rank,$max_rank"
-	));
-
-	if (!$name)
-		$name=generateRandomString();
-
-	$html.='<select name="'.$name.'" id="'.$name.'">';
-		$html.='<option value="0">'.$select_title.'</option>';
-		foreach ($riders as $rider) :
-			$html.='<option value="'.$rider->rider.'">'.$rider->rider.'</option>';
-		endforeach;
-	$html.='</select>';
-
-	if ($echo) :
-		echo $html;
-	else :
-		return $html;
-	endif;
-}
-*/
-
-/**
- * fc_rider_list_dropdown_race function.
- *
- * @access public
- * @param array $args (default: array())
- * @return void
- */
-/*
-function fc_rider_list_dropdown_race($args=array()) {
-	global $wpdb,$RiderStats;
-
-	$default_args=array(
-		'id' => 1,
-		'name' => false,
-		'min_rank' => 0,
-		'max_rank' => 10,
-		'select_title' => 'Select a Rider',
-		'echo' => true
-	);
-	$args=array_merge($default_args,$args);
-	$html=null;
-
-	extract($args);
-
-	$riders=$wpdb->get_col("SELECT start_list FROM wp_fc_races WHERE id=$id");
-	$riders=unserialize($riders[0]);
-
-	// if we have no start list //
-	if (empty($riders))
-		return '<div class="no-start-list">No start list yet, check back soon.</div>';
-
-	// Sort the array by name //
-	sort($riders);
-
-	if (!$name)
-		$name=generateRandomString();
-
-	$html.='<select name="'.$name.'" id="'.$name.'" class="fc-riders-dd">';
-		$html.='<option value="0">'.$select_title.'</option>';
-		foreach ($riders as $rider) :
-			$country=$wpdb->get_var("SELECT nat FROM wp_uci_rider_data WHERE name='$rider' GROUP BY nat");
-			$html.='<option value="'.$rider.'">'.$rider.' ('.$country.')</option>';
-		endforeach;
-	$html.='</select>';
-
-	if ($echo) :
-		echo $html;
-	else :
-		return $html;
-	endif;
-}
-*/
-
-/**
  * fc_get_fantasy_riders function.
  *
  * @access public
@@ -188,7 +96,6 @@ function fc_get_fantasy_riders($args=array()) {
 	$season='2015/2016';
 	$default_args=array(
 		'race_id' => 1,
-		'name' => generateRandomString(), // not used
 		'echo' => true
 	);
 	$args=array_merge($default_args,$args);
@@ -198,7 +105,8 @@ function fc_get_fantasy_riders($args=array()) {
 	$race_db=$wpdb->get_row("SELECT * FROM wp_fc_races WHERE id={$race_id}");
 	$riders_db=$RiderStats->get_riders(array(
 		'season' => $season,
-		'pagination' => false
+		'per_page' => -1,
+		'week' => $RiderStats->get_latest_rankings_week($season),
 	));
 	$riders=unserialize($race_db->start_list);
 
@@ -218,7 +126,7 @@ function fc_get_fantasy_riders($args=array()) {
 		$last_year=$wpdb->get_var("SELECT place FROM $uci_curl->results_table WHERE code=\"$race_db->last_year_code\" AND name='{$rider}'");
 		$arr=array();
 		$arr['name']=$rider;
-		$arr['country']=$wpdb->get_var("SELECT nat FROM $uci_curl->results_table WHERE name='{$rider}' GROUP BY nat");
+		$arr['country']=$rider_db->country;
 
 		if ($last_year) :
 			$arr['last_year']=$last_year;
@@ -227,8 +135,7 @@ function fc_get_fantasy_riders($args=array()) {
 		endif;
 
 		// last week finish/race
-		$last_week_race_code=$wpdb->get_var("SELECT code FROM wp_fc_races WHERE race_start BETWEEN DATE_SUB('{$race_db->race_start}', INTERVAL 7 DAY) AND '{$race_db->race_start}' AND id!={$race_id}");
-		$last_week=$wpdb->get_var("SELECT place FROM $uci_curl->results_table WHERE code=\"$last_week_race_code\" AND name='{$rider}'");
+		$last_week=$wpdb->get_var("SELECT place FROM $uci_curl->results_table WHERE code=\"$race_db->last_week_code\" AND name='{$rider}'");
 
 		if ($last_week) :
 			$arr['last_week']=$last_week;
@@ -236,8 +143,15 @@ function fc_get_fantasy_riders($args=array()) {
 			$arr['last_week']='n/a';
 		endif;
 
-		$arr['rank']=$rider_details->rank;
-		$arr['points']=$wpdb->get_row("SELECT c2,c1,cn,cc,cdm,cm,total FROM $uci_curl->rider_season_uci_points WHERE name='{$rider}' AND season='{$season}'");
+		$arr['rank']=$rider_db->rank;
+		$arr['points']=array(
+			'c2' => $rider_db->c2,
+			'c1' => $rider_db->c1,
+			'cn' => $rider_db->cn,
+			'cc' => $rider_db->cc,
+			'cdm' => $rider_db->wcp_total,
+			'cm' => $rider_db->cm
+		);
 
 		$riders[$key]=$arr;
 	endforeach;
