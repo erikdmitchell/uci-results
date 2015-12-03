@@ -40,6 +40,19 @@ jQuery(document).ready(function($) {
 	// set rider on click before we launch modal //
 	$('.fc-team-roster .add-remove-rider .add-remove-btn').click(function(i) {
 		riderID=$(this).parents('.add-remove-rider').attr('id');
+
+		if ($(this).find('.remove').is(':visible')) {
+			var $parent=$(this).parents('.add-remove-rider');
+			$parent.find('.rider-name-input').val('');
+			$parent.find('.last-year-finish').html('');
+			$parent.find('.last-week-finish').html('');
+			$parent.find('.rank').html('');
+			$parent.find('.season-points .sub-col div').each(function() {
+				$(this).html('');
+			});
+			$(this).find('.remove').hide();
+			$(this).find('.add').show();
+		}
 	});
 
 	// add rider button click inside modal //
@@ -59,6 +72,9 @@ jQuery(document).ready(function($) {
 		$('#'+riderID+' .season-points .cn').html(riderData.points.cn);
 		$('#'+riderID+' .season-points .cdm').html(riderData.points.cdm);
 		$('#'+riderID+' .season-points .cm').html(riderData.points.cm);
+
+		$('#'+riderID+' .add-remove-btn .add').hide();
+		$('#'+riderID+' .add-remove-btn .remove').show();
 	});
 
 });

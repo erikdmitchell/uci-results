@@ -10,6 +10,9 @@ $max_riders=6;
 ?>
 <div class="row">
 	<div class="fantasy-cycling-create-team col-md-12">
+		<?php if (isset($_GET['action']) && $_GET['action']=='teamupdated') : ?>
+			<div class="updated">Your roster has been updated</div>
+		<?php endif; ?>
 		<?php if ($race_id=fc_get_race_id()) : ?>
 			<form name="new-team" id="new-team" method="post" action="">
 				<?php
@@ -113,13 +116,14 @@ $max_riders=6;
 					'sort_by' => 'rank',
 				)); ?>
 
-				<?php //if (fc_race_has_start_list($race_id) && fc_is_race_roster_edit_open($race_id)) : ?>
-					<input type="submit" name="submit" id="submit" value="Create Team" />
-				<?php //endif; ?>
+				<?php if (fc_race_has_start_list($race_id) && fc_is_race_roster_edit_open($race_id)) : ?>
+					<input type="submit" name="submit" id="submit" value="Save Team" />
+				<?php endif; ?>
 
 				<input type="hidden" name="race" value="<?php echo $race_id; ?>" />
 				<input type="hidden" name="wp_user_id" value="<?php echo get_current_user_id(); ?>" />
 				<input type="hidden" name="create_team" value="1" />
+				<input type="hidden" name="redirect" value="<?php echo site_url('/fantasy/create-team/?race_id='.$race_id); ?>" />
 			</form>
 		<?php else : ?>
 			There was an error, please try again.

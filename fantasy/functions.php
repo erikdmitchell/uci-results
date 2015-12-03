@@ -285,9 +285,13 @@ function fc_process_create_team() {
 			'race_id' => $_POST['race'],
 		);
 
-		$wpdb->insert($table,$data);
+		if ($id=$wpdb->get_var("SELECT id FROM $table WHERE wp_user_id={$_POST['wp_user_id']} AND race_id={$_POST['race']}")) :
+			$wpdb->update($table,$data,array('id' => $id));
+		else :
+			$wpdb->insert($table,$data);
+		endif;
 
-		wp_redirect('/fantasy/team?team='.urlencode($_POST['team_name']));
+		wp_redirect($_POST['redirect'].'&action=teamupdated');
 		exit;
 	endif;
 }
@@ -916,6 +920,7 @@ function fc_check_if_roster_edit($team=false,$race_id=false) {
 				$rider_obj->last_year='n/a';
 			endif;
 
+			$rider_obj->rank=$rider[0]->rank;
 			$rider_obj->points->c2=$rider[0]->c2;
 			$rider_obj->points->c1=$rider[0]->c1;
 			$rider_obj->points->cn=$rider[0]->cn;
