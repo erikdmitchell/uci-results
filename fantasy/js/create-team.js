@@ -3,6 +3,7 @@ jQuery(document).ready(function($) {
 	var $selects = $('.fc-riders-dd');
 
 	// prevents dup user by diabiling name on other drop downs //
+/*
 	$selects.on('change', function() {
     // enable all options
     $selects.find('option').prop('disabled', false);
@@ -14,6 +15,7 @@ jQuery(document).ready(function($) {
 	      .prop('disabled', true);
 	  });
 	});
+*/
 
 	// populate roster (edit) //
 	if (createTeamOptions.roster) {

@@ -96,7 +96,8 @@ function fc_get_fantasy_riders($args=array()) {
 	$season='2015/2016';
 	$default_args=array(
 		'race_id' => 1,
-		'echo' => true
+		'sort' => SORT_ASC,
+		'sort_by' => 'name',
 	);
 	$args=array_merge($default_args,$args);
 
@@ -117,32 +118,17 @@ function fc_get_fantasy_riders($args=array()) {
 	// append rider data //
 	foreach ($riders as $key => $rider) :
 		foreach ($riders_db as $rider_db) :
-			if ($rider_db->name==$rider) :
+			if ($rider_db->name==$rider['rider']) :
 				$rider_details=$rider_db;
 				break;
 			endif;
 		endforeach;
 
-		$last_year=$wpdb->get_var("SELECT place FROM $uci_curl->results_table WHERE code=\"$race_db->last_year_code\" AND name='{$rider}'");
 		$arr=array();
-		$arr['name']=$rider;
+		$arr['name']=$rider['rider'];
 		$arr['country']=$rider_db->country;
-
-		if ($last_year) :
-			$arr['last_year']=$last_year;
-		else :
-			$arr['last_year']='n/a';
-		endif;
-
-		// last week finish/race
-		$last_week=$wpdb->get_var("SELECT place FROM $uci_curl->results_table WHERE code=\"$race_db->last_week_code\" AND name='{$rider}'");
-
-		if ($last_week) :
-			$arr['last_week']=$last_week;
-		else :
-			$arr['last_week']='n/a';
-		endif;
-
+		$arr['last_year']=$rider['last_year'];
+		$arr['last_week']=$rider['last_week'];
 		$arr['rank']=$rider_db->rank;
 		$arr['points']=array(
 			'c2' => $rider_db->c2,
@@ -157,7 +143,20 @@ function fc_get_fantasy_riders($args=array()) {
 	endforeach;
 
 	// Sort the array by name //
-	sort($riders);
+/*
+	array_multisort($riders,$sort);
+
+	usort($users, function ($a, $b) {
+	     return strcmp($a['username'], $b['username']);
+	});
+*/
+	//sort($riders);
+
+$sort_values=array();
+foreach ($riders as $rider) :
+	$sort_values[]=$rider[$sort_by];
+endforeach;
+array_multisort($sort_values,$sort,$riders);
 
 	return $riders;
 }

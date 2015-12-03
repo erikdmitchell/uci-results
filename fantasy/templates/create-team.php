@@ -107,7 +107,11 @@ $max_riders=6;
 						</div>
 					<?php endfor; ?>
 				</div>
-				<?php fc_add_rider_modal(array('race_id' => $race_id)); ?>
+				<?php
+				fc_add_rider_modal(array(
+					'race_id' => $race_id,
+					'sort_by' => 'rank',
+				)); ?>
 
 				<?php if (fc_race_has_start_list($race_id) && fc_is_race_roster_edit_open($race_id)) : ?>
 					<input type="submit" name="submit" id="submit" value="Create Team" />
