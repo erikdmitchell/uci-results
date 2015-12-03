@@ -477,55 +477,6 @@ function fc_final_standings($limit=10) {
 	echo fc_get_final_standings($limit);
 }
 
-function fc_get_fantasy_cycling_posts($limit=5) {
-	$html=null;
-	$featured_posts_id=0;
-	$args=array(
-		'posts_per_page' => 1,
-		'post_type' => 'fantasy-cycling',
-		'posttype' => 'featured'
-	);
-	$featured_posts=get_posts($args);
-
-	if (isset($featured_posts[0]))
-		$featured_posts_id=$featured_posts[0]->ID;
-
-	$args=array(
-		'posts_per_page' => $limit-1,
-		'post_type' => 'fantasy-cycling',
-		'post__not_in' => array($featured_posts_id),
-	);
-	$posts=get_posts($args);
-	$posts=array_merge($featured_posts,$posts);
-
-	if (!count($posts))
-		return false;
-
-	$html.='<ul class="fc-posts">';
-		foreach ($posts as $post) :
-			$class='';
-			$html.='<li id="post-'.$post->ID.'" class="post '.$class.'">';
-				$html.='<h4><a href="'.get_permalink($post->ID).'">'.get_the_title($post->ID).'</a></h4>';
-				$html.=get_the_post_thumbnail($post->ID,'thumbnail');
-				$html.='<div class="excerpt">'.fc_excerpt_by_id($post->ID,100,'<a><em><strong>','...<a href="'.get_permalink($post->ID).'">more &raquo;</a>').'</div>';
-			$html.='</li>';
-		endforeach;
-	$html.='</ul>';
-
-	return $html;
-}
-
-/**
- * fc_fantasy_cycling_posts function.
- *
- * @access public
- * @param int $limit (default: 5)
- * @return void
- */
-function fc_fantasy_cycling_posts($limit=5) {
-	echo fc_get_fantasy_cycling_posts($limit);
-}
-
 /**
  * fc_get_upcoming_races function.
  *

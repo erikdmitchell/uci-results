@@ -8,7 +8,7 @@
 
 <div class="row">
 	<div class="col-md-7">
-		<?php fc_fantasy_cycling_posts(); ?>
+		<?php tru_get_fantasy_cycling_posts(); ?>
 	</div>
 
 	<div class="col-md-5">
