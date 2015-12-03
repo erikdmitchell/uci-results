@@ -127,5 +127,22 @@ class CrossSeasons {
 		return $races;
 	}
 
+	public function get_week_from_date($date=false,$season=false) {
+		if (!$date || !$season)
+			return false;
+
+		$weeks=$this->get_weeks($season);
+		$week_num=1;
+
+		foreach ($weeks as $week) :
+			if ((strtotime($date)>=strtotime($week[0])) && (strtotime($date)<=strtotime($week[1])))
+				return $week_num;
+
+			$week_num++;
+		endforeach;
+
+		return false;
+	}
+
 }
 ?>

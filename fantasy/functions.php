@@ -861,7 +861,7 @@ add_action('wp_enqueue_scripts','fc_scripts_styles');
  * @return void
  */
 function fc_check_if_roster_edit($team=false,$race_id=false) {
-	global $wpdb;
+	global $wpdb,$uci_curl,$RiderStats;
 
 	if (!$team && isset($_GET['team']))
 		$team=$_GET['team'];
@@ -883,10 +883,88 @@ function fc_check_if_roster_edit($team=false,$race_id=false) {
 		AND race_id={$race_id}
 	";
 
-	$db_results=$wpdb->get_var($sql);
+	$roster=$wpdb->get_var($sql);
 
-	if ($db_results)
-		return $db_results;
+	if ($roster) :
+		$riders=explode('|',$roster);
+
+		foreach ($riders as $key => $rider_name) :
+			$CrossSeasons=new CrossSeasons();
+			$race=$wpdb->get_row("SELECT * FROM wp_fc_races WHERE id={$race_id}");
+			$week=$CrossSeasons->get_week_from_date($race->race_start,$race->season);
+			$prev_week=$week-1; // subtract 1 to get prev week
+			$last_week=$wpdb->get_var("SELECT place FROM $uci_curl->results_table WHERE code=\"$race->last_week_code\" AND name='{$rider_name}'");
+			$last_year=$wpdb->get_var("SELECT place FROM $uci_curl->results_table WHERE code=\"$race->last_year_code\" AND name='{$rider_name}'");
+			$rider=$RiderStats->get_riders(array(
+				'season' => $race->season,
+				'name' => $rider_name,
+				'week' => $prev_week
+			));
+			$rider_obj=new stdClass();
+			$rider_obj->points=new stdClass();
+			$rider_obj->name=$rider_name;
+
+			if ($last_week) :
+				$rider_obj->last_week=$last_week;
+			else :
+				$rider_obj->last_week='n/a';
+			endif;
+
+			if ($last_year) :
+				$rider_obj->last_year=$last_year;
+			else :
+				$rider_obj->last_year='n/a';
+			endif;
+
+			$rider_obj->points->c2=$rider[0]->c2;
+			$rider_obj->points->c1=$rider[0]->c1;
+			$rider_obj->points->cn=$rider[0]->cn;
+			$rider_obj->points->cc=$rider[0]->cc;
+			$rider_obj->points->wcp_total=$rider[0]->wcp_total;
+			$rider_obj->points->cm=$rider[0]->cm;
+
+			$riders[$key]=$rider_obj;
+		endforeach;
+
+		return $riders;
+	endif;
+
+	return false;
+}
+
+/**
+ * fc_check_if_roster_edit_simple function.
+ *
+ * @access public
+ * @param bool $team (default: false)
+ * @param bool $race_id (default: false)
+ * @return void
+ */
+function fc_check_if_roster_edit_simple($team=false,$race_id=false) {
+	global $wpdb,$uci_curl,$RiderStats;
+
+	if (!$team && isset($_GET['team']))
+		$team=$_GET['team'];
+
+	if (!$race_id && isset($_GET['race_id']))
+		$race_id=$_GET['race_id'];
+
+	if (!$team)
+		$team=$wpdb->get_var("SELECT meta_value FROM wp_usermeta WHERE user_id=".get_current_user_id()." AND meta_key='team_name'");
+
+	if (!$race_id)
+		$race_id=fc_get_next_race_id();
+
+	$sql="
+		SELECT
+			data AS roster
+		FROM wp_fc_teams
+		WHERE team=\"{$team}\"
+		AND race_id={$race_id}
+	";
+
+	if ($wpdb->get_var($sql))
+		return true;
 
 	return false;
 }

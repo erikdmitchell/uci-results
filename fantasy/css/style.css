@@ -68,11 +68,21 @@
 .fc-team-roster .uci-points {
 	text-align: center;
 }
+.fc-team-roster .rider-name-input {
+	width: 100%;
+	border: none;
+	cursor: pointer;
+}
+.fc-team-roster .rider-name-input:focus {
+	outline: none;
+}
 .add-remove-btn {
 	padding: 5px 10px;
 	background: #ccc;
 	border: none;
-	margin-left: 5px;
+}
+.add-remove-btn:focus {
+	outline: none;
 }
 .add-remove-btn:hover {
 	background: #eee;

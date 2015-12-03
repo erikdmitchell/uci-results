@@ -90,7 +90,7 @@ $max_riders=6;
 					<?php for ($i=0;$i<$max_riders;$i++) : ?>
 						<div id="rider-<?php echo $i; ?>" class="row add-remove-rider">
 							<div class="col-md-1"><?php fc_add_rider_modal_btn(); ?></div>
-							<div class="col-md-3 rider-name">Add Rider</div>
+							<div class="col-md-3 rider-name"><input type="text" name="riders[]" class="rider-name-input" value="" placeholder="Add Rider" readonly /></div>
 							<div class="col-md-1 last-year-finish"></div>
 							<div class="col-md-3 last-week-finish"></div>
 							<div class="col-md-1 rank"></div>
@@ -113,9 +113,9 @@ $max_riders=6;
 					'sort_by' => 'rank',
 				)); ?>
 
-				<?php if (fc_race_has_start_list($race_id) && fc_is_race_roster_edit_open($race_id)) : ?>
+				<?php //if (fc_race_has_start_list($race_id) && fc_is_race_roster_edit_open($race_id)) : ?>
 					<input type="submit" name="submit" id="submit" value="Create Team" />
-				<?php endif; ?>
+				<?php //endif; ?>
 
 				<input type="hidden" name="race" value="<?php echo $race_id; ?>" />
 				<input type="hidden" name="wp_user_id" value="<?php echo get_current_user_id(); ?>" />
