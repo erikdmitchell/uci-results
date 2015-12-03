@@ -400,10 +400,12 @@ class FantasyCyclingAdmin {
 	 * @return void
 	 */
 	protected function add_start_list_to_db($form) {
-		global $wpdb;
+		global $wpdb,$uci_curl;
 
 		if (!$form['id'])
 			return '<div class="error">No race entered.</div>';
+
+		$race=$wpdb->get_row("SELECT last_year_code,last_week_code FROM wp_fc_races WHERE id={$form['race']}");
 
 		// clean empties //
 		foreach ($form['riders'] as $key => $value) :
@@ -411,8 +413,27 @@ class FantasyCyclingAdmin {
 				unset($form['riders'][$key]);
 		endforeach;
 
+		$riders=array();
+		foreach($form['riders'] as $rider) :
+			$last_week=$wpdb->get_var("SELECT place FROM $uci_curl->results_table WHERE code=\"$race->last_week_code\" AND name='{$rider}'");
+			$last_year=$wpdb->get_var("SELECT place FROM $uci_curl->results_table WHERE code=\"$race->last_year_code\" AND name='{$rider}'");
+
+			if (!$last_week)
+				$last_week='n/a';
+
+			if (!$last_year)
+				$last_year='n/a';
+
+			$arr=array(
+				'rider' => $rider,
+				'last_week' => $last_week,
+				'last_year' => $last_year,
+			);
+			$riders[]=$arr;
+		endforeach;
+
 		$data=array(
-			'start_list' => serialize($form['riders'])
+			'start_list' => serialize($riders)
 		);
 		$where=array('id' => $form['id']);
 

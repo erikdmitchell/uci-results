@@ -79,7 +79,14 @@ function getStartList(id) {
 
 	jQuery.post(ajaxurl,data,function(race) {
 		race=jQuery.parseJSON(race);
-		loadStartList(race.start_list);
+
+		var cleanStartList=[];
+
+		for (var i in race.start_list) {
+			cleanStartList.push(race.start_list[i].rider);
+		}
+
+		loadStartList(cleanStartList);
 	});
 }
 
