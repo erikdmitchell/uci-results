@@ -9,16 +9,19 @@ class Top25_cURL {
 	public $table;
 	public $results_table;
 	public $fq_table;
-	public $weekly_rider_rankings_table;
-	public $rider_season_uci_points;
-	public $uci_rider_season_sos;
-	public $uci_rider_season_wins;
 	public $uci_rider_rankings;
 	public $version='1.0.3';
 	public $config=array();
 
 	protected $debug=false;
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @param array $config (default: array())
+	 * @return void
+	 */
 	public function __construct($config=array()) {
 		global $wpdb;
 
@@ -34,14 +37,16 @@ class Top25_cURL {
 
 		$this->table=$wpdb->prefix.'uci_races';
 		$this->results_table=$wpdb->prefix.'uci_rider_data';
-		//$this->weekly_rider_rankings_table=$wpdb->prefix.'uci_weekly_rider_rankings';
 		$this->fq_table=$wpdb->prefix.'uci_fq_rankings';
-		//$this->rider_season_uci_points=$wpdb->prefix.'uci_rider_season_points';
-		//$this->uci_rider_season_sos=$wpdb->prefix.'uci_rider_season_sos';
-		//$this->uci_rider_season_wins=$wpdb->prefix.'uci_rider_season_wins';
 		$this->uci_rider_rankings=$wpdb->prefix.'uci_rider_season_rankings';
 	}
 
+	/**
+	 * admin_page function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function admin_page() {
 		global $FantasyCyclingAdmin;
 
@@ -61,6 +66,12 @@ class Top25_cURL {
 		wp_enqueue_style('uci-curl-admin',UCICURLBASE.'/css/admin.css',array(),$this->version);
 	}
 
+	/**
+	 * display_admin_page function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function display_admin_page() {
 		$html=null;
 		$tabs=array(
