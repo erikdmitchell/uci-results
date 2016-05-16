@@ -1,10 +1,10 @@
 <?php
 /**
- * RaceStats class.
+ * UCIcURLRaces class.
  *
- * @since Version 1.0.1
+ * @since Version 2.0.0
  */
-class RaceStats {
+class UCIcURLRaces {
 
 	public $max_rows=0;
 	public $date_format='M. j Y';
@@ -71,7 +71,7 @@ class RaceStats {
 	 * @return void
 	 */
 	public function get_races($args=array()) {
-		global $wpdb,$uci_curl,$wp_query;
+		global $wpdb, $wp_query;
 
 		$limit=null;
 		$where=array();
@@ -79,7 +79,7 @@ class RaceStats {
 			'pagination' => true,
 			'paged' => 1,
 			'per_page' => 15,
-			'order_by' => 'fq',
+			'order_by' => 'date',
 			'order' => 'DESC',
 			'class' => false,
 			'season' => false,
@@ -117,23 +117,16 @@ class RaceStats {
 
 		$sql="
 			SELECT
-				races.code AS code,
-				STR_TO_DATE(date,'%e %M %Y') AS date,
-				event AS name,
-				nat,
-				class,
-				IFNULL(fq_table.fq,0) AS fq
-			FROM $uci_curl->table AS races
-			LEFT JOIN $uci_curl->fq_table AS fq_table
-			ON races.code=fq_table.code
-			$where
-			ORDER BY $order_by $order
-			$limit
+				*
+			FROM {$wpdb->ucicurl_races} AS races
+			{$where}
+			ORDER BY {$order_by} {$order}
+			{$limit}
 		";
 
 		$races=$wpdb->get_results($sql);
 
-		$max_races=$wpdb->get_results("SELECT DISTINCT(code) FROM $uci_curl->table WHERE season='$season'");
+		$max_races=$wpdb->get_results("SELECT DISTINCT(id) FROM {$wpdb->ucicurl_races} WHERE season='{$season}'");
 		$wp_query->uci_curl_max_pages=$wpdb->num_rows; // set max
 
 		// clean up some misc db slashes and formatting //
@@ -208,5 +201,5 @@ class RaceStats {
 
 }
 
-$RaceStats = new RaceStats();
+$ucicurl_races=new UCIcURLRaces();
 ?>

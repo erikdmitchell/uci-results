@@ -2,27 +2,6 @@ jQuery(document).ready(function($) {
 	var $modal=$('.loading-modal');
 
 	/**
-	 * on our curl page, this runs our select all checkbox functionality
-	 */
-  $('#selectall').live('click',function(event) {
-	  event.preventDefault();
-
-	  if ($(this).hasClass('unselect')) {
-		 	$(this).removeClass('unselect');
-    	$('.race-checkbox').each(function() {
-      	this.checked = false;  //select all checkboxes
-      });
-		} else {
-			$(this).addClass('unselect');
-    	$('.race-checkbox').each(function() {
-	    	if (!$(this).is(':disabled')) {
-	      	this.checked = true; //deselect all checkboxes
-	      }
-      });
-		}
-  });
-
-	/**
 	 * populates the url field on the UCI cURL page when a year is selected (years are pre populated)
 	 */
 	$('#get-race-season').change(function() {
@@ -94,25 +73,6 @@ jQuery(document).ready(function($) {
 					}
 				});
 			}
-		});
-	});
-
-	/**
-	 * updates our weekly rank based on season
-	 */
-	$('#update-weekly-rank').click(function(e) {
-		$modal.show();
-		$('#get-race-data').html('');
-		e.preventDefault();
-
-		var data={
-			'action' : 'update_weekly_rank',
-			'season' : $('form.get-races #get-race-season option:selected').text()
-		};
-
-		$.post(ajaxurl,data,function(response) {
-			$('#get-race-data').html(response);
-			$modal.hide();
 		});
 	});
 

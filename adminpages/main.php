@@ -1,8 +1,8 @@
 <?php
-		global $RaceStats;
+		global $ucicurl_races;
 
 		$html=null;
-		$races=$RaceStats->get_races(array(
+		$races=$ucicurl_races->get_races(array(
 			'season' => '2015/2016',
 			'pagination' => true,
 			'per_page' => 30,
