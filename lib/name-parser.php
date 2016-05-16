@@ -1,4 +1,4 @@
-<?
+<?php
 
 // split full names into the following parts:
 // - prefix / salutation  (Mr., Mrs., etc)
@@ -6,7 +6,7 @@
 // - middle initials
 // - surname / last name
 // - suffix (II, Phd, Jr, etc)
-function split_full_name($full_name) {
+function ucicurl_split_full_name($full_name) {
     $full_name = trim($full_name);
     // split into words
     $unfiltered_name_parts = explode(" ",$full_name);
@@ -18,8 +18,8 @@ function split_full_name($full_name) {
     $num_words = sizeof($name_parts);
 
     // is the first word a title? (Mr. Mrs, etc)
-    $salutation = is_salutation($name_parts[0]);
-    $suffix = is_suffix($name_parts[sizeof($name_parts)-1]);
+    $salutation = ucicurl_is_salutation($name_parts[0]);
+    $suffix = ucicurl_is_suffix($name_parts[sizeof($name_parts)-1]);
 
     // set the range for the middle part of the name (trim prefixes & suffixes)
     $start = ($salutation) ? 1 : 0;
@@ -30,17 +30,17 @@ function split_full_name($full_name) {
         $word = $name_parts[$i];
         // move on to parsing the last name if we find an indicator of a compound last name (Von, Van, etc)
         // we use $i != $start to allow for rare cases where an indicator is actually the first name (like "Von Fabella")
-        if (is_compound_lname($word) && $i != $start)
+        if (ucicurl_is_compound_lname($word) && $i != $start)
             break;
         // is it a middle initial or part of their first name?
         // if we start off with an initial, we'll call it the first name
-        if (is_initial($word)) {
-            // is the initial the first word?  
+        if (ucicurl_is_initial($word)) {
+            // is the initial the first word?
             if ($i == $start) {
                 // if so, do a look-ahead to see if they go by their middle name
                 // for ex: "R. Jason Smith" => "Jason Smith" & "R." is stored as an initial
                 // but "R. J. Smith" => "R. Smith" and "J." is stored as an initial
-                if (is_initial($name_parts[$i+1]))
+                if (ucicurl_is_initial($name_parts[$i+1]))
                     $fname .= " ".strtoupper($word);
                 else
                     $initials .= " ".strtoupper($word);
@@ -49,19 +49,19 @@ function split_full_name($full_name) {
                 $initials .= " ".strtoupper($word);
             }
         } else {
-            $fname .= " ".fix_case($word);
-        }  
+            $fname .= " ".ucicurl_fix_case($word);
+        }
     }
 
     // check that we have more than 1 word in our string
     if ($end-$start > 1) {
         // concat the last name
         for ($i; $i < $end; $i++) {
-            $lname .= " ".fix_case($name_parts[$i]);
+            $lname .= " ".ucicurl_fix_case($name_parts[$i]);
         }
     } else {
         // otherwise, single word strings are assumed to be first names
-        $fname = fix_case($name_parts[$i]);
+        $fname = ucicurl_fix_case($name_parts[$i]);
     }
 
     // return the various parts in an array
@@ -75,7 +75,7 @@ function split_full_name($full_name) {
 
 // detect and format standard salutations
 // I'm only considering english honorifics for now & not words like
-function is_salutation($word) {
+function ucicurl_is_salutation($word) {
     // ignore periods
     $word = str_replace('.','',strtolower($word));
     // returns normalized values
@@ -96,7 +96,7 @@ function is_salutation($word) {
 }
 
 //  detect and format common suffixes
-function is_suffix($word) {
+function ucicurl_is_suffix($word) {
     // ignore periods
     $word = str_replace('.','',$word);
     // these are some common suffixes - what am I missing?
@@ -109,7 +109,7 @@ function is_suffix($word) {
 }
 
 // detect compound last names like "Von Fange"
-function is_compound_lname($word) {
+function ucicurl_is_compound_lname($word) {
     $word = strtolower($word);
     // these are some common prefixes that identify a compound last names - what am I missing?
     $words = array('vere','von','van','de','del','della','di','da','pietro','vanden','du','st.','st','la','ter');
@@ -117,13 +117,13 @@ function is_compound_lname($word) {
 }
 
 // single letter, possibly followed by a period
-function is_initial($word) {
+function ucicurl_is_initial($word) {
     return ((strlen($word) == 1) || (strlen($word) == 2 && $word{1} == "."));
 }
 
 // detect mixed case words like "McDonald"
 // returns false if the string is all one case
-function is_camel_case($word) {
+function ucicurl_is_camel_case($word) {
     if (preg_match("|[A-Z]+|s", $word) && preg_match("|[a-z]+|s", $word))
         return true;
     return false;
@@ -131,20 +131,20 @@ function is_camel_case($word) {
 
 // ucfirst words split by dashes or periods
 // ucfirst all upper/lower strings, but leave camelcase words alone
-function fix_case($word) {
+function ucicurl_fix_case($word) {
     // uppercase words split by dashes, like "Kimura-Fay"
-    $word = safe_ucfirst("-",$word);
+    $word = ucicurl_safe_ucfirst("-",$word);
     // uppercase words split by periods, like "J.P."
-    $word = safe_ucfirst(".",$word);
+    $word = ucicurl_safe_ucfirst(".",$word);
     return $word;
 }
 
-// helper function for fix_case
-function safe_ucfirst($seperator, $word) {
+// helper function for ucicurl_fix_case
+function ucicurl_safe_ucfirst($seperator, $word) {
     // uppercase words split by the seperator (ex. dashes or periods)
     $parts = explode($seperator,$word);
     foreach ($parts as $word) {
-        $words[] = (is_camel_case($word)) ? $word : ucfirst(strtolower($word));
+        $words[] = (ucicurl_is_camel_case($word)) ? $word : ucfirst(strtolower($word));
     }
     return implode($seperator,$words);
 }
