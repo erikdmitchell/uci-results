@@ -1,10 +1,10 @@
 <?php
 /**
- * Top25_cURL class.
+ * UCIcURLAdmin class.
  *
- * @since Version 1.0.0
+ * @since Version 2.0.0
  */
-class Top25_cURL {
+class UCIcURLAdmin {
 
 	public $table;
 	public $results_table;
@@ -48,22 +48,17 @@ class Top25_cURL {
 	 * @return void
 	 */
 	public function admin_page() {
-		global $FantasyCyclingAdmin;
+		add_menu_page('UCI Cross', 'UCI Cross', 'manage_options', 'uci-cross', array($this, 'display_admin_page'));
 
-		add_menu_page('UCI Cross','UCI Cross','administrator','uci-cross',array($this,'display_admin_page'));
-
-		if (class_exists('FantasyCyclingAdmin')) :
-			add_submenu_page('uci-cross','Fantasy','Fantasy','manage_options','fantasy-cycling',array(new FantasyCyclingAdmin(),'admin_page'));
-		endif;
 		add_submenu_page('uci-cross','UCI cURL','UCI cURL','administrator','uci-curl',array($this,'display_curl_page'));
-		add_submenu_page('uci-cross','UCI View DB','UCI View DB','administrator','uci-view-db',array(new ViewDB(),'display_view_db_page'));
+		//add_submenu_page('uci-cross','UCI View DB','UCI View DB','administrator','uci-view-db',array(new ViewDB(),'display_view_db_page'));
 	}
 
 	public function admin_scripts_styles() {
-		wp_enqueue_script('uci-curl-admin',UCICURLBASE.'/js/admin.js',array('jquery'),$this->version,true);
+		wp_enqueue_script('uci-curl-admin',UCICURL_URL.'/js/admin.js',array('jquery'),$this->version,true);
 
-		wp_enqueue_style('uci-curl-bootstrap',UCICURLBASE.'/css/bootstrap.css',array(),'3.3.5');
-		wp_enqueue_style('uci-curl-admin',UCICURLBASE.'/css/admin.css',array(),$this->version);
+		wp_enqueue_style('uci-curl-bootstrap',UCICURL_URL.'/css/bootstrap.css',array(),'3.3.5');
+		wp_enqueue_style('uci-curl-admin',UCICURL_URL.'/css/admin.css',array(),$this->version);
 	}
 
 	/**
@@ -96,40 +91,16 @@ class Top25_cURL {
 
 			switch ($active_tab) :
 				case 'uci-cross':
-					$html.=$this->default_admin_page();
+					$html.=ucicurl_get_admin_page('main');
 					break;
 				default:
-					$html.=$this->default_admin_page();
+					$html.=ucicurl_get_admin_page('main');
 					break;
 			endswitch;
 
 		$html.='</div><!-- /.wrap -->';
 
 		echo $html;
-	}
-
-	/**
-	 * default_admin_page function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function default_admin_page() {
-		global $RaceStats;
-
-		$html=null;
-		$races=$RaceStats->get_races(array(
-			'season' => '2015/2016',
-			'pagination' => true,
-			'per_page' => 30,
-			'order' => 'ASC'
-		));
-
-		$html.='<h3>UCI Cross</h3>';
-
-		$html.='<p>Details coming soon on how to use this plugin and what to do.</p>';
-
-		return $html;
 	}
 
 	public function riders_admin_page() {
@@ -1169,7 +1140,17 @@ class Top25_cURL {
 
 }
 
-/** The same as curl_exec except tries its best to convert the output to utf8 **/
+$ucicurl_admin=new UCIcURLAdmin();
+
+/**
+ * curl_exec_utf8 function.
+ *
+ * The same as curl_exec except tries its best to convert the output to utf8
+ *
+ * @access public
+ * @param mixed $ch
+ * @return void
+ */
 function curl_exec_utf8($ch) {
     $data = curl_exec($ch);
     if (!is_string($data)) return $data;

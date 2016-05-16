@@ -9,15 +9,19 @@
  * Text Domain: uci-curl
  */
 
-include_once(plugin_dir_path(__FILE__).'database.php');
-//include_once(plugin_dir_path(__FILE__).'classes/top25-curl.php');
+define('UCICURL_PATH', plugin_dir_path(__FILE__));
+define('UCICURL_URL', plugin_dir_url(__FILE__));
+
+include_once(UCICURL_PATH.'database.php');
+include_once(UCICURL_PATH.'functions.php');
+include_once(UCICURL_PATH.'classes/admin.php');
 //include_once(plugin_dir_path(__FILE__).'classes/field-quality.php');
 //include_once(plugin_dir_path(__FILE__).'classes/view-db.php');
-//include_once(plugin_dir_path(__FILE__).'classes/race-stats.php');
+include_once(plugin_dir_path(__FILE__).'classes/race-stats.php');
 //include_once(plugin_dir_path(__FILE__).'classes/rider-stats.php');
 //include_once(plugin_dir_path(__FILE__).'classes/seasons.php');
 
-define('UCICURL',plugin_dir_url(__FILE__));
+
 
 
 $config=array(
