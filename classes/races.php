@@ -27,6 +27,7 @@ class UCIcURLRaces {
 	 * @param bool $season (default: false)
 	 * @return void
 	 */
+/*
 	public function get_season_race_rankings($season=false) {
 		$html=null;
 		$races=$this->get_races();
@@ -50,10 +51,6 @@ class UCIcURLRaces {
 					$html.='<div class="nat col-md-1">'.$race->nat.'</div>';
 					$html.='<div class="class col-md-1">'.$race->class.'</div>';
 					$html.='<div class="winner col-md-3">'.$race->winner.'</div>';
-
-					if (isset($race->field_quality))
-						$html.='<div class="fq col-md-1">'.$race->field_quality->race_total.'</div>';
-
 				$html.='</div>';
 			endforeach;
 
@@ -61,6 +58,7 @@ class UCIcURLRaces {
 
 		return $html;
 	}
+*/
 
 	/**
 	 * get_races function.
@@ -84,7 +82,14 @@ class UCIcURLRaces {
 			'season' => false,
 			'nat' => false,
 		);
-		$args=array_merge($default_args,$args);
+		$args=array_merge($default_args, $args);
+
+		// check filters //
+		if (isset($_POST['ucicurl_admin']) && wp_verify_nonce($_POST['ucicurl_admin'], 'filter_races'))
+			$args=wp_parse_args($_POST, $args);
+
+		if (isset($_GET['search']) && $_GET['search']!='')
+			$where[]="event LIKE '%{$_GET['search']}%'";
 
 		extract($args);
 
@@ -143,6 +148,7 @@ class UCIcURLRaces {
 	 * @param bool $code (default: false)
 	 * @return void
 	 */
+/*
 	public function get_race($code=false) {
 		global $wpdb,$uci_curl;
 
@@ -180,19 +186,16 @@ class UCIcURLRaces {
 
 		return $race;
 	}
+*/
 
 	/**
-	 * get_race_classes function.
+	 * races function.
 	 *
 	 * @access public
 	 * @return void
 	 */
-	public function get_race_classes() {
-		global $wpdb,$uci_curl;
-
-		$classes=$wpdb->get_col("SELECT DISTINCT class FROM $uci_curl->table");
-
-		return $classes;
+	public function races() {
+		return $this->get_races();
 	}
 
 }

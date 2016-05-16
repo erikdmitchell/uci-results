@@ -1,35 +1,19 @@
 <?php
+
 /**
- @since Version 1.0.2
-**/
+ * ViewDB class.
+ */
 class ViewDB {
 
-	public $version='0.1.3';
-	public $url='';
-
-	/**
-	 * __construct function.
-	 *
-	 * @access public
-	 * @return void
-	 */
 	public function __construct() {
 		add_action('admin_enqueue_scripts',array($this,'viewdb_scripts_styles'));
+
 		add_action('wp_ajax_race_search',array($this,'ajax_race_search'));
 		add_action('wp_ajax_race_filter',array($this,'ajax_race_filter'));
 		add_action('wp_ajax_rider_search',array($this,'ajax_rider_search'));
 		add_action('wp_ajax_rider_filter',array($this,'ajax_rider_filter'));
-
-		$this->url=admin_url('admin.php?page=uci-view-db');
 	}
 
-	/**
-	 * viewdb_scripts_styles function.
-	 *
-	 * @access public
-	 * @param mixed $hook
-	 * @return void
-	 */
 	public function viewdb_scripts_styles($hook) {
 		if ($hook!='uci-cross_page_uci-view-db')
 			return false;
@@ -38,181 +22,6 @@ class ViewDB {
 		wp_enqueue_script('uci-view-db-script',plugin_dir_url(basename(__FILE__)).'/uci-curl-wp-plugin/js/view-db.js',array('jquery','jquery-tablesorter-script'));
 	}
 
-	/**
-	 * display_view_db_page function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function display_view_db_page() {
-		global $wpdb,$uci_curl;
-
-		$seasons=$wpdb->get_col("SELECT season FROM $uci_curl->table GROUP BY season");
-		$classes=$wpdb->get_col("SELECT class FROM $uci_curl->table GROUP BY class");
-		$countries=$wpdb->get_col("SELECT nat FROM $uci_curl->table GROUP BY nat ORDER BY nat");
-
-		if (isset($_POST['update-race']) && $_POST['update-race'])
-			$this->update_race();
-		?>
-
-		<div class="wrap uci-view-db">
-			<h1>UCI View DB</h1>
-
-			<div class="view-db-filter">
-				<div class="row">
-					<div class="races col-md-6">
-						<h3>Races</h3>
-						<div class="filters">
-							<form name="race_filters" id="race_filters">
-								<div class="row">
-									<div class="season col-md-4">
-										<h4>Season</h4>
-										<select name="season" class="season">
-											<option value="0">-- Select One --</option>
-											<?php foreach ($seasons as $season) : ?>
-												<option value="<?php echo $season; ?>"><?php echo $season; ?></option>
-											<?php endforeach; ?>
-										</select>
-									</div>
-									<div class="class col-md-4">
-										<h4>Class</h4>
-										<select name="class" class="class">
-											<option value="0">-- Select One --</option>
-											<?php foreach ($classes as $class) : ?>
-												<option value="<?php echo $class; ?>"><?php echo $class; ?></option>
-											<?php endforeach; ?>
-										</select>
-									</div>
-									<div class="country col-md-4">
-										<h4>Country</h4>
-										<select name="nat" class="nat">
-											<option value="0">-- Select One --</option>
-											<?php foreach ($countries as $country) : ?>
-												<option value="<?php echo $country; ?>"><?php echo $country; ?></option>
-											<?php endforeach; ?>
-										</select>
-									</div>
-								</div><!-- .row -->
-
-								<div class="row">
-									<div class="race-search-buttons col-md-12">
-										<p>
-											<button type="reset" id="form-reset" value="Reset">Reset</button>
-										</p>
-									</div>
-								</div><!-- .row -->
-
-							</form>
-							<div class="row">
-								<div class="col-md-12">
-									<h4>Search by Name</h4>
-								</div>
-								<div class="race-search col-md-6">
-									<input id="race-search" type="text" />
-								</div>
-								<div class="col-md-6">
-									<button type="reset" id="clear-race-search" value="Clear">Clear</button>
-								</div>
-							</div><!-- .row -->
-							<div class="row">
-								<div class="race-search-results col-md-12">
-									<div id="race-search-results-text">Search Races...</div>
-								</div>
-							</div><!-- .row -->
-						</div><!-- .filters -->
-					</div><!-- .races -->
-					<div class="riders col-md-6">
-						<h3>Riders</h3>
-						<div class="filters">
-							<form name="rider_filters" id="rider_filters">
-								<div class="row">
-									<div class="season col-md-4">
-										<h4>Season</h4>
-										<select name="season" class="season-dd">
-											<option value="0">-- Select One --</option>
-											<?php foreach ($seasons as $season) : ?>
-												<option value="<?php echo $season; ?>"><?php echo $season; ?></option>
-											<?php endforeach; ?>
-										</select>
-									</div>
-<!--
-									<div class="class col-md-4">
-										<h4>Class</h4>
-										<select name="class" class="class">
-											<option value="0">-- Select One --</option>
-											<?php foreach ($classes as $class) : ?>
-												<option value="<?php echo $class; ?>"><?php echo $class; ?></option>
-											<?php endforeach; ?>
-										</select>
-									</div>
--->
-<!--
-									<div class="country col-md-4">
-										<h4>Country</h4>
-										<select name="nat" class="nat">
-											<option value="0">-- Select One --</option>
-											<?php foreach ($countries as $country) : ?>
-												<option value="<?php echo $country; ?>"><?php echo $country; ?></option>
-											<?php endforeach; ?>
-										</select>
-									</div>
--->
-								</div><!-- .row -->
-
-								<div class="row">
-									<div class="race-search-buttons col-md-12">
-										<p>
-											<button type="reset" id="form-reset" value="Reset">Reset</button>
-										</p>
-									</div>
-								</div><!-- .row -->
-
-							</form>
-							<div class="row">
-								<div class="col-md-12">
-									<h4>Search by Name</h4>
-								</div>
-								<div class="rider-search col-md-6">
-									<input id="rider-search" type="text" />
-								</div>
-								<div class="col-md-6">
-									<button type="reset" id="clear-rider-search" value="Clear">Clear</button>
-								</div>
-							</div><!-- .row -->
-							<div class="row">
-								<div class="rider-search-results col-md-12">
-									<div id="rider-search-results-text">Search Riders...</div>
-								</div>
-							</div><!-- .row -->
-						</div><!-- .filters -->
-					</div><!-- .riders -->
-				</div>
-				<div class="row data" id="get-race-rider">
-					<?php if (isset($_GET['race_code'])) : ?>
-						<?php echo $this->get_race_data($_GET['race_code']); ?>
-					<?php endif; ?>
-					<?php if (isset($_GET['rider'])) : ?>
-						<?php echo $this->get_rider_data($_GET['rider']); ?>
-					<?php endif; ?>
-				</div>
-			</div>
-			<div id="loader">
-				<div class="inner">
-					<img src="<?php echo plugins_url('../images/ajax-loader.gif',__FILE__); ?>" />
-				</div>
-			</div>
-		</div><!-- .wrap -->
-
-		<?php
-	}
-
-	/**
-	 * get_race_data function.
-	 *
-	 * @access protected
-	 * @param mixed $race_code
-	 * @return void
-	 */
 	protected function get_race_data($race_code) {
 		global $RaceStats;
 
@@ -328,12 +137,6 @@ echo '</pre>';
 		return $html;
 	}
 
-	/**
-	 * ajax_race_search function.
-	 *
-	 * @access public
-	 * @return void
-	 */
 	public function ajax_race_search() {
 		global $wpdb,$uci_curl;
 
@@ -372,12 +175,6 @@ echo '</pre>';
 		wp_die();
 	}
 
-	/**
-	 * ajax_race_seasons function.
-	 *
-	 * @access public
-	 * @return void
-	 */
 	public function ajax_race_filter() {
 		global $RaceStats;
 
@@ -431,12 +228,6 @@ echo '</pre>';
 		wp_die();
 	}
 
-	/**
-	 * ajax_rider_search function.
-	 *
-	 * @access public
-	 * @return void
-	 */
 	public function ajax_rider_search() {
 		global $wpdb,$uci_curl;
 
@@ -471,12 +262,6 @@ echo '</pre>';
 		wp_die();
 	}
 
-	/**
-	 * ajax_rider_filter function.
-	 *
-	 * @access public
-	 * @return void
-	 */
 	public function ajax_rider_filter() {
 		global $RiderStats;
 
@@ -519,7 +304,37 @@ echo '</pre>';
 		wp_die();
 	}
 
+	/**
+	 * seasons function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function seasons() {
+		global $wpdb;
+
+		$seasons=$wpdb->get_col("SELECT season FROM $wpdb->ucicurl_races GROUP BY season");
+
+		return $seasons;
+	}
+
+	public function classes() {
+		global $wpdb;
+
+		$classes=$wpdb->get_col("SELECT class FROM $wpdb->ucicurl_races GROUP BY class");
+
+		return $classes;
+	}
+
+	public function nats() {
+		global $wpdb;
+
+		$countries=$wpdb->get_col("SELECT nat FROM $wpdb->ucicurl_races GROUP BY nat ORDER BY nat");
+
+		return $countries;
+	}
+
 }
 
-new ViewDB();
+$ucicurl_viewdb=new ViewDB();
 ?>

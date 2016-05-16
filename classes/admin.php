@@ -35,9 +35,6 @@ class UCIcURLAdmin {
 	 */
 	public function admin_page() {
 		add_menu_page('UCI cURL', 'UCI cURL', 'manage_options', 'uci-curl', array($this, 'display_admin_page'), 'dashicons-sos');
-
-		//add_submenu_page('uci-cross', 'UCI cURL', 'UCI cURL', 'manage_options', 'uci-curl', array($this, 'display_curl_page'));
-		//add_submenu_page('uci-cross','UCI View DB','UCI View DB','administrator','uci-view-db',array(new ViewDB(),'display_view_db_page'));
 	}
 
 	/**
@@ -62,12 +59,14 @@ class UCIcURLAdmin {
 	public function display_admin_page() {
 		$html=null;
 		$tabs=array(
-			'uci-cross' => 'UCI Cross',
+			'uci-curl' => 'UCI cURL',
+			'races' => 'Races',
+			'view-db' => 'View DB',
 		);
-		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'uci-cross';
+		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'uci-curl';
 
 		$html.='<div class="wrap">';
-			$html.='<h2>UCI Cross Admin Section</h2>';
+			$html.='<h1>UCI cURL</h1>';
 
 			$html.='<h2 class="nav-tab-wrapper">';
 				foreach ($tabs as $key => $name) :
@@ -77,16 +76,19 @@ class UCIcURLAdmin {
 						$class=null;
 					endif;
 
-					$html.='<a href="?page=uci-cross&tab='.$key.'" class="nav-tab '.$class.'">'.$name.'</a>';
+					$html.='<a href="?page=uci-curl&tab='.$key.'" class="nav-tab '.$class.'">'.$name.'</a>';
 				endforeach;
 			$html.='</h2>';
 
 			switch ($active_tab) :
-				case 'uci-cross':
-					$html.=ucicurl_get_admin_page('main');
+				case 'races':
+					$html.=ucicurl_get_admin_page('races');
+					break;
+				case 'view-db':
+					$html.=ucicurl_get_admin_page('view-db');
 					break;
 				default:
-					$html.=ucicurl_get_admin_page('main');
+					$html.=ucicurl_get_admin_page('curl');
 					break;
 			endswitch;
 
@@ -111,16 +113,6 @@ class UCIcURLAdmin {
 		return $html;
 	}
 */
-
-	/**
-	 * display_curl_page function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function display_curl_page() {
-		echo ucicurl_get_admin_page('curl');
-	}
 
 	/**
 	 * ajax_get_race_data_non_db function.
@@ -428,7 +420,6 @@ class UCIcURLAdmin {
 			'nat' => $race_data->nat,
 			'class' => $race_data->class,
 			'winner' => $race_data->winner,
-			//'season' => $this->get_season_from_date($race_data->date),
 			'season' => $race_data->season,
 			'link' => $race_data->link,
 			'code' => $this->build_race_code($race_data->event, $race_data->date),
@@ -465,7 +456,7 @@ class UCIcURLAdmin {
 		$race_results=$this->get_race_results($link);
 
 		foreach ($race_results as $result) :
-			$rider_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_riders} WHERE name='{$result->name}' AND nat='{$result->nat}'");
+			$rider_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_riders} WHERE name=\"{$result->name}\" AND nat=\"{$result->nat}\"");
 
 			// check if we have a rider id, otherwise create one //
 			if (!$rider_id) :
@@ -672,7 +663,7 @@ class UCIcURLAdmin {
 		$html=null;
 
 		$html.='<form name="add-races-to-db" id="add-races-to-db" method="post">';
-			$html.='<table class="ulm-usac-clubs-table wp-list-table widefat fixed striped pages">';
+			$html.='<table class="wp-list-table widefat fixed striped pages">';
 				$html.='<thead>';
 					$html.='<tr>';
 						$html.='<td id="cb" class="check-column"><input type="checkbox" id="select-all"></td>';
