@@ -6,20 +6,18 @@
  * Version: 2.0.0
  * Author: Erik Mitchell
  * Author URI: http://erikmitchell.net
- * License: GPL2
+ * Text Domain: uci-curl
  */
 
 include_once(plugin_dir_path(__FILE__).'classes/databases.php');
-include_once(plugin_dir_path(__FILE__).'classes/top25-curl.php');
-include_once(plugin_dir_path(__FILE__).'classes/field-quality.php');
-include_once(plugin_dir_path(__FILE__).'classes/view-db.php');
-include_once(plugin_dir_path(__FILE__).'classes/race-stats.php');
-include_once(plugin_dir_path(__FILE__).'classes/rider-stats.php');
-include_once(plugin_dir_path(__FILE__).'classes/seasons.php');
-require_once(plugin_dir_path(__FILE__).'page-templating.php' );
-include_once(plugin_dir_path(__FILE__).'fantasy/fantasy.php');
+//include_once(plugin_dir_path(__FILE__).'classes/top25-curl.php');
+//include_once(plugin_dir_path(__FILE__).'classes/field-quality.php');
+//include_once(plugin_dir_path(__FILE__).'classes/view-db.php');
+//include_once(plugin_dir_path(__FILE__).'classes/race-stats.php');
+//include_once(plugin_dir_path(__FILE__).'classes/rider-stats.php');
+//include_once(plugin_dir_path(__FILE__).'classes/seasons.php');
 
-define('UCICURLBASE',plugin_dir_url(__FILE__));
+define('UCICURL',plugin_dir_url(__FILE__));
 
 
 $config=array(
@@ -29,8 +27,6 @@ $config=array(
 	),
 );
 $uci_curl=new Top25_cURL($config); // this may be initated in the top25 file at some point
-
-add_action('plugins_loaded',array('Page_Templates','get_instance')); // enables our templates to be added
 
 // need to be auto done or something //
 $core_page_slug='uci-cross-rankings';
