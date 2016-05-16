@@ -57,6 +57,8 @@ class UCIcURLAdmin {
 	 * @return void
 	 */
 	public function display_admin_page() {
+		global $ucicurl_riders;
+
 		$html=null;
 		$tabs=array(
 			'uci-curl' => 'UCI cURL',
@@ -85,7 +87,13 @@ class UCIcURLAdmin {
 					$html.=ucicurl_get_admin_page('races');
 					break;
 				case 'riders':
-					$html.=ucicurl_get_admin_page('riders');
+					if (isset($_GET['rider']) && $_GET['rider']!='') :
+						$atts['rider_id']=$ucicurl_riders->get_rider_id($_GET['rider']);
+
+						$html.=ucicurl_get_admin_page('single-rider', $atts);
+					else :
+						$html.=ucicurl_get_admin_page('riders');
+					endif;
 					break;
 				default:
 					$html.=ucicurl_get_admin_page('curl');
@@ -426,9 +434,9 @@ class UCIcURLAdmin {
 		);
 
 		if (!$this->check_for_dups($data['code'])) :
-			if ($race_id=$wpdb->insert($wpdb->ucicurl_races, $data)) :
+			if ($wpdb->insert($wpdb->ucicurl_races, $data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
-				$this->add_race_results_to_db($race_id, $race_data->link);
+				$this->add_race_results_to_db($wpdb->insert_id, $race_data->link);
 			else :
 				$message='<div class="error">Unable to insert '.$data['code'].' into the database.</div>';
 			endif;
