@@ -128,7 +128,7 @@ class ViewDB {
 								<div class="row">
 									<div class="season col-md-4">
 										<h4>Season</h4>
-										<select name="season" class="season">
+										<select name="season" class="season-dd">
 											<option value="0">-- Select One --</option>
 											<?php foreach ($seasons as $season) : ?>
 												<option value="<?php echo $season; ?>"><?php echo $season; ?></option>
@@ -187,7 +187,7 @@ class ViewDB {
 						</div><!-- .filters -->
 					</div><!-- .riders -->
 				</div>
-				<div class="row data">
+				<div class="row data" id="get-race-rider">
 					<?php if (isset($_GET['race_code'])) : ?>
 						<?php echo $this->get_race_data($_GET['race_code']); ?>
 					<?php endif; ?>
@@ -396,24 +396,35 @@ echo '</pre>';
 
 			$html.='<h4>Races</h4>';
 
-			$html.='<div class="row header">';
-				$html.='<div class="date col-md-2">Date</div>';
-				$html.='<div class="name col-md-5">Name</div>';
-				$html.='<div class="nat col-md-1">Nat</div>';
-				$html.='<div class="class col-md-1">Class</div>';
-				$html.='<div class="fq col-md-1">FQ</div>';
-			$html.='</div>';
+			$html.='<div class="check-all"><a href="" id="checkall">Select All</a></div>';
+			$html.='<table id="race-filter" class="race-filter tablesorter">';
+				$html.='<thead>';
+					$html.='<tr class="">';
+						$html.='<th class="checkbox"></th>';
+						$html.='<th class="date">Date</th>';
+						$html.='<th class="name">Name</th>';
+						$html.='<th class="nat">Nat</th>';
+						$html.='<th class="class">Class</th>';
+						$html.='<th class="fq">FQ</th>';
+					$html.='</tr>';
+				$html.='</thead>';
+				$html.='<tbody>';
+					foreach ($races as $race) :
+						$html.='<tr class="race-details">';
+							$html.='<td class="checkbox"><input class="race-checkbox" type="checkbox" name="races[]" value="'.$race->code.'" /></td>';
+							$html.='<td class="date">'.$race->date.'</td>';
+							$html.='<td class="name"><a href="'.$this->url.'&race_code='.urlencode($race->code).'">'.$race->name.'</a></td>';
+							$html.='<td class="nat">'.$race->nat.'</td>';
+							$html.='<td class="class">'.$race->class.'</td>';
+							$html.='<td class="fq">'.$race->fq.'</td>';
+						$html.='</tr>';
+					endforeach;
+				$html.='</tbody>';
+			$html.='</table>';
+			$html.='<div class="check-all"><a href="" id="checkall">Select All</a></div>';
 
-			foreach ($races as $race) :
-				$html.='<div class="row race-details">';
-					$html.='<div class="date col-md-2">'.$race->date.'</div>';
-					$html.='<div class="name col-md-5"><a href="'.$this->url.'&race_code='.urlencode($race->code).'">'.$race->name.'</a></div>';
-					$html.='<div class="nat col-md-1">'.$race->nat.'</div>';
-					$html.='<div class="class col-md-1">'.$race->class.'</div>';
-					$html.='<div class="fq col-md-1">'.$race->fq.'</div>';
-				$html.='</div>';
-			endforeach;
 		$html.='</div>';
+		$html.='<script>jQuery(".tablesorter").tablesorter();</script>';
 
 		echo $html;
 
@@ -460,6 +471,12 @@ echo '</pre>';
 		wp_die();
 	}
 
+	/**
+	 * ajax_rider_filter function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function ajax_rider_filter() {
 		global $RiderStats;
 
@@ -467,8 +484,10 @@ echo '</pre>';
 
 		$html=null;
 		$args=array(
-			'pagination' => false,
-			'order_by' => 'rider'
+			'per_page' => -1,
+			'order_by' => 'name',
+			'order' => 'ASC',
+			'group' => 'GROUP BY name'
 		);
 		$args=array_merge($args,$form);
 		$riders=$RiderStats->get_riders($args);
@@ -486,9 +505,9 @@ echo '</pre>';
 				$html.='</thead>';
 				$html.='<tbody>';
 					foreach ($riders as $rider) :
-						$html.='<tr class="race-details">';
-							$html.='<td class="name">'.$rider->rider.'</td>';
-							$html.='<td class="nat">'.$rider->nat.'</td>';
+						$html.='<tr class="rider-details">';
+							$html.='<td class="name">'.$rider->name.'</td>';
+							$html.='<td class="nat">'.$rider->country.'</td>';
 							$html.='<td class="rank">'.$rider->rank.'</td>';
 						$html.='</tr>';
 					endforeach;

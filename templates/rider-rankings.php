@@ -9,14 +9,11 @@
 <?php
 global $RiderStats,$wp_query;
 
-$paged=get_query_var('paged',1);
 $season=get_query_var('season','2015/2016');
-$current_week=uci_get_current_week($season);
-$riders=$RiderStats->get_riders_from_weekly_rank(array(
+$week=$RiderStats->get_latest_rankings_week($season);
+$riders=$RiderStats->get_riders(array(
 	'season' => $season,
-	'paged' => $paged,
-	'per_page' => 15,
-	'week' => $current_week
+	'week' => $week
 ));
 ?>
 
@@ -45,12 +42,12 @@ $riders=$RiderStats->get_riders_from_weekly_rank(array(
 						<div class="row">
 							<div class="rank col-md-1"><?php echo $rider->rank; ?></div>
 							<div class="rider col-md-4"><a href="<?php echo single_rider_link($rider->name,$season); ?>"><?php echo $rider->name; ?></a></div>
-							<div class="nat col-md-1"><a href="<?php echo single_country_link($rider->nat,$season); ?>"><?php echo get_country_flag($rider->nat); ?></a></div>
-							<div class="uci col-md-1"><?php echo $rider->uci; ?></div>
-							<div class="wcp col-md-1"><?php echo $rider->wcp; ?></div>
-							<div class="winning col-md-1"><?php echo number_format($rider->win_perc,3); ?></div>
+							<div class="nat col-md-1"><a href="<?php echo single_country_link($rider->country,$season); ?>"><?php echo get_country_flag($rider->country); ?></a></div>
+							<div class="uci col-md-1"><?php echo $rider->uci_total; ?></div>
+							<div class="wcp col-md-1"><?php echo $rider->wcp_total; ?></div>
+							<div class="winning col-md-1"><?php echo $rider->win_perc; ?></div>
 							<div class="sos col-md-1"><?php echo $rider->sos; ?></div>
-							<div class="total col-md-1"><?php echo number_format($rider->total,3); ?></div>
+							<div class="total col-md-1"><?php echo $rider->total; ?></div>
 						</div>
 					<?php endforeach; ?>
 				</div>

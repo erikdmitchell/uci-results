@@ -9,12 +9,19 @@ class Top25_cURL {
 	public $table;
 	public $results_table;
 	public $fq_table;
-	public $weekly_rider_rankings_table;
+	public $uci_rider_rankings;
 	public $version='1.0.3';
 	public $config=array();
 
 	protected $debug=false;
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @param array $config (default: array())
+	 * @return void
+	 */
 	public function __construct($config=array()) {
 		global $wpdb;
 
@@ -24,16 +31,22 @@ class Top25_cURL {
 		add_action('wp_ajax_get_race_data_non_db',array($this,'ajax_get_race_data_non_db'));
 		add_action('wp_ajax_prepare_add_races_to_db',array($this,'ajax_prepare_add_races_to_db'));
 		add_action('wp_ajax_add_race_to_db',array($this,'ajax_add_race_to_db'));
-		add_action('wp_ajax_get_all_riders',array($this,'ajax_get_all_riders'));
-		add_action('wp_ajax_add_riders_weekly_rankings',array($this,'ajax_add_riders_weekly_rankings'));
+		add_action('wp_ajax_update_weekly_rank',array($this,'ajax_update_weekly_rank'));
 
 		$this->setup_config($config);
+
 		$this->table=$wpdb->prefix.'uci_races';
 		$this->results_table=$wpdb->prefix.'uci_rider_data';
-		$this->weekly_rider_rankings_table=$wpdb->prefix.'uci_weekly_rider_rankings';
 		$this->fq_table=$wpdb->prefix.'uci_fq_rankings';
+		$this->uci_rider_rankings=$wpdb->prefix.'uci_rider_season_rankings';
 	}
 
+	/**
+	 * admin_page function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function admin_page() {
 		global $FantasyCyclingAdmin;
 
@@ -53,6 +66,12 @@ class Top25_cURL {
 		wp_enqueue_style('uci-curl-admin',UCICURLBASE.'/css/admin.css',array(),$this->version);
 	}
 
+	/**
+	 * display_admin_page function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function display_admin_page() {
 		$html=null;
 		$tabs=array(
@@ -153,7 +172,7 @@ class Top25_cURL {
 					$html.='<label for="url-dd" class="col-md-1">Season</label>';
 					$html.='<div class="col-md-2">';
 						$html.='<select class="url-dd" id="get-race-season" name="url">';
-							$html.='<option>Select Year</option>';
+							$html.='<option value="0">Select Year</option>';
 							foreach ($this->config->urls as $season => $s_url) :
 								$html.='<option value="'.$s_url.'" '.selected($url,$s_url).'>'.$season.'</option>';
 							endforeach;
@@ -177,6 +196,8 @@ class Top25_cURL {
 				$html.='</div><!-- .row -->';
 				$html.='<p>';
 					$html.='<input type="button" name="button" id="get-races-curl" class="button button-primary" value="Get Races" />';
+					$html.='&nbsp;';
+					$html.='<input type="button" name="button" id="update-weekly-rank" class="button button-primary" value="Weekly Rank" />';
 				$html.='</p>';
 			$html.='</form>';
 
@@ -350,41 +371,23 @@ class Top25_cURL {
 		if (!$this->check_for_dups($code)) :
 			echo $this->add_race_to_db($_POST['race']);
 		elseif (!$this->has_fq($code)) :
+			//echo '<div class="updated add-race-to-db-message">Adding fq...</div>';
 			echo $this->add_fq($code);
 		else :
-			echo '<div class="error add-race-to-db-message">Already in db.('.$code.')</div>';
+			echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';
 		endif;
 
 		wp_die();
 	}
 
 	/**
-	 * ajax_get_all_riders function.
+	 * ajax_update_weekly_rank function.
 	 *
 	 * @access public
 	 * @return void
 	 */
-	public function ajax_get_all_riders() {
-		global $RiderStats;
-
-		echo json_encode($RiderStats->get_riders_in_season($_POST['season']));
-
-		wp_die();
-	}
-
-	/**
-	 * ajax_add_riders_weekly_rankings function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function ajax_add_riders_weekly_rankings() {
-		global $RiderStats;
-
-		if (!$this->debug) :
-			$RiderStats->generate_total_rank_per_week($_POST['rider'],$_POST['season']); // SLOW???
-			echo '<div class="updated rider-weekly-rankings">'.$_POST['rider'].' - weekly rankings updated.</div>';
-		endif;
+	public function ajax_update_weekly_rank() {
+		$this->update_rider_rankings($_POST['season']);
 
 		wp_die();
 	}
@@ -555,7 +558,7 @@ class Top25_cURL {
 				endif;
 			endif;
 		else :
-			$message='<div class="error">'.$data['code'].' is already in the database</div>';
+			$message='<div class="updated">'.$data['code'].' is already in the database</div>';
 		endif;
 
 		return $message;
@@ -576,6 +579,7 @@ class Top25_cURL {
 			return false;
 
 		$race_results=$this->get_race_results($link);
+		$race_data=$wpdb->get_row("SELECT * FROM $this->table WHERE code=\"$code\"");
 
 		foreach ($race_results as $result) :
 			$insert=array(
@@ -597,6 +601,232 @@ class Top25_cURL {
 				$wpdb->insert($this->results_table,$insert);
 			endif;
 		endforeach;
+	}
+
+	/**
+	 * update_rider_rankings function.
+	 *
+	 * @access public
+	 * @param bool $season (default: false)
+	 * @return void
+	 */
+	public function update_rider_rankings($season=false) {
+		global $RaceStats,$wpdb;
+
+		$CrossSeasons=new CrossSeasons();
+
+		// setup our season //
+		if (!$season || $season=='' || $season=='Select Year')
+			$season=end($CrossSeasons->seasons);
+
+		$races_per_week=$CrossSeasons->get_races_in_season_by_week($season); // get races per week
+
+		// get race results and total //
+		$codes=array();
+		foreach ($races_per_week as $week) :
+			// this will stop everything when we get to a week without races //
+			if (empty($week->races))
+				break;
+
+			// get race codes and append to array //
+			foreach ($week->races as $race) :
+				$codes[]=$race->code;
+			endforeach;
+
+			echo $sql="
+				SELECT
+					name,
+					country,
+					SUM(c2) AS c2,
+					SUM(c1) AS c1,
+					SUM(cn) AS cn,
+					SUM(cc) AS cc,
+					SUM(wcp_total) AS wcp_total,
+					SUM(cm) AS cm,
+					SUM(uci_total) AS uci_total,
+					SUM(wins/rider_races) AS win_perc,
+					SUM(fq_avg/(total_races/rider_races)) AS sos,
+					SUM((uci_total+(wins/rider_races)+(fq_avg/(total_races/rider_races)))/3) AS total
+				FROM (
+					SELECT
+						results.name AS name,
+						results.nat AS country,
+						0 AS c2,
+						0 AS c1,
+						0 AS cn,
+						0 AS cc,
+						0 AS cm,
+						SUM(results.par) AS uci_total,
+						SUM(IF(results.place=1,1,0)) AS wins,
+						COUNT(results.code) AS rider_races,
+						COALESCE((SELECT SUM(fq_table.fq) / COUNT(fq_table.fq) ),0) AS fq_avg,
+						(SELECT COUNT(*) FROM $this->table AS races WHERE races.code IN (\"".implode('","',$codes)."\")) AS total_races,
+						0 AS wcp_total
+					FROM $this->results_table AS results
+					LEFT JOIN $this->table AS races
+					ON results.code=races.code
+					LEFT JOIN $this->fq_table AS fq_table
+					ON fq_table.code=races.code
+					WHERE results.code IN (\"".implode('","',$codes)."\")
+					GROUP BY name
+
+					UNION
+
+					SELECT
+						results.name AS name,
+						results.nat AS country,
+						0 AS c2,
+						0 AS c1,
+						0 AS cn,
+						0 AS cc,
+						0 AS cm,
+						0 AS uci_total,
+						0 AS wins,
+						0 AS rider_races,
+						0 AS fq_avg,
+						0 AS total_races,
+						SUM(results.par) AS wcp_total
+					FROM $this->results_table AS results
+					LEFT JOIN $this->table AS races
+					ON results.code=races.code
+					WHERE results.code IN (\"".implode('","',$codes)."\")
+					AND races.class='CDM'
+					GROUP BY name
+
+					UNION
+
+					SELECT
+						results.name AS name,
+						results.nat AS country,
+						SUM(results.par) AS c2,
+						0 AS c1,
+						0 AS cn,
+						0 AS cc,
+						0 AS cm,
+						0 AS uci_total,
+						0 AS wins,
+						0 AS rider_races,
+						0 AS fq_avg,
+						0 AS total_races,
+						0 AS wcp_total
+					FROM $this->results_table AS results
+					LEFT JOIN $this->table AS races
+					ON results.code=races.code
+					WHERE results.code IN (\"".implode('","',$codes)."\")
+					AND races.class='C2'
+					GROUP BY name
+
+					UNION
+
+					SELECT
+						results.name AS name,
+						results.nat AS country,
+						0 AS c2,
+						SUM(results.par) AS c1,
+						0 AS cn,
+						0 AS cc,
+						0 AS cm,
+						0 AS uci_total,
+						0 AS wins,
+						0 AS rider_races,
+						0 AS fq_avg,
+						0 AS total_races,
+						0 AS wcp_total
+					FROM $this->results_table AS results
+					LEFT JOIN $this->table AS races
+					ON results.code=races.code
+					WHERE results.code IN (\"".implode('","',$codes)."\")
+					AND races.class='C1'
+					GROUP BY name
+
+					UNION
+
+					SELECT
+						results.name AS name,
+						results.nat AS country,
+						0 AS c2,
+						0 AS c1,
+						SUM(results.par) AS cn,
+						0 AS cc,
+						0 AS cm,
+						0 AS uci_total,
+						0 AS wins,
+						0 AS rider_races,
+						0 AS fq_avg,
+						0 AS total_races,
+						0 AS wcp_total
+					FROM $this->results_table AS results
+					LEFT JOIN $this->table AS races
+					ON results.code=races.code
+					WHERE results.code IN (\"".implode('","',$codes)."\")
+					AND races.class='CN'
+					GROUP BY name
+
+					UNION
+
+					SELECT
+						results.name AS name,
+						results.nat AS country,
+						0 AS c2,
+						0 AS c1,
+						0 AS cn,
+						0 AS cc,
+						SUM(results.par) AS cm,
+						0 AS uci_total,
+						0 AS wins,
+						0 AS rider_races,
+						0 AS fq_avg,
+						0 AS total_races,
+						0 AS wcp_total
+					FROM $this->results_table AS results
+					LEFT JOIN $this->table AS races
+					ON results.code=races.code
+					WHERE results.code IN (\"".implode('","',$codes)."\")
+					AND races.class='CM'
+					GROUP BY name
+
+				) t
+				GROUP BY name
+				ORDER BY total DESC
+
+			";
+			$rank=1;
+			$riders=$wpdb->get_results($sql);
+
+			// build data for each rider aka result //
+			foreach ($riders as $rider) :
+				$data=array(
+					'name' => $rider->name,
+					'country' => $rider->country,
+					'season' => $season,
+					'rank' => $rank,
+					'week' => $week->week,
+					'c2' => $rider->c2,
+					'c1' => $rider->c1,
+					'cn' => $rider->cn,
+					'cc' => $rider->cc,
+					'cm' => $rider->cm,
+					'uci_total' => $rider->uci_total,
+					'wcp_total' => $rider->wcp_total,
+					'win_perc' => $rider->win_perc,
+					'sos' => $rider->sos,
+					'sos_rank' => 0,
+					'total' => $rider->total,
+				);
+
+				$rank++;
+
+				// updated if in db, else insert //
+				if ($id=$wpdb->get_var("SELECT id FROM $this->uci_rider_rankings WHERE name=\"{$rider->name}\" AND week=$week->week")) :
+					$wpdb->update($this->uci_rider_rankings,$data,array('id' => $id));
+				else :
+					$wpdb->insert($this->uci_rider_rankings,$data);
+				endif;
+
+				echo '<div class="updated">'.$rider->name.' has been updated in the rider rankings db for week '.$week->week.'</div>';
+
+			endforeach; // riders
+		endforeach; // races per week
 	}
 
 	//----------------------------- begin add_race_to_db helper functions -----------------------------//
@@ -781,18 +1011,18 @@ class Top25_cURL {
 		$html.='<form name="add-races-to-db" id="add-races-to-db" method="post">';
 			$html.='<div class="race-table">';
 				$html.='<div class="header row">';
-					$html.='<div class="col-md-1">&nbsp;</div>';
+					$html.='<div class="col-xs-1"><a href="" class="select" id="selectall">All</a></div>';
 					$html.='<div class="col-md-2">Date</div>';
-					$html.='<div class="col-md-3">Event</div>';
+					$html.='<div class="col-md-4">Event</div>';
 					$html.='<div class="col-md-1">Nat.</div>';
 					$html.='<div class="col-md-1">Class</div>';
-					$html.='<div class="col-md-2">Winner</div>';
+					//$html.='<div class="col-md-2">Winner</div>';
 					$html.='<div class="col-md-2">Season</div>';
 				$html.='</div>';
 
-				$html.='<div class="row select-all">';
-					$html.='<div class="col-xs-2"><a href="" class="select" id="selectall">Select All</a></div>';
-				$html.='</div>';
+				//$html.='<div class="row select-all">';
+
+				//$html.='</div>';
 
 				foreach ($obj as $result) :
 					$disabled='';
@@ -814,13 +1044,13 @@ class Top25_cURL {
 						$event='No Event';
 
 					$html.='<div class="row">';
-						$html.='<div class="col-md-1"><input class="race-checkbox" type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" '.$disabled.' /></div>';
+						$html.='<div class="col-xs-1"><input class="race-checkbox" type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" '.$disabled.' /></div>';
 						$html.='<div class="col-md-2">'.$date.'</div>';
-						$html.='<div class="col-md-3">'.$event.'</div>';
+						$html.='<div class="col-md-4">'.$event.'</div>';
 						if ($result->event) :
 							$html.='<div class="col-md-1">'.$result->nat.'</div>';
 							$html.='<div class="col-md-1">'.$result->class.'</div>';
-							$html.='<div class="col-md-2">'.$result->winner.'</div>';
+							//$html.='<div class="col-md-2">'.$result->winner.'</div>';
 							$html.='<div class="col-md-2">'.$result->season.'</div>';
 						endif;
 					$html.='</div>';
@@ -867,7 +1097,7 @@ class Top25_cURL {
 		global $wpdb;
 
 		if ($this->has_fq($code) || $this->debug)
-			return false;
+			return '<div class="error">This code already has an FQ</div>';
 
 		$FieldQuality=new FieldQuality($code);
 		$message='';

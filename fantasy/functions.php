@@ -84,93 +84,163 @@ function fc_user_teams($user_id=0) {
 }
 
 /**
- * fc_rider_list_dropdown function.
- *
- * @access public
- * @param bool $name (default: false)
- * @param int $min_rank (default: 0)
- * @param int $max_rank (default: 10)
- * @param string $select_title (default: 'Select a Rider')
- * @param bool $echo (default: true)
- * @return void
- */
-/*
-function fc_rider_list_dropdown($name=false,$min_rank=0,$max_rank=10,$select_title='Select a Rider',$echo=true) {
-	global $wpdb,$RiderStats;
-
-	$html=null;
-	$riders=$RiderStats->get_riders(array( // DEPRECATED
-		'pagination' => false,
-		'limit' => "$min_rank,$max_rank"
-	));
-
-	if (!$name)
-		$name=generateRandomString();
-
-	$html.='<select name="'.$name.'" id="'.$name.'">';
-		$html.='<option value="0">'.$select_title.'</option>';
-		foreach ($riders as $rider) :
-			$html.='<option value="'.$rider->rider.'">'.$rider->rider.'</option>';
-		endforeach;
-	$html.='</select>';
-
-	if ($echo) :
-		echo $html;
-	else :
-		return $html;
-	endif;
-}
-*/
-
-/**
- * fc_rider_list_dropdown_race function.
+ * fc_get_fantasy_riders function.
  *
  * @access public
  * @param array $args (default: array())
  * @return void
  */
-function fc_rider_list_dropdown_race($args=array()) {
-	global $wpdb,$RiderStats;
+function fc_get_fantasy_riders($args=array()) {
+	global $wpdb,$uci_curl,$RiderStats;
 
+	$season='2015/2016';
 	$default_args=array(
-		'id' => 1,
-		'name' => false,
-		'min_rank' => 0,
-		'max_rank' => 10,
-		'select_title' => 'Select a Rider',
-		'echo' => true
+		'race_id' => 1,
+		'sort' => SORT_ASC,
+		'sort_by' => 'name',
 	);
 	$args=array_merge($default_args,$args);
-	$html=null;
 
 	extract($args);
 
-	$riders=$wpdb->get_col("SELECT start_list FROM wp_fc_races WHERE id=$id");
-	$riders=unserialize($riders[0]);
+	$race_db=$wpdb->get_row("SELECT * FROM wp_fc_races WHERE id={$race_id}");
+	$riders_db=$RiderStats->get_riders(array(
+		'season' => $season,
+		'per_page' => -1,
+		'week' => $RiderStats->get_latest_rankings_week($season),
+	));
+	$riders=unserialize($race_db->start_list);
 
 	// if we have no start list //
 	if (empty($riders))
-		return '<div class="no-start-list">No start list yet, check back soon.</div>';
+		return false;
+
+	// append rider data //
+	foreach ($riders as $key => $rider) :
+		foreach ($riders_db as $rider_db) :
+			if ($rider_db->name==$rider['rider']) :
+				$rider_details=$rider_db;
+				break;
+			endif;
+		endforeach;
+
+		$arr=array();
+		$arr['name']=$rider['rider'];
+		$arr['country']=$rider_db->country;
+		$arr['last_year']=$rider['last_year'];
+		$arr['last_week']=$rider['last_week'];
+		$arr['rank']=$rider_db->rank;
+		$arr['points']=array(
+			'c2' => $rider_db->c2,
+			'c1' => $rider_db->c1,
+			'cn' => $rider_db->cn,
+			'cc' => $rider_db->cc,
+			'cdm' => $rider_db->wcp_total,
+			'cm' => $rider_db->cm
+		);
+
+		$riders[$key]=$arr;
+	endforeach;
 
 	// Sort the array by name //
-	sort($riders);
+/*
+	array_multisort($riders,$sort);
 
-	if (!$name)
-		$name=generateRandomString();
+	usort($users, function ($a, $b) {
+	     return strcmp($a['username'], $b['username']);
+	});
+*/
+	//sort($riders);
 
-	$html.='<select name="'.$name.'" id="'.$name.'" class="fc-riders-dd">';
-		$html.='<option value="0">'.$select_title.'</option>';
-		foreach ($riders as $rider) :
-			$country=$wpdb->get_var("SELECT nat FROM wp_uci_rider_data WHERE name='$rider' GROUP BY nat");
-			$html.='<option value="'.$rider.'">'.$rider.' ('.$country.')</option>';
-		endforeach;
-	$html.='</select>';
+$sort_values=array();
+foreach ($riders as $rider) :
+	$sort_values[]=$rider[$sort_by];
+endforeach;
+array_multisort($sort_values,$sort,$riders);
 
-	if ($echo) :
-		echo $html;
-	else :
-		return $html;
-	endif;
+	return $riders;
+}
+
+/**
+ * fc_add_rider_modal_btn function.
+ *
+ * @access public
+ * @return void
+ */
+function fc_add_rider_modal_btn() {
+	$html=null;
+
+	$html.='<button type="button" class="button button-getcode button-primary add-remove-btn" data-toggle="modal" data-target="#add-rider-modal">';
+		$html.='<span class="add"><i class="fa fa-plus"></i><span class="text">Add Rider</span></span>';
+		$html.='<span class="remove"><i class="fa fa-minus"></i><span class="text">Remove Rider</span></span>';
+	$html.='</button>';
+
+	echo $html;
+}
+
+/**
+ * fc_add_rider_modal function.
+ *
+ * @access public
+ * @param array $args (default: array())
+ * @return void
+ */
+function fc_add_rider_modal($args=array()) {
+	$html=null;
+	$riders=fc_get_fantasy_riders($args);
+
+	if (!$riders)
+		return false;
+
+	$html.='<div class="modal fade" id="add-rider-modal" tabindex="-1" role="dialog">';
+	  $html.='<div class="modal-dialog">';
+	    $html.='<div class="modal-content">';
+	      $html.='<div class="modal-header">';
+	        $html.='<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+	        $html.='<h4 class="modal-title">Select a Rider</h4>';
+	      $html.='</div>';
+	      $html.='<div class="modal-body">';
+	        $html.='<div class="rider-list">';
+							$html.='<div class="rider header row">';
+								$html.='<div class="name col-md-5">Name</div>';
+								$html.='<div class="rank col-md-2">Rank</div>';
+								$html.='<div class="last-year col-md-2">Last Year</div>';
+								$html.='<div class="last-week col-md-3">Last Week</div>';
+							$html.='</div>';
+	        	foreach ($riders as $rider) :
+							$html.='<div class="rider row">';
+								$html.='<div class="name col-md-5"><a href="#" data-rider="'.htmlspecialchars(json_encode($rider),ENT_QUOTES,'UTF-8').'">'.$rider['name'].'</a></div>';
+								$html.='<div class="rank col-md-2">'.$rider['rank'].'</div>';
+								$html.='<div class="last-year col-md-2">'.$rider['last_year'].'</div>';
+								$html.='<div class="last-week col-md-3">'.$rider['last_week'].'</div>';
+							$html.='</div>';
+	        	endforeach;
+	        $html.='</div>';
+	      $html.='</div>';
+	      $html.='<div class="modal-footer">';
+	        $html.='<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>';
+	      $html.='</div>';
+	    $html.='</div><!-- /.modal-content -->';
+	  $html.='</div><!-- /.modal-dialog -->';
+	$html.='</div><!-- /.modal -->';
+
+	echo $html;
+}
+
+/**
+ * fc_fantasy_get_last_week_race_name function.
+ *
+ * @access public
+ * @param int $race_id (default: 0)
+ * @return void
+ */
+function fc_fantasy_get_last_week_race_name($race_id=0) {
+	global $wpdb;
+
+	$race_db=$wpdb->get_row("SELECT * FROM wp_fc_races WHERE id={$race_id}");
+	$name=$wpdb->get_var("SELECT name FROM wp_fc_races WHERE race_start BETWEEN DATE_SUB('{$race_db->race_start}', INTERVAL 7 DAY) AND '{$race_db->race_start}' AND id!={$race_id}");
+
+	return $name;
 }
 
 /**
@@ -215,9 +285,13 @@ function fc_process_create_team() {
 			'race_id' => $_POST['race'],
 		);
 
-		$wpdb->insert($table,$data);
+		if ($id=$wpdb->get_var("SELECT id FROM $table WHERE wp_user_id={$_POST['wp_user_id']} AND race_id={$_POST['race']}")) :
+			$wpdb->update($table,$data,array('id' => $id));
+		else :
+			$wpdb->insert($table,$data);
+		endif;
 
-		wp_redirect('/fantasy/team?team='.urlencode($_POST['team_name']));
+		wp_redirect($_POST['redirect'].'&action=teamupdated');
 		exit;
 	endif;
 }
@@ -742,7 +816,7 @@ add_action('wp_enqueue_scripts','fc_scripts_styles');
  * @return void
  */
 function fc_check_if_roster_edit($team=false,$race_id=false) {
-	global $wpdb;
+	global $wpdb,$uci_curl,$RiderStats;
 
 	if (!$team && isset($_GET['team']))
 		$team=$_GET['team'];
@@ -764,10 +838,89 @@ function fc_check_if_roster_edit($team=false,$race_id=false) {
 		AND race_id={$race_id}
 	";
 
-	$db_results=$wpdb->get_var($sql);
+	$roster=$wpdb->get_var($sql);
 
-	if ($db_results)
-		return $db_results;
+	if ($roster) :
+		$riders=explode('|',$roster);
+
+		foreach ($riders as $key => $rider_name) :
+			$CrossSeasons=new CrossSeasons();
+			$race=$wpdb->get_row("SELECT * FROM wp_fc_races WHERE id={$race_id}");
+			$week=$CrossSeasons->get_week_from_date($race->race_start,$race->season);
+			$prev_week=$week-1; // subtract 1 to get prev week
+			$last_week=$wpdb->get_var("SELECT place FROM $uci_curl->results_table WHERE code=\"$race->last_week_code\" AND name='{$rider_name}'");
+			$last_year=$wpdb->get_var("SELECT place FROM $uci_curl->results_table WHERE code=\"$race->last_year_code\" AND name='{$rider_name}'");
+			$rider=$RiderStats->get_riders(array(
+				'season' => $race->season,
+				'name' => $rider_name,
+				'week' => $prev_week
+			));
+			$rider_obj=new stdClass();
+			$rider_obj->points=new stdClass();
+			$rider_obj->name=$rider_name;
+
+			if ($last_week) :
+				$rider_obj->last_week=$last_week;
+			else :
+				$rider_obj->last_week='n/a';
+			endif;
+
+			if ($last_year) :
+				$rider_obj->last_year=$last_year;
+			else :
+				$rider_obj->last_year='n/a';
+			endif;
+
+			$rider_obj->rank=$rider[0]->rank;
+			$rider_obj->points->c2=$rider[0]->c2;
+			$rider_obj->points->c1=$rider[0]->c1;
+			$rider_obj->points->cn=$rider[0]->cn;
+			$rider_obj->points->cc=$rider[0]->cc;
+			$rider_obj->points->wcp_total=$rider[0]->wcp_total;
+			$rider_obj->points->cm=$rider[0]->cm;
+
+			$riders[$key]=$rider_obj;
+		endforeach;
+
+		return $riders;
+	endif;
+
+	return false;
+}
+
+/**
+ * fc_check_if_roster_edit_simple function.
+ *
+ * @access public
+ * @param bool $team (default: false)
+ * @param bool $race_id (default: false)
+ * @return void
+ */
+function fc_check_if_roster_edit_simple($team=false,$race_id=false) {
+	global $wpdb,$uci_curl,$RiderStats;
+
+	if (!$team && isset($_GET['team']))
+		$team=$_GET['team'];
+
+	if (!$race_id && isset($_GET['race_id']))
+		$race_id=$_GET['race_id'];
+
+	if (!$team)
+		$team=$wpdb->get_var("SELECT meta_value FROM wp_usermeta WHERE user_id=".get_current_user_id()." AND meta_key='team_name'");
+
+	if (!$race_id)
+		$race_id=fc_get_next_race_id();
+
+	$sql="
+		SELECT
+			data AS roster
+		FROM wp_fc_teams
+		WHERE team=\"{$team}\"
+		AND race_id={$race_id}
+	";
+
+	if ($wpdb->get_var($sql))
+		return true;
 
 	return false;
 }
@@ -869,5 +1022,19 @@ function fc_get_last_years_code($race_id=0) {
 	$code=$wpdb->get_var("SELECT last_year_code FROM wp_fc_races WHERE id={$race_id}");
 
 	return $code;
+}
+
+function fc_is_race_roster_edit_open($race_id=0) {
+	global $wpdb;
+
+	$race_start=$wpdb->get_var("SELECT race_start FROM wp_fc_races WHERE id={$race_id}");
+
+	if (!$race_start)
+		return false;
+
+	if (strtotime($race_start)>strtotime(date('Y-m-d')))
+		return true;
+
+	return false;
 }
 ?>

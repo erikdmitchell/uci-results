@@ -35,7 +35,7 @@ jQuery(document).ready(function($) {
 		});
 	});
 
-	// form reset //
+	// search form reset //
 	$('#clear-race-search').click(function(e) {
 		e.preventDefault();
 
@@ -86,6 +86,30 @@ jQuery(document).ready(function($) {
 			$('.row.data').html(response);
 			$loader.hide();
 		});
+	});
+
+	// check all
+  $('#checkall').live('click',function(event) {
+	  event.preventDefault();
+
+	  if ($(this).hasClass('unselect')) {
+		 	$(this).removeClass('unselect');
+    	$('.race-checkbox').each(function() {
+      	this.checked = false;  //select all checkboxes
+      });
+		} else {
+			$(this).addClass('unselect');
+    	$('.race-checkbox').each(function() {
+	    	if (!$(this).is(':disabled')) {
+	      	this.checked = true; //deselect all checkboxes
+	      }
+      });
+		}
+  });
+
+	// form reset //
+	$('#form-reset').click(function() {
+		$('#get-race-rider').html('');
 	});
 
 });

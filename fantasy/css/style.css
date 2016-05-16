@@ -34,6 +34,7 @@
 .fantasy-cycling-create-team .row {
 	margin-bottom: 5px;
 }
+/*
 .fantasy-cycling-create-team .longtext {
 	width: 80%;
 }
@@ -44,6 +45,68 @@
 .world-cup-standings h3,
 .last-year-results h3 {
 	margin-top: 0;
+}
+*/
+.fc-team-roster .header {
+		font-weight: bold;
+}
+.add-remove-rider {
+	margin-bottom: 5px;
+}
+.fc-team-roster .season-points .sub-col div {
+	padding-right: 5px;
+	padding-left: 5px;
+	font-size: 12px;
+}
+.fc-team-roster .season-points .sub-col div.c2 {
+	padding-left: 15px;
+}
+.fc-team-roster .last-week-race-name {
+	font-size: 12px;
+}
+.fc-team-roster .last-week,
+.fc-team-roster .uci-points {
+	text-align: center;
+}
+.fc-team-roster .rider-name-input {
+	width: 100%;
+	border: none;
+	cursor: pointer;
+}
+.fc-team-roster .rider-name-input:focus {
+	outline: none;
+}
+.add-remove-btn {
+	padding: 5px 10px;
+	background: #ccc;
+	border: none;
+}
+.add-remove-btn:focus {
+	outline: none;
+}
+.add-remove-btn:hover {
+	background: #eee;
+}
+.add-remove-btn .text {
+	display: none;
+}
+.add-remove-btn .add {
+	display: none;
+}
+.add-remove-btn .remove {
+	display: none;
+}
+.add-remove-btn .add .text {
+
+}
+.add-remove-btn .remove .text {
+
+}
+#add-rider-modal .rider-list {
+	overflow: hidden;
+}
+#add-rider-modal .row.header {
+	font-weight: bold;
 }
 /**
  * team rosters
