@@ -44,7 +44,7 @@ $s_nat=isset($_POST['nat']) ? $_POST['nat'] : '';
 	<tbody>
 		<?php foreach ($ucicurl_riders->riders() as $rider) : ?>
 			<tr>
-				<td class="rider-name"><a href=""><?php echo $rider->name; ?></a></td>
+				<td class="rider-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=riders&rider='.urlencode($rider->name)); ?>"><?php echo $rider->name; ?></a></td>
 				<td class="rider-nat"><?php echo $rider->nat; ?></td>
 			</tr>
 		<?php endforeach; ?>
