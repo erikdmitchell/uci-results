@@ -35,6 +35,7 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 
 		var selected = [];
+
 		$('#add-races-to-db input:checked').each(function() {
 			if ($(this).attr('id')!='selectall')
 	    	selected.push($(this).val());

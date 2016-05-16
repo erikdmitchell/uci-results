@@ -22,14 +22,9 @@ class UCIcURLAdmin {
 
 		add_action('wp_ajax_get_race_data_non_db',array($this,'ajax_get_race_data_non_db'));
 		add_action('wp_ajax_prepare_add_races_to_db',array($this,'ajax_prepare_add_races_to_db'));
-		add_action('wp_ajax_add_race_to_db',array($this,'ajax_add_race_to_db'));
+		add_action('wp_ajax_add_race_to_db', array($this, 'ajax_add_race_to_db'));
 
 		$this->setup_config($config);
-
-		$this->table=$wpdb->prefix.'uci_races';
-		$this->results_table=$wpdb->prefix.'uci_rider_data';
-		$this->fq_table=$wpdb->prefix.'uci_fq_rankings';
-		$this->uci_rider_rankings=$wpdb->prefix.'uci_rider_season_rankings';
 	}
 
 	/**
@@ -45,11 +40,17 @@ class UCIcURLAdmin {
 		//add_submenu_page('uci-cross','UCI View DB','UCI View DB','administrator','uci-view-db',array(new ViewDB(),'display_view_db_page'));
 	}
 
+	/**
+	 * admin_scripts_styles function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function admin_scripts_styles() {
-		wp_enqueue_script('uci-curl-admin',UCICURL_URL.'/js/admin.js',array('jquery'),$this->version,true);
+		wp_enqueue_script('uci-curl-admin',UCICURL_URL.'/js/admin.js',array('jquery'), '0.1.0',true);
 
 		wp_enqueue_style('uci-curl-bootstrap',UCICURL_URL.'/css/bootstrap.css',array(),'3.3.5');
-		wp_enqueue_style('uci-curl-admin',UCICURL_URL.'/css/admin.css',array(),$this->version);
+		wp_enqueue_style('uci-curl-admin',UCICURL_URL.'/css/admin.css',array(), '0.1.0');
 	}
 
 	/**
@@ -279,9 +280,6 @@ class UCIcURLAdmin {
 		// add to db //
 		if (!$this->check_for_dups($code)) :
 			echo $this->add_race_to_db($_POST['race']);
-		elseif (!$this->has_fq($code)) :
-			//echo '<div class="updated add-race-to-db-message">Adding fq...</div>';
-			echo $this->add_fq($code);
 		else :
 			echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';
 		endif;
@@ -435,6 +433,7 @@ class UCIcURLAdmin {
 			'nat' => $race_data->nat,
 			'class' => $race_data->class,
 			'winner' => $race_data->winner,
+			//'season' => $this->get_season_from_date($race_data->date),
 			'season' => $race_data->season,
 			'link' => $race_data->link,
 			'code' => $this->build_race_code($race_data->event, $race_data->date),
@@ -761,9 +760,9 @@ print_r($insert);
 	public function build_year_arr() {
 		$year=date('Y');
 		$counter_year=$year-20;
-		$max_year=$year+20;
-		$season_start='Sep 1';
-		$season_end='Mar 1';
+		$max_year=$year+1;
+		$season_start='Aug 1';
+		$season_end='Apr 1';
 		$season_arr=array();
 
 		while ($counter_year<=$max_year) :
@@ -792,7 +791,7 @@ print_r($insert);
 	protected function check_for_dups($code) {
 		global $wpdb;
 
-		$races_in_db=$wpdb->get_results("SELECT code FROM $this->table");
+		$races_in_db=$wpdb->get_results("SELECT code FROM $wpdb->ucicurl_races");
 
 		if (count($races_in_db)!=0) :
 			foreach ($races_in_db as $race) :
@@ -845,9 +844,15 @@ print_r($insert);
 
 		return trim($date[0]);
 	}
-	//----------------------------- end add_race_to_db helper functions -----------------------------//
 
-	function reformat_date($date) {
+	/**
+	 * reformat_date function.
+	 *
+	 * @access public
+	 * @param mixed $date
+	 * @return void
+	 */
+	public function reformat_date($date) {
 		$date=utf8_encode($date);
 		$date_arr=explode('Â',$date);
 
