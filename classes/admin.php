@@ -463,9 +463,20 @@ class UCIcURLAdmin {
 			return false;
 
 		$race_results=$this->get_race_results($link);
-		//$race_data=$wpdb->get_row("SELECT * FROM $this->table WHERE code=\"$code\"");
 
 		foreach ($race_results as $result) :
+			$rider_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_riders} WHERE name='{$result->name}' AND nat='{$result->nat}'");
+
+			// check if we have a rider id, otherwise create one //
+			if (!$rider_id) :
+				$rider_insert=array(
+					'name' => $result->name,
+					'nat' => $result->nat,
+				);
+				$wpdb->insert($wpdb->ucicurl_riders, $rider_insert);
+				$rider_id=$wpdb->insert_id;
+			endif;
+
 			$insert=array(
 				'race_id' => $race_id,
 				'place' => $result->place,
@@ -475,8 +486,9 @@ class UCIcURLAdmin {
 				'result' => $result->result,
 				'par' => $result->par,
 				'pcr' => $result->pcr,
+				'rider_id' => $rider_id,
 			);
-print_r($insert);
+
 			$wpdb->insert($wpdb->ucicurl_results, $insert);
 		endforeach;
 	}

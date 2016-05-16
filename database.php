@@ -58,8 +58,8 @@ function ucicurl_db_install() {
 	$sql_riders="
 		CREATE TABLE $wpdb->ucicurl_riders (
 		  id bigint(20) NOT NULL AUTO_INCREMENT,
-			rider_id bigint(20) NOT NULL,
 			name LONGTEXT NOT NULL,
+			nat VARCHAR(5) NOT NULL,
 			PRIMARY KEY (`id`)
 		) $charset;
 	";
@@ -120,8 +120,8 @@ function ucicurl_db_update() {
 		$sql_riders="
 			CREATE TABLE $wpdb->ucicurl_riders (
 			  id bigint(20) NOT NULL AUTO_INCREMENT,
-				rider_id bigint(20) NOT NULL,
 				name LONGTEXT NOT NULL,
+				nat VARCHAR(5) NOT NULL,
 				PRIMARY KEY (`id`)
 			);
 		";

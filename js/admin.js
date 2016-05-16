@@ -65,13 +65,13 @@ jQuery(document).ready(function($) {
 				$.post(ajaxurl,data,function(response) {
 					$('#get-race-data').append(response);
 					$('#get-race-data').find('#counter span.ctr').text(counter);
-					counter++;
+
 					//$modal.hide();
 					// after we are done races //
 					if (counter>=races.length) {
-						console.log('fin');
 						return false;
 					}
+					counter++;
 				});
 			}
 		});
