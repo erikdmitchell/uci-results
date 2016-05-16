@@ -34,9 +34,9 @@ class UCIcURLAdmin {
 	 * @return void
 	 */
 	public function admin_page() {
-		add_menu_page('UCI Cross', 'UCI Cross', 'manage_options', 'uci-cross', array($this, 'display_admin_page'));
+		add_menu_page('UCI cURL', 'UCI cURL', 'manage_options', 'uci-curl', array($this, 'display_admin_page'), 'dashicons-sos');
 
-		add_submenu_page('uci-cross', 'UCI cURL', 'UCI cURL', 'manage_options', 'uci-curl', array($this, 'display_curl_page'));
+		//add_submenu_page('uci-cross', 'UCI cURL', 'UCI cURL', 'manage_options', 'uci-curl', array($this, 'display_curl_page'));
 		//add_submenu_page('uci-cross','UCI View DB','UCI View DB','administrator','uci-view-db',array(new ViewDB(),'display_view_db_page'));
 	}
 

@@ -7,7 +7,6 @@
 class UCIcURLRaces {
 
 	public $max_rows=0;
-	public $date_format='M. j Y';
 
 	/**
 	 * __construct function.
@@ -123,18 +122,15 @@ class UCIcURLRaces {
 			ORDER BY {$order_by} {$order}
 			{$limit}
 		";
-
 		$races=$wpdb->get_results($sql);
-
 		$max_races=$wpdb->get_results("SELECT DISTINCT(id) FROM {$wpdb->ucicurl_races} WHERE season='{$season}'");
 		$wp_query->uci_curl_max_pages=$wpdb->num_rows; // set max
 
 		// clean up some misc db slashes and formatting //
 		foreach ($races as $race) :
 			$race->code=stripslashes($race->code);
-			$race->name=stripslashes($race->name);
-			$race->date=date($this->date_format,strtotime($race->date));
-			$race->fq=round($race->fq);
+			$race->name=stripslashes($race->event);
+			$race->date=date(get_option('date_format'), strtotime($race->date));
 		endforeach;
 
 		return $races;
