@@ -440,9 +440,9 @@ class UCIcURLAdmin {
 		);
 
 		if (!$this->check_for_dups($data['code'])) :
-			if ($wpdb->insert($wpdb->ucicurl_races, $data)) :
+			if ($race_id=$wpdb->insert($wpdb->ucicurl_races, $data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
-				$this->add_race_results_to_db($data['code'], $race_data->link);
+				$this->add_race_results_to_db($race_id, $race_data->link);
 			else :
 				$message='<div class="error">Unable to insert '.$data['code'].' into the database.</div>';
 			endif;
@@ -457,32 +457,32 @@ class UCIcURLAdmin {
 	 * add_race_results_to_db function.
 	 *
 	 * @access public
-	 * @param bool $code (default: false)
+	 * @param bool $race_id (default: 0)
 	 * @param bool $link (default: false)
 	 * @return void
 	 */
-	public function add_race_results_to_db($code=false,$link=false) {
+	public function add_race_results_to_db($race_id=0, $link=false) {
 		global $wpdb;
 
-		if (!$code || !$link)
+		if (!$race_id || !$link)
 			return false;
 
 		$race_results=$this->get_race_results($link);
-		$race_data=$wpdb->get_row("SELECT * FROM $this->table WHERE code=\"$code\"");
+		//$race_data=$wpdb->get_row("SELECT * FROM $this->table WHERE code=\"$code\"");
 
 		foreach ($race_results as $result) :
 			$insert=array(
-				'name' => $result->name,
-				'code' => $code,
+				'race_id' => $race_id,
 				'place' => $result->place,
+				'name' => $result->name,
 				'nat' => $result->nat,
 				'age' => $result->age,
-				'time' => $result->result,
+				'result' => $result->result,
 				'par' => $result->par,
 				'pcr' => $result->pcr,
 			);
 print_r($insert);
-			$wpdb->insert($this->results_table, $insert);
+			$wpdb->insert($wpdb->ucicurl_results, $insert);
 		endforeach;
 	}
 

@@ -1,14 +1,14 @@
 <?php
 global $ucicurl_db_version;
 
-$ucicurl_db_version='0.2';
+$ucicurl_db_version='0.1';
 
 function ucicurl_set_db_tables() {
 	global $wpdb;
 
 	$wpdb->ucicurl_races=$wpdb->prefix.'uci_curl_races';
-	$wpdb->ucicurl_results=$wpdb->prefix.'uci_curl_riders';
-	$wpdb->ucicurl_riders=$wpdb->prefix.'uci_curl_results';
+	$wpdb->ucicurl_results=$wpdb->prefix.'uci_curl_results';
+	$wpdb->ucicurl_riders=$wpdb->prefix.'uci_curl_riders';
 }
 ucicurl_set_db_tables();
 
@@ -19,8 +19,8 @@ function ucicurl_db_install() {
 
 	$wpdb->hide_errors();
 	$wpdb->ucicurl_races=$wpdb->prefix.'uci_curl_races';
-	$wpdb->ucicurl_results=$wpdb->prefix.'uci_curl_riders';
-	$wpdb->ucicurl_riders=$wpdb->prefix.'uci_curl_results';
+	$wpdb->ucicurl_results=$wpdb->prefix.'uci_curl_results';
+	$wpdb->ucicurl_riders=$wpdb->prefix.'uci_curl_riders';
 
 	$charset=$wpdb->get_charset_collate();
 
@@ -42,7 +42,7 @@ function ucicurl_db_install() {
 	$sql_results="
 		CREATE TABLE $wpdb->ucicurl_results (
 			id bigint(20) NOT NULL AUTO_INCREMENT,
-			results_id bigint(20) NOT NULL,
+			race_id bigint(20) NOT NULL,
 			place SMALLINT NOT NULL DEFAULT '0',
 			name LONGTEXT NOT NULL,
 			nat VARCHAR(5) NOT NULL,
@@ -59,7 +59,6 @@ function ucicurl_db_install() {
 		CREATE TABLE $wpdb->ucicurl_riders (
 		  id bigint(20) NOT NULL AUTO_INCREMENT,
 			rider_id bigint(20) NOT NULL,
-			code TEXT NOT NULL,
 			name LONGTEXT NOT NULL,
 			PRIMARY KEY (`id`)
 		) $charset;
@@ -84,8 +83,8 @@ function ucicurl_db_update() {
 	if ($installed_version!=$ucicurl_db_version) :
 		$wpdb->hide_errors();
 		$wpdb->ucicurl_races=$wpdb->prefix.'uci_curl_races';
-		$wpdb->ucicurl_results=$wpdb->prefix.'uci_curl_riders';
-		$wpdb->ucicurl_riders=$wpdb->prefix.'uci_curl_results';
+	$wpdb->ucicurl_results=$wpdb->prefix.'uci_curl_results';
+	$wpdb->ucicurl_riders=$wpdb->prefix.'uci_curl_riders';
 
 		$sql_races="
 			CREATE TABLE $wpdb->ucicurl_races (
@@ -105,7 +104,7 @@ function ucicurl_db_update() {
 		$sql_results="
 			CREATE TABLE $wpdb->ucicurl_results (
 				id bigint(20) NOT NULL AUTO_INCREMENT,
-				results_id bigint(20) NOT NULL,
+				race_id bigint(20) NOT NULL,
 				place SMALLINT NOT NULL DEFAULT '0',
 				name LONGTEXT NOT NULL,
 				nat VARCHAR(5) NOT NULL,
@@ -122,7 +121,6 @@ function ucicurl_db_update() {
 			CREATE TABLE $wpdb->ucicurl_riders (
 			  id bigint(20) NOT NULL AUTO_INCREMENT,
 				rider_id bigint(20) NOT NULL,
-				code TEXT NOT NULL,
 				name LONGTEXT NOT NULL,
 				PRIMARY KEY (`id`)
 			);
