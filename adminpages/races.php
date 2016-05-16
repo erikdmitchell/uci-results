@@ -65,7 +65,7 @@ $s_nat=isset($_POST['nat']) ? $_POST['nat'] : '';
 		<?php foreach ($ucicurl_races->races() as $race) : ?>
 			<tr>
 				<td class="race-date"><?php echo $race->date; ?></td>
-				<td class="race-name"><a href=""><?php echo $race->event; ?></a></td>
+				<td class="race-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=races&race_id='.$race->id); ?>"><?php echo $race->event; ?></a></td>
 				<td class="race-nat"><?php echo $race->nat; ?></td>
 				<td class="race-class"><?php echo $race->class; ?></td>
 			</tr>

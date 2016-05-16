@@ -142,6 +142,15 @@ class UCIcURLRaces {
 		return $races;
 	}
 
+	public function get_race($race_id=0) {
+		global $wpdb;
+
+		$race=$wpdb->get_row("SELECT * FROM {$wpdb->ucicurl_races} WHERE id={$race_id}");
+		$race->results=$wpdb->get_results("SELECT * FROM {$wpdb->ucicurl_results} WHERE race_id={$race_id}");
+
+		return $race;
+	}
+
 	/**
 	 * get_race function.
 	 *

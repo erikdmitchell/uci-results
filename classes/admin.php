@@ -84,7 +84,11 @@ class UCIcURLAdmin {
 
 			switch ($active_tab) :
 				case 'races':
-					$html.=ucicurl_get_admin_page('races');
+					if (isset($_GET['race_id'])) :
+						$html.=ucicurl_get_admin_page('single-race');
+					else :
+						$html.=ucicurl_get_admin_page('races');
+					endif;
 					break;
 				case 'riders':
 					if (isset($_GET['rider']) && $_GET['rider']!='') :

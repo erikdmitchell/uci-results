@@ -43,7 +43,7 @@ $rider=$ucicurl_riders->get_rider($attributes['rider_id']);
 		<?php foreach ($rider->results as $result) : ?>
 			<tr>
 				<td class="race-date"><?php echo date(get_option('date_format'), strtotime($result->date)); ?></td>
-				<td class="race-name"><a href=""><?php echo $result->event; ?></a></td>
+				<td class="race-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=races&race_id='.$result->id); ?>"><?php echo $result->event; ?></a></td>
 				<td class="rider-place"><?php echo $result->place; ?></td>
 				<td class="rider-points"><?php echo $result->par; ?></td>
 				<td class="race-class"><?php echo $result->class; ?></td>
