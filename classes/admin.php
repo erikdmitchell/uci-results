@@ -911,62 +911,54 @@ class UCIcURLAdmin {
 	 */
 	public function build_default_race_table($obj) {
 		$html=null;
-		$alt=0;
 
 		$html.='<form name="add-races-to-db" id="add-races-to-db" method="post">';
-			$html.='<div class="race-table">';
-				$html.='<div class="header row">';
-					$html.='<div class="col-xs-1"><a href="" class="select" id="selectall">All</a></div>';
-					$html.='<div class="col-md-2">Date</div>';
-					$html.='<div class="col-md-4">Event</div>';
-					$html.='<div class="col-md-1">Nat.</div>';
-					$html.='<div class="col-md-1">Class</div>';
-					//$html.='<div class="col-md-2">Winner</div>';
-					$html.='<div class="col-md-2">Season</div>';
-				$html.='</div>';
+			$html.='<table class="ulm-usac-clubs-table wp-list-table widefat fixed striped pages">';
+				$html.='<thead>';
+					$html.='<tr>';
+						$html.='<td id="cb" class="check-column"><input type="checkbox" id="select-all"></td>';
+						$html.='<th scope="col" class="race-date">Date</th>';
+						$html.='<th scope="col" class="race-name">Event</th>';
+						$html.='<th scope="col" class="race-nat">Nat.</th>';
+						$html.='<th scope="col" class="race-class">Class</th>';
+					$html.='</tr>';
+				$html.='</thead>';
+				$html.='<tbody>';
 
-				//$html.='<div class="row select-all">';
+					foreach ($obj as $result) :
+						$disabled='';
+						$date=$result->date;
 
-				//$html.='</div>';
-
-				foreach ($obj as $result) :
-					$disabled='';
-					$date=$result->date;
-
-					if (!isset($result->event)) :
-						$result->event=false;
-					else :
-						$event=$result->event;
-					endif;
-
-					if (!$result->date || !$result->event)
-						$disabled='disabled';
-
-					if (!$result->date)
-						$date='No Date';
-
-					if (!$result->event)
-						$event='No Event';
-
-					$html.='<div class="row">';
-						$html.='<div class="col-xs-1"><input class="race-checkbox" type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" '.$disabled.' /></div>';
-						$html.='<div class="col-md-2">'.$date.'</div>';
-						$html.='<div class="col-md-4">'.$event.'</div>';
-						if ($result->event) :
-							$html.='<div class="col-md-1">'.$result->nat.'</div>';
-							$html.='<div class="col-md-1">'.$result->class.'</div>';
-							//$html.='<div class="col-md-2">'.$result->winner.'</div>';
-							$html.='<div class="col-md-2">'.$result->season.'</div>';
+						if (!isset($result->event)) :
+							$result->event=false;
+						else :
+							$event=$result->event;
 						endif;
-					$html.='</div>';
-					$alt++;
-				endforeach;
 
-				$html.='<div class="row select-all">';
-					$html.='<div class="col-xs-2"><a href="" class="select" id="selectall">Select All</a></div>';
-				$html.='</div>';
+						if (!$result->date || !$result->event)
+							$disabled='disabled';
 
-			$html.='</div>';
+						if (!$result->date)
+							$date='No Date';
+
+						if (!$result->event)
+							$event='No Event';
+
+						$html.='<tr>';
+							$html.='<th scope="row" class="check-column"><input type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" '.$disabled.'></th>';
+							$html.='<td class="race-date">'.$date.'</td>';
+							$html.='<td class="race-name">'.$event.'</td>';
+
+							if ($result->event) :
+								$html.='<td class="race-nat">'.$result->nat.'</td>';
+								$html.='<td class="race-class">'.$result->class.'</td>';
+							endif;
+
+						$html.='</tr>';
+					endforeach;
+
+				$html.='</tbody>';
+			$html.='</table>';
 
 			$html.='<p class="submit">';
 				$html.='<input type="button" name="button" id="add-races-curl-to-db" class="button button-primary" value="Add to DB" />';
@@ -974,59 +966,6 @@ class UCIcURLAdmin {
 		$html.='</form>';
 
 		return $html;
-	}
-
-	/**
-	 * has_fq function.
-	 *
-	 * @access public
-	 * @param string $code (default: '')
-	 * @return void
-	 */
-	public function has_fq($code='') {
-		global $wpdb;
-
-		$has_fq=$wpdb->get_var("SELECT IFNULL(code,0) AS code FROM $this->fq_table WHERE code=\"{$code}\"");
-
-		return $has_fq;
-	}
-
-	/**
-	 * add_fq function.
-	 *
-	 * @access public
-	 * @param string $code (default: '')
-	 * @return void
-	 */
-	public function add_fq($code='') {
-		global $wpdb;
-
-		if ($this->has_fq($code) || $this->debug)
-			return '<div class="error">This code already has an FQ</div>';
-
-		$FieldQuality=new FieldQuality($code);
-		$message='';
-
-		if (!isset($FieldQuality->field_quality->fq))
-			return '<div class="error">Error adding '.$code.' FQ to database.</div>';
-
-		$data=array(
-			'code' => $code,
-			'uci_points_in_field' => $FieldQuality->field_quality->uci_points_in_field,
-			'wcp_points_in_field' => $FieldQuality->field_quality->wcp_points_in_field,
-			'race_class_number' => $FieldQuality->field_quality->race_class_number,
-			'finishers_multiplier' => $FieldQuality->field_quality->finishers_multiplier,
-			'divider' => $FieldQuality->field_quality->divider,
-			'fq' => $FieldQuality->field_quality->fq
-		);
-
-		if ($wpdb->insert($this->fq_table,$data)) :
-			$message='<div class="updated">Added '.$code.' FQ to database.</div>';
-		else :
-			$message='<div class="error">Error adding '.$code.' FQ to database.</div>';
-		endif;
-
-		return $message;
 	}
 
 	/**
