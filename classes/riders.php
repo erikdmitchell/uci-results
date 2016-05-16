@@ -1,12 +1,9 @@
 <?php
-/**
- * RiderStats class.
- *
- * @since Version 1.0.1
- */
-class RiderStats {
 
-	public $date_format='M. j Y';
+/**
+ * UCIcURLRiders class.
+ */
+class UCIcURLRiders {
 
 	/**
 	 * __construct function.
@@ -14,20 +11,14 @@ class RiderStats {
 	 * @access public
 	 * @return void
 	 */
-	public function __construct() {
-	}
+	public function __construct() {}
 
 	/**
 	 * get_riders function.
 	 *
-	 * get_riders() is no longer used on public site and needs to be renamed
-	 *
 	 * @access public
 	 * @param array $user_args (default: array())
 	 * @return void
-	 *
-	 * a slow query
-	 *
 	 */
 	public function get_riders($user_args=array()) {
 		global $wpdb,$uci_curl,$wp_query;
@@ -37,16 +28,22 @@ class RiderStats {
 		$where=array();
 		$paged=get_query_var('paged',1);
 		$default_args=array(
-			'per_page' => 15,
-			'order_by' => 'total',
-			'order' => 'DESC',
+			'per_page' => 30,
+			'order_by' => 'name',
+			'order' => 'ASC',
 			'name' => false,
-			'season' => '2015/2016',
-			'country' => false, // not used yet
-			'week' => false,
-			'group' => '',
+			'nat' => false,
 		);
 		$args=array_merge($default_args,$user_args);
+
+		// check filters //
+		if (isset($_POST['ucicurl_admin']) && wp_verify_nonce($_POST['ucicurl_admin'], 'filter_riders'))
+			$args=wp_parse_args($_POST, $args);
+
+		// check search //
+		if (isset($_GET['search']) && $_GET['search']!='')
+			$where[]="name LIKE '%{$_GET['search']}%'";
+
 		extract($args);
 
 		// if we dont have a name and we have a limit, setup pagination //
@@ -65,15 +62,12 @@ class RiderStats {
 		if ($name)
 			$where[]="name='{$name}'";
 
-		if ($season)
-			$where[]="season='{$season}'";
-
-		if ($week)
-			$where[]="week='{$week}'";
+		if ($nat)
+			$where[]="nat='{$nat}'";
 
 		// run our where //
 		if (!empty($where)) :
-			$where=implode(' AND ',$where);
+			$where='WHERE '.implode(' AND ',$where);
 		else :
 			$where='';
 		endif;
@@ -81,9 +75,8 @@ class RiderStats {
 		$sql="
 			SELECT
 				*
-			FROM $uci_curl->uci_rider_rankings
-			WHERE $where
-			$group
+			FROM $wpdb->ucicurl_riders
+			$where
 			ORDER BY $order_by $order
 			$limit
 		";
@@ -92,26 +85,14 @@ class RiderStats {
 
 		//set our max pages var for pagination //
 		if ($per_page>0) :
-			$max_riders=$wpdb->get_var("SELECT COUNT(*) FROM $uci_curl->uci_rider_rankings WHERE $where");
+			$max_riders=$wpdb->get_var("SELECT COUNT(*) FROM $wpdb->ucicurl_riders $where");
 			$wp_query->uci_curl_max_pages=$max_riders;
 		endif;
-
-		// clean variables //
-		foreach ($riders as $rider) :
-			$rider->sos=number_format($rider->sos,3);
-			$rider->total=number_format($rider->total,3);
-		endforeach;
 
 		return $riders;
 	}
 
-	/**
-	 * get_rider_results function.
-	 *
-	 * @access public
-	 * @param array $args (default: array())
-	 * @return void
-	 */
+/*
 	function get_rider_results($args=array()) {
 		global $wpdb,$uci_curl;
 
@@ -178,14 +159,9 @@ class RiderStats {
 
 		return $results;
 	}
+*/
 
-	/**
-	 * get_country function.
-	 *
-	 * @access public
-	 * @param int $name (default: 0)
-	 * @return void
-	 */
+/*
 	public function get_country($name=0) {
 		global $wpdb,$uci_curl;
 
@@ -216,14 +192,9 @@ class RiderStats {
 
 		return $results;
 	}
+*/
 
-	/**
-	 * get_latest_rankings_week function.
-	 *
-	 * @access public
-	 * @param bool $season (default: false)
-	 * @return void
-	 */
+/*
 	public function get_latest_rankings_week($season=false) {
 		global $wpdb,$uci_curl;
 
@@ -231,8 +202,27 @@ class RiderStats {
 
 		return $week;
 	}
+*/
+
+	/**
+	 * riders function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function riders() {
+		return $this->get_riders();
+	}
+
+	public function nats() {
+		global $wpdb;
+
+		$nats=$wpdb->get_col("SELECT DISTINCT(nat) FROM $wpdb->ucicurl_riders ORDER BY nat ASC");
+
+		return $nats;
+	}
 
 }
 
-$RiderStats=new RiderStats();
+$ucicurl_riders=new UCIcURLRiders();
 ?>

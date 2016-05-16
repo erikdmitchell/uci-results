@@ -61,7 +61,7 @@ class UCIcURLAdmin {
 		$tabs=array(
 			'uci-curl' => 'UCI cURL',
 			'races' => 'Races',
-			'view-db' => 'View DB',
+			'riders' => 'Riders',
 		);
 		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'uci-curl';
 
@@ -84,8 +84,8 @@ class UCIcURLAdmin {
 				case 'races':
 					$html.=ucicurl_get_admin_page('races');
 					break;
-				case 'view-db':
-					$html.=ucicurl_get_admin_page('view-db');
+				case 'riders':
+					$html.=ucicurl_get_admin_page('riders');
 					break;
 				default:
 					$html.=ucicurl_get_admin_page('curl');
