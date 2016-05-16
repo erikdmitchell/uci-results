@@ -10,32 +10,44 @@ $limit=null;
 
 	<form class="get-races" name="get-races" method="post">
 
-		<div class="row">
-			<label for="url-dd" class="col-md-1">Season</label>
-			<div class="col-md-2">
-				<select class="url-dd" id="get-race-season" name="url">
-					<option value="0">Select Year</option>
-					<?php foreach ($ucicurl_admin->config->urls as $season => $s_url) : ?>
-						<option value="<?php echo $s_url; ?>" <?php selected($url, $s_url); ?>><?php echo $season; ?></option>
-					<?php endforeach; ?>
-				</select>
-			</div>
-		</div><!-- .row -->
+		<table class="form-table">
+			<tbody>
+				<tr>
+					<th scope="row">
+						<label for="season">Season</label>
+					</th>
+					<td>
+						<select class="url-dd" id="season" name="url">
+							<option value="0">Select Year</option>
+							<?php foreach ($ucicurl_admin->config->urls as $season => $s_url) : ?>
+								<option value="<?php echo $s_url; ?>" <?php selected($url, $s_url); ?>><?php echo $season; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</td>
+				</tr>
 
-		<div class="row">
-			<label for="url" class="col-md-1">URL</label>
-			<div class="col-md-11">
-				<textarea class="url" id="url" name="url" readonly><?php echo $url; ?></textarea>
-			</div>
-		</div><!-- .row -->
+				<tr>
+					<th scope="row">
+						<label for="url">URL</label>
+					</th>
+					<td>
+						<textarea class="url" id="url" name="url" rows="5" cols="100" readonly><?php echo $url; ?></textarea>
+					</td>
+				</tr>
 
-		<div class="row">
-			<label for="limit" class="col-md-1">Limit</label>
-			<div class="col-md-2">
-				<input class="small-text" type="text" name="limit" id="limit" value="<?php echo $limit; ?>" />
-				<span class="description">Optional</span>
-			</div>
-		</div><!-- .row -->
+				<tr>
+					<th scope="row">
+						<label for="limit">Limit</label>
+					</th>
+					<td>
+						<input class="small-text" type="text" name="limit" id="limit" value="<?php echo $limit; ?>" />
+						<span class="description">Optional</span>
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+
 		<p>
 			<input type="button" name="button" id="get-races-curl" class="button button-primary" value="Get Races" />
 		</p>
