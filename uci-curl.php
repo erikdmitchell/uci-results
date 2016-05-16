@@ -16,12 +16,8 @@ include_once(UCICURL_PATH.'database.php');
 include_once(UCICURL_PATH.'functions.php');
 include_once(UCICURL_PATH.'classes/admin.php');
 include_once(UCICURL_PATH.'lib/name-parser.php');
-include_once(UCICURL_PATH.'classes/view-db.php');
 include_once(UCICURL_PATH.'classes/races.php');
 include_once(UCICURL_PATH.'classes/riders.php');
-
-//include_once(plugin_dir_path(__FILE__).'classes/rider-stats.php');
-//include_once(plugin_dir_path(__FILE__).'classes/seasons.php');
 
 
 

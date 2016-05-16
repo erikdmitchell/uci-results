@@ -1,5 +1,5 @@
 <?php
-global $ucicurl_races, $ucicurl_viewdb;
+global $ucicurl_races;
 
 $s_season=isset($_POST['season']) ? $_POST['season'] : '';
 $s_class=isset($_POST['class']) ? $_POST['class'] : '';
@@ -24,7 +24,7 @@ $s_nat=isset($_POST['nat']) ? $_POST['nat'] : '';
 		<div class="alignleft actions">
 			<select name="season" class="season">
 				<option value="0">-- Select Season --</option>
-				<?php foreach ($ucicurl_viewdb->seasons() as $season) : ?>
+				<?php foreach ($ucicurl_races->seasons() as $season) : ?>
 					<option value="<?php echo $season; ?>" <?php selected($s_season, $season); ?>><?php echo $season; ?></option>
 				<?php endforeach; ?>
 			</select>
@@ -33,7 +33,7 @@ $s_nat=isset($_POST['nat']) ? $_POST['nat'] : '';
 		<div class="alignleft actions">
 			<select name="class" class="class">
 				<option value="0">-- Select Class --</option>
-				<?php foreach ($ucicurl_viewdb->classes() as $class) : ?>
+				<?php foreach ($ucicurl_races->classes() as $class) : ?>
 					<option value="<?php echo $class; ?>" <?php selected($s_class, $class); ?>><?php echo $class; ?></option>
 				<?php endforeach; ?>
 			</select>
@@ -42,7 +42,7 @@ $s_nat=isset($_POST['nat']) ? $_POST['nat'] : '';
 		<div class="alignleft actions">
 			<select name="nat" class="nat">
 				<option value="0">-- Select Country --</option>
-				<?php foreach ($ucicurl_viewdb->nats() as $country) : ?>
+				<?php foreach ($ucicurl_races->nats() as $country) : ?>
 					<option value="<?php echo $country; ?>" <?php selected($s_nat, $country); ?>><?php echo $country; ?></option>
 				<?php endforeach; ?>
 			</select>

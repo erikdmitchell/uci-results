@@ -208,6 +208,48 @@ class UCIcURLRaces {
 		return $this->get_races();
 	}
 
+	/**
+	 * seasons function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function seasons() {
+		global $wpdb;
+
+		$seasons=$wpdb->get_col("SELECT season FROM $wpdb->ucicurl_races GROUP BY season");
+
+		return $seasons;
+	}
+
+	/**
+	 * classes function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function classes() {
+		global $wpdb;
+
+		$classes=$wpdb->get_col("SELECT class FROM $wpdb->ucicurl_races GROUP BY class");
+
+		return $classes;
+	}
+
+	/**
+	 * nats function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function nats() {
+		global $wpdb;
+
+		$countries=$wpdb->get_col("SELECT nat FROM $wpdb->ucicurl_races GROUP BY nat ORDER BY nat");
+
+		return $countries;
+	}
+
 }
 
 $ucicurl_races=new UCIcURLRaces();
