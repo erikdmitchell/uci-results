@@ -99,10 +99,7 @@ register_activation_hook(__FILE__,'ucicurl_activate');
  * @return void
  */
 function uci_curl_scripts_styles($hook) {
-	wp_enqueue_script('uci-curl-core',plugins_url('/js/core.js',__FILE__),array('jquery'));
-
 	wp_enqueue_style('flag-icon-css',plugins_url('/css/flag-icon.min.css',__FILE__),array(),'0.8.2');
-	wp_enqueue_style('uci-curl-style',plugins_url('/css/user.css',__FILE__));
 }
 add_action('wp_enqueue_scripts','uci_curl_scripts_styles');
 

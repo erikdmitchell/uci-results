@@ -46,7 +46,6 @@ class UCIcURLAdmin {
 	public function admin_scripts_styles() {
 		wp_enqueue_script('uci-curl-admin',UCICURL_URL.'/js/admin.js',array('jquery'), '0.1.0',true);
 
-		wp_enqueue_style('uci-curl-bootstrap',UCICURL_URL.'/css/bootstrap.css',array(),'3.3.5');
 		wp_enqueue_style('uci-curl-admin',UCICURL_URL.'/css/admin.css',array(), '0.1.0');
 	}
 
