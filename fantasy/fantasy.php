@@ -26,8 +26,6 @@ class FantasyCycling {
 			update_option($this->wp_option_version,$this->version);
 		endif;
 
-		add_action('init',array($this,'add_cpt'));
-		add_action('init',array($this,'add_taxonomies'));
 		add_action('wp_enqueue_scripts',array($this,'scripts_styles'));
 	}
 
@@ -96,44 +94,6 @@ class FantasyCycling {
 				);
 				wp_insert_post($standings);
 		endif;
-	}
-
-	/**
-	 * add_categories function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function add_cpt() {
-		register_post_type('fantasy-cycling',
-			array(
-				'labels' => array(
-					'name' => __('Fantasy Cycling'),
-					'singular_name' => __('Fantasy Cycling')
-				),
-				'public' => true,
-				'has_archive' => true,
-				'supports' => array('title','editor','excerpt','author','thumbnail','revisions')
-			)
-		);
-	}
-
-	/**
-	 * add_taxonomies function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function add_taxonomies() {
-		register_taxonomy(
-			'posttype',
-			'fantasy-cycling',
-			array(
-				'label' => __( 'Post Type' ),
-				//'rewrite' => array( 'slug' => 'person' ),
-				'hierarchical' => true,
-			)
-		);
 	}
 
 }
