@@ -27,7 +27,7 @@ function ucicurl_db_install() {
 	$sql_races="
 		CREATE TABLE $wpdb->ucicurl_races (
 			id bigint(20) NOT NULL AUTO_INCREMENT,
-			date DATE NOT NULL,,
+			date DATE NOT NULL,
 			event TEXT NOT NULL,
 			nat VARCHAR(5) NOT NULL,
 			class VARCHAR(5) NOT NULL ,
@@ -39,7 +39,7 @@ function ucicurl_db_install() {
 	";
 
 	$sql_results="
-		CREATE TABLE $wpdb->ulm_meta (
+		CREATE TABLE $wpdb->ucicurl_results (
 			id bigint(20) NOT NULL AUTO_INCREMENT,
 			results_id bigint(20) NOT NULL,
 			place SMALLINT NOT NULL DEFAULT '0',
@@ -55,7 +55,7 @@ function ucicurl_db_install() {
 	";
 
 	$sql_riders="
-		CREATE TABLE $wpdb->ulm_points (
+		CREATE TABLE $wpdb->ucicurl_riders (
 		  id bigint(20) NOT NULL AUTO_INCREMENT,
 			rider_id bigint(20) NOT NULL,
 			code TEXT NOT NULL,
@@ -78,7 +78,7 @@ function ucicurl_db_update() {
 
 	global $wpdb, $ucicurl_db_version;
 
-	$installed_version=get_option('ucicurl_db_version');
+	echo $installed_version=get_option('ucicurl_db_version');
 
 	if ($installed_version!=$ucicurl_db_version) :
 		$wpdb->hide_errors();
@@ -89,18 +89,19 @@ function ucicurl_db_update() {
 		$sql_races="
 			CREATE TABLE $wpdb->ucicurl_races (
 				id bigint(20) NOT NULL AUTO_INCREMENT,
-				date DATE NOT NULL,,
+				date DATE NOT NULL,
 				event TEXT NOT NULL,
 				nat VARCHAR(5) NOT NULL,
 				class VARCHAR(5) NOT NULL ,
 				winner VARCHAR(250) NOT NULL,
 				season VARCHAR(50) NOT NULL,
-				link TEXT NOT NULL
+				link TEXT NOT NULL,
+				PRIMARY KEY (`id`)
 			);
 		";
 
 		$sql_results="
-			CREATE TABLE $wpdb->ulm_meta (
+			CREATE TABLE $wpdb->ucicurl_results (
 				id bigint(20) NOT NULL AUTO_INCREMENT,
 				results_id bigint(20) NOT NULL,
 				place SMALLINT NOT NULL DEFAULT '0',
@@ -110,16 +111,18 @@ function ucicurl_db_update() {
 				result VARCHAR(10) NOT NULL,
 				par TINYINT NOT NULL DEFAULT '0',
 				pcr VARCHAR(10) NOT NULL DEFAULT '0',
-				rider_id bigint(20) NOT NULL
+				rider_id bigint(20) NOT NULL,
+				PRIMARY KEY (`id`)
 			);
 		";
 
 		$sql_riders="
-			CREATE TABLE $wpdb->ulm_points (
+			CREATE TABLE $wpdb->ucicurl_riders (
 			  id bigint(20) NOT NULL AUTO_INCREMENT,
 				rider_id bigint(20) NOT NULL,
 				code TEXT NOT NULL,
-				name LONGTEXT NOT NULL
+				name LONGTEXT NOT NULL,
+				PRIMARY KEY (`id`)
 			);
 		";
 
@@ -136,8 +139,8 @@ function ucicurl_db_update() {
 function ucicurl_update_db_check() {
 	global $ucicurl_db_version;
 
-	if (get_option('ucicurl_db_version')!=$ulm_db_version)
-		ulm_db_update();
+	if (get_option('ucicurl_db_version')!=$ucicurl_db_version)
+		ucicurl_db_update();
 
 	return;
 }
