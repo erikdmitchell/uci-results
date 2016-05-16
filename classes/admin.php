@@ -5,15 +5,7 @@
  * @since Version 2.0.0
  */
 class UCIcURLAdmin {
-
-	public $table;
-	public $results_table;
-	public $fq_table;
-	public $uci_rider_rankings;
-	public $version='1.0.3';
 	public $config=array();
-
-	protected $debug=false;
 
 	/**
 	 * __construct function.
@@ -438,29 +430,22 @@ class UCIcURLAdmin {
 
 		// build data array ..
 		$data=array(
-			'code' => $this->build_race_code($race_data),
-			'season' => $race_data->season,
 			'date' => $race_data->date,
 			'event' => $race_data->event,
 			'nat' => $race_data->nat,
 			'class' => $race_data->class,
 			'winner' => $race_data->winner,
-			'link' => $race_data->link
+			'season' => $race_data->season,
+			'link' => $race_data->link,
+			'code' => $this->build_race_code($race_data->event, $race_data->date),
 		);
 
 		if (!$this->check_for_dups($data['code'])) :
-			if ($this->debug) :
-				$message='<div class="updated">Added '.$data['code'].' to database.(debug)</div>';
-				$this->add_race_results_to_db($data['code'],$race_data->link);
-				$this->add_fq($data['code']);
+			if ($wpdb->insert($wpdb->ucicurl_races, $data)) :
+				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
+				$this->add_race_results_to_db($data['code'], $race_data->link);
 			else :
-				if ($wpdb->insert($this->table,$data)) :
-					$message='<div class="updated">Added '.$data['code'].' to database.</div>';
-					$this->add_race_results_to_db($data['code'],$race_data->link);
-					$this->add_fq($data['code']);
-				else :
-					$message='<div class="error">Unable to insert '.$data['code'].' into the database.</div>';
-				endif;
+				$message='<div class="error">Unable to insert '.$data['code'].' into the database.</div>';
 			endif;
 		else :
 			$message='<div class="updated">'.$data['code'].' is already in the database</div>';
@@ -497,14 +482,8 @@ class UCIcURLAdmin {
 				'par' => $result->par,
 				'pcr' => $result->pcr,
 			);
-
-			if ($this->debug) :
-				echo '<pre>';
-				print_r($insert);
-				echo '</pre>';
-			else :
-				$wpdb->insert($this->results_table,$insert);
-			endif;
+print_r($insert);
+			$wpdb->insert($this->results_table, $insert);
 		endforeach;
 	}
 
@@ -734,27 +713,21 @@ class UCIcURLAdmin {
 		endforeach; // races per week
 	}
 
-	//----------------------------- begin add_race_to_db helper functions -----------------------------//
-
 	/**
 	 * build_race_code function.
 	 *
 	 * takes the race name and date to build a string which becomes our "code" to prevent dups
 	 *
 	 * @access public
-	 * @param mixed $obj
+	 * @param bool $name (default: false)
+	 * @param bool $date (default: false)
 	 * @return void
 	 */
-	public function build_race_code($obj) {
-		if (!is_object($obj))
-			$obj=json_decode(json_encode($obj),FALSE);
-
-		if (!$obj->date || !$obj->event) :
+	public function build_race_code($name=false, $date=false) {
+		if (!$date || !$name)
 			return false;
-		else :
-			$code=$obj->event.$obj->date; // combine name and date
-		endif;
 
+		$code=$name.$date; // combine name and date
 		$code=str_replace(' ','',$code); // remove spaces
 		$code=strtolower($code); // make lowercase
 

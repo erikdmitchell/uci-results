@@ -1,7 +1,7 @@
 <?php
 global $ucicurl_db_version;
 
-$ucicurl_db_version='0.1';
+$ucicurl_db_version='0.2';
 
 function ucicurl_set_db_tables() {
 	global $wpdb;
@@ -34,6 +34,7 @@ function ucicurl_db_install() {
 			winner VARCHAR(250) NOT NULL,
 			season VARCHAR(50) NOT NULL,
 			link TEXT NOT NULL,
+			code TEXT NOT NULL,
 			PRIMARY KEY (`id`)
 		) $charset;
 	";
@@ -96,6 +97,7 @@ function ucicurl_db_update() {
 				winner VARCHAR(250) NOT NULL,
 				season VARCHAR(50) NOT NULL,
 				link TEXT NOT NULL,
+				code TEXT NOT NULL,
 				PRIMARY KEY (`id`)
 			);
 		";
