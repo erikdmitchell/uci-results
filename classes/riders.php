@@ -57,7 +57,6 @@ class UCIcURLRiders {
 			endif;
 			$end=$per_page;
 			$limit="LIMIT $start,$end";
-			//$rank=$start+1;
 		endif;
 
 		// setup our where stuff //
@@ -115,6 +114,12 @@ class UCIcURLRiders {
 		return $rider;
 	}
 
+	/**
+	 * admin_pagination function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function admin_pagination() {
 		$pagination=new UCIcURLPagination($this->admin_pagination['total'], $this->admin_pagination['limit'], admin_url('admin.php?page=uci-curl&tab=riders'));
 

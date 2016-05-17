@@ -4,11 +4,17 @@ global $ucicurl_races;
 $s_season=isset($_POST['season']) ? $_POST['season'] : '';
 $s_class=isset($_POST['class']) ? $_POST['class'] : '';
 $s_nat=isset($_POST['nat']) ? $_POST['nat'] : '';
+
+$races=$ucicurl_races->races();
 ?>
 
-<h2>Races</h2>
+<h2>Races <span class="ucicurl-admin-total">(<?php echo $ucicurl_races->admin_pagination['total']; ?>)</span></h2>
 
 <div class="tablenav top">
+	<div class="pagination">
+		<?php $ucicurl_races->admin_pagination(); ?>
+	</div>
+
 	<div class="alignright actions">
 		<form name="races-search" method="get" action="">
 			<input type="hidden" name="page" value="uci-curl">
@@ -62,7 +68,7 @@ $s_nat=isset($_POST['nat']) ? $_POST['nat'] : '';
 		</tr>
 	</thead>
 	<tbody>
-		<?php foreach ($ucicurl_races->races() as $race) : ?>
+		<?php foreach ($races as $race) : ?>
 			<tr>
 				<td class="race-date"><?php echo $race->date; ?></td>
 				<td class="race-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=races&race_id='.$race->id); ?>"><?php echo $race->event; ?></a></td>
@@ -72,3 +78,5 @@ $s_nat=isset($_POST['nat']) ? $_POST['nat'] : '';
 		<?php endforeach; ?>
 	</tbody>
 </table>
+
+<?php $ucicurl_races->admin_pagination(); ?>
