@@ -20,5 +20,5 @@ include_once(UCICURL_PATH.'classes/races.php'); // our races functions
 include_once(UCICURL_PATH.'classes/riders.php'); // our riders functions
 include_once(UCICURL_PATH.'classes/pagination.php'); // our pagination functions
 include_once(UCICURL_PATH.'shortcode.php'); // our shortcodes
-include_once(UCICURL_PATH.'flasgs.php'); // our flag stuff
+include_once(UCICURL_PATH.'lib/flags.php'); // our flag stuff
 ?>
