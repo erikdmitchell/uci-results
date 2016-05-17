@@ -84,14 +84,23 @@ class UCIcURLRiders {
 		$riders=$wpdb->get_results($sql);
 
 		//set our max pages var for pagination //
+/*
 		if ($per_page>0) :
 			$max_riders=$wpdb->get_var("SELECT COUNT(*) FROM $wpdb->ucicurl_riders $where");
 			$wp_query->uci_curl_max_pages=$max_riders;
 		endif;
+*/
 
 		return $riders;
 	}
 
+	/**
+	 * get_rider function.
+	 *
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
 	public function get_rider($rider_id=0) {
 		global $wpdb;
 
@@ -108,6 +117,13 @@ class UCIcURLRiders {
 		return $rider;
 	}
 
+	/**
+	 * get_rider_id function.
+	 *
+	 * @access public
+	 * @param string $name (default: '')
+	 * @return void
+	 */
 	public function get_rider_id($name='') {
 		global $wpdb;
 
@@ -115,118 +131,6 @@ class UCIcURLRiders {
 
 		return $id;
 	}
-
-/*
-	function get_rider_results($args=array()) {
-		global $wpdb,$uci_curl;
-
-		$html=null;
-		$where=array();
-		$default_args=array(
-			'order_by' => 'date',
-			'order' => 'DESC',
-			'name' => false,
-			'season' => false,
-			'class' => false,
-			'nat' => false,
-			'place' => false
-		);
-		$args=array_merge($default_args,$args);
-
-		extract($args);
-
-		// setup our potential where statement //
-		if ($name)
-			$where[]="name='{$name}'";
-
-		if ($season)
-			$where[]="season='{$season}'";
-
-		if ($class)
-			$where[]="class='{$class}'";
-
-		if ($nat)
-			$where[]="nat='{$nat}'";
-
-		if ($place)
-			$where[]="place='{$place}'";
-
-		if (!empty($where)) :
-			$where=' WHERE '.implode(' AND ',$where);
-		else :
-			$where="";
-		endif;
-
-		$sql="
-			SELECT
-				name,
-				place,
-				results.nat,
-				par AS points,
-				season,
-				STR_TO_DATE(date,'%e %M %Y') AS date,
-				event,
-				races.code,
-				class,
-				races.nat AS race_country,
-				fq_table.fq
-			FROM $uci_curl->results_table AS results
-			LEFT JOIN $uci_curl->table AS races
-			ON results.code=races.code
-			LEFT JOIN $uci_curl->fq_table AS fq_table
-			ON results.code=fq_table.code
-			$where
-			ORDER BY $order_by $order
-		";
-		$wpdb->query("SET SQL_BIG_SELECTS=1"); // fixes a minor sql bug
-		$results=$wpdb->get_results($sql);
-
-		return $results;
-	}
-*/
-
-/*
-	public function get_country($name=0) {
-		global $wpdb,$uci_curl;
-
-		if (!$name)
-			return false;
-
-		$season=get_query_var('season','2015/2016');
-		$sql="
-			SELECT
-				results.name AS rider,
-				results.place,
-				CASE WHEN results.par IS NULL OR results.par='' THEN 0 ELSE results.par END AS points,
-				races.date,
-				races.code,
-				races.event AS race,
-				races.class,
-				races.nat AS race_country,
-				races.fq
-			FROM $uci_curl->results_table AS results
-			LEFT JOIN $uci_curl->table AS races
-			ON results.code=races.code
-			WHERE season='$season'
-			AND results.nat='$name'
-			ORDER BY results.name,races.date,results.place
-		";
-
-		$results=$wpdb->get_results($sql);
-
-		return $results;
-	}
-*/
-
-/*
-	public function get_latest_rankings_week($season=false) {
-		global $wpdb,$uci_curl;
-
-		$week=$wpdb->get_var("SELECT MAX(week) FROM $uci_curl->uci_rider_rankings	WHERE season='{$season}'");
-
-		return $week;
-	}
-*/
 
 	/**
 	 * riders function.
@@ -238,6 +142,12 @@ class UCIcURLRiders {
 		return $this->get_riders();
 	}
 
+	/**
+	 * nats function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function nats() {
 		global $wpdb;
 

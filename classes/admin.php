@@ -108,23 +108,6 @@ class UCIcURLAdmin {
 		echo $html;
 	}
 
-/*
-	public function riders_admin_page() {
-		$html=null;
-		$rider_stats=new RiderStats();
-
-		$html.='<div class="riders-wrap">';
-			$html.='<h3>Riders</h3>';
-
-			$html.=$rider_stats->get_season_rider_rankings();
-
-
-		$html.='</div>';
-
-		return $html;
-	}
-*/
-
 	/**
 	 * ajax_get_race_data_non_db function.
 	 *
@@ -310,7 +293,7 @@ class UCIcURLAdmin {
 		$final_url.='&Phase3ID=0';
 		$final_url.='&PhaseClassificationID=-1';
 		$final_url.='&Detail='.$arr['Detail'];
-		//$final_url.='&Ranking='.$arr['Ranking']; -- causes and error
+		//$final_url.='&Ranking='.$arr['Ranking']; -- causes an error
 		$final_url.='&All=0';
 		$final_url.='&TaalCode=2';
 		$final_url.='&StyleID=0';
@@ -763,61 +746,4 @@ class UCIcURLAdmin {
 }
 
 $ucicurl_admin=new UCIcURLAdmin();
-
-/**
- * curl_exec_utf8 function.
- *
- * The same as curl_exec except tries its best to convert the output to utf8
- *
- * @access public
- * @param mixed $ch
- * @return void
- */
-function curl_exec_utf8($ch) {
-    $data = curl_exec($ch);
-    if (!is_string($data)) return $data;
-
-    unset($charset);
-    $content_type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-
-    /* 1: HTTP Content-Type: header */
-    preg_match( '@([\w/+]+)(;\s*charset=(\S+))?@i', $content_type, $matches );
-    if ( isset( $matches[3] ) )
-        $charset = $matches[3];
-
-    /* 2: <meta> element in the page */
-    if (!isset($charset)) {
-        preg_match( '@<meta\s+http-equiv="Content-Type"\s+content="([\w/]+)(;\s*charset=([^\s"]+))?@i', $data, $matches );
-        if ( isset( $matches[3] ) )
-            $charset = $matches[3];
-    }
-
-    /* 3: <xml> element in the page */
-    if (!isset($charset)) {
-        preg_match( '@<\?xml.+encoding="([^\s"]+)@si', $data, $matches );
-        if ( isset( $matches[1] ) )
-            $charset = $matches[1];
-    }
-
-    /* 4: PHP's heuristic detection */
-    if (!isset($charset)) {
-        $encoding = mb_detect_encoding($data);
-        if ($encoding)
-            $charset = $encoding;
-    }
-
-    /* 5: Default for HTML */
-    if (!isset($charset)) {
-        if (strstr($content_type, "text/html") === 0)
-            $charset = "ISO 8859-1";
-    }
-
-    /* Convert it if it is anything but UTF-8 */
-    /* You can change "UTF-8"  to "UTF-8//IGNORE" to
-       ignore conversion errors and still output something reasonable */
-    if (isset($charset) && strtoupper($charset) != "UTF-8")
-        $data = iconv($charset, 'UTF-8', $data);
-
-    return $data;
-}
 ?>
