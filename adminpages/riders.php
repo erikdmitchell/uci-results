@@ -8,7 +8,7 @@ $s_nat=isset($_POST['nat']) ? $_POST['nat'] : '';
 $riders=$ucicurl_riders->riders();
 ?>
 
-<h2>Riders</h2>
+<h2>Riders <span class="ucicurl-admin-total">(<?php echo $ucicurl_riders->admin_pagination['total']; ?>)</span></h2>
 
 <div class="tablenav top">
 	<div class="pagination">

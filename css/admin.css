@@ -12,6 +12,11 @@
 	display: none;
 }
 
+h2 .ucicurl-admin-total {
+	font-size: 14px;
+	font-weight: normal;
+}
+
 /** races **/
 .tablenav.single-race > div {
 	margin-right: 15px;
