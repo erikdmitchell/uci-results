@@ -23,7 +23,7 @@ class UCIcURLRiders {
 	 * @return void
 	 */
 	public function get_riders($user_args=array()) {
-		global $wpdb, $uci_curl, $wp_query;
+		global $wpdb;
 
 		$riders=array();
 		$limit=false;
@@ -87,6 +87,71 @@ class UCIcURLRiders {
 		// for pagination //
 		$this->admin_pagination['limit']=$args['per_page'];
 		$this->admin_pagination['total']=$wpdb->get_var("SELECT COUNT(*) FROM $wpdb->ucicurl_riders $where");
+
+		return $riders;
+	}
+
+	/**
+	 * get_rider_rankings function.
+	 *
+	 * @access public
+	 * @param array $args (default: array())
+	 * @return void
+	 */
+	public function get_rider_rankings($args=array()) {
+		global $wpdb;
+
+		$riders=array();
+		$limit=false;
+		$where=array();
+		$paged=isset($_GET['pagenum']) ? absint($_GET['pagenum']) : 1;
+		$default_args=array(
+			'per_page' => 10,
+			'order_by' => 'points',
+			'order' => 'DESC',
+			'name' => false,
+			'nat' => false,
+			'season' => false,
+		);
+		$args=wp_parse_args($args, $default_args);
+
+		extract($args);
+
+		// if we dont have a name and we have a limit, setup pagination //
+		if (!$name && $per_page>0) :
+			if ($paged==0) :
+				$start=0;
+			else :
+				$start=$per_page*($paged-1);
+			endif;
+			$end=$per_page;
+			$limit="LIMIT $start,$end";
+		endif;
+
+		// run our where //
+		if (!empty($where)) :
+			$where='WHERE '.implode(' AND ',$where);
+		else :
+			$where='';
+		endif;
+
+		$sql="
+			SELECT
+				riders.name,
+				riders.nat,
+				SUM(results.par) AS points
+			FROM {$wpdb->ucicurl_riders} AS riders
+			LEFT JOIN {$wpdb->ucicurl_results} AS results
+			ON riders.id=results.rider_id
+			LEFT JOIN {$wpdb->ucicurl_races} AS races
+			ON results.race_id=races.id
+			{$where}
+			GROUP BY riders.name
+			ORDER BY {$order_by} {$order}
+			{$limit}
+		";
+
+		$riders=$wpdb->get_results($sql);
 
 		return $riders;
 	}
