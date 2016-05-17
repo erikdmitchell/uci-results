@@ -4,7 +4,7 @@ jQuery(document).ready(function($) {
 	/**
 	 * populates the url field on the UCI cURL page when a year is selected (years are pre populated)
 	 */
-	$('#get-race-season').change(function() {
+	$('#season').change(function() {
 		$('#url').val($(this).val());
 	});
 

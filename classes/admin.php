@@ -570,6 +570,31 @@ class UCIcURLAdmin {
 	}
 
 	/**
+	 * has_results function.
+	 *
+	 * @access public
+	 * @param mixed $code
+	 * @return void
+	 */
+	public function has_results($code) {
+		global $wpdb;
+
+		$race_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_races} WHERE code=\"{$code}\"");
+
+		// no race id, we out //
+		if (!$race_id)
+			return false;
+
+		$results=$wpdb->get_results("SELECT id FROM {$wpdb->ucicurl_results} WHERE race_id={$race_id}");
+
+		// do we have results? //
+		if (count($results))
+			return true;
+
+		return false;
+	}
+
+	/**
  	 * @param string $url - results url
 	 * the date comes in with hidden &nbsp; this gets a 'clean' date from the results page
 
@@ -660,25 +685,28 @@ class UCIcURLAdmin {
 			$html.='<table class="wp-list-table widefat fixed striped pages">';
 				$html.='<thead>';
 					$html.='<tr>';
-						$html.='<td id="cb" class="check-column"><input type="checkbox" id="select-all"></td>';
+						$html.='<td id="cb" class="manage-column column-cb check-column"><input type="checkbox" id="select-all"></td>';
 						$html.='<th scope="col" class="race-date">Date</th>';
 						$html.='<th scope="col" class="race-name">Event</th>';
 						$html.='<th scope="col" class="race-nat">Nat.</th>';
 						$html.='<th scope="col" class="race-class">Class</th>';
 					$html.='</tr>';
 				$html.='</thead>';
-				$html.='<tbody>';
+				$html.='<tbody id="the-list">';
 
 					foreach ($obj as $result) :
 						$disabled='';
 						$date=$result->date;
+						$code=$this->build_race_code($result->event, $result->date);
 
+						// check we have event //
 						if (!isset($result->event)) :
 							$result->event=false;
 						else :
 							$event=$result->event;
 						endif;
 
+						// disable if no event (data error) //
 						if (!$result->date || !$result->event)
 							$disabled='disabled';
 
@@ -687,6 +715,10 @@ class UCIcURLAdmin {
 
 						if (!$result->event)
 							$event='No Event';
+
+						// if we already have results, bail. there are other check later, but this is a good helper //
+						if ($this->has_results($code))
+							$disabled='disabled';
 
 						$html.='<tr>';
 							$html.='<th scope="row" class="check-column"><input type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" '.$disabled.'></th>';
