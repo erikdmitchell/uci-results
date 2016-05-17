@@ -32,13 +32,15 @@ class UCIcURLRaces {
 		$where=array();
 		$paged=isset($_GET['pagenum']) ? absint($_GET['pagenum']) : 1;
 		$default_args=array(
-			'pagination' => true,
+			'pagination' => false,
 			'per_page' => 30,
 			'order_by' => 'date',
 			'order' => 'DESC',
 			'class' => false,
 			'season' => false,
 			'nat' => false,
+			'start_date' => false,
+			'end_date' => false
 		);
 		$args=array_merge($default_args, $args);
 
@@ -62,14 +64,22 @@ class UCIcURLRaces {
 			$limit="LIMIT $start,$end";
 		endif;
 
+		// check class //
 		if ($class)
 			$where[]="class='{$class}'";
 
+		// check season //
 		if ($season)
 			$where[]="season='{$season}'";
 
+		// check nat //
 		if ($nat)
 			$where[]="nat='{$nat}'";
+
+		// check start and end //
+		if ($start_date && $end_date) :
+			$where[]="(date BETWEEN '{$start_date}' AND '{$end_date}')";
+		endif;
 
 		if (!empty($where)) :
 			$where=' WHERE '.implode(' AND ',$where);
