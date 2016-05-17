@@ -23,7 +23,7 @@ class UCIcURLRiders {
 	 * @return void
 	 */
 	public function get_riders($user_args=array()) {
-		global $wpdb,$uci_curl, $wp_query;
+		global $wpdb, $uci_curl, $wp_query;
 
 		$riders=array();
 		$limit=false;

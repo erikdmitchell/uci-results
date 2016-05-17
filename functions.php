@@ -24,7 +24,7 @@ function ucicurl_get_template($template_name=false, $attributes=null) {
 	elseif (file_exists(get_template_directory().'/ultimate-league-management/templates/'.$template_name.'.php')) :
 		include(get_template_directory().'/ultimate-league-management/templates/'.$template_name.'.php');
 	else :
-		include(ULM_PATH.'/templates/'.$template_name.'.php');
+		include(UCICURL_PATH.'templates/'.$template_name.'.php');
 	endif;
 
 	do_action('ulm_after_'.$template_name);

@@ -1,10 +1,15 @@
 <?php
+function ucicurl_scripts_styles() {
+	wp_enqueue_style('ucicurl-shortcode-styles', UCICURL_URL.'/css/main.css');
+}
+add_action('wp_enqueue_scripts', 'ucicurl_scripts_styles');
+
 function ucicurl_landing($atts) {
 	$atts = shortcode_atts( array(
 
 	), $atts, 'ucicurl' );
 
-	return;
+	return ucicurl_get_template('main');
 }
 add_shortcode('ucicurl', 'ucicurl_landing');
 
