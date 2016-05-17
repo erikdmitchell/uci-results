@@ -454,6 +454,7 @@ class UCIcURLAdmin {
 			return false;
 
 		$race_results=$this->get_race_results($link);
+		$race=$wpdb->get_row("SELECT * FROM {$wpdb->ucicurl_races} WHERE id={$race_id}");
 
 		foreach ($race_results as $result) :
 			$rider_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_riders} WHERE name=\"{$result->name}\" AND nat=\"{$result->nat}\"");
@@ -481,7 +482,46 @@ class UCIcURLAdmin {
 			);
 
 			$wpdb->insert($wpdb->ucicurl_results, $insert);
+
+			$this->update_rider_rankings($rider_id, $result->par, $race->season, $race->week);
 		endforeach;
+	}
+
+	/**
+	 * update_rider_rankings function.
+	 *
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @param int $points (default: 0)
+	 * @param string $season (default: '')
+	 * @param int $week (default: 0)
+	 * @return void
+	 */
+	public function update_rider_rankings($rider_id=0, $points=0, $season='', $week=0) {
+		global $wpdb;
+
+		$ranking_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week={$week}");
+
+		if ($ranking_id) :
+			$db_points=$wpdb->get_var("SELECT points FROM {$wpdb->ucicurl_rider_rankings} WHERE id={$ranking_id}");
+			$data=array(
+				'points' => $db_points
+			);
+			$where=array(
+				'id' => $ranking_id
+			);
+
+			$wpdb->update($wpdb->ucicurl_rider_rankings, $data, $where);
+		else :
+			$insert_data=array(
+				'rider_id' => $rider_id,
+				'points' => $points,
+				'season' => $season,
+				'week' => $week,
+			);
+
+			$wpdb->insert($wpdb->ucicurl_rider_rankings, $insert_data);
+		endif;
 	}
 
 	/**
