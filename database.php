@@ -35,6 +35,7 @@ function ucicurl_db_install() {
 			class VARCHAR(5) NOT NULL ,
 			winner VARCHAR(250) NOT NULL,
 			season VARCHAR(50) NOT NULL,
+			week bigint(20) NOT NULL DEFAULT '0',
 			link TEXT NOT NULL,
 			code TEXT NOT NULL,
 			PRIMARY KEY (`id`)
@@ -73,6 +74,7 @@ function ucicurl_db_install() {
 			points bigint(20) NOT NULL DEFAULT '0',
 			season VARCHAR(50) NOT NULL,
 			rank bigint(20) NOT NULL DEFAULT '0',
+			week bigint(20) NOT NULL DEFAULT '0',
 			PRIMARY KEY (`id`)
 		) $charset;
 	";
@@ -110,6 +112,7 @@ function ucicurl_db_update() {
 				class VARCHAR(5) NOT NULL ,
 				winner VARCHAR(250) NOT NULL,
 				season VARCHAR(50) NOT NULL,
+				week bigint(20) NOT NULL DEFAULT '0',
 				link TEXT NOT NULL,
 				code TEXT NOT NULL,
 				PRIMARY KEY (`id`)
@@ -148,6 +151,7 @@ function ucicurl_db_update() {
 				points bigint(20) NOT NULL DEFAULT '0',
 				season VARCHAR(50) NOT NULL,
 				rank bigint(20) NOT NULL DEFAULT '0',
+				week bigint(20) NOT NULL DEFAULT '0',
 				PRIMARY KEY (`id`)
 			);
 		";
