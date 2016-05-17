@@ -485,6 +485,8 @@ class UCIcURLAdmin {
 
 			$this->update_rider_rankings($rider_id, $result->par, $race->season, $race->week);
 		endforeach;
+
+		$this->update_rider_rankings_rank($race->season, $race->week);
 	}
 
 	/**
@@ -522,6 +524,40 @@ class UCIcURLAdmin {
 
 			$wpdb->insert($wpdb->ucicurl_rider_rankings, $insert_data);
 		endif;
+	}
+
+	/**
+	 * update_rider_rankings_rank function.
+	 *
+	 * @access public
+	 * @param string $season (default: '')
+	 * @param int $week (default: 0)
+	 * @return void
+	 */
+	public function update_rider_rankings_rank($season='', $week=0) {
+		global $wpdb;
+
+		$sql="
+			SELECT id
+			FROM {$wpdb->ucicurl_rider_rankings}
+			WHERE season='{$season}'
+				AND week={$week}
+			ORDER BY points DESC
+		";
+		$ids=$wpdb->get_col($sql);
+		$rank=1;
+
+		// we now just update our rank via id //
+		foreach ($ids as $id) :
+			$data=array(
+				'rank' => $rank
+			);
+			$where=array(
+				'id' => $id
+			);
+			$wpdb->update($wpdb->ucicurl_rider_rankings, $data, $where);
+			$rank++;
+		endforeach;
 	}
 
 	/**
