@@ -4,11 +4,17 @@ global $ucicurl_riders;
 $s_season=isset($_POST['season']) ? $_POST['season'] : '';
 $s_class=isset($_POST['class']) ? $_POST['class'] : '';
 $s_nat=isset($_POST['nat']) ? $_POST['nat'] : '';
+
+$riders=$ucicurl_riders->riders();
 ?>
 
 <h2>Riders</h2>
 
 <div class="tablenav top">
+	<div class="pagination">
+		<?php $ucicurl_riders->admin_pagination(); ?>
+	</div>
+
 	<div class="alignright actions">
 		<form name="riders-search" method="get" action="">
 			<input type="hidden" name="page" value="uci-curl">
@@ -42,7 +48,7 @@ $s_nat=isset($_POST['nat']) ? $_POST['nat'] : '';
 		</tr>
 	</thead>
 	<tbody>
-		<?php foreach ($ucicurl_riders->riders() as $rider) : ?>
+		<?php foreach ($riders as $rider) : ?>
 			<tr>
 				<td class="rider-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=riders&rider='.urlencode($rider->name)); ?>"><?php echo $rider->name; ?></a></td>
 				<td class="rider-nat"><?php echo $rider->nat; ?></td>
@@ -50,3 +56,5 @@ $s_nat=isset($_POST['nat']) ? $_POST['nat'] : '';
 		<?php endforeach; ?>
 	</tbody>
 </table>
+
+<?php $ucicurl_riders->admin_pagination(); ?>

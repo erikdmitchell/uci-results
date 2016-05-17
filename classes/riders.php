@@ -5,6 +5,8 @@
  */
 class UCIcURLRiders {
 
+	public $admin_pagination=array();
+
 	/**
 	 * __construct function.
 	 *
@@ -21,12 +23,12 @@ class UCIcURLRiders {
 	 * @return void
 	 */
 	public function get_riders($user_args=array()) {
-		global $wpdb,$uci_curl,$wp_query;
+		global $wpdb,$uci_curl, $wp_query;
 
 		$riders=array();
 		$limit=false;
 		$where=array();
-		$paged=get_query_var('paged',1);
+		$paged=isset($_GET['pagenum']) ? absint($_GET['pagenum']) : 1;
 		$default_args=array(
 			'per_page' => 30,
 			'order_by' => 'name',
@@ -72,7 +74,7 @@ class UCIcURLRiders {
 			$where='';
 		endif;
 
-		 $sql="
+		$sql="
 			SELECT
 				*
 			FROM $wpdb->ucicurl_riders
@@ -83,13 +85,9 @@ class UCIcURLRiders {
 
 		$riders=$wpdb->get_results($sql);
 
-		//set our max pages var for pagination //
-/*
-		if ($per_page>0) :
-			$max_riders=$wpdb->get_var("SELECT COUNT(*) FROM $wpdb->ucicurl_riders $where");
-			$wp_query->uci_curl_max_pages=$max_riders;
-		endif;
-*/
+		// for pagination //
+		$this->admin_pagination['limit']=$args['per_page'];
+		$this->admin_pagination['total']=$wpdb->get_var("SELECT COUNT(*) FROM $wpdb->ucicurl_riders $where");
 
 		return $riders;
 	}
@@ -115,6 +113,12 @@ class UCIcURLRiders {
 		$rider->results=$wpdb->get_results($sql);
 
 		return $rider;
+	}
+
+	public function admin_pagination() {
+		$pagination=new UCIcURLPagination($this->admin_pagination['total'], $this->admin_pagination['limit'], admin_url('admin.php?page=uci-curl&tab=riders'));
+
+		echo $pagination->get_pagination();
 	}
 
 	/**

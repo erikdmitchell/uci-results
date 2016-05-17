@@ -12,7 +12,7 @@
 	display: none;
 }
 
-
+/** races **/
 .tablenav.single-race > div {
 	margin-right: 15px;
 }
@@ -20,17 +20,44 @@
 	font-style: italic;
 }
 
-/**
- * pagination
- */
-.uci-pagination {
+/** pagination **/
+.tablenav .pagination {
+	float: right;
+	margin-left: 30px;
+}
+.tablenav .pagination .ucicurl-pagination .next-link {
+	margin-left: 10px;
+}
+.tablenav .pagination .ucicurl-pagination {
+	margin-top: 3px;
+}
+.tablenav .pagination .ucicurl-pagination > div {
+	width: auto;
+  min-width: 17px;
+  border: 1px solid #ccc;
+  padding: 3px 5px 7px;
+  background: #e5e5e5;
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 400;
+  text-align: center;
+}
+.tablenav .pagination .ucicurl-pagination > div.hide {
+	display: none;
+}
+.tablenav .pagination .ucicurl-pagination > div a {
+	text-decoration: none;
+}
+.ucicurl-pagination {
 	overflow: hidden;
 	margin: 15px 0;
 }
-.uci-pagination > div {
+.ucicurl-pagination > div {
 	width: 50%;
 	float: left;
 }
-.uci-pagination .next-page {
+.ucicurl-pagination > div.hide {
+}
+.ucicurl-pagination .next-link {
 	text-align: right;
 }
