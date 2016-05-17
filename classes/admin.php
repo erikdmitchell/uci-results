@@ -63,6 +63,7 @@ class UCIcURLAdmin {
 			'uci-curl' => 'UCI cURL',
 			'races' => 'Races',
 			'riders' => 'Riders',
+			'rider-rankings' => 'Rider Rankings'
 		);
 		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'uci-curl';
 
@@ -98,6 +99,9 @@ class UCIcURLAdmin {
 						$html.=ucicurl_get_admin_page('riders');
 					endif;
 					break;
+				case 'rider-rankings' :
+						$html.=ucicurl_get_admin_page('rider-rankings');
+						break;
 				default:
 					$html.=ucicurl_get_admin_page('curl');
 					break;
