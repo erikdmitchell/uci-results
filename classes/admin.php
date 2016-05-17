@@ -422,7 +422,7 @@ class UCIcURLAdmin {
 			'season' => $race_data->season,
 			'link' => $race_data->link,
 			'code' => $this->build_race_code($race_data->event, $race_data->date),
-			'week' => $this->get_race_week($race_data->date),
+			'week' => $this->get_race_week($race_data->date, $race_data->season),
 		);
 
 		if (!$this->check_for_dups($data['code'])) :
@@ -760,12 +760,12 @@ class UCIcURLAdmin {
 	 * @param mixed $season (default: )
 	 * @return void
 	 */
-	public function get_race_week($date='', $season=) {
+	public function get_race_week($date='', $season='') {
 		$date=date('Y-m-d', strtotime($date));
 		$seasons=$this->build_year_arr();
-		$season_data=add_weeks_to_season($seasons[$season]);
+		$season_data=$this->add_weeks_to_season($seasons[$season]);
 
-		return get_week_of_date($date, $season_data['weeks']);
+		return $this->get_week_of_date($date, $season_data['weeks']);
 	}
 
 	/**

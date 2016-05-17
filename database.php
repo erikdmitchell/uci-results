@@ -1,7 +1,7 @@
 <?php
 global $ucicurl_db_version;
 
-$ucicurl_db_version='0.2';
+$ucicurl_db_version='0.1';
 
 function ucicurl_set_db_tables() {
 	global $wpdb;
