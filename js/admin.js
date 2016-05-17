@@ -9,6 +9,27 @@ jQuery(document).ready(function($) {
 	});
 
 	/**
+	 * select all
+	 */
+  $('#select-all').live('click',function(event) {
+	  event.preventDefault();
+
+	  if ($(this).hasClass('unselect')) {
+		 	$(this).removeClass('unselect');
+    	$('.check-column > input').each(function() {
+      	this.checked = false;  //select all checkboxes
+      });
+		} else {
+			$(this).addClass('unselect');
+    	$('.check-column > input').each(function() {
+	    	if (!$(this).is(':disabled')) {
+	      	this.checked = true; //deselect all checkboxes
+	      }
+      });
+		}
+  });
+
+	/**
 	 * gets an output of races via the season selected
 	 */
 	$('#get-races-curl').click(function(e) {
