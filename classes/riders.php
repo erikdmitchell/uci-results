@@ -111,7 +111,7 @@ class UCIcURLRiders {
 			'order' => 'DESC',
 			'name' => false,
 			'nat' => false,
-			'season' => false,
+			'season' => '2015/2016',
 		);
 		$args=wp_parse_args($args, $default_args);
 
@@ -127,6 +127,18 @@ class UCIcURLRiders {
 			$end=$per_page;
 			$limit="LIMIT $start,$end";
 		endif;
+
+		// set name //
+		if ($name)
+			$where[]="results.name='{$name}'";
+
+		// set nat //
+		if ($nat)
+			$where[]="results.nat='{$nat}'";
+
+		// set season //
+		if ($season)
+			$where[]="races.season='{$season}'";
 
 		// run our where //
 		if (!empty($where)) :
