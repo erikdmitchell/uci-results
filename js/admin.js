@@ -112,10 +112,11 @@ jQuery(document).ready(function($) {
 				url: ajaxurl,
 				data: {
 					action : 'search_related_races',
-					query : search_string
+					query : search_string,
+					race_id : $('#main_race_id').val()
 				},
 				success: function(response){
-console.log(response);
+					$('#related-races-search-results').html(response);
 				}
 			});
 	  }

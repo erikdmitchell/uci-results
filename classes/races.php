@@ -15,6 +15,7 @@ class UCIcURLRaces {
 	 * @return void
 	 */
 	public function __construct() {
+		add_action('admin_init', array($this, 'add_related_races'));
 		add_action('wp_ajax_search_related_races', array($this, 'ajax_search_related_races'));
 	}
 
@@ -200,9 +201,34 @@ class UCIcURLRaces {
 	}
 
 	public function ajax_search_related_races() {
-print_r($_POST);
+		global $wpdb;
+
+		$html=null;
+		$query=$_POST['query'];
+		$races=$wpdb->get_results("SELECT * FROM {$wpdb->ucicurl_races} WHERE event LIKE '%{$query}%'");
+
+		// build out html //
+		foreach ($races as $race) :
+			if ($race->id==$_POST['race_id'])
+				continue; // skip if current race
+
+			$html.='<tr>';
+				$html.='<th scope="row" class="check-column"><input id="cb-select-'.$race->ID.'" type="checkbox" name="race[]" value="'.$race->ID.'"></th>';
+				$html.='<td class="race-date">'.date(get_option('date_format'), strtotime($race->date)).'</td>';
+				$html.='<td class="race-name">'.$race->event.'</td>';
+				$html.='<td class="race-nat">'.$race->nat.'</td>';
+				$html.='<td class="race-class">'.$race->class.'</td>';
+				$html.='<td class="race-season">'.$race->season.'</td>';
+			$html.='</tr>';
+		endforeach;
+
+		echo $html;
 
 		wp_die();
+	}
+
+	public function add_related_races() {
+
 	}
 
 }
