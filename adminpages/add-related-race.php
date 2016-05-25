@@ -37,10 +37,22 @@ $related_race_id=$ucicurl_races->get_related_race_id($_GET['race_id']);
 						<th scope="col" class="race-season">Season</th>
 					</tr>
 				</thead>
+				<tbody>
+					<?php if ($related_races) : foreach ($related_races as $race) : ?>
+						<tr>
+							<th scope="row" class="check-column"><input id="cb-select-<?php echo $race->id; ?>" type="checkbox" name="races[]" value="<?php echo $race->id; ?>" checked="checked"></th>
+							<td class="race-date"><?php echo date(get_option('date_format'), strtotime($race->date)); ?></td>
+							<td class="race-name"><?php echo $race->event; ?></td>
+							<td class="race-nat"><?php echo $race->nat; ?></td>
+							<td class="race-class"><?php echo $race->class; ?></td>
+							<td class="race-season"><?php echo $race->season; ?></td>
+						</tr>
+					<?php endforeach; endif; ?>
+				</tbody>
 				<tbody id="related-races-search-results"></tbody>
 			</table>
 
-			<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Add Races"></p>
+			<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Update Races"></p>
 		</form>
 
 	</div>

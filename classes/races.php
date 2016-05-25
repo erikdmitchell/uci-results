@@ -192,18 +192,47 @@ class UCIcURLRaces {
 		return $countries;
 	}
 
+	/**
+	 * get_related_races function.
+	 *
+	 * @access public
+	 * @param int $race_id (default: 0)
+	 * @return void
+	 */
 	public function get_related_races($race_id=0) {
 		global $wpdb;
 
-		$related_races=$wpdb->get_col("SELECT race_ids FROM {$wpdb->ucicurl_related_races} WHERE id={$race_id}");
+		$related_races=array();
+		$related_race_id=$this->get_related_race_id($race_id);
+		$related_races_db=$wpdb->get_var("SELECT race_ids FROM {$wpdb->ucicurl_related_races} WHERE id={$related_race_id}");
+
+		if (!$related_races_db)
+			return false;
+
+		$related_race_ids=explode(',', $related_races_db);
+
+		// build out races //
+		foreach ($related_race_ids as $id) :
+			if ($id==$race_id)
+				continue;
+
+			$related_races[]=$this->get_race($id);
+		endforeach;
 
 		return $related_races;
 	}
 
+	/**
+	 * get_related_race_id function.
+	 *
+	 * @access public
+	 * @param int $race_id (default: 0)
+	 * @return void
+	 */
 	public function get_related_race_id($race_id=0) {
 		global $wpdb;
 
-		$id=$wpdb->get_col("SELECT id FROM {$wpdb->ucicurl_related_races} WHERE race_ids LIKE '%{$race_id}%'");
+		$id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_related_races} WHERE race_ids LIKE '%{$race_id}%'");
 
 		if ($id)
 			return $id;
@@ -211,6 +240,12 @@ class UCIcURLRaces {
 		return 0;
 	}
 
+	/**
+	 * ajax_search_related_races function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function ajax_search_related_races() {
 		global $wpdb;
 
@@ -238,6 +273,12 @@ class UCIcURLRaces {
 		wp_die();
 	}
 
+	/**
+	 * add_related_races function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function add_related_races() {
 		global $wpdb;
 
@@ -245,7 +286,17 @@ class UCIcURLRaces {
 			return false;
 
 		if ($_POST['related_race_id']) :
-			// update
+			// update if we have races, other wise remove //
+			if (isset($_POST['races']) && !empty($_POST['races'])) :
+				$data=array(
+					'race_ids' => implode(',', $_POST['races']).','.$_POST['race_id'] // get our ids and append the current race id
+				);
+
+				$wpdb->update($wpdb->ucicurl_related_races, $data, array('id' => $_POST['related_race_id']));
+			else :
+				$wpdb->delete($wpdb->ucicurl_related_races, array('id' => $_POST['related_race_id']));
+			endif;
+
 		else :
 			$data=array(
 				'race_ids' => implode(',', $_POST['races']).','.$_POST['race_id'] // get our ids and append the current race id
