@@ -251,10 +251,15 @@ class UCIcURLRaces {
 	public function get_related_race_id($race_id=0) {
 		global $wpdb;
 
-		$id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_related_races} WHERE race_ids LIKE '%{$race_id}%'");
+		$related_db=$wpdb->get_results("SELECT * FROM {$wpdb->ucicurl_related_races} WHERE race_ids LIKE '%{$race_id}%'");
 
-		if ($id)
-			return $id;
+		foreach ($related_db as $arr) :
+			$ids=explode(',', $arr->race_ids);
+
+			if (in_array($race_id, $ids))
+				return $arr->id;
+
+		endforeach;
 
 		return 0;
 	}
@@ -324,6 +329,8 @@ class UCIcURLRaces {
 
 			$wpdb->insert($wpdb->ucicurl_related_races, $data);
 		endif;
+
+		echo '<div class="updated">Related Races Updated!</div>';
 	}
 
 }
