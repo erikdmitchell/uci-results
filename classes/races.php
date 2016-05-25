@@ -200,6 +200,17 @@ class UCIcURLRaces {
 		return $related_races;
 	}
 
+	public function get_related_race_id($race_id=0) {
+		global $wpdb;
+
+		$id=$wpdb->get_col("SELECT id FROM {$wpdb->ucicurl_related_races} WHERE race_ids LIKE '%{$race_id}%'");
+
+		if ($id)
+			return $id;
+
+		return 0;
+	}
+
 	public function ajax_search_related_races() {
 		global $wpdb;
 
@@ -213,7 +224,7 @@ class UCIcURLRaces {
 				continue; // skip if current race
 
 			$html.='<tr>';
-				$html.='<th scope="row" class="check-column"><input id="cb-select-'.$race->ID.'" type="checkbox" name="race[]" value="'.$race->ID.'"></th>';
+				$html.='<th scope="row" class="check-column"><input id="cb-select-'.$race->id.'" type="checkbox" name="races[]" value="'.$race->id.'"></th>';
 				$html.='<td class="race-date">'.date(get_option('date_format'), strtotime($race->date)).'</td>';
 				$html.='<td class="race-name">'.$race->event.'</td>';
 				$html.='<td class="race-nat">'.$race->nat.'</td>';
@@ -228,7 +239,20 @@ class UCIcURLRaces {
 	}
 
 	public function add_related_races() {
+		global $wpdb;
 
+		if (!isset($_POST['uci_curl']) || !wp_verify_nonce($_POST['uci_curl'], 'add_related_races'))
+			return false;
+
+		if ($_POST['related_race_id']) :
+			// update
+		else :
+			$data=array(
+				'race_ids' => implode(',', $_POST['races']).','.$_POST['race_id'] // get our ids and append the current race id
+			);
+
+			$wpdb->insert($wpdb->ucicurl_related_races, $data);
+		endif;
 	}
 
 }

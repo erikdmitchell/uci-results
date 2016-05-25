@@ -3,6 +3,7 @@ global $ucicurl_races;
 
 $race=$ucicurl_races->get_race($_GET['race_id']);
 $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
+$related_race_id=$ucicurl_races->get_related_race_id($_GET['race_id']);
 ?>
 
 <h2>Add Related Race</h2>
@@ -22,6 +23,8 @@ $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 
 		<form name="add-races" method="post" action="">
 			<?php wp_nonce_field('add_related_races', 'uci_curl'); ?>
+			<input type="hidden" id="race_id" name="race_id" value="<?php echo $_GET['race_id']; ?>">
+			<input type="hidden" id="related_race_id" name="related_race_id" value="<?php echo $related_race_id; ?>">
 
 			<table class="wp-list-table widefat fixed striped pages">
 				<thead>
@@ -36,6 +39,7 @@ $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 				</thead>
 				<tbody id="related-races-search-results"></tbody>
 			</table>
+
 			<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Add Races"></p>
 		</form>
 
