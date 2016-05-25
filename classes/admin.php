@@ -84,7 +84,9 @@ class UCIcURLAdmin {
 
 			switch ($active_tab) :
 				case 'races':
-					if (isset($_GET['race_id'])) :
+					if (isset($_GET['race_id']) && isset($_GET['add_related_race'])) :
+						$html.=ucicurl_get_admin_page('add-related-race');
+					elseif (isset($_GET['race_id'])) :
 						$html.=ucicurl_get_admin_page('single-race');
 					else :
 						$html.=ucicurl_get_admin_page('races');

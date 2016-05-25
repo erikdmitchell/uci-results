@@ -2,6 +2,7 @@
 global $ucicurl_races;
 
 $race=$ucicurl_races->get_race($_GET['race_id']);
+$related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 ?>
 
 <h2><?php echo $race->event; ?></h2>
@@ -34,6 +35,31 @@ $race=$ucicurl_races->get_race($_GET['race_id']);
 				<td class="rider-result"><?php echo $result->result; ?></td>
 				<td class="rider-par"><?php echo $result->par; ?></td>
 				<td class="rider-pcr"><?php echo $result->pcr; ?></td>
+			</tr>
+		<?php endforeach; ?>
+	</tbody>
+</table>
+
+<h2>Related Races <a href="<?php echo admin_url('admin.php?page=uci-curl&tab=races&race_id='.$_GET['race_id'].'&add_related_race=yes'); ?>" id="add-related-race" class="page-title-action">Add Related Race</a></h2>
+
+<table class="wp-list-table widefat fixed striped pages related-races">
+	<thead>
+		<tr>
+			<th scope="col" class="race-date">Date</th>
+			<th scope="col" class="race-name">Event</th>
+			<th scope="col" class="race-nat">Nat.</th>
+			<th scope="col" class="race-class">Class</th>
+			<th scope="col" class="race-season">Season</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php foreach ($related_races as $race) : ?>
+			<tr>
+				<td class="race-date">Date</td>
+				<td class="race-name">Event</td>
+				<td class="race-nat">Nat.</td>
+				<td class="race-class">Class</td>
+				<td class="race-season">Season</td>
 			</tr>
 		<?php endforeach; ?>
 	</tbody>

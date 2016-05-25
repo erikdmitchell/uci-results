@@ -98,4 +98,29 @@ jQuery(document).ready(function($) {
 		});
 	});
 
+	/**
+	 * related races ajax search
+	 */
+	$("#search-related-races").live("keyup", function(e) {
+		// Set Search String
+		var search_string = $(this).val();
+
+	  // Do Search
+	  if (search_string!=='' && search_string.length>=3) {
+			$.ajax({
+				type: 'post',
+				url: ajaxurl,
+				data: {
+					action : 'search_related_races',
+					query : search_string
+				},
+				success: function(response){
+console.log(response);
+				}
+			});
+	  }
+
+	  return false;
+	});
+
 });

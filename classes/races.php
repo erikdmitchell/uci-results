@@ -15,7 +15,7 @@ class UCIcURLRaces {
 	 * @return void
 	 */
 	public function __construct() {
-
+		add_action('wp_ajax_search_related_races', array($this, 'ajax_search_related_races'));
 	}
 
 	/**
@@ -127,6 +127,12 @@ class UCIcURLRaces {
 		return $race;
 	}
 
+	/**
+	 * admin_pagination function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function admin_pagination() {
 		$pagination=new UCIcURLPagination($this->admin_pagination['total'], $this->admin_pagination['limit'], admin_url('admin.php?page=uci-curl&tab=races'));
 
@@ -152,7 +158,7 @@ class UCIcURLRaces {
 	public function seasons() {
 		global $wpdb;
 
-		$seasons=$wpdb->get_col("SELECT season FROM $wpdb->ucicurl_races GROUP BY season");
+		$seasons=$wpdb->get_col("SELECT season FROM {$wpdb->ucicurl_races} GROUP BY season");
 
 		return $seasons;
 	}
@@ -166,7 +172,7 @@ class UCIcURLRaces {
 	public function classes() {
 		global $wpdb;
 
-		$classes=$wpdb->get_col("SELECT class FROM $wpdb->ucicurl_races GROUP BY class");
+		$classes=$wpdb->get_col("SELECT class FROM {$wpdb->ucicurl_races} GROUP BY class");
 
 		return $classes;
 	}
@@ -180,9 +186,23 @@ class UCIcURLRaces {
 	public function nats() {
 		global $wpdb;
 
-		$countries=$wpdb->get_col("SELECT nat FROM $wpdb->ucicurl_races GROUP BY nat ORDER BY nat");
+		$countries=$wpdb->get_col("SELECT nat FROM {$wpdb->ucicurl_races} GROUP BY nat ORDER BY nat");
 
 		return $countries;
+	}
+
+	public function get_related_races($race_id=0) {
+		global $wpdb;
+
+		$related_races=$wpdb->get_col("SELECT race_ids FROM {$wpdb->ucicurl_related_races} WHERE id={$race_id}");
+
+		return $related_races;
+	}
+
+	public function ajax_search_related_races() {
+print_r($_POST);
+
+		wp_die();
 	}
 
 }
