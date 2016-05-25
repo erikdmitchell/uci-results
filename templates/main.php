@@ -2,8 +2,7 @@
 global $ucicurl_riders, $ucicurl_races;
 
 $riders=$ucicurl_riders->get_rider_rankings(array(
-	'per_page' => 10,
-	'season' => '2015/2016'
+	'per_page' => 10
 ));
 $races=$ucicurl_races->get_races(array(
 	'per_page' => 10
@@ -24,7 +23,7 @@ $races=$ucicurl_races->get_races(array(
 
 			<?php foreach ($riders as $rider) : ?>
 				<div class="row">
-					<div class="rank"></div>
+					<div class="rank"><?php echo $rider->rank; ?></div>
 					<div class="rider"><a href=""><?php echo $rider->name; ?></a></div>
 					<div class="nat"><a href=""><?php echo ucicurl_get_country_flag($rider->nat); ?></a></div>
 					<div class="points"><?php echo $rider->points; ?></div>
@@ -59,3 +58,12 @@ $races=$ucicurl_races->get_races(array(
 		</div>
 	</div>
 </div>
+
+<?php
+global $wpdb;
+
+$sql="
+	SELECT
+		*
+";
+?>
