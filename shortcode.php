@@ -11,6 +11,13 @@ function ucicurl_scripts_styles() {
 }
 add_action('wp_enqueue_scripts', 'ucicurl_scripts_styles');
 
+/**
+ * ucicurl_landing function.
+ *
+ * @access public
+ * @param mixed $atts
+ * @return void
+ */
 function ucicurl_landing($atts) {
 	$atts = shortcode_atts( array(
 
