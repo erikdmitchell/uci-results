@@ -65,6 +65,7 @@ $races=$ucicurl_races->races();
 			<th scope="col" class="race-name">Event</th>
 			<th scope="col" class="race-nat">Nat.</th>
 			<th scope="col" class="race-class">Class</th>
+			<th scope="col" class="race-season">Season</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -74,6 +75,7 @@ $races=$ucicurl_races->races();
 				<td class="race-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=races&race_id='.$race->id); ?>"><?php echo $race->event; ?></a></td>
 				<td class="race-nat"><?php echo $race->nat; ?></td>
 				<td class="race-class"><?php echo $race->class; ?></td>
+				<td class="race-season"><?php echo $race->season; ?></td>
 			</tr>
 		<?php endforeach; ?>
 	</tbody>
