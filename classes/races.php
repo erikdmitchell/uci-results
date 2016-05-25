@@ -223,6 +223,25 @@ class UCIcURLRaces {
 	}
 
 	/**
+	 * get_related_races_ids function.
+	 *
+	 * @access public
+	 * @param int $race_id (default: 0)
+	 * @return void
+	 */
+	public function get_related_races_ids($race_id=0) {
+		global $wpdb;
+
+		$related_race_id=$this->get_related_race_id($race_id);
+		$related_races_db=$wpdb->get_var("SELECT race_ids FROM {$wpdb->ucicurl_related_races} WHERE id={$related_race_id}");
+
+		if (!$related_races_db)
+			return false;
+
+		return explode(',', $related_races_db);
+	}
+
+	/**
 	 * get_related_race_id function.
 	 *
 	 * @access public
@@ -252,11 +271,12 @@ class UCIcURLRaces {
 		$html=null;
 		$query=$_POST['query'];
 		$races=$wpdb->get_results("SELECT * FROM {$wpdb->ucicurl_races} WHERE event LIKE '%{$query}%'");
+		$related_races=$this->get_related_races_ids($_POST['race_id']);
 
 		// build out html //
 		foreach ($races as $race) :
-			if ($race->id==$_POST['race_id'])
-				continue; // skip if current race
+			if ($race->id==$_POST['race_id'] || in_array($race->id, $related_races))
+				continue; // skip if current race or already linked
 
 			$html.='<tr>';
 				$html.='<th scope="row" class="check-column"><input id="cb-select-'.$race->id.'" type="checkbox" name="races[]" value="'.$race->id.'"></th>';
