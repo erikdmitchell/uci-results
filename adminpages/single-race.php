@@ -55,11 +55,11 @@ $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 	<tbody>
 		<?php foreach ($related_races as $race) : ?>
 			<tr>
-				<td class="race-date">Date</td>
-				<td class="race-name">Event</td>
-				<td class="race-nat">Nat.</td>
-				<td class="race-class">Class</td>
-				<td class="race-season">Season</td>
+				<td class="race-date"><?php echo date(get_option('date_format'), strtotime($race->date)); ?></td>
+				<td class="race-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=races&race_id='.$race->id); ?>"><?php echo $race->event; ?></a></td>
+				<td class="race-nat"><?php echo $race->nat; ?></td>
+				<td class="race-class"><?php echo $race->class; ?></td>
+				<td class="race-season"><?php echo $race->season; ?></td>
 			</tr>
 		<?php endforeach; ?>
 	</tbody>
