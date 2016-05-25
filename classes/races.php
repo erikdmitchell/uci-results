@@ -33,7 +33,7 @@ class UCIcURLRaces {
 		$where=array();
 		$paged=isset($_GET['pagenum']) ? absint($_GET['pagenum']) : 1;
 		$default_args=array(
-			'pagination' => false,
+			//'pagination' => false,
 			'per_page' => 30,
 			'order_by' => 'date',
 			'order' => 'DESC',
@@ -43,7 +43,7 @@ class UCIcURLRaces {
 			'start_date' => false,
 			'end_date' => false
 		);
-		$args=array_merge($default_args, $args);
+		$args=wp_parse_args($args, $default_args);
 
 		// check filters //
 		if (isset($_POST['ucicurl_admin']) && wp_verify_nonce($_POST['ucicurl_admin'], 'filter_races'))
@@ -55,7 +55,7 @@ class UCIcURLRaces {
 
 		extract($args);
 
-		if ($pagination) :
+		//if ($pagination) :
 			if ($paged==0) :
 				$start=0;
 			else :
@@ -63,7 +63,7 @@ class UCIcURLRaces {
 			endif;
 			$end=$per_page;
 			$limit="LIMIT $start,$end";
-		endif;
+		//endif;
 
 		// check class //
 		if ($class)
