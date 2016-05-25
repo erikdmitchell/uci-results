@@ -87,6 +87,7 @@ class UCIcURLRiders {
 		// for pagination //
 		$this->admin_pagination['limit']=$args['per_page'];
 		$this->admin_pagination['total']=$wpdb->get_var("SELECT COUNT(*) FROM $wpdb->ucicurl_riders $where");
+		$this->admin_pagination['url']=admin_url('admin.php?page=uci-curl&tab=riders');
 
 		return $riders;
 	}
@@ -106,7 +107,7 @@ class UCIcURLRiders {
 		$where=array();
 		$paged=isset($_GET['pagenum']) ? absint($_GET['pagenum']) : 1;
 		$default_args=array(
-			'per_page' => 10,
+			'per_page' => 25,
 			'order_by' => 'points',
 			'order' => 'DESC',
 			'name' => false,
@@ -165,6 +166,24 @@ class UCIcURLRiders {
 
 		$riders=$wpdb->get_results($sql);
 
+		// for pagination //
+		$count_sql="
+			SELECT
+				riders.name
+			FROM {$wpdb->ucicurl_riders} AS riders
+			LEFT JOIN {$wpdb->ucicurl_results} AS results
+			ON riders.id=results.rider_id
+			LEFT JOIN {$wpdb->ucicurl_races} AS races
+			ON results.race_id=races.id
+			{$where}
+			GROUP BY riders.name
+		";
+		$total_riders=$wpdb->get_col($count_sql);
+
+		$this->admin_pagination['limit']=$args['per_page'];
+		$this->admin_pagination['total']=count($total_riders);
+				$this->admin_pagination['url']=admin_url('admin.php?page=uci-curl&tab=rider-rankings');
+
 		return $riders;
 	}
 
@@ -198,7 +217,7 @@ class UCIcURLRiders {
 	 * @return void
 	 */
 	public function admin_pagination() {
-		$pagination=new UCIcURLPagination($this->admin_pagination['total'], $this->admin_pagination['limit'], admin_url('admin.php?page=uci-curl&tab=riders'));
+		$pagination=new UCIcURLPagination($this->admin_pagination['total'], $this->admin_pagination['limit'], $this->admin_pagination['url']);
 
 		echo $pagination->get_pagination();
 	}
