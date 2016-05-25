@@ -607,10 +607,7 @@ class UCIcURLAdmin {
 			return false;
 
 		$code=$name.$date; // combine name and date
-		$code=str_replace(' ','',$code); // remove spaces
-		$code=str_replace('"','',$code); // remove double quotes
-		$code=str_replace("'",'',$code); // remove single quotes
-		$code=strtolower($code); // make lowercase
+		$code=sanitize_title_with_dashes($code); // https://codex.wordpress.org/Function_Reference/sanitize_title_with_dashes
 
 		return $code;
 	}
