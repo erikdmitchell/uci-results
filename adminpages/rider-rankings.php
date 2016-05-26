@@ -15,7 +15,7 @@ $rankings=$ucicurl_riders->get_rider_rankings(array(
 ?>
 
 <div class="ucicurl-rider-rankings">
-	<h2>Rider Rankings (<?php echo $_season; ?>)</h2>
+	<h2>Rider Rankings <span class="ucicurl-admin-total">(<?php echo $ucicurl_riders->admin_pagination['total']; ?>)</span></h2>
 
 	<div class="tablenav top">
 		<div class="pagination">
@@ -25,8 +25,8 @@ $rankings=$ucicurl_riders->get_rider_rankings(array(
 		<div class="alignright actions">
 			<form name="races-search" method="get" action="">
 				<input type="hidden" name="page" value="uci-curl">
-				<input type="hidden" name="tab" value="races">
-				<input id="race-search" name="search" type="text" value="<?php echo $search; ?>" />
+				<input type="hidden" name="tab" value="rider-rankings">
+				<input id="race-search" name="search" type="text" value="<?php echo $search; ?> NO WORK" />
 				<input type="submit" id="search-submit" class="button action" value="Search">
 			</form>
 		</div>

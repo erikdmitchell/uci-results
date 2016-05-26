@@ -130,6 +130,10 @@ class UCIcURLRiders {
 			$limit="LIMIT $start,$end";
 		endif;
 
+		// check search //
+		if (isset($_GET['search']) && $_GET['search']!='')
+			$where[]="event LIKE '%{$_GET['search']}%'";
+
 		// set name //
 		if ($name)
 			$where[]="riders.name='{$name}'";
