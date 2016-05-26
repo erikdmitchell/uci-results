@@ -71,7 +71,7 @@ jQuery(document).ready(function($) {
 			$('#get-race-data').html('');
 
 			var races=$.parseJSON(response);
-			var counter=1;
+			var counter=0;
 
 			$('#get-race-data').append('<div id="counter"><span class="ctr">'+counter+'</span> out of '+races.length+' proccessed.');
 
@@ -84,15 +84,18 @@ jQuery(document).ready(function($) {
 				};
 
 				$.post(ajaxurl,data,function(response) {
+					counter++;
+
 					$('#get-race-data').append(response);
 					$('#get-race-data').find('#counter span.ctr').text(counter);
 
 					//$modal.hide();
 					// after we are done races //
 					if (counter>=races.length) {
+						$('#get-race-data').find('#counter span.ctr').text(counter);
+
 						return false;
 					}
-					counter++;
 				});
 			}
 		});
