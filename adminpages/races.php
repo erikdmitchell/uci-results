@@ -1,11 +1,15 @@
 <?php
 global $ucicurl_races;
 
-$s_season=isset($_POST['season']) ? $_POST['season'] : '';
-$s_class=isset($_POST['class']) ? $_POST['class'] : '';
-$s_nat=isset($_POST['nat']) ? $_POST['nat'] : '';
+$s_season=isset($_GET['season']) ? $_GET['season'] : '';
+$s_class=isset($_GET['class']) ? $_GET['class'] : '';
+$s_nat=isset($_GET['nat']) ? $_GET['nat'] : '';
 
-$races=$ucicurl_races->races();
+$races=$ucicurl_races->races(array(
+	'class' => $s_class,
+	'season' => $s_season,
+	'nat' => $s_nat,
+));
 ?>
 
 <h2>Races <span class="ucicurl-admin-total">(<?php echo $ucicurl_races->admin_pagination['total']; ?>)</span></h2>
@@ -24,8 +28,9 @@ $races=$ucicurl_races->races();
 		</form>
 	</div>
 
-	<form name="races-filter" method="post" action="">
-		<?php wp_nonce_field('filter_races', 'ucicurl_admin'); ?>
+	<form name="races-filter" method="get" action="">
+		<input type="hidden" name="page" value="uci-curl">
+		<input type="hidden" name="tab" value="races">
 
 		<div class="alignleft actions">
 			<select name="season" class="season">
