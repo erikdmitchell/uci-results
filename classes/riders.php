@@ -144,7 +144,7 @@ class UCIcURLRiders {
 
 		// set week //
 		if ($week)
-			$where[]="rankings.week='{$week}'";
+			$where[]="rankings.week={$week}";
 
 		// run our where //
 		if (!empty($where)) :
@@ -153,7 +153,7 @@ class UCIcURLRiders {
 			$where='';
 		endif;
 
-		$sql="
+		echo $sql="
 			SELECT
 				*
 			FROM {$wpdb->ucicurl_rider_rankings} AS rankings

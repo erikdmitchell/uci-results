@@ -127,7 +127,15 @@ class CrossSeasons {
 		return $races;
 	}
 
-	public function get_week_from_date($date=false,$season=false) {
+	/**
+	 * get_week_from_date function.
+	 *
+	 * @access public
+	 * @param bool $date (default: false)
+	 * @param bool $season (default: false)
+	 * @return void
+	 */
+	public function get_week_from_date($date=false, $season=false) {
 		if (!$date || !$season)
 			return false;
 

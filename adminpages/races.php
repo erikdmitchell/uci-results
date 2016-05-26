@@ -4,6 +4,7 @@ global $ucicurl_races;
 $s_season=isset($_GET['season']) ? $_GET['season'] : '';
 $s_class=isset($_GET['class']) ? $_GET['class'] : '';
 $s_nat=isset($_GET['nat']) ? $_GET['nat'] : '';
+$search=isset($_GET['search']) ? $_GET['search'] : '';
 
 $races=$ucicurl_races->races(array(
 	'class' => $s_class,
@@ -23,7 +24,7 @@ $races=$ucicurl_races->races(array(
 		<form name="races-search" method="get" action="">
 			<input type="hidden" name="page" value="uci-curl">
 			<input type="hidden" name="tab" value="races">
-			<input id="race-search" name="search" type="text" />
+			<input id="race-search" name="search" type="text" value="<?php echo $search; ?>" />
 			<input type="submit" id="search-submit" class="button action" value="Search">
 		</form>
 	</div>

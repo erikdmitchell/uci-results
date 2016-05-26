@@ -332,6 +332,20 @@ class UCIcURLRaces {
 		echo '<div class="updated">Related Races Updated!</div>';
 	}
 
+	/**
+	 * weeks function.
+	 *
+	 * @access public
+	 * @param string $season (default: '2015/2016')
+	 * @return void
+	 */
+	public function weeks($season='2015/2016') {
+		global $wpdb;
+
+		$weeks=$wpdb->get_col("SELECT week FROM {$wpdb->ucicurl_rider_rankings} WHERE season='{$season}' GROUP BY week ORDER BY week ASC");
+
+		return $weeks;
+	}
 }
 
 $ucicurl_races=new UCIcURLRaces();
