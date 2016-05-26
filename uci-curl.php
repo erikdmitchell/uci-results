@@ -12,6 +12,7 @@
 define('UCICURL_PATH', plugin_dir_path(__FILE__));
 define('UCICURL_URL', plugin_dir_url(__FILE__));
 
+include_once(UCICURL_PATH.'lib/log.php'); // our log stuff
 include_once(UCICURL_PATH.'database.php'); // sets up our db tables
 include_once(UCICURL_PATH.'functions.php'); // all our outlying functions
 include_once(UCICURL_PATH.'classes/admin.php'); // our admin panel and curl functions
