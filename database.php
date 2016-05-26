@@ -1,7 +1,7 @@
 <?php
 global $ucicurl_db_version;
 
-$ucicurl_db_version='0.1.1';
+$ucicurl_db_version='0.1.2';
 
 function ucicurl_set_db_tables() {
 	global $wpdb;
@@ -59,6 +59,7 @@ function ucicurl_db_install() {
 			rider_id bigint(20) NOT NULL,
 			PRIMARY KEY (`id`)
 		) $charset;
+		ALTER DATABASE {$wpdb->ucicurl_results} CHARACTER SET utf8;
 	";
 
 	$sql_riders="
@@ -147,6 +148,7 @@ function ucicurl_db_update() {
 				rider_id bigint(20) NOT NULL,
 				PRIMARY KEY (`id`)
 			);
+			ALTER DATABASE {$wpdb->ucicurl_results} CHARACTER SET utf8;
 		";
 
 		$sql_riders="
