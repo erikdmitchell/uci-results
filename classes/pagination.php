@@ -18,16 +18,15 @@ class UCIcURLPagination {
 	 * @access public
 	 * @param int $total (default: 0)
 	 * @param int $limit (default: 15)
-	 * @param string $base_url (default: '')
 	 * @return void
 	 */
-	public function __construct($total=0, $limit=15, $base_url='') {
+	public function __construct($total=0, $limit=15) {
 		$this->pagenum=isset($_GET['pagenum']) ? absint($_GET['pagenum']) : 1;
 		$this->limit=$limit;
 		$this->offset=($this->pagenum-1)*$limit;
 		$this->total=$total;
 		$this->num_of_pages=ceil($this->total/$this->limit);
-		$this->base_url=$base_url;
+		$this->base_url=get_current_admin_page_url();
 	}
 
 	/**

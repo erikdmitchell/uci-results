@@ -123,4 +123,47 @@ function curl_exec_utf8($ch) {
 
   return $data;
 }
+
+
+/**
+* Build the entire current page URL (incl query strings) and output it
+* Useful for social media plugins and other times you need the full page URL
+* Also can be used outside The Loop, unlike the_permalink
+*
+* @returns the URL in PHP (so echo it if it must be output in the template)
+* Also see the_current_page_url() syntax that echoes it
+*/
+if ( ! function_exists( 'get_current_page_url' ) ) {
+	function get_current_page_url() {
+	  global $wp;
+	  return add_query_arg( $_SERVER['QUERY_STRING'], '', home_url( $wp->request ) );
+	}
+}
+
+/*
+* Shorthand for echo get_current_page_url();
+* @returns echo'd string
+*/
+if ( ! function_exists( 'the_current_page_url' ) ) {
+	function the_current_page_url() {
+	  echo get_current_page_url();
+	}
+}
+
+if ( ! function_exists( 'get_current_admin_page_url' ) ) {
+	function get_current_admin_page_url() {
+	  global $wp;
+	  return add_query_arg( $_SERVER['QUERY_STRING'], '', admin_url( $wp->request ) );
+	}
+}
+
+/*
+* Shorthand for echo the_current_admin_page_url();
+* @returns echo'd string
+*/
+if ( ! function_exists( 'the_current_admin_page_url' ) ) {
+	function the_current_admin_page_url() {
+	  echo get_current_admin_page_url();
+	}
+}
 ?>
