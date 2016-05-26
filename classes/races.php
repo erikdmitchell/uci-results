@@ -33,7 +33,6 @@ class UCIcURLRaces {
 		$where=array();
 		$paged=isset($_GET['pagenum']) ? absint($_GET['pagenum']) : 1;
 		$default_args=array(
-			//'pagination' => false,
 			'per_page' => 30,
 			'order_by' => 'date',
 			'order' => 'DESC',
@@ -55,15 +54,14 @@ class UCIcURLRaces {
 
 		extract($args);
 
-		//if ($pagination) :
-			if ($paged==0) :
-				$start=0;
-			else :
-				$start=$per_page*($paged-1);
-			endif;
-			$end=$per_page;
-			$limit="LIMIT $start,$end";
-		//endif;
+		// setup limit //
+		if ($paged==0) :
+			$start=0;
+		else :
+			$start=$per_page*($paged-1);
+		endif;
+		$end=$per_page;
+		$limit="LIMIT $start,$end";
 
 		// check class //
 		if ($class)
@@ -100,7 +98,7 @@ class UCIcURLRaces {
 
 		// for pagination //
 		$this->admin_pagination['limit']=$args['per_page'];
-		$this->admin_pagination['total']=$wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->ucicurl_races} {$where}");
+		$this->admin_pagination['total']=$wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->ucicurl_races} AS races	{$where} ORDER BY {$order_by} {$order}");
 
 		// clean up some misc db slashes and formatting //
 		foreach ($races as $race) :
@@ -135,7 +133,7 @@ class UCIcURLRaces {
 	 * @return void
 	 */
 	public function admin_pagination() {
-		$pagination=new UCIcURLPagination($this->admin_pagination['total'], $this->admin_pagination['limit'], admin_url('admin.php?page=uci-curl&tab=races'));
+		$pagination=new UCIcURLPagination($this->admin_pagination['total'], $this->admin_pagination['limit']);
 
 		echo $pagination->get_pagination();
 	}
@@ -144,10 +142,11 @@ class UCIcURLRaces {
 	 * races function.
 	 *
 	 * @access public
+	 * @param array $args (default: array())
 	 * @return void
 	 */
-	public function races() {
-		return $this->get_races();
+	public function races($args=array()) {
+		return $this->get_races($args);
 	}
 
 	/**
