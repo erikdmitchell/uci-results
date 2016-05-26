@@ -492,7 +492,22 @@ class UCIcURLAdmin {
 	public function ajax_update_rider_rankings() {
 print_r($_POST);
 
-		echo 'do this stuff - update rankings';
+/*
+	SELECT * FROM wp_uci_curl_riders; -- gets all riders ADD SEASON
+-- loop --
+SELECT
+	results.race_id,
+	results.par AS points,
+	results.rider_id,
+	races.week
+FROM wp_uci_curl_results AS results
+LEFT JOIN wp_uci_curl_races AS races
+ON results.race_id = races.id
+WHERE races.season = '2015/2016'
+AND rider_id=1; -- gets riders races
+	*/
+		// update rider rankings
+		// then update rider rankings rank
 		wp_die();
 	}
 
