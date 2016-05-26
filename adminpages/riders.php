@@ -1,11 +1,13 @@
 <?php
 global $ucicurl_riders;
 
-$s_season=isset($_POST['season']) ? $_POST['season'] : '';
-$s_class=isset($_POST['class']) ? $_POST['class'] : '';
-$s_nat=isset($_POST['nat']) ? $_POST['nat'] : '';
+//$s_season=isset($_GET['season']) ? $_GET['season'] : '';
+$search=isset($_GET['search']) ? $_GET['search'] : '';
+$nat=isset($_GET['nat']) ? $_GET['nat'] : '';
 
-$riders=$ucicurl_riders->riders();
+$riders=$ucicurl_riders->riders(array(
+	'nat' => $nat,
+));
 ?>
 
 <h2>Riders <span class="ucicurl-admin-total">(<?php echo $ucicurl_riders->admin_pagination['total']; ?>)</span></h2>
@@ -19,19 +21,20 @@ $riders=$ucicurl_riders->riders();
 		<form name="riders-search" method="get" action="">
 			<input type="hidden" name="page" value="uci-curl">
 			<input type="hidden" name="tab" value="riders">
-			<input id="riders-search" name="search" type="text" />
+			<input id="riders-search" name="search" type="text" value="<?php echo $search; ?>" />
 			<input type="submit" id="search-submit" class="button action" value="Search">
 		</form>
 	</div>
 
-	<form name="riders-filter" method="post" action="">
-		<?php wp_nonce_field('filter_riders', 'ucicurl_admin'); ?>
+	<form name="riders-filter" method="get" action="">
+		<input type="hidden" name="page" value="uci-curl">
+		<input type="hidden" name="tab" value="riders">
 
 		<div class="alignleft actions">
 			<select name="nat" class="nat">
 				<option value="0">-- Select Country --</option>
 				<?php foreach ($ucicurl_riders->nats() as $country) : ?>
-					<option value="<?php echo $country; ?>" <?php selected($s_nat, $country); ?>><?php echo $country; ?></option>
+					<option value="<?php echo $country; ?>" <?php selected($nat, $country); ?>><?php echo $country; ?></option>
 				<?php endforeach; ?>
 			</select>
 		</div>

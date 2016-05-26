@@ -73,7 +73,7 @@ class UCIcURLRiders {
 			$where='';
 		endif;
 
-		$sql="
+		echo $sql="
 			SELECT
 				*
 			FROM $wpdb->ucicurl_riders
@@ -143,7 +143,7 @@ class UCIcURLRiders {
 			$where[]="rankings.season='{$season}'";
 
 		// set week //
-		if ($season)
+		if ($week)
 			$where[]="rankings.week='{$week}'";
 
 		// run our where //
@@ -237,10 +237,11 @@ class UCIcURLRiders {
 	 * riders function.
 	 *
 	 * @access public
+	 * @param array $args (default: array())
 	 * @return void
 	 */
-	public function riders() {
-		return $this->get_riders();
+	public function riders($args=array()) {
+		return $this->get_riders($args);
 	}
 
 	/**
