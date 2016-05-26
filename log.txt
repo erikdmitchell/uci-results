@@ -1,5 +1,5 @@
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 1
     [points] => 80
@@ -7,8 +7,8 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 2
     [points] => 60
@@ -16,8 +16,8 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 3
     [points] => 40
@@ -25,8 +25,8 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 4
     [points] => 30
@@ -34,8 +34,8 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 5
     [points] => 25
@@ -43,8 +43,8 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 6
     [points] => 20
@@ -52,8 +52,8 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 7
     [points] => 17
@@ -61,8 +61,8 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 8
     [points] => 15
@@ -70,8 +70,8 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 9
     [points] => 12
@@ -79,8 +79,8 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 10
     [points] => 10
@@ -88,8 +88,8 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 11
     [points] => 8
@@ -97,8 +97,8 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 12
     [points] => 6
@@ -106,8 +106,8 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 13
     [points] => 4
@@ -115,8 +115,8 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 14
     [points] => 2
@@ -124,8 +124,8 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 15
     [points] => 1
@@ -133,8 +133,8 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 16
     [points] => 0
@@ -142,8 +142,8 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 17
     [points] => 0
@@ -151,8 +151,8 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 18
     [points] => 0
@@ -160,8 +160,9 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 19
     [points] => 0
@@ -169,8 +170,17 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 1
+    [points] => 80
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 20
     [points] => 0
@@ -178,8 +188,17 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 3
+    [points] => 60
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 21
     [points] => 0
@@ -187,8 +206,17 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 2
+    [points] => 40
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 22
     [points] => 0
@@ -196,8 +224,16 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 5
+    [points] => 30
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 23
     [points] => 0
@@ -205,8 +241,18 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 4
+    [points] => 25
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 24
     [points] => 0
@@ -214,8 +260,16 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 6
+    [points] => 20
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 25
     [points] => 0
@@ -223,8 +277,17 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 13
+    [points] => 17
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 26
     [points] => 0
@@ -232,8 +295,17 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 7
+    [points] => 15
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 27
     [points] => 0
@@ -241,8 +313,17 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 8
+    [points] => 12
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 28
     [points] => 0
@@ -250,8 +331,17 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 16
+    [points] => 10
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 29
     [points] => 0
@@ -259,8 +349,17 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 11
+    [points] => 8
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 30
     [points] => 0
@@ -268,8 +367,17 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 12
+    [points] => 6
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 31
     [points] => 0
@@ -277,8 +385,9 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 32
     [points] => 0
@@ -286,8 +395,17 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 18
+    [points] => 4
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 33
     [points] => 0
@@ -295,8 +413,16 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 9
+    [points] => 2
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 34
     [points] => 0
@@ -304,8 +430,18 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 19
+    [points] => 1
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 35
     [points] => 0
@@ -313,8 +449,25 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 29
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 17
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 36
     [points] => 0
@@ -322,17 +475,9 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
-(
-    [rider_id] => 26
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 37
     [points] => 0
@@ -340,8 +485,25 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 20
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 39
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 38
     [points] => 0
@@ -349,17 +511,17 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
-    [rider_id] => 39
+    [rider_id] => 15
     [points] => 0
     [season] => 2015/2016
-    [week] => 2
+    [week] => 1
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 40
     [points] => 0
@@ -367,8 +529,17 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 22
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 41
     [points] => 0
@@ -376,17 +547,17 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 42
     [points] => 0
     [season] => 2015/2016
-    [week] => 2
+    [week] => 1
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 43
     [points] => 0
@@ -394,8 +565,17 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:01] Update Rider Rankings
-[2016/05/26 07:27:01] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 26
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 44
     [points] => 0
@@ -403,135 +583,3743 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
 (
     [rider_id] => 45
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 46
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 23
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 39
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 27
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 47
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 25
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 48
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 43
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 49
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 42
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 37
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 50
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 28
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 45
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 24
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 51
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 35
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 49
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 34
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 36
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 48
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 40
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 33
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 31
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 21
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 50
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 30
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 46
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 41
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 44
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 51
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:31:36] Update Rider Rankings
+[2016/05/26 07:31:36] Array
+(
+    [rider_id] => 32
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 1
     [points] => 80
     [season] => 2015/2016
     [week] => 1
 )
 
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
 (
-    [rider_id] => 46
+    [rider_id] => 2
     [points] => 60
     [season] => 2015/2016
     [week] => 1
 )
 
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
 (
-    [rider_id] => 47
+    [rider_id] => 3
     [points] => 40
     [season] => 2015/2016
     [week] => 1
 )
 
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
 (
-    [rider_id] => 18
-    [points] => 40
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 45
-    [points] => 160
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 48
+    [rider_id] => 4
     [points] => 30
     [season] => 2015/2016
     [week] => 1
 )
 
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
 (
-    [rider_id] => 3
-    [points] => 70
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 47
-    [points] => 100
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 49
+    [rider_id] => 5
     [points] => 25
     [season] => 2015/2016
     [week] => 1
 )
 
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
 (
-    [rider_id] => 8
-    [points] => 35
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 46
-    [points] => 100
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 10
-    [points] => 25
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 50
+    [rider_id] => 6
     [points] => 20
     [season] => 2015/2016
     [week] => 1
 )
 
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
 (
-    [rider_id] => 49
+    [rider_id] => 7
+    [points] => 17
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 8
+    [points] => 15
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 9
+    [points] => 12
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 10
+    [points] => 10
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 11
+    [points] => 8
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 12
+    [points] => 6
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 13
+    [points] => 4
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 14
+    [points] => 2
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 15
+    [points] => 1
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 16
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 17
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 18
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 19
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 20
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 1
+    [points] => 160
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 21
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 3
+    [points] => 100
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 22
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 2
+    [points] => 100
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 23
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 5
     [points] => 55
     [season] => 2015/2016
     [week] => 2
 )
 
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 24
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 4
+    [points] => 55
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 25
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 6
+    [points] => 40
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 26
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 8
+    [points] => 32
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 27
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 9
+    [points] => 27
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 28
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 14
+    [points] => 14
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 29
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 30
+    [points] => 10
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 31
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 11
+    [points] => 16
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 32
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 12
+    [points] => 12
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 33
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 7
+    [points] => 21
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 34
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 35
+    [points] => 2
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 36
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 20
+    [points] => 1
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 37
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 10
+    [points] => 10
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 38
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 17
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 39
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 13
+    [points] => 4
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 40
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 15
+    [points] => 1
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 41
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 18
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 42
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 42
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 43
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 21
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 44
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 25
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 45
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 33
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 46
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 27
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 47
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 48
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 23
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 49
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 26
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 32
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 16
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 44
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 41
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 49
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 40
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 36
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 34
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 37
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 31
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 50
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 39
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 46
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 28
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 47
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 45
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 19
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 51
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 38
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 22
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 43
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 24
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 48
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:35:02] Update Rider Rankings
+[2016/05/26 07:35:02] Array
+(
+    [rider_id] => 29
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 1
+    [points] => 40
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 2
+    [points] => 30
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 3
+    [points] => 20
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 4
+    [points] => 15
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 5
+    [points] => 10
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 6
+    [points] => 8
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 7
+    [points] => 6
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 8
+    [points] => 4
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 9
+    [points] => 2
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 10
+    [points] => 1
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 11
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 12
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 13
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 14
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 15
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 16
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 17
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 18
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 19
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 20
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 21
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 22
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 23
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 24
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 25
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 26
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 27
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 28
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 29
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 30
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 31
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 32
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 33
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 34
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 35
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 36
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 37
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 38
+    [points] => 40
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 5
+    [points] => 40
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 2
+    [points] => 50
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 7
+    [points] => 21
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 4
+    [points] => 25
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 39
+    [points] => 8
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 40
+    [points] => 6
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 11
+    [points] => 4
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 27
+    [points] => 2
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 28
+    [points] => 1
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 18
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 41
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 17
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 42
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 43
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 44
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 30
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 15
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 45
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:35] Update Rider Rankings
+[2016/05/26 07:38:35] Array
+(
+    [rider_id] => 46
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 47
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 48
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 49
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 50
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 26
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 51
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 52
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 53
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 54
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 55
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 56
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 57
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 58
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 59
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 60
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 61
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 62
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 63
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 64
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 32
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 65
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 38
+    [points] => 80
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 66
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 7
+    [points] => 51
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 67
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 2
+    [points] => 70
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 68
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 69
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 11
+    [points] => 19
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 70
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 42
+    [points] => 10
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 71
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 40
+    [points] => 14
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 72
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 17
+    [points] => 6
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 73
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 18
+    [points] => 4
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 74
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 15
+    [points] => 2
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 75
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 47
+    [points] => 1
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 76
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 44
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 77
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 30
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 78
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 79
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 80
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 81
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 41
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 82
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 45
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 83
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 51
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 84
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 28
+    [points] => 1
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 85
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 26
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 87
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 86
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 88
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 50
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 43
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 27
+    [points] => 2
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 66
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 53
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 61
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 46
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 35
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 52
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 48
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 56
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 63
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 55
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 73
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 58
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 64
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 57
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 85
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 67
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 72
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 54
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 68
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 32
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 77
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 65
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 89
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 78
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 76
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 60
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 69
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 84
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 90
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 74
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 86
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 91
+    [points] => 80
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 92
+    [points] => 60
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 93
+    [points] => 40
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 94
+    [points] => 30
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 95
+    [points] => 25
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 96
+    [points] => 20
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:36] Update Rider Rankings
+[2016/05/26 07:38:36] Array
+(
+    [rider_id] => 97
+    [points] => 17
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 98
+    [points] => 15
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 99
+    [points] => 12
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 100
+    [points] => 10
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 101
+    [points] => 8
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 102
+    [points] => 6
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 103
+    [points] => 4
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 104
+    [points] => 2
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 105
+    [points] => 1
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 106
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 107
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 108
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 109
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 110
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 111
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 112
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 113
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 114
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 115
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 116
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 117
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 118
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 119
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 120
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 121
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 122
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 123
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 124
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 125
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 126
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 127
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 128
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 129
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 130
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 131
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 132
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 133
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 134
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 135
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 136
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 137
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 138
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:37] Update Rider Rankings
+[2016/05/26 07:38:37] Array
+(
+    [rider_id] => 139
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 3
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 38
+    [points] => 80
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 107
+    [points] => 60
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 140
+    [points] => 40
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 141
+    [points] => 30
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 142
+    [points] => 25
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 143
+    [points] => 20
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 144
+    [points] => 17
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 110
+    [points] => 15
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 145
+    [points] => 12
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 146
+    [points] => 10
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 147
+    [points] => 8
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 148
+    [points] => 6
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 149
+    [points] => 4
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 150
+    [points] => 2
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 151
+    [points] => 1
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 152
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 153
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 154
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 135
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 88
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 155
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 156
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 157
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 158
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 159
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 160
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 161
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 162
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 163
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 164
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 165
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 166
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 167
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 168
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 85
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 169
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 170
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 171
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 172
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 173
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 174
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 175
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 176
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 177
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 178
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 179
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 180
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 181
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 182
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 183
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:38] Update Rider Rankings
+[2016/05/26 07:38:38] Array
+(
+    [rider_id] => 184
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 38
+    [points] => 80
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 140
+    [points] => 60
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 107
+    [points] => 40
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 142
+    [points] => 30
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 141
+    [points] => 25
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 143
+    [points] => 20
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 149
+    [points] => 17
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 144
+    [points] => 15
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 110
+    [points] => 12
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 152
+    [points] => 10
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 147
+    [points] => 8
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 148
+    [points] => 6
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 154
+    [points] => 4
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 145
+    [points] => 2
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 135
+    [points] => 1
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 163
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 153
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 88
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 177
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 151
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 156
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 180
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 160
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 182
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 157
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 161
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 159
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 185
+    [points] => 80
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 174
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 184
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 5
+    [points] => 70
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 170
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Array
 (
     [rider_id] => 2
     [points] => 70
@@ -539,1897 +4327,296 @@
     [week] => 2
 )
 
-[2016/05/26 07:27:02] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 51
-    [points] => 17
+    [rider_id] => 162
+    [points] => 0
     [season] => 2015/2016
     [week] => 1
 )
 
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 48
-    [points] => 55
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 4
+    [rider_id] => 6
     [points] => 38
     [season] => 2015/2016
     [week] => 2
 )
 
-[2016/05/26 07:27:02] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 52
-    [points] => 15
+    [rider_id] => 158
+    [points] => 0
     [season] => 2015/2016
     [week] => 1
 )
 
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 50
-    [points] => 40
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 11
-    [points] => 14
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 53
-    [points] => 12
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 52
-    [points] => 32
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 9
-    [points] => 16
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 54
-    [points] => 10
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 53
-    [points] => 27
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 6
-    [points] => 22
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 56
-    [points] => 12
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 55
-    [points] => 8
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 5
+    [rider_id] => 10
     [points] => 26
     [season] => 2015/2016
     [week] => 2
 )
 
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 57
-    [points] => 10
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 58
-    [points] => 6
+    [rider_id] => 85
+    [points] => 0
     [season] => 2015/2016
     [week] => 1
 )
 
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 12
-    [points] => 6
+    [rider_id] => 168
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 9
+    [points] => 22
     [season] => 2015/2016
     [week] => 2
 )
 
-[2016/05/26 07:27:02] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 55
+    [rider_id] => 169
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 22
+    [points] => 17
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 179
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 3
+    [points] => 35
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 172
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 8
     [points] => 16
     [season] => 2015/2016
     [week] => 2
 )
 
-[2016/05/26 07:27:02] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 59
-    [points] => 4
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 34
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 58
-    [points] => 12
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 56
-    [points] => 2
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 51
-    [points] => 21
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 17
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 60
-    [points] => 1
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 61
-    [points] => 2
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 16
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 62
+    [rider_id] => 167
     [points] => 0
     [season] => 2015/2016
     [week] => 1
 )
 
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 63
-    [points] => 1
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 64
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 54
-    [points] => 10
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 65
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 14
-    [points] => 2
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 65
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 66
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 22
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 67
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 59
-    [points] => 4
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 24
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 63
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 60
-    [points] => 1
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 19
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 66
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 68
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 33
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 69
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 20
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 70
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 71
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 7
-    [points] => 17
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 68
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 37
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 72
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 73
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 73
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 32
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 74
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 30
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 75
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 76
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 77
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 76
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 71
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 78
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 79
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 75
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 29
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 80
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 81
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 31
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 82
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 62
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 35
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 81
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 83
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 74
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 25
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 84
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 38
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 85
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 86
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 39
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 87
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 88
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 43
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 89
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 87
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 40
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 90
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 85
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 42
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 91
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 89
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 41
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 88
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 82
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 84
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 92
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 70
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 91
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 93
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 94
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 83
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 79
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 95
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 96
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 94
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 96
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 95
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 67
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 44
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 97
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 86
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:27:02] Update Rider Rankings
-[2016/05/26 07:27:02] Array
-(
-    [rider_id] => 90
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:03] Update Rider Rankings
-[2016/05/26 07:27:03] Array
-(
-    [rider_id] => 69
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:03] Update Rider Rankings
-[2016/05/26 07:27:03] Array
-(
-    [rider_id] => 93
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:03] Update Rider Rankings
-[2016/05/26 07:27:03] Array
-(
-    [rider_id] => 72
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:03] Update Rider Rankings
-[2016/05/26 07:27:03] Array
-(
-    [rider_id] => 44
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:27:03] Update Rider Rankings
-[2016/05/26 07:27:03] Array
-(
-    [rider_id] => 80
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 1
-    [points] => 80
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 2
-    [points] => 60
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 3
-    [points] => 40
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
     [rider_id] => 4
-    [points] => 30
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 5
     [points] => 25
     [season] => 2015/2016
-    [week] => 1
+    [week] => 2
 )
 
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 6
-    [points] => 20
+    [rider_id] => 165
+    [points] => 0
     [season] => 2015/2016
     [week] => 1
 )
 
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
     [rider_id] => 7
-    [points] => 17
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 8
-    [points] => 15
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 9
-    [points] => 12
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 10
-    [points] => 10
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 11
-    [points] => 8
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 12
-    [points] => 6
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 13
-    [points] => 4
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 14
-    [points] => 2
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 15
-    [points] => 1
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 16
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 17
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 18
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 19
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 20
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 21
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 22
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 23
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 24
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 25
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 26
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 27
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 28
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 29
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 30
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 31
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 32
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 33
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 34
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 35
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 36
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 37
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 38
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 39
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 40
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 41
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 42
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 43
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 44
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 45
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 46
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 47
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 1
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 1
-    [points] => 160
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 3
-    [points] => 100
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 2
-    [points] => 100
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 5
-    [points] => 55
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 4
-    [points] => 55
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 6
-    [points] => 40
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 8
-    [points] => 32
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 9
-    [points] => 27
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 14
     [points] => 14
     [season] => 2015/2016
     [week] => 2
 )
 
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 48
-    [points] => 10
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 11
-    [points] => 16
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 12
-    [points] => 12
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 7
-    [points] => 21
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 49
-    [points] => 2
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 20
-    [points] => 1
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 10
-    [points] => 10
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 17
+    [rider_id] => 155
     [points] => 0
     [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 11
+    [points] => 6
+    [season] => 2015/2016
     [week] => 2
 )
 
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 13
+    [rider_id] => 181
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 39
     [points] => 4
     [season] => 2015/2016
     [week] => 2
 )
 
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 15
+    [rider_id] => 164
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 16
+    [points] => 2
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 176
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 40
     [points] => 1
     [season] => 2015/2016
     [week] => 2
 )
 
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 18
+    [rider_id] => 173
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 14
     [points] => 0
     [season] => 2015/2016
     [week] => 2
 )
 
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 40
+    [rider_id] => 175
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 13
     [points] => 0
     [season] => 2015/2016
     [week] => 2
 )
 
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 21
+    [rider_id] => 183
     [points] => 0
+    [season] => 2015/2016
+    [week] => 1
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 1
+    [points] => 40
     [season] => 2015/2016
     [week] => 2
 )
 
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 25
+    [rider_id] => 166
     [points] => 0
     [season] => 2015/2016
-    [week] => 2
+    [week] => 1
 )
 
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 32
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 27
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 23
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 26
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 31
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 16
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 42
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 39
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 47
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 38
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 34
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 33
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 35
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 30
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 50
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 37
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 44
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 28
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 45
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
-(
-    [rider_id] => 43
-    [points] => 0
-    [season] => 2015/2016
-    [week] => 2
-)
-
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
+[2016/05/26 07:38:39] Array
 (
     [rider_id] => 19
     [points] => 0
@@ -2437,35 +4624,80 @@
     [week] => 2
 )
 
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 51
+    [rider_id] => 21
     [points] => 0
     [season] => 2015/2016
     [week] => 2
 )
 
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 36
+    [rider_id] => 186
     [points] => 0
     [season] => 2015/2016
     [week] => 2
 )
 
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 22
+    [rider_id] => 17
     [points] => 0
     [season] => 2015/2016
     [week] => 2
 )
 
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 42
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 18
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 31
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 187
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 188
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
     [rider_id] => 41
     [points] => 0
@@ -2473,8 +4705,35 @@
     [week] => 2
 )
 
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 28
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 25
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 29
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
     [rider_id] => 24
     [points] => 0
@@ -2482,19 +4741,118 @@
     [week] => 2
 )
 
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 46
+    [rider_id] => 20
     [points] => 0
     [season] => 2015/2016
     [week] => 2
 )
 
-[2016/05/26 07:30:17] Update Rider Rankings
-[2016/05/26 07:30:17] Array
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
 (
-    [rider_id] => 29
+    [rider_id] => 12
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 30
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 55
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 187
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 23
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 32
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 33
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 35
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 37
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 36
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 34
+    [points] => 0
+    [season] => 2015/2016
+    [week] => 2
+)
+
+[2016/05/26 07:38:39] Update Rider Rankings
+[2016/05/26 07:38:39] Array
+(
+    [rider_id] => 183
     [points] => 0
     [season] => 2015/2016
     [week] => 2

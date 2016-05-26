@@ -23,6 +23,7 @@ class UCIcURLAdmin {
 		add_action('wp_ajax_get_race_data_non_db',array($this,'ajax_get_race_data_non_db'));
 		add_action('wp_ajax_prepare_add_races_to_db',array($this,'ajax_prepare_add_races_to_db'));
 		add_action('wp_ajax_add_race_to_db', array($this, 'ajax_add_race_to_db'));
+		add_action('wp_ajax_update_rider_rankings', array($this, 'ajax_update_rider_rankings'));
 
 		$this->setup_config($config);
 	}
@@ -485,10 +486,14 @@ class UCIcURLAdmin {
 
 			$wpdb->insert($wpdb->ucicurl_results, $insert);
 
-			$this->update_rider_rankings($rider_id, $result->par, $race->season, $race->week);
 		endforeach;
+	}
 
-		$this->update_rider_rankings_rank($race->season, $race->week);
+	public function ajax_update_rider_rankings() {
+print_r($_POST);
+
+		echo 'do this stuff - update rankings';
+		wp_die();
 	}
 
 	/**
@@ -504,6 +509,8 @@ class UCIcURLAdmin {
 	public function update_rider_rankings($rider_id=0, $points=0, $season='', $week=0) {
 		global $wpdb;
 
+		$prev_points=0;
+		$db_points=0;
 		$ranking_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week={$week}");
 
 		if ($ranking_id) :
@@ -537,8 +544,9 @@ class UCIcURLAdmin {
 			'week' => $week,
 		);
 
-		_log('Update Rider Rankings');
-		_log($log_data);
+echo '<pre>';
+print_r($log_data);
+echo '</pre>';
 	}
 
 	/**

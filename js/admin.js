@@ -92,7 +92,11 @@ jQuery(document).ready(function($) {
 					//$modal.hide();
 					// after we are done races //
 					if (counter>=races.length) {
-						$('#get-race-data').find('#counter span.ctr').text(counter);
+						$('#get-race-data').find('#counter span.ctr').text(counter); // update counter on screen
+
+						$.post(ajaxurl, {action : 'update_rider_rankings'}, function(response) {
+console.log(response);
+						});
 
 						return false;
 					}
