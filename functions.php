@@ -177,7 +177,7 @@ function ucicurl_create_virtual_page() {
   if ($url_array[0]=='rider') :
 		$args = array(
 			'slug' => 'rider',
-			'title' => ucicurl_slug_to_name($url_array[1]),
+			'title' => ucicurl_rider_slug_to_name($url_array[1]),
 			'content' => "This can be generated content, or static content<br />Whatever you put here will appear on your virtual page."
 		);
 	elseif ($url_array[0]=='race') :
@@ -201,14 +201,18 @@ function ucicurl_create_virtual_page() {
 add_action('init', 'ucicurl_create_virtual_page');
 
 /**
- * ucicurl_slug_to_name function.
+ * ucicurl_rider_slug_to_name function.
  *
  * @access public
  * @param string $slug (default: '')
  * @return void
  */
-function ucicurl_slug_to_name($slug='') {
+function ucicurl_rider_slug_to_name($slug='') {
+	global $wpdb;
 
+	$name=$wpdb->get_var("SELECT name FROM {$wpdb->ucicurl_riders} WHERE slug='{$slug}'");
+
+	return $name;
 }
 
 /**
