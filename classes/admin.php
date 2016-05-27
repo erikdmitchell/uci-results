@@ -537,7 +537,7 @@ class UCIcURLAdmin {
 	 */
 	public function update_rider_rankings($rider_id=0, $points=0, $season='', $week=0) {
 		global $wpdb;
-echo "$rider_id | $points | $season | $week";
+
 		$prev_points=0;
 		$db_points=0;
 		$prev_week=absint($week)-1;
@@ -567,7 +567,7 @@ echo "$rider_id | $points | $season | $week";
 			$wpdb->insert($wpdb->ucicurl_rider_rankings, $data);
 			$ranking_id=$wpdb->insert_id;
 		endif;
-
+/*
 		$log_data=array(
 			'ranking_id' => $ranking_id,
 			'rider_id' => $rider_id,
@@ -575,11 +575,7 @@ echo "$rider_id | $points | $season | $week";
 			'season' => $season,
 			'week' => $week,
 		);
-
-print_r($log_data);
-
-		//_log($log_data);
-
+*/
 	}
 
 	/**
