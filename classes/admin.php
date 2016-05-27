@@ -501,8 +501,10 @@ class UCIcURLAdmin {
 
 		global $wpdb, $ucicurl_races;
 
+		$wpdb->query("TRUNCATE {$wpdb->ucicurl_rider_rankings}"); // clear db
+
 		$season=$_POST['season']; // set season
-		$rider_ids=$wpdb->get_col("SELECT id FROM wp_uci_curl_riders"); // get all rider ids
+		$rider_ids=$wpdb->get_col("SELECT id FROM {$wpdb->ucicurl_riders}"); // get all rider ids
 
 		// loop through riders and get results //
 		foreach ($rider_ids as $rider_id) :
@@ -534,7 +536,6 @@ class UCIcURLAdmin {
 			$this->update_rider_rankings_rank($season, $week);
 		endforeach;
 
-echo 'fin';
 		wp_die();
 	}
 
