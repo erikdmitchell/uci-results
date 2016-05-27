@@ -47,7 +47,7 @@ $races=$ucicurl_races->get_races(array(
 
 			<?php foreach ($races as $race) : ?>
 				<div class="row">
-					<div class="name"><a href=""><?php echo $race->name; ?></a></div>
+					<div class="name"><a href="<?php ucicurl_race_url($race->code); ?>"><?php echo $race->name; ?></a></div>
 					<div class="date"><?php echo $race->date; ?></div>
 					<div class="nat"><?php echo ucicurl_get_country_flag($race->nat); ?></div>
 					<div class="class"><?php echo $race->class; ?></div>

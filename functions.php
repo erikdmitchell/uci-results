@@ -180,19 +180,22 @@ function ucicurl_create_virtual_page() {
 		$args = array(
 			'slug' => 'rider',
 			'title' => ucicurl_rider_slug_to_name($url_array[1]),
-			'content' => ucicurl_get_template('rider', array('rider_id' => ucicurl_get_rider_id($url_array[1])))
+			'content' => ucicurl_get_template('rider', array('rider_id' => ucicurl_get_rider_id($url_array[1]))),
+			'pagename' => $url
 		);
 	elseif ($url_array[0]=='race') :
 		$args = array(
 			'slug' => 'race',
-			'title' => 'Rider Page',
-			'content' => "This can be generated content, or static content<br />Whatever you put here will appear on your virtual page."
+			'title' => ucicurl_race_slug_to_name($url_array[1]),
+			'content' => "This can be generated content, or static content<br />Whatever you put here will appear on your virtual page.",
+			'pagename' => $url
 		);
 	elseif ($url_array[0]=='country') :
 		$args = array(
 			'slug' => 'country',
 			'title' => 'Rider Page',
-			'content' => "This can be generated content, or static content<br />Whatever you put here will appear on your virtual page."
+			'content' => "This can be generated content, or static content<br />Whatever you put here will appear on your virtual page.",
+			'pagename' => $url
 		);
 	endif;
 
@@ -213,6 +216,21 @@ function ucicurl_rider_slug_to_name($slug='') {
 	global $wpdb;
 
 	$name=$wpdb->get_var("SELECT name FROM {$wpdb->ucicurl_riders} WHERE slug='{$slug}'");
+
+	return $name;
+}
+
+/**
+ * ucicurl_race_slug_to_name function.
+ *
+ * @access public
+ * @param string $slug (default: '')
+ * @return void
+ */
+function ucicurl_race_slug_to_name($slug='') {
+	global $wpdb;
+
+	$name=$wpdb->get_var("SELECT event FROM {$wpdb->ucicurl_races} WHERE code='{$slug}'");
 
 	return $name;
 }

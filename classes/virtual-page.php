@@ -11,6 +11,7 @@ class ucicurlVirtualPage {
     private $author = NULL;
     private $date = NULL;
     private $type = NULL;
+    private $pagename = NULL;
 
     public function __construct($args) {
         if (!isset($args['slug']))
@@ -23,6 +24,7 @@ class ucicurlVirtualPage {
         $this->date = isset($args['date']) ? $args['date'] : current_time('mysql');
         $this->dategmt = isset($args['date']) ? $args['date'] : current_time('mysql', 1);
         $this->type = isset($args['type']) ? $args['type'] : 'page';
+        $this->pagename = isset($args['pagename']) ? $args['pagename'] : $args['slug'];
 
         add_filter('the_posts', array($this, 'virtualPage'));
     }
@@ -31,7 +33,7 @@ class ucicurlVirtualPage {
     public function virtualPage($posts) {
       global $wp, $wp_query;
 
-      if (count($posts) == 0 && (strcasecmp($wp->request, $this->slug) == 0 || $wp->query_vars['pagename'] != $this->slug)) {
+      if (count($posts) == 0 && (strcasecmp($wp->request, $this->slug) == 0 || $wp->query_vars['pagename'] == $this->pagename)) {
           //create a fake post intance
           $post = new stdClass;
           // fill properties of $post with everything a page in the database would have
