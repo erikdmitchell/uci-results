@@ -100,8 +100,10 @@ jQuery(document).ready(function($) {
 							season : season
 						};
 
+						$('#get-race-data').append('<div class="note">Calculating rider rankings...</div>');
+
 						$.post(ajaxurl, data, function(response) {
-console.log(response);
+							$('#get-race-data').append('<div class="updated">Rider rankings complete.</div>');
 						});
 
 						return false;
