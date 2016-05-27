@@ -79,7 +79,7 @@ $rankings=$ucicurl_riders->get_rider_rankings(array(
 			<?php foreach ($rankings as $rider) : ?>
 				<tr>
 					<td class="rider-rank"><?php echo $rider->rank; ?></td>
-					<td class="rider-name"><a href=""><?php echo $rider->name; ?></a></td>
+					<td class="rider-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=riders&rider='.urlencode($rider->name)); ?>"><?php echo $rider->name; ?></a></td>
 					<td class="rider-nat"><?php echo $rider->nat; ?></td>
 					<td class="rider-points"><?php echo $rider->points; ?></td>
 				</tr>
