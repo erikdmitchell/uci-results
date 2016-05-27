@@ -143,6 +143,41 @@ function ucicurl_country_url($slug='') {
 }
 
 /**
+ * ucicurl_create_virtual_page function.
+ *
+ * @access public
+ * @return void
+ */
+function ucicurl_create_virtual_page() {
+	$args=array();
+	$url = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+	$url = substr($url, 0, strpos($url, '/')); // reomves everything after the '/' - allowing us to hack in before the rest of the url
+
+  if ($url=='rider') :
+		$args = array(
+			'slug' => 'rider',
+			'title' => 'Rider Page',
+			'content' => "This can be generated content, or static content<br />Whatever you put here will appear on your virtual page."
+		);
+	elseif ($url=='race') :
+			'slug' => 'race',
+			'title' => 'Rider Page',
+			'content' => "This can be generated content, or static content<br />Whatever you put here will appear on your virtual page."
+		);
+	elseif ($url=='country') :
+			'slug' => 'country',
+			'title' => 'Rider Page',
+			'content' => "This can be generated content, or static content<br />Whatever you put here will appear on your virtual page."
+		);
+	endif;
+
+	// generate page if we have args //
+	if (!empty($args))
+		$pg = new ucicurlVirtualPage($args);
+}
+add_action('init', 'ucicurl_create_virtual_page');
+
+/**
 * Build the entire current page URL (incl query strings) and output it
 * Useful for social media plugins and other times you need the full page URL
 * Also can be used outside The Loop, unlike the_permalink

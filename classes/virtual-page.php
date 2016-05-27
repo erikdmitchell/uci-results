@@ -76,18 +76,4 @@ class ucicurlVirtualPage {
       return ($posts);
     }
 }
-
-function ucicurl_create_virtual() {
-	$url = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
-	$url = substr($url, 0, strpos($url, '/')); // reomves everything after the '/' - allowing us to hack in before the rest of the url
-  if ($url == 'rider') :
-		$args = array(
-			'slug' => 'rider',
-			'title' => 'Rider Page',
-			'content' => "This can be generated content, or static content<br />Whatever you put here will appear on your virtual page."
-	);
-	$pg = new ucicurlVirtualPage($args);
-	endif;
-}
-add_action('init', 'ucicurl_create_virtual');
 ?>
