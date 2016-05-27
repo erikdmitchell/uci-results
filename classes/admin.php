@@ -461,7 +461,7 @@ class UCIcURLAdmin {
 
 		foreach ($race_results as $result) :
 			$rider_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_riders} WHERE name=\"{$result->name}\" AND nat='{$result->nat}'");
-//echo "rider id: $rider_id<br>";
+
 			// check if we have a rider id, otherwise create one //
 			if (!$rider_id) :
 				$rider_insert=array(
@@ -550,7 +550,7 @@ class UCIcURLAdmin {
 	 */
 	public function update_rider_rankings($rider_id=0, $points=0, $season='', $week=0) {
 		global $wpdb;
-//echo "$rider_id | $points | $week<br>";
+
 		$prev_points=0;
 		$db_points=0;
 		$prev_week=absint($week)-1;
@@ -587,9 +587,6 @@ class UCIcURLAdmin {
 			'points' => $points,
 			'week' => $week,
 		);
-
-if ($rider_id==1)
-	print_r($log);
 
 	}
 
