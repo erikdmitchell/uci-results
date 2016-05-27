@@ -33,7 +33,7 @@ class ucicurlVirtualPage {
     public function virtualPage($posts) {
       global $wp, $wp_query;
 
-      if (count($posts) == 0 && (strcasecmp($wp->request, $this->slug) == 0 || $wp->query_vars['pagename'] == $this->pagename)) {
+      if (count($posts) == 0 && (strcasecmp($wp->request, $this->slug) == 0 || $wp->query_vars['pagename'] == $this->pagename || $wp->query_vars['page']=='')) {
           //create a fake post intance
           $post = new stdClass;
           // fill properties of $post with everything a page in the database would have

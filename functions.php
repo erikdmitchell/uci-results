@@ -145,7 +145,7 @@ function ucicurl_rider_url($slug='') {
  * @return void
  */
 function ucicurl_race_url($slug='') {
-	$url="/race/$slug";
+	$url="/races/$slug";
 
 	echo $url;
 }
@@ -183,11 +183,11 @@ function ucicurl_create_virtual_page() {
 			'content' => ucicurl_get_template('rider', array('rider_id' => ucicurl_get_rider_id($url_array[1]))),
 			'pagename' => $url
 		);
-	elseif ($url_array[0]=='race') :
+	elseif ($url_array[0]=='races') :
 		$args = array(
-			'slug' => 'race',
+			'slug' => 'races',
 			'title' => ucicurl_race_slug_to_name($url_array[1]),
-			'content' => "This can be generated content, or static content<br />Whatever you put here will appear on your virtual page.",
+			'content' => "TEMPLATE",
 			'pagename' => $url
 		);
 	elseif ($url_array[0]=='country') :
