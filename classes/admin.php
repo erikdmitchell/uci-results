@@ -489,11 +489,17 @@ class UCIcURLAdmin {
 		endforeach;
 	}
 
+	/**
+	 * ajax_update_rider_rankings function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function ajax_update_rider_rankings() {
 		if (!isset($_POST['season']) || $_POST['season']=='')
 			return false;
 
-		global $wpdb;
+		global $wpdb, $ucicurl_races;
 
 		$season=$_POST['season']; // set season
 		$rider_ids=$wpdb->get_col("SELECT id FROM wp_uci_curl_riders"); // get all rider ids
@@ -521,7 +527,14 @@ class UCIcURLAdmin {
 			endforeach;
 		endforeach;
 
-		// then update rider rankings rank
+		// then update rider rankings rank //
+		$weeks=$ucicurl_races->weeks($season);
+
+		foreach ($weeks as $week) :
+			$this->update_rider_rankings_rank($season, $week);
+		endforeach;
+
+echo 'fin';
 		wp_die();
 	}
 
@@ -565,27 +578,10 @@ class UCIcURLAdmin {
 			);
 
 			$wpdb->insert($wpdb->ucicurl_rider_rankings, $data);
-			$ranking_id=$wpdb->insert_id;
+			$ranking_id=$wpdb->insert_id; // not utalized, except for log
 		endif;
-/*
-		$log_data=array(
-			'ranking_id' => $ranking_id,
-			'rider_id' => $rider_id,
-			'points' => $points,
-			'season' => $season,
-			'week' => $week,
-		);
-*/
 	}
 
-	/**
-	 * update_rider_rankings_rank function.
-	 *
-	 * @access public
-	 * @param string $season (default: '')
-	 * @param int $week (default: 0)
-	 * @return void
-	 */
 	public function update_rider_rankings_rank($season='', $week=0) {
 		global $wpdb;
 

@@ -157,7 +157,7 @@ class UCIcURLRiders {
 			$where='';
 		endif;
 
-		echo $sql="
+		$sql="
 			SELECT
 				*
 			FROM {$wpdb->ucicurl_rider_rankings} AS rankings
