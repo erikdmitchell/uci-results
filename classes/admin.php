@@ -540,6 +540,7 @@ class UCIcURLAdmin {
 echo "$rider_id | $points | $season | $week";
 		$prev_points=0;
 		$db_points=0;
+		$prev_week=absint($week)-1;
 		$ranking_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week={$week}");
 
 		if ($ranking_id) :
@@ -554,7 +555,7 @@ echo "$rider_id | $points | $season | $week";
 
 			$wpdb->update($wpdb->ucicurl_rider_rankings, $data, $where);
 		else :
-			$prev_points=$wpdb->get_var("SELECT SUM(points) FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week<={$week}");
+			$prev_points=$wpdb->get_var("SELECT SUM(points) FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week={$prev_week}");
 			$points=$points + $prev_points;
 			$data=array(
 				'rider_id' => $rider_id,
