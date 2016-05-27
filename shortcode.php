@@ -53,7 +53,4 @@ function ucicurl_race_rankings($atts) {
 	return;
 }
 add_shortcode('race_rankings', 'ucicurl_race_rankings');
-
-// single rider
-// single race
 ?>

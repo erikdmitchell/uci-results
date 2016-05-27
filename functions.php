@@ -170,6 +170,8 @@ function ucicurl_country_url($slug='') {
  * @return void
  */
 function ucicurl_create_virtual_page() {
+	global $wp;
+
 	$args=array();
 	$url = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 	$url_array=explode('/', $url); // split into page slug and slug
@@ -178,7 +180,7 @@ function ucicurl_create_virtual_page() {
 		$args = array(
 			'slug' => 'rider',
 			'title' => ucicurl_rider_slug_to_name($url_array[1]),
-			'content' => "This can be generated content, or static content<br />Whatever you put here will appear on your virtual page."
+			'content' => ucicurl_get_template('rider', array('rider_id' => ucicurl_get_rider_id($url_array[1])))
 		);
 	elseif ($url_array[0]=='race') :
 		$args = array(
@@ -213,6 +215,21 @@ function ucicurl_rider_slug_to_name($slug='') {
 	$name=$wpdb->get_var("SELECT name FROM {$wpdb->ucicurl_riders} WHERE slug='{$slug}'");
 
 	return $name;
+}
+
+/**
+ * ucicurl_get_rider_id function.
+ *
+ * @access public
+ * @param string $slug (default: '')
+ * @return void
+ */
+function ucicurl_get_rider_id($slug='') {
+	global $wpdb;
+
+	$id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_riders} WHERE slug='{$slug}'");
+
+	return $id;
 }
 
 /**
