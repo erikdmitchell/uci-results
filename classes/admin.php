@@ -583,6 +583,14 @@ class UCIcURLAdmin {
 		endif;
 	}
 
+	/**
+	 * update_rider_rankings_rank function.
+	 *
+	 * @access public
+	 * @param string $season (default: '')
+	 * @param int $week (default: 0)
+	 * @return void
+	 */
 	public function update_rider_rankings_rank($season='', $week=0) {
 		global $wpdb;
 
@@ -611,6 +619,14 @@ class UCIcURLAdmin {
 		endforeach;
 	}
 
+	/**
+	 * add_previous_weeks_riders_to_rank function.
+	 *
+	 * @access public
+	 * @param string $season (default: '')
+	 * @param int $week (default: 0)
+	 * @return void
+	 */
 	public function add_previous_weeks_riders_to_rank($season='', $week=0) {
 		global $wpdb;
 
