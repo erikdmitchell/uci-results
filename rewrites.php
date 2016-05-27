@@ -1,32 +1,18 @@
 <?php
 
-/**
- * ulm_results_rewrites function.
- *
- * @access public
- * @return void
- */
-function ulm_results_rewrites() {
-	global $ulm_sections;
-
-	// results //
-	add_rewrite_rule('^results/([^/]*)/?', 'index.php?pagename=results&ulm_event_slug=$matches[1]', 'top');
-	add_rewrite_rule('^'.$ulm_sections['players']['slug'].'/results/([^/]*)/?', 'index.php?pagename=results&ulm_player_slug=$matches[1]', 'top');
+function ucicurl_results_rewrites() {
+	//add_rewrite_rule('^results/([^/]*)/?', 'index.php?pagename=ucicurl-rider&ucicurl_rider_slug=$matches[1]', 'top');
+	add_rewrite_rule('^race/([^/]*)/?', 'index.php?pagename=race&ucicurl_race_slug=$matches[1]', 'top');
+	add_rewrite_rule('^country/([^/]*)/?', 'index.php?pagename=country&ucicurl_country_slug=$matches[1]', 'top');
 }
-add_action('init', 'ulm_results_rewrites');
+add_action('init', 'ucicurl_results_rewrites');
 
-/**
- * ulm_results_query_vars function.
- *
- * @access public
- * @param mixed $vars
- * @return void
- */
-function ulm_results_query_vars($vars) {
-  $vars[] = 'ulm_event_slug';
-  $vars[] = 'ulm_player_slug';
+function ucicurl_results_query_vars($vars) {
+  $vars[] = 'ucicurl_rider_slug';
+  $vars[] = 'ucicurl_race_slug';
+  $vars[] = 'ucicurl_country_slug';
 
   return $vars;
 }
-add_filter('query_vars', 'ulm_results_query_vars');
+add_filter('query_vars', 'ucicurl_results_query_vars');
 ?>

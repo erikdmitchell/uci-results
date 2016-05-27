@@ -24,7 +24,7 @@ $races=$ucicurl_races->get_races(array(
 			<?php foreach ($riders as $rider) : ?>
 				<div class="row">
 					<div class="rank"><?php echo $rider->rank; ?></div>
-					<div class="rider"><a href=""><?php echo $rider->name; ?></a></div>
+					<div class="rider"><a href="<?php ucicurl_rider_url(sanitize_title_with_dashes($rider->name)); ?>"><?php echo $rider->name; ?></a></div>
 					<div class="nat"><a href=""><?php echo ucicurl_get_country_flag($rider->nat); ?></a></div>
 					<div class="points"><?php echo $rider->points; ?></div>
 				</div>

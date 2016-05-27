@@ -23,4 +23,9 @@ include_once(UCICURL_PATH.'classes/pagination.php'); // our pagination functions
 include_once(UCICURL_PATH.'shortcode.php'); // our shortcodes
 include_once(UCICURL_PATH.'lib/flags.php'); // our flag stuff
 include_once(UCICURL_PATH.'rewrites.php'); // rewrites for urls
+include_once(UCICURL_PATH.'classes/virtual-page.php'); // creates virtual pages when need be
+
+// create rider page
+// create race page
+// create country page
 ?>

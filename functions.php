@@ -124,6 +124,23 @@ function curl_exec_utf8($ch) {
   return $data;
 }
 
+function ucicurl_rider_url($slug='') {
+	$url="/rider/$slug";
+
+	echo $url;
+}
+
+function ucicurl_race_url($slug='') {
+	$url='';
+
+	echo $url;
+}
+
+function ucicurl_country_url($slug='') {
+	$url='';
+
+	echo $url;
+}
 
 /**
 * Build the entire current page URL (incl query strings) and output it
