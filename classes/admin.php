@@ -467,6 +467,7 @@ class UCIcURLAdmin {
 				$rider_insert=array(
 					'name' => $result->name,
 					'nat' => $result->nat,
+					'slug' => sanitize_title_with_dashes($result->name)
 				);
 				$wpdb->insert($wpdb->ucicurl_riders, $rider_insert);
 				$rider_id=$wpdb->insert_id;

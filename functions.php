@@ -124,20 +124,41 @@ function curl_exec_utf8($ch) {
   return $data;
 }
 
+/**
+ * ucicurl_rider_url function.
+ *
+ * @access public
+ * @param string $slug (default: '')
+ * @return void
+ */
 function ucicurl_rider_url($slug='') {
 	$url="/rider/$slug";
 
 	echo $url;
 }
 
+/**
+ * ucicurl_race_url function.
+ *
+ * @access public
+ * @param string $slug (default: '')
+ * @return void
+ */
 function ucicurl_race_url($slug='') {
-	$url='';
+	$url="/race/$slug";
 
 	echo $url;
 }
 
+/**
+ * ucicurl_country_url function.
+ *
+ * @access public
+ * @param string $slug (default: '')
+ * @return void
+ */
 function ucicurl_country_url($slug='') {
-	$url='';
+	$url="/country/$slug";
 
 	echo $url;
 }
@@ -151,20 +172,22 @@ function ucicurl_country_url($slug='') {
 function ucicurl_create_virtual_page() {
 	$args=array();
 	$url = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
-	$url = substr($url, 0, strpos($url, '/')); // reomves everything after the '/' - allowing us to hack in before the rest of the url
+	$url_array=explode('/', $url); // split into page slug and slug
 
-  if ($url=='rider') :
+  if ($url_array[0]=='rider') :
 		$args = array(
 			'slug' => 'rider',
-			'title' => 'Rider Page',
+			'title' => ucicurl_slug_to_name($url_array[1]),
 			'content' => "This can be generated content, or static content<br />Whatever you put here will appear on your virtual page."
 		);
-	elseif ($url=='race') :
+	elseif ($url_array[0]=='race') :
+		$args = array(
 			'slug' => 'race',
 			'title' => 'Rider Page',
 			'content' => "This can be generated content, or static content<br />Whatever you put here will appear on your virtual page."
 		);
-	elseif ($url=='country') :
+	elseif ($url_array[0]=='country') :
+		$args = array(
 			'slug' => 'country',
 			'title' => 'Rider Page',
 			'content' => "This can be generated content, or static content<br />Whatever you put here will appear on your virtual page."
@@ -176,6 +199,17 @@ function ucicurl_create_virtual_page() {
 		$pg = new ucicurlVirtualPage($args);
 }
 add_action('init', 'ucicurl_create_virtual_page');
+
+/**
+ * ucicurl_slug_to_name function.
+ *
+ * @access public
+ * @param string $slug (default: '')
+ * @return void
+ */
+function ucicurl_slug_to_name($slug='') {
+
+}
 
 /**
 * Build the entire current page URL (incl query strings) and output it
