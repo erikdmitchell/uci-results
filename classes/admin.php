@@ -460,8 +460,8 @@ class UCIcURLAdmin {
 		$race=$wpdb->get_row("SELECT * FROM {$wpdb->ucicurl_races} WHERE id={$race_id}");
 
 		foreach ($race_results as $result) :
-			$rider_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_riders} WHERE name=\"{$result->name}\" AND nat=\"{$result->nat}\"");
-
+			$rider_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_riders} WHERE name=\"{$result->name}\" AND nat='{$result->nat}'");
+//echo "rider id: $rider_id<br>";
 			// check if we have a rider id, otherwise create one //
 			if (!$rider_id) :
 				$rider_insert=array(
@@ -501,9 +501,8 @@ class UCIcURLAdmin {
 
 		global $wpdb, $ucicurl_races;
 
-		$wpdb->query("TRUNCATE {$wpdb->ucicurl_rider_rankings}"); // clear db
-
 		$season=$_POST['season']; // set season
+		$wpdb->delete($wpdb->ucicurl_rider_rankings, array('season' => $season)); // remove ranks from season to prevent dups
 		$rider_ids=$wpdb->get_col("SELECT id FROM {$wpdb->ucicurl_riders}"); // get all rider ids
 
 		// loop through riders and get results //
@@ -551,7 +550,7 @@ class UCIcURLAdmin {
 	 */
 	public function update_rider_rankings($rider_id=0, $points=0, $season='', $week=0) {
 		global $wpdb;
-
+//echo "$rider_id | $points | $week<br>";
 		$prev_points=0;
 		$db_points=0;
 		$prev_week=absint($week)-1;
@@ -581,6 +580,17 @@ class UCIcURLAdmin {
 			$wpdb->insert($wpdb->ucicurl_rider_rankings, $data);
 			$ranking_id=$wpdb->insert_id; // not utalized, except for log
 		endif;
+
+		$log=array(
+			'ranking_id' => $ranking_id,
+			'rider_id' => $rider_id,
+			'points' => $points,
+			'week' => $week,
+		);
+
+if ($rider_id==1)
+	print_r($log);
+
 	}
 
 	/**
