@@ -490,22 +490,33 @@ class UCIcURLAdmin {
 	}
 
 	public function ajax_update_rider_rankings() {
-print_r($_POST);
+		if (!isset($_POST['season']) || $_POST['season']=='')
+			return false;
 
-/*
-	SELECT * FROM wp_uci_curl_riders; -- gets all riders ADD SEASON
--- loop --
-SELECT
-	results.race_id,
-	results.par AS points,
-	results.rider_id,
-	races.week
-FROM wp_uci_curl_results AS results
-LEFT JOIN wp_uci_curl_races AS races
-ON results.race_id = races.id
-WHERE races.season = '2015/2016'
-AND rider_id=1; -- gets riders races
-	*/
+		global $wpdb;
+
+		$season=$_POST['season']; // set season
+		$rider_ids=$wpdb->get_col("SELECT id FROM wp_uci_curl_riders"); // get all rider ids
+
+		// loop through riders and get results //
+		foreach ($rider_ids as $rider_id) :
+			$sql="
+				SELECT
+					results.race_id,
+					results.par AS points,
+					results.rider_id,
+					races.week
+				FROM wp_uci_curl_results AS results
+				LEFT JOIN wp_uci_curl_races AS races
+				ON results.race_id = races.id
+				WHERE races.season='{$season}'
+				AND rider_id=1;
+			";
+			$rider_results=$wpdb->get_results($sql);
+
+			// go through rider results and update rider rankings //
+		endforeach;
+
 		// update rider rankings
 		// then update rider rankings rank
 		wp_die();

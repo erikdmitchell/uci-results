@@ -56,6 +56,7 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 
 		var selected = [];
+		var season=$('.url-dd#season option:selected').text();
 
 		$('#add-races-to-db input:checked').each(function() {
 			if ($(this).attr('id')!='selectall')
@@ -94,7 +95,12 @@ jQuery(document).ready(function($) {
 					if (counter>=races.length) {
 						$('#get-race-data').find('#counter span.ctr').text(counter); // update counter on screen
 
-						$.post(ajaxurl, {action : 'update_rider_rankings'}, function(response) {
+						var data={
+							action : 'update_rider_rankings',
+							season : season
+						};
+
+						$.post(ajaxurl, data, function(response) {
 console.log(response);
 						});
 
