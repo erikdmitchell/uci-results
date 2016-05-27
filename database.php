@@ -1,7 +1,7 @@
 <?php
 global $ucicurl_db_version;
 
-$ucicurl_db_version='0.1.2';
+$ucicurl_db_version='0.1.3';
 
 function ucicurl_set_db_tables() {
 	global $wpdb;
@@ -67,6 +67,7 @@ function ucicurl_db_install() {
 		  id bigint(20) NOT NULL AUTO_INCREMENT,
 			name LONGTEXT NOT NULL,
 			nat VARCHAR(5) NOT NULL,
+			slug LONGTEXT NOT NULL,
 			PRIMARY KEY (`id`)
 		) $charset;
 	";
@@ -156,6 +157,7 @@ function ucicurl_db_update() {
 			  id bigint(20) NOT NULL AUTO_INCREMENT,
 				name LONGTEXT NOT NULL,
 				nat VARCHAR(5) NOT NULL,
+				slug LONGTEXT NOT NULL,
 				PRIMARY KEY (`id`)
 			);
 		";
