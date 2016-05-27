@@ -510,11 +510,14 @@ class UCIcURLAdmin {
 				LEFT JOIN wp_uci_curl_races AS races
 				ON results.race_id = races.id
 				WHERE races.season='{$season}'
-				AND rider_id=1;
+				AND rider_id={$rider_id};
 			";
 			$rider_results=$wpdb->get_results($sql);
 
 			// go through rider results and update rider rankings //
+			foreach ($rider_results as $result) :
+				$this->update_rider_rankings($rider_id, $result->points, $season, $result->week);
+			endforeach;
 		endforeach;
 
 		// update rider rankings
@@ -534,7 +537,7 @@ class UCIcURLAdmin {
 	 */
 	public function update_rider_rankings($rider_id=0, $points=0, $season='', $week=0) {
 		global $wpdb;
-
+//echo "$rider_id | $points | $season | $week";
 		$prev_points=0;
 		$db_points=0;
 		$ranking_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week={$week}");
@@ -549,7 +552,7 @@ class UCIcURLAdmin {
 				'id' => $ranking_id
 			);
 
-			$wpdb->update($wpdb->ucicurl_rider_rankings, $data, $where);
+			//$wpdb->update($wpdb->ucicurl_rider_rankings, $data, $where);
 		else :
 			$prev_points=$wpdb->get_var("SELECT SUM(points) FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week<={$week}");
 			$points=$points + $prev_points;
@@ -560,19 +563,22 @@ class UCIcURLAdmin {
 				'week' => $week,
 			);
 
-			$wpdb->insert($wpdb->ucicurl_rider_rankings, $data);
+			//$wpdb->insert($wpdb->ucicurl_rider_rankings, $data);
+			$ranking_id=$wpdb->insert_id;
 		endif;
 
 		$log_data=array(
+			'ranking_id' => $ranking_id,
 			'rider_id' => $rider_id,
 			'points' => $points,
 			'season' => $season,
 			'week' => $week,
 		);
 
-echo '<pre>';
-print_r($log_data);
-echo '</pre>';
+//print_r($log_data);
+
+		//_log($log_data);
+
 	}
 
 	/**
