@@ -513,6 +513,7 @@ class UCIcURLAdmin {
 					results.race_id,
 					results.par AS points,
 					results.rider_id,
+					results.name,
 					races.week
 				FROM wp_uci_curl_results AS results
 				LEFT JOIN wp_uci_curl_races AS races
@@ -522,6 +523,8 @@ class UCIcURLAdmin {
 				ORDER BY week ASC
 			";
 			$rider_results=$wpdb->get_results($sql);
+//print_r($rider_results);
+
 
 			// go through rider results and update rider rankings //
 			foreach ($rider_results as $result) :
@@ -569,8 +572,19 @@ class UCIcURLAdmin {
 
 			$wpdb->update($wpdb->ucicurl_rider_rankings, $data, $where);
 		else :
-			$prev_points=$wpdb->get_var("SELECT SUM(points) FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week={$prev_week}");
-			$points=$points + $prev_points;
+// we have an issue, lets say a rider doesn't race the prev week, then we need to grab it, otherwise, grab the week before? but what if they skip two weeks?
+/*
+	get the last week with points, bump them through, until today
+*/
+			$prev_week_pts=$wpdb->get_var("SELECT SUM(points) FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week={$prev_week}");
+			$prev_points=$wpdb->get_var("SELECT SUM(points) FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week<={$prev_week}");
+
+			if ($prev_week_pts) :
+				$points=$points + $prev_week_pts;
+			else :
+				$points=$points + $prev_points;
+			endif;
+
 			$data=array(
 				'rider_id' => $rider_id,
 				'points' => $points,
@@ -588,6 +602,8 @@ class UCIcURLAdmin {
 			'points' => $points,
 			'week' => $week,
 		);
+
+		//_log($log);
 
 	}
 
