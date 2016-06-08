@@ -560,9 +560,22 @@ class UCIcURLAdmin {
 		$prev_week=absint($week)-1;
 		$ranking_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week={$week}");
 
+				$sql="
+					SELECT
+						SUM(results.par) AS points
+					FROM wp_uci_curl_results AS results
+					LEFT JOIN wp_uci_curl_races AS races
+					ON results.race_id = races.id
+					WHERE races.season='{$season}'
+					AND rider_id={$rider_id}
+					AND week<={$week}
+				";
+				$points=$wpdb->get_var($sql);
+
 		if ($ranking_id) :
-			$db_points=$wpdb->get_var("SELECT points FROM {$wpdb->ucicurl_rider_rankings} WHERE id={$ranking_id}");
-			$points=$db_points + $points;
+			//$db_points=$wpdb->get_var("SELECT points FROM {$wpdb->ucicurl_rider_rankings} WHERE id={$ranking_id}");
+			//$points=$db_points + $points;
+
 			$data=array(
 				'points' => $points
 			);
@@ -581,6 +594,7 @@ class UCIcURLAdmin {
 	note: prev points <= causes issues when multiple weeks between points
 
 */
+/*
 			$prev_week_pts=$wpdb->get_var("SELECT SUM(points) FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week={$prev_week}");
 			//$prev_points=$wpdb->get_var("SELECT SUM(points) FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week<{$prev_week}");
 
@@ -603,6 +617,7 @@ class UCIcURLAdmin {
 				//$points=$points + $prev_points;
 				$points=$prev_points;
 			endif;
+*/
 
 			$data=array(
 				'rider_id' => $rider_id,
