@@ -1,7 +1,7 @@
 <?php
 global $ucicurl_db_version;
 
-$ucicurl_db_version='0.1.3';
+$ucicurl_db_version='0.1.4';
 
 function ucicurl_set_db_tables() {
 	global $wpdb;
@@ -54,7 +54,7 @@ function ucicurl_db_install() {
 			nat VARCHAR(5) NOT NULL,
 			age TINYINT NOT NULL DEFAULT '0',
 			result VARCHAR(10) NOT NULL,
-			par TINYINT NOT NULL DEFAULT '0',
+			pcr VARCHAR(10) NOT NULL DEFAULT '0',
 			pcr VARCHAR(10) NOT NULL DEFAULT '0',
 			rider_id bigint(20) NOT NULL,
 			PRIMARY KEY (`id`)
@@ -144,7 +144,7 @@ function ucicurl_db_update() {
 				nat VARCHAR(5) NOT NULL,
 				age TINYINT NOT NULL DEFAULT '0',
 				result VARCHAR(10) NOT NULL,
-				par TINYINT NOT NULL DEFAULT '0',
+				pcr VARCHAR(10) NOT NULL DEFAULT '0',
 				pcr VARCHAR(10) NOT NULL DEFAULT '0',
 				rider_id bigint(20) NOT NULL,
 				PRIMARY KEY (`id`)
