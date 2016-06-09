@@ -523,12 +523,10 @@ class UCIcURLAdmin {
 				ORDER BY week ASC
 			";
 			$rider_results=$wpdb->get_results($sql);
-//print_r($rider_results);
-
 
 			// go through rider results and update rider rankings //
 			foreach ($rider_results as $result) :
-				$this->update_rider_rankings($rider_id, $result->points, $season, $result->week);
+				$this->update_rider_rankings($rider_id, $season, $result->week);
 			endforeach;
 		endforeach;
 
@@ -547,12 +545,11 @@ class UCIcURLAdmin {
 	 *
 	 * @access public
 	 * @param int $rider_id (default: 0)
-	 * @param int $points (default: 0)
 	 * @param string $season (default: '')
 	 * @param int $week (default: 0)
 	 * @return void
 	 */
-	public function update_rider_rankings($rider_id=0, $points=0, $season='', $week=0) {
+	public function update_rider_rankings($rider_id=0, $season='', $week=0) {
 		global $wpdb;
 
 		$prev_points=0;
