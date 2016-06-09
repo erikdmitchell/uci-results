@@ -555,7 +555,7 @@ class UCIcURLAdmin {
 		$prev_points=0;
 		$db_points=0;
 		$prev_week=absint($week)-1;
-		$ranking_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week={$week}");
+		$ranking_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week={$week} AND season='{$season}'");
 		$sql="
 			SELECT
 				SUM(results.par) AS points
@@ -566,6 +566,7 @@ class UCIcURLAdmin {
 			AND rider_id={$rider_id}
 			AND week<={$week}
 		";
+
 		$points=$wpdb->get_var($sql);
 
 		// there's already a ranking for this week, so we update it, else we add new //
@@ -620,6 +621,7 @@ class UCIcURLAdmin {
 				AND week={$week}
 			ORDER BY points DESC
 		";
+
 		$ids=$wpdb->get_col($sql);
 		$rank=1;
 
