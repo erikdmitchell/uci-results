@@ -559,23 +559,20 @@ class UCIcURLAdmin {
 		$db_points=0;
 		$prev_week=absint($week)-1;
 		$ranking_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week={$week}");
+		$sql="
+			SELECT
+				SUM(results.par) AS points
+			FROM wp_uci_curl_results AS results
+			LEFT JOIN wp_uci_curl_races AS races
+			ON results.race_id = races.id
+			WHERE races.season='{$season}'
+			AND rider_id={$rider_id}
+			AND week<={$week}
+		";
+		$points=$wpdb->get_var($sql);
 
-				$sql="
-					SELECT
-						SUM(results.par) AS points
-					FROM wp_uci_curl_results AS results
-					LEFT JOIN wp_uci_curl_races AS races
-					ON results.race_id = races.id
-					WHERE races.season='{$season}'
-					AND rider_id={$rider_id}
-					AND week<={$week}
-				";
-				$points=$wpdb->get_var($sql);
-
+		// there's already a ranking for this week, so we update it, else we add new //
 		if ($ranking_id) :
-			//$db_points=$wpdb->get_var("SELECT points FROM {$wpdb->ucicurl_rider_rankings} WHERE id={$ranking_id}");
-			//$points=$db_points + $points;
-
 			$data=array(
 				'points' => $points
 			);
@@ -585,40 +582,6 @@ class UCIcURLAdmin {
 
 			$wpdb->update($wpdb->ucicurl_rider_rankings, $data, $where);
 		else :
-// we have an issue, lets say a rider doesn't race the prev week, then we need to grab it, otherwise, grab the week before? but what if they skip two weeks?
-/*
-	get the last week with points, bump them through, until today
-
-	we split them to basically say get last weeks, or get the previous weeks when it's not last week -- latter doesnt work
-
-	note: prev points <= causes issues when multiple weeks between points
-
-*/
-/*
-			$prev_week_pts=$wpdb->get_var("SELECT SUM(points) FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week={$prev_week}");
-			//$prev_points=$wpdb->get_var("SELECT SUM(points) FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week<{$prev_week}");
-
-			if ($prev_week_pts) :
-				$points=$points + $prev_week_pts;
-			else :
-
-				$sql="
-					SELECT
-						SUM(results.par) AS points
-					FROM wp_uci_curl_results AS results
-					LEFT JOIN wp_uci_curl_races AS races
-					ON results.race_id = races.id
-					WHERE races.season='{$season}'
-					AND rider_id={$rider_id}
-					AND week<={$week}
-				";
-				$prev_points=$wpdb->get_var($sql);
-
-				//$points=$points + $prev_points;
-				$points=$prev_points;
-			endif;
-*/
-
 			$data=array(
 				'rider_id' => $rider_id,
 				'points' => $points,
@@ -638,7 +601,6 @@ class UCIcURLAdmin {
 		);
 
 		//_log($log);
-
 	}
 
 	/**
