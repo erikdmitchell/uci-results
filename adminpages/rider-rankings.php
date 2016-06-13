@@ -47,7 +47,7 @@ $rankings=$ucicurl_riders->get_rider_rankings(array(
 			<div class="alignleft actions">
 				<select name="week" class="week">
 					<option value="0">-- Select Week --</option>
-					<?php foreach ($ucicurl_races->weeks() as $week) : ?>
+					<?php foreach ($ucicurl_races->weeks($_season) as $week) : ?>
 						<option value="<?php echo $week; ?>" <?php selected($_week, $week); ?>><?php echo $week; ?></option>
 					<?php endforeach; ?>
 				</select>
