@@ -66,3 +66,14 @@ h2 .ucicurl-admin-total {
 .ucicurl-pagination .next-link {
 	text-align: right;
 }
+
+/* update rider rankings */
+.ucicurl-update-rankings .update-rankings .button {
+	margin: 15px 0;
+}
+.update-rider-ranking-notes {
+	margin: 15px 0;
+	display: none;
+	max-height: 500px;
+	overflow: scroll;
+}
