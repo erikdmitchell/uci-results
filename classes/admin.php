@@ -544,7 +544,8 @@ class UCIcURLAdmin {
 				$this->update_rider_rankings($rider_id, $season, $result->week);
 			endforeach;
 		endforeach;
-
+//////////////////////////////// WE NEED TO DO THE BELOW ///////////////////////
+// make it an additional button/ajax function that auto runs with Update Rankings //
 		// then update rider rankings rank //
 		$weeks=$ucicurl_races->weeks($season);
 
