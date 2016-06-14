@@ -102,9 +102,11 @@ jQuery(document).ready(function($) {
 
 						$('#get-race-data').append('<div class="note">Calculating rider rankings...</div>');
 
-						$.post(ajaxurl, data, function(response) {
-							$('#get-race-data').append('<div class="updated">Rider rankings complete.</div>');
-						});
+						$('#get-race-data').append('<div class="note">You need to do this on the other page for now.</div>');
+
+						//$.post(ajaxurl, data, function(response) {
+							//$('#get-race-data').append('<div class="updated">Rider rankings complete.</div>');
+						//});
 
 						return false;
 					}
