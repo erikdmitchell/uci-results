@@ -25,7 +25,12 @@ $_season=isset($_GET['season']) ? $_GET['season'] : 0;
 		<input type="button" id="update" class="button button-primary" value="Update Rankings">
 	</form>
 
-	<div id="update-rider-ranking-notes"></div>
+	<div class="update-rider-ranking-notes">
+		<div class="rider-ranking-totals">
+			<span class="current-count">0</span> out of <span class="total">0</span> processed.
+		</div>
+		<div class="response-result"></div>
+	</div>
 
 </div>
 
