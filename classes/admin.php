@@ -23,7 +23,13 @@ class UCIcURLAdmin {
 		add_action('wp_ajax_get_race_data_non_db',array($this,'ajax_get_race_data_non_db'));
 		add_action('wp_ajax_prepare_add_races_to_db',array($this,'ajax_prepare_add_races_to_db'));
 		add_action('wp_ajax_add_race_to_db', array($this, 'ajax_add_race_to_db'));
+		//add_action('wp_ajax_update_rider_rankings', array($this, 'ajax_update_rider_rankings'));
+
+		add_action('wp_ajax_update_rider_rankings_get_rider_ids', array($this, 'ajax_update_rider_rankings_get_rider_ids'));
+		add_action('wp_ajax_update_rider_rankings_rider_results', array($this, 'ajax_update_rider_rankings_rider_results'));
 		add_action('wp_ajax_update_rider_rankings', array($this, 'ajax_update_rider_rankings'));
+
+
 
 		$this->setup_config($config);
 	}
@@ -502,9 +508,12 @@ class UCIcURLAdmin {
 	 * @access public
 	 * @return void
 	 */
+/*
 	public function ajax_update_rider_rankings() {
-		if (!isset($_POST['season']) || $_POST['season']=='')
+		if (!isset($_POST['season']) || $_POST['season']=='') :
+			echo 'No season found';
 			return false;
+		endif;
 
 		global $wpdb, $ucicurl_races;
 
@@ -545,6 +554,41 @@ class UCIcURLAdmin {
 
 		wp_die();
 	}
+*/
+
+	public function ajax_update_rider_rankings_get_rider_ids() {
+		if (!isset($_POST['season']) || $_POST['season']=='') :
+			echo 'No season found';
+			return false;
+		endif;
+
+		global $wpdb;
+
+		$season=$_POST['season']; // set season
+		$wpdb->delete($wpdb->ucicurl_rider_rankings, array('season' => $season)); // remove ranks from season to prevent dups
+		$rider_ids=$wpdb->get_col("SELECT id FROM {$wpdb->ucicurl_riders}"); // get all rider ids
+
+		wp_send_json($rider_ids);
+	}
+
+	public function ajax_update_rider_rankings() {
+		extract($_POST);
+
+		if (!$rider_id || !$season)
+			return;
+
+		global $ucicurl_races;
+
+		$weeks=$ucicurl_races->weeks($season);
+
+		foreach ($weeks as $week) :
+			$this->update_rider_rankings($rider_id, $season, $week);
+		endforeach;
+
+		echo '<div class="updated">Rider ID '.$rider_id.' rankings have been updated!</div>';
+
+		wp_die();
+	}
 
 	/**
 	 * update_rider_rankings function.
@@ -564,7 +608,7 @@ class UCIcURLAdmin {
 		$ranking_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week={$week} AND season='{$season}'");
 		$sql="
 			SELECT
-				SUM(results.par) AS points
+				IFNULL(SUM(results.par), 0)
 			FROM wp_uci_curl_results AS results
 			LEFT JOIN wp_uci_curl_races AS races
 			ON results.race_id = races.id
@@ -605,6 +649,7 @@ class UCIcURLAdmin {
 		);
 
 		//_log($log);
+		//return $log;
 	}
 
 	/**
