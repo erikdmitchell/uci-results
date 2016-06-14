@@ -38,11 +38,13 @@ jQuery(document).ready(function($) {
 
 					$('.update-rider-ranking-notes .rider-ranking-totals .current-count').text(rider_counter);
 					$('.update-rider-ranking-notes .response-result').append(response);
+
+					if (rider_counter>=total_riders) {
+						$btn.prop('disabled', false);
+					}
 				});
 			}
 		});
-
-		$btn.prop('disabled', false);
 	});
 
 });
