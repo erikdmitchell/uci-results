@@ -8,6 +8,10 @@ $limit=null;
 
 	<h2>cURL</h2>
 
+	<ul class="actions">
+		<li><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=uci-curl&action=update-rankings'); ?>">Update Rankings</a></li>
+	</ul>
+
 	<form class="get-races" name="get-races" method="post">
 
 		<table class="form-table">

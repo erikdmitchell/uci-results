@@ -18,7 +18,7 @@ class UCIcURLAdmin {
 		global $wpdb;
 
 		add_action('admin_menu',array($this,'admin_page'));
-		add_action('admin_enqueue_scripts',array($this,'admin_scripts_styles'));
+		add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
 
 		add_action('wp_ajax_get_race_data_non_db',array($this,'ajax_get_race_data_non_db'));
 		add_action('wp_ajax_prepare_add_races_to_db',array($this,'ajax_prepare_add_races_to_db'));
@@ -46,6 +46,7 @@ class UCIcURLAdmin {
 	 */
 	public function admin_scripts_styles() {
 		wp_enqueue_script('uci-curl-admin',UCICURL_URL.'/js/admin.js',array('jquery'), '0.1.0',true);
+		wp_enqueue_script('uci-curl-update-rankings',UCICURL_URL.'/js/update-rankings.js',array('jquery'), '0.1.0',true);
 
 		wp_enqueue_style('uci-curl-admin',UCICURL_URL.'/css/admin.css',array(), '0.1.0');
 	}
@@ -106,7 +107,12 @@ class UCIcURLAdmin {
 						$html.=ucicurl_get_admin_page('rider-rankings');
 						break;
 				default:
-					$html.=ucicurl_get_admin_page('curl');
+					if (isset($_GET['action']) && $_GET['action']=='update-rankings') :
+						$html.=ucicurl_get_admin_page('update-rankings');
+					else :
+						$html.=ucicurl_get_admin_page('curl');
+					endif;
+
 					break;
 			endswitch;
 
