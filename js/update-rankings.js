@@ -65,7 +65,7 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 
 		var weeks=$(this).data('weeks').split(',');
-		var totalWeeks=count(weeks);
+		var totalWeeks=weeks.length;
 		var weeksCounter=0;
 
 		$('.update-rider-ranking-notes .rider-ranking-totals .total').text(totalWeeks);
