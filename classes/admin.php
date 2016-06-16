@@ -28,8 +28,8 @@ class UCIcURLAdmin {
 		add_action('wp_ajax_update_rider_rankings_get_rider_ids', array($this, 'ajax_update_rider_rankings_get_rider_ids'));
 		add_action('wp_ajax_update_rider_rankings_rider_results', array($this, 'ajax_update_rider_rankings_rider_results'));
 		add_action('wp_ajax_update_rider_rankings', array($this, 'ajax_update_rider_rankings'));
-
-
+		add_action('wp_ajax_update_rider_weekly_rank', array($this, 'ajax_update_rider_weekly_rank'));
+		add_action('wp_ajax_get_weeks_in_season', array($this, 'ajax_get_weeks_in_season'));
 
 		$this->setup_config($config);
 	}
@@ -557,6 +557,12 @@ class UCIcURLAdmin {
 	}
 */
 
+	/**
+	 * ajax_update_rider_rankings_get_rider_ids function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function ajax_update_rider_rankings_get_rider_ids() {
 		if (!isset($_POST['season']) || $_POST['season']=='') :
 			echo 'No season found';
@@ -572,6 +578,12 @@ class UCIcURLAdmin {
 		wp_send_json($rider_ids);
 	}
 
+	/**
+	 * ajax_update_rider_rankings function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function ajax_update_rider_rankings() {
 		extract($_POST);
 
@@ -589,6 +601,31 @@ class UCIcURLAdmin {
 		echo '<div class="updated">Rider ID '.$rider_id.' rankings have been updated!</div>';
 
 		wp_die();
+	}
+
+	public function ajax_update_rider_weekly_rank() {
+		if (!$_POST['season'] || !$_POST['week'])
+			return false;
+
+		$this->update_rider_rankings_rank($_POST['season'], $_POST['week']);
+
+		echo '<div class="updated">Week '.$_POST['week'].' updated!</div>';
+
+		wp_die();
+	}
+
+	/**
+	 * ajax_get_weeks_in_season function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function ajax_get_weeks_in_season() {
+		global $ucicurl_races;
+
+		$weeks=$ucicurl_races->weeks($_POST['season']);
+
+		wp_send_json($weeks);
 	}
 
 	/**

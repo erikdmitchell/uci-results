@@ -23,6 +23,7 @@ $_season=isset($_GET['season']) ? $_GET['season'] : 0;
 		</div>
 
 		<input type="button" id="update" class="button button-primary" value="Update Rankings">
+		<input type="button" id="update-weekly" class="button button-secondary" value="Update Weekly Rank">
 	</form>
 
 	<div class="update-rider-ranking-notes">
@@ -32,6 +33,6 @@ $_season=isset($_GET['season']) ? $_GET['season'] : 0;
 		<div class="response-result"></div>
 	</div>
 
-</div>
+	<div class="update-weekly-rank-result"></div>
 
-<div class="loading-modal"></div>
+</div>

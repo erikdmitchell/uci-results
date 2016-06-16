@@ -2,6 +2,19 @@ jQuery(document).ready(function($) {
 
 	var $modal=$('.loading-modal');
 
+	// get weeks for weekly ranks //
+	$('form.update-rankings .season').change(function() {
+		var data={
+			'action' : 'get_weeks_in_season',
+			'season' : $(this).val()
+		};
+
+		$.post(ajaxurl, data, function(response) {
+			$('#update-weekly').attr('data-weeks', response);
+		});
+	});
+
+	// update season rankings //
 	$('form.update-rankings #update').click(function(e) {
 		e.preventDefault();
 
@@ -45,6 +58,33 @@ jQuery(document).ready(function($) {
 				});
 			}
 		});
+	});
+
+	// update rider weekly ranks //
+	$('form.update-rankings #update-weekly').click(function(e) {
+		e.preventDefault();
+
+		var weeks=$(this).data('weeks').split(',');
+		var totalWeeks=count(weeks);
+		var weeksCounter=0;
+
+		$('.update-rider-ranking-notes .rider-ranking-totals .total').text(totalWeeks);
+		$('.update-rider-ranking-notes').show();
+
+		for (var i in weeks) {
+			var data={
+				'action' : 'update_rider_weekly_rank',
+				'week' : weeks[i],
+				'season' : $('.season').val()
+			};
+
+			$.post(ajaxurl, data, function(response) {
+				weeksCounter++;
+
+				$('.update-rider-ranking-notes .rider-ranking-totals .current-count').text(weeksCounter);
+				$('.update-rider-ranking-notes .response-result').append(response);
+			});
+		}
 	});
 
 });
