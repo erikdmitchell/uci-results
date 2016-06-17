@@ -585,11 +585,14 @@ class UCIcURLAdmin {
 	 * @return void
 	 */
 	public function ajax_update_rider_rankings() {
+		global $wpdb;
+
 		extract($_POST);
 
 		if (!$rider_id || !$season)
 			return;
 
+/*
 		global $ucicurl_races;
 
 		$weeks=$ucicurl_races->weeks($season);
@@ -597,12 +600,54 @@ class UCIcURLAdmin {
 		foreach ($weeks as $week) :
 			$this->update_rider_rankings($rider_id, $season, $week);
 		endforeach;
+*/
+
+$sql="
+	SELECT
+		races.week,
+		(
+			SELECT IFNULL(SUM(s_results.par), 0)
+			FROM {$wpdb->ucicurl_results} AS s_results
+			LEFT JOIN {$wpdb->ucicurl_races} AS s_races
+			ON s_results.race_id = s_races.id
+			WHERE s_races.season='{$season}'
+				AND s_results.rider_id={$rider_id}
+				AND s_races.week<=races.week
+		) AS points
+	FROM {$wpdb->ucicurl_results} AS results
+	LEFT JOIN {$wpdb->ucicurl_races} AS races
+	ON results.race_id = races.id
+	WHERE races.season='2010/2011'
+		AND results.rider_id=1
+	GROUP BY races.week
+	ORDER BY races.week
+";
+$weekly_points=$wpdb->get_results($sql);
+
+foreach ($weekly_points as $arr) :
+
+		$data=array(
+			'rider_id' => $rider_id,
+			'points' => $arr->points,
+			'season' => $season,
+			'week' => $arr->week,
+		);
+
+		$wpdb->insert($wpdb->ucicurl_rider_rankings, $data);
+		//$ranking_id=$wpdb->insert_id; // not utalized, except for log
+endforeach;
 
 		echo '<div class="updated">Rider ID '.$rider_id.' rankings have been updated!</div>';
 
 		wp_die();
 	}
 
+	/**
+	 * ajax_update_rider_weekly_rank function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function ajax_update_rider_weekly_rank() {
 		if (!$_POST['season'] || !$_POST['week'])
 			return false;
