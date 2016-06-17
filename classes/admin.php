@@ -592,50 +592,40 @@ class UCIcURLAdmin {
 		if (!$rider_id || !$season)
 			return;
 
-/*
-		global $ucicurl_races;
+		$sql="
+			SELECT
+				races.week,
+				(
+					SELECT IFNULL(SUM(s_results.par), 0)
+					FROM {$wpdb->ucicurl_results} AS s_results
+					LEFT JOIN {$wpdb->ucicurl_races} AS s_races
+					ON s_results.race_id = s_races.id
+					WHERE s_races.season='{$season}'
+						AND s_results.rider_id={$rider_id}
+						AND s_races.week<=races.week
+				) AS points
+			FROM {$wpdb->ucicurl_results} AS results
+			LEFT JOIN {$wpdb->ucicurl_races} AS races
+			ON results.race_id = races.id
+			WHERE races.season='2010/2011'
+				AND results.rider_id=1
+			GROUP BY races.week
+			ORDER BY races.week
+		";
+		$weekly_points=$wpdb->get_results($sql);
 
-		$weeks=$ucicurl_races->weeks($season);
+		foreach ($weekly_points as $arr) :
 
-		foreach ($weeks as $week) :
-			$this->update_rider_rankings($rider_id, $season, $week);
+				$data=array(
+					'rider_id' => $rider_id,
+					'points' => $arr->points,
+					'season' => $season,
+					'week' => $arr->week,
+				);
+
+				$wpdb->insert($wpdb->ucicurl_rider_rankings, $data);
+				//$ranking_id=$wpdb->insert_id; // not utalized, except for log
 		endforeach;
-*/
-
-$sql="
-	SELECT
-		races.week,
-		(
-			SELECT IFNULL(SUM(s_results.par), 0)
-			FROM {$wpdb->ucicurl_results} AS s_results
-			LEFT JOIN {$wpdb->ucicurl_races} AS s_races
-			ON s_results.race_id = s_races.id
-			WHERE s_races.season='{$season}'
-				AND s_results.rider_id={$rider_id}
-				AND s_races.week<=races.week
-		) AS points
-	FROM {$wpdb->ucicurl_results} AS results
-	LEFT JOIN {$wpdb->ucicurl_races} AS races
-	ON results.race_id = races.id
-	WHERE races.season='2010/2011'
-		AND results.rider_id=1
-	GROUP BY races.week
-	ORDER BY races.week
-";
-$weekly_points=$wpdb->get_results($sql);
-
-foreach ($weekly_points as $arr) :
-
-		$data=array(
-			'rider_id' => $rider_id,
-			'points' => $arr->points,
-			'season' => $season,
-			'week' => $arr->week,
-		);
-
-		$wpdb->insert($wpdb->ucicurl_rider_rankings, $data);
-		//$ranking_id=$wpdb->insert_id; // not utalized, except for log
-endforeach;
 
 		echo '<div class="updated">Rider ID '.$rider_id.' rankings have been updated!</div>';
 
@@ -671,68 +661,6 @@ endforeach;
 		$weeks=$ucicurl_races->weeks($_POST['season']);
 
 		wp_send_json($weeks);
-	}
-
-	/**
-	 * update_rider_rankings function.
-	 *
-	 * @access public
-	 * @param int $rider_id (default: 0)
-	 * @param string $season (default: '')
-	 * @param int $week (default: 0)
-	 * @return void
-	 */
-	public function update_rider_rankings($rider_id=0, $season='', $week=0) {
-		global $wpdb;
-
-		$prev_points=0;
-		$db_points=0;
-		$prev_week=absint($week)-1;
-		$ranking_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_rider_rankings} WHERE rider_id={$rider_id} AND week={$week} AND season='{$season}'");
-		$sql="
-			SELECT
-				IFNULL(SUM(results.par), 0)
-			FROM wp_uci_curl_results AS results
-			LEFT JOIN wp_uci_curl_races AS races
-			ON results.race_id = races.id
-			WHERE races.season='{$season}'
-			AND rider_id={$rider_id}
-			AND week<={$week}
-		";
-
-		$points=$wpdb->get_var($sql);
-
-		// there's already a ranking for this week, so we update it, else we add new //
-		if ($ranking_id) :
-			$data=array(
-				'points' => $points
-			);
-			$where=array(
-				'id' => $ranking_id
-			);
-
-			$wpdb->update($wpdb->ucicurl_rider_rankings, $data, $where);
-		else :
-			$data=array(
-				'rider_id' => $rider_id,
-				'points' => $points,
-				'season' => $season,
-				'week' => $week,
-			);
-
-			$wpdb->insert($wpdb->ucicurl_rider_rankings, $data);
-			$ranking_id=$wpdb->insert_id; // not utalized, except for log
-		endif;
-
-		$log=array(
-			'ranking_id' => $ranking_id,
-			'rider_id' => $rider_id,
-			'points' => $points,
-			'week' => $week,
-		);
-
-		//_log($log);
-		//return $log;
 	}
 
 	/**
