@@ -199,7 +199,7 @@ class UCIResultsAddRaces {
 							$event='No Event';
 
 						// if we already have results, bail. there are other check later, but this is a good helper //
-						if ($this->uci_results_race_has_results($code))
+						if (uci_results_race_has_results($code))
 							$disabled='disabled';
 
 						$html.='<tr>';

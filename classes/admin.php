@@ -6,26 +6,12 @@
  */
 class UCIcURLAdmin {
 
-
-	/**
-	 * __construct function.
-	 *
-	 * @access public
-	 * @param array $config (default: array())
-	 * @return void
-	 */
-	public function __construct($config=array()) {
-
-
-
-
-	}
-
 	/**
  	 * @param string $url - results url
 	 * the date comes in with hidden &nbsp; this gets a 'clean' date from the results page
 	 * WHERE IS THIS FUNCTION USED?????
 	**/
+/*
 	function get_race_date($url) {
 		// Use the Curl extension to query Google and get back a page of results
 		$timeout = 5;
@@ -62,6 +48,7 @@ class UCIcURLAdmin {
 
 		return trim($date[0]);
 	}
+*/
 
 
 

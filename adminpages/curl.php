@@ -1,5 +1,5 @@
 <?php
-global $ucicurl_admin;
+global $uci_results_admin_pages;
 
 $url=null;
 $limit=null;
@@ -23,7 +23,7 @@ $limit=null;
 					<td>
 						<select class="url-dd" id="season" name="url">
 							<option value="0">Select Year</option>
-							<?php foreach ($ucicurl_admin->config->urls as $season => $s_url) : ?>
+							<?php foreach ($uci_results_admin_pages->config->urls as $season => $s_url) : ?>
 								<option value="<?php echo $s_url; ?>" <?php selected($url, $s_url); ?>><?php echo $season; ?></option>
 							<?php endforeach; ?>
 						</select>
