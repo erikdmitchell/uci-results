@@ -251,6 +251,31 @@ function ucicurl_get_rider_id($slug='') {
 }
 
 /**
+ * uci_results_race_has_results function.
+ *
+ * @access public
+ * @param string $code (default: '')
+ * @return void
+ */
+function uci_results_race_has_results($code='') {
+	global $wpdb;
+
+	$race_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_races} WHERE code=\"{$code}\"");
+
+	// no race id, we out //
+	if (!$race_id)
+		return false;
+
+	$results=$wpdb->get_results("SELECT id FROM {$wpdb->ucicurl_results} WHERE race_id={$race_id}");
+
+	// do we have results? //
+	if (count($results))
+		return true;
+
+	return false;
+}
+
+/**
 * Build the entire current page URL (incl query strings) and output it
 * Useful for social media plugins and other times you need the full page URL
 * Also can be used outside The Loop, unlike the_permalink
