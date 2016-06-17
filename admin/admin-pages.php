@@ -109,4 +109,6 @@ class UCIResultsAdminPages {
 	}
 
 }
+
+$uci_results_admin_pages=new UCIResultsAdminPages();
 ?>
