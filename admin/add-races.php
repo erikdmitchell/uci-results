@@ -540,6 +540,143 @@ class UCIResultsAddRaces {
 		return $week_counter;
 	}
 
+	/**
+	 * add_race_results_to_db function.
+	 *
+	 * @access public
+	 * @param bool $race_id (default: 0)
+	 * @param bool $link (default: false)
+	 * @return void
+	 */
+	public function add_race_results_to_db($race_id=0, $link=false) {
+		global $wpdb;
+
+		if (!$race_id || !$link)
+			return false;
+
+		$race_results=$this->get_race_results($link);
+		$race=$wpdb->get_row("SELECT * FROM {$wpdb->ucicurl_races} WHERE id={$race_id}");
+
+		foreach ($race_results as $result) :
+			$rider_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_riders} WHERE name=\"{$result->name}\" AND nat='{$result->nat}'");
+
+			// check if we have a rider id, otherwise create one //
+			if (!$rider_id) :
+				$rider_insert=array(
+					'name' => $result->name,
+					'nat' => $result->nat,
+					'slug' => sanitize_title_with_dashes($result->name)
+				);
+				$wpdb->insert($wpdb->ucicurl_riders, $rider_insert);
+				$rider_id=$wpdb->insert_id;
+			endif;
+
+			$insert=array(
+				'race_id' => $race_id,
+				'place' => $result->place,
+				'name' => $result->name,
+				'nat' => $result->nat,
+				'age' => $result->age,
+				'result' => $result->result,
+				'par' => $result->par,
+				'pcr' => $result->pcr,
+				'rider_id' => $rider_id,
+			);
+
+			$wpdb->insert($wpdb->ucicurl_results, $insert);
+
+		endforeach;
+	}
+
+	/**
+	 * get_race_results function.
+	 *
+	 * @access public
+	 * @param mixed $url
+	 * @return void
+	 */
+	public function get_race_results($url) {
+		// Use the Curl extension to query Google and get back a page of results
+		$timeout = 5;
+		$race_results=array();
+		$race_results_obj=new stdClass();
+		$results_class_name="datatable";
+
+		// get header so that we can get the charset ? //
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		//$html = curl_exec_utf8($ch); // external function in this file //
+		$html=curl_exec($ch);
+		curl_close($ch);
+
+		// modify html //
+		$html=preg_replace('/<script\b[^>]*>(.*?)<\/script>/is',"",$html); // remove js
+
+		// Create a DOM parser object
+		$dom = new DOMDocument();
+
+		// Parse HTML - The @ before the method call suppresses any warnings that loadHTML might throw because of invalid HTML in the page.
+		@$dom->loadHTML($html);
+
+		//discard white space
+		$dom->preserveWhiteSpace = false;
+
+		// get our results table //
+		$finder = new DomXPath($dom);
+
+		$nodes = $finder->query("//*[contains(@class, '$results_class_name')]");
+
+		// if for some reason we can't find that class, we bail and return an empty object //
+		if ($nodes->length==0)
+			return new stdClass();
+
+		$rows=$nodes->item(0)->getElementsByTagName('tr'); //get all rows from the table -- this seems to cause an ERROR sometimes
+
+		// loop over the table rows
+		$row_count=0;
+		foreach ($rows as $row) :
+		  if ($row_count!=0) :
+		  	$race_results[$row_count]=new stdClass();
+		  	$cols = $row->getElementsByTagName('td'); 	// get each column by tag name
+			  foreach ($cols as $key => $col) :
+					// rank, name, nat, age, result, par, pcr
+					switch ($key) :
+						case 0:
+							$race_results[$row_count]->place=$col->nodeValue;
+							break;
+						case 1:
+							$race_results[$row_count]->name=$col->nodeValue;
+							break;
+						case 2:
+							$race_results[$row_count]->nat=$col->nodeValue;
+							break;
+						case 3:
+							$race_results[$row_count]->age=$col->nodeValue;
+							break;
+						case 4:
+							$race_results[$row_count]->result=$col->nodeValue;
+							break;
+						case 5:
+							$race_results[$row_count]->par=$col->nodeValue;
+							break;
+						case 6:
+							$race_results[$row_count]->pcr=$col->nodeValue;
+							break;
+					endswitch;
+				endforeach;
+			endif;
+			$row_count++;
+		endforeach;
+
+		foreach ($race_results as $key => $value) :
+			$race_results_obj->$key=$value;
+		endforeach;
+
+		return $race_results_obj;
+	}
+
 }
 
 $uci_results_add_races=new UCIResultsAddRaces();
