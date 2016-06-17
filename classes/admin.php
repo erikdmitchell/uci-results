@@ -15,15 +15,12 @@ class UCIcURLAdmin {
 	 * @return void
 	 */
 	public function __construct($config=array()) {
-		global $wpdb;
-
 		add_action('admin_menu',array($this,'admin_page'));
 		add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
 
 		add_action('wp_ajax_get_race_data_non_db',array($this,'ajax_get_race_data_non_db'));
 		add_action('wp_ajax_prepare_add_races_to_db',array($this,'ajax_prepare_add_races_to_db'));
 		add_action('wp_ajax_add_race_to_db', array($this, 'ajax_add_race_to_db'));
-		//add_action('wp_ajax_update_rider_rankings', array($this, 'ajax_update_rider_rankings'));
 
 		add_action('wp_ajax_update_rider_rankings_get_rider_ids', array($this, 'ajax_update_rider_rankings_get_rider_ids'));
 		add_action('wp_ajax_update_rider_rankings_rider_results', array($this, 'ajax_update_rider_rankings_rider_results'));
