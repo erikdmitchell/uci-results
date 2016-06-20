@@ -14,7 +14,7 @@ class UCIResultsRiderRankings {
 	public function __construct() {
 		add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
 		add_action('wp_ajax_update_rider_rankings_get_rider_ids', array($this, 'ajax_update_rider_rankings_get_rider_ids'));
-		add_action('wp_ajax_update_rider_rankings', array($this, 'ajax_update_rider_rankings'));
+		add_action('wp_ajax_update_rider_rankings', array($this, 'ajax_update_rider_weekly_points'));
 		add_action('wp_ajax_update_rider_weekly_rank', array($this, 'ajax_update_rider_weekly_rank'));
 		add_action('wp_ajax_get_weeks_in_season', array($this, 'ajax_get_weeks_in_season'));
 	}
@@ -56,7 +56,7 @@ class UCIResultsRiderRankings {
 	 * @access public
 	 * @return void
 	 */
-	public function ajax_update_rider_rankings() {
+	public function ajax_update_rider_weekly_points() {
 		global $wpdb;
 
 		extract($_POST);
