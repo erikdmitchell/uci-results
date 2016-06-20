@@ -81,7 +81,7 @@ class UCIResultsRiderRankings {
 		if (!$_POST['season'] || !$_POST['week'])
 			return false;
 
-		$this->update_rider_rankings_rank($_POST['season'], $_POST['week']);
+		$this->update_rider_weekly_rankings($_POST['season'], $_POST['week']);
 
 		echo '<div class="updated">Week '.$_POST['week'].' updated!</div>';
 
@@ -135,14 +135,14 @@ class UCIResultsRiderRankings {
 	}
 
 	/**
-	 * update_rider_rankings_rank function.
+	 * update_rider_weekly_rankings function.
 	 *
 	 * @access public
 	 * @param string $season (default: '')
 	 * @param int $week (default: 0)
 	 * @return void
 	 */
-	public function update_rider_rankings_rank($season='', $week=0) {
+	public function update_rider_weekly_rankings($season='', $week=0) {
 		global $wpdb;
 
 		$this->add_previous_weeks_riders_to_rank($season, $week);
