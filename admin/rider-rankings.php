@@ -64,6 +64,39 @@ class UCIResultsRiderRankings {
 		if (!$rider_id || !$season)
 			return;
 
+		$this->update_rider_weekly_points($rider_id, $season);
+
+		echo '<div class="updated">Rider ID '.$rider_id.' rankings have been updated!</div>';
+
+		wp_die();
+	}
+
+	/**
+	 * ajax_update_rider_weekly_rank function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function ajax_update_rider_weekly_rank() {
+		if (!$_POST['season'] || !$_POST['week'])
+			return false;
+
+		$this->update_rider_rankings_rank($_POST['season'], $_POST['week']);
+
+		echo '<div class="updated">Week '.$_POST['week'].' updated!</div>';
+
+		wp_die();
+	}
+
+	/**
+	 * update_rider_weekly_points function.
+	 *
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @param string $season (default: '')
+	 * @return void
+	 */
+	public function update_rider_weekly_points($rider_id=0, $season='') {
 		$sql="
 			SELECT
 				races.week,
@@ -96,29 +129,9 @@ class UCIResultsRiderRankings {
 				);
 
 				$wpdb->insert($wpdb->ucicurl_rider_rankings, $data);
-				//$ranking_id=$wpdb->insert_id; // not utalized, except for log
 		endforeach;
 
-		echo '<div class="updated">Rider ID '.$rider_id.' rankings have been updated!</div>';
-
-		wp_die();
-	}
-
-	/**
-	 * ajax_update_rider_weekly_rank function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function ajax_update_rider_weekly_rank() {
-		if (!$_POST['season'] || !$_POST['week'])
-			return false;
-
-		$this->update_rider_rankings_rank($_POST['season'], $_POST['week']);
-
-		echo '<div class="updated">Week '.$_POST['week'].' updated!</div>';
-
-		wp_die();
+		return;
 	}
 
 	/**
