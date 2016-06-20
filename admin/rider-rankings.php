@@ -1,4 +1,5 @@
 <?php
+global $uci_results_rider_rankings;
 
 /**
  * UCIResultsRiderRankings class.
@@ -97,6 +98,8 @@ class UCIResultsRiderRankings {
 	 * @return void
 	 */
 	public function update_rider_weekly_points($rider_id=0, $season='') {
+		global $wpdb;
+
 		$sql="
 			SELECT
 				races.week,

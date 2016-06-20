@@ -1,4 +1,6 @@
 <?php
+global $ucicurl_races;
+
 /**
  * UCIcURLRaces class.
  *
