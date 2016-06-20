@@ -53,11 +53,18 @@ class UCIResultsCLI extends WP_CLI_Command {
 
 		WP_CLI::success('Rider rankings table for '.$season.' cleared.');
 
+		// weekly points progress bar //
+		$rider_id_count=count($rider_ids);
+		$rider_id_counter=0;
+		$weekly_points_progress = \WP_CLI\Utils\make_progress_bar( 'Updating weekly points', $rider_id_count );
+
 		// update weekly points //
-		foreach ($rider_ids as $rider_id) :
-			$uci_results_rider_rankings->update_rider_weekly_points($rider_id, $season);
-			WP_CLI::success('Rider ID '.$rider_id.' weekly points have been updated!');
-		endforeach;
+		for ( $i = 0; $i < $rider_id_count; $i++ ) :
+    	$uci_results_rider_rankings->update_rider_weekly_points($rider_ids[$i], $season);
+			$weekly_points_progress->tick();
+		endfor;
+
+		$weekly_points_progress->finish();
 
 		// update weekly ranks //
 		foreach ($weeks as $week) :
