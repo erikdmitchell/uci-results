@@ -20,6 +20,7 @@ include_once(UCICURL_PATH.'classes/admin.php'); // our admin panel and curl func
 include_once(UCICURL_PATH.'admin/admin-pages.php'); // admin page
 include_once(UCICURL_PATH.'admin/add-races.php'); // cURL and add races/results to db
 include_once(UCICURL_PATH.'admin/rider-rankings.php'); // add and update rider rankings
+include_once(UCICURL_PATH.'admin/wp-cli.php'); // wp cli functions
 
 include_once(UCICURL_PATH.'lib/name-parser.php'); // a php nameparser
 include_once(UCICURL_PATH.'classes/races.php'); // our races functions
