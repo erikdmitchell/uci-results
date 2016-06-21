@@ -12,20 +12,20 @@ function ucicurl_scripts_styles() {
 add_action('wp_enqueue_scripts', 'ucicurl_scripts_styles');
 
 /**
- * ucicurl_landing function.
+ * uci_results_main function.
  *
  * @access public
  * @param mixed $atts
  * @return void
  */
-function ucicurl_landing($atts) {
+function uci_results_main($atts) {
 	$atts = shortcode_atts( array(
 
-	), $atts, 'ucicurl' );
+	), $atts, 'uci_results' );
 
 	return ucicurl_get_template('main');
 }
-add_shortcode('ucicurl', 'ucicurl_landing');
+add_shortcode('uci_results', 'uci_results_main');
 
 function ucicurl_rider_rankings($atts) {
 	$atts = shortcode_atts( array(
