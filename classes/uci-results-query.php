@@ -45,7 +45,7 @@ class UCI_Results_Query {
 		$array=array(
 			'per_page' => 30,
 			'order_by' => '', // date (races -- name (riders)
-			'order' => 'DESC', // DESC (races -- ASC (riders)
+			'order' => '', // DESC (races -- ASC (riders)
 			'class' => false, // races
 			'season' => false, // races, rider ranks
 			'nat' => false,
@@ -77,9 +77,15 @@ class UCI_Results_Query {
 			switch ($args['type']) :
 				case 'races':
 					$args['order_by']='date';
+
+					if (empty($args['order']))
+						$args['order']='DESC';
 					break;
 				case 'riders':
 					$args['order_by']='rank';
+
+					if (empty($args['order']))
+						$args['order']='ASC';
 					break;
 			endswitch;
 		endif;
