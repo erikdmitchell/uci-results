@@ -270,6 +270,10 @@ echo '</pre>';
 			$where.=" AND week=$week";
 		endif;
 
+		// square away a default order by //
+		if (empty($order))
+			$order="ORDER BY rank";
+
 		$sql="SELECT * FROM $wpdb->ucicurl_rider_rankings AS rankings	LEFT JOIN $wpdb->ucicurl_riders AS riders	ON riders.id=rankings.rider_id $where	$order $limit";
 
 		return $sql;
