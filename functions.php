@@ -164,48 +164,6 @@ function ucicurl_country_url($slug='') {
 }
 
 /**
- * ucicurl_create_virtual_page function.
- *
- * @access public
- * @return void
- */
-function ucicurl_create_virtual_page() {
-	global $wp;
-
-	$args=array();
-	$url = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
-	$url_array=explode('/', $url); // split into page slug and slug
-
-  if ($url_array[0]=='rider') :
-		$args = array(
-			'slug' => 'rider',
-			'title' => ucicurl_rider_slug_to_name($url_array[1]),
-			'content' => ucicurl_get_template('rider', array('rider_id' => ucicurl_get_rider_id($url_array[1]))),
-			'pagename' => $url
-		);
-	elseif ($url_array[0]=='races') :
-		$args = array(
-			'slug' => 'races',
-			'title' => ucicurl_race_slug_to_name($url_array[1]),
-			'content' => "TEMPLATE",
-			'pagename' => $url
-		);
-	elseif ($url_array[0]=='country') :
-		$args = array(
-			'slug' => 'country',
-			'title' => 'Rider Page',
-			'content' => "This can be generated content, or static content<br />Whatever you put here will appear on your virtual page.",
-			'pagename' => $url
-		);
-	endif;
-
-	// generate page if we have args //
-	if (!empty($args))
-		$pg = new ucicurlVirtualPage($args);
-}
-add_action('init', 'ucicurl_create_virtual_page');
-
-/**
  * ucicurl_rider_slug_to_name function.
  *
  * @access public

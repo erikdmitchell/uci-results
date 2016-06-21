@@ -39,8 +39,6 @@ $races=new UCI_Results_Query(array(
 		</div>
 	</div>
 
-
-
 	<div class="ucicurl-races">
 		<h3>Race Results</h3>
 
