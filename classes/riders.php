@@ -101,6 +101,7 @@ class UCIcURLRiders {
 	 * @param array $args (default: array())
 	 * @return void
 	 */
+/*
 	public function get_rider_rankings($args=array()) {
 		global $wpdb;
 
@@ -188,6 +189,7 @@ class UCIcURLRiders {
 
 		return $riders;
 	}
+*/
 
 	/**
 	 * get_rider function.
