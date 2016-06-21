@@ -235,10 +235,9 @@ echo '</pre>';
 		if ($this->current_post + 1 < $this->post_count) :
 			return true;
 		elseif ( $this->current_post + 1 == $this->post_count && $this->post_count > 0 ) :
-			//$this->rewind_posts();
+			$this->rewind_posts();
 		endif;
 
-		//$this->in_the_loop = false;
 		return false;
 	}
 
@@ -250,11 +249,6 @@ echo '</pre>';
 	 */
 	public function the_post() {
 		global $uci_results_post;
-
-		//$this->in_the_loop = true;
-
-		//if ( $this->current_post == -1 ) // loop has just started
-			//do_action_ref_array( 'loop_start', array( &$this ) );
 
 		$uci_results_post = $this->next_post();
 	}
@@ -271,6 +265,19 @@ echo '</pre>';
 		$this->post = $this->posts[$this->current_post];
 
 		return $this->post;
+	}
+
+	/**
+	 * rewind_posts function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function rewind_posts() {
+		$this->current_post = -1;
+
+		if ( $this->post_count > 0 )
+			$this->post = $this->posts[0];
 	}
 
 }
