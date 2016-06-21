@@ -136,6 +136,10 @@ echo '</pre>';
 			$where[]="(date BETWEEN '".$q['start_date']."' AND '".$q['end_date']."')";
 		endif;
 
+		// check name //
+		if ($q['name'])
+			$where[]="name='".$q['name']."'";
+
 		if (!empty($where)) :
 			$where=' WHERE '.implode(' AND ',$where);
 		else :
@@ -284,47 +288,4 @@ echo '</pre>';
 	}
 
 }
-
-	/*
-	public function get_riders($user_args=array()) {
-
-		// if we dont have a name and we have a limit, setup pagination //
-		if (!$name && $per_page>0) :
-			if ($paged==0) :
-				$start=0;
-			else :
-				$start=$per_page*($paged-1);
-			endif;
-			$end=$per_page;
-			$limit="LIMIT $start,$end";
-		endif;
-
-		// setup our where stuff //
-		if ($name)
-			$where[]="name='{$name}'";
-
-		if ($nat)
-			$where[]="nat='{$nat}'";
-
-		// run our where //
-		if (!empty($where)) :
-			$where='WHERE '.implode(' AND ',$where);
-		else :
-			$where='';
-		endif;
-
-		$sql="
-			SELECT
-				*
-			FROM $wpdb->ucicurl_riders
-			$where
-			ORDER BY $order_by $order
-			$limit
-		";
-
-		$riders=$wpdb->get_results($sql);
-
-		return $riders;
-	}
-	*/
 ?>
