@@ -14,17 +14,6 @@ $riders=new UCI_Results_Query(array(
 	'rankings' => true,
 	'nat' => get_query_var('country_slug'),
 ));
-/*
-                    [id] => 5259
-                    [rider_id] => 5259
-                    [points] => 0
-                    [season] => 2014/2015
-                    [rank] => 5261
-                    [week] => 26
-                    [name] => Jens VAN DER BORGHT
-                    [nat] => BEL
-                    [slug] => jens-van-der-borght
-*/
 ?>
 
 <div class="uci-results-country">
