@@ -100,10 +100,12 @@ class UCI_Results_Query {
 		endif;
 
 		$this->get_posts();
+/*
 echo '<pre>';
 print_r($query);
 print_r($this);
 echo '</pre>';
+*/
 	}
 
 	/**
