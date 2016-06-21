@@ -89,7 +89,7 @@ function uci_results_rider_rankings($atts) {
 
 	), $atts, 'uci_results_rider_rankings' );
 
-	return ucicurl_get_template('rider_rankings');
+	return ucicurl_get_template('rider-rankings');
 }
 add_shortcode('uci_results_rider_rankings', 'uci_results_rider_rankings');
 
