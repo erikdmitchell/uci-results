@@ -27,7 +27,7 @@ class UCIcURLRiders {
 
 		// if not an int, it's a slug //
 		if (!is_integer($rider_id)) :
-			$rider_id=$wpdb->get_var("SELECT id FROM $wpdb->ucicurl_riders WHERE slug='{$rider_id}'");
+			$rider_id=ucicurl_get_rider_id($rider_id);
 		endif;
 
 		$where="rider_id=".absint($rider_id);

@@ -140,7 +140,18 @@ function uci_results_rider_url($slug='') {
 	echo $url;
 }
 
+/**
+ * uci_results_race_url function.
+ *
+ * @access public
+ * @param string $slug (default: '')
+ * @return void
+ */
 function uci_results_race_url($slug='') {
+	// check if id, not slug //
+	if (is_numeric($slug))
+		$slug=uci_results_get_race_slug($slug);
+
 	$url="/races/$slug";
 
 	echo $url;
@@ -150,6 +161,23 @@ function uci_results_country_url($slug='') {
 	$url="/country/$slug";
 
 	echo $url;
+}
+
+/**
+ * uci_results_get_race_slug function.
+ *
+ * @access public
+ * @param int $id (default: 0)
+ * @return void
+ */
+function uci_results_get_race_slug($id=0) {
+	global $wpdb;
+
+	$id=absint($id);
+
+	$slug=$wpdb->get_var("SELECT code FROM {$wpdb->ucicurl_races} WHERE id=$id");
+
+	return $slug;
 }
 
 /**
