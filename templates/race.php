@@ -40,11 +40,11 @@ $race=$ucicurl_races->get_race(get_query_var('race_code'));
 				<?php foreach ($race->results as $result) : ?>
 					<tr>
 						<td class="rider-place"><?php echo $result->place; ?></td>
-						<td class="rider-name"><a href=""><?php echo $result->name; ?></a></td>
-						<td class="rider-points"><?php echo $result->par; ?></td>
+						<td class="rider-name"><a href="<?php echo uci_results_rider_url($result->slug); ?>"><?php echo $result->name; ?></a></td>
+						<td class="rider-points"><?php echo $result->points; ?></td>
 						<td class="rider-nat"><a href=""><?php echo ucicurl_get_country_flag($result->nat); ?></a></td>
 						<td class="rider-age"><?php echo $result->age; ?></td>
-						<td class="rider-time"><?php echo $result->result; ?></td>
+						<td class="rider-time"><?php echo $result->time; ?></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>

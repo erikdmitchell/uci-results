@@ -36,7 +36,20 @@ class UCIcURLRaces {
 			$race_id=uci_results_get_race_id($race_id);
 
 		$race=$wpdb->get_row("SELECT * FROM {$wpdb->ucicurl_races} WHERE id={$race_id}");
-		$race->results=$wpdb->get_results("SELECT * FROM {$wpdb->ucicurl_results} WHERE race_id={$race_id}");
+		$race->results=$wpdb->get_results("
+			SELECT
+				results.place,
+				results.name,
+				results.nat,
+				results.age,
+				results.result AS time,
+				results.par AS points,
+				riders.slug
+			FROM {$wpdb->ucicurl_results} AS results
+			LEFT JOIN {$wpdb->ucicurl_riders} AS riders
+			ON results.rider_id=riders.id
+			WHERE results.race_id={$race_id}
+		");
 
 		return $race;
 	}
