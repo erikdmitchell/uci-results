@@ -1,63 +1,39 @@
 <?php
 /**
- * Template Name: Rider Rankings
+ * Rider Rankings
  *
- * @since 	1.0.8
+ * @since 	2.0.0
  */
-?>
 
-<?php
-global $RiderStats,$wp_query;
+global $uci_results_post;
 
-$season=get_query_var('season','2015/2016');
-$week=$RiderStats->get_latest_rankings_week($season);
-$riders=$RiderStats->get_riders(array(
-	'season' => $season,
-	'week' => $week
+$riders=new UCI_Results_Query(array(
+	'per_page' => 10,
+	'type' => 'riders',
+	'season' => '2014/2015',
+	'rankings' => true
 ));
 ?>
 
-<?php get_header(); ?>
-
-<div class="container">
-	<div class="row content">
-		<div class="col-md-12">
-
-			<div class="uci-curl-rider-rankings">
-				<h1 class="entry-title">Rider Rankings (<?php echo $season; ?>)</h1>
-
-				<div id="season-rider-rankings" class="season-rider-rankings">
-					<div class="header row">
-						<div class="rank col-md-1">Rank</div>
-						<div class="rider col-md-4">Rider</div>
-						<div class="nat col-md-1">Nat</div>
-						<div class="uci col-md-1">UCI</div>
-						<div class="wcp col-md-1">WCP</div>
-						<div class="winning col-md-1">Win %</div>
-						<div class="sos col-md-1">SOS</div>
-						<div class="total col-md-1">Total</div>
-					</div>
-
-					<?php foreach ($riders as $rider) : ?>
-						<div class="row">
-							<div class="rank col-md-1"><?php echo $rider->rank; ?></div>
-							<div class="rider col-md-4"><a href="<?php echo single_rider_link($rider->name,$season); ?>"><?php echo $rider->name; ?></a></div>
-							<div class="nat col-md-1"><a href="<?php echo single_country_link($rider->country,$season); ?>"><?php echo get_country_flag($rider->country); ?></a></div>
-							<div class="uci col-md-1"><?php echo $rider->uci_total; ?></div>
-							<div class="wcp col-md-1"><?php echo $rider->wcp_total; ?></div>
-							<div class="winning col-md-1"><?php echo $rider->win_perc; ?></div>
-							<div class="sos col-md-1"><?php echo $rider->sos; ?></div>
-							<div class="total col-md-1"><?php echo $rider->total; ?></div>
-						</div>
-					<?php endforeach; ?>
-				</div>
-
-				<?php uci_curl_pagination(); ?>
-
-			</div><!-- .uci-curl-rider-rankings -->
-
-		</div>
-	</div>
-</div><!-- .container -->
-
-<?php get_footer(); ?>
+<div class="uci-results-rider-rankings">
+	<table class="wp-list-table widefat fixed striped uci-results-rider-rankings">
+		<thead>
+			<tr>
+				<th scope="col" class="rider-rank">Rank</th>
+				<th scope="col" class="rider-name">Rider</th>
+				<th scope="col" class="rider-nat">Nat</th>
+				<th scope="col" class="rider-points">Points</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php if ($riders->have_posts()) : while ( $riders->have_posts() ) : $riders->the_post(); ?>
+				<tr>
+					<td class="rider-rank"><?php echo $uci_results_post->rank; ?></td>
+					<td class="rider-name"><a href="<?php uci_results_rider_url($uci_results_post->slug); ?>"><?php echo $uci_results_post->name; ?></a></td>
+					<td class="rider-nat"><a href=""><?php echo ucicurl_get_country_flag($uci_results_post->nat); ?></a></td>
+					<td class="rider-points"><?php echo $uci_results_post->points; ?></td>
+				</tr>
+			<?php endwhile; endif; ?>
+		</tbody>
+	</table>
+</div>
