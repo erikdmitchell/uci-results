@@ -1,11 +1,13 @@
 <?php
-global $ucicurl_riders, $ucicurl_races;
+global $ucicurl_riders, $uci_results_post;
 
 $riders=$ucicurl_riders->get_rider_rankings(array(
 	'per_page' => 10
 ));
-$races=$ucicurl_races->get_races(array(
-	'per_page' => 10
+
+$races=new UCI_Results_Query(array(
+	'per_page' => 10,
+	'type' => 'races'
 ));
 ?>
 
@@ -34,6 +36,8 @@ $races=$ucicurl_races->get_races(array(
 		</div>
 	</div>
 
+
+
 	<div class="ucicurl-races">
 		<h3>Race Results</h3>
 
@@ -45,25 +49,16 @@ $races=$ucicurl_races->get_races(array(
 				<div class="class">Class</div>
 			</div>
 
-			<?php foreach ($races as $race) : ?>
+			<?php if ($races->have_posts()) : while ( $races->have_posts() ) : $races->the_post(); ?>
 				<div class="row">
-					<div class="name"><a href="<?php ucicurl_race_url($race->code); ?>"><?php echo $race->name; ?></a></div>
-					<div class="date"><?php echo $race->date; ?></div>
-					<div class="nat"><?php echo ucicurl_get_country_flag($race->nat); ?></div>
-					<div class="class"><?php echo $race->class; ?></div>
+					<div class="name"><a href="<?php ucicurl_race_url($uci_results_post->code); ?>"><?php echo $uci_results_post->name; ?></a></div>
+					<div class="date"><?php echo $uci_results_post->date; ?></div>
+					<div class="nat"><?php echo ucicurl_get_country_flag($uci_results_post->nat); ?></div>
+					<div class="class"><?php echo $uci_results_post->class; ?></div>
 				</div>
-			<?php endforeach; ?>
+			<?php endwhile; endif; ?>
 
 			<a class="view-all" href="">View All Races &raquo;</a>
 		</div>
 	</div>
 </div>
-
-<?php
-global $wpdb;
-
-$sql="
-	SELECT
-		*
-";
-?>
