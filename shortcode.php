@@ -45,7 +45,21 @@ function uci_results_rider($atts) {
 }
 add_shortcode('uci_results_rider', 'uci_results_rider');
 
+/**
+ * uci_results_race function.
+ *
+ * @access public
+ * @param mixed $atts
+ * @return void
+ */
+function uci_results_race($atts) {
+	$atts = shortcode_atts( array(
 
+	), $atts, 'uci_results_race' );
+
+	return ucicurl_get_template('race');
+}
+add_shortcode('uci_results_race', 'uci_results_race');
 
 
 
