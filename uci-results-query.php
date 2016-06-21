@@ -16,6 +16,8 @@ class UCI_Results_Query {
 
 	public $post;
 
+	public $rider_rankings_query=false;
+
 
 	/**
 	 * __construct function.
@@ -45,12 +47,15 @@ class UCI_Results_Query {
 			'order_by' => '', // date (races -- name (riders)
 			'order' => '', // DESC (races -- ASC (riders)
 			'class' => false, // races
-			'season' => false, // races
+			'season' => false, // races, rider ranks
+			'week' => 0, // rider ranks
 			'nat' => false,
 			'name' => false, // riders
 			'start_date' => false, // races
 			'end_date' => false, // races
 			'paged' => 1,
+			'type' => 'races',
+			'rankings' => false // riders
 		);
 
 		return $array;
@@ -87,7 +92,13 @@ class UCI_Results_Query {
 		$order=$this->order_clause($q);
 		$limit=$this->set_limit($q);
 
-		$this->query="SELECT * FROM $db_table $where $order $limit";
+		// we are looking for rider rankings //
+		if ($q['rankings']) :
+			$this->rider_rankings_query=$this->rider_rankings_query($q, $where, $order, $limit);
+			$this->query=$this->rider_rankings_query;
+		else :
+			$this->query="SELECT * FROM $db_table $where $order $limit";
+		endif;
 
 		$this->get_posts();
 echo '<pre>';
@@ -139,6 +150,10 @@ echo '</pre>';
 		// check name //
 		if ($q['name'])
 			$where[]="name='".$q['name']."'";
+
+		// check week //
+		if ($q['week'])
+			$where[]="week='".$q['week']."'";
 
 		if (!empty($where)) :
 			$where=' WHERE '.implode(' AND ',$where);
@@ -230,6 +245,14 @@ echo '</pre>';
 		endswitch;
 
 		return $table;
+	}
+
+	protected function rider_rankings_query($q, $where, $order, $limit) {
+		global $wpdb;
+
+		$sql="SELECT * FROM $wpdb->ucicurl_rider_rankings AS rankings	LEFT JOIN $wpdb->ucicurl_riders AS riders	ON riders.id=rankings.rider_id $where	$order $limit";
+
+		return $sql;
 	}
 
 	/**
