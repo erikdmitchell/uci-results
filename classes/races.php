@@ -28,6 +28,7 @@ class UCIcURLRaces {
 	 * @param array $args (default: array())
 	 * @return void
 	 */
+/*
 	public function get_races($args=array()) {
 		global $wpdb, $wp_query;
 
@@ -111,6 +112,7 @@ class UCIcURLRaces {
 
 		return $races;
 	}
+*/
 
 	/**
 	 * get_race function.
