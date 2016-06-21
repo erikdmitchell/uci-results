@@ -74,17 +74,6 @@ class UCIcURLRiders {
 	}
 
 	/**
-	 * riders function.
-	 *
-	 * @access public
-	 * @param array $args (default: array())
-	 * @return void
-	 */
-	public function riders($args=array()) {
-		return $this->get_riders($args);
-	}
-
-	/**
 	 * nats function.
 	 *
 	 * @access public
