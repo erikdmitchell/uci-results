@@ -2,13 +2,11 @@
 
 class UCI_Results_Query {
 
-	public $posts; //
+	public $posts;
 
-	public $type;
+	public $query;
 
-	public $query; //
-
-	public $query_vars=array(); //
+	public $query_vars;
 
 
 	/**
@@ -77,8 +75,10 @@ class UCI_Results_Query {
 		$order=$this->order_clause($q);
 		$limt=$this->set_limit($q);
 
-
 		$this->query="SELECT * FROM {$wpdb->ucicurl_races} AS races	{$where} {$order}	{$limit}";
+
+		$this->get_posts();
+
 echo '<pre>';
 print_r($query);
 print_r($this);
@@ -86,20 +86,11 @@ echo '</pre>';
 	}
 
 	public function get_posts() {
-		//$limit=null;
-		//$where=array();
-		$paged=isset($_GET['pagenum']) ? absint($_GET['pagenum']) : 1; // absint() - query var
+		global $wpdb;
 
-		$sql="
-			SELECT
-				*
-			FROM {$wpdb->ucicurl_races} AS races
-			{$where}
-			{$order}
-			{$limit}
-		"; // this query
+		$posts=$wpdb->get_results($this->query);
 
-		$this->posts=$wpdb->get_results($sql);
+		if (
 	}
 
 	protected function where_clause($q) {
