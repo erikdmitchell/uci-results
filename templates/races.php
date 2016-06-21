@@ -14,7 +14,6 @@ $races=new UCI_Results_Query(array(
 ?>
 
 <div class="uci-results-races">
-
 	<table class="wp-list-table widefat fixed striped uci-results-races">
 		<thead>
 			<tr>
@@ -27,10 +26,10 @@ $races=new UCI_Results_Query(array(
 		<tbody>
 			<?php if ($races->have_posts()) : while ( $races->have_posts() ) : $races->the_post(); ?>
 				<tr>
-					<td class="name"><a href="<?php uci_results_race_url($uci_results_post->code); ?>"><?php echo $uci_results_post->name; ?></a></td>
-					<td class="date"><?php echo $uci_results_post->date; ?></td>
-					<td class="nat"><?php echo ucicurl_get_country_flag($uci_results_post->nat); ?></td>
-					<td class="class"><?php echo $uci_results_post->class; ?></td>
+					<td class="race-name"><a href="<?php uci_results_race_url($uci_results_post->code); ?>"><?php echo $uci_results_post->name; ?></a></td>
+					<td class="race-date"><?php echo $uci_results_post->date; ?></td>
+					<td class="race-nat"><?php echo ucicurl_get_country_flag($uci_results_post->nat); ?></td>
+					<td class="race-class"><?php echo $uci_results_post->class; ?></td>
 				</tr>
 			<?php endwhile; endif; ?>
 		</tbody>
