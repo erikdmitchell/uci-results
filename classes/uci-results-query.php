@@ -364,11 +364,22 @@ echo '</pre>';
 
 
 function uci_results_pagination($args='') {
+	$html=null;
 	$defauls=array(
 
 	);
 	$args=wp_parse_args($args, $defaults);
+
 }
+/*
+	public $pagenum=0;
+	public $limit=0;
+	public $offset=0;
+	public $total=0;
+	public $num_of_pages=0;
+	public $base_url='';
+
+*/
 // $wp_query->max_num_pages
 // get_query_var( 'paged' )
 // $pagenum_link = trailingslashit( $url_parts[0] ) . '%_%';
