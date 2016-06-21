@@ -42,14 +42,15 @@ class UCI_Results_Query {
 	public function default_query_vars() {
 		$array=array(
 			'per_page' => 30,
-			'order_by' => 'date',
-			'order' => 'DESC',
-			'class' => false,
-			'season' => false,
+			'order_by' => 'date', // races -- name (riders)
+			'order' => 'DESC', // races -- ASC (riders)
+			'class' => false, // races
+			'season' => false, // races
 			'nat' => false,
-			'start_date' => false,
-			'end_date' => false,
-			'paged' => 1
+			'name' => false, // riders
+			'start_date' => false, // races
+			'end_date' => false, // races
+			'paged' => 1,
 		);
 
 		return $array;
@@ -276,4 +277,55 @@ class UCI_Results_Query {
 	}
 
 }
+
+	/*
+	public function get_riders($user_args=array()) {
+
+		$default_args=array(
+			'per_page' => 30,
+			'order_by' => 'name',
+			'order' => 'ASC',
+			'name' => false,
+			'nat' => false,
+		);
+
+		// if we dont have a name and we have a limit, setup pagination //
+		if (!$name && $per_page>0) :
+			if ($paged==0) :
+				$start=0;
+			else :
+				$start=$per_page*($paged-1);
+			endif;
+			$end=$per_page;
+			$limit="LIMIT $start,$end";
+		endif;
+
+		// setup our where stuff //
+		if ($name)
+			$where[]="name='{$name}'";
+
+		if ($nat)
+			$where[]="nat='{$nat}'";
+
+		// run our where //
+		if (!empty($where)) :
+			$where='WHERE '.implode(' AND ',$where);
+		else :
+			$where='';
+		endif;
+
+		$sql="
+			SELECT
+				*
+			FROM $wpdb->ucicurl_riders
+			$where
+			ORDER BY $order_by $order
+			$limit
+		";
+
+		$riders=$wpdb->get_results($sql);
+
+		return $riders;
+	}
+	*/
 ?>
