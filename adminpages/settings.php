@@ -48,6 +48,24 @@
 				</td>
 			</tr>
 
+      <tr>
+      	<th scope="row" valign="top">
+					<label for="country_page_id">Country Page:</label>
+				</th>
+				<td>
+					<?php wp_dropdown_pages(array(
+						'name' => 'country_page_id',
+						'show_option_none' => '-- '.__('Select One', 'ucicurl').' --',
+						'selected' => $uci_results_pages['country']
+					)); ?>
+					<a target="_blank" href="<?php echo admin_url('post.php?post='.$uci_results_pages['country'].'&action=edit'); ?>" class="button button-secondary">Edit Page</a>
+					&nbsp;
+					<a target="_blank" href="<?php echo get_permalink($uci_results_pages['country']); ?>" class="button button-secondary">View Page</a>
+					<br>
+					<small class="p">Include the shortcode [uci_results_country]</small>
+				</td>
+			</tr>
+
 		</tbody>
 	</table>
 

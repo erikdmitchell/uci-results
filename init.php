@@ -11,6 +11,7 @@ function uci_results_init() {
 	$uci_results_pages=array();
 	$uci_results_pages['single_rider'] = get_option('single_rider_page_id', 0);
 	$uci_results_pages['single_race'] = get_option('single_race_page_id', 0);
+	$uci_results_pages['country'] = get_option('country_page_id', 0);
 }
 add_action('init', 'uci_results_init', 1);
 
@@ -25,9 +26,11 @@ function uci_results_rewrite_rules() {
 
 	$single_rider_url=ltrim(str_replace( home_url(), "", get_permalink($uci_results_pages['single_rider'])), '/');
 	$single_race_url=ltrim(str_replace( home_url(), "", get_permalink($uci_results_pages['single_race'])), '/');
+	$country_url=ltrim(str_replace( home_url(), "", get_permalink($uci_results_pages['country'])), '/');
 
 	add_rewrite_rule($single_rider_url.'([^/]*)/?', 'index.php?page_id='.$uci_results_pages['single_rider'].'&rider_slug=$matches[1]', 'top');
 	add_rewrite_rule($single_race_url.'([^/]*)/?', 'index.php?page_id='.$uci_results_pages['single_race'].'&race_code=$matches[1]', 'top');
+	add_rewrite_rule($country_url.'([^/]*)/?', 'index.php?page_id='.$uci_results_pages['country'].'&country_slug=$matches[1]', 'top');
 }
 add_action('init', 'uci_results_rewrite_rules', 10, 0);
 
@@ -41,6 +44,7 @@ add_action('init', 'uci_results_rewrite_rules', 10, 0);
 function uci_results_register_query_vars( $vars ) {
   $vars[] = 'rider_slug';
   $vars[] = 'race_code';
+  $vars[] = 'country_slug';
 
   return $vars;
 }

@@ -160,8 +160,18 @@ function uci_results_race_url($slug='') {
 	echo $url;
 }
 
+/**
+ * uci_results_country_url function.
+ *
+ * @access public
+ * @param string $slug (default: '')
+ * @return void
+ */
 function uci_results_country_url($slug='') {
-	$url="/country/$slug";
+	global $uci_results_pages;
+
+	$base_url=get_permalink($uci_results_pages['country']);
+	$url=$base_url.$slug;
 
 	echo $url;
 }

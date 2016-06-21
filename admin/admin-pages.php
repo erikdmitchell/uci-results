@@ -170,6 +170,12 @@ class UCIResultsAdminPages {
 			delete_option('single_race_page_id');
 		endif;
 
+		if (isset($_POST['country_page_id'])) :
+			update_option('country_page_id', $_POST['country_page_id']);
+		else :
+			delete_option('country_page_id');
+		endif;
+
 		flush_rewrite_rules(); // this may not be the best place for it
 	}
 
