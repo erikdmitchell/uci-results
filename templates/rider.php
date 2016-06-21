@@ -8,6 +8,9 @@
 global $ucicurl_riders;
 
 $rider=$ucicurl_riders->get_rider($attributes['rider_id']);
+
+global $wp_query;
+print_r($wp_query->query_vars);
 ?>
 
 <div class="ucicurl-rider">
