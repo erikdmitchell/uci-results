@@ -125,7 +125,10 @@ function curl_exec_utf8($ch) {
 }
 
 function uci_results_rider_url($slug='') {
-	$url="/rider/$slug";
+	global $uci_results_pages;
+
+	$base_url=get_permalink($uci_results_pages['single_rider']);
+	$url=$base_url.$slug;
 
 	echo $url;
 }
