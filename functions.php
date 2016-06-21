@@ -124,6 +124,13 @@ function curl_exec_utf8($ch) {
   return $data;
 }
 
+/**
+ * uci_results_rider_url function.
+ *
+ * @access public
+ * @param string $slug (default: '')
+ * @return void
+ */
 function uci_results_rider_url($slug='') {
 	global $uci_results_pages;
 
