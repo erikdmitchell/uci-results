@@ -15,7 +15,8 @@ class UCIResultsAdminPages {
 	 */
 	public function __construct($config=array()) {
 		add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
-		add_action('admin_menu',array($this,'admin_page'));
+		add_action('admin_menu', array($this, 'admin_page'));
+		add_action('init', array($this, 'save_settings'));
 
 		$this->setup_config($config);
 	}
@@ -27,7 +28,7 @@ class UCIResultsAdminPages {
 	 * @return void
 	 */
 	public function admin_page() {
-		add_menu_page('UCI cURL', 'UCI cURL', 'manage_options', 'uci-curl', array($this, 'display_admin_page'), 'dashicons-sos');
+		add_menu_page('UCI Results', 'UCI Results', 'manage_options', 'uci-curl', array($this, 'display_admin_page'), 'dashicons-sos');
 	}
 
 	/**
@@ -56,7 +57,8 @@ class UCIResultsAdminPages {
 			'uci-curl' => 'Results',
 			'races' => 'Races',
 			'riders' => 'Riders',
-			'rider-rankings' => 'Rider Rankings'
+			'rider-rankings' => 'Rider Rankings',
+			'settings' => 'Settings'
 		);
 		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'uci-curl';
 
@@ -97,6 +99,9 @@ class UCIResultsAdminPages {
 				case 'rider-rankings' :
 						$html.=ucicurl_get_admin_page('rider-rankings');
 						break;
+				case 'settings':
+					$html.=ucicurl_get_admin_page('settings');
+					break;
 				default:
 					if (isset($_GET['action']) && $_GET['action']=='update-rankings') :
 						$html.=ucicurl_get_admin_page('update-rankings');
@@ -141,6 +146,41 @@ class UCIResultsAdminPages {
 		krsort($config['urls']);
 
 		$this->config=json_decode(json_encode($config), FALSE); // convert to object and store
+	}
+
+	/**
+	 * save_settings function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function save_settings() {
+		if (!isset($_POST['save_settings']) || $_POST['save_settings']!=1)
+			return false;
+
+		if (isset($_POST['login_page_id'])) :
+			update_option('hcmcul_login_page_id', $_POST['login_page_id']);
+		else :
+			delete_option('hcmcul_login_page_id');
+		endif;
+
+		if (isset($_POST['hcmcul_reset_page_id'])) :
+			update_option('hcmcul_reset_page_id', $_POST['hcmcul_reset_page_id']);
+		else :
+			delete_option('hcmcul_reset_page_id');
+		endif;
+
+		if (isset($_POST['hcmcul_password_reset_page_id'])) :
+			update_option('hcmcul_password_reset_page_id', $_POST['hcmcul_password_reset_page_id']);
+		else :
+			delete_option('hcmcul_password_reset_page_id');
+		endif;
+
+		if (isset($_POST['hcmcul_edit_profile_page_id'])) :
+			update_option('hcmcul_edit_profile_page_id', $_POST['hcmcul_edit_profile_page_id']);
+		else :
+			delete_option('hcmcul_edit_profile_page_id');
+		endif;
 	}
 
 }
