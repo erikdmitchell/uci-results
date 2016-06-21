@@ -73,11 +73,11 @@ class UCI_Results_Query {
 
 		$where=$this->where_clause($q);
 		$order=$this->order_clause($q);
-		$limt=$this->set_limit($q);
+		$limit=$this->set_limit($q);
 
 		$this->query="SELECT * FROM {$wpdb->ucicurl_races} AS races	{$where} {$order}	{$limit}";
 
-		$this->get_posts();
+		//$this->get_posts();
 
 echo '<pre>';
 print_r($query);
@@ -90,7 +90,10 @@ echo '</pre>';
 
 		$posts=$wpdb->get_results($this->query);
 
-		if (
+		if ($this->query_vars['type']=='races')
+			$posts=$this->races_clean_up($posts);
+
+		$this->posts=$posts;
 	}
 
 	protected function where_clause($q) {
@@ -159,16 +162,24 @@ echo '</pre>';
 		return "LIMIT $start,$end";
 	}
 
-}
-
-	function XXXXget_races($args=array()) {
-		// clean up some misc db slashes and formatting //
-		foreach ($races as $race) :
-			$race->code=stripslashes($race->code);
-			$race->name=stripslashes($race->event);
-			$race->date=date(get_option('date_format'), strtotime($race->date));
+	/**
+	 * races_clean_up function.
+	 *
+	 * clean up some misc db slashes and formatting
+	 *
+	 * @access protected
+	 * @param mixed $posts
+	 * @return void
+	 */
+	protected function races_clean_up($posts) {
+		foreach ($posts as $post) :
+			$post->code=stripslashes($post->code);
+			$post->name=stripslashes($post->event);
+			$post->date=date(get_option('date_format'), strtotime($post->date));
 		endforeach;
 
-		return $races;
+		return $posts;
 	}
+
+}
 ?>
