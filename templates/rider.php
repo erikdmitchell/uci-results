@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Rider (Single)
+ * Rider (Single)
  *
  * @since 	2.0.0
  */
