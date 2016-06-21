@@ -16,7 +16,7 @@ class UCIResultsAdminPages {
 	public function __construct($config=array()) {
 		add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
 		add_action('admin_menu', array($this, 'admin_page'));
-		add_action('init', array($this, 'save_settings'));
+		add_action('admin_init', array($this, 'save_settings'));
 
 		$this->setup_config($config);
 	}
@@ -158,28 +158,10 @@ class UCIResultsAdminPages {
 		if (!isset($_POST['save_settings']) || $_POST['save_settings']!=1)
 			return false;
 
-		if (isset($_POST['login_page_id'])) :
-			update_option('hcmcul_login_page_id', $_POST['login_page_id']);
+		if (isset($_POST['single_rider_page_id'])) :
+			update_option('single_rider_page_id', $_POST['single_rider_page_id']);
 		else :
-			delete_option('hcmcul_login_page_id');
-		endif;
-
-		if (isset($_POST['hcmcul_reset_page_id'])) :
-			update_option('hcmcul_reset_page_id', $_POST['hcmcul_reset_page_id']);
-		else :
-			delete_option('hcmcul_reset_page_id');
-		endif;
-
-		if (isset($_POST['hcmcul_password_reset_page_id'])) :
-			update_option('hcmcul_password_reset_page_id', $_POST['hcmcul_password_reset_page_id']);
-		else :
-			delete_option('hcmcul_password_reset_page_id');
-		endif;
-
-		if (isset($_POST['hcmcul_edit_profile_page_id'])) :
-			update_option('hcmcul_edit_profile_page_id', $_POST['hcmcul_edit_profile_page_id']);
-		else :
-			delete_option('hcmcul_edit_profile_page_id');
+			delete_option('single_rider_page_id');
 		endif;
 	}
 

@@ -17,7 +17,7 @@
 				</th>
 				<td>
 					<?php wp_dropdown_pages(array(
-						'name' => 'login_page_id',
+						'name' => 'single_rider_page_id',
 						'show_option_none' => '-- '.__('Select One', 'ucicurl').' --',
 						'selected' => $uci_results_pages['single_rider']
 					)); ?>
