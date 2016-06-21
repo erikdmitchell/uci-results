@@ -48,7 +48,6 @@ class UCI_Results_Query {
 			'order' => '', // DESC (races -- ASC (riders)
 			'class' => false, // races
 			'season' => false, // races, rider ranks
-			'week' => 0, // rider ranks
 			'nat' => false,
 			'name' => false, // riders
 			'start_date' => false, // races
@@ -151,10 +150,6 @@ echo '</pre>';
 		if ($q['name'])
 			$where[]="name='".$q['name']."'";
 
-		// check week //
-		if ($q['week'])
-			$where[]="week='".$q['week']."'";
-
 		if (!empty($where)) :
 			$where=' WHERE '.implode(' AND ',$where);
 		else :
@@ -247,8 +242,33 @@ echo '</pre>';
 		return $table;
 	}
 
+	/**
+	 * rider_rankings_query function.
+	 *
+	 * @access protected
+	 * @param mixed $q
+	 * @param mixed $where
+	 * @param mixed $order
+	 * @param mixed $limit
+	 * @return void
+	 */
 	protected function rider_rankings_query($q, $where, $order, $limit) {
 		global $wpdb;
+
+		// check week, get last week in season by default //
+		if (!empty($q['week'])) :
+			$week=absint($q['week']);
+		else :
+			$last_week=$wpdb->get_var("SELECT MAX(week) FROM $wpdb->ucicurl_races WHERE season='".$q['season']."'");
+			$week=absint($last_week);
+		endif;
+
+		// if we have where append it, else make it where //
+		if (empty($where)) :
+			$where="WHERE week=$week";
+		else :
+			$where.=" AND week=$week";
+		endif;
 
 		$sql="SELECT * FROM $wpdb->ucicurl_rider_rankings AS rankings	LEFT JOIN $wpdb->ucicurl_riders AS riders	ON riders.id=rankings.rider_id $where	$order $limit";
 
