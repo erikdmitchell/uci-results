@@ -360,4 +360,16 @@ echo '</pre>';
 	}
 
 }
+
+
+
+function uci_results_pagination($args='') {
+	$defauls=array(
+
+	);
+	$args=wp_parse_args($args, $defaults);
+}
+// $wp_query->max_num_pages
+// get_query_var( 'paged' )
+// $pagenum_link = trailingslashit( $url_parts[0] ) . '%_%';
 ?>
