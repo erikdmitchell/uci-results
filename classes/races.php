@@ -31,6 +31,10 @@ class UCIcURLRaces {
 	public function get_race($race_id=0) {
 		global $wpdb;
 
+		// check if numeric, otherwise, it's a slug (code) //
+		if (!is_numeric($race_id))
+			$race_id=uci_results_get_race_id($race_id);
+
 		$race=$wpdb->get_row("SELECT * FROM {$wpdb->ucicurl_races} WHERE id={$race_id}");
 		$race->results=$wpdb->get_results("SELECT * FROM {$wpdb->ucicurl_results} WHERE race_id={$race_id}");
 
