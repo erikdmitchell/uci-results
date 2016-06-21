@@ -124,40 +124,19 @@ function curl_exec_utf8($ch) {
   return $data;
 }
 
-/**
- * ucicurl_rider_url function.
- *
- * @access public
- * @param string $slug (default: '')
- * @return void
- */
-function ucicurl_rider_url($slug='') {
+function uci_results_rider_url($slug='') {
 	$url="/rider/$slug";
 
 	echo $url;
 }
 
-/**
- * ucicurl_race_url function.
- *
- * @access public
- * @param string $slug (default: '')
- * @return void
- */
-function ucicurl_race_url($slug='') {
+function uci_results_race_url($slug='') {
 	$url="/races/$slug";
 
 	echo $url;
 }
 
-/**
- * ucicurl_country_url function.
- *
- * @access public
- * @param string $slug (default: '')
- * @return void
- */
-function ucicurl_country_url($slug='') {
+function uci_results_country_url($slug='') {
 	$url="/country/$slug";
 
 	echo $url;
