@@ -77,24 +77,35 @@ function uci_results_country($atts) {
 }
 add_shortcode('uci_results_country', 'uci_results_country');
 
-
-
-
-function ucicurl_rider_rankings($atts) {
+/**
+ * uci_results_rider_rankings function.
+ *
+ * @access public
+ * @param mixed $atts
+ * @return void
+ */
+function uci_results_rider_rankings($atts) {
 	$atts = shortcode_atts( array(
 
-	), $atts, 'rider_rankings' );
+	), $atts, 'uci_results_rider_rankings' );
 
-	return;
+	return ucicurl_get_template('rider_rankings');
 }
-add_shortcode('rider_rankings', 'ucicurl_rider_rankings');
+add_shortcode('uci_results_rider_rankings', 'uci_results_rider_rankings');
 
-function ucicurl_race_rankings($atts) {
+/**
+ * uci_results_races function.
+ *
+ * @access public
+ * @param mixed $atts
+ * @return void
+ */
+function uci_results_races($atts) {
 	$atts = shortcode_atts( array(
 
-	), $atts, 'race_rankings' );
+	), $atts, 'uci_results_races' );
 
-	return;
+	return ucicurl_get_template('races');
 }
-add_shortcode('race_rankings', 'ucicurl_race_rankings');
+add_shortcode('uci_results_races', 'uci_results_races');
 ?>

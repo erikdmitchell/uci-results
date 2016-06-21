@@ -176,6 +176,18 @@ class UCIResultsAdminPages {
 			delete_option('country_page_id');
 		endif;
 
+		if (isset($_POST['rider_rankings_page_id'])) :
+			update_option('rider_rankings_page_id', $_POST['rider_rankings_page_id']);
+		else :
+			delete_option('rider_rankings_page_id');
+		endif;
+
+		if (isset($_POST['races_page_id'])) :
+			update_option('races_page_id', $_POST['races_page_id']);
+		else :
+			delete_option('races_page_id');
+		endif;
+
 		flush_rewrite_rules(); // this may not be the best place for it
 	}
 

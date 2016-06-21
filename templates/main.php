@@ -35,7 +35,7 @@ $races=new UCI_Results_Query(array(
 				</div>
 			<?php endwhile; endif; ?>
 
-			<a class="view-all" href="">View All Riders &raquo;</a>
+			<a class="view-all" href="<?php uci_results_rider_rankings_url(); ?>">View All Riders &raquo;</a>
 		</div>
 	</div>
 
@@ -59,7 +59,7 @@ $races=new UCI_Results_Query(array(
 				</div>
 			<?php endwhile; endif; ?>
 
-			<a class="view-all" href="">View All Races &raquo;</a>
+			<a class="view-all" href="<?php uci_results_races_url(); ?>">View All Races &raquo;</a>
 		</div>
 	</div>
 </div>

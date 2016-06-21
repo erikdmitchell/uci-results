@@ -177,6 +177,34 @@ function uci_results_country_url($slug='') {
 }
 
 /**
+ * uci_results_rider_rankings_url function.
+ *
+ * @access public
+ * @return void
+ */
+function uci_results_rider_rankings_url() {
+	global $uci_results_pages;
+
+	$url=get_permalink($uci_results_pages['rider_rankings']);
+
+	echo $url;
+}
+
+/**
+ * uci_results_races_url function.
+ *
+ * @access public
+ * @return void
+ */
+function uci_results_races_url() {
+	global $uci_results_pages;
+
+	$url=get_permalink($uci_results_pages['races']);
+
+	echo $url;
+}
+
+/**
  * uci_results_get_race_slug function.
  *
  * @access public

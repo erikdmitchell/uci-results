@@ -66,6 +66,42 @@
 				</td>
 			</tr>
 
+      <tr>
+      	<th scope="row" valign="top">
+					<label for="rider_rankings_page_id">Rider Rankings Page:</label>
+				</th>
+				<td>
+					<?php wp_dropdown_pages(array(
+						'name' => 'rider_rankings_page_id',
+						'show_option_none' => '-- '.__('Select One', 'ucicurl').' --',
+						'selected' => $uci_results_pages['rider_rankings']
+					)); ?>
+					<a target="_blank" href="<?php echo admin_url('post.php?post='.$uci_results_pages['rider_rankings'].'&action=edit'); ?>" class="button button-secondary">Edit Page</a>
+					&nbsp;
+					<a target="_blank" href="<?php echo get_permalink($uci_results_pages['rider_rankings']); ?>" class="button button-secondary">View Page</a>
+					<br>
+					<small class="p">Include the shortcode [uci_results_rider_rankings]</small>
+				</td>
+			</tr>
+
+      <tr>
+      	<th scope="row" valign="top">
+					<label for="races_page_id">Races Page:</label>
+				</th>
+				<td>
+					<?php wp_dropdown_pages(array(
+						'name' => 'races_page_id',
+						'show_option_none' => '-- '.__('Select One', 'ucicurl').' --',
+						'selected' => $uci_results_pages['races']
+					)); ?>
+					<a target="_blank" href="<?php echo admin_url('post.php?post='.$uci_results_pages['races'].'&action=edit'); ?>" class="button button-secondary">Edit Page</a>
+					&nbsp;
+					<a target="_blank" href="<?php echo get_permalink($uci_results_pages['races']); ?>" class="button button-secondary">View Page</a>
+					<br>
+					<small class="p">Include the shortcode [uci_results_races]</small>
+				</td>
+			</tr>
+
 		</tbody>
 	</table>
 
