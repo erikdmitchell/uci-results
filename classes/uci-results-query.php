@@ -45,7 +45,7 @@ class UCI_Results_Query {
 		$array=array(
 			'per_page' => 30,
 			'order_by' => '', // date (races -- name (riders)
-			'order' => '', // DESC (races -- ASC (riders)
+			'order' => 'DESC', // DESC (races -- ASC (riders)
 			'class' => false, // races
 			'season' => false, // races, rider ranks
 			'nat' => false,
@@ -71,6 +71,18 @@ class UCI_Results_Query {
 	 */
 	public function set_query_vars($query='') {
 		$args=wp_parse_args($query, $this->default_query_vars());
+
+		// set default order by type if need be //
+		if (empty($args['order_by'])) :
+			switch ($args['type']) :
+				case 'races':
+					$args['order_by']='date';
+					break;
+				case 'riders':
+					$args['order_by']='rank';
+					break;
+			endswitch;
+		endif;
 
 		return $args;
 	}
@@ -100,12 +112,13 @@ class UCI_Results_Query {
 		endif;
 
 		$this->get_posts();
+
 /*
 echo '<pre>';
-print_r($query);
 print_r($this);
 echo '</pre>';
 */
+
 	}
 
 	/**
