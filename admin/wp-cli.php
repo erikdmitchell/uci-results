@@ -65,7 +65,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 		endfor;
 
 		$weekly_points_progress->finish();
-r
+
 		// weekly ranks progress bar //
 		$weeks_count=count($weeks);
 		$weeks_counter=0;
