@@ -27,6 +27,31 @@ function uci_results_main($atts) {
 }
 add_shortcode('uci_results', 'uci_results_main');
 
+/**
+ * uci_results_rider function.
+ *
+ * single rider
+ *
+ * @access public
+ * @param mixed $atts
+ * @return void
+ */
+function uci_results_rider($atts) {
+	$atts = shortcode_atts( array(
+
+	), $atts, 'uci_results_rider' );
+
+	return ucicurl_get_template('rider');
+}
+add_shortcode('uci_results_rider', 'uci_results_rider');
+
+
+
+
+
+
+
+
 function ucicurl_rider_rankings($atts) {
 	$atts = shortcode_atts( array(
 
