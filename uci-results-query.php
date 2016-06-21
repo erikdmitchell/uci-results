@@ -1,4 +1,6 @@
 <?php
+global $uci_results_query;
+global $uci_results_post;
 
 class UCI_Results_Query {
 
@@ -7,6 +9,12 @@ class UCI_Results_Query {
 	public $query;
 
 	public $query_vars;
+
+	public $current_post=-1;
+
+	public $post_count=0;
+
+	public $post;
 
 
 	/**
@@ -17,8 +25,10 @@ class UCI_Results_Query {
 	 * @return void
 	 */
 	public function __construct($query='') {
+		global $uci_results_query;
+
 		if (!empty($query))
-			$this->query($query);
+			$uci_results_query=$this->query($query);
 	}
 
 	/**
@@ -101,6 +111,7 @@ echo '</pre>';
 			$posts=$this->races_clean_up($posts);
 
 		$this->posts=$posts;
+		$this->post_count=count($posts);
 
 		return $this->posts;
 	}
@@ -212,6 +223,54 @@ echo '</pre>';
 		endswitch;
 
 		return $table;
+	}
+
+	/**
+	 * have_posts function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function have_posts() {
+		if ($this->current_post + 1 < $this->post_count) :
+			return true;
+		elseif ( $this->current_post + 1 == $this->post_count && $this->post_count > 0 ) :
+			//$this->rewind_posts();
+		endif;
+
+		//$this->in_the_loop = false;
+		return false;
+	}
+
+	/**
+	 * the_post function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function the_post() {
+		global $uci_results_post;
+
+		//$this->in_the_loop = true;
+
+		//if ( $this->current_post == -1 ) // loop has just started
+			//do_action_ref_array( 'loop_start', array( &$this ) );
+
+		$uci_results_post = $this->next_post();
+	}
+
+  /**
+   * next_post function.
+   *
+   * @access public
+   * @return void
+   */
+  public function next_post() {
+		$this->current_post++;
+
+		$this->post = $this->posts[$this->current_post];
+
+		return $this->post;
 	}
 
 }
