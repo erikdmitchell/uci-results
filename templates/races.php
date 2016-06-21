@@ -1,58 +1,38 @@
 <?php
 /**
- * Template Name: Race Rankings
+ * Races
  *
- * @since 	1.0.8
+ * @since 2.0.0
  */
-?>
 
-<?php
-global $RaceStats,$wp_query;
+global $uci_results_post;
 
-$paged=get_query_var('paged',1);
-$season=get_query_var('season','2015/2016');
-$races=$RaceStats->get_races(array(
-	'season' => $season,
-	'paged' => $paged,
-	'per_page' => 15
+$races=new UCI_Results_Query(array(
+	'per_page' => 10,
+	'type' => 'races'
 ));
 ?>
 
-<?php get_header(); ?>
+<div class="uci-results-races">
 
-<div class="container">
-	<div class="row content">
-		<div class="col-md-12">
-
-			<div class="uci-curl-race-rankings">
-				<h1 class="entry-title">Race Rankings (<?php echo $season; ?>)</h1>
-
-				<div id="season-race-rankings" class="season-race-rankings">
-					<div class="header row">
-						<div class="name col-md-5">Name</div>
-						<div class="date col-md-2">Date</div>
-						<div class="nat col-md-1">Nat</div>
-						<div class="class col-md-1">Class</div>
-						<div class="fq col-md-1">FQ</div>
-					</div>
-
-					<?php foreach ($races as $race) : ?>
-						<div class="row">
-							<div class="name col-md-5"><a href="<?php echo single_race_link($race->code); ?>"><?php echo $race->name; ?></a></div>
-							<div class="date col-md-2"><?php echo $race->date; ?></div>
-							<div class="nat col-md-1"><?php echo get_country_flag($race->nat); ?></div>
-							<div class="class col-md-1"><?php echo $race->class; ?></div>
-							<div class="fq col-md-1"><?php echo $race->fq; ?></div>
-						</div>
-					<?php endforeach; ?>
-				</div>
-
-				<?php uci_curl_pagination(); ?>
-
-			</div><!-- .uci-curl-rider-rankings -->
-
-		</div>
-	</div>
-</div><!-- .container -->
-
-<?php get_footer(); ?>
+	<table class="wp-list-table widefat fixed striped uci-results-races">
+		<thead>
+			<tr>
+				<th scope="col" class="race-name">Name</th>
+				<th scope="col" class="race-date">Date</th>
+				<th scope="col" class="race-nat">Nat</th>
+				<th scope="col" class="race-class">Class</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php if ($races->have_posts()) : while ( $races->have_posts() ) : $races->the_post(); ?>
+				<tr>
+					<td class="name"><a href="<?php uci_results_race_url($uci_results_post->code); ?>"><?php echo $uci_results_post->name; ?></a></td>
+					<td class="date"><?php echo $uci_results_post->date; ?></td>
+					<td class="nat"><?php echo ucicurl_get_country_flag($uci_results_post->nat); ?></td>
+					<td class="class"><?php echo $uci_results_post->class; ?></td>
+				</tr>
+			<?php endwhile; endif; ?>
+		</tbody>
+	</table>
+</div>
