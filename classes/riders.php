@@ -25,12 +25,19 @@ class UCIcURLRiders {
 	public function get_rider($rider_id=0) {
 		global $wpdb;
 
+		// if not an int, it's a slug //
+		if (!is_integer($rider_id)) :
+			$rider_id=$wpdb->get_var("SELECT id FROM $wpdb->ucicurl_riders WHERE slug='{$rider_id}'");
+		endif;
+
+		$where="rider_id=".absint($rider_id);
+
 		$sql="
 			SELECT *
 			FROM {$wpdb->ucicurl_results}
 			LEFT JOIN {$wpdb->ucicurl_races}
 			ON {$wpdb->ucicurl_results}.race_id={$wpdb->ucicurl_races}.id
-			WHERE rider_id={$rider_id}
+			WHERE $where
 			ORDER BY date
 		";
 		$rider=$wpdb->get_row("SELECT * FROM {$wpdb->ucicurl_riders} WHERE id={$rider_id}");
