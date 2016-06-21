@@ -89,11 +89,6 @@ class UCI_Results_Query {
 		$this->query="SELECT * FROM $db_table $where $order $limit";
 
 		$this->get_posts();
-
-echo '<pre>';
-print_r($query);
-print_r($this);
-echo '</pre>';
 	}
 
 	/**
