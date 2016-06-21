@@ -42,8 +42,8 @@ class UCI_Results_Query {
 	public function default_query_vars() {
 		$array=array(
 			'per_page' => 30,
-			'order_by' => 'date', // races -- name (riders)
-			'order' => 'DESC', // races -- ASC (riders)
+			'order_by' => '', // date (races -- name (riders)
+			'order' => '', // DESC (races -- ASC (riders)
 			'class' => false, // races
 			'season' => false, // races
 			'nat' => false,
@@ -90,6 +90,10 @@ class UCI_Results_Query {
 		$this->query="SELECT * FROM $db_table $where $order $limit";
 
 		$this->get_posts();
+echo '<pre>';
+print_r($query);
+print_r($this);
+echo '</pre>';
 	}
 
 	/**
@@ -149,6 +153,9 @@ class UCI_Results_Query {
 	 * @return void
 	 */
 	protected function order_clause($q) {
+		if (empty($q['order_by']))
+			return;
+
 		$order='ORDER BY '.$q['order_by'].' '.$q['order'];
 
 		return $order;
@@ -280,14 +287,6 @@ class UCI_Results_Query {
 
 	/*
 	public function get_riders($user_args=array()) {
-
-		$default_args=array(
-			'per_page' => 30,
-			'order_by' => 'name',
-			'order' => 'ASC',
-			'name' => false,
-			'nat' => false,
-		);
 
 		// if we dont have a name and we have a limit, setup pagination //
 		if (!$name && $per_page>0) :
