@@ -1,25 +1,18 @@
 <?php
 /**
- * Template Name: Country (Single)
+ * Country (Single)
  *
- * @since 	1.0.8
+ * @since 	2.0.0
  */
 ?>
 
 <?php
-global $RiderStats,$wp_query;
-
-$country=get_query_var('country',0);
-$season=get_query_var('season','2015/2016');
-$results=$RiderStats->get_country($country);
+// get country
 ?>
 
-<?php get_header(); ?>
-<div class="container">
-	<div class="row content">
-		<div class="col-md-12">
+<div class="uci-results-country">
 
-			<?php if (!$results) : ?>
+			<?php if (empty($results)) : ?>
 				Results not found.
 			<?php else : ?>
 				<div class="uci-curl-rider-rankings">
@@ -50,8 +43,31 @@ $results=$RiderStats->get_country($country);
 					</div>
 				</div><!-- .uci-curl-rider-rankings -->
 			<?php endif; ?>
-		</div>
-	</div>
-</div><!-- .container -->
 
-<?php get_footer(); ?>
+		<table class="wp-list-table widefat fixed striped single-race">
+			<thead>
+				<tr>
+					<th scope="col" class="rider-place">Place</th>
+					<th scope="col" class="rider-name">Rider</th>
+					<th scope="col" class="rider-points">Points</th>
+					<th scope="col" class="rider-nat">Nat</th>
+					<th scope="col" class="rider-age">Age</th>
+					<th scope="col" class="rider-time">Time</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<?php foreach ($race->results as $result) : ?>
+					<tr>
+						<td class="rider-place"><?php echo $result->place; ?></td>
+						<td class="rider-name"><a href="<?php echo uci_results_rider_url($result->slug); ?>"><?php echo $result->name; ?></a></td>
+						<td class="rider-points"><?php echo $result->points; ?></td>
+						<td class="rider-nat"><a href="<?php echo uci_results_country_url($result->nat); ?>"><?php echo ucicurl_get_country_flag($result->nat); ?></a></td>
+						<td class="rider-age"><?php echo $result->age; ?></td>
+						<td class="rider-time"><?php echo $result->time; ?></td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+
+		</table>
+</div>
