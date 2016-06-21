@@ -100,12 +100,12 @@ class UCI_Results_Query {
 		endif;
 
 		$this->get_posts();
-/*
+
 echo '<pre>';
 print_r($query);
 print_r($this);
 echo '</pre>';
-*/
+
 	}
 
 	/**
@@ -188,7 +188,11 @@ echo '</pre>';
 	 */
 	protected function set_limit($q) {
 		$paged=absint($q['paged']);
-		$per_page=absint($q['per_page']);
+		$per_page=$q['per_page'];
+
+		// no limit //
+		if ($per_page<0)
+			return;
 
 		if ($paged==0) :
 			$start=0;
