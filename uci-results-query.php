@@ -71,13 +71,14 @@ class UCI_Results_Query {
 		$this->query_vars=$this->set_query_vars($query);
 		$q=$this->query_vars;
 
+		$db_table=$this->set_db_table($q);
 		$where=$this->where_clause($q);
 		$order=$this->order_clause($q);
 		$limit=$this->set_limit($q);
 
-		$this->query="SELECT * FROM {$wpdb->ucicurl_races} AS races	{$where} {$order}	{$limit}";
+		$this->query="SELECT * FROM $db_table $where $order $limit";
 
-		//$this->get_posts();
+		$this->get_posts();
 
 echo '<pre>';
 print_r($query);
@@ -85,6 +86,12 @@ print_r($this);
 echo '</pre>';
 	}
 
+	/**
+	 * get_posts function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function get_posts() {
 		global $wpdb;
 
@@ -94,6 +101,8 @@ echo '</pre>';
 			$posts=$this->races_clean_up($posts);
 
 		$this->posts=$posts;
+
+		return $this->posts;
 	}
 
 	protected function where_clause($q) {
@@ -179,6 +188,30 @@ echo '</pre>';
 		endforeach;
 
 		return $posts;
+	}
+
+	/**
+	 * set_db_table function.
+	 *
+	 * @access protected
+	 * @param mixed $q
+	 * @return void
+	 */
+	protected function set_db_table($q) {
+		global $wpdb;
+
+		switch ($q['type']) :
+			case 'races':
+				$table=$wpdb->ucicurl_races;
+				break;
+			case 'riders':
+				$table=$wpdb->ucicurl_riders;
+				break;
+			default:
+				$table=$wpdb->posts;
+		endswitch;
+
+		return $table;
 	}
 
 }
