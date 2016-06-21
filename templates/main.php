@@ -1,8 +1,11 @@
 <?php
-global $ucicurl_riders, $uci_results_post;
+global $uci_results_post;
 
-$riders=$ucicurl_riders->get_rider_rankings(array(
-	'per_page' => 10
+$riders=new UCI_Results_Query(array(
+	'per_page' => 10,
+	'type' => 'riders',
+	'season' => '2014/2015',
+	'rankings' => true
 ));
 
 $races=new UCI_Results_Query(array(
@@ -23,14 +26,14 @@ $races=new UCI_Results_Query(array(
 				<div class="points">Points</div>
 			</div>
 
-			<?php foreach ($riders as $rider) : ?>
+			<?php if ($riders->have_posts()) : while ( $riders->have_posts() ) : $riders->the_post(); ?>
 				<div class="row">
-					<div class="rank"><?php echo $rider->rank; ?></div>
-					<div class="rider"><a href="<?php ucicurl_rider_url($rider->slug); ?>"><?php echo $rider->name; ?></a></div>
-					<div class="nat"><a href=""><?php echo ucicurl_get_country_flag($rider->nat); ?></a></div>
-					<div class="points"><?php echo $rider->points; ?></div>
+					<div class="rank"><?php echo $uci_results_post->rank; ?></div>
+					<div class="rider"><a href="<?php ucicurl_rider_url($uci_results_post->slug); ?>"><?php echo $uci_results_post->name; ?></a></div>
+					<div class="nat"><a href=""><?php echo ucicurl_get_country_flag($uci_results_post->nat); ?></a></div>
+					<div class="points"><?php echo $uci_results_post->points; ?></div>
 				</div>
-			<?php endforeach; ?>
+			<?php endwhile; endif; ?>
 
 			<a class="view-all" href="">View All Riders &raquo;</a>
 		</div>
