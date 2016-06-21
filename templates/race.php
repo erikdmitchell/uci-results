@@ -1,58 +1,55 @@
 <?php
 /**
- * Template Name: Race (Single)
+ * Race (Single)
  *
- * @since 	1.0.8
+ * @since 	2.0.0
  */
 ?>
 
 <?php
-global $RaceStats,$wp_query;
+global $ucicurl_races;
 
-$race_code=get_query_var('race',0);
-$race=$RaceStats->get_race($race_code);
+$race=$ucicurl_races->get_race(get_query_var('race_code'));
 ?>
 
-<?php get_header(); ?>
-<div class="container">
-	<div class="row content">
-		<div class="col-md-12">
+<div class="uci-results-race">
 
-			<?php if (!$race->results) : ?>
-				Race not found.
-			<?php else : ?>
-				<div class="uci-curl-rider-rankings">
-					<h1 class="entry-title"><?php echo $race->details->race; ?> <?php echo get_country_flag($race->details->nat); ?></h1>
-					<div class="race-details">
-						<div class="race-date"><?php echo $race->details->date; ?></div>
-						<div class="race-class"><?php echo $race->details->class; ?></div>
-					</div>
+	<?php if (!$race->results) : ?>
+		<div class="race-results-not-found">Race results not found.</div>
+	<?php else : ?>
+		<div class="race-name"><?php echo $race->event; ?> <?php echo ucicurl_get_country_flag($race->nat); ?></div>
 
-					<div id="season-rider-rankings" class="season-rider-rankings">
-						<div class="header row">
-							<div class="place col-md-1">Place</div>
-							<div class="rider col-md-4">Rider</div>
-							<div class="points col-md-1">Points</div>
-							<div class="nat col-md-1">Nat</div>
-							<div class="age col-md-1">Age</div>
-							<div class="time col-md-2">Time</div>
-						</div>
-
-						<?php foreach ($race->results as $result) : ?>
-							<div class="row">
-								<div class="place col-md-1"><?php echo $result->place; ?></div>
-								<div class="rider col-md-4"><a href="<?php echo single_rider_link($result->rider,$race->details->season); ?>"><?php echo $result->rider; ?></a></div>
-								<div class="points col-md-1"><?php echo $result->points; ?></div>
-								<div class="nat col-md-1"><a href="<?php echo single_country_link($result->nat,$race->details->season); ?>"><?php echo get_country_flag($result->nat); ?></a></div>
-								<div class="age col-md-1"><?php echo $result->age; ?></div>
-								<div class="time col-md-2"><?php echo $result->time; ?></div>
-							</div>
-						<?php endforeach; ?>
-					</div>
-				</div><!-- .uci-curl-rider-rankings -->
-			<?php endif; ?>
+		<div class="race-details">
+			<div class="race-date"><?php echo date(get_option('date_format'), strtotime($race->date)); ?></div>
+			<div class="race-class"><?php echo $race->class; ?></div>
 		</div>
-	</div>
-</div><!-- .container -->
 
-<?php get_footer(); ?>
+		<table class="wp-list-table widefat fixed striped single-race">
+			<thead>
+				<tr>
+					<th scope="col" class="rider-place">Place</th>
+					<th scope="col" class="rider-name">Rider</th>
+					<th scope="col" class="rider-points">Points</th>
+					<th scope="col" class="rider-nat">Nat</th>
+					<th scope="col" class="rider-age">Age</th>
+					<th scope="col" class="rider-time">Time</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<?php foreach ($race->results as $result) : ?>
+					<tr>
+						<td class="rider-place"><?php echo $result->place; ?></td>
+						<td class="rider-name"><a href=""><?php echo $result->name; ?></a></td>
+						<td class="rider-points"><?php echo $result->par; ?></td>
+						<td class="rider-nat"><a href=""><?php echo ucicurl_get_country_flag($result->nat); ?></a></td>
+						<td class="rider-age"><?php echo $result->age; ?></td>
+						<td class="rider-time"><?php echo $result->result; ?></td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+
+		</table>
+	<?php endif; ?>
+
+</div>
