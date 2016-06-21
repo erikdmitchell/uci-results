@@ -29,7 +29,7 @@ $races=new UCI_Results_Query(array(
 			<?php if ($riders->have_posts()) : while ( $riders->have_posts() ) : $riders->the_post(); ?>
 				<div class="row">
 					<div class="rank"><?php echo $uci_results_post->rank; ?></div>
-					<div class="rider"><a href="<?php ucicurl_rider_url($uci_results_post->slug); ?>"><?php echo $uci_results_post->name; ?></a></div>
+					<div class="rider"><a href="<?php uci_results_rider_url($uci_results_post->slug); ?>"><?php echo $uci_results_post->name; ?></a></div>
 					<div class="nat"><a href=""><?php echo ucicurl_get_country_flag($uci_results_post->nat); ?></a></div>
 					<div class="points"><?php echo $uci_results_post->points; ?></div>
 				</div>
@@ -52,7 +52,7 @@ $races=new UCI_Results_Query(array(
 
 			<?php if ($races->have_posts()) : while ( $races->have_posts() ) : $races->the_post(); ?>
 				<div class="row">
-					<div class="name"><a href="<?php ucicurl_race_url($uci_results_post->code); ?>"><?php echo $uci_results_post->name; ?></a></div>
+					<div class="name"><a href="<?php uci_results_race_url($uci_results_post->code); ?>"><?php echo $uci_results_post->name; ?></a></div>
 					<div class="date"><?php echo $uci_results_post->date; ?></div>
 					<div class="nat"><?php echo ucicurl_get_country_flag($uci_results_post->nat); ?></div>
 					<div class="class"><?php echo $uci_results_post->class; ?></div>
