@@ -15,7 +15,7 @@ $riders=new UCI_Results_Query(array(
 
 <div class="tablenav top">
 	<div class="pagination">
-		PAGINATION
+		<?php uci_results_admin_pagination(); ?>
 	</div>
 
 	<div class="alignright actions">
@@ -61,4 +61,4 @@ $riders=new UCI_Results_Query(array(
 	</tbody>
 </table>
 
-PAGINATION
+<?php uci_results_admin_pagination(); ?>
