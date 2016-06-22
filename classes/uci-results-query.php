@@ -18,6 +18,10 @@ class UCI_Results_Query {
 
 	public $rider_rankings_query=false;
 
+	public $max_num_pages=0;
+
+	public $found_posts=0;
+
 
 	/**
 	 * __construct function.
@@ -114,17 +118,24 @@ class UCI_Results_Query {
 			$this->rider_rankings_query=$this->rider_rankings_query($q, $where, $order, $limit);
 			$this->query=$this->rider_rankings_query;
 		else :
-			$this->query="SELECT * FROM $db_table $where $order $limit";
+			$this->query="SELECT SQL_CALC_FOUND_ROWS * FROM $db_table $where $order $limit";
 		endif;
 
 		$this->get_posts();
 
-/*
+		// set total number of posts found //
+		if (!empty($limit))
+			$this->found_posts = $wpdb->get_var('SELECT FOUND_ROWS()');
+
+		// set max number of pages //
+		if (!empty($limit))
+			$this->max_num_pages=ceil($this->found_posts/$q['per_page']);
+
 echo '<pre>';
 print_r($this);
 echo '</pre>';
-*/
 
+		return $this;
 	}
 
 	/**
@@ -299,7 +310,7 @@ echo '</pre>';
 		if (empty($order))
 			$order="ORDER BY rank";
 
-		$sql="SELECT * FROM $wpdb->ucicurl_rider_rankings AS rankings	LEFT JOIN $wpdb->ucicurl_riders AS riders	ON riders.id=rankings.rider_id $where	$order $limit";
+		$sql="SELECT SQL_CALC_FOUND_ROWS * FROM $wpdb->ucicurl_rider_rankings AS rankings	LEFT JOIN $wpdb->ucicurl_riders AS riders	ON riders.id=rankings.rider_id $where	$order $limit";
 
 		return $sql;
 	}
@@ -364,13 +375,45 @@ echo '</pre>';
 
 
 function uci_results_pagination($args='') {
-	$html=null;
-	$defauls=array(
+	global $uci_results_query;
 
+	//$html=null;
+
+	$pagenum_link = html_entity_decode( get_pagenum_link() );
+	$total   = isset( $uci_results_query->max_num_pages ) ? $uci_results_query->max_num_pages : 1;
+  $current = get_query_var( 'paged' ) ? intval( get_query_var( 'paged' ) ) : 1;
+
+	$defaults=array(
+		'base' => $pagenum_link,
+		'total' => $total,
+		'current' => $current,
 	);
 	$args=wp_parse_args($args, $defaults);
 
+echo '<pre>';
+//print_r($uci_results_query);
+print_r($args);
+echo '</pre>';
 }
+/*
+	        $defaults = array(
+	                'base' => $pagenum_link, // http://example.com/all_posts.php%_% : %_% is replaced by format (below)
+	                'format' => $format, // ?page=%#% : %#% is replaced by the page number
+	                'total' => $total,
+	                'current' => $current,
+	                'show_all' => false,
+	                'prev_next' => true,
+	                'prev_text' => __('&laquo; Previous'),
+	                'next_text' => __('Next &raquo;'),
+	                'end_size' => 1,
+	                'mid_size' => 2,
+	                'type' => 'plain',
+	                'add_args' => array(), // array of query args to add
+	                'add_fragment' => '',
+	                'before_page_number' => '',
+	                'after_page_number' => ''
+	        );
+*/
 /*
 	public $pagenum=0;
 	public $limit=0;
