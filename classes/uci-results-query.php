@@ -22,6 +22,8 @@ class UCI_Results_Query {
 
 	public $found_posts=0;
 
+	public $is_paged=false;
+
 
 	/**
 	 * __construct function.
@@ -56,7 +58,7 @@ class UCI_Results_Query {
 			'name' => false, // riders
 			'start_date' => false, // races
 			'end_date' => false, // races
-			'paged' => 1,
+			'paged' => get_query_var('page'),
 			'type' => 'races',
 			'rankings' => false // riders
 		);
@@ -94,6 +96,10 @@ class UCI_Results_Query {
 			endswitch;
 		endif;
 
+		// check if paged //
+		if ($args['paged'])
+			$this->is_paged=true;
+
 		return $args;
 	}
 
@@ -130,6 +136,20 @@ class UCI_Results_Query {
 		// set max number of pages //
 		if (!empty($limit))
 			$this->max_num_pages=ceil($this->found_posts/$q['per_page']);
+
+		// force update 'paged' query var //
+		if ($this->is_paged)
+			set_query_var('paged', $q['paged']);
+
+/*
+global $wp_query;
+
+
+echo '<pre>';
+print_r($wp_query->query_vars);
+print_r($this);
+echo '</pre>';
+*/
 
 		return $this;
 	}
