@@ -88,10 +88,12 @@ class UCI_Results_Query {
 						$args['order']='DESC';
 					break;
 				case 'riders':
-					$args['order_by']='rank';
+					if ($args['rankings']) :
+						$args['order_by']='rank';
 
-					if (empty($args['order']))
-						$args['order']='ASC';
+						if (empty($args['order']))
+							$args['order']='ASC';
+					endif;
 					break;
 			endswitch;
 		endif;
