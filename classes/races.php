@@ -8,8 +8,6 @@ global $ucicurl_races;
  */
 class UCIcURLRaces {
 
-	public $admin_pagination=array();
-
 	/**
 	 * __construct function.
 	 *
@@ -32,7 +30,7 @@ class UCIcURLRaces {
 		global $wpdb;
 
 		// check if numeric, otherwise, it's a slug (code) //
-		if (!is_numeric($race_id))
+		if (!is_integer($race_id))
 			$race_id=uci_results_get_race_id($race_id);
 
 		$race=$wpdb->get_row("SELECT * FROM {$wpdb->ucicurl_races} WHERE id={$race_id}");
@@ -52,18 +50,6 @@ class UCIcURLRaces {
 		");
 
 		return $race;
-	}
-
-	/**
-	 * admin_pagination function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function admin_pagination() {
-		$pagination=new UCIcURLPagination($this->admin_pagination['total'], $this->admin_pagination['limit']);
-
-		echo $pagination->get_pagination();
 	}
 
 	/**

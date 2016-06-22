@@ -5,8 +5,6 @@
  */
 class UCIcURLRiders {
 
-	public $admin_pagination=array();
-
 	/**
 	 * __construct function.
 	 *
@@ -44,18 +42,6 @@ class UCIcURLRiders {
 		$rider->results=$wpdb->get_results($sql);
 
 		return $rider;
-	}
-
-	/**
-	 * admin_pagination function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function admin_pagination() {
-		$pagination=new UCIcURLPagination($this->admin_pagination['total'], $this->admin_pagination['limit'], $this->admin_pagination['url']);
-
-		echo $pagination->get_pagination();
 	}
 
 	/**
