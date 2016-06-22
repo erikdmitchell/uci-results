@@ -96,6 +96,13 @@ class UCI_Results_Query {
 			endswitch;
 		endif;
 
+		// setup some defaults for rankings //
+		if ($args['rankings']) :
+			if (!$args['season'] || empty($args['season']))
+				$args['season']=uci_results_get_default_rider_ranking_season();
+				$args['week']=uci_results_get_default_rider_ranking_week();
+		endif;
+
 		// check if paged //
 		if ($args['paged'])
 			$this->is_paged=true;
