@@ -4,7 +4,6 @@ global $uci_results_post;
 $riders=new UCI_Results_Query(array(
 	'per_page' => 10,
 	'type' => 'riders',
-	'season' => '2014/2015',
 	'rankings' => true
 ));
 
