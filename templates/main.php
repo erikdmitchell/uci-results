@@ -29,7 +29,7 @@ $races=new UCI_Results_Query(array(
 				<div class="row">
 					<div class="rank"><?php echo $uci_results_post->rank; ?></div>
 					<div class="rider"><a href="<?php uci_results_rider_url($uci_results_post->slug); ?>"><?php echo $uci_results_post->name; ?></a></div>
-					<div class="nat"><a href=""><?php echo ucicurl_get_country_flag($uci_results_post->nat); ?></a></div>
+					<div class="nat"><a href="<?php echo uci_results_country_url($uci_results_post->nat); ?>"><?php echo ucicurl_get_country_flag($uci_results_post->nat); ?></a></div>
 					<div class="points"><?php echo $uci_results_post->points; ?></div>
 				</div>
 			<?php endwhile; endif; ?>
