@@ -141,16 +141,6 @@ class UCI_Results_Query {
 		if ($this->is_paged)
 			set_query_var('paged', $q['paged']);
 
-/*
-global $wp_query;
-
-
-echo '<pre>';
-print_r($wp_query->query_vars);
-print_r($this);
-echo '</pre>';
-*/
-
 		return $this;
 	}
 
@@ -388,16 +378,27 @@ echo '</pre>';
 
 }
 
-
-
+/**
+ * uci_results_pagination function.
+ *
+ * @access public
+ * @param string $args (default: '')
+ * @return void
+ */
 function uci_results_pagination($args='') {
 	global $uci_results_query;
 
 	$html=null;
-	$pagenum_link = html_entity_decode( get_pagenum_link() );
-	$total   = isset( $uci_results_query->max_num_pages ) ? $uci_results_query->max_num_pages : 1;
+	//$pagenum_link = html_entity_decode( get_pagenum_link() );
+	$pagenum_link = html_entity_decode( get_permalink() );
+	$url_parts = explode( '?', $pagenum_link ); // -- this may be needed in the future if we have extra queries
+	$total = isset( $uci_results_query->max_num_pages ) ? $uci_results_query->max_num_pages : 1;
   $current = get_query_var( 'paged' ) ? intval( get_query_var( 'paged' ) ) : 1;
-	$defaults=array(
+
+  // Append the format placeholder to the base URL.
+  //$pagenum_link = trailingslashit( $url_parts[0] ) . '%_%';
+
+  $defaults=array(
 		'base' => $pagenum_link,
 		'total' => $total,
 		'current' => $current,
@@ -415,7 +416,7 @@ function uci_results_pagination($args='') {
 		$prev_link.='<div class="prev-link">';
 
 			if ($prev_page!=0)
-				$prev_link.='<a href="'.$args['base'].'&pagenum='.$prev_page.'">'.$args['prev_text'].'</a>';
+				$prev_link.='<a href="'.$args['base'].$prev_page.'">'.$args['prev_text'].'</a>';
 
 		$prev_link.='</div>';
 	endif;
@@ -438,11 +439,6 @@ function uci_results_pagination($args='') {
 		$html.=$prev_link;
 		$html.=$next_link;
 	$html.='</div>';
-
-echo '<pre>';
-//print_r($uci_results_query);
-print_r($args);
-echo '</pre>';
 
 	echo $html;
 }
