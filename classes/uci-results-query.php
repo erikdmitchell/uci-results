@@ -144,11 +144,13 @@ class UCI_Results_Query {
 		$order=$this->order_clause($q);
 		$limit=$this->set_limit($q);
 
-		// we are looking for rider rankings //
-		if ($q['rankings']) :
+		// run specific query if need be //
+		if ($this->is_search) : // a search //
+			$this->query=$this->search_query($db_table);
+		elseif ($q['rankings']) : // we are looking for rider rankings //
 			$this->rider_rankings_query=$this->rider_rankings_query($q, $where, $order, $limit);
 			$this->query=$this->rider_rankings_query;
-		else :
+		else : // general query //
 			$this->query="SELECT SQL_CALC_FOUND_ROWS * FROM $db_table $where $order $limit";
 		endif;
 
@@ -165,9 +167,7 @@ class UCI_Results_Query {
 		// force update 'paged' query var //
 		if ($this->is_paged)
 			set_query_var('paged', $q['paged']);
-echo '<pre>';
-print_r($this);
-echo '</pre>';
+
 		return $this;
 	}
 
@@ -222,6 +222,7 @@ echo '</pre>';
 		if ($q['name'])
 			$where[]="name='".$q['name']."'";
 
+		// build our where query //
 		if (!empty($where)) :
 			$where=' WHERE '.implode(' AND ',$where);
 		else :
@@ -353,6 +354,25 @@ echo '</pre>';
 		$sql="SELECT SQL_CALC_FOUND_ROWS * FROM $wpdb->ucicurl_rider_rankings AS rankings	LEFT JOIN $wpdb->ucicurl_riders AS riders	ON riders.id=rankings.rider_id $where	$order $limit";
 
 		return $sql;
+	}
+
+	/**
+	 * search_query function.
+	 *
+	 * @access protected
+	 * @param string $table (default: '')
+	 * @return void
+	 */
+	protected function search_query($table='') {
+		$query='';
+
+		if ($this->query_vars['type']=='races') :
+			$query="SELECT * FROM $table WHERE event LIKE '%".$_GET['search']."%'";
+		elseif ($this->query_vars['type']=='riders') :
+			$query="SELECT * FROM $table WHERE name LIKE '%".$_GET['search']."%'";
+		endif;
+
+		return $query;
 	}
 
 	/**
