@@ -1,23 +1,30 @@
 <?php
-global $ucicurl_races;
+global $uci_results_query, $uci_results_post, $ucicurl_races;
 
 $s_season=isset($_GET['season']) ? $_GET['season'] : '';
 $s_class=isset($_GET['class']) ? $_GET['class'] : '';
 $s_nat=isset($_GET['nat']) ? $_GET['nat'] : '';
 $search=isset($_GET['search']) ? $_GET['search'] : '';
 
-$races=$ucicurl_races->races(array(
+$races=new UCI_Results_Query(array(
+	'type' => 'races',
 	'class' => $s_class,
 	'season' => $s_season,
 	'nat' => $s_nat,
 ));
+
+/*
+echo '<pre>';
+print_r($races);
+echo '</pre>';
+*/
 ?>
 
-<h2>Races <span class="ucicurl-admin-total">(<?php echo $ucicurl_races->admin_pagination['total']; ?>)</span></h2>
+<h2>Races <span class="ucicurl-admin-total">(<?php echo $races->found_posts; ?>)</span></h2>
 
 <div class="tablenav top">
 	<div class="pagination">
-		<?php $ucicurl_races->admin_pagination(); ?>
+		PAGINATION
 	</div>
 
 	<div class="alignright actions">
@@ -75,16 +82,16 @@ $races=$ucicurl_races->races(array(
 		</tr>
 	</thead>
 	<tbody>
-		<?php foreach ($races as $race) : ?>
+		<?php if ($races->have_posts()) : while ( $races->have_posts() ) : $races->the_post(); ?>
 			<tr>
-				<td class="race-date"><?php echo $race->date; ?></td>
-				<td class="race-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=races&race_id='.$race->id); ?>"><?php echo $race->event; ?></a></td>
-				<td class="race-nat"><?php echo $race->nat; ?></td>
-				<td class="race-class"><?php echo $race->class; ?></td>
-				<td class="race-season"><?php echo $race->season; ?></td>
+				<td class="race-date"><?php echo $uci_results_post->date; ?></td>
+				<td class="race-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=races&race_id='.$uci_results_post->id); ?>"><?php echo $uci_results_post->event; ?></a></td>
+				<td class="race-nat"><?php echo $uci_results_post->nat; ?></td>
+				<td class="race-class"><?php echo $uci_results_post->class; ?></td>
+				<td class="race-season"><?php echo $uci_results_post->season; ?></td>
 			</tr>
-		<?php endforeach; ?>
+		<?php endwhile; endif; ?>
 	</tbody>
 </table>
 
-<?php $ucicurl_races->admin_pagination(); ?>
+PAGINATION

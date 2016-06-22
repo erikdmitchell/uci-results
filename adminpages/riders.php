@@ -1,20 +1,27 @@
 <?php
-global $ucicurl_riders;
+global $uci_results_query, $uci_results_post, $ucicurl_riders;
 
 //$s_season=isset($_GET['season']) ? $_GET['season'] : '';
 $search=isset($_GET['search']) ? $_GET['search'] : '';
 $nat=isset($_GET['nat']) ? $_GET['nat'] : '';
 
+/*
 $riders=$ucicurl_riders->riders(array(
+	'nat' => $nat,
+));
+*/
+
+$riders=new UCI_Results_Query(array(
+	'type' => 'riders',
 	'nat' => $nat,
 ));
 ?>
 
-<h2>Riders <span class="ucicurl-admin-total">(<?php echo $ucicurl_riders->admin_pagination['total']; ?>)</span></h2>
+<h2>Riders <span class="ucicurl-admin-total">(<?php echo $riders->found_posts; ?>)</span></h2>
 
 <div class="tablenav top">
 	<div class="pagination">
-		<?php $ucicurl_riders->admin_pagination(); ?>
+		PAGINATION
 	</div>
 
 	<div class="alignright actions">
@@ -51,13 +58,13 @@ $riders=$ucicurl_riders->riders(array(
 		</tr>
 	</thead>
 	<tbody>
-		<?php foreach ($riders as $rider) : ?>
+		<?php if ($riders->have_posts()) : while ( $riders->have_posts() ) : $riders->the_post(); ?>
 			<tr>
-				<td class="rider-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=riders&rider='.urlencode($rider->name)); ?>"><?php echo $rider->name; ?></a></td>
-				<td class="rider-nat"><?php echo $rider->nat; ?></td>
+				<td class="rider-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=riders&rider='.urlencode($uci_results_post->name)); ?>"><?php echo $uci_results_post->name; ?></a></td>
+				<td class="rider-nat"><?php echo $uci_results_post->nat; ?></td>
 			</tr>
-		<?php endforeach; ?>
+		<?php endwhile; endif; ?>
 	</tbody>
 </table>
 
-<?php $ucicurl_riders->admin_pagination(); ?>
+PAGINATION
