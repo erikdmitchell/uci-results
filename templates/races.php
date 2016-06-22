@@ -34,4 +34,6 @@ $races=new UCI_Results_Query(array(
 			<?php endwhile; endif; ?>
 		</tbody>
 	</table>
+
+	<?php uci_results_pagination(); ?>
 </div>
