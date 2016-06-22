@@ -321,10 +321,21 @@ function uci_results_get_default_rider_ranking_season() {
 	return $latest_season;
 }
 
+/**
+ * uci_results_get_default_rider_ranking_week function.
+ *
+ * @access public
+ * @return void
+ */
+function uci_results_get_default_rider_ranking_week() {
+	global $ucicurl_races;
 
+	$season=uci_results_get_default_rider_ranking_season(); // get latest season
+	$weeks=$ucicurl_races->weeks($season); // get weeks
+	$latest_week=array_pop($weeks); // get latest week
 
-
-
+	return $latest_week;
+}
 
 
 
