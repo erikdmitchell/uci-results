@@ -24,14 +24,16 @@ $riders=new UCI_Results_Query(array(
 			<?php uci_results_admin_pagination(); ?>
 		</div>
 
+		<!--
 		<div class="alignright actions">
 			<form name="races-search" method="get" action="">
 				<input type="hidden" name="page" value="uci-curl">
 				<input type="hidden" name="tab" value="rider-rankings">
-				<input id="race-search" name="search" type="text" value="<?php echo $search; ?> NO WORK" />
+				<input id="race-search" name="search" type="text" value="<?php echo $search; ?>" />
 				<input type="submit" id="search-submit" class="button action" value="Search">
 			</form>
 		</div>
+		-->
 
 		<form name="rankings-filter" method="get" action="">
 			<input type="hidden" name="page" value="uci-curl">
