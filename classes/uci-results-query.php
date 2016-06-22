@@ -24,6 +24,8 @@ class UCI_Results_Query {
 
 	public $is_paged=false;
 
+	public $is_search=false;
+
 
 	/**
 	 * __construct function.
@@ -109,6 +111,10 @@ class UCI_Results_Query {
 				$args['week']=uci_results_get_default_rider_ranking_week();
 		endif;
 
+		// check for search //
+		if (isset($_GET['search']))
+			$this->is_search=true;
+
 		// check if paged //
 		if ($args['paged'])
 			$this->is_paged=true;
@@ -129,7 +135,6 @@ class UCI_Results_Query {
 		$limit='';
 		$where='';
 		$order='';
-		// $pieces = array( 'where', 'groupby', 'join', 'orderby', 'distinct', 'fields', 'limits' );
 
 		$this->query_vars=$this->set_query_vars($query);
 		$q=$this->query_vars;
@@ -160,7 +165,9 @@ class UCI_Results_Query {
 		// force update 'paged' query var //
 		if ($this->is_paged)
 			set_query_var('paged', $q['paged']);
-
+echo '<pre>';
+print_r($this);
+echo '</pre>';
 		return $this;
 	}
 
@@ -184,6 +191,13 @@ class UCI_Results_Query {
 		return $this->posts;
 	}
 
+	/**
+	 * where_clause function.
+	 *
+	 * @access protected
+	 * @param mixed $q
+	 * @return void
+	 */
 	protected function where_clause($q) {
 		$where=array();
 
