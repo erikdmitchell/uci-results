@@ -5,12 +5,6 @@ global $uci_results_query, $uci_results_post, $ucicurl_riders;
 $search=isset($_GET['search']) ? $_GET['search'] : '';
 $nat=isset($_GET['nat']) ? $_GET['nat'] : '';
 
-/*
-$riders=$ucicurl_riders->riders(array(
-	'nat' => $nat,
-));
-*/
-
 $riders=new UCI_Results_Query(array(
 	'type' => 'riders',
 	'nat' => $nat,
