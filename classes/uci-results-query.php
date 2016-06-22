@@ -131,10 +131,6 @@ class UCI_Results_Query {
 		if (!empty($limit))
 			$this->max_num_pages=ceil($this->found_posts/$q['per_page']);
 
-echo '<pre>';
-print_r($this);
-echo '</pre>';
-
 		return $this;
 	}
 
@@ -377,53 +373,57 @@ echo '</pre>';
 function uci_results_pagination($args='') {
 	global $uci_results_query;
 
-	//$html=null;
-
+	$html=null;
 	$pagenum_link = html_entity_decode( get_pagenum_link() );
 	$total   = isset( $uci_results_query->max_num_pages ) ? $uci_results_query->max_num_pages : 1;
   $current = get_query_var( 'paged' ) ? intval( get_query_var( 'paged' ) ) : 1;
-
 	$defaults=array(
 		'base' => $pagenum_link,
 		'total' => $total,
 		'current' => $current,
+    'prev_text' => __('&laquo; Previous'),
+    'next_text' => __('Next &raquo;'),
 	);
 	$args=wp_parse_args($args, $defaults);
+
+	// prev link //
+	$prev_link=null;
+	$prev_page=$args['current']-1;
+
+	// only display if needed //
+	if ($prev_page>0) :
+		$prev_link.='<div class="prev-link">';
+
+			if ($prev_page!=0)
+				$prev_link.='<a href="'.$args['base'].'&pagenum='.$prev_page.'">'.$args['prev_text'].'</a>';
+
+		$prev_link.='</div>';
+	endif;
+
+	// next link //
+	$next_link=null;
+	$next_page=$args['current']+1;
+
+	// only display if we are not on last page //
+	if ($next_page<=$args['total']) :
+		$next_link.='<div class="next-link">';
+
+			if ($next_page<=$args['total'])
+				$next_link.='<a href="'.$args['base'].$next_page.'">'.$args['next_text'].'</a>';
+
+		$next_link.='</div>';
+	endif;
+
+	$html.='<div class="uci-results-pagination">';
+		$html.=$prev_link;
+		$html.=$next_link;
+	$html.='</div>';
 
 echo '<pre>';
 //print_r($uci_results_query);
 print_r($args);
 echo '</pre>';
-}
-/*
-	        $defaults = array(
-	                'base' => $pagenum_link, // http://example.com/all_posts.php%_% : %_% is replaced by format (below)
-	                'format' => $format, // ?page=%#% : %#% is replaced by the page number
-	                'total' => $total,
-	                'current' => $current,
-	                'show_all' => false,
-	                'prev_next' => true,
-	                'prev_text' => __('&laquo; Previous'),
-	                'next_text' => __('Next &raquo;'),
-	                'end_size' => 1,
-	                'mid_size' => 2,
-	                'type' => 'plain',
-	                'add_args' => array(), // array of query args to add
-	                'add_fragment' => '',
-	                'before_page_number' => '',
-	                'after_page_number' => ''
-	        );
-*/
-/*
-	public $pagenum=0;
-	public $limit=0;
-	public $offset=0;
-	public $total=0;
-	public $num_of_pages=0;
-	public $base_url='';
 
-*/
-// $wp_query->max_num_pages
-// get_query_var( 'paged' )
-// $pagenum_link = trailingslashit( $url_parts[0] ) . '%_%';
+	echo $html;
+}
 ?>
