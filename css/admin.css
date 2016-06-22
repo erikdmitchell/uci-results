@@ -30,13 +30,13 @@ h2 .ucicurl-admin-total {
 	float: right;
 	margin-left: 30px;
 }
-.tablenav .pagination .ucicurl-pagination .next-link {
+.tablenav .pagination .uci-results-admin-pagination .next-link {
 	margin-left: 10px;
 }
-.tablenav .pagination .ucicurl-pagination {
+.tablenav .pagination .uci-results-admin-pagination {
 	margin-top: 3px;
 }
-.tablenav .pagination .ucicurl-pagination > div {
+.tablenav .pagination .uci-results-admin-pagination > div {
 	width: auto;
   min-width: 17px;
   border: 1px solid #ccc;
@@ -47,23 +47,23 @@ h2 .ucicurl-admin-total {
   font-weight: 400;
   text-align: center;
 }
-.tablenav .pagination .ucicurl-pagination > div.hide {
+.tablenav .pagination .uci-results-admin-pagination > div.hide {
 	display: none;
 }
-.tablenav .pagination .ucicurl-pagination > div a {
+.tablenav .pagination .uci-results-admin-pagination > div a {
 	text-decoration: none;
 }
-.ucicurl-pagination {
+.uci-results-admin-pagination {
 	overflow: hidden;
 	margin: 15px 0;
 }
-.ucicurl-pagination > div {
+.uci-results-admin-pagination > div {
 	width: 50%;
 	float: left;
 }
-.ucicurl-pagination > div.hide {
+.uci-results-admin-pagination > div.hide {
 }
-.ucicurl-pagination .next-link {
+.uci-results-admin-pagination .next-link {
 	text-align: right;
 }
 

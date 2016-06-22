@@ -89,5 +89,5 @@ $riders=new UCI_Results_Query(array(
 		</tbody>
 	</table>
 
-	PAGINATION
+	<?php uci_results_admin_pagination(); ?>
 </div>
