@@ -10,7 +10,7 @@ global $uci_results_post;
 $riders=new UCI_Results_Query(array(
 	'per_page' => -1,
 	'type' => 'riders',
-	'season' => '2014/2015',
+	'season' => uci_results_get_default_rider_ranking_season(),
 	'rankings' => true,
 	'nat' => get_query_var('country_slug'),
 ));
