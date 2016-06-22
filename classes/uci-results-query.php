@@ -63,6 +63,10 @@ class UCI_Results_Query {
 			'rankings' => false // riders
 		);
 
+		// for our admin, we pass a get var //
+		if (is_admin() && empty($array['paged']) && isset($_GET['paged']))
+			$array['paged']=$_GET['paged'];
+
 		return $array;
 	}
 
@@ -112,6 +116,13 @@ class UCI_Results_Query {
 		return $args;
 	}
 
+	/**
+	 * query function.
+	 *
+	 * @access public
+	 * @param string $query (default: '')
+	 * @return void
+	 */
 	public function query($query='') {
 		global $wpdb;
 
@@ -445,6 +456,78 @@ function uci_results_pagination($args='') {
 	endif;
 
 	$html.='<div class="uci-results-pagination">';
+		$html.=$prev_link;
+		$html.=$next_link;
+	$html.='</div>';
+
+	echo $html;
+}
+
+function uci_results_admin_pagination($args='') {
+  global $wp, $uci_results_query;
+
+	$html=null;
+	$pagenum_link=add_query_arg( $_SERVER['QUERY_STRING'], '', admin_url( $wp->request ) );
+	$url_parts = explode( '?', $pagenum_link );
+	$pagenum_link = trailingslashit( $url_parts[0] );
+	$total = isset( $uci_results_query->max_num_pages ) ? $uci_results_query->max_num_pages : 1;
+	$current = isset($_GET['paged']) ? intval( $_GET['paged'] ) : 1;
+
+  $defaults=array(
+		'base' => $pagenum_link,
+		'total' => $total,
+		'current' => $current,
+    'prev_text' => __('&laquo; Previous'),
+    'next_text' => __('Next &raquo;'),
+		'add_args' => array()
+	);
+	$args=wp_parse_args($args, $defaults);
+
+	// Merge additional query vars found in the original URL into 'add_args' array. via - wp-includes/general-template.php
+	if (isset($url_parts[1])) :
+		// Find the query args of the requested URL.
+		wp_parse_str( $url_parts[1], $url_query_args );
+
+		$args['add_args'] = array_merge( $args['add_args'], urlencode_deep( $url_query_args ) );
+	endif;
+
+	// set our previous url //
+	$prev_url_args=$args['add_args'];
+	$prev_url_args['paged']=$args['current']-1;
+	$prev_page=add_query_arg($prev_url_args, $args['base']);
+
+	// prev link //
+	$prev_link=null;
+
+	// only display if needed //
+	if ($prev_url_args['paged']>0) :
+		$prev_link.='<div class="prev-link">';
+
+			if ($prev_url_args['paged']!=0)
+				$prev_link.='<a href="'.$prev_page.'">'.$args['prev_text'].'</a>';
+
+		$prev_link.='</div>';
+	endif;
+
+	// set our next url //
+	$next_url_args=$args['add_args'];
+	$next_url_args['paged']=$args['current']+1;
+	$next_page=add_query_arg($next_url_args, $args['base']);
+
+	// next link //
+	$next_link=null;
+
+	// only display if we are not on last page //
+	if ($next_url_args['paged']<=$args['total']) :
+		$next_link.='<div class="next-link">';
+
+			if ($next_url_args['paged']<=$args['total'])
+				$next_link.='<a href="'.$next_page.'">'.$args['next_text'].'</a>';
+
+		$next_link.='</div>';
+	endif;
+
+	$html.='<div class="uci-results-admin-pagination">';
 		$html.=$prev_link;
 		$html.=$next_link;
 	$html.='</div>';
