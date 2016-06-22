@@ -307,6 +307,32 @@ function uci_results_race_has_results($code='') {
 }
 
 /**
+ * uci_results_get_default_rider_ranking_season function.
+ *
+ * @access public
+ * @return void
+ */
+function uci_results_get_default_rider_ranking_season() {
+	global $ucicurl_races;
+
+	$seasons=$ucicurl_races->seasons(); // get seasons
+	$latest_season=array_pop($seasons); // get last season in arr
+
+	return $latest_season;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/**
 * Build the entire current page URL (incl query strings) and output it
 * Useful for social media plugins and other times you need the full page URL
 * Also can be used outside The Loop, unlike the_permalink
