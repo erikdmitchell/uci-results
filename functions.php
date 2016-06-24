@@ -336,4 +336,28 @@ function uci_results_get_default_rider_ranking_week() {
 
 	return $latest_week;
 }
+
+/**
+ * uci_results_seasons_dropdown function.
+ *
+ * @access public
+ * @param string $name (default: 'seasons')
+ * @param string $selected (default: '')
+ * @return void
+ */
+function uci_results_seasons_dropdown($name='seasons', $selected='') {
+	global $ucicurl_races;
+
+	$html=null;
+	$seasons=$ucicurl_races->seasons();
+
+	$html.='<select name="'.$name.'">';
+		$html.='<option value="0">'.__('Select One', '').'</option>';
+		foreach ($seasons as $season) :
+			$html.='<option name="'.$season.'" '.selected($selected, $season, false).'>'.$season.'</option>';
+		endforeach;
+	$html.='</select>';
+
+	echo $html;
+}
 ?>
