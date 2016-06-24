@@ -1,7 +1,7 @@
 <?php
 global $ucicurl_db_version;
 
-$ucicurl_db_version='0.1.4';
+$ucicurl_db_version='0.1.5';
 
 function ucicurl_set_db_tables() {
 	global $wpdb;
@@ -11,6 +11,7 @@ function ucicurl_set_db_tables() {
 	$wpdb->ucicurl_riders=$wpdb->prefix.'uci_curl_riders';
 	$wpdb->ucicurl_rider_rankings=$wpdb->prefix.'uci_curl_rider_rankings';
 	$wpdb->ucicurl_related_races=$wpdb->prefix.'uci_curl_related_races';
+	$wpdb->ucicurl_series=$wpdb->prefix.'uci_curl_series';
 }
 ucicurl_set_db_tables();
 
@@ -25,6 +26,7 @@ function ucicurl_db_install() {
 	$wpdb->ucicurl_riders=$wpdb->prefix.'uci_curl_riders';
 	$wpdb->ucicurl_rider_rankings=$wpdb->prefix.'uci_curl_rider_rankings';
 	$wpdb->ucicurl_related_races=$wpdb->prefix.'uci_curl_related_races';
+	$wpdb->ucicurl_series=$wpdb->prefix.'uci_curl_series';
 
 	$charset=$wpdb->get_charset_collate();
 
@@ -41,6 +43,7 @@ function ucicurl_db_install() {
 			link TEXT NOT NULL,
 			code TEXT NOT NULL,
 			related_races_id bigint(20) NOT NULL DEFAULT '0',
+			series_id bigint(20) NOT NULL DEFAULT '0',
 			PRIMARY KEY (`id`)
 		) $charset;
 	";
@@ -92,12 +95,22 @@ function ucicurl_db_install() {
 		) $charset;
 	";
 
+	$sql_series="
+		CREATE TABLE $wpdb->ucicurl_series (
+		  id bigint(20) NOT NULL AUTO_INCREMENT,
+			name TEXT NOT NULL,
+			season VARCHAR(50) NOT NULL,
+			PRIMARY KEY (`id`)
+		) $charset;
+	";
+
 	dbDelta(array(
 		$sql_races,
 		$sql_results,
 		$sql_riders,
 		$sql_rider_rankings,
 		$sql_related_races,
+		$sql_series,
 	));
 
 	add_option('ucicurl_db_version', $ucicurl_db_version);
@@ -117,6 +130,7 @@ function ucicurl_db_update() {
 		$wpdb->ucicurl_riders=$wpdb->prefix.'uci_curl_riders';
 		$wpdb->ucicurl_rider_rankings=$wpdb->prefix.'uci_curl_rider_rankings';
 		$wpdb->ucicurl_related_races=$wpdb->prefix.'uci_curl_related_races';
+		$wpdb->ucicurl_series=$wpdb->prefix.'uci_curl_series';
 
 		$sql_races="
 			CREATE TABLE $wpdb->ucicurl_races (
@@ -131,6 +145,7 @@ function ucicurl_db_update() {
 				link TEXT NOT NULL,
 				code TEXT NOT NULL,
 				related_races_id bigint(20) NOT NULL DEFAULT '0',
+				series_id bigint(20) NOT NULL DEFAULT '0',
 				PRIMARY KEY (`id`)
 			);
 		";
@@ -182,12 +197,22 @@ function ucicurl_db_update() {
 			);
 		";
 
+		$sql_series="
+			CREATE TABLE $wpdb->ucicurl_series (
+			  id bigint(20) NOT NULL AUTO_INCREMENT,
+				name TEXT NOT NULL,
+				season VARCHAR(50) NOT NULL,
+				PRIMARY KEY (`id`)
+			);
+		";
+
 		dbDelta(array(
 			$sql_races,
 			$sql_results,
 			$sql_riders,
 			$sql_rider_rankings,
 			$sql_related_races,
+			$sql_series,
 		));
 
 		update_option('ucicurl_db_version', $ucicurl_db_version);
