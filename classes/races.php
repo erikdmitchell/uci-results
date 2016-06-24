@@ -287,6 +287,12 @@ class UCIcURLRaces {
 		$wpdb->update($wpdb->ucicurl_races, $data, array('id' => $_POST['race_id']));
 	}
 
+	/**
+	 * update_series_form function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function update_series_form() {
 		global $wpdb;
 
@@ -313,6 +319,13 @@ class UCIcURLRaces {
 		endif;
 	}
 
+	/**
+	 * get_series_info function.
+	 *
+	 * @access public
+	 * @param int $id (default: 0)
+	 * @return void
+	 */
 	public function get_series_info($id=0) {
 		global $wpdb;
 

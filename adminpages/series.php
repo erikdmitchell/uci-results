@@ -7,7 +7,7 @@ $series=new UCI_Results_Query(array(
 ?>
 
 <div class="uci-results-admin-series">
-	<h2>Series</h2> <a href="<?php echo admin_url('admin.php?page=uci-curl&tab=uci-curl&action=update-series'); ?>" class="button add-series">Add Series</a>
+	<h2>Series</h2> <a href="<?php echo admin_url('admin.php?page=uci-curl&tab=series&action=update-series'); ?>" class="button add-series">Add Series</a>
 
 	<div class="tablenav top">
 		<div class="pagination">
@@ -27,7 +27,7 @@ $series=new UCI_Results_Query(array(
 			<?php if ($series->have_posts()) : while ( $series->have_posts() ) : $series->the_post(); ?>
 				<tr>
 					<td class="race-date"><?php echo $uci_results_post->id; ?></td>
-					<td class="race-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=races&action=update-series&series_id='.$uci_results_post->id); ?>"><?php echo $uci_results_post->name; ?></a></td>
+					<td class="race-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=series&action=update-series&series_id='.$uci_results_post->id); ?>"><?php echo $uci_results_post->name; ?></a></td>
 					<td class="race-season"><?php echo $uci_results_post->season; ?></td>
 				</tr>
 			<?php endwhile; endif; ?>
