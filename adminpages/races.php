@@ -12,12 +12,6 @@ $races=new UCI_Results_Query(array(
 	'season' => $s_season,
 	'nat' => $s_nat,
 ));
-
-/*
-echo '<pre>';
-print_r($races);
-echo '</pre>';
-*/
 ?>
 
 <h2>Races <span class="ucicurl-admin-total">(<?php echo $races->found_posts; ?>)</span></h2>

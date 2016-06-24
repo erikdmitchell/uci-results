@@ -24,7 +24,7 @@ class UCIcURLRiders {
 		global $wpdb;
 
 		// if not an int, it's a slug //
-		if (!is_integer($rider_id)) :
+		if (!is_numeric($rider_id)) :
 			$rider_id=ucicurl_get_rider_id($rider_id);
 		endif;
 
