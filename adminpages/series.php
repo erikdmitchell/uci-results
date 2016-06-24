@@ -1,11 +1,6 @@
 <?php
 global $uci_results_query, $uci_results_post, $ucicurl_races;
 
-$s_season=isset($_GET['season']) ? $_GET['season'] : '';
-$s_class=isset($_GET['class']) ? $_GET['class'] : '';
-$s_nat=isset($_GET['nat']) ? $_GET['nat'] : '';
-$search=isset($_GET['search']) ? $_GET['search'] : '';
-
 $races=new UCI_Results_Query(array(
 	'type' => 'races',
 	'class' => $s_class,
@@ -14,8 +9,8 @@ $races=new UCI_Results_Query(array(
 ));
 ?>
 
-<div class="uci-results-admin-races">
-	<h2>Races <span class="ucicurl-admin-total">(<?php echo $races->found_posts; ?>)</span></h2> <a href="<?php echo admin_url('admin.php?page=uci-curl&tab=uci-curl&action=series'); ?>" class="button view-series">View Series</a>
+<div class="uci-results-admin-series">
+	<h2>Series</h2>
 
 	<div class="tablenav top">
 		<div class="pagination">
