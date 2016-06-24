@@ -16,6 +16,7 @@ class UCIcURLRaces {
 	 */
 	public function __construct() {
 		add_action('admin_init', array($this, 'add_related_races'));
+		add_action('admin_init', array($this, 'update_single_race_form'));
 		add_action('wp_ajax_search_related_races', array($this, 'ajax_search_related_races'));
 	}
 
@@ -42,6 +43,7 @@ class UCIcURLRaces {
 				results.age,
 				results.result AS time,
 				results.par AS points,
+				results.pcr,
 				riders.slug
 			FROM {$wpdb->ucicurl_results} AS results
 			LEFT JOIN {$wpdb->ucicurl_riders} AS riders
@@ -259,6 +261,29 @@ class UCIcURLRaces {
 		$weeks=$wpdb->get_col("SELECT week FROM {$wpdb->ucicurl_races} WHERE season='{$season}' GROUP BY week ORDER BY week ASC");
 
 		return $weeks;
+	}
+
+	/**
+	 * update_single_race_form function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function update_single_race_form() {
+		global $wpdb;
+
+		// verify nonce //
+		if (!isset($_POST['uci_results_admin']) || !wp_verify_nonce($_POST['uci_results_admin'], 'update_single_race_info'))
+			return false;
+
+		$data=array(
+			'date' => date('Y-m-d', strtotime($_POST['date'])),
+			'season' => $_POST['season'],
+			'class' => $_POST['class'],
+			'nat' => $_POST['nat'],
+		);
+
+		$wpdb->update($wpdb->ucicurl_races, $data, array('id' => $_POST['race_id']));
 	}
 }
 

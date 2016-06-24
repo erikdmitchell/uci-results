@@ -8,9 +8,17 @@ $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 <h2><?php echo $race->event; ?></h2>
 
 <div class="tablenav top single-race">
-	<div class="date alignleft"><?php echo date(get_option('date_format'), strtotime($race->date)); ?> <span class="season">(<?php echo $race->season; ?>)</span></div>
-	<div class="class alignleft"><?php echo $race->class; ?></div>
-	<div class="nat alignleft"><?php echo $race->nat; ?></div>
+	<form id="update-race-information" method="post" action="">
+		<?php wp_nonce_field('update_single_race_info', 'uci_results_admin'); ?>
+		<input type="hidden" name="race_id" value="<?php echo $_GET['race_id']; ?>" />
+
+		<input type="text" name="date" class="date alignleft" value="<?php echo date(get_option('date_format'), strtotime($race->date)); ?>" />
+		<div class="season alignleft"><?php uci_results_seasons_dropdown('season', $race->season); ?></div>
+		<input type="text" name="class" class="class alignleft" value="<?php echo $race->class; ?>" />
+		<input type="text" name="nat" class="nat alignleft" value="<?php echo $race->nat; ?>" />
+
+		<input type="submit" id="doaction" class="button action" value="Apply">
+	</form>
 </div>
 
 <table class="wp-list-table widefat fixed striped pages">
@@ -32,8 +40,8 @@ $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 				<td class="rider-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=riders&rider='.urlencode($result->name)); ?>"><?php echo $result->name; ?></a></td>
 				<td class="rider-nat"><?php echo $result->nat; ?></td>
 				<td class="rider-age"><?php echo $result->age; ?></td>
-				<td class="rider-result"><?php echo $result->result; ?></td>
-				<td class="rider-par"><?php echo $result->par; ?></td>
+				<td class="rider-result"><?php echo $result->time; ?></td>
+				<td class="rider-par"><?php echo $result->points; ?></td>
 				<td class="rider-pcr"><?php echo $result->pcr; ?></td>
 			</tr>
 		<?php endforeach; ?>
