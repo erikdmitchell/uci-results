@@ -312,6 +312,9 @@ class UCI_Results_Query {
 			case 'riders':
 				$table=$wpdb->ucicurl_riders;
 				break;
+			case 'series':
+				$table=$wpdb->ucicurl_series;
+				break;
 			default:
 				$table=$wpdb->posts;
 		endswitch;

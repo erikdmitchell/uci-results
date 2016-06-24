@@ -351,7 +351,7 @@ function uci_results_seasons_dropdown($name='seasons', $selected='') {
 	$html=null;
 	$seasons=$ucicurl_races->seasons();
 
-	$html.='<select name="'.$name.'">';
+	$html.='<select id="'.$name.'" name="'.$name.'">';
 		$html.='<option value="0">'.__('Select One', '').'</option>';
 		foreach ($seasons as $season) :
 			$html.='<option name="'.$season.'" '.selected($selected, $season, false).'>'.$season.'</option>';

@@ -83,6 +83,10 @@ class UCIResultsAdminPages {
 						$html.=ucicurl_get_admin_page('add-related-race');
 					elseif (isset($_GET['race_id'])) :
 						$html.=ucicurl_get_admin_page('single-race');
+					elseif (isset($_GET['action']) && $_GET['action']=='series') :
+						$html.=ucicurl_get_admin_page('series');
+					elseif (isset($_GET['action']) && $_GET['action']=='update-series') :
+						$html.=ucicurl_get_admin_page('update-series');
 					else :
 						$html.=ucicurl_get_admin_page('races');
 					endif;
@@ -105,8 +109,6 @@ class UCIResultsAdminPages {
 				default:
 					if (isset($_GET['action']) && $_GET['action']=='update-rankings') :
 						$html.=ucicurl_get_admin_page('update-rankings');
-					elseif (isset($_GET['action']) && $_GET['action']=='series') :
-						$html.=ucicurl_get_admin_page('series');
 					else :
 						$html.=ucicurl_get_admin_page('curl');
 					endif;

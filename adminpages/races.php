@@ -15,7 +15,7 @@ $races=new UCI_Results_Query(array(
 ?>
 
 <div class="uci-results-admin-races">
-	<h2>Races <span class="ucicurl-admin-total">(<?php echo $races->found_posts; ?>)</span></h2> <a href="<?php echo admin_url('admin.php?page=uci-curl&tab=uci-curl&action=series'); ?>" class="button view-series">View Series</a>
+	<h2>Races <span class="ucicurl-admin-total">(<?php echo $races->found_posts; ?>)</span></h2> <a href="<?php echo admin_url('admin.php?page=uci-curl&tab=races&action=series'); ?>" class="button view-series">View Series</a>
 
 	<div class="tablenav top">
 		<div class="pagination">

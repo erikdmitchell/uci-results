@@ -17,6 +17,7 @@ class UCIcURLRaces {
 	public function __construct() {
 		add_action('admin_init', array($this, 'add_related_races'));
 		add_action('admin_init', array($this, 'update_single_race_form'));
+		add_action('admin_init', array($this, 'update_series_form'));
 		add_action('wp_ajax_search_related_races', array($this, 'ajax_search_related_races'));
 	}
 
@@ -285,6 +286,54 @@ class UCIcURLRaces {
 
 		$wpdb->update($wpdb->ucicurl_races, $data, array('id' => $_POST['race_id']));
 	}
+
+	public function update_series_form() {
+		global $wpdb;
+
+		// verify nonce //
+		if (!isset($_POST['uci_results_admin']) || !wp_verify_nonce($_POST['uci_results_admin'], 'update_series'))
+			return false;
+
+		// add or update //
+		if (isset($_POST['series_id']) && $_POST['series_id']) :
+			$data=array(
+				'name' => $_POST['name'],
+				'season' => $_POST['season'],
+			);
+
+			$wpdb->update($wpdb->ucicurl_series, $data, array('id' => $_POST['series_id']));
+		else :
+			$data=array(
+				'name' => $_POST['name'],
+				'season' => $_POST['season'],
+			);
+
+			$wpdb->insert($wpdb->ucicurl_series, $data);
+			$_POST['series_id']=$wpdb->insert_id;
+		endif;
+	}
+
+	public function get_series_info($id=0) {
+		global $wpdb;
+
+		// grab any form of id we can find //
+		if (isset($_GET['series_id'])) :
+			$id=$_GET['series_id'];
+		elseif (isset($_POST['series_id'])) :
+			$id=$_POST['series_id'];
+		endif;
+
+		$defaults=array(
+			'id' => '',
+			'name' => '',
+			'season' => '',
+		);
+		$series=$wpdb->get_row("SELECT * FROM $wpdb->ucicurl_series WHERE id=$id", ARRAY_A);
+		$args=wp_parse_args($series, $defaults);
+
+		return $args;
+	}
+
 }
 
 $ucicurl_races=new UCIcURLRaces();
