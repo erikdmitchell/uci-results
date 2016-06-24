@@ -17,6 +17,20 @@ h2 .ucicurl-admin-total {
 	font-weight: normal;
 }
 
+.uci-results .two-col {
+	margin-right: 300px;
+}
+.uci-results .col-left {
+	width: 100%;
+	float: left;
+
+}
+.uci-results .col-right {
+	width: 280px;
+	float: right;
+	margin-right: -300px;
+}
+
 /** races **/
 .tablenav.single-race > div {
 	margin-right: 15px;

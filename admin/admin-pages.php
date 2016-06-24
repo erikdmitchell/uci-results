@@ -63,7 +63,7 @@ class UCIResultsAdminPages {
 		);
 		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'uci-curl';
 
-		$html.='<div class="wrap">';
+		$html.='<div class="wrap uci-results">';
 			$html.='<h1>UCI Results</h1>';
 
 			$html.='<h2 class="nav-tab-wrapper">';
