@@ -36,6 +36,10 @@ $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 						<label for="nat">Nat.</label>
 						<input type="text" name="nat" id="nat" class="nat" value="<?php echo $race->nat; ?>" />
 					</div>
+					<div class="row">
+						<label for="series_id">Series</label>
+						<?php $ucicurl_races->series_dropdown('series_id', $race->series_id); ?>
+					</div>
 					<div class="action-buttons">
 						<input type="submit" id="doaction" class="button action button-primary" value="Update">
 					</div>

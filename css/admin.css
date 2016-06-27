@@ -12,6 +12,9 @@
 	display: none;
 }
 
+.uci-results table th {
+	font-weight: bold;
+}
 h2 .ucicurl-admin-total {
 	font-size: 14px;
 	font-weight: normal;
@@ -34,7 +37,7 @@ h2 .ucicurl-admin-total {
 .uci-results-sidebox label {
 	font-weight: bold;
 	display: inline-block;
-	width: 70px;
+	width: 58px;
 }
 .uci-results-sidebox .upper-box {
 	border-bottom: 1px solid #ddd;
@@ -47,7 +50,7 @@ h2 .ucicurl-admin-total {
   line-height: 1.4;
 }
 .uci-results-sidebox .inner-box {
-	padding: 5px 10px;
+	padding: 5px 5px 5px 10px;
 }
 .uci-results-sidebox .action-buttons {
   padding: 10px;

@@ -282,6 +282,7 @@ class UCIcURLRaces {
 			'season' => $_POST['season'],
 			'class' => $_POST['class'],
 			'nat' => $_POST['nat'],
+			'series_id' => $_POST['series_id'],
 		);
 
 		$wpdb->update($wpdb->ucicurl_races, $data, array('id' => $_POST['race_id']));
@@ -345,6 +346,31 @@ class UCIcURLRaces {
 		$args=wp_parse_args($series, $defaults);
 
 		return $args;
+	}
+
+	/**
+	 * series_dropdown function.
+	 *
+	 * @access public
+	 * @param string $name (default: 'series')
+	 * @param int $selected (default: 0)
+	 * @return void
+	 */
+	public function series_dropdown($name='series', $selected=0) {
+		global $wpdb;
+
+		$html=null;
+		$series=$wpdb->get_results("SELECT * FROM $wpdb->ucicurl_series");
+
+		$html.='<select name="'.$name.'" id="'.$name.'">';
+			$html.='<option value="0">'.__('Select One','uci-results').'</option>';
+
+			foreach ($series as $values) :
+				$html.='<option value="'.$values->id.'" '.selected($selected, $values->id, false).'>'.$values->name.' ('.$values->season.')</option>';
+			endforeach;
+		$html.='</select>';
+
+		echo $html;
 	}
 
 }
