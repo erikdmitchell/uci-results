@@ -141,4 +141,20 @@ jQuery(document).ready(function($) {
 	  return false;
 	});
 
+	/**
+	 * delete series
+	 */
+	$('.uci-results-series a.delete').click(function(e) {
+		e.preventDefault();
+
+		var data={
+			'action' : 'delete_series',
+			'series_id' : $(this).data('id')
+		};
+
+		$.post(ajaxurl, data, function(response) {
+			location.reload(); // refresh
+		});
+	});
+
 });

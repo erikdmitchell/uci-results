@@ -19,6 +19,7 @@ class UCIcURLRaces {
 		add_action('admin_init', array($this, 'update_single_race_form'));
 		add_action('admin_init', array($this, 'update_series_form'));
 		add_action('wp_ajax_search_related_races', array($this, 'ajax_search_related_races'));
+		add_action('wp_ajax_delete_series', array($this, 'ajax_delete_series'));
 	}
 
 	/**
@@ -318,6 +319,21 @@ class UCIcURLRaces {
 			$wpdb->insert($wpdb->ucicurl_series, $data);
 			$_POST['series_id']=$wpdb->insert_id;
 		endif;
+	}
+
+	public function delete_series($id=0) {
+		global $wpdb;
+
+		$wpdb->delete($wpdb->ucicurl_series, array('id' => $id));
+	}
+
+	public function ajax_delete_series() {
+		if (!isset($_POST['series_id']) || empty($_POST['series_id']))
+			return false;
+
+		$this->delete_series($_POST['series_id']);
+
+		wp_die();
 	}
 
 	/**
