@@ -10,27 +10,40 @@ $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 
 	<!-- <div class="tablenav top single-race"> -->
 	<div class="single-race col-right">
-		<h3>Race Details</h3>
-		<form id="update-race-information" method="post" action="">
-			<?php wp_nonce_field('update_single_race_info', 'uci_results_admin'); ?>
-			<input type="hidden" name="race_id" value="<?php echo $_GET['race_id']; ?>" />
-
-			<div class="row">
-				<input type="text" name="date" class="date" value="<?php echo date(get_option('date_format'), strtotime($race->date)); ?>" />
-			</div>
-			<div class="row season">
-				<?php uci_results_seasons_dropdown('season', $race->season); ?>
-			</div>
-			<div class="row">
-				<input type="text" name="class" class="class" value="<?php echo $race->class; ?>" />
-			</div>
-			<div class="row">
-				<input type="text" name="nat" class="nat" value="<?php echo $race->nat; ?>" />
+		<div class="race-details postbox uci-results-sidebox">
+			<div class="upper-box">
+				<h2>Race Details</h2>
 			</div>
 
-			<input type="submit" id="doaction" class="button action" value="Apply">
-		</form>
+			<div class="inner-box">
+				<form id="update-race-information" method="post" action="">
+					<?php wp_nonce_field('update_single_race_info', 'uci_results_admin'); ?>
+					<input type="hidden" name="race_id" value="<?php echo $_GET['race_id']; ?>" />
+
+					<div class="row">
+						<label for="date">Date</label>
+						<input type="text" name="date" id="date" class="date" value="<?php echo date(get_option('date_format'), strtotime($race->date)); ?>" />
+					</div>
+					<div class="row season">
+						<label for="season">Season</label>
+						<?php uci_results_seasons_dropdown('season', $race->season); ?>
+					</div>
+					<div class="row">
+						<label for="class">Class</label>
+						<input type="text" name="class" id="class" class="class" value="<?php echo $race->class; ?>" />
+					</div>
+					<div class="row">
+						<label for="nat">Nat.</label>
+						<input type="text" name="nat" id="nat" class="nat" value="<?php echo $race->nat; ?>" />
+					</div>
+					<div class="action-buttons">
+						<input type="submit" id="doaction" class="button action button-primary" value="Update">
+					</div>
+				</form>
+			</div>
+		</div>
 	</div>
+
 	<div class="col-left">
 		<table class="wp-list-table widefat fixed striped pages">
 			<thead>
@@ -84,4 +97,5 @@ $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 			</tbody>
 		</table>
 	</div>
+
 </div>
