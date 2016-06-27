@@ -348,6 +348,15 @@ class UCIcURLRaces {
 		return $args;
 	}
 
+	/**
+	 * series_dropdown function.
+	 *
+	 * @access public
+	 * @param string $name (default: 'series')
+	 * @param int $selected (default: 0)
+	 * @param string $season (default: '')
+	 * @return void
+	 */
 	public function series_dropdown($name='series', $selected=0, $season='') {
 		global $wpdb;
 
@@ -372,6 +381,21 @@ class UCIcURLRaces {
 		$html.='</select>';
 
 		echo $html;
+	}
+
+	/**
+	 * get_series function.
+	 *
+	 * @access public
+	 * @param int $race_id (default: 0)
+	 * @return void
+	 */
+	public function get_series($race_id=0) {
+		global $wpdb;
+
+		$series=$wpdb->get_var("SELECT series.name FROM $wpdb->ucicurl_series AS series LEFT JOIN $wpdb->ucicurl_races AS races ON races.series_id=series.id WHERE races.id=$race_id");
+
+		return $series;
 	}
 
 }

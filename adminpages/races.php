@@ -74,6 +74,7 @@ $races=new UCI_Results_Query(array(
 				<th scope="col" class="race-nat">Nat.</th>
 				<th scope="col" class="race-class">Class</th>
 				<th scope="col" class="race-season">Season</th>
+				<th scope="col" class="race-series">Series</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -84,6 +85,7 @@ $races=new UCI_Results_Query(array(
 					<td class="race-nat"><?php echo $uci_results_post->nat; ?></td>
 					<td class="race-class"><?php echo $uci_results_post->class; ?></td>
 					<td class="race-season"><?php echo $uci_results_post->season; ?></td>
+					<td class="race-series"><?php echo $ucicurl_races->get_series($uci_results_post->id); ?></td>
 				</tr>
 			<?php endwhile; endif; ?>
 		</tbody>
