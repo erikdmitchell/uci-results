@@ -1,4 +1,5 @@
 <?php
+global $uci_results_add_races;
 
 /**
  * UCIResultsAddRaces class.
@@ -42,17 +43,15 @@ class UCIResultsAddRaces {
 	/**
 	 * get_race_data function.
 	 *
-	 * this function does all the magic as far as parseing results and adding them to the db
-	 *
 	 * @access public
 	 * @param bool $limit (default: false)
+	 * @param bool $raw (default: false)
+	 * @param bool $url (default: false)
 	 * @return void
 	 */
-	public function get_race_data($limit=false) {
-		if (!isset($this->config->url))
-			return false;
-
+	public function get_race_data($limit=false, $raw=false, $url=false) {
 		set_time_limit(0); // mex ececution time
+
 		$races=array();
 		$races_class_name='datatable';
 		$races_obj=new stdClass();
@@ -60,8 +59,17 @@ class UCIResultsAddRaces {
 		$timeout = 5;
 		$row_count=0;
 
+		// if no passed url, use config //
+		if (!$url) :
+			if (!isset($this->config->url)) :
+				return false;
+			else :
+				$url=$this->config->url;
+			endif;
+		endif;
+
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $this->config->url);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 
@@ -131,6 +139,9 @@ class UCIResultsAddRaces {
 		foreach ($races as $key => $value) :
 			$races_obj->$key=$value;
 		endforeach;
+
+		if ($raw)
+			return $races_obj;
 
 		return $this->build_default_race_table($races_obj);
 	}
@@ -362,11 +373,11 @@ class UCIResultsAddRaces {
 	/**
 	 * check_for_dups function.
 	 *
-	 * @access protected
+	 * @access public
 	 * @param mixed $code
 	 * @return void
 	 */
-	protected function check_for_dups($code) {
+	public function check_for_dups($code) {
 		global $wpdb;
 
 		$races_in_db=$wpdb->get_results("SELECT code FROM $wpdb->ucicurl_races");
