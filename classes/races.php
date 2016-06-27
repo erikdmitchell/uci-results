@@ -348,25 +348,26 @@ class UCIcURLRaces {
 		return $args;
 	}
 
-	/**
-	 * series_dropdown function.
-	 *
-	 * @access public
-	 * @param string $name (default: 'series')
-	 * @param int $selected (default: 0)
-	 * @return void
-	 */
-	public function series_dropdown($name='series', $selected=0) {
+	public function series_dropdown($name='series', $selected=0, $season='') {
 		global $wpdb;
 
+		if (!empty($season))
+			$season="WHERE season='$season'";
+
 		$html=null;
-		$series=$wpdb->get_results("SELECT * FROM $wpdb->ucicurl_series");
+		$series=$wpdb->get_results("SELECT * FROM $wpdb->ucicurl_series $season");
 
 		$html.='<select name="'.$name.'" id="'.$name.'">';
 			$html.='<option value="0">'.__('Select One','uci-results').'</option>';
 
 			foreach ($series as $values) :
-				$html.='<option value="'.$values->id.'" '.selected($selected, $values->id, false).'>'.$values->name.' ('.$values->season.')</option>';
+				if (!empty($season)) :
+					$season_display='';
+				else :
+					$season_display=' ('.$values->season.')';
+				endif;
+
+				$html.='<option value="'.$values->id.'" '.selected($selected, $values->id, false).'>'.$values->name.$season_display.'</option>';
 			endforeach;
 		$html.='</select>';
 
