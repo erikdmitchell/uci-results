@@ -1,4 +1,5 @@
 <?php
+global $uci_results_admin_pages;
 
 /**
  * UCIResultsAdminPages class.

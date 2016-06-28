@@ -420,7 +420,8 @@ class UCIResultsAddRaces {
 			'code' => $this->build_race_code($race_data->event, $race_data->date),
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
 		);
-
+print_r($data);
+/*
 		if (!$this->check_for_dups($data['code'])) :
 			if ($wpdb->insert($wpdb->ucicurl_races, $data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
@@ -431,6 +432,7 @@ class UCIResultsAddRaces {
 		else :
 			$message='<div class="updated">'.$data['code'].' is already in the database</div>';
 		endif;
+*/
 
 		return $message;
 	}
@@ -444,9 +446,17 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function get_race_week($date='', $season='') {
-		$date=date('Y-m-d', strtotime($date));
-		$seasons=$this->build_year_arr();
-		$season_data=$this->add_weeks_to_season($seasons[$season]);
+		global $uci_results_admin_pages;
+
+		$season_url=$uci_results_admin_pages->config->urls->$season;
+		$season_races=$this->get_race_data(false, true, $season_url);
+		$first_race=end($season_races);
+		$last_race=reset($season_races);
+		$dates=array(
+			'start' => date('M j Y', strtotime($first_race->date)),
+			'end' => date('M j Y', strtotime($last_race->date)),
+		);
+		$season_data=$this->add_weeks_to_season($dates);
 
 		return $this->get_week_of_date($date, $season_data['weeks']);
 	}
