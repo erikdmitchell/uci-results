@@ -131,8 +131,12 @@ h2 .ucicurl-admin-total {
 	width: 75px;
 	display: inline-block;
 }
-
-
+.uci-results-admin-update-series form .row input.season {
+	margin-left: 80px;
+}
+.uci-results-admin-update-series form .row input.season.first {
+	margin-left: 2px;
+}
 /* update rider rankings */
 .ucicurl-update-rankings .update-rankings .button {
 	margin: 15px 0;

@@ -13,11 +13,11 @@ $series=$ucicurl_races->get_series_info();
 
 		<div class="row">
 			<label for="name">Name</label>
-			<input type="text" name="name" id="name" value="<?php echo $series['name']; ?>" />
+			<input type="text" name="name" id="name" class="regular-text" value="<?php echo $series['name']; ?>" />
 		</div>
 		<div class="row">
 			<label for="season">Season</label>
-			<?php uci_results_seasons_dropdown('season', $series['season']); ?>
+			<?php uci_results_seasons_checkboxes('season', $series['season']); ?>
 		</div>
 
 		<p class="submit">

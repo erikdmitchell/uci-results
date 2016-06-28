@@ -360,4 +360,30 @@ function uci_results_seasons_dropdown($name='seasons', $selected='') {
 
 	echo $html;
 }
+
+/**
+ * uci_results_seasons_checkboxes function.
+ *
+ * @access public
+ * @param string $name (default: 'seasons')
+ * @param string $checked (default: '')
+ * @return void
+ */
+function uci_results_seasons_checkboxes($name='seasons', $checked='') {
+	global $ucicurl_races;
+
+	$html=null;
+	$seasons=$ucicurl_races->seasons();
+
+	foreach ($seasons as $key => $season) :
+		$class='';
+
+		if ($key==0)
+			$class='first';
+
+		$html.='<input type="checkbox" name="'.$name.'[]" class="'.$name.' '.$class.'" value="'.$season.'">'.$season.'<br />';
+	endforeach;
+
+	echo $html;
+}
 ?>
