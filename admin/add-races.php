@@ -447,7 +447,7 @@ echo $data['date'].' | '.$data['week'].'<br>';
 
 		$season_url=$uci_results_admin_pages->config->urls->$season;
 		$season_races=$this->get_race_data($season, false, true, $season_url);
-//print_r($season_races);
+
 		$first_race=end($season_races);
 		$last_race=reset($season_races);
 		$dates=array(
@@ -455,41 +455,9 @@ echo $data['date'].' | '.$data['week'].'<br>';
 			'end' => date('M j Y', strtotime($last_race->date)),
 		);
 		$season_data=$this->add_weeks_to_season($dates);
-//print_r($season_data);
+
 		return $this->get_week_of_date($date, $season_data['weeks']);
 	}
-
-	/**
-	 * build_year_arr function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-/*
-	public function build_year_arr() {
-		$year=date('Y');
-		$counter_year=$year-20;
-		$max_year=$year+1;
-		$season_start='Aug 30';
-		$season_end='Mar 1';
-		$season_arr=array();
-
-		while ($counter_year<=$max_year) :
-			$year=$counter_year;
-			$next_year=$counter_year+1;
-			$season=$year.'/'.$next_year;
-
-			$season_arr[$season]=array(
-				'start' => $season_start.' '.$year,
-				'end' => $season_end.' '.$next_year
-			);
-
-			$counter_year++;
-		endwhile;
-
-		return $season_arr;
-	}
-*/
 
 	/**
 	 * add_weeks_to_season function.
