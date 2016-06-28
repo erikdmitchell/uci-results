@@ -115,7 +115,7 @@ class UCIResultsRiderRankings {
 			FROM {$wpdb->ucicurl_results} AS results
 			LEFT JOIN {$wpdb->ucicurl_races} AS races
 			ON results.race_id = races.id
-			WHERE races.season='2010/2011'
+			WHERE races.season='{$season}'
 				AND results.rider_id=1
 			GROUP BY races.week
 			ORDER BY races.week
