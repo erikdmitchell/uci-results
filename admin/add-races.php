@@ -25,31 +25,25 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function ajax_get_race_data_non_db() {
-		if (empty($_POST['url']))
+		$form=array();
+		parse_str($_POST['form'], $form);
+
+		if (empty($form['url']))
 			return false;
 
-		$this->config->url=$_POST['url']; // set url
+		$this->config->url=$form['url']; // set url
 		$limit=false;
 
 		// set limit if passed //
-		if (!empty($_POST['limit']))
-			$limit=$_POST['limit'];
+		if (!empty($form['limit']))
+			$limit=$form['limit'];
 
-		echo $this->get_race_data($limit);
+		echo $this->get_race_data($form['season'], $limit);
 
 		wp_die();
 	}
 
-	/**
-	 * get_race_data function.
-	 *
-	 * @access public
-	 * @param bool $limit (default: false)
-	 * @param bool $raw (default: false)
-	 * @param bool $url (default: false)
-	 * @return void
-	 */
-	public function get_race_data($limit=false, $raw=false, $url=false) {
+	public function get_race_data($season=false, $limit=false, $raw=false, $url=false) {
 		set_time_limit(0); // mex ececution time
 
 		$races=array();
@@ -122,7 +116,7 @@ class UCIResultsAddRaces {
 				endforeach;
 
 				$races[$row_count]->link=$link;
-				$races[$row_count]->season=$this->get_season_from_date($races[$row_count]->date);
+				$races[$row_count]->season=$season;
 
 				// check for code in db, only get results if not in db //
 				$code=$this->build_race_code($races[$row_count]);
@@ -153,8 +147,9 @@ class UCIResultsAddRaces {
 	 * @param mixed $date
 	 * @return void
 	 */
-	protected function get_season_from_date($date) {
-		$season_arr=$this->build_year_arr();
+/*
+	public function get_season_from_date($date) {
+		//$season_arr=$this->build_year_arr();
 
 		foreach ($season_arr as $key => $season) :
 			if (strtotime($date) >= strtotime($season['start'])  && strtotime($date) <= strtotime($season['end']))
@@ -163,6 +158,7 @@ class UCIResultsAddRaces {
 
 		return false;
 	}
+*/
 
 	/**
 	 * build_default_race_table function.
@@ -420,7 +416,8 @@ class UCIResultsAddRaces {
 			'code' => $this->build_race_code($race_data->event, $race_data->date),
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
 		);
-print_r($data);
+print_r($race_data);
+echo $data['date'].' | '.$data['week'].'<br>';
 /*
 		if (!$this->check_for_dups($data['code'])) :
 			if ($wpdb->insert($wpdb->ucicurl_races, $data)) :
@@ -449,7 +446,8 @@ print_r($data);
 		global $uci_results_admin_pages;
 
 		$season_url=$uci_results_admin_pages->config->urls->$season;
-		$season_races=$this->get_race_data(false, true, $season_url);
+		$season_races=$this->get_race_data($season, false, true, $season_url);
+//print_r($season_races);
 		$first_race=end($season_races);
 		$last_race=reset($season_races);
 		$dates=array(
@@ -457,7 +455,7 @@ print_r($data);
 			'end' => date('M j Y', strtotime($last_race->date)),
 		);
 		$season_data=$this->add_weeks_to_season($dates);
-
+//print_r($season_data);
 		return $this->get_week_of_date($date, $season_data['weeks']);
 	}
 
@@ -467,6 +465,7 @@ print_r($data);
 	 * @access public
 	 * @return void
 	 */
+/*
 	public function build_year_arr() {
 		$year=date('Y');
 		$counter_year=$year-20;
@@ -490,6 +489,7 @@ print_r($data);
 
 		return $season_arr;
 	}
+*/
 
 	/**
 	 * add_weeks_to_season function.

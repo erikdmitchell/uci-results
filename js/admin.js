@@ -5,7 +5,9 @@ jQuery(document).ready(function($) {
 	 * populates the url field on the UCI cURL page when a year is selected (years are pre populated)
 	 */
 	$('#season').change(function() {
-		$('#url').val($(this).val());
+		var url=$('#season option:selected').data('url');
+
+		$('#url').val(url);
 	});
 
 	/**
@@ -39,8 +41,7 @@ jQuery(document).ready(function($) {
 
 		var data={
 			'action' : 'get_race_data_non_db',
-			'url' : $('form.get-races').find('#url').val(),
-			'limit' : $('form.get-races').find('#limit').val()
+			'form' : $('form.get-races').serialize()
 		};
 
 		$.post(ajaxurl,data,function(response) {
