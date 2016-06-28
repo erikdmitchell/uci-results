@@ -322,12 +322,25 @@ class UCIcURLRaces {
 		endif;
 	}
 
+	/**
+	 * delete_series function.
+	 *
+	 * @access public
+	 * @param int $id (default: 0)
+	 * @return void
+	 */
 	public function delete_series($id=0) {
 		global $wpdb;
 
 		$wpdb->delete($wpdb->ucicurl_series, array('id' => $id));
 	}
 
+	/**
+	 * ajax_delete_series function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function ajax_delete_series() {
 		if (!isset($_POST['series_id']) || empty($_POST['series_id']))
 			return false;
