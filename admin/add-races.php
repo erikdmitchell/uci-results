@@ -43,6 +43,16 @@ class UCIResultsAddRaces {
 		wp_die();
 	}
 
+	/**
+	 * get_race_data function.
+	 *
+	 * @access public
+	 * @param bool $season (default: false)
+	 * @param bool $limit (default: false)
+	 * @param bool $raw (default: false)
+	 * @param bool $url (default: false)
+	 * @return void
+	 */
 	public function get_race_data($season=false, $limit=false, $raw=false, $url=false) {
 		set_time_limit(0); // mex ececution time
 
@@ -416,9 +426,7 @@ class UCIResultsAddRaces {
 			'code' => $this->build_race_code($race_data->event, $race_data->date),
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
 		);
-print_r($race_data);
-echo $data['date'].' | '.$data['week'].'<br>';
-/*
+
 		if (!$this->check_for_dups($data['code'])) :
 			if ($wpdb->insert($wpdb->ucicurl_races, $data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
@@ -429,7 +437,6 @@ echo $data['date'].' | '.$data['week'].'<br>';
 		else :
 			$message='<div class="updated">'.$data['code'].' is already in the database</div>';
 		endif;
-*/
 
 		return $message;
 	}

@@ -65,7 +65,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 			$url=$this->uci_urls[$season];
 		endif;
 
-		$races=$uci_results_add_races->get_race_data(false, true, $url);
+		$races=$uci_results_add_races->get_race_data($season, false, true, $url);
 
 		if (empty($races))
 			WP_CLI::error('No races found.');
