@@ -17,7 +17,7 @@ $series=$ucicurl_races->get_series_info();
 		</div>
 		<div class="row">
 			<label for="season">Season</label>
-			<?php uci_results_seasons_checkboxes('season', $series['season']); ?>
+			<?php uci_results_seasons_dropdown('season', $series['season']); ?>
 		</div>
 
 		<p class="submit">
