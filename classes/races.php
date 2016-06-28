@@ -281,6 +281,7 @@ class UCIcURLRaces {
 		$data=array(
 			'date' => date('Y-m-d', strtotime($_POST['date'])),
 			'season' => $_POST['season'],
+			'week' => $_POST['week'],
 			'class' => $_POST['class'],
 			'nat' => $_POST['nat'],
 			'series_id' => $_POST['series_id'],

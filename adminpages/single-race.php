@@ -29,6 +29,10 @@ $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 						<?php uci_results_seasons_dropdown('season', $race->season); ?>
 					</div>
 					<div class="row">
+						<label for="week">Week</label>
+						<input type="text" name="week" id="week" class="week" value="<?php echo $race->week; ?>" />
+					</div>
+					<div class="row">
 						<label for="class">Class</label>
 						<input type="text" name="class" id="class" class="class" value="<?php echo $race->class; ?>" />
 					</div>
