@@ -389,6 +389,12 @@ function uci_results_seasons_checkboxes($name='seasons', $checked='') {
 
 global $uci_results_admin_notices;
 
+/**
+ * uci_results_admin_notices function.
+ *
+ * @access public
+ * @return void
+ */
 function uci_results_admin_notices() {
 	global $uci_results_admin_notices;
 
@@ -400,5 +406,22 @@ function uci_results_admin_notices() {
 			echo '<div class="'.$class.'">'.__($notice, 'uci-results').'</div>';
 		endforeach;
 	endforeach;
+}
+
+/**
+ * uci_results_admin_url function.
+ *
+ * @access public
+ * @param string $args (default: '')
+ * @return void
+ */
+function uci_results_admin_url($args='') {
+	$default_args=array(
+		'page' => 'uci-curl',
+		'tab' => 'uci-curl'
+	);
+	$args=wp_parse_args($args, $default_args);
+
+	echo add_query_arg($args, admin_url());
 }
 ?>
