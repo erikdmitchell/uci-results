@@ -113,16 +113,21 @@ h2 .ucicurl-admin-total {
 	text-align: right;
 }
 .uci-results-admin-races h2,
-.uci-results-admin-series h2 {
-	width: 10%;
+.uci-results-admin-series h2,
+.uci-results-admin-update-series h2 {
+	width: 12%;
 	float: left;
 }
 .uci-results-admin-races a.view-series.button ,
-.uci-results-admin-series a.add-series.button {
+.uci-results-admin-series a.add-series.button,
+.uci-results-admin-update-series a.add-series.button {
 	margin-top: 12px;
 }
 
 /* update series */
+.uci-results-admin-update-series form {
+	clear: both;
+}
 .uci-results-admin-update-series form .row {
 	margin-bottom: 15px;
 }
@@ -137,6 +142,7 @@ h2 .ucicurl-admin-total {
 .uci-results-admin-update-series form .row input.season.first {
 	margin-left: 2px;
 }
+
 /* update rider rankings */
 .ucicurl-update-rankings .update-rankings .button {
 	margin: 15px 0;

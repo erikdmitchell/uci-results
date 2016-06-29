@@ -9,6 +9,8 @@ $series=$ucicurl_races->get_series_info();
 <div class="uci-results-admin-update-series">
 	<h2>Update Series</h2>
 
+	<a href="<?php echo admin_url('admin.php?page=uci-curl&tab=series&action=update-series'); ?>" class="button add-series">Add Series</a>
+
 	<form name="post" action="" method="post">
 		<?php wp_nonce_field('update_series', 'uci_results_admin'); ?>
 		<input type="hidden" name="series_id" value="<?php echo $series['id']; ?>" />
