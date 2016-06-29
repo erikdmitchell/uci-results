@@ -5,6 +5,8 @@ $race=$ucicurl_races->get_race($_GET['race_id']);
 $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 ?>
 
+<?php uci_results_admin_notices(); ?>
+
 <div class="uci-results-admin-single-race two-col">
 	<h2><?php echo $race->event; ?></h2>
 
