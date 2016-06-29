@@ -132,7 +132,6 @@ class UCIResultsCLI extends WP_CLI_Command {
 
 		// weekly points progress bar //
 		$rider_id_count=count($rider_ids);
-		//$rider_id_counter=0;
 		$weekly_points_progress = \WP_CLI\Utils\make_progress_bar( 'Updating weekly points', $rider_id_count );
 
 		// update weekly points //
@@ -145,7 +144,6 @@ class UCIResultsCLI extends WP_CLI_Command {
 
 		// weekly ranks progress bar //
 		$weeks_count=count($weeks);
-		//$weeks_counter=0;
 		$week_rank_progress = \WP_CLI\Utils\make_progress_bar( 'Updating weekly ranks', $weeks_count );
 
 		// update weekly points //
