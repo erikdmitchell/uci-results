@@ -1,13 +1,18 @@
 <?php
 global $uci_results_query, $uci_results_post;
 
+$order_by=isset($_GET['orderby']) ? $_GET['orderby'] : '';
+$order=isset($_GET['order']) ? $_GET['order'] : '';
+
 $series=new UCI_Results_Query(array(
 	'type' => 'series',
+	'order_by' => $order_by,
+	'order' => $order
 ));
 ?>
 
 <div class="uci-results-admin-series">
-	<h2>Series</h2> <a href="<?php echo admin_url('admin.php?page=uci-curl&tab=series&action=update-series'); ?>" class="button add-series">Add Series</a>
+	<h2>Series</h2> <a href="<?php uci_results_admin_url(array('tab' => 'series', 'action' => 'update-series')); ?>" class="button add-series">Add Series</a>
 
 	<div class="tablenav top">
 		<div class="pagination">
@@ -19,7 +24,7 @@ $series=new UCI_Results_Query(array(
 		<thead>
 			<tr>
 				<th scope="col" class="series-id">ID</th>
-				<th scope="col" class="series-name"><a href="<?php uci_results_admin_url(array('tab' => 'series')); ?>">Name</a></th>
+				<th scope="col" class="series-name"><a href="<?php uci_results_admin_url(array('tab' => 'series', 'orderby' => 'name', 'order' => 'asc')); ?>">Name</a></th>
 				<th scope="col" class="series-season">Season</th>
 				<th scope="col" class="series-actions">&nbsp;</th>
 			</tr>
