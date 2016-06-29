@@ -287,7 +287,13 @@ class UCIcURLRaces {
 			'series_id' => $_POST['series_id'],
 		);
 
-		$wpdb->update($wpdb->ucicurl_races, $data, array('id' => $_POST['race_id']));
+		$result=$wpdb->update($wpdb->ucicurl_races, $data, array('id' => $_POST['race_id']));
+
+		if ($result===false) :
+			$uci_results_admin_notices['error'][]='Race failed to update.';
+		else :
+			$uci_results_admin_notices['updated'][]='Race updated.';
+		endif;
 	}
 
 	/**
@@ -297,7 +303,7 @@ class UCIcURLRaces {
 	 * @return void
 	 */
 	public function update_series_form() {
-		global $wpdb;
+		global $wpdb, $uci_results_admin_notices;
 
 		// verify nonce //
 		if (!isset($_POST['uci_results_admin']) || !wp_verify_nonce($_POST['uci_results_admin'], 'update_series'))
@@ -320,6 +326,8 @@ class UCIcURLRaces {
 			$wpdb->insert($wpdb->ucicurl_series, $data);
 			$_POST['series_id']=$wpdb->insert_id;
 		endif;
+
+		$uci_results_admin_notices['updated'][]='Series updated.';
 	}
 
 	/**

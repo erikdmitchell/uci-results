@@ -386,4 +386,19 @@ function uci_results_seasons_checkboxes($name='seasons', $checked='') {
 
 	echo $html;
 }
+
+global $uci_results_admin_notices;
+
+function uci_results_admin_notices() {
+	global $uci_results_admin_notices;
+
+	if (empty($uci_results_admin_notices))
+		return;
+
+	foreach ($uci_results_admin_notices as $class => $notices) :
+		foreach ($notices as $notice) :
+			echo '<div class="'.$class.'">'.__($notice, 'uci-results').'</div>';
+		endforeach;
+	endforeach;
+}
 ?>

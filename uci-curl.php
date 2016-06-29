@@ -12,6 +12,8 @@
 define('UCICURL_PATH', plugin_dir_path(__FILE__));
 define('UCICURL_URL', plugin_dir_url(__FILE__));
 
+
+
 include_once(UCICURL_PATH.'classes/races.php'); // our races functions
 include_once(UCICURL_PATH.'classes/riders.php'); // our riders functions
 include_once(UCICURL_PATH.'classes/uci-results-query.php'); // our query class and pagination

@@ -4,6 +4,8 @@ global $ucicurl_races;
 $series=$ucicurl_races->get_series_info();
 ?>
 
+<?php uci_results_admin_notices(); ?>
+
 <div class="uci-results-admin-update-series">
 	<h2>Update Series</h2>
 
