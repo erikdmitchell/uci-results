@@ -158,4 +158,32 @@ jQuery(document).ready(function($) {
 		});
 	});
 
+	/**
+	 * Remove Data button (settings) - remove all data from db
+	 */
+	$('#uci-results-empty-db').click(function(e) {
+		var data={
+			'action' : 'uci_results_empty_db',
+			'security' : $('#uci-results-empty-db-nonce').val()
+		}
+
+		$.post(ajaxurl, data, function(response) {
+			$('#uci-results-actions-message').append(response);
+		});
+	});
+
+	/**
+	 * Remove Database Tables button (settings) - remove all tables from db
+	 */
+	$('#uci-results-remove-db').click(function(e) {
+		var data={
+			'action' : 'uci_results_remove_db',
+			'security' : $('#uci-results-remove-db-nonce').val()
+		}
+
+		$.post(ajaxurl, data, function(response) {
+			$('#uci-results-actions-message').append(response);
+		});
+	});
+
 });

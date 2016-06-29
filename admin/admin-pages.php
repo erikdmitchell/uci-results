@@ -18,6 +18,8 @@ class UCIResultsAdminPages {
 		add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
 		add_action('admin_menu', array($this, 'admin_page'));
 		add_action('admin_init', array($this, 'save_settings'));
+		add_action('wp_ajax_uci_results_empty_db', array($this, 'ajax_empty_db'));
+		add_action('wp_ajax_uci_results_remove_db', array($this, 'ajax_remove_db'));
 
 		$this->setup_config($config);
 	}
@@ -199,6 +201,42 @@ class UCIResultsAdminPages {
 
 		flush_rewrite_rules(); // this may not be the best place for it
 	}
+
+	/**
+	 * ajax_empty_db function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function ajax_empty_db() {
+		if (!check_ajax_referer('uci-results-empty-db-nonce', 'security', false))
+			return;
+
+		uci_results_empty_database_tables();
+
+		echo '<div class="updated">Database tables are empty.</div>';
+
+		wp_die();
+	}
+
+	/**
+	 * ajax_remove_db function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function ajax_remove_db() {
+		if (!check_ajax_referer('uci-results-remove-db-nonce', 'security', false))
+			return;
+
+		uci_results_remove_database_tables();
+
+		echo '<div class="updated">Database tables removed.</div>';
+
+		wp_die();
+	}
+
+
 
 }
 

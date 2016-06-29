@@ -3,6 +3,12 @@ global $ucicurl_db_version;
 
 $ucicurl_db_version='0.1.5';
 
+/**
+ * ucicurl_set_db_tables function.
+ *
+ * @access public
+ * @return void
+ */
 function ucicurl_set_db_tables() {
 	global $wpdb;
 
@@ -15,6 +21,12 @@ function ucicurl_set_db_tables() {
 }
 ucicurl_set_db_tables();
 
+/**
+ * ucicurl_db_install function.
+ *
+ * @access public
+ * @return void
+ */
 function ucicurl_db_install() {
 	require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 
@@ -115,7 +127,14 @@ function ucicurl_db_install() {
 
 	add_option('ucicurl_db_version', $ucicurl_db_version);
 }
+register_activation_hook(__FILE__, 'ucicurl_db_install');
 
+/**
+ * ucicurl_db_update function.
+ *
+ * @access public
+ * @return void
+ */
 function ucicurl_db_update() {
 	require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 
@@ -219,6 +238,12 @@ function ucicurl_db_update() {
 	endif;
 }
 
+/**
+ * ucicurl_update_db_check function.
+ *
+ * @access public
+ * @return void
+ */
 function ucicurl_update_db_check() {
 	global $ucicurl_db_version;
 
@@ -229,6 +254,37 @@ function ucicurl_update_db_check() {
 }
 add_action('plugins_loaded', 'ucicurl_update_db_check');
 
+/**
+ * uci_results_empty_database_tables function.
+ *
+ * @access public
+ * @return void
+ */
+function uci_results_empty_database_tables() {
+	global $wpdb;
 
-register_activation_hook(__FILE__, 'ucicurl_db_install');
+	$wpdb->query("TRUNCATE TABLE $wpdb->ucicurl_races");
+	$wpdb->query("TRUNCATE TABLE $wpdb->ucicurl_results");
+	$wpdb->query("TRUNCATE TABLE $wpdb->ucicurl_riders");
+	$wpdb->query("TRUNCATE TABLE $wpdb->ucicurl_rider_rankings");
+	$wpdb->query("TRUNCATE TABLE $wpdb->ucicurl_related_races");
+	$wpdb->query("TRUNCATE TABLE $wpdb->ucicurl_series");
+}
+
+/**
+ * uci_results_remove_database_tables function.
+ *
+ * @access public
+ * @return void
+ */
+function uci_results_remove_database_tables() {
+	global $wpdb;
+
+	$wpdb->query("DROP TABLE $wpdb->ucicurl_races");
+	$wpdb->query("DROP TABLE $wpdb->ucicurl_results");
+	$wpdb->query("DROP TABLE $wpdb->ucicurl_riders");
+	$wpdb->query("DROP TABLE $wpdb->ucicurl_rider_rankings");
+	$wpdb->query("DROP TABLE $wpdb->ucicurl_related_races");
+	$wpdb->query("DROP TABLE $wpdb->ucicurl_series");
+}
 ?>

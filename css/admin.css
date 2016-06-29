@@ -147,3 +147,32 @@ h2 .ucicurl-admin-total {
 	max-height: 500px;
 	overflow: scroll;
 }
+
+/* admin settings */
+.uci-results-settings .warning {
+	border-left: 4px solid #dd3d36;
+	background-color: #fff;
+	color: #424242;
+	padding: 5px 15px 15px 15px;
+}
+.uci-results-settings .warning-button,
+.uci-results-settings .warning-button:focus {
+  border: 1px solid #9E0B0F;
+  background: #9E0B0F;
+  color: #FFF;
+  -webkit-box-shadow: inset 0 2px 5px -3px rgba( 173, 12, 17, 0.5 );
+  box-shadow: inset 0 2px 5px -3px rgba( 173, 12, 17, 0.5 );
+  text-shadow: none !important;
+}
+.uci-results-settings .warning-button:hover,
+.uci-results-settings .warning-button:active {
+  border: 1px solid #DD3D36;
+  background: #DD3D36;
+  color: #FFF;
+  -webkit-box-shadow: inset 0 2px 5px -3px rgba( 173, 12, 17, 0.5 );
+  box-shadow: inset 0 2px 5px -3px rgba( 173, 12, 17, 0.5 );
+  text-shadow: none !important;
+}
+.uci-results-settings .message {
+	margin-bottom: 15px;
+}
