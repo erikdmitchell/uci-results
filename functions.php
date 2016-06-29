@@ -422,6 +422,9 @@ function uci_results_admin_url($args='') {
 	);
 	$args=wp_parse_args($args, $default_args);
 
+	if (isset($_GET['paged']))
+		$args['paged']=$_GET['paged'];
+
 	echo add_query_arg($args, admin_url());
 }
 ?>

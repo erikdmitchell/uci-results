@@ -19,7 +19,7 @@ $series=new UCI_Results_Query(array(
 		<thead>
 			<tr>
 				<th scope="col" class="series-id">ID</th>
-				<th scope="col" class="series-name">Name</th>
+				<th scope="col" class="series-name"><a href="<?php uci_results_admin_url(array('tab' => 'series')); ?>">Name</a></th>
 				<th scope="col" class="series-season">Season</th>
 				<th scope="col" class="series-actions">&nbsp;</th>
 			</tr>
