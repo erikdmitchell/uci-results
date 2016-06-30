@@ -28,6 +28,10 @@ class UCIcURLRiders {
 			$rider_id=ucicurl_get_rider_id($rider_id);
 		endif;
 
+		// last rider id check //
+		if (empty($rider_id))
+			return false;
+
 		$where="rider_id=".absint($rider_id);
 
 		$sql="

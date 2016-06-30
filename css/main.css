@@ -33,7 +33,7 @@
 	border-bottom: none;
 	padding: 5px 10px;
 }
-.uci-results .table .row:last-child >div {
+.uci-results .table .row:last-child > div {
 	border-bottom: 1px solid #d1d1d1;
 }
 .uci-results .table .row > div.rider-place {
@@ -66,6 +66,24 @@
 .uci-results .table .row > div.race-season {
 	width: 11%;
 }
+.uci-results .table .row > div.race-nat {
+	width: 5%;
+}
+
+
+/* pagination */
+.uci-results-pagination {
+	overflow: hidden;
+}
+.uci-results-pagination .prev-link {
+	float: left;
+	width: 50%;
+}
+.uci-results-pagination .next-link {
+	float: left;
+	width: 50%;
+}
+
 
 /* country page */
 .uci-results-country h1 .season {
