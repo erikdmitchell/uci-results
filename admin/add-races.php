@@ -151,26 +151,6 @@ class UCIResultsAddRaces {
 	}
 
 	/**
-	 * get_season_from_date function.
-	 *
-	 * @access protected
-	 * @param mixed $date
-	 * @return void
-	 */
-/*
-	public function get_season_from_date($date) {
-		//$season_arr=$this->build_year_arr();
-
-		foreach ($season_arr as $key => $season) :
-			if (strtotime($date) >= strtotime($season['start'])  && strtotime($date) <= strtotime($season['end']))
-				return $key;
-		endforeach;
-
-		return false;
-	}
-*/
-
-	/**
 	 * build_default_race_table function.
 	 *
 	 * @access public
