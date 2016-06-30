@@ -156,18 +156,20 @@ class UCI_Results_Query {
 			$this->query=$this->rider_rankings_query;
 		else : // general query //
 			// cycle through meta and attach our "queries" //
-			foreach ($meta as $type => $queries) :
-				foreach ($queries as $query) :
-					// the where type - make sure we check that where exists //
-					if ($type=='where') :
-						if (empty($where)) :
-							$where="WHERE ".$query;
-						else :
-							$where.=$query;
+			if (!empty($meta)) :
+				foreach ($meta as $type => $queries) :
+					foreach ($queries as $query) :
+						// the where type - make sure we check that where exists //
+						if ($type=='where') :
+							if (empty($where)) :
+								$where="WHERE ".$query;
+							else :
+								$where.=$query;
+							endif;
 						endif;
-					endif;
+					endforeach;
 				endforeach;
-			endforeach;
+			endif;
 
 			$this->query="SELECT SQL_CALC_FOUND_ROWS * FROM $db_table $where $order $limit";
 		endif;
