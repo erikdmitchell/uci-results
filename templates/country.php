@@ -1,12 +1,15 @@
 <?php
 /**
- * Country (Single)
+ * The template for the single country page
  *
- * @since 	2.0.0
+ * It can be overriden
+ *
+ * @since 2.0.0
  */
 
-global $uci_results_post;
+get_header(); ?>
 
+<?php
 $riders=new UCI_Results_Query(array(
 	'per_page' => -1,
 	'type' => 'riders',
@@ -16,32 +19,30 @@ $riders=new UCI_Results_Query(array(
 ));
 ?>
 
-<div class="uci-results-country">
+<div class="uci-results uci-results-country">
 
-	<div class="country-name"><?php echo get_query_var('country_slug'); ?><span class="flag"><?php echo ucicurl_get_country_flag(get_query_var('country_slug')); ?></span></div>
-	<div class="season"><?php echo uci_results_get_default_rider_ranking_season(); ?></div>
+	<h1 class="page-title"><?php echo get_query_var('country_slug'); ?><span class="flag"><?php echo ucicurl_get_country_flag(get_query_var('country_slug')); ?></span><span class="season"><?php echo uci_results_get_default_rider_ranking_season(); ?></span></h1>
 
 	<?php if ($riders->have_posts()) : ?>
-		<table class="wp-list-table widefat fixed striped single-race">
-			<thead>
-				<tr>
-					<th scope="col" class="rider-place">Rank</th>
-					<th scope="col" class="rider-name">Name</th>
-					<th scope="col" class="rider-points">Points</th>
-				</tr>
-			</thead>
+		<div class="table country-riders">
+			<div class="row header">
+				<div class="rider-place">Rank</div>
+				<div class="rider-name">Name</div>
+				<div class="rider-points">Points</div>
+			</div>
 
-			<tbody>
-				<?php while ( $riders->have_posts() ) : $riders->the_post(); ?>
-					<tr>
-						<td class="rider-place"><?php echo $uci_results_post->rank; ?></td>
-						<td class="rider-name"><a href="<?php echo uci_results_rider_url($uci_results_post->slug); ?>"><?php echo $uci_results_post->name; ?></a></td>
-						<td class="rider-points"><?php echo $uci_results_post->points; ?></td>
-					</tr>
-				<?php endwhile; ?>
-			</tbody>
-		</table>
+			<?php while ( $riders->have_posts() ) : $riders->the_post(); ?>
+				<div class="row">
+					<div class="rider-place"><?php echo $uci_results_post->rank; ?></div>
+					<div class="rider-name"><a href="<?php echo uci_results_rider_url($uci_results_post->slug); ?>"><?php echo $uci_results_post->name; ?></a></div>
+					<div class="rider-points"><?php echo $uci_results_post->points; ?></div>
+				</div>
+			<?php endwhile; ?>
+
+		</div>
 	<?php else :?>
 		<div class="none-found">No riders from this country found.</div>
 	<?php endif; ?>
 </div>
+
+<?php get_footer(); ?>

@@ -1,3 +1,48 @@
+/* general */
+.uci-results .table {
+
+}
+.uci-results .table .row {
+	overflow: hidden;
+}
+.uci-results .table .row.header {
+	font-weight: bold;
+}
+.uci-results .table .row > div {
+	float: left;
+	border: 1px solid #d1d1d1;
+	border-bottom: none;
+	padding: 5px;
+}
+.uci-results .table .row:last-child >div {
+	border-bottom: 1px solid #d1d1d1;
+}
+.uci-results .table .row > div.rider-place {
+	width: 10%;
+}
+.uci-results .table .row > div.rider-name {
+	width: 30%;
+}
+.uci-results .table .row > div.rider-points {
+	width: 10%;
+}
+
+/* country page */
+.uci-results-country h1 .flag,
+.uci-results-country h1 .season {
+	margin-left: 15px;
+}
+.uci-results-country h1 .season {
+	font-weight: normal;
+	font-size: 0.75em;
+}
+.uci-results-country h1 {
+	font-size: 1.5em;
+	margin-bottom: 1em;
+}
+
+
+
 .ucicurl-races {
 	margin-top: 15px;
 }

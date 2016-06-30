@@ -30,6 +30,13 @@ function uci_results_get_template_part($template_name='') {
 	return $html;
 }
 
+/**
+ * uci_results_template_loader function.
+ *
+ * @access public
+ * @param mixed $template
+ * @return void
+ */
 function uci_results_template_loader($template) {
 	global $uci_results_pages, $post;
 
