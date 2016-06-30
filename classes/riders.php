@@ -36,7 +36,7 @@ class UCIcURLRiders {
 			LEFT JOIN {$wpdb->ucicurl_races}
 			ON {$wpdb->ucicurl_results}.race_id={$wpdb->ucicurl_races}.id
 			WHERE $where
-			ORDER BY date
+			ORDER BY date DESC
 		";
 		$rider=$wpdb->get_row("SELECT * FROM {$wpdb->ucicurl_riders} WHERE id={$rider_id}");
 		$rider->results=$wpdb->get_results($sql);
