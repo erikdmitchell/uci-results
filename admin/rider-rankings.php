@@ -100,9 +100,13 @@ class UCIResultsRiderRankings {
 	public function update_rider_weekly_points($rider_id=0, $season='') {
 		global $wpdb;
 
+		// check we have the required data //
+		if (!$rider_id || empty($season))
+			return false;
+
 		$sql="
 			SELECT
-				races.week,
+				races.week AS week,
 				(
 					SELECT IFNULL(SUM(s_results.par), 0)
 					FROM {$wpdb->ucicurl_results} AS s_results
@@ -110,7 +114,7 @@ class UCIResultsRiderRankings {
 					ON s_results.race_id = s_races.id
 					WHERE s_races.season='{$season}'
 						AND s_results.rider_id={$rider_id}
-						AND s_races.week<=races.week
+						AND s_races.week<=s_races.week
 				) AS points
 			FROM {$wpdb->ucicurl_results} AS results
 			LEFT JOIN {$wpdb->ucicurl_races} AS races
