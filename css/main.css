@@ -48,6 +48,9 @@
 .uci-results .table .row > div.rider-nat {
 	width: 10%;
 }
+.uci-results .table .row > div.rider-rank {
+	width: 10%;
+}
 .uci-results .table .row > div.rider-age {
 	width: 10%;
 }
