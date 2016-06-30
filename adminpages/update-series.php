@@ -25,3 +25,18 @@ $series=$ucicurl_races->get_series_info();
 		</p>
 	</form>
 </div>
+
+<?php
+$races=new UCI_Results_Query(array(
+	'type' => 'races',
+	'meta' => array(
+		array(
+			'table' => 'races',
+			'field' => 'series_id',
+			'value' => $series['id']
+		)
+	)
+));
+
+print_r($races);
+?>

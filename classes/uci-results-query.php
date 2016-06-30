@@ -62,7 +62,8 @@ class UCI_Results_Query {
 			'end_date' => false, // races
 			'paged' => get_query_var('page'),
 			'type' => 'races',
-			'rankings' => false // riders
+			'rankings' => false, // riders
+			'meta' => array()
 		);
 
 		// for our admin, we pass a get var //
@@ -136,6 +137,7 @@ class UCI_Results_Query {
 		$limit='';
 		$where='';
 		$order='';
+		$meta='';
 
 		$this->query_vars=$this->set_query_vars($query);
 		$q=$this->query_vars;
@@ -144,14 +146,29 @@ class UCI_Results_Query {
 		$where=$this->where_clause($q);
 		$order=$this->order_clause($q);
 		$limit=$this->set_limit($q);
+		$meta=$this->meta_query($q);
 
 		// run specific query if need be //
 		if ($this->is_search) : // a search //
 			$this->query=$this->search_query($db_table);
 		elseif ($q['rankings']) : // we are looking for rider rankings //
-			$this->rider_rankings_query=$this->rider_rankings_query($q, $where, $order, $limit);
+			$this->rider_rankings_query=$this->rider_rankings_query($q, $where, $order, $limit, $meta);
 			$this->query=$this->rider_rankings_query;
 		else : // general query //
+			// cycle through meta and attach our "queries" //
+			foreach ($meta as $type => $queries) :
+				foreach ($queries as $query) :
+					// the where type - make sure we check that where exists //
+					if ($type=='where') :
+						if (empty($where)) :
+							$where="WHERE ".$query;
+						else :
+							$where.=$query;
+						endif;
+					endif;
+				endforeach;
+			endforeach;
+
 			$this->query="SELECT SQL_CALC_FOUND_ROWS * FROM $db_table $where $order $limit";
 		endif;
 
@@ -300,13 +317,18 @@ class UCI_Results_Query {
 	 * set_db_table function.
 	 *
 	 * @access protected
-	 * @param mixed $q
+	 * @param string $q (default: '')
+	 * @param bool $type (default: false)
 	 * @return void
 	 */
-	protected function set_db_table($q) {
+	protected function set_db_table($q='', $type=false) {
 		global $wpdb;
 
-		switch ($q['type']) :
+		// check passed type directly //
+		if (!$type)
+			$type=$q['type'];
+
+		switch ($type) :
 			case 'races':
 				$table=$wpdb->ucicurl_races;
 				break;
@@ -331,9 +353,10 @@ class UCI_Results_Query {
 	 * @param mixed $where
 	 * @param mixed $order
 	 * @param mixed $limit
+	 * @param mixed $meta
 	 * @return void
 	 */
-	protected function rider_rankings_query($q, $where, $order, $limit) {
+	protected function rider_rankings_query($q, $where, $order, $limit, $meta) {
 		global $wpdb;
 
 		// check week, get last week in season by default //
@@ -377,6 +400,40 @@ class UCI_Results_Query {
 		endif;
 
 		return $query;
+	}
+
+	/**
+	 * meta_query function.
+	 *
+	 * @access protected
+	 * @param mixed $query
+	 * @return void
+	 */
+	protected function meta_query($query) {
+		if (empty($query['meta']))
+			return;
+
+		$meta_queries=array();
+
+		foreach ($query['meta'] as $meta) :
+			$table='';
+			$query_table=$this->set_db_table($query);
+
+			// get table for query if passed //
+			if (isset($meta['table']))
+				$table=$this->set_db_table('', $meta['table']);
+
+			// check tables aren't the same //
+			if (!empty($table) && $table==$query_table) :
+				$meta_queries['where'][]=$meta['field']."=".$meta['value'];
+			elseif (empty($table)) :
+				$table=$query_table;
+
+				$meta_queries['join'][]="SELECT * FROM $table WHERE ".$meta['field']."=".$meta['value'];
+			endif;
+		endforeach;
+
+		return $meta_queries;
 	}
 
 	/**
@@ -501,6 +558,13 @@ function uci_results_pagination($args='') {
 	echo $html;
 }
 
+/**
+ * uci_results_admin_pagination function.
+ *
+ * @access public
+ * @param string $args (default: '')
+ * @return void
+ */
 function uci_results_admin_pagination($args='') {
   global $wp, $uci_results_query;
 
