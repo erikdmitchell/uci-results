@@ -169,7 +169,7 @@ class UCI_Results_Query {
 				endforeach;
 			endforeach;
 
-			$this->query="SELECT SQL_CALC_FOUND_ROWS * FROM $db_table $where $order $limit";
+			echo $this->query="SELECT SQL_CALC_FOUND_ROWS * FROM $db_table $where $order $limit";
 		endif;
 
 		$this->get_posts();
@@ -424,9 +424,9 @@ class UCI_Results_Query {
 				$table=$this->set_db_table('', $meta['table']);
 
 			// check tables aren't the same //
-			if (!empty($table) && $table==$query_table) :
+			if ($table==$query_table || empty($table)) :
 				$meta_queries['where'][]=$meta['field']."=".$meta['value'];
-			elseif (empty($table)) :
+			else :
 				$table=$query_table;
 
 				$meta_queries['join'][]="SELECT * FROM $table WHERE ".$meta['field']."=".$meta['value'];
