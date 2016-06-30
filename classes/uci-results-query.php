@@ -169,7 +169,7 @@ class UCI_Results_Query {
 				endforeach;
 			endforeach;
 
-			echo $this->query="SELECT SQL_CALC_FOUND_ROWS * FROM $db_table $where $order $limit";
+			$this->query="SELECT SQL_CALC_FOUND_ROWS * FROM $db_table $where $order $limit";
 		endif;
 
 		$this->get_posts();
