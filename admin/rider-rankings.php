@@ -114,7 +114,7 @@ class UCIResultsRiderRankings {
 					ON s_results.race_id = s_races.id
 					WHERE s_races.season='{$season}'
 						AND s_results.rider_id={$rider_id}
-						AND s_races.week<=s_races.week
+						AND s_races.week<=races.week
 				) AS points
 			FROM {$wpdb->ucicurl_results} AS results
 			LEFT JOIN {$wpdb->ucicurl_races} AS races
