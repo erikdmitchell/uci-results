@@ -82,6 +82,7 @@
 .uci-results-pagination .next-link {
 	float: left;
 	width: 50%;
+	text-align: right;
 }
 
 
