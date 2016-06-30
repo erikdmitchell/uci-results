@@ -17,7 +17,7 @@ $race=$ucicurl_races->get_race(get_query_var('race_code'));
 
 <div class="uci-results uci-results-race">
 
-	<?php if (!$race->results) : ?>
+	<?php if (!$race) : ?>
 		<div class="race-results-not-found">Race results not found.</div>
 	<?php else : ?>
 		<h1 class="page-title"><?php echo $race->event; ?><span class="flag"><?php echo ucicurl_get_country_flag($race->nat); ?></span></h1>
