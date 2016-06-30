@@ -25,7 +25,6 @@ $series=new UCI_Results_Query(array(
 			<tr>
 				<th scope="col" class="series-id">ID</th>
 				<th scope="col" class="series-name"><a href="<?php uci_results_admin_url(array('tab' => 'series', 'orderby' => 'name', 'order' => 'asc')); ?>">Name</a></th>
-				<th scope="col" class="series-season">Season</th>
 				<th scope="col" class="series-actions">&nbsp;</th>
 			</tr>
 		</thead>
@@ -34,7 +33,6 @@ $series=new UCI_Results_Query(array(
 				<tr>
 					<td class="series-id"><?php echo $uci_results_post->id; ?></td>
 					<td class="series-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=series&action=update-series&series_id='.$uci_results_post->id); ?>"><?php echo $uci_results_post->name; ?></a></td>
-					<td class="series-season"><?php echo $uci_results_post->season; ?></td>
 					<td class="series-actions"><a href="" class="delete" data-id="<?php echo $uci_results_post->id; ?>"><span class="dashicons dashicons-trash"></span></a></td>
 				</tr>
 			<?php endwhile; endif; ?>
