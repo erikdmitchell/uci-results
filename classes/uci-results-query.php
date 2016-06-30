@@ -419,6 +419,10 @@ class UCI_Results_Query {
 			$table='';
 			$query_table=$this->set_db_table($query);
 
+			// check we have what we need //
+			if (empty($meta['field']) || empty($meta['value']))
+				continue;
+
 			// get table for query if passed //
 			if (isset($meta['table']))
 				$table=$this->set_db_table('', $meta['table']);
