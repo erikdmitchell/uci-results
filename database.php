@@ -111,7 +111,6 @@ function ucicurl_db_install() {
 		CREATE TABLE $wpdb->ucicurl_series (
 		  id bigint(20) NOT NULL AUTO_INCREMENT,
 			name TEXT NOT NULL,
-			season VARCHAR(50) NOT NULL,
 			PRIMARY KEY (`id`)
 		) $charset;
 	";
@@ -220,7 +219,6 @@ function ucicurl_db_update() {
 			CREATE TABLE $wpdb->ucicurl_series (
 			  id bigint(20) NOT NULL AUTO_INCREMENT,
 				name TEXT NOT NULL,
-				season VARCHAR(50) NOT NULL,
 				PRIMARY KEY (`id`)
 			);
 		";
