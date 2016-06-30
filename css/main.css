@@ -31,7 +31,7 @@
 	float: left;
 	border: 1px solid #d1d1d1;
 	border-bottom: none;
-	padding: 5px;
+	padding: 5px 10px;
 }
 .uci-results .table .row:last-child >div {
 	border-bottom: 1px solid #d1d1d1;
@@ -43,6 +43,15 @@
 	width: 30%;
 }
 .uci-results .table .row > div.rider-points {
+	width: 10%;
+}
+.uci-results .table .row > div.rider-nat {
+	width: 10%;
+}
+.uci-results .table .row > div.rider-age {
+	width: 10%;
+}
+.uci-results .table .row > div.rider-time {
 	width: 10%;
 }
 .uci-results .table .row > div.race-date {
@@ -73,6 +82,15 @@
 	width: 33%;
 }
 
+/* single race */
+.uci-results-race .race-details {
+	overflow: hidden;
+	margin-bottom: 15px;
+}
+.uci-results-race .race-details > div {
+	float: left;
+	margin-right: 15px;
+}
 
 .ucicurl-races {
 	margin-top: 15px;
