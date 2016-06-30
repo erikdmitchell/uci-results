@@ -313,14 +313,12 @@ class UCIcURLRaces {
 		if (isset($_POST['series_id']) && $_POST['series_id']) :
 			$data=array(
 				'name' => $_POST['name'],
-				'season' => $_POST['season'],
 			);
 
 			$wpdb->update($wpdb->ucicurl_series, $data, array('id' => $_POST['series_id']));
 		else :
 			$data=array(
 				'name' => $_POST['name'],
-				'season' => $_POST['season'],
 			);
 
 			$wpdb->insert($wpdb->ucicurl_series, $data);

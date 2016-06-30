@@ -9,7 +9,7 @@ $series=$ucicurl_races->get_series_info();
 <div class="uci-results-admin-update-series">
 	<h2>Update Series</h2>
 
-	<a href="<?php echo admin_url('admin.php?page=uci-curl&tab=series&action=update-series'); ?>" class="button add-series">Add Series</a>
+	<a href="<?php uci_results_admin_url(array('tab' => 'series', 'action' => 'update-series')); ?>" class="button add-series">Add Series</a>
 
 	<form name="post" action="" method="post">
 		<?php wp_nonce_field('update_series', 'uci_results_admin'); ?>
@@ -18,10 +18,6 @@ $series=$ucicurl_races->get_series_info();
 		<div class="row">
 			<label for="name">Name</label>
 			<input type="text" name="name" id="name" class="regular-text" value="<?php echo $series['name']; ?>" />
-		</div>
-		<div class="row">
-			<label for="season">Season</label>
-			<?php uci_results_seasons_dropdown('season', $series['season']); ?>
 		</div>
 
 		<p class="submit">

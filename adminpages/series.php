@@ -32,7 +32,8 @@ $series=new UCI_Results_Query(array(
 			<?php if ($series->have_posts()) : while ( $series->have_posts() ) : $series->the_post(); ?>
 				<tr>
 					<td class="series-id"><?php echo $uci_results_post->id; ?></td>
-					<td class="series-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=series&action=update-series&series_id='.$uci_results_post->id); ?>"><?php echo $uci_results_post->name; ?></a></td>
+					<td class="series-name"><a href="<?php uci_results_admin_url(array('tab' => 'series', 'action' => 'update-series', 'series_id' => $uci_results_post->id)); ?>"><?php echo $uci_results_post->name; ?></a></td>
+
 					<td class="series-actions"><a href="" class="delete" data-id="<?php echo $uci_results_post->id; ?>"><span class="dashicons dashicons-trash"></span></a></td>
 				</tr>
 			<?php endwhile; endif; ?>
