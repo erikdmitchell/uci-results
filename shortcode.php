@@ -73,7 +73,7 @@ function uci_results_country($atts) {
 
 	), $atts, 'uci_results_country' );
 
-	return uci_results_get_template_part('country');
+	//return uci_results_get_template_part('country');
 }
 add_shortcode('uci_results_country', 'uci_results_country');
 
