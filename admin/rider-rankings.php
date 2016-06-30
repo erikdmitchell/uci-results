@@ -200,7 +200,7 @@ class UCIResultsRiderRankings {
 		// if missing from this week, use last weeks points //
 		foreach ($prev_week_ranking_ids as $rider_id) :
 			if (!in_array($rider_id, $this_week_ranking_ids)) :
-				$prev_points=$wpdb->get_var("SELECT points FROM {$wpdb->ucicurl_rider_rankings}	WHERE rider_id='{$rider_id}' AND week={$prev_week}");
+				$prev_points=$wpdb->get_var("SELECT points FROM {$wpdb->ucicurl_rider_rankings}	WHERE rider_id={$rider_id} AND season='{$season}' AND week={$prev_week}");
 
 				$insert_data=array(
 					'rider_id' => $rider_id,
