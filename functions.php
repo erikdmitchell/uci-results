@@ -1,33 +1,29 @@
 <?php
 
 /**
- * ucicurl_get_template function.
+ * uci_results_get_template_part function.
  *
  * @access public
- * @param bool $template_name (default: false)
- * @param mixed $attributes (default: null)
+ * @param string $template_name (default: '')
  * @return void
  */
-function ucicurl_get_template($template_name=false, $attributes=null) {
-	if (!$attributes )
-		$attributes = array();
-
-	if (!$template_name)
+function uci_results_get_template_part($template_name='') {
+	if (empty($template_name))
 		return false;
 
 	ob_start();
 
-	do_action('ulm_before_'.$template_name);
+	do_action('uci_results_before_'.$template_name);
 
-	if (file_exists(get_stylesheet_directory().'/ultimate-league-management/templates/'.$template_name.'.php')) :
-		include(get_stylesheet_directory().'/ultimate-league-management/templates/'.$template_name.'.php');
-	elseif (file_exists(get_template_directory().'/ultimate-league-management/templates/'.$template_name.'.php')) :
-		include(get_template_directory().'/ultimate-league-management/templates/'.$template_name.'.php');
+	if (file_exists(get_stylesheet_directory().'/ultimate-league-management/'.$template_name.'.php')) :
+		include(get_stylesheet_directory().'/ultimate-league-management/'.$template_name.'.php');
+	elseif (file_exists(get_template_directory().'/ultimate-league-management/'.$template_name.'.php')) :
+		include(get_template_directory().'/ultimate-league-management/'.$template_name.'.php');
 	else :
 		include(UCICURL_PATH.'templates/'.$template_name.'.php');
 	endif;
 
-	do_action('ulm_after_'.$template_name);
+	do_action('uci_results_after_'.$template_name);
 
 	$html=ob_get_contents();
 
@@ -35,6 +31,12 @@ function ucicurl_get_template($template_name=false, $attributes=null) {
 
 	return $html;
 }
+
+function uci_results_template_loader($template) {
+
+		return $template;
+}
+add_filter('template_include', 'uci_results_template_loader');
 
 /**
  * ucicurl_get_admin_page function.
