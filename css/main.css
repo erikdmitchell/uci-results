@@ -2,6 +2,14 @@
 .uci-results .table {
 
 }
+.uci-results .table a,
+.uci-results .table a:visited {
+	color: #1a1a1a;
+}
+.uci-results .table a:active,
+.uci-results .table a:hover {
+	color: #686868;
+}
 .uci-results .table .row {
 	overflow: hidden;
 }
