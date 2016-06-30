@@ -6,6 +6,7 @@
 .uci-results a {
 	text-decoration: none;
 	border-bottom: none;
+	box-shadow: none;
 }
 .uci-results .table {
 
@@ -16,6 +17,9 @@
 .uci-results .table a,
 .uci-results .table a:visited {
 	color: #1a1a1a;
+	text-decoration: none;
+	border-bottom: none;
+	box-shadow: none;
 }
 .uci-results .table a:active,
 .uci-results .table a:hover {
@@ -114,35 +118,7 @@
 	margin-right: 15px;
 }
 
-.ucicurl-races {
-	margin-top: 15px;
-}
-.entry-content .ucicurl-list a,
-.ucicurl-list a {
-	text-decoration: none;
-	border-bottom: none;
-	box-shadow: none;
-}
-.ucicurl-main .view-all {
-	padding: 10px 0;
-	text-decoration: none;
-	border-bottom: none;
-	box-shadow: none;
-}
-.ucicurl-list {
-	display: table;
-	width: auto;
-}
-.ucicurl-list .row {
-	display: table-row;
-	width: auto;
-	clear: both;
-	overflow: hidden;
-}
-.ucicurl-list .header {
-	font-weight: bold;
-}
-.ucicurl-list .row > div {
-	display: table-cell;
-	padding-right: 30px;
+/* main */
+.uci-results.main .uci-results-riders {
+	margin-bottom: 15px;
 }
