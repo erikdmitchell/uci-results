@@ -13,6 +13,7 @@ $rider=$ucicurl_riders->get_rider(get_query_var('rider_slug'));
 <div class="ucicurl-rider">
 
 	<div class="rider-name"><?php echo ucicurl_rider_slug_to_name(get_query_var('rider_slug')); ?></div>
+	<div class="rider-country"><a href="<?php echo uci_results_country_url($rider->nat); ?>"><?php echo ucicurl_get_country_flag($rider->nat); ?></a></div>
 
 	<table class="wp-list-table widefat fixed striped pages">
 		<thead>
