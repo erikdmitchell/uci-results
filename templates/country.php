@@ -19,6 +19,7 @@ $riders=new UCI_Results_Query(array(
 <div class="uci-results-country">
 
 	<div class="country-name"><?php echo get_query_var('country_slug'); ?><span class="flag"><?php echo ucicurl_get_country_flag(get_query_var('country_slug')); ?></span></div>
+	<div class="season"><?php echo uci_results_get_default_rider_ranking_season(); ?></div>
 
 	<?php if ($riders->have_posts()) : ?>
 		<table class="wp-list-table widefat fixed striped single-race">
