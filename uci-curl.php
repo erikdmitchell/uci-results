@@ -12,8 +12,6 @@
 define('UCICURL_PATH', plugin_dir_path(__FILE__));
 define('UCICURL_URL', plugin_dir_url(__FILE__));
 
-
-
 include_once(UCICURL_PATH.'classes/races.php'); // our races functions
 include_once(UCICURL_PATH.'classes/riders.php'); // our riders functions
 include_once(UCICURL_PATH.'classes/uci-results-query.php'); // our query class and pagination
@@ -27,4 +25,17 @@ include_once(UCICURL_PATH.'admin/wp-cli.php'); // wp cli functions
 include_once(UCICURL_PATH.'lib/name-parser.php'); // a php nameparser
 include_once(UCICURL_PATH.'shortcode.php'); // our shortcodes
 include_once(UCICURL_PATH.'lib/flags.php'); // our flag stuff
+
+/**
+ * is_uci_results_active function.
+ *
+ * @access public
+ * @return void
+ */
+function is_uci_results_active() {
+	if ( in_array( 'uci-curl-wp-plugin/uci-curl.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) )
+		return true;
+
+	return false;
+}
 ?>
