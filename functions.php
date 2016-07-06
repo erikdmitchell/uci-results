@@ -502,4 +502,30 @@ function uci_results_admin_url($args='') {
 
 	echo add_query_arg($args, admin_url());
 }
+
+function uci_results_get_rider_rank($rider_id=0, $season='', $week='') {
+	global $wpdb;
+
+	$rank=$wpdb->get_var("SELECT rank FROM $wpdb->ucicurl_rider_rankings WHERE rider_id=$rider_id AND season='$season' AND week=$week");
+
+	if (!$rank)
+		$rank=0;
+
+	return $rank;
+}
+
+/**
+ * uci_results_get_last_week_in_season function.
+ *
+ * @access public
+ * @param string $season (default: '')
+ * @return void
+ */
+function uci_results_get_last_week_in_season($season='') {
+	global $wpdb;
+
+	$week=$wpdb->get_var("SELECT MAX(week) FROM $wpdb->ucicurl_races WHERE season='$season'");
+
+	return $week;
+}
 ?>
