@@ -58,6 +58,7 @@ class UCI_Results_Query {
 			'season' => false, // races, rider ranks
 			'nat' => false,
 			'name' => false, // riders
+			'rider_id' => 0, // riders
 			'start_date' => false, // races
 			'end_date' => false, // races
 			'paged' => get_query_var('page'),
@@ -241,6 +242,10 @@ class UCI_Results_Query {
 		// check name //
 		if ($q['name'])
 			$where[]="name='".$q['name']."'";
+
+		// check rider id //
+		if ($q['rider_id'])
+			$where[]="riders.id='".$q['rider_id']."'";
 
 		// build our where query //
 		if (!empty($where)) :
