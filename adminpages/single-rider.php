@@ -4,7 +4,7 @@ global $ucicurl_riders;
 $rider=$ucicurl_riders->get_rider($attributes['rider_id']);
 ?>
 
-<h2><?php echo $rider->name; ?></h2>
+<h2><?php echo $rider->name; ?> (ID <?php echo $attributes['rider_id']; ?>)</h2>
 
 <div class="tablenav top">
 	<!--
