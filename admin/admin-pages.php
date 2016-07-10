@@ -199,7 +199,7 @@ class UCIResultsAdminPages {
 			delete_option('races_page_id');
 		endif;
 
-		flush_rewrite_rules(); // this may not be the best place for it
+		//flush_rewrite_rules(); // this may not be the best place for it
 	}
 
 	/**
