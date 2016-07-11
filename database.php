@@ -69,7 +69,7 @@ function ucicurl_db_install() {
 			nat VARCHAR(5) NOT NULL,
 			age TINYINT NOT NULL DEFAULT '0',
 			result VARCHAR(10) NOT NULL,
-			pcr VARCHAR(10) NOT NULL DEFAULT '0',
+			pcr bigint(20) NOT NULL DEFAULT '0',
 			pcr VARCHAR(10) NOT NULL DEFAULT '0',
 			rider_id bigint(20) NOT NULL,
 			PRIMARY KEY (`id`)
@@ -177,7 +177,7 @@ function ucicurl_db_update() {
 				nat VARCHAR(5) NOT NULL,
 				age TINYINT NOT NULL DEFAULT '0',
 				result VARCHAR(10) NOT NULL,
-				pcr VARCHAR(10) NOT NULL DEFAULT '0',
+				pcr bigint(20) NOT NULL DEFAULT '0',
 				pcr VARCHAR(10) NOT NULL DEFAULT '0',
 				rider_id bigint(20) NOT NULL,
 				PRIMARY KEY (`id`)
