@@ -108,13 +108,22 @@ class UCIResultsAddRaces {
 		  if ($row_count!=0) :
 		  	$races[$row_count]=new stdClass();
 
+		  	// get columns (td) //
+		  	$cols = $row->getElementsByTagName('td'); 	// get each column by tag name
+
+		  	// check for multi day event //
+		  	if ($days=$this->is_multi_day_race($cols->item(0)->nodeValue)) :
+print_r($days);
+		  	endif;
+
 		  	// get links //
 		  	$links = $row->getElementsByTagName('a');
-				foreach ($links as $tag) :
-					$link=$this->alter_race_link($tag->getAttribute('href'));
-				endforeach;
 
-		  	$cols = $row->getElementsByTagName('td'); 	// get each column by tag name
+			foreach ($links as $tag) :
+				$link=$this->alter_race_link($tag->getAttribute('href'));
+			endforeach;
+
+
 			  foreach ($cols as $key => $col) :
 					if ($key==0) {
 						$races[$row_count]->date=$this->reformat_date($col->nodeValue);
@@ -133,7 +142,7 @@ class UCIResultsAddRaces {
 				$races[$row_count]->season=$season;
 
 				// check for code in db, only get results if not in db //
-				$code=$this->build_race_code($races[$row_count]); // not used any more - may be able to remove
+				//$code=$this->build_race_code($races[$row_count]); // not used any more - may be able to remove
 			endif;
 
 			$row_count++;
@@ -152,6 +161,26 @@ class UCIResultsAddRaces {
 			return $races_obj;
 
 		return $this->build_default_race_table($races_obj);
+	}
+
+	/**
+	 * is_multi_day_race function.
+	 *
+	 * @access public
+	 * @param string $date (default: '')
+	 * @return void
+	 */
+	public function is_multi_day_race($date='') {
+		// clean date //
+		$date = $this->reformat_date($date);
+
+		if (strpos($date, '-') !== false) :
+			$dates=explode('-', $date);
+
+			return $dates;
+		endif;
+
+		return false;
 	}
 
 	/**
@@ -256,7 +285,7 @@ class UCIResultsAddRaces {
 	 */
 	protected function alter_race_link($link) {
 		$final_url='http://www.uci.infostradasports.com/asp/lib/TheASP.asp?';
-		parse_str($link,$arr);
+		parse_str($link, $arr);
 
 		$final_url.='PageID=19006';
 		$final_url.='&SportID='.$arr['SportID'];
@@ -290,29 +319,8 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function reformat_date($date) {
-		$date=utf8_encode($date);
-		$date_arr=explode('Â',$date);
-
-		foreach ($date_arr as $key => $value) :
-			switch ($key) :
-				case 0:
-					$new_value=substr($value,0,-2);
-					break;
-				case 1:
-					$new_value=null;
-					$new_value=substr($value,1,-2);
-					break;
-				case 2:
-					$new_value=substr($value,1);
-					break;
-			endswitch;
-			$date_arr[$key]=$new_value;
-		endforeach;
-
-		if (count($date_arr)<3)
-			return false;
-
-		$date=$date_arr[0].' '.$date_arr[1].' '.$date_arr[2];
+		$date = htmlentities($date, null, 'utf-8');
+        $date = str_replace("&nbsp;", "", $date);
 
 		return $date;
 	}
@@ -410,8 +418,8 @@ class UCIResultsAddRaces {
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
 		);
 echo '<pre>';
-print_r($race_data);
-print_r($data);
+//print_r($race_data);
+//print_r($data);
 echo '</pre>';
 // bad date
 
@@ -456,7 +464,7 @@ echo '</pre>';
 			'end' => date('M j Y', strtotime($last_race->date)),
 		);
 		$season_data=$this->add_weeks_to_season($dates);
-
+print_r($season_data);
 		return $this->get_week_of_date($date, $season_data['weeks']);
 	}
 
