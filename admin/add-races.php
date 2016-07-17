@@ -109,20 +109,26 @@ class UCIResultsAddRaces {
 		  	$races[$row_count]=new stdClass();
 
 		  	// get columns (td) //
-		  	$cols = $row->getElementsByTagName('td'); 	// get each column by tag name
+		  	$cols=$row->getElementsByTagName('td'); // get each column by tag name
+
+		  	// get (results) link //
+		  	$link=$this->alter_race_link($row->getElementsByTagName('a')->item(0)->getAttribute('href'));
 
 		  	// check for multi day event //
 		  	if ($days=$this->is_multi_day_race($cols->item(0)->nodeValue)) :
-print_r($days);
+		  		$link_parts=parse_url($link);
+		  		$link_args=wp_parse_args($link_parts['query']);
+echo '<pre>';
+print_r($link_args);
+echo '</pre>';
+
+// https://developer.wordpress.org/reference/functions/add_query_arg/
+
+// not sure if we need page id, but we need to add  "Page=resultoverview"
+				$link='multi';
 		  	endif;
 
-		  	// get links //
-		  	$links = $row->getElementsByTagName('a');
-
-			foreach ($links as $tag) :
-				$link=$this->alter_race_link($tag->getAttribute('href'));
-			endforeach;
-
+//echo "link: $link<br>";
 
 			  foreach ($cols as $key => $col) :
 					if ($key==0) {
@@ -140,9 +146,6 @@ print_r($days);
 
 				$races[$row_count]->link=$link;
 				$races[$row_count]->season=$season;
-
-				// check for code in db, only get results if not in db //
-				//$code=$this->build_race_code($races[$row_count]); // not used any more - may be able to remove
 			endif;
 
 			$row_count++;
@@ -174,8 +177,13 @@ print_r($days);
 		// clean date //
 		$date = $this->reformat_date($date);
 
+		// if we have a '-' then it's a multi day so we return an array of start/end //
 		if (strpos($date, '-') !== false) :
 			$dates=explode('-', $date);
+
+			// the first date will lack a year //
+			$year=substr($dates[1], -4);
+			$dates[0].=$year;
 
 			return $dates;
 		endif;
