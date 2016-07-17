@@ -131,3 +131,7 @@
 	</section>
 
 </div>
+
+<?php
+uci_results_add_races();
+?>
