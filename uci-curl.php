@@ -25,6 +25,7 @@ include_once(UCICURL_PATH.'admin/wp-cli.php'); // wp cli functions
 include_once(UCICURL_PATH.'lib/name-parser.php'); // a php nameparser
 include_once(UCICURL_PATH.'shortcode.php'); // our shortcodes
 include_once(UCICURL_PATH.'lib/flags.php'); // our flag stuff
+include_once(UCICURL_PATH.'cron.php'); // cron jobs
 
 /**
  * is_uci_results_active function.
@@ -38,4 +39,20 @@ function is_uci_results_active() {
 
 	return false;
 }
+
+function uci_results_activation() {
+	// schedule crons	//
+	uci_results_schedule_event(current_time('timestamp'), 'daily', 'uci_results_add_races');
+
+	do_action('uci_results_activation');
+}
+
+function uci_results_deactivation() {
+	// remove crons //
+	wp_clear_scheduled_hook('fantasy_cycling_cron_lock_teams');
+
+	do_action('uci_results_deactivation');
+}
+register_activation_hook(__FILE__, 'uci_results_activation');
+register_deactivation_hook(__FILE__, 'uci_results_deactivation');
 ?>
