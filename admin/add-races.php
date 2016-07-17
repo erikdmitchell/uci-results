@@ -347,33 +347,17 @@ class UCIResultsAddRaces {
 		if (!$_POST['race'])
 			return false;
 
-		echo $this->add_race_to_db($_POST['race']);
+		$code=$this->build_race_code($_POST['race']);
+
+		// add to db //
+		if (!$this->check_for_dups($code)) :
+			echo $this->add_race_to_db($_POST['race']);
+		else :
+			echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';
+		endif;
 
 		wp_die();
 	}
-
-	/**
-	 * add_race_to_db function.
-	 *
-	 * @access public
-	 * @param mixed $race
-	 * @return void
-	 */
-	public function add_race_to_db($race) {
-		$code=$this->build_race_code($race);
-
-		// add to db //
-/*
-		if (!$this->check_for_dups($code)) :
-			return $this->add_race_to_db($race);
-		else :
-			return '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';
-		endif;
-*/
-
-		return $code;
-	}
-
 
 	/**
 	 * check_for_dups function.
