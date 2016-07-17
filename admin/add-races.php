@@ -72,6 +72,10 @@ class UCIResultsAddRaces {
 			endif;
 		endif;
 
+		// check season //
+		if (!$season || empty($season))
+			$season=date('Y');
+
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
