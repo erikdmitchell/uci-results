@@ -409,7 +409,12 @@ class UCIResultsAddRaces {
 			'code' => $this->build_race_code($race_data->event, $race_data->date),
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
 		);
+echo '<pre>';
+print_r($data);
+echo '</pre>';
+// bad date
 
+/*
 		if (!$this->check_for_dups($data['code'])) :
 			if ($wpdb->insert($wpdb->ucicurl_races, $data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
@@ -420,6 +425,7 @@ class UCIResultsAddRaces {
 		else :
 			$message='<div class="updated">'.$data['code'].' is already in the database</div>';
 		endif;
+*/
 
 		return $message;
 	}
@@ -434,6 +440,10 @@ class UCIResultsAddRaces {
 	 */
 	public function get_race_week($date='', $season='') {
 		global $uci_results_admin_pages;
+
+		// see if the season is set in our admin pages (config) //
+		if (!isset($uci_results_admin_pages->config->urls->$season))
+			return false;
 
 		$season_url=$uci_results_admin_pages->config->urls->$season;
 		$season_races=$this->get_race_data($season, false, true, $season_url);
