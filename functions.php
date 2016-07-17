@@ -528,4 +528,24 @@ function uci_results_get_last_week_in_season($season='') {
 
 	return $week;
 }
+
+/**
+ * uci_results_schedule_event function.
+ *
+ * @access public
+ * @param mixed $timestamp
+ * @param mixed $recurrence
+ * @param mixed $hook
+ * @param array $args (default: array())
+ * @return void
+ */
+function uci_results_schedule_event($timestamp, $recurrence, $hook, $args = array()) {
+	$next = wp_next_scheduled($hook, $args);
+
+	if (empty($next)) :
+		return wp_schedule_event($timestamp, $recurrence, $hook, $args);
+	else :
+		return false;
+	endif;
+}
 ?>
