@@ -133,7 +133,7 @@ class UCIResultsAddRaces {
 				$races[$row_count]->season=$season;
 
 				// check for code in db, only get results if not in db //
-				$code=$this->build_race_code($races[$row_count]);
+				$code=$this->build_race_code($races[$row_count]); // not used any more - may be able to remove
 			endif;
 
 			$row_count++;
@@ -347,16 +347,31 @@ class UCIResultsAddRaces {
 		if (!$_POST['race'])
 			return false;
 
-		$code=$this->build_race_code($_POST['race']);
-
-		// add to db //
-		if (!$this->check_for_dups($code)) :
-			echo $this->add_race_to_db($_POST['race']);
-		else :
-			echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';
-		endif;
+		echo $this->add_race_to_db($_POST['race']);
 
 		wp_die();
+	}
+
+	/**
+	 * add_race_to_db function.
+	 *
+	 * @access public
+	 * @param mixed $race
+	 * @return void
+	 */
+	public function add_race_to_db($race) {
+		$code=$this->build_race_code($race);
+
+		// add to db //
+/*
+		if (!$this->check_for_dups($code)) :
+			return $this->add_race_to_db($race);
+		else :
+			return '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';
+		endif;
+*/
+
+		return $code;
 	}
 
 
