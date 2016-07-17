@@ -410,6 +410,7 @@ class UCIResultsAddRaces {
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
 		);
 echo '<pre>';
+print_r($race_data);
 print_r($data);
 echo '</pre>';
 // bad date
