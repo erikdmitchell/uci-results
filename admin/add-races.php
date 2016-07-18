@@ -121,41 +121,41 @@ class UCIResultsAddRaces {
 
 		// cycle through rows //
 		foreach ($rows as $row) :
-		  if ($row_count!=0) :
-		  	$races[$row_count]=new stdClass();
+			if ($row_count!=0) :
+			  	$races[$row_count]=new stdClass();
 
-		  	// get columns (td) //
-		  	$cols=$row->getElementsByTagName('td'); // get each column by tag name
+			  	// get columns (td) //
+			  	$cols=$row->getElementsByTagName('td'); // get each column by tag name
 
-		  	// get (results) link //
-		  	$link=$this->alter_race_link($row->getElementsByTagName('a')->item(0)->getAttribute('href'));
+			  	// get (results) link //
+			  	$link=$this->alter_race_link($row->getElementsByTagName('a')->item(0)->getAttribute('href'));
 
-		  	// check for multi day event //
-		  	if ($days=$this->is_multi_day_race($cols->item(0)->nodeValue)) :
-		  		$link_parts=parse_url($link); // split the url
-		  		$link_parts_query=array_pop($link_parts); // get just the query args
-		  		$link_args=wp_parse_args($link_parts_query); // query ags become array
-		  		$uci_url=$link_parts['scheme'].'://'.$link_parts['host'].$link_parts['path']; // rebuild the base url
+			  	// check for multi day event //
+			  	if ($days=$this->is_multi_day_race($cols->item(0)->nodeValue)) :
+			  		$link_parts=parse_url($link); // split the url
+			  		$link_parts_query=array_pop($link_parts); // get just the query args
+			  		$link_args=wp_parse_args($link_parts_query); // query ags become array
+			  		$uci_url=$link_parts['scheme'].'://'.$link_parts['host'].$link_parts['path']; // rebuild the base url
 
-		  		// add query arg(s) //
-		  		// we need to remove the PageID param and add Page //
-		  		unset($link_args['PageID']);
-		  		$link_args['Page']='resultsoverview';
+			  		// add query arg(s) //
+			  		// we need to remove the PageID param and add Page //
+			  		unset($link_args['PageID']);
+			  		$link_args['Page']='resultsoverview';
 
-		  		$url=esc_url(add_query_arg($link_args, $uci_url)); // combine base url and query args
+			  		$url=esc_url(add_query_arg($link_args, $uci_url)); // combine base url and query args
 
-echo $url;
+					// we need to grab this url and proccess is like the row element it's in //
+					echo $url.'<br>';
+					/*
+							$html=$this->get_url_page($url, $timeout);
+							$rows=$this->get_html_table_rows($html, $races_class_name);
+							$races_obj=$this->build_races_object_from_rows($rows, $season, $limit);
+					*/
+					$link='multi';
+				endif;
 
-// we need to grab this url and proccess is like the row element it's in //
-
-
-
-				$link='multi';
-		  	endif;
-
-//echo "link: $link<br>";
-
-			  	foreach ($cols as $key => $col) :
+				// use our cols to build out raceso bject //
+				foreach ($cols as $key => $col) :
 					if ($key==0) {
 						$races[$row_count]->date=$this->reformat_date($col->nodeValue);
 					} else if ($key==1) {
@@ -173,8 +173,10 @@ echo $url;
 				$races[$row_count]->season=$season;
 			endif;
 
+			// increase counter //
 			$row_count++;
 
+			// bail if we've reached our limit //
 			if ($limit && $row_count>$limit)
 				break;
 
@@ -221,9 +223,9 @@ echo $url;
 		if (!$season || empty($season))
 			$season=date('Y');
 
-		$html=$this->get_url_page($url, $timeout);
-		$rows=$this->get_html_table_rows($html, $races_class_name);
-		$races_obj=$this->build_races_object_from_rows($rows, $season, $limit);
+		$html=$this->get_url_page($url, $timeout); // get the html from the url
+		$rows=$this->get_html_table_rows($html, $races_class_name); // grab our rows via dom object
+		$races_obj=$this->build_races_object_from_rows($rows, $season, $limit); // build our races object from rows
 
 		// return object if $raw is true //
 		if ($raw)
