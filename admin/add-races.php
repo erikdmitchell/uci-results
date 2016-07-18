@@ -203,12 +203,8 @@ class UCIResultsAddRaces {
 	public function get_race_data($season=false, $limit=false, $raw=false, $url=false) {
 		set_time_limit(0); // mex ececution time
 
-		//$races=array();
 		$races_class_name='datatable';
-		//$races_obj=new stdClass();
-		//$arr=array();
 		$timeout = 5;
-		//$row_count=0;
 
 		// if no passed url, use config //
 		if (!$url) :
