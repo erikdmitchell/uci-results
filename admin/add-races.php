@@ -44,6 +44,30 @@ class UCIResultsAddRaces {
 	}
 
 	/**
+	 * get_url_page function.
+	 *
+	 * @access public
+	 * @param string $url (default: '')
+	 * @param int $timeout (default: 5)
+	 * @return void
+	 */
+	public function get_url_page($url='', $timeout=5) {
+		if (empty($url))
+			return false;
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+
+		$html=curl_exec($ch);
+
+		curl_close($ch);
+
+		return $html;
+	}
+
+	/**
 	 * get_race_data function.
 	 *
 	 * @access public
@@ -76,14 +100,7 @@ class UCIResultsAddRaces {
 		if (!$season || empty($season))
 			$season=date('Y');
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-
-		$html=curl_exec($ch);
-
-		curl_close($ch);
+		$html=$this->get_url_page($url, $timeout);
 
 		// Create a DOM parser object
 		$dom = new DOMDocument();
@@ -116,15 +133,24 @@ class UCIResultsAddRaces {
 
 		  	// check for multi day event //
 		  	if ($days=$this->is_multi_day_race($cols->item(0)->nodeValue)) :
-		  		$link_parts=parse_url($link);
-		  		$link_args=wp_parse_args($link_parts['query']);
-echo '<pre>';
-print_r($link_args);
-echo '</pre>';
+		  		$link_parts=parse_url($link); // split the url
+		  		$link_parts_query=array_pop($link_parts); // get just the query args
+		  		$link_args=wp_parse_args($link_parts_query); // query ags become array
+		  		$uci_url=$link_parts['scheme'].'://'.$link_parts['host'].$link_parts['path']; // rebuild the base url
 
-// https://developer.wordpress.org/reference/functions/add_query_arg/
+		  		// add query arg(s) //
+		  		// we need to remove the PageID param and add Page //
+		  		unset($link_args['PageID']);
+		  		$link_args['Page']='resultsoverview';
 
-// not sure if we need page id, but we need to add  "Page=resultoverview"
+		  		$url=esc_url(add_query_arg($link_args, $uci_url)); // combine base url and query args
+
+echo $url;
+
+// we need to grab this url and proccess is like the row element it's in //
+
+
+
 				$link='multi';
 		  	endif;
 
