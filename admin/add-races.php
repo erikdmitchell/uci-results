@@ -68,39 +68,16 @@ class UCIResultsAddRaces {
 	}
 
 	/**
-	 * get_race_data function.
+	 * get_html_table_rows function.
 	 *
 	 * @access public
-	 * @param bool $season (default: false)
-	 * @param bool $limit (default: false)
-	 * @param bool $raw (default: false)
-	 * @param bool $url (default: false)
+	 * @param string $html (default: '')
+	 * @param string $class_name (default: 'datatable')
 	 * @return void
 	 */
-	public function get_race_data($season=false, $limit=false, $raw=false, $url=false) {
-		set_time_limit(0); // mex ececution time
-
-		$races=array();
-		$races_class_name='datatable';
-		$races_obj=new stdClass();
-		$arr=array();
-		$timeout = 5;
-		$row_count=0;
-
-		// if no passed url, use config //
-		if (!$url) :
-			if (!isset($this->config->url)) :
-				return false;
-			else :
-				$url=$this->config->url;
-			endif;
-		endif;
-
-		// check season //
-		if (!$season || empty($season))
-			$season=date('Y');
-
-		$html=$this->get_url_page($url, $timeout);
+	public function get_html_table_rows($html='', $class_name='datatable') {
+		if (empty($html))
+			return false;
 
 		// Create a DOM parser object
 		$dom = new DOMDocument();
@@ -113,14 +90,36 @@ class UCIResultsAddRaces {
 
 		$finder = new DomXPath($dom);
 
-		$nodes = $finder->query("//*[contains(@class, '$races_class_name')]");
+		$nodes = $finder->query("//*[contains(@class, '$class_name')]");
 
 		if ($nodes->length==0)
-			return '<div class="error">No rows (nodes) found. Check the url and the "races class name" ('.$races_class_name.').</div>';
+			return false;
+			//return '<div class="error">No rows (nodes) found. Check the url and the "races class name" ('.$class_name.').</div>';
 
 		$rows=$nodes->item(0)->getElementsByTagName('tr'); //get all rows from the table
 
-		// loop over the table rows
+		return $rows;
+	}
+
+	/**
+	 * build_races_object_from_rows function.
+	 *
+	 * @access public
+	 * @param string $rows (default: '')
+	 * @param bool $season (default: false)
+	 * @param bool $limit (default: false)
+	 * @return void
+	 */
+	public function build_races_object_from_rows($rows='', $season=false, $limit=false) {
+		$races=array();
+		$races_obj=new stdClass();
+		$row_count=0;
+
+		// bail if no rows //
+		if (empty($rows))
+			return $races_obj;
+
+		// cycle through rows //
 		foreach ($rows as $row) :
 		  if ($row_count!=0) :
 		  	$races[$row_count]=new stdClass();
@@ -156,7 +155,7 @@ echo $url;
 
 //echo "link: $link<br>";
 
-			  foreach ($cols as $key => $col) :
+			  	foreach ($cols as $key => $col) :
 					if ($key==0) {
 						$races[$row_count]->date=$this->reformat_date($col->nodeValue);
 					} else if ($key==1) {
@@ -186,6 +185,47 @@ echo $url;
 			$races_obj->$key=$value;
 		endforeach;
 
+		return $races_obj;
+	}
+
+	/**
+	 * get_race_data function.
+	 *
+	 * @access public
+	 * @param bool $season (default: false)
+	 * @param bool $limit (default: false)
+	 * @param bool $raw (default: false)
+	 * @param bool $url (default: false)
+	 * @return void
+	 */
+	public function get_race_data($season=false, $limit=false, $raw=false, $url=false) {
+		set_time_limit(0); // mex ececution time
+
+		//$races=array();
+		$races_class_name='datatable';
+		//$races_obj=new stdClass();
+		//$arr=array();
+		$timeout = 5;
+		//$row_count=0;
+
+		// if no passed url, use config //
+		if (!$url) :
+			if (!isset($this->config->url)) :
+				return false;
+			else :
+				$url=$this->config->url;
+			endif;
+		endif;
+
+		// check season //
+		if (!$season || empty($season))
+			$season=date('Y');
+
+		$html=$this->get_url_page($url, $timeout);
+		$rows=$this->get_html_table_rows($html, $races_class_name);
+		$races_obj=$this->build_races_object_from_rows($rows, $season, $limit);
+
+		// return object if $raw is true //
 		if ($raw)
 			return $races_obj;
 
