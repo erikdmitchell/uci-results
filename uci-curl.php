@@ -26,6 +26,7 @@ include_once(UCICURL_PATH.'lib/name-parser.php'); // a php nameparser
 include_once(UCICURL_PATH.'shortcode.php'); // our shortcodes
 include_once(UCICURL_PATH.'lib/flags.php'); // our flag stuff
 include_once(UCICURL_PATH.'cron.php'); // cron jobs
+include_once(UCICURL_PATH.'api/api.php'); // api
 
 /**
  * is_uci_results_active function.

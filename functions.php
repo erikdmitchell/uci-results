@@ -72,45 +72,6 @@ function uci_results_template_loader($template) {
 }
 add_filter('template_include', 'uci_results_template_loader');
 
-/*
-function rcp_locate_template( $template_names, $load = false, $require_once = true ) {
-	// No file found yet
-	$located = false;
-
-	// Try to find a template file
-	foreach ( (array) $template_names as $template_name ) {
-
-		// Continue if template is empty
-		if ( empty( $template_name ) )
-			continue;
-
-		// Trim off any slashes from the template name
-		$template_name = ltrim( $template_name, '/' );
-
-		// Check child theme first
-		if ( file_exists( trailingslashit( get_stylesheet_directory() ) . 'rcp/' . $template_name ) ) {
-			$located = trailingslashit( get_stylesheet_directory() ) . 'rcp/' . $template_name;
-			break;
-
-		// Check parent theme next
-		} elseif ( file_exists( trailingslashit( get_template_directory() ) . 'rcp/' . $template_name ) ) {
-			$located = trailingslashit( get_template_directory() ) . 'rcp/' . $template_name;
-			break;
-
-		// Check theme compatibility last
-		} elseif ( file_exists( trailingslashit( rcp_get_templates_dir() ) . $template_name ) ) {
-			$located = trailingslashit( rcp_get_templates_dir() ) . $template_name;
-			break;
-		}
-	}
-
-	if ( ( true == $load ) && ! empty( $located ) )
-		load_template( $located, $require_once );
-
-	return $located;
-}
-*/
-
 /**
  * ucicurl_get_admin_page function.
  *
