@@ -201,6 +201,9 @@ class UCIResultsAddRaces {
 
 		// setup as object //
 		foreach ($races as $key => $value) :
+			if (empty((array) $value))
+				continue;
+
 			$races_obj->$key=$value;
 		endforeach;
 
@@ -256,7 +259,8 @@ class UCIResultsAddRaces {
 	 */
 	public function is_multi_day_race($date='') {
 		// clean date //
-		$date = $this->reformat_date($date);
+		$date = htmlentities($date, null, 'utf-8');
+    $date = str_replace("&nbsp;", "", $date);
 
 		// if we have a '-' then it's a multi day so we return an array of start/end //
 		if (strpos($date, '-') !== false) :
@@ -409,7 +413,18 @@ class UCIResultsAddRaces {
 	 */
 	public function reformat_date($date) {
 		$date = htmlentities($date, null, 'utf-8');
-        $date = str_replace("&nbsp;", "", $date);
+    $date = str_replace("&nbsp;", "", $date);
+
+		// if we have a '-' then it's a multi day so we return base date //
+		if (strpos($date, '-') !== false)
+			return $date;
+
+		// make "readable" to php date //
+		$day=substr($date, 0, 2);
+		$month=date('m', strtotime(substr($date, 2, 3)));
+		$year=substr($date, 5);
+
+    $date="$year-$month-$day";
 
 		return $date;
 	}
@@ -506,11 +521,6 @@ class UCIResultsAddRaces {
 			'code' => $this->build_race_code($race_data->event, $race_data->date),
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
 		);
-echo '<pre>';
-//print_r($race_data);
-//print_r($data);
-echo '</pre>';
-// bad date
 
 /*
 		if (!$this->check_for_dups($data['code'])) :
@@ -548,12 +558,13 @@ echo '</pre>';
 
 		$first_race=end($season_races);
 		$last_race=reset($season_races);
+
 		$dates=array(
 			'start' => date('M j Y', strtotime($first_race->date)),
 			'end' => date('M j Y', strtotime($last_race->date)),
 		);
 		$season_data=$this->add_weeks_to_season($dates);
-print_r($season_data);
+
 		return $this->get_week_of_date($date, $season_data['weeks']);
 	}
 
