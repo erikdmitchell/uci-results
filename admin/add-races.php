@@ -124,58 +124,51 @@ class UCIResultsAddRaces {
 		// cycle through rows //
 		foreach ($rows as $row) :
 			if ($row_count!=0) :
-			  	$races[$row_count]=new stdClass();
+				$races[$row_count]=new stdClass();
 
-			  	// get columns (td) //
-			  	$cols=$row->getElementsByTagName('td'); // get each column by tag name
+				// get columns (td) //
+			  $cols=$row->getElementsByTagName('td'); // get each column by tag name
 
-			  	// get (results) link //
-			  	$link=$this->alter_race_link($row->getElementsByTagName('a')->item(0)->getAttribute('href'));
+			  // get (results) link //
+			  $link=$this->alter_race_link($row->getElementsByTagName('a')->item(0)->getAttribute('href'));
 
-			  	// check for multi day event //
-			  	if ($days=$this->is_multi_day_race($cols->item(0)->nodeValue)) :
-			  		$link_parts=parse_url($link); // split the url
-			  		$link_parts_query=array_pop($link_parts); // get just the query args
-			  		$link_args=wp_parse_args($link_parts_query); // query ags become array
-			  		$uci_url=$link_parts['scheme'].'://'.$link_parts['host'].$link_parts['path']; // rebuild the base url
+			  // check for multi day event //
+			  if ($days=$this->is_multi_day_race($cols->item(0)->nodeValue)) :
+			  	continue;
+			  	/*
+		  		$link_parts=parse_url($link); // split the url
+		  		$link_parts_query=array_pop($link_parts); // get just the query args
+		  		$link_args=wp_parse_args($link_parts_query); // query ags become array
+		  		$uci_url=$link_parts['scheme'].'://'.$link_parts['host'].$link_parts['path']; // rebuild the base url
 
-			  		// add query arg(s) - we need to remove the PageID param and add Page plus more //
-			  		// remove params //
-			  		//unset($link_args['PageID']);
-			  		//unset($link_args['Phase2ID']);
-			  		//unset($link_args['Phase3ID']);
-			  		//unset($link_args['PhaseClassificationID']);
-			  		//unset($link_args['All']);
-			  		//unset($link_args['TaalCode']);
-			  		//unset($link_args['StyleID']);
-			  		//unset($link_args['Cache']);
-			  		unset($link_args['PageNr0']);
+		  		// add query arg(s) - we need to remove the PageID param and add Page plus more //
+		  		// remove params //
+		  		//unset($link_args['PageID']);
+		  		//unset($link_args['Phase2ID']);
+		  		//unset($link_args['Phase3ID']);
+		  		//unset($link_args['PhaseClassificationID']);
+		  		//unset($link_args['All']);
+		  		//unset($link_args['TaalCode']);
+		  		//unset($link_args['StyleID']);
+		  		//unset($link_args['Cache']);
+		  		unset($link_args['PageNr0']);
 
-			  		// add params //
-			  		//$link_args['Page']='resultsoverview';
-			  		//$link_args['DerivedEventPhaseID']='-1';
-			  		$link_args['Ranking']=0;
-			  		$link_args['CompetitionCodeInv']=1;
-			  		$link_args['PageID']=19004; // changed from 19006
+		  		// add params //
+		  		//$link_args['Page']='resultsoverview';
+		  		//$link_args['DerivedEventPhaseID']='-1';
+		  		$link_args['Ranking']=0;
+		  		$link_args['CompetitionCodeInv']=1;
+		  		$link_args['PageID']=19004; // changed from 19006
 
-			  		$url=esc_url(add_query_arg($link_args, $uci_url)); // combine base url and query args
-
-			  		//$url='http://www.uci.infostradasports.com/asp/lib/TheASP.asp?SportID=102&CompetitionID=23217&EditionID=1423125&SeasonID=490&ClassID=1&GenderID=1&EventID=12146&EventPhaseID=1423208&Phase1ID=-1&Phase2ID=0&Phase3ID=0&PhaseClassificationID=-1&Detail=1&All=0&TaalCode=2&StyleID=0&Cache=8&PageNr0=-1&Page=resultsoverview';
-
-echo 'multi:<br>';
-echo "$url<br>";
+		  		$url=esc_url(add_query_arg($link_args, $uci_url)); // combine base url and query args
 
 					// we need to grab this url and proccess is like the row element it's in //
-					$html=$this->get_url_page($url, $timeout);
+					//$html=$this->get_url_page($url, $timeout);
+					//$rows=$this->get_html_table_rows($html, $races_class_name);
+					//$races_obj=$this->build_races_object_from_rows($rows, $season, $limit);
 
-echo $html;
-					$rows=$this->get_html_table_rows($html, $races_class_name);
-					$races_obj=$this->build_races_object_from_rows($rows, $season, $limit);
-echo '<pre>';
-
-print_r($races_obj);
-echo '</pre>';
 					$link='multi';
+					*/
 				endif;
 
 				// use our cols to build out races object //
