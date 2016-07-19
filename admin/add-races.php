@@ -522,7 +522,6 @@ class UCIResultsAddRaces {
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
 		);
 
-/*
 		if (!$this->check_for_dups($data['code'])) :
 			if ($wpdb->insert($wpdb->ucicurl_races, $data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
@@ -533,7 +532,6 @@ class UCIResultsAddRaces {
 		else :
 			$message='<div class="updated">'.$data['code'].' is already in the database</div>';
 		endif;
-*/
 
 		return $message;
 	}
