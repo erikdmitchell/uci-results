@@ -12,7 +12,7 @@ define('DATA_PATH', realpath(dirname(__FILE__).'/data'));
 try {
     //get all of the parameters in the POST/GET request
     $params = $_REQUEST;
-
+print_r($params);
     //get the controller and format it correctly so the first
     //letter is always capitalized
     $controller = ucfirst(strtolower($params['controller']));
