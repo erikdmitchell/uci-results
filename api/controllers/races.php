@@ -1,30 +1,20 @@
 <?php
 class Races {
-    private $_params;
+	public $result;
 
-    public function __construct($params)
-    {
-        $this->_params = $params;
-    }
+	private $_params;
 
-    public function createAction()
-    {
-			return 'create';
-    }
+	public function __construct($params) {
+		$this->_params=$params;
 
-    public function readAction()
-    {
-        //read all the todo items
-    }
+		if (empty($this->_params['action']))
+			$this->get_races();
+	}
 
-    public function updateAction()
-    {
-        //update a todo item
-    }
+	public function get_races() {
+//echo 'get races';
+		$this->result='get races';
+	}
 
-    public function deleteAction()
-    {
-        //delete a todo item
-    }
 }
 ?>

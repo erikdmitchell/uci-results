@@ -23,11 +23,11 @@ try {
 	  	$controller='';
 	  endif;
 
-    // get the action //
+    // set the action param //
     if (isset($params['action'])) :
-	    $action = strtolower($params['action']);
+	    $params['action']=strtolower($params['action']);
 	  else :
-	  	$action='';
+	  	$params['action']='';
 	  endif;
 
     //check if the controller exists. if not, throw an exception //
@@ -41,12 +41,14 @@ try {
     $controller = new $controller($params);
 
     //check if the action exists in the controller. if not, throw an exception.
+/*
     if (method_exists($controller, $action) === false) :
 			throw new Exception('Action is invalid.');
     endif;
+*/
 
     //execute the action
-    $result['data'] = $controller->$action();
+    $result['data'] = $controller->result;
     $result['success'] = true;
 
 } catch( Exception $e ) {
