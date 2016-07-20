@@ -667,8 +667,17 @@ class UCIResultsAddRaces {
 				$rider_id=$wpdb->insert_id;
 			endif;
 
-			$par=is_null($result->par) ? 0 : $result->par;
-			$pcr=is_null($result->pcr) ? 0 : $result->pcr;
+			if (!isset($result->par) || empty($result->par) || is_null($result->par)) :
+				$par=0;
+			else :
+				$par=$result->par;
+			endif;
+
+			if (!isset($result->pcr) || empty($result->pcr) || is_null($result->pcr)) :
+				$pcr=0;
+			else :
+				$pcr=$result->pcr;
+			endif;
 
 			$insert=array(
 				'race_id' => $race_id,
