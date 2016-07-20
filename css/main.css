@@ -1,6 +1,6 @@
 /* general */
 .uci-results {
-	margin-bottom: 15px;
+	margin-bottom: 30px;
 }
 .uci-results h1 {
 	font-size: 1.5em;
@@ -14,82 +14,30 @@
 .uci-results h1 .flag {
 	margin-left: 15px;
 }
-.uci-results .table a,
-.uci-results .table a:visited {
+.uci-results a,
+.uci-results a:visited {
 	color: #1a1a1a;
 	text-decoration: none;
 	border-bottom: none;
 	box-shadow: none;
 }
-.uci-results .table a:active,
-.uci-results .table a:hover {
+.uci-results a:active,
+.uci-results a:hover {
 	color: #686868;
 }
-.uci-results .table .row {
-	overflow: hidden;
-}
-.uci-results .table .row.header {
+.uci-results .header {
 	font-weight: bold;
 }
-.uci-results .table .row > div {
-	float: left;
-	border: 1px solid #d1d1d1;
-	border-bottom: none;
-	padding: 5px 10px;
+.uci-results a.view-all {
+	padding-top: 10px;
+	display: inline-block;
 }
-.uci-results .table .row:last-child > div {
-	border-bottom: 1px solid #d1d1d1;
+.uci-results-riders,
+.uci-results-races {
+	margin-bottom: 30px;
 }
-.uci-results .table .row > div.rider-place {
-	width: 6%;
-}
-.uci-results .table .row > div.rider-name {
-	width: 30%;
-}
-.uci-results .table .row > div.rider-points {
-	width: 8%;
-}
-.uci-results .table .row > div.rider-nat,
-.uci-results .table .row > div.race-nat {
-	width: 10%;
-}
-.uci-results .table .row > div.rider-rank {
-	width: 10%;
-}
-.uci-results .table .row > div.rider-age {
-	width: 10%;
-}
-.uci-results .table .row > div.rider-time {
-	width: 10%;
-}
-.uci-results .table .row > div.race-date {
-	width: 17%;
-}
-.uci-results .table .row > div.race-name {
-	width: 52%;
-}
-.uci-results .table .row > div.race-class {
-	width: 6%;
-}
-.uci-results .table .row > div.race-season {
-	width: 11%;
-}
-
-/* main shortcode */
-.uci-results.main .table .row > div.race-name {
-	width: 68%;
-}
-.uci-results.main .table .row > div.race-date {
-	width: 16%;
-}
-.uci-results.main .table .row > div.race-nat {
-	width: 7%;
-}
-.uci-results.main .table .row > div.race-class {
-	width: 9%;
-}
-.uci-results.main .table .row > div.rider-points {
-	width: 10%;
+.uci-results .uci-results-races {
+	margin-bottom: 0;
 }
 
 

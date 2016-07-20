@@ -7,6 +7,7 @@
  */
 function uci_results_scripts_styles() {
 	wp_enqueue_style('uci-results-style', UCICURL_URL.'/css/main.css');
+	wp_enqueue_style('uci-results-grid', UCICURL_URL.'/css/em-bs-grid.css');
 }
 add_action('wp_enqueue_scripts', 'uci_results_scripts_styles');
 
