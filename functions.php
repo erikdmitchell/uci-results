@@ -1,4 +1,14 @@
 <?php
+/**
+ * uci_results_scripts_styles function.
+ *
+ * @access public
+ * @return void
+ */
+function uci_results_scripts_styles() {
+	wp_enqueue_style('uci-results-style', UCICURL_URL.'/css/main.css');
+}
+add_action('wp_enqueue_scripts', 'uci_results_scripts_styles');
 
 /**
  * uci_results_get_template_part function.

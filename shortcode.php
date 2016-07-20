@@ -1,16 +1,4 @@
 <?php
-
-/**
- * ucicurl_scripts_styles function.
- *
- * @access public
- * @return void
- */
-function ucicurl_scripts_styles() {
-	wp_enqueue_style('ucicurl-shortcode-styles', UCICURL_URL.'/css/main.css');
-}
-add_action('wp_enqueue_scripts', 'ucicurl_scripts_styles');
-
 /**
  * uci_results_main function.
  *
