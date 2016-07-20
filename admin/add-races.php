@@ -697,6 +697,7 @@ class UCIResultsAddRaces {
 		$race_results=array();
 		$race_results_obj=new stdClass();
 		$results_class_name="datatable";
+		//$race_results_row_arr=array('place', 'name', 'nat', 'age', 'result', 'par', 'pcr');
 
 		// get header so that we can get the charset ? //
 		$ch = curl_init();
@@ -728,44 +729,46 @@ class UCIResultsAddRaces {
 		if ($nodes->length==0)
 			return new stdClass();
 
-		$rows=$nodes->item(0)->getElementsByTagName('tr'); //get all rows from the table -- this seems to cause an ERROR sometimes
+		// get all rows from the table //
+		$rows=$nodes->item(0)->getElementsByTagName('tr');
 
-		// loop over the table rows
-		$row_count=0;
-		foreach ($rows as $row) :
-		  if ($row_count!=0) :
-		  	$race_results[$row_count]=new stdClass();
-		  	$cols = $row->getElementsByTagName('td'); 	// get each column by tag name
-			  foreach ($cols as $key => $col) :
-					// rank, name, nat, age, result, par, pcr
-					switch ($key) :
-						case 0:
-							$race_results[$row_count]->place=$col->nodeValue;
-							break;
-						case 1:
-							$race_results[$row_count]->name=$col->nodeValue;
-							break;
-						case 2:
-							$race_results[$row_count]->nat=$col->nodeValue;
-							break;
-						case 3:
-							$race_results[$row_count]->age=$col->nodeValue;
-							break;
-						case 4:
-							$race_results[$row_count]->result=$col->nodeValue;
-							break;
-						case 5:
-							$race_results[$row_count]->par=$col->nodeValue;
-							break;
-						case 6:
-							$race_results[$row_count]->pcr=$col->nodeValue;
-							break;
-					endswitch;
-				endforeach;
-			endif;
-			$row_count++;
+		// get header row //
+		$header_row=$rows->item(0); //->getElementsByTagName('tr'); //get all rows from the table
+		$header_cols=$header_row->getElementsByTagName('td');
+		$header_arr=array();
+
+		foreach ($header_cols as $col) :
+			$col_value=preg_replace("/[^A-Za-z0-9 ]/", '', $col->nodeValue); // remove non alpha chars
+			$col_value=strtolower($col_value); // make lowercase
+
+			$header_arr[]=$col_value;
 		endforeach;
 
+		// build our rows (results) //
+		foreach ($rows as $row_key => $row) :
+			// skip header row (first) //
+			if ($row_key==0)
+				continue;
+
+			// process row //
+	  	$race_results[$row_key]=new stdClass();
+	  	$cols=$row->getElementsByTagName('td'); 	// get each column by tag name
+	  	$col_values=array();
+
+	  	// get col values //
+		  foreach ($cols as $key => $col) :
+		  	$col_values[]=$col->nodeValue;
+		  endforeach;
+
+		  // make our results row array w/ header as key(s) //
+		  $race_results[$row_key]=array_combine($header_arr, $col_values);
+
+		  // we need to make one swap - rank/place //
+		  $race_results[$row_key]['place']=$race_results[$row_key]['rank'];
+		  unset($race_results[$row_key]['rank']);
+		endforeach;
+
+		// convert everything to an object //
 		foreach ($race_results as $key => $value) :
 			$race_results_obj->$key=$value;
 		endforeach;
