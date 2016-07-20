@@ -770,7 +770,7 @@ class UCIResultsAddRaces {
 
 		// convert everything to an object //
 		foreach ($race_results as $key => $value) :
-			$race_results_obj->$key=$value;
+			$race_results_obj->$key=(object) $value;
 		endforeach;
 
 		return $race_results_obj;
