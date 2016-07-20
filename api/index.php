@@ -1,17 +1,26 @@
 <?php
+// include wordpress //
+require_once( ABSPATH . 'wp-load.php' );
+
 // Define api path
 define('API_PATH', realpath(dirname(__FILE__)));
 
 // Define path to data folder
-define('DATA_PATH', realpath(dirname(__FILE__).'/data'));
+//define('DATA_PATH', realpath(dirname(__FILE__).'/data'));
 
 //include our models
 //include_once 'models/TodoItem.php';
 
 //wrap the whole thing in a try-catch block to catch any wayward exceptions!
 try {
-    //get all of the parameters in the POST/GET request
+    // get all of the parameters in the POST/GET request - check that query vars aren't passed either //
     $params = $_REQUEST;
+
+    if (get_query_var('controller'))
+    	$params['controller']=get_query_var('controller');
+
+    if (get_query_var('action'))
+    	$params['action']=get_query_var('action');
 print_r($params);
     //get the controller and format it correctly so the first
     //letter is always capitalized
