@@ -5,13 +5,7 @@ require_once( ABSPATH . 'wp-load.php' );
 // Define api path
 define('API_PATH', realpath(dirname(__FILE__)));
 
-// Define path to data folder
-//define('DATA_PATH', realpath(dirname(__FILE__).'/data'));
-
-//include our models
-//include_once 'models/TodoItem.php';
-
-//wrap the whole thing in a try-catch block to catch any wayward exceptions!
+// wrap the whole thing in a try-catch block to catch any wayward exceptions! //
 try {
     // get all of the parameters in the POST/GET request - check that query vars aren't passed either //
     $params = $_REQUEST;
@@ -21,30 +15,35 @@ try {
 
     if (get_query_var('action'))
     	$params['action']=get_query_var('action');
-print_r($params);
-    //get the controller and format it correctly so the first
-    //letter is always capitalized
-    $controller = ucfirst(strtolower($params['controller']));
 
-    //get the action and format it correctly so all the
-    //letters are not capitalized, and append 'Action'
-    $action = strtolower($params['action']).'Action';
+    // get the controller and format it correctly so the first letter is always capitalized //
+    if (isset($params['controller'])) :
+	    $controller = ucfirst(strtolower($params['controller']));
+	  else :
+	  	$controller='';
+	  endif;
 
-    //check if the controller exists. if not, throw an exception
-    if( file_exists(API_PATH."/controllers/{$controller}.php") ) {
-        include_once API_PATH."/controllers/{$controller}.php";
-    } else {
-        throw new Exception('Controller is invalid.');
-    }
+    // get the action //
+    if (isset($params['action'])) :
+	    $action = strtolower($params['action']);
+	  else :
+	  	$action='';
+	  endif;
 
-    //create a new instance of the controller, and pass
-    //it the parameters from the request
+    //check if the controller exists. if not, throw an exception //
+    if (file_exists(API_PATH."/controllers/{$controller}.php")) :
+      include_once API_PATH."/controllers/{$controller}.php";
+		else :
+			throw new Exception('Controller is invalid.');
+    endif;
+
+    //create a new instance of the controller, and pass it the parameters from the request
     $controller = new $controller($params);
 
     //check if the action exists in the controller. if not, throw an exception.
-    if( method_exists($controller, $action) === false ) {
-        throw new Exception('Action is invalid.');
-    }
+    if (method_exists($controller, $action) === false) :
+			throw new Exception('Action is invalid.');
+    endif;
 
     //execute the action
     $result['data'] = $controller->$action();
