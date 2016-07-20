@@ -65,9 +65,9 @@ class UCIResultsRiderRankings {
 		if (!$rider_id || !$season)
 			return;
 
-		$this->update_rider_weekly_points($rider_id, $season);
+		$message=$this->update_rider_weekly_points($rider_id, $season);
 
-		echo '<div class="updated">Rider ID '.$rider_id.' rankings have been updated!</div>';
+		echo $message;
 
 		wp_die();
 	}
@@ -127,7 +127,6 @@ class UCIResultsRiderRankings {
 		$weekly_points=$wpdb->get_results($sql);
 
 		foreach ($weekly_points as $arr) :
-
 				$data=array(
 					'rider_id' => $rider_id,
 					'points' => $arr->points,
@@ -138,7 +137,9 @@ class UCIResultsRiderRankings {
 				$wpdb->insert($wpdb->ucicurl_rider_rankings, $data);
 		endforeach;
 
-		return;
+		$message='<div class="updated">Rider ID '.$rider_id.' rankings have been updated!</div>';
+
+		return $message;
 	}
 
 	/**
