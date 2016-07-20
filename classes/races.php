@@ -406,7 +406,7 @@ class UCIcURLRaces {
 		$series=$wpdb->get_results("SELECT * FROM $wpdb->ucicurl_series");
 
 		$html.='<select name="'.$name.'" id="'.$name.'">';
-			$html.='<option value="0">'.__('Select One','uci-results').'</option>';
+			$html.='<option value="0">-- '.__('Select Series','uci-results').' --</option>';
 
 			foreach ($series as $values) :
 				$html.='<option value="'.$values->id.'" '.selected($selected, $values->id, false).'>'.$values->name.'</option>';
