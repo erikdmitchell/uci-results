@@ -1,4 +1,7 @@
 /* general */
+.uci-results {
+	margin-bottom: 15px;
+}
 .uci-results h1 {
 	font-size: 1.5em;
 	margin-bottom: 1em;
@@ -7,9 +10,6 @@
 	text-decoration: none;
 	border-bottom: none;
 	box-shadow: none;
-}
-.uci-results .table {
-
 }
 .uci-results h1 .flag {
 	margin-left: 15px;
@@ -41,15 +41,16 @@
 	border-bottom: 1px solid #d1d1d1;
 }
 .uci-results .table .row > div.rider-place {
-	width: 10%;
+	width: 6%;
 }
 .uci-results .table .row > div.rider-name {
 	width: 30%;
 }
 .uci-results .table .row > div.rider-points {
-	width: 10%;
+	width: 8%;
 }
-.uci-results .table .row > div.rider-nat {
+.uci-results .table .row > div.rider-nat,
+.uci-results .table .row > div.race-nat {
 	width: 10%;
 }
 .uci-results .table .row > div.rider-rank {
@@ -62,19 +63,33 @@
 	width: 10%;
 }
 .uci-results .table .row > div.race-date {
-	width: 15%;
+	width: 17%;
 }
 .uci-results .table .row > div.race-name {
-	width: 46%;
+	width: 52%;
 }
 .uci-results .table .row > div.race-class {
-	width: 8%;
+	width: 6%;
 }
 .uci-results .table .row > div.race-season {
 	width: 11%;
 }
-.uci-results .table .row > div.race-nat {
-	width: 5%;
+
+/* main shortcode */
+.uci-results.main .table .row > div.race-name {
+	width: 68%;
+}
+.uci-results.main .table .row > div.race-date {
+	width: 16%;
+}
+.uci-results.main .table .row > div.race-nat {
+	width: 7%;
+}
+.uci-results.main .table .row > div.race-class {
+	width: 9%;
+}
+.uci-results.main .table .row > div.rider-points {
+	width: 10%;
 }
 
 

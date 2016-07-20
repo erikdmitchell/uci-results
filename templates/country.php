@@ -9,24 +9,25 @@
 
 get_header(); ?>
 
-<?php if (empty(get_query_var('country_slug'))) : ?>
-	<div class="none-found">No country found.</div>
-<?php else : ?>
+<div class="uci-results uci-results-country">
 
-	<?php
-	$riders=new UCI_Results_Query(array(
-		'per_page' => -1,
-		'type' => 'riders',
-		'nat' => get_query_var('country_slug'),
-		'order_by' => 'name'
-	));
+	<?php if (empty(get_query_var('country_slug'))) : ?>
+		<div class="none-found">No country found.</div>
+	<?php else : ?>
 
-	// build out three column setup //
-	$columns=3;
-	$all_riders=$riders->posts;
-	$riders_chunk=array_chunk($all_riders, ceil(count($all_riders)/$columns));
-	?>
-	<div class="uci-results uci-results-country">
+		<?php
+		$riders=new UCI_Results_Query(array(
+			'per_page' => -1,
+			'type' => 'riders',
+			'nat' => get_query_var('country_slug'),
+			'order_by' => 'name'
+		));
+
+		// build out three column setup //
+		$columns=3;
+		$all_riders=$riders->posts;
+		$riders_chunk=array_chunk($all_riders, ceil(count($all_riders)/$columns));
+		?>
 
 		<h1 class="page-title"><?php echo get_query_var('country_slug'); ?><span class="flag"><?php echo ucicurl_get_country_flag(get_query_var('country_slug')); ?></span></h1>
 
@@ -43,8 +44,9 @@ get_header(); ?>
 		<?php else :?>
 			<div class="none-found">No riders from this country found.</div>
 		<?php endif; ?>
-	</div>
 
-<?php endif; ?>
+	<?php endif; ?>
+
+</div>
 
 <?php get_footer(); ?>
