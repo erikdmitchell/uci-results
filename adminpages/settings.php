@@ -26,8 +26,6 @@
 							<a target="_blank" href="<?php echo admin_url('post.php?post='.$uci_results_pages['single_rider'].'&action=edit'); ?>" class="button button-secondary">Edit Page</a>
 							&nbsp;
 							<a target="_blank" href="<?php echo get_permalink($uci_results_pages['single_rider']); ?>" class="button button-secondary">View Page</a>
-							<br>
-							<small class="p">Include the shortcode [uci_results_rider]</small>
 						</td>
 					</tr>
 
@@ -44,8 +42,6 @@
 							<a target="_blank" href="<?php echo admin_url('post.php?post='.$uci_results_pages['single_race'].'&action=edit'); ?>" class="button button-secondary">Edit Page</a>
 							&nbsp;
 							<a target="_blank" href="<?php echo get_permalink($uci_results_pages['single_race']); ?>" class="button button-secondary">View Page</a>
-							<br>
-							<small class="p">Include the shortcode [uci_results_race]</small>
 						</td>
 					</tr>
 
@@ -62,8 +58,6 @@
 							<a target="_blank" href="<?php echo admin_url('post.php?post='.$uci_results_pages['country'].'&action=edit'); ?>" class="button button-secondary">Edit Page</a>
 							&nbsp;
 							<a target="_blank" href="<?php echo get_permalink($uci_results_pages['country']); ?>" class="button button-secondary">View Page</a>
-							<br>
-							<small class="p">Include the shortcode [uci_results_country]</small>
 						</td>
 					</tr>
 
@@ -80,8 +74,6 @@
 							<a target="_blank" href="<?php echo admin_url('post.php?post='.$uci_results_pages['rider_rankings'].'&action=edit'); ?>" class="button button-secondary">Edit Page</a>
 							&nbsp;
 							<a target="_blank" href="<?php echo get_permalink($uci_results_pages['rider_rankings']); ?>" class="button button-secondary">View Page</a>
-							<br>
-							<small class="p">Include the shortcode [uci_results_rider_rankings]</small>
 						</td>
 					</tr>
 
@@ -98,8 +90,6 @@
 							<a target="_blank" href="<?php echo admin_url('post.php?post='.$uci_results_pages['races'].'&action=edit'); ?>" class="button button-secondary">Edit Page</a>
 							&nbsp;
 							<a target="_blank" href="<?php echo get_permalink($uci_results_pages['races']); ?>" class="button button-secondary">View Page</a>
-							<br>
-							<small class="p">Include the shortcode [uci_results_races]</small>
 						</td>
 					</tr>
 
