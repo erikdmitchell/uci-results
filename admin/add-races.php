@@ -667,6 +667,9 @@ class UCIResultsAddRaces {
 				$rider_id=$wpdb->insert_id;
 			endif;
 
+			$par=is_null($result->par) ? 0 : $result->par;
+			$pcr=is_null($result->pcr) ? 0 : $result->pcr;
+
 			$insert=array(
 				'race_id' => $race_id,
 				'place' => $result->place,
@@ -674,8 +677,8 @@ class UCIResultsAddRaces {
 				'nat' => $result->nat,
 				'age' => $result->age,
 				'result' => $result->result,
-				'par' => $result->par,
-				'pcr' => $result->pcr,
+				'par' => $par,
+				'pcr' => $pcr,
 				'rider_id' => $rider_id,
 			);
 
