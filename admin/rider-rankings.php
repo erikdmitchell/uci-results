@@ -82,9 +82,9 @@ class UCIResultsRiderRankings {
 		if (!$_POST['season'] || !$_POST['week'])
 			return false;
 
-		$this->update_rider_weekly_rankings($_POST['season'], $_POST['week']);
+		$message=$this->update_rider_weekly_rankings($_POST['season'], $_POST['week']);
 
-		echo '<div class="updated">Week '.$_POST['week'].' updated!</div>';
+		echo $message;
 
 		wp_die();
 	}
@@ -177,6 +177,10 @@ class UCIResultsRiderRankings {
 			$wpdb->update($wpdb->ucicurl_rider_rankings, $data, $where);
 			$rank++;
 		endforeach;
+
+		$message='<div class="updated">Week '.$week.' updated!</div>';
+
+		return $message;
 	}
 
 	/**
