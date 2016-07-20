@@ -14,7 +14,6 @@ $riders=new UCI_Results_Query(array(
 	'week' => $_week,
 	'nat' => $_nat,
 ));
-//print_r($riders);
 ?>
 
 <div class="ucicurl-rider-rankings">

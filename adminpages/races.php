@@ -12,6 +12,12 @@ $races=new UCI_Results_Query(array(
 	'class' => $s_class,
 	'season' => $s_season,
 	'nat' => $s_nat,
+	'meta' => array(
+		array(
+			'field' => 'series_id',
+			'value' => $series_id
+		),
+	),
 ));
 ?>
 
