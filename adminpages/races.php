@@ -5,6 +5,7 @@ $s_season=isset($_GET['season']) ? $_GET['season'] : '';
 $s_class=isset($_GET['class']) ? $_GET['class'] : '';
 $s_nat=isset($_GET['nat']) ? $_GET['nat'] : '';
 $search=isset($_GET['search']) ? $_GET['search'] : '';
+$series_id=isset($_GET['series_id']) ? $_GET['series_id'] : 0;
 
 $races=new UCI_Results_Query(array(
 	'type' => 'races',
@@ -61,6 +62,12 @@ $races=new UCI_Results_Query(array(
 					<?php endforeach; ?>
 				</select>
 			</div>
+
+			<div class="alignleft actions">
+				<?php $ucicurl_races->series_dropdown('series_id', $series_id); ?>
+			</div>
+
+
 
 			<input type="submit" id="doaction" class="button action" value="Apply">
 		</form>
