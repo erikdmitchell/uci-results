@@ -11,6 +11,7 @@ get_header();
 
 global $ucicurl_races;
 
+$type='';
 $rider_nat='';
 $race_season='';
 $race_class='';
@@ -28,8 +29,8 @@ $race_series_id='';
 		</div>
 
 		<div class="em-col-md-9">
-			<input type="text" name="search" id="search" class="search" value="" />
-			<div class="search-icon"><a href=""><span class="dashicons dashicons-search"></span></a></div>
+			<input type="text" name="search" id="uci-results-search" class="search" value="" />
+			<div class="search-icon"><a class="search-icon-go" href=""><span class="dashicons dashicons-search"></span></a></div>
 		</div>
 	</div>
 
@@ -40,11 +41,11 @@ $race_series_id='';
 				<label>Type</label>
 				<div class="search-type">
 					<div class="type-row">
-						<input type="radio" name="type" value="races">
+						<input type="radio" name="type" value="races" <?php checked($type, 'races'); ?>>
 						<span>Races</span>
 					</div>
 					<div class="type-row">
-						<input type="radio" name="type" value="riders">
+						<input type="radio" name="type" value="riders" <?php checked($type, 'riders'); ?>>
 						<span>Riders</span>
 					</div>
 				</div>
@@ -101,6 +102,8 @@ $race_series_id='';
 
 		<div id="uci-results-search-results" class="em-col-md-9 search-results">CONTENT</div>
 	</div>
+
+	<div id="search-loader"><div id="loader-gif"><img src="/wp-includes/images/wpspin-2x.gif"></div></div>
 
 </div>
 

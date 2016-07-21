@@ -6,6 +6,15 @@
  * @return void
  */
 function uci_results_scripts_styles() {
+	global $uci_results_pages;
+
+	// include on search page //
+	if (is_page($uci_results_pages['search'])) :
+		wp_enqueue_script('uci-results-search-script', UCICURL_URL.'/js/search.js', array('jquery'), '0.1.0');
+
+		wp_localize_script('uci-results-search-script', 'searchAJAXObject', array('ajax_url' => admin_url('admin-ajax.php')));
+	endif;
+
 	wp_enqueue_style('uci-results-style', UCICURL_URL.'/css/main.css');
 	wp_enqueue_style('uci-results-grid', UCICURL_URL.'/css/em-bs-grid.css');
 }
@@ -475,6 +484,15 @@ function uci_results_admin_url($args='') {
 	echo add_query_arg($args, admin_url());
 }
 
+/**
+ * uci_results_get_rider_rank function.
+ *
+ * @access public
+ * @param int $rider_id (default: 0)
+ * @param string $season (default: '')
+ * @param string $week (default: '')
+ * @return void
+ */
 function uci_results_get_rider_rank($rider_id=0, $season='', $week='') {
 	global $wpdb;
 
@@ -520,4 +538,18 @@ function uci_results_schedule_event($timestamp, $recurrence, $hook, $args = arra
 		return false;
 	endif;
 }
+
+/**
+ * uci_results_search_ajax function.
+ *
+ * @access public
+ * @return void
+ */
+function uci_results_search_ajax() {
+print_r($_POST);
+
+	wp_die();
+}
+add_action('wp_ajax_uci_results_search', 'uci_results_search_ajax');
+add_action('wp_ajax_nopriv_uci_results_search', 'uci_results_search_ajax');
 ?>
