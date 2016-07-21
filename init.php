@@ -16,6 +16,7 @@ function uci_results_init() {
 	$uci_results_pages['country'] = get_option('country_page_id', 0);
 	$uci_results_pages['rider_rankings'] = get_option('rider_rankings_page_id', 0);
 	$uci_results_pages['races'] = get_option('races_page_id', 0);
+	$uci_results_pages['search'] = get_option('uci_results_search_page_id', 0);
 }
 add_action('init', 'uci_results_init', 1);
 

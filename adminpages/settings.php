@@ -93,6 +93,22 @@
 						</td>
 					</tr>
 
+		      <tr>
+		      	<th scope="row" valign="top">
+							<label for="uci_results_search_page_id">Search Page:</label>
+						</th>
+						<td>
+							<?php wp_dropdown_pages(array(
+								'name' => 'uci_results_search_page_id',
+								'show_option_none' => '-- '.__('Select One', 'uci-results').' --',
+								'selected' => $uci_results_pages['search']
+							)); ?>
+							<a target="_blank" href="<?php echo admin_url('post.php?post='.$uci_results_pages['search'].'&action=edit'); ?>" class="button button-secondary">Edit Page</a>
+							&nbsp;
+							<a target="_blank" href="<?php echo get_permalink($uci_results_pages['search']); ?>" class="button button-secondary">View Page</a>
+						</td>
+					</tr>
+
 				</tbody>
 			</table>
 

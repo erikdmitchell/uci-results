@@ -200,6 +200,12 @@ class UCIResultsAdminPages {
 			delete_option('races_page_id');
 		endif;
 
+		if (isset($_POST['uci_results_search_page_id'])) :
+			update_option('uci_results_search_page_id', $_POST['uci_results_search_page_id']);
+		else :
+			delete_option('uci_results_search_page_id');
+		endif;
+
 		//flush_rewrite_rules(); // this may not be the best place for it - doesnt seem to work
 	}
 
