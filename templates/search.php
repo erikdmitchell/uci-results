@@ -24,9 +24,7 @@ $race_series_id='';
 	<h1 class="page-title"><?php _e('UCI Results &amp; Rankings Search','uci-results'); ?></h1>
 
 	<div class="em-row search-box">
-		<div class="em-col-md-3 search-details">
-			Search Details
-		</div>
+		<div id="search-details" class="em-col-md-3"></div>
 
 		<div class="em-col-md-9">
 			<input type="text" name="search" id="uci-results-search" class="search" value="" />

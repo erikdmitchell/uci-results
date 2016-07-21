@@ -551,16 +551,25 @@ function uci_results_search_ajax() {
 		'type' => '',
 		'search' => $_POST['search'],
 	));
+	$return=array();
 
-	$html=uci_results_build_search_results($query->posts);
+	$return['details']=uci_results_build_search_details($query);
+	$return['content']=uci_results_build_search_results($query->posts);
 
-	echo $html;
+	echo json_encode($return);
 
 	wp_die();
 }
 add_action('wp_ajax_uci_results_search', 'uci_results_search_ajax');
 add_action('wp_ajax_nopriv_uci_results_search', 'uci_results_search_ajax');
 
+/**
+ * uci_results_build_search_results function.
+ *
+ * @access public
+ * @param string $posts (default: '')
+ * @return void
+ */
 function uci_results_build_search_results($posts='') {
 	if (empty($posts))
 		return '<div class="not-found">No results found.</div>';
@@ -577,6 +586,14 @@ function uci_results_build_search_results($posts='') {
 			$html.='<div class="em-col-md-2 type">'.$post->type.'</div>';
 		$html.='</div>';
 	endforeach;
+
+	return $html;
+}
+
+function uci_results_build_search_details($query) {
+	$html='';
+
+	$html.='<div class="total-posts">'.$query->found_posts.' posts found</div>';
 
 	return $html;
 }

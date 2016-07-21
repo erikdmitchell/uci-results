@@ -13,7 +13,10 @@ jQuery(document).ready(function($) {
 		};
 
 		$.post(searchAJAXObject.ajax_url, data, function(response) {
-			$('#uci-results-search-results').html(response);
+			response=$.parseJSON(response);
+
+			$('#search-details').html(response.details); // append search details
+			$('#uci-results-search-results').html(response.content); // append search results
 
 			$loader.hide();
 		});
