@@ -58,6 +58,7 @@ class UCI_Results_Query {
 			'season' => false, // races, rider ranks
 			'nat' => false,
 			'name' => false, // riders
+			'search' => false,
 			'rider_id' => 0, // riders
 			'start_date' => false, // races
 			'end_date' => false, // races
@@ -115,7 +116,7 @@ class UCI_Results_Query {
 		endif;
 
 		// check for search //
-		if (isset($_GET['search']))
+		if (isset($_GET['search']) || $query['search'])
 			$this->is_search=true;
 
 		// check if paged //
@@ -398,12 +399,26 @@ class UCI_Results_Query {
 	 * @return void
 	 */
 	protected function search_query($table='') {
+		global $wpdb;
+
 		$query='';
 
 		if ($this->query_vars['type']=='races') :
 			$query="SELECT * FROM $table WHERE event LIKE '%".$_GET['search']."%'";
 		elseif ($this->query_vars['type']=='riders') :
 			$query="SELECT * FROM $table WHERE name LIKE '%".$_GET['search']."%'";
+		else :
+			if (isset($_GET['search'])) :
+				$search_value=$_GET['search'];
+			else :
+				$search_value=$this->query_vars['search'];
+			endif;
+
+			$query="
+				SELECT id, event COLLATE utf8mb4_general_ci AS name, 'race' AS type FROM $wpdb->ucicurl_races WHERE event LIKE '%".$search_value."%'
+				UNION
+				SELECT id, name, 'rider' AS type FROM $wpdb->ucicurl_riders WHERE name LIKE '%".$search_value."%'
+			";
 		endif;
 
 		return $query;

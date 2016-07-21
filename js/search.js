@@ -13,7 +13,9 @@ jQuery(document).ready(function($) {
 		};
 
 		$.post(searchAJAXObject.ajax_url, data, function(response) {
-console.log(response);
+			$('#uci-results-search-results').html(response);
+
+			$loader.hide();
 		});
 	});
 

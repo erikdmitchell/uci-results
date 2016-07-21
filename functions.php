@@ -546,10 +546,38 @@ function uci_results_schedule_event($timestamp, $recurrence, $hook, $args = arra
  * @return void
  */
 function uci_results_search_ajax() {
-print_r($_POST);
+	$query=new UCI_Results_Query(array(
+		'per_page' => 15,
+		'type' => '',
+		'search' => $_POST['search'],
+	));
+
+	$html=uci_results_build_search_results($query->posts);
+
+	echo $html;
 
 	wp_die();
 }
 add_action('wp_ajax_uci_results_search', 'uci_results_search_ajax');
 add_action('wp_ajax_nopriv_uci_results_search', 'uci_results_search_ajax');
+
+function uci_results_build_search_results($posts='') {
+	if (empty($posts))
+		return '<div class="not-found">No results found.</div>';
+
+	$html=null;
+
+	$html.='<div class="em-row">';
+
+	$html.='</div>';
+
+	foreach ($posts as $post) :
+		$html.='<div id="dbid-'.$post->id.'" class="em-row">';
+			$html.='<div class="em-col-md-4 name"><a href="#">'.$post->name.'</a></div>';
+			$html.='<div class="em-col-md-2 type">'.$post->type.'</div>';
+		$html.='</div>';
+	endforeach;
+
+	return $html;
+}
 ?>

@@ -100,7 +100,7 @@ $race_series_id='';
 		</div>
 
 
-		<div id="uci-results-search-results" class="em-col-md-9 search-results">CONTENT</div>
+		<div id="uci-results-search-results" class="em-col-md-9 search-results"></div>
 	</div>
 
 	<div id="search-loader"><div id="loader-gif"><img src="/wp-includes/images/wpspin-2x.gif"></div></div>
