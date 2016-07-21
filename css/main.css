@@ -70,18 +70,3 @@
 .uci-results-country .country-riders .columns-3 {
 	width: 33%;
 }
-
-/* single race */
-.uci-results-race .race-details {
-	overflow: hidden;
-	margin-bottom: 15px;
-}
-.uci-results-race .race-details > div {
-	float: left;
-	margin-right: 15px;
-}
-
-/* main */
-.uci-results.main .uci-results-riders {
-	margin-bottom: 15px;
-}
