@@ -53,3 +53,43 @@
 	width: 50%;
 	text-align: right;
 }
+
+/* search */
+.uci-results-search .search-box .search {
+	width: 95%;
+	float: left;
+}
+.uci-results-search .search-box .search-icon {
+	width: 5%;
+	float: right;
+	padding: 0.375em 0 0.275em 0.275em;
+	background: #eee;
+	border: 1px solid #d1d1d1;
+  border-radius: 2px;
+}
+.uci-results-search .search-box .search-icon span {
+	font-size: 32px;
+	height: 30px;
+}
+.uci-results-search label {
+	font-weight: bold;
+	display: inline-block;
+	width: 75px;
+}
+.uci-results-search .search-filters .filter-section {
+	border-top: 1px solid #ccc;
+	margin-top: 15px;
+	padding-top: 15px;
+}
+.uci-results-search .search-filters .filter-section:first-child {
+	border-top: none;
+	margin-top: 30px;
+	padding-top: 0;
+}
+.uci-results-search .search-results {
+	margin-top: 30px;
+}
+.uci-results-search #riders-search-filters,
+.uci-results-search #races-search-filters {
+	//display: none;
+}
