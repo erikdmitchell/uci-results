@@ -40,7 +40,6 @@
 	margin-bottom: 0;
 }
 
-
 /* pagination */
 .uci-results-pagination {
 	overflow: hidden;
@@ -53,20 +52,4 @@
 	float: left;
 	width: 50%;
 	text-align: right;
-}
-
-
-/* country page */
-.uci-results-country h1 .season {
-	margin-left: 15px;
-}
-.uci-results-country h1 .season {
-	font-weight: normal;
-	font-size: 0.75em;
-}
-.uci-results-country .country-riders .col {
-	float: left;
-}
-.uci-results-country .country-riders .columns-3 {
-	width: 33%;
 }

@@ -32,9 +32,9 @@ get_header(); ?>
 		<h1 class="page-title"><?php echo get_query_var('country_slug'); ?><span class="flag"><?php echo ucicurl_get_country_flag(get_query_var('country_slug')); ?></span></h1>
 
 		<?php if ($riders->have_posts()) : ?>
-			<div class="table country-riders">
+			<div class="em-row country-riders">
 				<?php foreach ($riders_chunk as $key => $chunk) : ?>
-				<div class="col col-<?php echo $key; ?> columns-<?php echo $columns; ?>">
+				<div class="em-col-md-4 col-<?php echo $key; ?> columns-<?php echo $columns; ?>">
 					<?php foreach ($chunk as $arr) : ?>
 					<div class="rider-name"><a href="<?php echo uci_results_rider_url($arr->slug); ?>"><?php echo $arr->name; ?></a></div>
 					<?php endforeach; ?>
