@@ -546,8 +546,6 @@ function uci_results_schedule_event($timestamp, $recurrence, $hook, $args = arra
  * @return void
  */
 function uci_results_search_ajax() {
-print_r($_POST);
-
 	// set type param //
 	if (isset($_POST['search_data']['types'])) :
 		if (count($_POST['search_data']['types']) == 1) : // just one type
@@ -575,7 +573,7 @@ print_r($_POST);
 		'search' => $_POST['search'],
 	));
 
-echo $query->query;
+//echo $query->query;
 /*
 			'order_by' => '', // date (races -- name (riders)
 			'order' => '', // DESC (races -- ASC (riders)
