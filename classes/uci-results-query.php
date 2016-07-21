@@ -116,7 +116,7 @@ class UCI_Results_Query {
 		endif;
 
 		// check for search //
-		if (isset($_GET['search']) || $query['search'])
+		if (isset($_GET['search']) || (isset($query['search']) && $query['search']))
 			$this->is_search=true;
 
 		// check if paged //
