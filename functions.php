@@ -546,6 +546,7 @@ function uci_results_schedule_event($timestamp, $recurrence, $hook, $args = arra
  * @return void
  */
 function uci_results_search_ajax() {
+print_r($_POST);
 	$query=new UCI_Results_Query(array(
 		'per_page' => 15,
 		'type' => '',
