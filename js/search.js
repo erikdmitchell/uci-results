@@ -19,6 +19,21 @@ jQuery(document).ready(function($) {
 			}
 		});
 
+		// hide all extra filters //
+		$('#races-search-filters').hide();
+		$('#riders-search-filters').hide();
+
+		// if we have one type, show that extra filters, two, show all fliters //
+		if (types.length==1) {
+			if (types[0]=='races') {
+				$('#races-search-filters').show();
+			} else {
+				$('#riders-search-filters').show();
+			}
+		} else if (types.length>1) {
+			$('#races-search-filters').show();
+		}
+
 		var data={'types' : types};
 
 		runSearch(data);
