@@ -547,11 +547,48 @@ function uci_results_schedule_event($timestamp, $recurrence, $hook, $args = arra
  */
 function uci_results_search_ajax() {
 print_r($_POST);
+
+	// set type param //
+	if (isset($_POST['search_data']['types'])) :
+		if (count($_POST['search_data']['types']) == 1) : // just one type
+			$type=$_POST['search_data']['types'][0];
+		elseif (count($_POST['search_data']['types'])) : // multiple
+			$type='';
+		else : // a basic fallback
+			$type='';
+		endif;
+	else :
+		$type='';
+	endif;
+
+	// build args //
+	$args=array(
+		'per_page' => 15,
+		'type' => $type,
+		'search' => $_POST['search']
+	);
+
+	// run query //
 	$query=new UCI_Results_Query(array(
 		'per_page' => 15,
-		'type' => '',
+		'type' => $type,
 		'search' => $_POST['search'],
 	));
+
+echo $query->query;
+/*
+			'order_by' => '', // date (races -- name (riders)
+			'order' => '', // DESC (races -- ASC (riders)
+			'class' => false, // races
+			'season' => false, // races, rider ranks
+			'nat' => false,
+			'name' => false, // riders
+			'rider_id' => 0, // riders
+			'start_date' => false, // races
+			'end_date' => false, // races
+			'rankings' => false, // riders
+			'meta' => array()
+*/
 	$return=array();
 
 	$return['details']=uci_results_build_search_details($query);

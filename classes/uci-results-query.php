@@ -403,17 +403,18 @@ class UCI_Results_Query {
 
 		$query='';
 
-		if ($this->query_vars['type']=='races') :
-			$query="SELECT * FROM $table WHERE event LIKE '%".$_GET['search']."%'";
-		elseif ($this->query_vars['type']=='riders') :
-			$query="SELECT * FROM $table WHERE name LIKE '%".$_GET['search']."%'";
+		// set search value //
+		if (isset($_GET['search'])) :
+			$search_value=$_GET['search'];
 		else :
-			if (isset($_GET['search'])) :
-				$search_value=$_GET['search'];
-			else :
-				$search_value=$this->query_vars['search'];
-			endif;
+			$search_value=$this->query_vars['search'];
+		endif;
 
+		if ($this->query_vars['type']=='races') :
+			$query="SELECT * FROM $table WHERE event LIKE '%".$search_value."%'";
+		elseif ($this->query_vars['type']=='riders') :
+			$query="SELECT * FROM $table WHERE name LIKE '%".$search_value."%'";
+		else :
 			$query="
 				SELECT id, event COLLATE utf8mb4_general_ci AS name, 'race' AS type FROM $wpdb->ucicurl_races WHERE event LIKE '%".$search_value."%'
 				UNION
