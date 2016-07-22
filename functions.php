@@ -619,19 +619,22 @@ function uci_results_build_search_results($posts='') {
 
 		if ($post->type=='rider') :
 			$post_data=$ucicurl_riders->get_rider($post->id);
+			$icon='<i class="fa fa-user" aria-hidden="true"></i>';
 		elseif ($post->type=='race') :
 			$post_data=$ucicurl_races->get_race($post->id);
+			$icon='<i class="fa fa-flag-checkered" aria-hidden="true"></i>';
 
 			// conform to post //
 			$post_data->name=$post_data->event;
 		else :
 			$post_data='';
+			$icon='';
 		endif;
 
 		$html.='<div id="dbid-'.$post->id.'" class="em-row">';
-			$html.='<div class="em-col-md-1 type"><a href="#">'.$post->type.'</a></div>';
+			$html.='<div class="em-col-md-1 type">'.$icon.'</div>';
 			$html.='<div class="em-col-md-10 name"><a href="#">'.$post->name.'</a></div>';
-			$html.='<div class="em-col-md-1 country"><a href="#">'.ucicurl_get_country_flag($post_data->nat).'</a></div>';
+			$html.='<div class="em-col-md-1 country">'.ucicurl_get_country_flag($post_data->nat).'</div>';
 		$html.='</div>';
 	endforeach;
 
