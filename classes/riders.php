@@ -13,14 +13,7 @@ class UCIcURLRiders {
 	 */
 	public function __construct() {}
 
-	/**
-	 * get_rider function.
-	 *
-	 * @access public
-	 * @param int $rider_id (default: 0)
-	 * @return void
-	 */
-	public function get_rider($rider_id=0) {
+	public function get_rider($rider_id=0, $results=false, $rankings=false) {
 		global $wpdb;
 
 		// if not an int, it's a slug //
@@ -34,7 +27,7 @@ class UCIcURLRiders {
 
 		$where="rider_id=".absint($rider_id);
 
-		$sql="
+		$results_sql="
 			SELECT *
 			FROM {$wpdb->ucicurl_results}
 			LEFT JOIN {$wpdb->ucicurl_races}
@@ -43,7 +36,12 @@ class UCIcURLRiders {
 			ORDER BY date DESC
 		";
 		$rider=$wpdb->get_row("SELECT * FROM {$wpdb->ucicurl_riders} WHERE id={$rider_id}");
-		$rider->results=$wpdb->get_results($sql);
+
+		if ($results)
+			$rider->results=$wpdb->get_results($results_sql);
+
+		if ($rankings)
+			$rider->rankings=array();
 
 		return $rider;
 	}
