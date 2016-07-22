@@ -70,9 +70,8 @@
 	border: 1px solid #d1d1d1;
   border-radius: 2px;
 }
-.uci-results-search .search-box .search-icon span {
-	font-size: 32px;
-	height: 30px;
+.uci-results-search .search-box .search-icon .fa-search {
+	font-size: 26px;
 }
 .uci-results-search label {
 	font-weight: bold;

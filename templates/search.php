@@ -28,7 +28,7 @@ $race_series_id='';
 
 		<div class="em-col-md-9">
 			<input type="text" name="search" id="uci-results-search" class="search" value="" />
-			<div class="search-icon"><a class="search-icon-go" href=""><span class="dashicons dashicons-search"></span></a></div>
+			<div class="search-icon"><a class="search-icon-go" href=""><i class="fa fa-search" aria-hidden="true"></i></a></div>
 		</div>
 	</div>
 

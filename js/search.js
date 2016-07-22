@@ -58,6 +58,6 @@ function runSearch(searchData) {
 		jQuery('#search-details').html(response.details); // append search details
 		jQuery('#uci-results-search-results').html(response.content); // append search results
 
-		$loader.hide();
+		//$loader.hide();
 	});
 }

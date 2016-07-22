@@ -15,7 +15,7 @@ function uci_results_scripts_styles() {
 		wp_localize_script('uci-results-search-script', 'searchAJAXObject', array('ajax_url' => admin_url('admin-ajax.php')));
 	endif;
 
-	wp_enqueue_style( 'dashicons' );
+	wp_enqueue_style('uci-results-fa-style', UCICURL_URL.'css/font-awesome.min.css');
 	wp_enqueue_style('uci-results-style', UCICURL_URL.'/css/main.css');
 	wp_enqueue_style('uci-results-grid', UCICURL_URL.'/css/em-bs-grid.css');
 }
@@ -608,19 +608,30 @@ add_action('wp_ajax_nopriv_uci_results_search', 'uci_results_search_ajax');
  * @return void
  */
 function uci_results_build_search_results($posts='') {
+	global $ucicurl_riders, $ucicurl_races;
+
 	if (empty($posts))
 		return '<div class="not-found">No results found.</div>';
 
 	$html=null;
 
-	$html.='<div class="em-row">';
-
-	$html.='</div>';
-
 	foreach ($posts as $post) :
+
+		if ($post->type=='rider') :
+			$post_data=$ucicurl_riders->get_rider($post->id);
+		elseif ($post->type=='race') :
+			$post_data=$ucicurl_races->get_race($post->id);
+
+			// conform to post //
+			$post_data->name=$post_data->event;
+		else :
+			$post_data='';
+		endif;
+
 		$html.='<div id="dbid-'.$post->id.'" class="em-row">';
-			$html.='<div class="em-col-md-4 name"><a href="#">'.$post->name.'</a></div>';
-			$html.='<div class="em-col-md-2 type">'.$post->type.'</div>';
+			$html.='<div class="em-col-md-1 type"><a href="#">'.$post->type.'</a></div>';
+			$html.='<div class="em-col-md-10 name"><a href="#">'.$post->name.'</a></div>';
+			$html.='<div class="em-col-md-1 country"><a href="#">'.ucicurl_get_country_flag($post_data->nat).'</a></div>';
 		$html.='</div>';
 	endforeach;
 
