@@ -591,7 +591,8 @@ function uci_results_search_ajax() {
 	$return=array();
 
 	$return['details']=uci_results_build_search_details($query);
-	$return['content']=uci_results_build_search_results($query->posts);
+	//$return['content']=uci_results_build_search_results($query->posts);
+	$return['content']=$query->query;
 
 	echo json_encode($return);
 

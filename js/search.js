@@ -1,6 +1,8 @@
+var $loader='';
+
 jQuery(document).ready(function($) {
 
-
+	$loader=jQuery('.uci-results-search #search-loader');
 
 	// main search button click //
 	$('a.search-icon-go').click(function(e) {
@@ -41,8 +43,6 @@ jQuery(document).ready(function($) {
 
 });
 
-var $loader=jQuery('.uci-results-search #search-loader');
-
 function runSearch(searchData) {
 	$loader.show();
 
@@ -58,6 +58,6 @@ function runSearch(searchData) {
 		jQuery('#search-details').html(response.details); // append search details
 		jQuery('#uci-results-search-results').html(response.content); // append search results
 
-		//$loader.hide();
+		$loader.hide();
 	});
 }
