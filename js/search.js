@@ -8,7 +8,19 @@ jQuery(document).ready(function($) {
 	$('a.search-icon-go').click(function(e) {
 		e.preventDefault();
 
-		runSearch();
+		// we need this from the type filter //
+		var types=[];
+
+		$('.uci-results-search .type').each(function() {
+			if ($(this).prop('checked')) {
+				types.push($(this).val());
+			}
+		});
+
+		var data={'types' : types};
+
+		//clearSearchFilters();
+		runSearch(data);
 	});
 
 	// type search filter (checkbox) //
@@ -41,6 +53,26 @@ jQuery(document).ready(function($) {
 		runSearch(data);
 	});
 
+	// search filter select change //
+	$('.search-filters select').change(function() {
+		// we need this from the type filter //
+		var types=[];
+
+		$('.uci-results-search .type').each(function() {
+			if ($(this).prop('checked')) {
+				types.push($(this).val());
+			}
+		});
+
+		var name=$(this).attr('name');
+		var data={
+			'types' : types,
+			name : $(this).val()
+		};
+
+		runSearch(data);
+	});
+
 });
 
 function runSearch(searchData) {
@@ -51,7 +83,7 @@ function runSearch(searchData) {
 		'search' : jQuery('#uci-results-search').val(),
 		'search_data' : searchData
 	};
-
+console.log(data);
 	jQuery.post(searchAJAXObject.ajax_url, data, function(response) {
 		response=jQuery.parseJSON(response);
 
@@ -60,4 +92,17 @@ function runSearch(searchData) {
 
 		$loader.hide();
 	});
+}
+
+function clearSearchFilters() {
+	jQuery('.uci-results-search .search-filters').find('input:text, input:password, input:file, textarea').val('');
+	jQuery('.uci-results-search .search-filters').find('select').val(0);
+  jQuery('.uci-results-search .search-filters').find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');
+
+  resetFilterSection();
+}
+
+function resetFilterSection() {
+	jQuery('#races-search-filters').hide();
+	jQuery('#riders-search-filters').hide();
 }
