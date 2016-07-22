@@ -4,8 +4,14 @@ jQuery(document).ready(function($) {
 		if ($('.uci-results-pagination').data('ajax'))
 			e.preventDefault();
 
-console.log('a');
-console.log($('.uci-results-pagination').data());
+		var data={
+			'action' : 'uci_results_pagination',
+			'data' : $('.uci-results-pagination').data('details')
+		};
+
+		$.post(paginationOptions.ajax_url, data, function(response) {
+console.log(response);
+		});
 	});
 
 });

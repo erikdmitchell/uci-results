@@ -41,6 +41,9 @@ class UCI_Results_Query {
 			$uci_results_query=$this->query($query);
 
 		wp_enqueue_script('uci-results-pagination-script', UCICURL_URL.'js/pagination.js', array('jquery'));
+
+		wp_localize_script('uci-results-pagination-script', 'paginationOptions', array('ajax_url' => admin_url('admin-ajax.php')));
+
 	}
 
 	/**
@@ -578,8 +581,16 @@ function uci_results_pagination($args='', $ajax=false) {
 	endif;
 
 	// build aajx stuff if need be //
-	if ($ajax)
-		$ajax_details='data-ajax=true data-details='.json_encode($args);
+	if ($ajax) :
+		$details=array(
+			'base' => $args['base'],
+			'total' => $args['total'],
+			'current' => $args['current'],
+			'prev_page' => $prev_page,
+			'next_page' => $next_page,
+		);
+		$ajax_details='data-ajax=true data-details data-details='.json_encode($details);
+	endif;
 
 	$html.='<div class="uci-results-pagination" '.$ajax_details.'>';
 		$html.=$prev_link;
@@ -588,6 +599,14 @@ function uci_results_pagination($args='', $ajax=false) {
 
 	echo $html;
 }
+
+function uci_results_ajax_pagination() {
+print_r($_POST);
+
+	wp_die();
+}
+add_action('wp_ajax_uci_results_pagination', 'uci_results_ajax_pagination');
+add_action('wp_ajax_nopriv_uci_results_pagination', 'uci_results_ajax_pagination');
 
 /**
  * uci_results_admin_pagination function.
