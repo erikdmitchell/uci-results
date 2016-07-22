@@ -33,13 +33,20 @@ class UCIcURLRiders {
 			WHERE rider_id = $rider_id
 			ORDER BY date DESC
 		";
+		$rankings_sql="
+			SELECT
+				*
+			FROM $wpdb->ucicurl_rider_rankings
+			WHERE rider_id = $rider_id
+			ORDER BY season, week DESC
+		";
 		$rider=$wpdb->get_row("SELECT * FROM $wpdb->ucicurl_riders WHERE id=$rider_id");
 
 		if ($results)
 			$rider->results=$wpdb->get_results($results_sql);
 
 		if ($rankings)
-			$rider->rankings=array();
+			$rider->rankings=$wpdb->get_results($rankings_sql);
 
 		return $rider;
 	}
