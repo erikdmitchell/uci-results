@@ -39,6 +39,8 @@ class UCI_Results_Query {
 
 		if (!empty($query))
 			$uci_results_query=$this->query($query);
+
+		wp_enqueue_script('uci-results-pagination-script', UCICURL_URL.'js/pagination.js', array('jquery'));
 	}
 
 	/**
@@ -525,20 +527,18 @@ class UCI_Results_Query {
  *
  * @access public
  * @param string $args (default: '')
+ * @param bool $ajax (default: false)
  * @return void
  */
-function uci_results_pagination($args='') {
+function uci_results_pagination($args='', $ajax=false) {
 	global $uci_results_query;
 
 	$html=null;
-	//$pagenum_link = html_entity_decode( get_pagenum_link() );
 	$pagenum_link = html_entity_decode( get_permalink() );
 	$url_parts = explode( '?', $pagenum_link ); // -- this may be needed in the future if we have extra queries
 	$total = isset( $uci_results_query->max_num_pages ) ? $uci_results_query->max_num_pages : 1;
   $current = get_query_var( 'paged' ) ? intval( get_query_var( 'paged' ) ) : 1;
-
-  // Append the format placeholder to the base URL.
-  //$pagenum_link = trailingslashit( $url_parts[0] ) . '%_%';
+	$ajax_details='';
 
   $defaults=array(
 		'base' => $pagenum_link,
@@ -577,7 +577,11 @@ function uci_results_pagination($args='') {
 		$next_link.='</div>';
 	endif;
 
-	$html.='<div class="uci-results-pagination">';
+	// build aajx stuff if need be //
+	if ($ajax)
+		$ajax_details='data-ajax=true data-details='.json_encode($args);
+
+	$html.='<div class="uci-results-pagination" '.$ajax_details.'>';
 		$html.=$prev_link;
 		$html.=$next_link;
 	$html.='</div>';
