@@ -25,17 +25,15 @@ class UCIcURLRiders {
 		if (empty($rider_id))
 			return false;
 
-		$where="rider_id=".absint($rider_id);
-
 		$results_sql="
 			SELECT *
 			FROM {$wpdb->ucicurl_results}
 			LEFT JOIN {$wpdb->ucicurl_races}
 			ON {$wpdb->ucicurl_results}.race_id={$wpdb->ucicurl_races}.id
-			WHERE $where
+			WHERE rider_id = $rider_id
 			ORDER BY date DESC
 		";
-		$rider=$wpdb->get_row("SELECT * FROM {$wpdb->ucicurl_riders} WHERE id={$rider_id}");
+		$rider=$wpdb->get_row("SELECT * FROM $wpdb->ucicurl_riders WHERE id=$rider_id");
 
 		if ($results)
 			$rider->results=$wpdb->get_results($results_sql);
