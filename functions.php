@@ -15,6 +15,7 @@ function uci_results_scripts_styles() {
 		wp_localize_script('uci-results-search-script', 'searchAJAXObject', array('ajax_url' => admin_url('admin-ajax.php')));
 	endif;
 
+	wp_enqueue_style( 'dashicons' );
 	wp_enqueue_style('uci-results-style', UCICURL_URL.'/css/main.css');
 	wp_enqueue_style('uci-results-grid', UCICURL_URL.'/css/em-bs-grid.css');
 }
