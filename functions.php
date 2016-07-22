@@ -590,9 +590,9 @@ function uci_results_search_ajax() {
 */
 	$return=array();
 
-	$return['details']=uci_results_build_search_details($query);
-	//$return['content']=uci_results_build_search_results($query->posts);
-	$return['content']=$query->query;
+	//$return['details']=uci_results_build_search_details($query);
+	$return['content']=uci_results_build_search_results($query->posts, $type);
+	$return['details']=$query->query;
 
 	echo json_encode($return);
 
@@ -601,14 +601,7 @@ function uci_results_search_ajax() {
 add_action('wp_ajax_uci_results_search', 'uci_results_search_ajax');
 add_action('wp_ajax_nopriv_uci_results_search', 'uci_results_search_ajax');
 
-/**
- * uci_results_build_search_results function.
- *
- * @access public
- * @param string $posts (default: '')
- * @return void
- */
-function uci_results_build_search_results($posts='') {
+function uci_results_build_search_results($posts='', $type='') {
 	global $ucicurl_riders, $ucicurl_races;
 
 	if (empty($posts))
@@ -617,11 +610,13 @@ function uci_results_build_search_results($posts='') {
 	$html=null;
 
 	foreach ($posts as $post) :
+		if (isset($post->type))
+			$type=$post->type;
 
-		if ($post->type=='rider') :
+		if ($type=='rider' || $type=='riders') :
 			$post_data=$ucicurl_riders->get_rider($post->id);
 			$icon='<i class="fa fa-user" aria-hidden="true"></i>';
-		elseif ($post->type=='race') :
+		elseif ($type=='race' || $type='races') :
 			$post_data=$ucicurl_races->get_race($post->id);
 			$icon='<i class="fa fa-flag-checkered" aria-hidden="true"></i>';
 
