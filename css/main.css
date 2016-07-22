@@ -54,6 +54,11 @@
 	text-align: right;
 }
 
+/* single rder */
+.single-rider-rankings {
+	margin-top: 15px;
+}
+
 /* search */
 .uci-results-search {
 	position: relative;
