@@ -510,23 +510,7 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function get_race_week($date='', $season='') {
-		global $uci_results_admin_pages;
-
-		// see if the season is set in our admin pages (config) //
-		if (!isset($uci_results_admin_pages->config->urls->$season))
-			return false;
-
-		$season_url=$uci_results_admin_pages->config->urls->$season;
-		$season_races=$this->get_race_data($season, false, true, $season_url);
-
-		$first_race=end($season_races);
-		$last_race=reset($season_races);
-
-		$dates=array(
-			'start' => date('M j Y', strtotime($first_race->date)),
-			'end' => date('M j Y', strtotime($last_race->date)),
-		);
-		$season_data=$this->add_weeks_to_season($dates);
+		$season_data=uci_results_get_season_weeks($season);
 
 		return $this->get_week_of_date($date, $season_data['weeks']);
 	}
