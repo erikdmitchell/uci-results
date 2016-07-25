@@ -16,7 +16,7 @@ function uci_results_add_races() {
 	// add race(s) to db //
 	foreach ($races as $race) :
 		$result=$uci_results_add_races->add_race_to_db($race);
-		write_log(strip_tags($result));
+		write_cron_log(strip_tags($result));
 	endforeach;
 
 	// update rider rankings //
@@ -26,13 +26,13 @@ function uci_results_add_races() {
 	// update rider weekly points //
 	foreach ($rider_ids as $rider_id) :
 		$result=$uci_results_rider_rankings->update_rider_weekly_points($rider_id, $season);
-		write_log(strip_tags($result));
+		write_cron_log(strip_tags($result));
 	endforeach;
 
 	// update rider weekly rank //
 	foreach ($weeks as $week) :
 		$result=$uci_results_rider_rankings->update_rider_weekly_rankings($season, $week);
-		write_log(strip_tags($result));
+		write_cron_log(strip_tags($result));
 	endforeach;
 
 	// alert admin //
@@ -44,12 +44,12 @@ function uci_results_add_races() {
 add_action('uci_results_add_races', 'uci_results_add_races');
 
 
-if ( ! function_exists('write_log')) {
-   function write_log ( $log )  {
+if ( ! function_exists('write_cron_log')) {
+   function write_cron_log ( $log )  {
       if ( is_array( $log ) || is_object( $log ) ) {
-         error_log( print_r( $log, true ) );
+         error_log( print_r( $log, true ), 3, UCICURL_PATH.'cron.log' );
       } else {
-         error_log( $log );
+         error_log( "$log\n", 3, UCICURL_PATH.'cron.log' );
       }
    }
 }

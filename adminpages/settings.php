@@ -137,3 +137,5 @@
 	</section>
 
 </div>
+
+<?php write_cron_log('abc'); ?>
