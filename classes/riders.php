@@ -13,6 +13,15 @@ class UCIcURLRiders {
 	 */
 	public function __construct() {}
 
+	/**
+	 * get_rider function.
+	 *
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @param bool $results (default: false)
+	 * @param bool $rankings (default: false)
+	 * @return void
+	 */
 	public function get_rider($rider_id=0, $results=false, $rankings=false) {
 		global $wpdb;
 
