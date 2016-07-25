@@ -19,22 +19,6 @@ function uci_results_add_races() {
 		write_cron_log(strip_tags($result));
 	endforeach;
 
-	// update rider rankings //
-	$rider_ids=$wpdb->get_col("SELECT id FROM {$wpdb->ucicurl_riders}"); // get all rider ids
-	$weeks=$ucicurl_races->weeks($season);
-
-	// update rider weekly points //
-	foreach ($rider_ids as $rider_id) :
-		$result=$uci_results_rider_rankings->update_rider_weekly_points($rider_id, $season);
-		write_cron_log(strip_tags($result));
-	endforeach;
-
-	// update rider weekly rank //
-	foreach ($weeks as $week) :
-		$result=$uci_results_rider_rankings->update_rider_weekly_rankings($season, $week);
-		write_cron_log(strip_tags($result));
-	endforeach;
-
 	// alert admin //
 	$message="The uci_results_add_races cron job finished. It added races and updated rankings.";
 	wp_mail('erikdmitchell@gmail.com', 'Cron Job: UCI Results Add Races', $message);
@@ -43,13 +27,37 @@ function uci_results_add_races() {
 }
 add_action('uci_results_add_races', 'uci_results_add_races');
 
+function uci_results_update_rider_weekly_points() {
+	// update rider rankings //
+	$rider_ids=$wpdb->get_col("SELECT id FROM $wpdb->ucicurl_riders"); // get all rider ids
+	$weeks=$ucicurl_races->weeks($season);
+
+	// update rider weekly points //
+	foreach ($rider_ids as $rider_id) :
+		$result=$uci_results_rider_rankings->update_rider_weekly_points($rider_id, $season);
+		write_cron_log(strip_tags($result));
+	endforeach;
+}
+add_action('uci_results_update_rider_weekly_points', 'uci_results_update_rider_weekly_points');
+
+function uci_results_update_rider_weekly_rank() {
+	// update rider weekly rank //
+	foreach ($weeks as $week) :
+		$result=$uci_results_rider_rankings->update_rider_weekly_rankings($season, $week);
+		write_cron_log(strip_tags($result));
+	endforeach;
+}
+add_action('uci_results_update_rider_weekly_rank', 'uci_results_update_rider_weekly_rank');
+
+
+
 
 if ( ! function_exists('write_cron_log')) {
    function write_cron_log ( $log )  {
       if ( is_array( $log ) || is_object( $log ) ) {
-         error_log( print_r( $log, true ), 3, UCICURL_PATH.'cron.log' );
+        error_log( print_r( $log, true ), 3, UCICURL_PATH.'cron.log' );
       } else {
-         error_log( "$log\n", 3, UCICURL_PATH.'cron.log' );
+        error_log( "$log\n", 3, UCICURL_PATH.'cron.log' );
       }
    }
 }
