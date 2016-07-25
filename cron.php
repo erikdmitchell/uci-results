@@ -71,7 +71,7 @@ function uci_results_update_rider_weekly_points() {
 		write_cron_log(strip_tags($result));
 	endforeach;
 
-	write_cron_log ('The uci_results_update_rider_weekly_points cron job finished.');
+	write_cron_log('The uci_results_update_rider_weekly_points cron job finished.');
 
 	// alert admin //
 	$message="The uci_results_update_rider_weekly_points cron job finished.";
@@ -88,7 +88,10 @@ add_action('uci_results_update_rider_weekly_points', 'uci_results_update_rider_w
  * @return void
  */
 function uci_results_update_rider_weekly_rank() {
-	global $uci_results_rider_rankings;
+	global $ucicurl_races, $uci_results_rider_rankings;
+
+	$season=uci_results_get_current_season();
+	$weeks=$ucicurl_races->weeks($season);
 
 	// update rider weekly rank //
 	foreach ($weeks as $week) :
