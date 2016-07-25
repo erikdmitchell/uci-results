@@ -833,7 +833,12 @@ function uci_results_store_rider_rankings($season='', $week='') {
 		'rankings' => true
 	));
 
-	$option=update_option('uci_results_current_rankings', $riders->posts);
+	$rankings=new stdClass();
+	$rankings->season=$season;
+	$rankings->week=$week;
+	$rankings->riders=$riders->posts;
+
+	$option=update_option('uci_results_current_rankings', $rankings);
 
 	return $option;
 }
