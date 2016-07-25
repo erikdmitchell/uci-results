@@ -2,13 +2,32 @@
 
 <div class="uci-results-settings">
 
-	<section class="pages">
-	  <h2>Pages</h2>
+	<form action="" method="post">
+		<input type="hidden" name="save_settings" value="1" />
 
-	  <p>Manage the WordPress pages assigned to each UCI Results page.</p>
+		<section class="general">
+			<h2>General</h2>
 
-		<form action="" method="post">
-			<input type="hidden" name="save_settings" value="1" />
+			<table class="form-table">
+				<tbody>
+
+					<tr>
+						<th scope="row">
+							<label form="current_season">Current Season</label>
+						</th>
+						<td>
+							<?php uci_results_seasons_dropdown('current_season', get_option('uci_results_current_season', 0)); ?>
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+		</section>
+
+		<section class="pages">
+		  <h2>Pages</h2>
+
+		  <p>Manage the WordPress pages assigned to each UCI Results page.</p>
 
 		  <table class="form-table">
 		  	<tbody>
@@ -115,8 +134,9 @@
 			<p class="submit">
 				<input name="submit" type="submit" class="button button-primary" value="Save Settings">
 			</p>
-		</form>
-	</section>
+
+		</section>
+	</form>
 
 	<section class="admin-actions">
 		<h2>Actions</h2>
@@ -137,5 +157,3 @@
 	</section>
 
 </div>
-
-<?php write_cron_log('abc'); ?>

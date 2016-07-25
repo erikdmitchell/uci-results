@@ -206,6 +206,12 @@ class UCIResultsAdminPages {
 			delete_option('uci_results_search_page_id');
 		endif;
 
+		if (isset($_POST['current_season']) && $_POST['current_season']!='') :
+			update_option('uci_results_current_season', $_POST['current_season']);
+		else :
+			delete_option('uci_results_current_season');
+		endif;
+
 		//flush_rewrite_rules(); // this may not be the best place for it - doesnt seem to work
 	}
 
