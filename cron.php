@@ -100,6 +100,8 @@ function uci_results_update_rider_weekly_rank() {
 		write_cron_log(strip_tags($result));
 	endforeach;
 
+	uci_results_store_rider_rankings(); // updates our stored option
+
 	write_cron_log ('The uci_results_update_rider_weekly_rank cron job finished.');
 
 	// alert admin //

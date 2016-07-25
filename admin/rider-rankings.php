@@ -85,6 +85,8 @@ class UCIResultsRiderRankings {
 
 		echo $message;
 
+		uci_results_store_rider_rankings(); // updates our stored option -- MAY NEED TO ADJUST
+
 		wp_die();
 	}
 

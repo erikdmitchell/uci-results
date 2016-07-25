@@ -157,3 +157,4 @@
 	</section>
 
 </div>
+<?php print_r(uci_results_get_stored_rider_rankings()); ?>

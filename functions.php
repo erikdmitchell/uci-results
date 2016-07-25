@@ -809,4 +809,32 @@ function uci_results_add_weeks_to_season($season='') {
 
 	return $season;
 }
+
+/**
+ * uci_results_store_rider_rankings function.
+ *
+ * @access public
+ * @param string $season (default: '')
+ * @param string $week (default: '')
+ * @return void
+ */
+function uci_results_store_rider_rankings($season='', $week='') {
+	// check season //
+	if (empty($season))
+		$season=uci_results_get_default_rider_ranking_season();
+
+	// check week //
+	if (empty($week))
+		$week=uci_results_get_default_rider_ranking_week();
+
+	$riders=new UCI_Results_Query(array(
+		'per_page' => -1,
+		'type' => 'riders',
+		'rankings' => true
+	));
+
+	$option=update_option('uci_results_current_rankings', $riders->posts);
+
+	return $option;
+}
 ?>
