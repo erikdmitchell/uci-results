@@ -44,8 +44,7 @@ class UCIResultsRiderRankings {
 
 		global $wpdb;
 
-		$season=$_POST['season']; // set season
-		$wpdb->delete($wpdb->ucicurl_rider_rankings, array('season' => $season)); // remove ranks from season to prevent dups
+		$this->clear_db($_POST['season']);
 		$rider_ids=$wpdb->get_col("SELECT id FROM {$wpdb->ucicurl_riders}"); // get all rider ids
 
 		wp_send_json($rider_ids);
@@ -230,6 +229,24 @@ class UCIResultsRiderRankings {
 		$weeks=$ucicurl_races->weeks($_POST['season']);
 
 		wp_send_json($weeks);
+	}
+
+	/**
+	 * clear_db function.
+	 *
+	 * @access public
+	 * @param string $season (default: '')
+	 * @return void
+	 */
+	public function clear_db($season='') {
+		global $wpdb;
+
+		if (empty($season))
+			return false;
+
+		$wpdb->delete($wpdb->ucicurl_rider_rankings, array('season' => $season)); // remove ranks from season to prevent dups
+
+		return true;
 	}
 
 }

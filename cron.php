@@ -64,6 +64,7 @@ function uci_results_update_rider_weekly_points() {
 	// update rider rankings //
 	$rider_ids=$wpdb->get_col("SELECT id FROM $wpdb->ucicurl_riders"); // get all rider ids
 	$weeks=$ucicurl_races->weeks($season);
+	$uci_results_rider_rankings->clear_db($season); // clear db for season to prevent dups
 
 	// update rider weekly points //
 	foreach ($rider_ids as $rider_id) :
