@@ -7,3 +7,4 @@ lib/.DS_Store
 log.txt
 admin/.DS_Store
 /api/.DS_Store
+/cron.log
