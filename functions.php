@@ -837,4 +837,14 @@ function uci_results_store_rider_rankings($season='', $week='') {
 
 	return $option;
 }
+
+/**
+ * uci_results_get_stored_rankings function.
+ *
+ * @access public
+ * @return void
+ */
+function uci_results_get_stored_rankings() {
+	return get_option('uci_results_current_rankings', array());
+}
 ?>
