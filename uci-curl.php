@@ -44,8 +44,7 @@ function is_uci_results_active() {
 function uci_results_activation() {
 	// schedule crons	//
 	uci_results_schedule_event(current_time('timestamp'), 'daily', 'uci_results_add_races');
-// uci_results_update_rider_weekly_points
-// uci_results_update_rider_weekly_rank
+
 	do_action('uci_results_activation');
 }
 

@@ -4,15 +4,23 @@
  * uci_results_add_races function.
  *
  * @access public
+ * @param string $args (default: '')
  * @return void
  */
-function uci_results_add_races() {
+function uci_results_add_races($args='') {
 	global $wpdb, $uci_results_add_races, $uci_results_admin_pages;
 
 	$uci_results_urls=get_object_vars($uci_results_admin_pages->config->urls);
 	$season=uci_results_get_current_season();
 	$url=$uci_results_urls[$season];
 	$races=$uci_results_add_races->get_race_data(false, 10, true, $url); // gets an output of races via the url
+	$default_args=array(
+		'weekly_points' => true,
+		'weekly_ranks' => true,
+	);
+	$args=wp_parse_args($args, $default_args);
+
+	extract($args);
 
 	// add race(s) to db //
 	write_cron_log(date('n/j/Y H:i:s'));
@@ -24,7 +32,15 @@ function uci_results_add_races() {
 
 	uci_results_build_season_weeks($season); // update season weeks
 
-	write_cron_log ('The uci_results_add_races cron job finished.');
+	// run weekly points if need be //
+	if ($weekly_points)
+		uci_results_update_rider_weekly_points();
+
+	// run weekly ranks if need be //
+	if ($weekly_ranks)
+		uci_results_update_rider_weekly_rank();
+
+	write_cron_log('The uci_results_add_races cron job finished.');
 
 	// alert admin //
 	$message="The uci_results_add_races cron job finished.";
@@ -60,6 +76,8 @@ function uci_results_update_rider_weekly_points() {
 	// alert admin //
 	$message="The uci_results_update_rider_weekly_points cron job finished.";
 	wp_mail('erikdmitchell@gmail.com', 'Cron Job: Updated Rider Weekly Points', $message);
+
+	return;
 }
 add_action('uci_results_update_rider_weekly_points', 'uci_results_update_rider_weekly_points');
 
@@ -83,6 +101,8 @@ function uci_results_update_rider_weekly_rank() {
 	// alert admin //
 	$message="The uci_results_update_rider_weekly_rank cron job finished.";
 	wp_mail('erikdmitchell@gmail.com', 'Cron Job: Updated Rider Weekly Rank', $message);
+
+	return;
 }
 add_action('uci_results_update_rider_weekly_rank', 'uci_results_update_rider_weekly_rank');
 
