@@ -1,4 +1,12 @@
 <?php
+/**
+ * template for main page
+ *
+ * It can be overriden
+ *
+ * @since 2.0.0
+ */
+
 global $uci_results_post;
 
 $riders=new UCI_Results_Query(array(

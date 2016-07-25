@@ -1,6 +1,6 @@
 <?php
 /**
- * div e template for riders page
+ * template for riders page
  *
  * It can be overriden
  *
