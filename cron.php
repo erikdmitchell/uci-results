@@ -12,7 +12,7 @@ function uci_results_add_races() {
 	$uci_results_urls=get_object_vars($uci_results_admin_pages->config->urls);
 	$season=uci_results_get_current_season();
 	$url=$uci_results_urls[$season];
-	$races=$uci_results_add_races->get_race_data(false, false, true, $url); // gets an output of races via the url
+	$races=$uci_results_add_races->get_race_data(false, 10, true, $url); // gets an output of races via the url
 
 	// add race(s) to db //
 	write_cron_log(date('n/j/Y H:i:s'));

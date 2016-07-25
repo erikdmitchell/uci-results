@@ -680,6 +680,13 @@ function uci_results_get_current_season() {
 	return get_option('uci_results_current_season', 0);
 }
 
+/**
+ * uci_results_get_season_weeks function.
+ *
+ * @access public
+ * @param string $season (default: '')
+ * @return void
+ */
 function uci_results_get_season_weeks($season='') {
 	$season_weeks=get_option('uci_results_season_weeks', array());
 
