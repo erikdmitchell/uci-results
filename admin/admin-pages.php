@@ -249,8 +249,6 @@ class UCIResultsAdminPages {
 		wp_die();
 	}
 
-
-
 }
 
 $uci_results_admin_pages=new UCIResultsAdminPages();

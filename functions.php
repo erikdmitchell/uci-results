@@ -659,4 +659,24 @@ function uci_results_build_search_details($query) {
 
 	return $html;
 }
+
+/**
+ * uci_results_current_season function.
+ *
+ * @access public
+ * @return void
+ */
+function uci_results_current_season() {
+	echo uci_results_get_current_season();
+}
+
+/**
+ * uci_results_get_current_season function.
+ *
+ * @access public
+ * @return void
+ */
+function uci_results_get_current_season() {
+	return get_option('uci_results_current_season', 0);
+}
 ?>
