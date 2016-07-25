@@ -130,12 +130,58 @@
 
 				</tbody>
 			</table>
-
-			<p class="submit">
-				<input name="submit" type="submit" class="button button-primary" value="Save Settings">
-			</p>
-
 		</section>
+
+		<section class="general">
+			<h2>Updates to Twitter</h2>
+
+			<table class="form-table">
+				<tbody>
+
+					<tr>
+						<th scope="row">
+							<label form="twitter_consumer_key">Consumer Key</label>
+						</th>
+						<td>
+							<input type="text" name="twitter_consumer_key" id="twitter_consumer_key" class="regular-text code" value="<?php echo get_option('uci_results_twitter_consumer_key', ''); ?>" />
+						</td>
+					</tr>
+
+					<tr>
+						<th scope="row">
+							<label form="twitter_consumer_secret">Consumer Secret</label>
+						</th>
+						<td>
+							<input type="text" name="twitter_consumer_secret" id="twitter_consumer_secret" class="regular-text code" value="<?php echo get_option('uci_results_twitter_consumer_secret', ''); ?>" />
+						</td>
+					</tr>
+
+					<tr>
+						<th scope="row">
+							<label form="twitter_access_token">Access Token</label>
+						</th>
+						<td>
+							<input type="text" name="twitter_access_token" id="twitter_access_token" class="regular-text code" value="<?php echo get_option('uci_results_twitter_access_token', ''); ?>" />
+						</td>
+					</tr>
+
+					<tr>
+						<th scope="row">
+							<label form="twitter_access_token_secret">Access Token Secret</label>
+						</th>
+						<td>
+							<input type="text" name="twitter_access_token_secret" id="twitter_access_token_secret" class="regular-text code" value="<?php echo get_option('uci_results_twitter_access_token_secret', ''); ?>" />
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+		</section>
+
+		<p class="submit">
+			<input name="submit" type="submit" class="button button-primary" value="Save Settings">
+		</p>
+
 	</form>
 
 	<section class="admin-actions">
