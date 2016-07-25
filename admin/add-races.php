@@ -567,51 +567,6 @@ class UCIResultsAddRaces {
 	}
 
 	/**
-	 * add_weeks_to_season function.
-	 *
-	 * @access public
-	 * @param string $season (default: '')
-	 * @return void
-	 */
-	public function add_weeks_to_season($season='') {
-		// start (first) week //
-		$start_date_arr=explode(' ', $season['start']); // get start day
-		$next_monday=strtotime('monday', mktime(0, 0, 0, date('n', strtotime($season['start'])), $start_date_arr[1], $start_date_arr[2])); // get next monday
-		$next_sunday=strtotime('sunday', $next_monday); // get next sunday
-		$first_monday=strtotime('-1 week', $next_monday); // prev monday is start
-		$first_sunday=strtotime('-1 week', $next_sunday); // prev sunday is start
-
-		// end (last) week //
-		$end_date_arr=explode(' ', $season['end']); // get end day
-		$last_monday=strtotime('monday', mktime(0, 0, 0, date('n', strtotime($season['end'])), $end_date_arr[1], $end_date_arr[2])); // get next monday
-		$last_sunday=strtotime('sunday', $last_monday); // get next sunday
-		$final_monday=strtotime('-1 week', $last_monday); // prev monday is start
-		$final_sunday=strtotime('-1 week', $last_sunday); // prev sunday is start
-
-		// build out all our weeks //
-		$monday=$first_monday;
-		$sunday=$first_sunday;
-
-		while ($monday != $final_monday) :
-	    $season['weeks'][]=array(
-	    	'start' => date('c', $monday),
-	    	'end' => date('c', $sunday)
-	    );
-
-	    $monday=strtotime('+1 week', $monday);
-	    $sunday=strtotime('+1 week', $sunday);
-		endwhile;
-
-		// append final week //
-		$season['weeks'][]=array(
-			'start' => date('c', $final_monday),
-			'end' => date('c', $final_sunday)
-		);
-
-		return $season;
-	}
-
-	/**
 	 * get_week_of_date function.
 	 *
 	 * @access public

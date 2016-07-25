@@ -22,6 +22,8 @@ function uci_results_add_races() {
 		write_cron_log(strip_tags($result));
 	endforeach;
 
+	uci_results_build_season_weeks($season); // update season weeks
+
 	write_cron_log ('The uci_results_add_races cron job finished.');
 
 	// alert admin //
