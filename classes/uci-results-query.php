@@ -161,7 +161,8 @@ class UCI_Results_Query {
 
 			if ($query['season']==$stored_rankings->season && $query['week']==$stored_rankings->week && !empty($q['rider_id'])) :
 				$this->rider_rankings_query='stored';
-				$this->query=$this->rider_rankings_query=$sql="SELECT SQL_CALC_FOUND_ROWS * FROM $wpdb->ucicurl_riders WHERE id=".$q['rider_id'];
+				//$this->query=$this->rider_rankings_query;
+				$this->query="SELECT SQL_CALC_FOUND_ROWS * FROM $wpdb->ucicurl_riders WHERE id=".$q['rider_id'];
 				$this->is_rankings_stored=true;
 			else :
 				$this->rider_rankings_query=$this->rider_rankings_query($q, $where, $order, $limit, $meta);
@@ -222,20 +223,8 @@ echo '</pre>';
 			$posts=$this->races_clean_up($posts);
 
 		// stored, so we need to append //
-		if ($this->is_rankings_stored) :
-			$stored_rankings=uci_results_get_stored_rankings();
-
-			foreach ($posts as $_post) :
-//print_r($post);
-				foreach ($stored_rankings->riders as $rider) :
-//echo $_post->id.'<br>';
-echo $_post->id.' | '.$rider->id.'<br>';
-					if ($_post->id==$rider->id)
-print_r($rider);
-					$_post=$rider;
-				endforeach;
-			endforeach;
-		endif;
+		if ($this->is_rankings_stored)
+			$posts=$this->updated_posts_with_stored_rankings($posts);
 
 		$this->posts=$posts;
 		$this->post_count=count($posts);
@@ -419,6 +408,35 @@ print_r($rider);
 		$sql="SELECT SQL_CALC_FOUND_ROWS * FROM $wpdb->ucicurl_rider_rankings AS rankings	LEFT JOIN $wpdb->ucicurl_riders AS riders	ON riders.id=rankings.rider_id $where	$order $limit";
 
 		return $sql;
+	}
+
+	/**
+	 * updated_posts_with_stored_rankings function.
+	 *
+	 * @access protected
+	 * @param mixed $posts
+	 * @return void
+	 */
+	protected function updated_posts_with_stored_rankings($posts) {
+		if (!$this->is_rankings_stored)
+			return $posts;
+
+		$stored_rankings=uci_results_get_stored_rankings();
+
+		// loop through posts //
+		foreach ($posts as $key => $post) :
+
+			// loop through stored riders //
+			foreach ($stored_rankings->riders as $rider) :
+				// find a match and replace our post data //
+				if ($post->id==$rider->id) :
+					$posts[$key]=$rider;
+				endif;
+
+			endforeach;
+		endforeach;
+
+		return $posts;
 	}
 
 	/**
