@@ -265,8 +265,21 @@ class UCIResultsRiderRankings {
 		if (!uci_results_post_rankings_updates_to_twitter())
 			return false;
 
+		$rider_info='';
+		$riders=new UCI_Results_Query(array(
+			'per_page' => 5,
+			'type' => 'riders',
+			'rankings' => true
+		));
+
+		// get our leader info //
+		if (isset($riders->posts[0])) :
+			$rider=$riders->posts[0];
+			$rider_info=$rider->name.' ('.$rider->nat.') leads the rankings with '.$rider->points.' points.';
+		endif;
+
 		$url=get_permalink($uci_results_pages['rider_rankings']);
-		$status='Rider rankings updated. '.$url;
+		$status=$rider_info.' '.$url;
 		$uci_results_twitter->update_status($status);
 	}
 
