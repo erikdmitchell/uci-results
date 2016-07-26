@@ -191,9 +191,7 @@ class UCI_Results_Query {
 		// force update 'paged' query var //
 		if ($this->is_paged)
 			set_query_var('paged', $q['paged']);
-echo '<pre>';
-print_r($this);
-echo '</pre>';
+
 		return $this;
 	}
 
@@ -210,7 +208,7 @@ echo '</pre>';
 
 		if ($this->query_vars['type']=='races')
 			$posts=$this->races_clean_up($posts);
-print_r($posts);
+
 		// stored, so we need to append //
 		if ($this->is_rankings_stored)
 			$posts=$this->update_posts_with_stored_rankings($posts);
@@ -464,6 +462,33 @@ print_r($posts);
 			return $posts;
 
 		$stored_rankings=uci_results_get_stored_rankings();
+		$order_by=$this->query_vars['order_by'];
+
+		// sort using our order and order by param //
+		// setup proper order //
+		if ($this->query_vars['order']=='ASC') :
+			$order=SORT_ASC;
+		elseif ($this->query_vars['order']=='DESC') :
+			$order=SORT_DESC;
+		endif;
+
+		$sort=array();
+		foreach ($stored_rankings->riders as $rider) :
+			$sort[]=$rider->$order_by;
+		endforeach;
+		array_multisort($sort, SORT_ASC, $stored_rankings->riders);
+
+		// if there's no where statement, we can just use the limit param //
+		if (strpos($this->rider_rankings_query, 'WHERE') === false) :
+			if (strpos($this->rider_rankings_query, 'LIMIT') === false) :
+				return $stored_rankings->riders; // no LIMIT - return all
+			else :
+				$limit_exp=explode('LIMIT', $this->rider_rankings_query);
+				$limit_arr=explode(',', $limit_exp[1]);
+
+				return array_slice($stored_rankings->riders, $limit_arr[0], $limit_arr[1]);
+			endif;
+		endif;
 
 		// loop through posts //
 		foreach ($posts as $key => $post) :
