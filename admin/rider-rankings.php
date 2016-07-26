@@ -262,7 +262,7 @@ class UCIResultsRiderRankings {
 	public function update_twitter() {
 		global $uci_results_pages, $uci_results_twitter;
 
-		if (!uci_results_post_rankings_to_twitter())
+		if (!uci_results_post_rankings_updates_to_twitter())
 			return false;
 
 		$url=get_permalink($uci_results_pages['rider_rankings']);
