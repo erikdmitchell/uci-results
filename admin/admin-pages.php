@@ -212,6 +212,44 @@ class UCIResultsAdminPages {
 			delete_option('uci_results_current_season');
 		endif;
 
+		if (isset($_POST['twitter_consumer_key']) && $_POST['twitter_consumer_key']!='') :
+			update_option('uci_results_twitter_consumer_key', $_POST['twitter_consumer_key']);
+		else :
+			delete_option('uci_results_twitter_consumer_key');
+		endif;
+
+		if (isset($_POST['twitter_consumer_secret']) && $_POST['twitter_consumer_secret']!='') :
+			update_option('uci_results_twitter_consumer_secret', $_POST['twitter_consumer_secret']);
+		else :
+			delete_option('uci_results_twitter_consumer_secret');
+		endif;
+
+		if (isset($_POST['twitter_access_token']) && $_POST['twitter_access_token']!='') :
+			update_option('uci_results_twitter_access_token', $_POST['twitter_access_token']);
+		else :
+			delete_option('uci_results_twitter_access_token');
+		endif;
+
+		if (isset($_POST['twitter_access_token_secret']) && $_POST['twitter_access_token_secret']!='') :
+			update_option('uci_results_twitter_access_token_secret', $_POST['twitter_access_token_secret']);
+		else :
+			delete_option('uci_results_twitter_access_token_secret');
+		endif;
+
+		if (isset($_POST['post_results_to_twitter']) && $_POST['post_results_to_twitter']!='') :
+			update_option('uci_results_post_results_to_twitter', $_POST['post_results_to_twitter']);
+		else :
+			delete_option('uci_results_post_results_to_twitter');
+		endif;
+
+		if (isset($_POST['post_rankings_to_twitter']) && $_POST['post_rankings_to_twitter']!='') :
+			update_option('uci_results_post_rankings_to_twitter', $_POST['post_rankings_to_twitter']);
+		else :
+			delete_option('uci_results_post_rankings_to_twitter');
+		endif;
+
+		echo '<div class="updated">Settings updated!</div>';
+
 		//flush_rewrite_rules(); // this may not be the best place for it - doesnt seem to work
 	}
 
