@@ -156,19 +156,8 @@ class UCI_Results_Query {
 		if ($this->is_search) : // a search //
 			$this->query=$this->search_query($db_table);
 		elseif ($q['rankings']) : // we are looking for rider rankings //
-			// check for our stored query //
-			$stored_rankings=uci_results_get_stored_rankings();
-
-			if ($query['season']==$stored_rankings->season && $query['week']==$stored_rankings->week && !empty($q['rider_id'])) :
-				$this->rider_rankings_query='stored';
-				//$this->query=$this->rider_rankings_query;
-				$this->query="SELECT SQL_CALC_FOUND_ROWS * FROM $wpdb->ucicurl_riders WHERE id=".$q['rider_id'];
-				$this->is_rankings_stored=true;
-			else :
-				$this->rider_rankings_query=$this->rider_rankings_query($q, $where, $order, $limit, $meta);
-				$this->query=$this->rider_rankings_query;
-			endif;
-
+			$this->rider_rankings_query=$this->rider_rankings_query($q, $where, $order, $limit, $meta);
+			$this->query=$this->rider_rankings_query;
 		else : // general query //
 			// cycle through meta and attach our "queries" //
 			if (!empty($meta)) :
@@ -221,10 +210,10 @@ echo '</pre>';
 
 		if ($this->query_vars['type']=='races')
 			$posts=$this->races_clean_up($posts);
-
+print_r($posts);
 		// stored, so we need to append //
 		if ($this->is_rankings_stored)
-			$posts=$this->updated_posts_with_stored_rankings($posts);
+			$posts=$this->update_posts_with_stored_rankings($posts);
 
 		$this->posts=$posts;
 		$this->post_count=count($posts);
@@ -265,7 +254,7 @@ echo '</pre>';
 
 		// check rider id //
 		if ($q['rider_id'])
-			$where[]="riders.id='".$q['rider_id']."'";
+			$where[]="riders.id=".$q['rider_id'];
 
 		// build our where query //
 		if (!empty($where)) :
@@ -386,6 +375,9 @@ echo '</pre>';
 	protected function rider_rankings_query($q, $where, $order, $limit, $meta) {
 		global $wpdb;
 
+		// get stored rankings //
+		$stored_rankings=uci_results_get_stored_rankings();
+
 		// check week, get last week in season by default //
 		if (!empty($q['week'])) :
 			$week=absint($q['week']);
@@ -405,19 +397,65 @@ echo '</pre>';
 		if (empty($order))
 			$order="ORDER BY rank";
 
-		$sql="SELECT SQL_CALC_FOUND_ROWS * FROM $wpdb->ucicurl_rider_rankings AS rankings	LEFT JOIN $wpdb->ucicurl_riders AS riders	ON riders.id=rankings.rider_id $where	$order $limit";
+		// check if we can use stored rankings and modify sql //
+		if ($q['season']==$stored_rankings->season && $q['week']==$stored_rankings->week) :
+			$this->is_rankings_stored=true;
+			$where=$this->stored_rankings_clean_where($q, $where);
+			$sql="SELECT SQL_CALC_FOUND_ROWS * FROM $wpdb->ucicurl_riders AS riders $where $limit";
+		else :
+			$sql="SELECT SQL_CALC_FOUND_ROWS * FROM $wpdb->ucicurl_rider_rankings AS rankings	LEFT JOIN $wpdb->ucicurl_riders AS riders	ON riders.id=rankings.rider_id $where	$order $limit";
+		endif;
 
 		return $sql;
 	}
 
 	/**
-	 * updated_posts_with_stored_rankings function.
+	 * stored_rankings_clean_where function.
+	 *
+	 * @access protected
+	 * @param mixed $query
+	 * @param mixed $where
+	 * @return void
+	 */
+	protected function stored_rankings_clean_where($query, $where) {
+		$where_clean=str_replace(' WHERE ', '', $where); // remove the WHERE text
+		$where_arr=explode(' AND ', $where_clean); // put into array
+		$rider_db_fields=array('id', 'riders.id', 'name' , 'nat', 'slug');
+		$arr=array();
+		$final_arr=array();
+
+		// build array in key/value pairs //
+		foreach ($where_arr as $string) :
+			$string_arr=explode('=', $string);
+			$arr[$string_arr[0]]=$string_arr[1];
+		endforeach;
+
+		// we need to remove things that are not vaild riders fields //
+		foreach ($arr as $key => $value) :
+			if (array_search($key, $rider_db_fields)===false) :
+				unset($arr[$key]);
+			endif;
+		endforeach;
+
+		// rebuild our arr from key/value pairs //
+		foreach ($arr as $key => $value) :
+			$final_arr[]="$key = $value";
+		endforeach;
+
+		// rebuild our string //
+		$where=' WHERE '.implode(' AND ', $final_arr);
+
+		return $where;
+	}
+
+	/**
+	 * update_posts_with_stored_rankings function.
 	 *
 	 * @access protected
 	 * @param mixed $posts
 	 * @return void
 	 */
-	protected function updated_posts_with_stored_rankings($posts) {
+	protected function update_posts_with_stored_rankings($posts) {
 		if (!$this->is_rankings_stored)
 			return $posts;
 
