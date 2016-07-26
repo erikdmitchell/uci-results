@@ -236,6 +236,13 @@ class UCIResultsAdminPages {
 			delete_option('uci_results_twitter_access_token_secret');
 		endif;
 
+		if (isset($_POST['post_results_to_twitter']) && $_POST['post_results_to_twitter']!='') :
+			update_option('uci_results_post_results_to_twitter', $_POST['post_results_to_twitter']);
+		else :
+			delete_option('uci_results_post_results_to_twitter');
+		endif;
+
+		echo '<div class="updated">Settings updated!</div>';
 
 		//flush_rewrite_rules(); // this may not be the best place for it - doesnt seem to work
 	}
