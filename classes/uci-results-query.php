@@ -443,7 +443,11 @@ print_r($posts);
 		endforeach;
 
 		// rebuild our string //
-		$where=' WHERE '.implode(' AND ', $final_arr);
+		if (!empty($final_arr)) :
+			$where=' WHERE '.implode(' AND ', $final_arr);
+		else :
+			$where='';
+		endif;
 
 		return $where;
 	}
