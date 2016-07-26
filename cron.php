@@ -23,7 +23,7 @@ function uci_results_add_races($args='') {
 	extract($args);
 
 	// add race(s) to db //
-	write_cron_log(date('n/j/Y H:i:s'));
+	write_cron_log('[DATE: '.date('n/j/Y H:i:s').']');
 
 	foreach ($races as $race) :
 		$result=$uci_results_add_races->add_race_to_db($race);
