@@ -251,8 +251,13 @@ class UCI_Results_Query {
 			$where[]="name='".$q['name']."'";
 
 		// check rider id //
-		if ($q['rider_id'])
-			$where[]="riders.id=".$q['rider_id'];
+		if ($q['rider_id']) :
+			if ($q['rankings']) :
+				$where[]="riders.id=".$q['rider_id'];
+			else :
+				$where[]="id=".$q['rider_id'];
+			endif;
+		endif;
 
 		// build our where query //
 		if (!empty($where)) :
