@@ -5,11 +5,22 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 
 global $uci_results_twitter;
 
-
+/**
+ * UCIResultsTwitter class.
+ *
+ * since v2.0
+ *
+ */
 class UCIResultsTwitter {
 
 	protected $connection;
 
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		$this->connection = new TwitterOAuth(
 			get_option('uci_results_twitter_consumer_key', ''),
@@ -19,6 +30,13 @@ class UCIResultsTwitter {
 		);
 	}
 
+	/**
+	 * update_status function.
+	 *
+	 * @access public
+	 * @param string $status (default: '')
+	 * @return void
+	 */
 	public function update_status($status='') {
 		if (empty($status))
 			return 'No status to update.';
@@ -54,6 +72,19 @@ $uci_results_twitter=new UCIResultsTwitter();
  */
 function uci_results_post_results_to_twitter() {
 	if (get_option('uci_results_post_results_to_twitter', 0))
+		return true;
+
+	return false;
+}
+
+/**
+ * uci_results_post_rankings_updates_to_twitter function.
+ *
+ * @access public
+ * @return void
+ */
+function uci_results_post_rankings_updates_to_twitter() {
+	if (get_option('uci_results_post_rankings_to_twitter', 0))
 		return true;
 
 	return false;

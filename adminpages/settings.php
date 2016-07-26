@@ -140,10 +140,19 @@
 
 					<tr>
 						<th scope="row">
-							<label form="post_results_to_twitter">Post Results to Twitter</label>
+							<label form="post_results_to_twitter">Post Results</label>
 						</th>
 						<td>
 							<input type="checkbox" name="post_results_to_twitter" id="post_results_to_twitter" value="1" <?php checked(get_option('uci_results_post_results_to_twitter', ''), 1); ?>>
+						</td>
+					</tr>
+
+					<tr>
+						<th scope="row">
+							<label form="post_rankings_to_twitter">Post Rankings Updates</label>
+						</th>
+						<td>
+							<input type="checkbox" name="post_rankings_to_twitter" id="post_rankings_to_twitter" value="1" <?php checked(get_option('uci_results_post_rankings_to_twitter', ''), 1); ?>>
 						</td>
 					</tr>
 
@@ -212,11 +221,3 @@
 	</section>
 
 </div>
-
-<?php
-global $uci_results_twitter;
-
-
-
-//echo $uci_results_twitter->update_status("Results are being added to site. Why would you want to know this? #hashtag");
-?>

@@ -102,6 +102,8 @@ function uci_results_update_rider_weekly_rank() {
 
 	uci_results_store_rider_rankings(); // updates our stored option
 
+	$uci_results_rider_rankings->update_twitter();
+
 	write_cron_log ('The uci_results_update_rider_weekly_rank cron job finished.');
 
 	// alert admin //

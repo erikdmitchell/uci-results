@@ -87,6 +87,8 @@ class UCIResultsRiderRankings {
 
 		uci_results_store_rider_rankings(); // updates our stored option -- MAY NEED TO ADJUST
 
+		$this->update_twitter();
+
 		wp_die();
 	}
 
@@ -249,6 +251,23 @@ class UCIResultsRiderRankings {
 		$wpdb->delete($wpdb->ucicurl_rider_rankings, array('season' => $season)); // remove ranks from season to prevent dups
 
 		return true;
+	}
+
+	/**
+	 * update_twitter function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function update_twitter() {
+		global $uci_results_pages, $uci_results_twitter;
+
+		if (!uci_results_post_rankings_to_twitter())
+			return false;
+
+		$url=get_permalink($uci_results_pages['rider_rankings']);
+		$status='Rider rankings updated. '.$url;
+		$uci_results_twitter->update_status($status);
 	}
 
 }
