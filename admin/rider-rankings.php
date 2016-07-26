@@ -128,14 +128,18 @@ class UCIResultsRiderRankings {
 		$weekly_points=$wpdb->get_results($sql);
 
 		foreach ($weekly_points as $arr) :
-				$data=array(
-					'rider_id' => $rider_id,
-					'points' => $arr->points,
-					'season' => $season,
-					'week' => $arr->week,
-				);
+			// skip if no points //
+			if (empty($arr->points) || $arr->points==0)
+				continue;
 
-				$wpdb->insert($wpdb->ucicurl_rider_rankings, $data);
+			$data=array(
+				'rider_id' => $rider_id,
+				'points' => $arr->points,
+				'season' => $season,
+				'week' => $arr->week,
+			);
+
+			$wpdb->insert($wpdb->ucicurl_rider_rankings, $data);
 		endforeach;
 
 		$message='<div class="updated">Rider ID '.$rider_id.' rankings have been updated!</div>';
