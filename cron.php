@@ -120,9 +120,9 @@ add_action('uci_results_update_rider_weekly_rank', 'uci_results_update_rider_wee
 if ( ! function_exists('write_cron_log')) {
    function write_cron_log($log)  {
       if ( is_array( $log ) || is_object( $log ) ) {
-        error_log( print_r( $log, true )."\n", 3, UCICURL_PATH.'cron.log' );
+        error_log( print_r( $log, true )."\n", 3, UCI_RESULTS_PATH.'cron.log' );
       } else {
-        error_log( "$log\n", 3, UCICURL_PATH.'cron.log' );
+        error_log( "$log\n", 3, UCI_RESULTS_PATH.'cron.log' );
       }
    }
 }

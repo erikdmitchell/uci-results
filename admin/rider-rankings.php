@@ -27,7 +27,7 @@ class UCIResultsRiderRankings {
 	 * @return void
 	 */
 	public function admin_scripts_styles() {
-		wp_enqueue_script('uci-curl-update-rankings',UCICURL_URL.'/js/update-rankings.js',array('jquery'), '0.1.0',true);
+		wp_enqueue_script('uci-curl-update-rankings',UCI_RESULTS_URL.'/js/update-rankings.js',array('jquery'), '0.1.0',true);
 	}
 
 	/**

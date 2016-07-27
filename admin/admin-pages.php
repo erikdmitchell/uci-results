@@ -41,9 +41,9 @@ class UCIResultsAdminPages {
 	 * @return void
 	 */
 	public function admin_scripts_styles() {
-		wp_enqueue_script('uci-curl-admin',UCICURL_URL.'/js/admin.js',array('jquery'), '0.1.0',true);
+		wp_enqueue_script('uci-curl-admin',UCI_RESULTS_URL.'/js/admin.js',array('jquery'), '0.1.0',true);
 
-		wp_enqueue_style('uci-curl-admin',UCICURL_URL.'/css/admin.css',array(), '0.1.0');
+		wp_enqueue_style('uci-curl-admin',UCI_RESULTS_URL.'/css/admin.css',array(), '0.1.0');
 	}
 
 	/**

@@ -8,7 +8,7 @@
  * @return void
  */
 function ucicurl_flags_css($hook) {
-	wp_enqueue_style('flag-icon-css', UCICURL_URL.'/lib/css/flag-icon.min.css', array(), '0.8.2');
+	wp_enqueue_style('flag-icon-css', UCI_RESULTS_URL.'/lib/css/flag-icon.min.css', array(), '0.8.2');
 }
 add_action('wp_enqueue_scripts','ucicurl_flags_css');
 

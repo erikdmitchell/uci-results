@@ -10,14 +10,14 @@ function uci_results_scripts_styles() {
 
 	// include on search page //
 	if (is_page($uci_results_pages['search'])) :
-		wp_enqueue_script('uci-results-search-script', UCICURL_URL.'/js/search.js', array('jquery'), '0.1.0');
+		wp_enqueue_script('uci-results-search-script', UCI_RESULTS_URL.'/js/search.js', array('jquery'), '0.1.0');
 
 		wp_localize_script('uci-results-search-script', 'searchAJAXObject', array('ajax_url' => admin_url('admin-ajax.php')));
 	endif;
 
-	wp_enqueue_style('uci-results-fa-style', UCICURL_URL.'css/font-awesome.min.css');
-	wp_enqueue_style('uci-results-style', UCICURL_URL.'/css/main.css');
-	wp_enqueue_style('uci-results-grid', UCICURL_URL.'/css/em-bs-grid.css');
+	wp_enqueue_style('uci-results-fa-style', UCI_RESULTS_URL.'css/font-awesome.min.css');
+	wp_enqueue_style('uci-results-style', UCI_RESULTS_URL.'/css/main.css');
+	wp_enqueue_style('uci-results-grid', UCI_RESULTS_URL.'/css/em-bs-grid.css');
 }
 add_action('wp_enqueue_scripts', 'uci_results_scripts_styles');
 
@@ -41,7 +41,7 @@ function uci_results_get_template_part($template_name='') {
 	elseif (file_exists(get_template_directory().'/uci-results/'.$template_name.'.php')) :
 		include(get_template_directory().'/uci-results/'.$template_name.'.php');
 	else :
-		include(UCICURL_PATH.'templates/'.$template_name.'.php');
+		include(UCI_RESULTS_PATH.'templates/'.$template_name.'.php');
 	endif;
 
 	$html=ob_get_contents();
@@ -81,8 +81,8 @@ function uci_results_template_loader($template) {
 		$located=get_stylesheet_directory().'/uci-results/'.$template_slug.'.php';
 	elseif (file_exists(get_template_directory().'/uci-results/'.$template_slug.'.php')) :
 		$located=get_template_directory().'/uci-results/'.$template_slug.'.php';
-	elseif (file_exists(UCICURL_PATH.'templates/'.$template_slug.'.php')) :
-		$located=UCICURL_PATH.'templates/'.$template_slug.'.php';
+	elseif (file_exists(UCI_RESULTS_PATH.'templates/'.$template_slug.'.php')) :
+		$located=UCI_RESULTS_PATH.'templates/'.$template_slug.'.php';
 	endif;
 
 	// we found a template //
@@ -112,7 +112,7 @@ function ucicurl_get_admin_page($template_name=false, $attributes=null) {
 
 	do_action('ucicurl_before_admin_'.$template_name);
 
-	include(UCICURL_PATH.'adminpages/'.$template_name.'.php');
+	include(UCI_RESULTS_PATH.'adminpages/'.$template_name.'.php');
 
 	do_action('ucicurl_after_admin_'.$template_name);
 

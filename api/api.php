@@ -15,7 +15,7 @@ function uci_results_api_template_loader($template) {
 
 	// it's a page //
 	if (is_page('api'))
-		return UCICURL_PATH.'api/index.php';
+		return UCI_RESULTS_PATH.'api/index.php';
 
 	return $template;
 }

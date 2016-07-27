@@ -1,5 +1,5 @@
 <?php
-require_once(UCICURL_PATH.'lib/twitteroauth/autoload.php');
+require_once(UCI_RESULTS_PATH.'lib/twitteroauth/autoload.php');
 
 use Abraham\TwitterOAuth\TwitterOAuth;
 
