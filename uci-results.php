@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: UCI cURL
- * Plugin URI: http://erikmitchell.net
- * Description: Pulls in results via cURL from the UCI website.
+ * Plugin Name: UCI Results
+ * Plugin URI: http://therunup.com
+ * Description: Pulls in information from the UCI website and adds it to your site.
  * Version: 2.0.0
  * Author: Erik Mitchell
  * Author URI: http://erikmitchell.net
