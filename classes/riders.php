@@ -70,7 +70,7 @@ class UCIResultsRiders {
 	public function get_rider_id($name='') {
 		global $wpdb;
 
-		$id=$wpdb->get_var("SELECT id FROM {$wpdb->uci_results_riders} WHERE name='{$name}'");
+		$id=$wpdb->get_var("SELECT id FROM $wpdb->uci_results_riders WHERE name='{$name}'");
 
 		return $id;
 	}
@@ -89,9 +89,66 @@ class UCIResultsRiders {
 		return $nats;
 	}
 
+	/**
+	 * get_stats function.
+	 *
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
 	public function get_stats($rider_id=0) {
+		global $wpdb;
+
 		if (!$rider_id)
 			return false;
+
+		$stats=new stdClass();
+		$stats->final_rankings=$this->get_rider_final_rankings($rider_id);
+		$stats->wins=$this->get_rider_wins($rider_id);
+
+		return $stats;
+	}
+
+	/**
+	 * get_rider_final_rankings function.
+	 *
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
+	public function get_rider_final_rankings($rider_id=0) {
+		global $wpdb;
+
+		if (!$rider_id)
+			return false;
+
+		$rankings=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_rider_rankings WHERE rider_id=$rider_id AND week=(SELECT MAX(week) FROM $wpdb->uci_results_rider_rankings) GROUP BY season");
+
+		if (!count($rankings))
+			return false;
+
+		return $rankings;
+	}
+
+	/**
+	 * get_rider_wins function.
+	 *
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
+	public function get_rider_wins($rider_id=0) {
+		global $wpdb;
+
+		if (!$rider_id)
+			return false;
+
+		$wins=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_results WHERE rider_id=$rider_id AND place=1 ORDER BY race_id");
+
+		if (!count($wins))
+			return false;
+
+		return $wins;
 	}
 
 }
