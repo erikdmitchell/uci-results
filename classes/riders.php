@@ -105,6 +105,7 @@ class UCIResultsRiders {
 		$stats=new stdClass();
 		$stats->final_rankings=$this->get_rider_final_rankings($rider_id);
 		$stats->wins=$this->get_rider_wins($rider_id);
+		$stats->podiums=$this->get_rider_podiums($rider_id);
 
 		return $stats;
 	}
@@ -122,7 +123,8 @@ class UCIResultsRiders {
 		if (!$rider_id)
 			return false;
 
-		$rankings=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_rider_rankings WHERE rider_id=$rider_id AND week=(SELECT MAX(week) FROM $wpdb->uci_results_rider_rankings) GROUP BY season");
+		$current_season=uci_results_get_current_season();
+		$rankings=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_rider_rankings WHERE rider_id=$rider_id AND week=(SELECT MAX(week) FROM $wpdb->uci_results_rider_rankings) AND season!='$current_season' GROUP BY season");
 
 		if (!count($rankings))
 			return false;
@@ -149,6 +151,27 @@ class UCIResultsRiders {
 			return false;
 
 		return $wins;
+	}
+
+	/**
+	 * get_rider_podiums function.
+	 *
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
+	public function get_rider_podiums($rider_id=0) {
+		global $wpdb;
+
+		if (!$rider_id)
+			return false;
+
+		$podiums=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_results WHERE rider_id=$rider_id AND (place=1 OR place=2 OR place=3) ORDER BY race_id");
+
+		if (!count($podiums))
+			return false;
+
+		return $podiums;
 	}
 
 }
