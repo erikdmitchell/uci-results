@@ -403,7 +403,7 @@ class UCI_Results_Query {
 		$sql="SELECT SQL_CALC_FOUND_ROWS * FROM $wpdb->ucicurl_rider_rankings AS rankings	LEFT JOIN $wpdb->ucicurl_riders AS riders	ON riders.id=rankings.rider_id $where	$order $limit";
 
 		// check if we can use stored rankings and modify sql //
-		if (isset($q['season']) && isset($q['week'])) :
+		if (isset($q['season']) && isset($q['week']) && isset($stored_rankings->season) && isset($stored_rankings->week)) :
 			if ($q['season']==$stored_rankings->season && $q['week']==$stored_rankings->week) :
 				$this->is_rankings_stored=true;
 				$where=$this->stored_rankings_clean_where($q, $where);
