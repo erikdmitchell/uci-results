@@ -446,7 +446,7 @@ class UCIResultsAddRaces {
 	public function check_for_dups($code) {
 		global $wpdb;
 
-		$races_in_db=$wpdb->get_results("SELECT code FROM $wpdb->ucicurl_races");
+		$races_in_db=$wpdb->get_results("SELECT code FROM $wpdb->uci_results_races");
 
 		if (count($races_in_db)!=0) :
 			foreach ($races_in_db as $race) :
@@ -488,7 +488,7 @@ class UCIResultsAddRaces {
 		);
 
 		if (!$this->check_for_dups($data['code'])) :
-			if ($wpdb->insert($wpdb->ucicurl_races, $data)) :
+			if ($wpdb->insert($wpdb->uci_results_races, $data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
 				$this->add_race_results_to_db($wpdb->insert_id, $race_data->link);
 
@@ -562,10 +562,10 @@ class UCIResultsAddRaces {
 			return false;
 
 		$race_results=$this->get_race_results($link);
-		$race=$wpdb->get_row("SELECT * FROM {$wpdb->ucicurl_races} WHERE id={$race_id}");
+		$race=$wpdb->get_row("SELECT * FROM {$wpdb->uci_results_races} WHERE id={$race_id}");
 
 		foreach ($race_results as $result) :
-			$rider_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_riders} WHERE name=\"{$result->name}\" AND nat='{$result->nat}'");
+			$rider_id=$wpdb->get_var("SELECT id FROM {$wpdb->uci_results_riders} WHERE name=\"{$result->name}\" AND nat='{$result->nat}'");
 
 			// check if we have a rider id, otherwise create one //
 			if (!$rider_id) :
@@ -574,7 +574,7 @@ class UCIResultsAddRaces {
 					'nat' => $result->nat,
 					'slug' => sanitize_title_with_dashes($result->name)
 				);
-				$wpdb->insert($wpdb->ucicurl_riders, $rider_insert);
+				$wpdb->insert($wpdb->uci_results_riders, $rider_insert);
 				$rider_id=$wpdb->insert_id;
 			endif;
 
@@ -602,7 +602,7 @@ class UCIResultsAddRaces {
 				'rider_id' => $rider_id,
 			);
 
-			$wpdb->insert($wpdb->ucicurl_results, $insert);
+			$wpdb->insert($wpdb->uci_results_results, $insert);
 
 		endforeach;
 	}

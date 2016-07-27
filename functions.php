@@ -273,7 +273,7 @@ function uci_results_get_race_slug($id=0) {
 
 	$id=absint($id);
 
-	$slug=$wpdb->get_var("SELECT code FROM {$wpdb->ucicurl_races} WHERE id=$id");
+	$slug=$wpdb->get_var("SELECT code FROM {$wpdb->uci_results_races} WHERE id=$id");
 
 	return $slug;
 }
@@ -288,7 +288,7 @@ function uci_results_get_race_slug($id=0) {
 function uci_results_get_race_id($slug='') {
 	global $wpdb;
 
-	$id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_races} WHERE code='$slug'");
+	$id=$wpdb->get_var("SELECT id FROM {$wpdb->uci_results_races} WHERE code='$slug'");
 
 	return absint($id);
 }
@@ -303,7 +303,7 @@ function uci_results_get_race_id($slug='') {
 function ucicurl_rider_slug_to_name($slug='') {
 	global $wpdb;
 
-	$name=$wpdb->get_var("SELECT name FROM {$wpdb->ucicurl_riders} WHERE slug='{$slug}'");
+	$name=$wpdb->get_var("SELECT name FROM {$wpdb->uci_results_riders} WHERE slug='{$slug}'");
 
 	return $name;
 }
@@ -318,7 +318,7 @@ function ucicurl_rider_slug_to_name($slug='') {
 function ucicurl_race_slug_to_name($slug='') {
 	global $wpdb;
 
-	$name=$wpdb->get_var("SELECT event FROM {$wpdb->ucicurl_races} WHERE code='{$slug}'");
+	$name=$wpdb->get_var("SELECT event FROM {$wpdb->uci_results_races} WHERE code='{$slug}'");
 
 	return $name;
 }
@@ -333,7 +333,7 @@ function ucicurl_race_slug_to_name($slug='') {
 function ucicurl_get_rider_id($slug='') {
 	global $wpdb;
 
-	$id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_riders} WHERE slug='{$slug}'");
+	$id=$wpdb->get_var("SELECT id FROM {$wpdb->uci_results_riders} WHERE slug='{$slug}'");
 
 	return $id;
 }
@@ -348,13 +348,13 @@ function ucicurl_get_rider_id($slug='') {
 function uci_results_race_has_results($code='') {
 	global $wpdb;
 
-	$race_id=$wpdb->get_var("SELECT id FROM {$wpdb->ucicurl_races} WHERE code=\"{$code}\"");
+	$race_id=$wpdb->get_var("SELECT id FROM {$wpdb->uci_results_races} WHERE code=\"{$code}\"");
 
 	// no race id, we out //
 	if (!$race_id)
 		return false;
 
-	$results=$wpdb->get_results("SELECT id FROM {$wpdb->ucicurl_results} WHERE race_id={$race_id}");
+	$results=$wpdb->get_results("SELECT id FROM {$wpdb->uci_results_results} WHERE race_id={$race_id}");
 
 	// do we have results? //
 	if (count($results))
@@ -497,7 +497,7 @@ function uci_results_admin_url($args='') {
 function uci_results_get_rider_rank($rider_id=0, $season='', $week='') {
 	global $wpdb;
 
-	$rank=$wpdb->get_var("SELECT rank FROM $wpdb->ucicurl_rider_rankings WHERE rider_id=$rider_id AND season='$season' AND week=$week");
+	$rank=$wpdb->get_var("SELECT rank FROM $wpdb->uci_results_rider_rankings WHERE rider_id=$rider_id AND season='$season' AND week=$week");
 
 	if (!$rank)
 		$rank=0;
@@ -515,7 +515,7 @@ function uci_results_get_rider_rank($rider_id=0, $season='', $week='') {
 function uci_results_get_last_week_in_season($season='') {
 	global $wpdb;
 
-	$week=$wpdb->get_var("SELECT MAX(week) FROM $wpdb->ucicurl_races WHERE season='$season'");
+	$week=$wpdb->get_var("SELECT MAX(week) FROM $wpdb->uci_results_races WHERE season='$season'");
 
 	return $week;
 }

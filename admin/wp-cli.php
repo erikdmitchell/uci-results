@@ -125,8 +125,8 @@ class UCIResultsCLI extends WP_CLI_Command {
 			WP_CLI::error('No season found.');
 
 		$weeks=$ucicurl_races->weeks($season); // get weeks in season
-		$wpdb->delete($wpdb->ucicurl_rider_rankings, array('season' => $season)); // remove ranks from season to prevent dups
-		$rider_ids=$wpdb->get_col("SELECT id FROM {$wpdb->ucicurl_riders}"); // get all rider ids
+		$wpdb->delete($wpdb->uci_results_rider_rankings, array('season' => $season)); // remove ranks from season to prevent dups
+		$rider_ids=$wpdb->get_col("SELECT id FROM {$wpdb->uci_results_riders}"); // get all rider ids
 
 		WP_CLI::success('Rider rankings table for '.$season.' cleared.');
 
@@ -166,7 +166,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 	public function list_seasons_in_db() {
 		global $wpdb;
 
-		$seasons=$wpdb->get_results("SELECT season FROM {$wpdb->ucicurl_races} GROUP BY season");
+		$seasons=$wpdb->get_results("SELECT season FROM {$wpdb->uci_results_races} GROUP BY season");
 
 		WP_CLI\Utils\format_items( 'table', $seasons, array( 'season' ) );
 	}

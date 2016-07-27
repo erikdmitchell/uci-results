@@ -40,7 +40,7 @@ class UCIcURLRaces {
 		if (empty($race_id))
 			return false;
 
-		$race=$wpdb->get_row("SELECT * FROM {$wpdb->ucicurl_races} WHERE id={$race_id}");
+		$race=$wpdb->get_row("SELECT * FROM {$wpdb->uci_results_races} WHERE id={$race_id}");
 		$race->results=$wpdb->get_results("
 			SELECT
 				results.place,
@@ -51,8 +51,8 @@ class UCIcURLRaces {
 				results.par AS points,
 				results.pcr,
 				riders.slug
-			FROM {$wpdb->ucicurl_results} AS results
-			LEFT JOIN {$wpdb->ucicurl_riders} AS riders
+			FROM {$wpdb->uci_results_results} AS results
+			LEFT JOIN {$wpdb->uci_results_riders} AS riders
 			ON results.rider_id=riders.id
 			WHERE results.race_id={$race_id}
 		");
@@ -80,7 +80,7 @@ class UCIcURLRaces {
 	public function seasons() {
 		global $wpdb;
 
-		$seasons=$wpdb->get_col("SELECT season FROM {$wpdb->ucicurl_races} GROUP BY season");
+		$seasons=$wpdb->get_col("SELECT season FROM {$wpdb->uci_results_races} GROUP BY season");
 
 		return $seasons;
 	}
@@ -94,7 +94,7 @@ class UCIcURLRaces {
 	public function classes() {
 		global $wpdb;
 
-		$classes=$wpdb->get_col("SELECT class FROM {$wpdb->ucicurl_races} GROUP BY class");
+		$classes=$wpdb->get_col("SELECT class FROM {$wpdb->uci_results_races} GROUP BY class");
 
 		return $classes;
 	}
@@ -108,7 +108,7 @@ class UCIcURLRaces {
 	public function nats() {
 		global $wpdb;
 
-		$countries=$wpdb->get_col("SELECT nat FROM {$wpdb->ucicurl_races} GROUP BY nat ORDER BY nat");
+		$countries=$wpdb->get_col("SELECT nat FROM {$wpdb->uci_results_races} GROUP BY nat ORDER BY nat");
 
 		return $countries;
 	}
@@ -125,7 +125,7 @@ class UCIcURLRaces {
 
 		$related_races=array();
 		$related_race_id=$this->get_related_race_id($race_id);
-		$related_races_db=$wpdb->get_var("SELECT race_ids FROM {$wpdb->ucicurl_related_races} WHERE id={$related_race_id}");
+		$related_races_db=$wpdb->get_var("SELECT race_ids FROM {$wpdb->uci_results_related_races} WHERE id={$related_race_id}");
 
 		if (!$related_races_db)
 			return false;
@@ -154,7 +154,7 @@ class UCIcURLRaces {
 		global $wpdb;
 
 		$related_race_id=$this->get_related_race_id($race_id);
-		$related_races_db=$wpdb->get_var("SELECT race_ids FROM {$wpdb->ucicurl_related_races} WHERE id={$related_race_id}");
+		$related_races_db=$wpdb->get_var("SELECT race_ids FROM {$wpdb->uci_results_related_races} WHERE id={$related_race_id}");
 
 		if (!$related_races_db)
 			return false;
@@ -172,7 +172,7 @@ class UCIcURLRaces {
 	public function get_related_race_id($race_id=0) {
 		global $wpdb;
 
-		$related_db=$wpdb->get_results("SELECT * FROM {$wpdb->ucicurl_related_races} WHERE race_ids LIKE '%{$race_id}%'");
+		$related_db=$wpdb->get_results("SELECT * FROM {$wpdb->uci_results_related_races} WHERE race_ids LIKE '%{$race_id}%'");
 
 		foreach ($related_db as $arr) :
 			$ids=explode(',', $arr->race_ids);
@@ -196,7 +196,7 @@ class UCIcURLRaces {
 
 		$html=null;
 		$query=$_POST['query'];
-		$races=$wpdb->get_results("SELECT * FROM {$wpdb->ucicurl_races} WHERE event LIKE '%{$query}%'");
+		$races=$wpdb->get_results("SELECT * FROM {$wpdb->uci_results_races} WHERE event LIKE '%{$query}%'");
 		$related_races=$this->get_related_races_ids($_POST['race_id']);
 
 		// build out html //
@@ -238,9 +238,9 @@ class UCIcURLRaces {
 					'race_ids' => implode(',', $_POST['races']).','.$_POST['race_id'] // get our ids and append the current race id
 				);
 
-				$wpdb->update($wpdb->ucicurl_related_races, $data, array('id' => $_POST['related_race_id']));
+				$wpdb->update($wpdb->uci_results_related_races, $data, array('id' => $_POST['related_race_id']));
 			else :
-				$wpdb->delete($wpdb->ucicurl_related_races, array('id' => $_POST['related_race_id']));
+				$wpdb->delete($wpdb->uci_results_related_races, array('id' => $_POST['related_race_id']));
 			endif;
 
 		else :
@@ -248,7 +248,7 @@ class UCIcURLRaces {
 				'race_ids' => implode(',', $_POST['races']).','.$_POST['race_id'] // get our ids and append the current race id
 			);
 
-			$wpdb->insert($wpdb->ucicurl_related_races, $data);
+			$wpdb->insert($wpdb->uci_results_related_races, $data);
 		endif;
 
 		echo '<div class="updated">Related Races Updated!</div>';
@@ -264,7 +264,7 @@ class UCIcURLRaces {
 	public function weeks($season='2015/2016') {
 		global $wpdb;
 
-		$weeks=$wpdb->get_col("SELECT week FROM {$wpdb->ucicurl_races} WHERE season='{$season}' GROUP BY week ORDER BY week ASC");
+		$weeks=$wpdb->get_col("SELECT week FROM {$wpdb->uci_results_races} WHERE season='{$season}' GROUP BY week ORDER BY week ASC");
 
 		return $weeks;
 	}
@@ -291,7 +291,7 @@ class UCIcURLRaces {
 			'series_id' => $_POST['series_id'],
 		);
 
-		$result=$wpdb->update($wpdb->ucicurl_races, $data, array('id' => $_POST['race_id']));
+		$result=$wpdb->update($wpdb->uci_results_races, $data, array('id' => $_POST['race_id']));
 
 		if ($result===false) :
 			$uci_results_admin_notices['error'][]='Race failed to update.';
@@ -319,13 +319,13 @@ class UCIcURLRaces {
 				'name' => $_POST['name'],
 			);
 
-			$wpdb->update($wpdb->ucicurl_series, $data, array('id' => $_POST['series_id']));
+			$wpdb->update($wpdb->uci_results_series, $data, array('id' => $_POST['series_id']));
 		else :
 			$data=array(
 				'name' => $_POST['name'],
 			);
 
-			$wpdb->insert($wpdb->ucicurl_series, $data);
+			$wpdb->insert($wpdb->uci_results_series, $data);
 			$_POST['series_id']=$wpdb->insert_id;
 		endif;
 
@@ -342,7 +342,7 @@ class UCIcURLRaces {
 	public function delete_series($id=0) {
 		global $wpdb;
 
-		$wpdb->delete($wpdb->ucicurl_series, array('id' => $id));
+		$wpdb->delete($wpdb->uci_results_series, array('id' => $id));
 	}
 
 	/**
@@ -382,7 +382,7 @@ class UCIcURLRaces {
 			'name' => '',
 			'season' => '',
 		);
-		$series=$wpdb->get_row("SELECT * FROM $wpdb->ucicurl_series WHERE id=$id", ARRAY_A);
+		$series=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_series WHERE id=$id", ARRAY_A);
 		$args=wp_parse_args($series, $defaults);
 
 		return $args;
@@ -403,7 +403,7 @@ class UCIcURLRaces {
 			$season="WHERE season='$season'";
 
 		$html=null;
-		$series=$wpdb->get_results("SELECT * FROM $wpdb->ucicurl_series");
+		$series=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_series");
 
 		$html.='<select name="'.$name.'" id="'.$name.'">';
 			$html.='<option value="0">-- '.__('Select Series','uci-results').' --</option>';
@@ -426,7 +426,7 @@ class UCIcURLRaces {
 	public function get_series($race_id=0) {
 		global $wpdb;
 
-		$series=$wpdb->get_var("SELECT series.name FROM $wpdb->ucicurl_series AS series LEFT JOIN $wpdb->ucicurl_races AS races ON races.series_id=series.id WHERE races.id=$race_id");
+		$series=$wpdb->get_var("SELECT series.name FROM $wpdb->uci_results_series AS series LEFT JOIN $wpdb->uci_results_races AS races ON races.series_id=series.id WHERE races.id=$race_id");
 
 		return $series;
 	}

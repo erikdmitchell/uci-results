@@ -12,12 +12,12 @@ $ucicurl_db_version='0.1.5';
 function ucicurl_set_db_tables() {
 	global $wpdb;
 
-	$wpdb->ucicurl_races=$wpdb->prefix.'uci_curl_races';
-	$wpdb->ucicurl_results=$wpdb->prefix.'uci_curl_results';
-	$wpdb->ucicurl_riders=$wpdb->prefix.'uci_curl_riders';
-	$wpdb->ucicurl_rider_rankings=$wpdb->prefix.'uci_curl_rider_rankings';
-	$wpdb->ucicurl_related_races=$wpdb->prefix.'uci_curl_related_races';
-	$wpdb->ucicurl_series=$wpdb->prefix.'uci_curl_series';
+	$wpdb->uci_results_races=$wpdb->prefix.'uci_curl_races';
+	$wpdb->uci_results_results=$wpdb->prefix.'uci_curl_results';
+	$wpdb->uci_results_riders=$wpdb->prefix.'uci_curl_riders';
+	$wpdb->uci_results_rider_rankings=$wpdb->prefix.'uci_curl_rider_rankings';
+	$wpdb->uci_results_related_races=$wpdb->prefix.'uci_curl_related_races';
+	$wpdb->uci_results_series=$wpdb->prefix.'uci_curl_series';
 }
 ucicurl_set_db_tables();
 
@@ -33,17 +33,17 @@ function ucicurl_db_install() {
 	global $wpdb, $ucicurl_db_version;
 
 	$wpdb->hide_errors();
-	$wpdb->ucicurl_races=$wpdb->prefix.'uci_curl_races';
-	$wpdb->ucicurl_results=$wpdb->prefix.'uci_curl_results';
-	$wpdb->ucicurl_riders=$wpdb->prefix.'uci_curl_riders';
-	$wpdb->ucicurl_rider_rankings=$wpdb->prefix.'uci_curl_rider_rankings';
-	$wpdb->ucicurl_related_races=$wpdb->prefix.'uci_curl_related_races';
-	$wpdb->ucicurl_series=$wpdb->prefix.'uci_curl_series';
+	$wpdb->uci_results_races=$wpdb->prefix.'uci_curl_races';
+	$wpdb->uci_results_results=$wpdb->prefix.'uci_curl_results';
+	$wpdb->uci_results_riders=$wpdb->prefix.'uci_curl_riders';
+	$wpdb->uci_results_rider_rankings=$wpdb->prefix.'uci_curl_rider_rankings';
+	$wpdb->uci_results_related_races=$wpdb->prefix.'uci_curl_related_races';
+	$wpdb->uci_results_series=$wpdb->prefix.'uci_curl_series';
 
 	$charset=$wpdb->get_charset_collate();
 
 	$sql_races="
-		CREATE TABLE $wpdb->ucicurl_races (
+		CREATE TABLE $wpdb->uci_results_races (
 			id bigint(20) NOT NULL AUTO_INCREMENT,
 			date DATE NOT NULL,
 			event TEXT NOT NULL,
@@ -61,7 +61,7 @@ function ucicurl_db_install() {
 	";
 
 	$sql_results="
-		CREATE TABLE $wpdb->ucicurl_results (
+		CREATE TABLE $wpdb->uci_results_results (
 			id bigint(20) NOT NULL AUTO_INCREMENT,
 			race_id bigint(20) NOT NULL,
 			place SMALLINT NOT NULL DEFAULT '0',
@@ -74,11 +74,11 @@ function ucicurl_db_install() {
 			rider_id bigint(20) NOT NULL,
 			PRIMARY KEY (`id`)
 		) $charset;
-		ALTER DATABASE {$wpdb->ucicurl_results} CHARACTER SET utf8;
+		ALTER DATABASE {$wpdb->uci_results_results} CHARACTER SET utf8;
 	";
 
 	$sql_riders="
-		CREATE TABLE $wpdb->ucicurl_riders (
+		CREATE TABLE $wpdb->uci_results_riders (
 		  id bigint(20) NOT NULL AUTO_INCREMENT,
 			name LONGTEXT NOT NULL,
 			nat VARCHAR(5) NOT NULL,
@@ -88,7 +88,7 @@ function ucicurl_db_install() {
 	";
 
 	$sql_rider_rankings="
-		CREATE TABLE $wpdb->ucicurl_rider_rankings (
+		CREATE TABLE $wpdb->uci_results_rider_rankings (
 		  id bigint(20) NOT NULL AUTO_INCREMENT,
 			rider_id bigint(20) NOT NULL,
 			points bigint(20) NOT NULL DEFAULT '0',
@@ -100,7 +100,7 @@ function ucicurl_db_install() {
 	";
 
 	$sql_related_races="
-		CREATE TABLE $wpdb->ucicurl_related_races (
+		CREATE TABLE $wpdb->uci_results_related_races (
 		  id bigint(20) NOT NULL AUTO_INCREMENT,
 			race_ids TEXT NOT NULL,
 			PRIMARY KEY (`id`)
@@ -108,7 +108,7 @@ function ucicurl_db_install() {
 	";
 
 	$sql_series="
-		CREATE TABLE $wpdb->ucicurl_series (
+		CREATE TABLE $wpdb->uci_results_series (
 		  id bigint(20) NOT NULL AUTO_INCREMENT,
 			name TEXT NOT NULL,
 			PRIMARY KEY (`id`)
@@ -143,15 +143,15 @@ function ucicurl_db_update() {
 
 	if ($installed_version!=$ucicurl_db_version) :
 		$wpdb->hide_errors();
-		$wpdb->ucicurl_races=$wpdb->prefix.'uci_curl_races';
-		$wpdb->ucicurl_results=$wpdb->prefix.'uci_curl_results';
-		$wpdb->ucicurl_riders=$wpdb->prefix.'uci_curl_riders';
-		$wpdb->ucicurl_rider_rankings=$wpdb->prefix.'uci_curl_rider_rankings';
-		$wpdb->ucicurl_related_races=$wpdb->prefix.'uci_curl_related_races';
-		$wpdb->ucicurl_series=$wpdb->prefix.'uci_curl_series';
+		$wpdb->uci_results_races=$wpdb->prefix.'uci_curl_races';
+		$wpdb->uci_results_results=$wpdb->prefix.'uci_curl_results';
+		$wpdb->uci_results_riders=$wpdb->prefix.'uci_curl_riders';
+		$wpdb->uci_results_rider_rankings=$wpdb->prefix.'uci_curl_rider_rankings';
+		$wpdb->uci_results_related_races=$wpdb->prefix.'uci_curl_related_races';
+		$wpdb->uci_results_series=$wpdb->prefix.'uci_curl_series';
 
 		$sql_races="
-			CREATE TABLE $wpdb->ucicurl_races (
+			CREATE TABLE $wpdb->uci_results_races (
 				id bigint(20) NOT NULL AUTO_INCREMENT,
 				date DATE NOT NULL,
 				event TEXT NOT NULL,
@@ -169,7 +169,7 @@ function ucicurl_db_update() {
 		";
 
 		$sql_results="
-			CREATE TABLE $wpdb->ucicurl_results (
+			CREATE TABLE $wpdb->uci_results_results (
 				id bigint(20) NOT NULL AUTO_INCREMENT,
 				race_id bigint(20) NOT NULL,
 				place SMALLINT NOT NULL DEFAULT '0',
@@ -182,11 +182,11 @@ function ucicurl_db_update() {
 				rider_id bigint(20) NOT NULL,
 				PRIMARY KEY (`id`)
 			);
-			ALTER DATABASE {$wpdb->ucicurl_results} CHARACTER SET utf8;
+			ALTER DATABASE {$wpdb->uci_results_results} CHARACTER SET utf8;
 		";
 
 		$sql_riders="
-			CREATE TABLE $wpdb->ucicurl_riders (
+			CREATE TABLE $wpdb->uci_results_riders (
 			  id bigint(20) NOT NULL AUTO_INCREMENT,
 				name LONGTEXT NOT NULL,
 				nat VARCHAR(5) NOT NULL,
@@ -196,7 +196,7 @@ function ucicurl_db_update() {
 		";
 
 		$sql_rider_rankings="
-			CREATE TABLE $wpdb->ucicurl_rider_rankings (
+			CREATE TABLE $wpdb->uci_results_rider_rankings (
 			  id bigint(20) NOT NULL AUTO_INCREMENT,
 				rider_id bigint(20) NOT NULL,
 				points bigint(20) NOT NULL DEFAULT '0',
@@ -208,7 +208,7 @@ function ucicurl_db_update() {
 		";
 
 		$sql_related_races="
-			CREATE TABLE $wpdb->ucicurl_related_races (
+			CREATE TABLE $wpdb->uci_results_related_races (
 			  id bigint(20) NOT NULL AUTO_INCREMENT,
 				race_ids TEXT NOT NULL,
 				PRIMARY KEY (`id`)
@@ -216,7 +216,7 @@ function ucicurl_db_update() {
 		";
 
 		$sql_series="
-			CREATE TABLE $wpdb->ucicurl_series (
+			CREATE TABLE $wpdb->uci_results_series (
 			  id bigint(20) NOT NULL AUTO_INCREMENT,
 				name TEXT NOT NULL,
 				PRIMARY KEY (`id`)
@@ -261,12 +261,12 @@ add_action('plugins_loaded', 'ucicurl_update_db_check');
 function uci_results_empty_database_tables() {
 	global $wpdb;
 
-	$wpdb->query("TRUNCATE TABLE $wpdb->ucicurl_races");
-	$wpdb->query("TRUNCATE TABLE $wpdb->ucicurl_results");
-	$wpdb->query("TRUNCATE TABLE $wpdb->ucicurl_riders");
-	$wpdb->query("TRUNCATE TABLE $wpdb->ucicurl_rider_rankings");
-	$wpdb->query("TRUNCATE TABLE $wpdb->ucicurl_related_races");
-	$wpdb->query("TRUNCATE TABLE $wpdb->ucicurl_series");
+	$wpdb->query("TRUNCATE TABLE $wpdb->uci_results_races");
+	$wpdb->query("TRUNCATE TABLE $wpdb->uci_results_results");
+	$wpdb->query("TRUNCATE TABLE $wpdb->uci_results_riders");
+	$wpdb->query("TRUNCATE TABLE $wpdb->uci_results_rider_rankings");
+	$wpdb->query("TRUNCATE TABLE $wpdb->uci_results_related_races");
+	$wpdb->query("TRUNCATE TABLE $wpdb->uci_results_series");
 }
 
 /**
@@ -278,11 +278,11 @@ function uci_results_empty_database_tables() {
 function uci_results_remove_database_tables() {
 	global $wpdb;
 
-	$wpdb->query("DROP TABLE $wpdb->ucicurl_races");
-	$wpdb->query("DROP TABLE $wpdb->ucicurl_results");
-	$wpdb->query("DROP TABLE $wpdb->ucicurl_riders");
-	$wpdb->query("DROP TABLE $wpdb->ucicurl_rider_rankings");
-	$wpdb->query("DROP TABLE $wpdb->ucicurl_related_races");
-	$wpdb->query("DROP TABLE $wpdb->ucicurl_series");
+	$wpdb->query("DROP TABLE $wpdb->uci_results_races");
+	$wpdb->query("DROP TABLE $wpdb->uci_results_results");
+	$wpdb->query("DROP TABLE $wpdb->uci_results_riders");
+	$wpdb->query("DROP TABLE $wpdb->uci_results_rider_rankings");
+	$wpdb->query("DROP TABLE $wpdb->uci_results_related_races");
+	$wpdb->query("DROP TABLE $wpdb->uci_results_series");
 }
 ?>

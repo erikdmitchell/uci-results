@@ -349,13 +349,13 @@ class UCI_Results_Query {
 
 		switch ($type) :
 			case 'races':
-				$table=$wpdb->ucicurl_races;
+				$table=$wpdb->uci_results_races;
 				break;
 			case 'riders':
-				$table=$wpdb->ucicurl_riders;
+				$table=$wpdb->uci_results_riders;
 				break;
 			case 'series':
-				$table=$wpdb->ucicurl_series;
+				$table=$wpdb->uci_results_series;
 				break;
 			default:
 				$table=$wpdb->posts;
@@ -385,7 +385,7 @@ class UCI_Results_Query {
 		if (!empty($q['week'])) :
 			$week=absint($q['week']);
 		else :
-			$last_week=$wpdb->get_var("SELECT MAX(week) FROM $wpdb->ucicurl_races WHERE season='".$q['season']."'");
+			$last_week=$wpdb->get_var("SELECT MAX(week) FROM $wpdb->uci_results_races WHERE season='".$q['season']."'");
 			$week=absint($last_week);
 		endif;
 
@@ -400,14 +400,14 @@ class UCI_Results_Query {
 		if (empty($order))
 			$order="ORDER BY rank";
 
-		$sql="SELECT SQL_CALC_FOUND_ROWS * FROM $wpdb->ucicurl_rider_rankings AS rankings	LEFT JOIN $wpdb->ucicurl_riders AS riders	ON riders.id=rankings.rider_id $where	$order $limit";
+		$sql="SELECT SQL_CALC_FOUND_ROWS * FROM $wpdb->uci_results_rider_rankings AS rankings	LEFT JOIN $wpdb->uci_results_riders AS riders	ON riders.id=rankings.rider_id $where	$order $limit";
 
 		// check if we can use stored rankings and modify sql //
 		if (isset($q['season']) && isset($q['week']) && isset($stored_rankings->season) && isset($stored_rankings->week)) :
 			if ($q['season']==$stored_rankings->season && $q['week']==$stored_rankings->week) :
 				$this->is_rankings_stored=true;
 				$where=$this->stored_rankings_clean_where($q, $where);
-				$sql="SELECT SQL_CALC_FOUND_ROWS * FROM $wpdb->ucicurl_riders AS riders $where $limit";
+				$sql="SELECT SQL_CALC_FOUND_ROWS * FROM $wpdb->uci_results_riders AS riders $where $limit";
 			endif;
 		endif;
 
@@ -538,9 +538,9 @@ class UCI_Results_Query {
 			$query="SELECT * FROM $table WHERE name LIKE '%".$search_value."%'";
 		else :
 			$query="
-				SELECT id, event COLLATE utf8mb4_general_ci AS name, 'race' AS type FROM $wpdb->ucicurl_races WHERE event LIKE '%".$search_value."%'
+				SELECT id, event COLLATE utf8mb4_general_ci AS name, 'race' AS type FROM $wpdb->uci_results_races WHERE event LIKE '%".$search_value."%'
 				UNION
-				SELECT id, name, 'rider' AS type FROM $wpdb->ucicurl_riders WHERE name LIKE '%".$search_value."%'
+				SELECT id, name, 'rider' AS type FROM $wpdb->uci_results_riders WHERE name LIKE '%".$search_value."%'
 			";
 		endif;
 
