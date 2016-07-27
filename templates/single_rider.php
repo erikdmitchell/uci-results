@@ -21,19 +21,18 @@ $rider=$ucicurl_riders->get_rider(get_query_var('rider_slug'), true, true, true)
 
 		<h1 class="page-title"><?php echo ucicurl_rider_slug_to_name(get_query_var('rider_slug')); ?><span class="flag"><a href="<?php echo uci_results_country_url($rider->nat); ?>"><?php echo ucicurl_get_country_flag($rider->nat); ?></a></span></h1>
 
-		<?php if (!empty($rider->stats)) : ?>
-			<div class="rider-stats">
-				<div class="em-col-md-4 general">
-					Coming soon -- basic stats including current rank.
-				</div>
-				<div class="em-col-md-4 top-results">
-					top results coming soon
-				</div>
-				<div class="em-col-md-4 key-stats">
-					key stats
-				</div>
+		<div class="em-row rider-stats">
+			<div class="em-col-md-4 general">
+				<div class="rank"><span class="label">Ranking:</span> <?php echo $rider->rank; ?></div>
 			</div>
-		<?php endif; ?>
+			<div class="em-col-md-4 top-results">
+				top results coming soon
+			</div>
+			<div class="em-col-md-4 key-stats">
+				<div class="wins"><span class="label">Wins:</span> <?php echo count($rider->stats->wins); ?></div>
+				<div class="podiums"><span class="label">Podiums:</span> <?php echo count($rider->stats->podiums); ?></div>
+			</div>
+		</div>
 
 		<?php if (isset($rider->results) && count($rider->results)) : ?>
 			<div class="single-rider-results">
