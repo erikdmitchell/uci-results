@@ -28,7 +28,7 @@ add_filter('template_include', 'uci_results_api_template_loader');
  * @return void
  */
 function uci_results_api_rewrite_rules() {
-	add_rewrite_rule('api/([^/]*)/?', 'index.php?pagename=api&controller=$matches[1]', 'top');
+	add_rewrite_rule('api/([^/]*)/?', 'index.php?pagename=api&controller=$matches[1]', 'bottom');
 	add_rewrite_rule('api/([^/]*)/([^/]*)/?', 'index.php?pagename=api&controller=$matches[1]&action=$matches[2]', 'top');
 }
 add_action('init', 'uci_results_api_rewrite_rules', 10, 0);

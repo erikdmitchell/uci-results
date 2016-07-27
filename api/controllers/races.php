@@ -19,6 +19,14 @@ class Races {
 	public function __construct($params) {
 		$this->_params=$params;
 
+		switch ($this->_params['action']) :
+			case 'seasons' :
+				$this->get_seasons();
+				break;
+			default :
+				$this->get_races();
+		endswitch;
+
 		if (empty($this->_params['action']))
 			$this->get_races();
 	}
@@ -41,6 +49,12 @@ class Races {
 		));
 
 		$this->result=$races->posts;
+	}
+
+	public function get_seasons() {
+		global $ucicurl_races;
+
+		$this->result=$ucicurl_races->seasons();
 	}
 
 }

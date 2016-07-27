@@ -80,7 +80,7 @@ class UCIcURLRaces {
 	public function seasons() {
 		global $wpdb;
 
-		$seasons=$wpdb->get_col("SELECT season FROM {$wpdb->uci_results_races} GROUP BY season");
+		$seasons=$wpdb->get_col("SELECT season FROM $wpdb->uci_results_races GROUP BY season");
 
 		return $seasons;
 	}
