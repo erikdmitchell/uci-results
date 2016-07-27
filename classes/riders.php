@@ -16,7 +16,17 @@ class UCIResultsRiders {
 	 */
 	public function __construct() {}
 
-	public function get_rider($rider_id=0, $results=false, $rankings=false, $stats=false) {
+	/**
+	 * get_rider function.
+	 *
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @param bool $results (default: false)
+	 * @param bool $ranking (default: false)
+	 * @param bool $stats (default: false)
+	 * @return void
+	 */
+	public function get_rider($rider_id=0, $results=false, $ranking=false, $stats=false) {
 		global $wpdb;
 
 		// if not an int, it's a slug //
@@ -36,22 +46,15 @@ class UCIResultsRiders {
 			WHERE rider_id = $rider_id
 			ORDER BY date DESC
 		";
-		$rankings_sql="
-			SELECT
-				*
-			FROM $wpdb->uci_results_rider_rankings
-			WHERE rider_id = $rider_id
-			ORDER BY season, week DESC
-		";
 		$rider=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_riders WHERE id=$rider_id");
 
 		// get results //
 		if ($results)
 			$rider->results=$wpdb->get_results($results_sql);
 
-		// get rankings //
-		if ($rankings)
-			$rider->rankings=$wpdb->get_results($rankings_sql);
+		// get ranking //
+		if ($ranking)
+			$rider->rank=$this->get_rider_rank($rider_id);
 
 		// get stats //
 		if ($stats)
@@ -87,6 +90,21 @@ class UCIResultsRiders {
 		$nats=$wpdb->get_col("SELECT DISTINCT(nat) FROM $wpdb->uci_results_riders ORDER BY nat ASC");
 
 		return $nats;
+	}
+
+	public function get_rider_rank($rider_id=0) {
+		global $wpdb;
+
+		if (!$rider_id)
+			return false;
+
+		$current_season=uci_results_get_current_season();
+		$ranking=$wpdb->get_var("SELECT rank FROM $wpdb->uci_results_rider_rankings WHERE rider_id=$rider_id AND week=(SELECT MAX(week) FROM $wpdb->uci_results_rider_rankings) AND season='$current_season'");
+
+		if (!count($ranking))
+			return false;
+
+		return $ranking;
 	}
 
 	/**
