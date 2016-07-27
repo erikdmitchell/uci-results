@@ -1,9 +1,9 @@
 <?php
 
 /**
- * UCIcURLRiders class.
+ * UCIResultsRiders class.
  */
-class UCIcURLRiders {
+class UCIResultsRiders {
 
 	/**
 	 * __construct function.
@@ -91,5 +91,5 @@ class UCIcURLRiders {
 
 }
 
-$ucicurl_riders=new UCIcURLRiders();
+$ucicurl_riders=new UCIResultsRiders();
 ?>
