@@ -36,7 +36,7 @@ include_once(UCI_RESULTS_PATH.'update-to-twitter.php'); // updates results and r
  * @return void
  */
 function is_uci_results_active() {
-	if ( in_array( 'uci-curl-wp-plugin/uci-curl.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) )
+	if ( in_array( 'uci-results/uci-results.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) )
 		return true;
 
 	return false;
