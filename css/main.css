@@ -11,9 +11,6 @@
 	border-bottom: none;
 	box-shadow: none;
 }
-.uci-results h1 .flag {
-	margin-left: 15px;
-}
 .uci-results a,
 .uci-results a:visited {
 	color: #1a1a1a;
@@ -25,7 +22,8 @@
 .uci-results a:hover {
 	color: #686868;
 }
-.uci-results .header {
+.uci-results .header,
+.uci-results .label {
 	font-weight: bold;
 }
 .uci-results a.view-all {
@@ -55,8 +53,12 @@
 }
 
 /* single rder */
-.single-rider-rankings {
-	margin-top: 15px;
+.uci-results-rider .rider-stats {
+	margin-bottom: 30px;
+}
+.uci-results-rider .top-results,
+.uci-results-rider .key-stats {
+	margin-top: 3em;
 }
 
 /* search */
