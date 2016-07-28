@@ -26,31 +26,50 @@ class UCIResultsRiders {
 	 * @param bool $stats (default: false)
 	 * @return void
 	 */
-	public function get_rider($rider_id=0, $results=false, $ranking=false, $stats=false) {
+	public function get_rider($rider_id=0, $results='', $ranking=false, $stats=false) {
 		global $wpdb;
 
 		// if not an int, it's a slug //
 		if (!is_numeric($rider_id)) :
-			$rider_id=ucicurl_get_rider_id($rider_id);
+			$rider_id=uci_results_get_rider_id($rider_id);
 		endif;
 
 		// last rider id check //
 		if (empty($rider_id))
 			return false;
 
-		$results_sql="
-			SELECT *
-			FROM {$wpdb->uci_results_results}
-			LEFT JOIN {$wpdb->uci_results_races}
-			ON {$wpdb->uci_results_results}.race_id={$wpdb->uci_results_races}.id
-			WHERE rider_id = $rider_id
-			ORDER BY date DESC
-		";
+		$race_ids_sql='';
+		$race_ids='';
 		$rider=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_riders WHERE id=$rider_id");
+		$rider->results='';
+		$rider->ranking='';
+		$rider->stats='';
 
-		// get results //
-		if ($results)
+		// get results, $results is either true, an array of race ids or string of race ids //
+		if ($results) :
+			// check if its something besides true //
+			if (is_array($results)) :
+				$race_ids=implode(',', $results);
+			elseif (is_string($results)) :
+				$race_ids=$results;
+			endif;
+
+			// build sql if we have specific ids //
+			if (!empty($race_ids))
+				$race_ids_sql=" AND {$wpdb->uci_results_results}.race_id IN ($race_ids)";
+
+			$results_sql="
+				SELECT *
+				FROM {$wpdb->uci_results_results}
+				LEFT JOIN {$wpdb->uci_results_races}
+				ON {$wpdb->uci_results_results}.race_id={$wpdb->uci_results_races}.id
+				WHERE rider_id = $rider_id
+				$race_ids_sql
+				ORDER BY date DESC
+			";
+
 			$rider->results=$wpdb->get_results($results_sql);
+		endif;
 
 		// get ranking //
 		if ($ranking)
@@ -92,6 +111,13 @@ class UCIResultsRiders {
 		return $nats;
 	}
 
+	/**
+	 * get_rider_rank function.
+	 *
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
 	public function get_rider_rank($rider_id=0) {
 		global $wpdb;
 
