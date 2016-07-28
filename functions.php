@@ -681,6 +681,28 @@ function uci_results_get_current_season() {
 }
 
 /**
+ * uci_results_get_previous_season function.
+ *
+ * @access public
+ * @return void
+ */
+function uci_results_get_previous_season() {
+	global $fantasy_cycling_settings;
+
+	$current_season=get_option('uci_results_current_season', 0);
+	$current_season_arr=explode('/', $current_season);
+
+	// subtract one from each year //
+	foreach ($current_season_arr as $key => $year) :
+		$current_season_arr[$key]=absint($year)-1;
+	endforeach;
+
+	$prev_season=implode('/', $current_season_arr);
+
+	return $prev_season;
+}
+
+/**
  * uci_results_get_season_weeks function.
  *
  * @access public
