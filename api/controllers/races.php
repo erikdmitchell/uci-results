@@ -68,9 +68,30 @@ class Races {
 	public function series() {
 		global $wpdb;
 
-		$series=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_series");
+		if (isset($this->_params['id']) && $this->_params['id']) :
+			$series=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_series WHERE id=".$this->_params['id']);
+		else :
+			$series=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_series");
+		endif;
 
 		return $series;
+	}
+
+	/**
+	 * seriesName function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function seriesName() {
+		global $wpdb;
+
+		$name='';
+
+		if (isset($this->_params['id']) && $this->_params['id'])
+			$name=$wpdb->get_var("SELECT name FROM $wpdb->uci_results_series WHERE id=".$this->_params['id']);
+
+		return $name;
 	}
 
 	/**
