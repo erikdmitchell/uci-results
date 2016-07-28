@@ -17,10 +17,22 @@ class Races {
 		$this->_params=$params;
 	}
 
+	/**
+	 * _default function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function _default() {
 		return $this->races();
 	}
 
+	/**
+	 * races function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function races() {
 		$default_args=array(
 			'limit' => 15
@@ -35,11 +47,24 @@ class Races {
 		return $races->posts;
 	}
 
+	/**
+	 * seasons function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function seasons() {
 		global $ucicurl_races;
 
 		return $ucicurl_races->seasons();
 	}
 
+	public function series() {
+		global $wpdb;
+
+		$series=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_series");
+
+		return $series;
+	}
 }
 ?>
