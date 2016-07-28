@@ -17,6 +17,12 @@ class Flags {
 		$this->_params=$params;
 	}
 
+	/**
+	 * flag function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function flag() {
 		$flag=uci_results_get_country_flag($this->_params['country'], $this->_params['addon']);
 
