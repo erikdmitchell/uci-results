@@ -1,26 +1,26 @@
 <?php
 
 /**
- * ucicurl_flags_css function.
+ * uci_results_flags_css function.
  *
  * @access public
  * @param mixed $hook
  * @return void
  */
-function ucicurl_flags_css($hook) {
+function uci_results_flags_css($hook) {
 	wp_enqueue_style('flag-icon-css', UCI_RESULTS_URL.'/lib/css/flag-icon.min.css', array(), '0.8.2');
 }
-add_action('wp_enqueue_scripts','ucicurl_flags_css');
+add_action('wp_enqueue_scripts','uci_results_flags_css');
 
 /**
- * ucicurl_get_country_flag function.
+ * uci_results_get_country_flag function.
  *
  * @access public
  * @param bool $country (default: false)
  * @param bool $addon (default: false)
  * @return void
  */
-function ucicurl_get_country_flag($country=false,$addon=false) {
+function uci_results_get_country_flag($country=false, $addon=false) {
 	if (!$country)
 		return false;
 
