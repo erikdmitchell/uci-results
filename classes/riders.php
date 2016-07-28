@@ -124,13 +124,37 @@ class UCIResultsRiders {
 		if (!$rider_id)
 			return false;
 
-		$current_season=uci_results_get_current_season();
-		$ranking=$wpdb->get_var("SELECT rank FROM $wpdb->uci_results_rider_rankings WHERE rider_id=$rider_id AND week=(SELECT MAX(week) FROM $wpdb->uci_results_rider_rankings) AND season='$current_season'");
+		$current_season=fantasy_cycling_get_current_season();
+		$prev_season=fantasy_cycling_get_previous_season();
+		$current_season_rank=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_rider_rankings WHERE season='$current_season' AND rider_id=$rider_id ORDER BY week DESC LIMIT 1");
 
-		if (!count($ranking))
-			return false;
+		// check for current rank, else get prev season //
+		if (null!==$current_season_rank) :
+			$season=$current_season;
+			$rank=$current_season_rank;
+		else :
+			$season=$prev_season;
+			$rank=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_rider_rankings WHERE season='$prev_season' AND rider_id=$rider_id ORDER BY week DESC LIMIT 1");
+		endif;
 
-		return $ranking;
+		// get prev week rank //
+		$prev_week=(int) $rank->week - 1;
+		$prev_week_rank=uci_results_get_rider_rank($rider_id, $season, $prev_week);
+
+		// set icon based on change //
+		if ($prev_week_rank === NULL) :
+			$rank->prev_icon='';
+		elseif ($prev_week_rank==$rank->rank) :
+			$rank->prev_icon='';
+		elseif ($prev_week_rank < $rank->rank) :
+			$rank->prev_icon='<i class="fa fa-arrow-down" aria-hidden="true"></i>';
+		elseif ($prev_week_rank > $rank->rank) :
+			$rank->prev_icon='<i class="fa fa-arrow-up" aria-hidden="true"></i>';
+		else :
+			$rank->prev_icon='';
+		endif;
+
+		return $rank;
 	}
 
 	/**
