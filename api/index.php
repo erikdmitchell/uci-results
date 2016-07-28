@@ -27,12 +27,12 @@ try {
     $params = json_decode(trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $applications[$app_id], base64_decode($enc_request), MCRYPT_MODE_ECB)));
 
     //check if the request is valid by checking if it's an array and looking for the controller and action
-    if( $params == false || isset($params->controller) == false || isset($params->action) == false ) {
-        throw new Exception('Request is not valid');
-    }
+    if ($params == false || isset($params->controller) == false || isset($params->action) == false) :
+      throw new Exception('Request is not valid');
+    endif;
 
     //cast it into an array
-    $params = (array) $params;
+    $params=(array) $params;
 
     // get the controller and format it correctly so the first letter is always capitalized //
     if (isset($params['controller'])) :
