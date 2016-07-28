@@ -15,11 +15,10 @@ class Races {
 	 */
 	public function __construct($params) {
 		$this->_params=$params;
+	}
 
-/*
-		if (empty($this->_params['action']))
-			$this->get_races();
-*/
+	public function _default() {
+		return $this->races();
 	}
 
 	public function races() {
@@ -33,7 +32,7 @@ class Races {
 			'type' => 'races'
 		));
 
-		$this->result=$races->posts;
+		return $races->posts;
 	}
 
 	public function seasons() {

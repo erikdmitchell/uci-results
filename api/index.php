@@ -10,12 +10,6 @@ try {
     // get all of the parameters in the POST/GET request - check that query vars aren't passed either //
     $params = $_REQUEST;
 
-    if (get_query_var('controller'))
-    	$params['controller']=get_query_var('controller');
-
-    if (get_query_var('action'))
-    	$params['action']=get_query_var('action');
-
     // get the controller and format it correctly so the first letter is always capitalized //
     if (isset($params['controller'])) :
 	    $controller = ucfirst(strtolower($params['controller']));
@@ -25,11 +19,11 @@ try {
 
     // set the action param //
     if (isset($params['action'])) :
-	    $params['action']=strtolower($params['action']);
+	    $action=strtolower($params['action']);
 	  else :
-	  	$params['action']='';
+	  	$action='_default';
 	  endif;
-print_r($params);
+
     //check if the controller exists. if not, throw an exception //
     if (file_exists(API_PATH."/controllers/{$controller}.php")) :
       include_once API_PATH."/controllers/{$controller}.php";
@@ -46,7 +40,7 @@ print_r($params);
     endif;
 
     //execute the action
-    $result['data'] = $controller->action();
+    $result['data'] = $controller->$action();
     $result['success'] = true;
 
 } catch( Exception $e ) {
