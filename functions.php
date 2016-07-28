@@ -324,13 +324,13 @@ function ucicurl_race_slug_to_name($slug='') {
 }
 
 /**
- * ucicurl_get_rider_id function.
+ * uci_results_get_rider_id function.
  *
  * @access public
  * @param string $slug (default: '')
  * @return void
  */
-function ucicurl_get_rider_id($slug='') {
+function uci_results_get_rider_id($slug='') {
 	global $wpdb;
 
 	$id=$wpdb->get_var("SELECT id FROM {$wpdb->uci_results_riders} WHERE slug='{$slug}'");
