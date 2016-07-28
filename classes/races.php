@@ -40,7 +40,7 @@ class UCIcURLRaces {
 		if (empty($race_id))
 			return false;
 
-		$race=$wpdb->get_row("SELECT * FROM {$wpdb->uci_results_races} WHERE id={$race_id}");
+		$race=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_races WHERE id=$race_id");
 		$race->results=$wpdb->get_results("
 			SELECT
 				results.place,
