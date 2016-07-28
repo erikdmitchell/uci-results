@@ -59,12 +59,32 @@ class Races {
 		return $ucicurl_races->seasons();
 	}
 
+	/**
+	 * series function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function series() {
 		global $wpdb;
 
 		$series=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_series");
 
 		return $series;
+	}
+
+	/**
+	 * buildRaceCode function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function buildRaceCode(){
+		global $uci_results_add_races;
+
+		$code=$uci_results_add_races->build_race_code($this->_params['name'], $this->_params['date']);
+
+		return $code;
 	}
 }
 ?>
