@@ -100,12 +100,25 @@ class Races {
 	 * @access public
 	 * @return void
 	 */
-	public function buildRaceCode(){
+	public function buildRaceCode() {
 		global $uci_results_add_races;
 
 		$code=$uci_results_add_races->build_race_code($this->_params['name'], $this->_params['date']);
 
 		return $code;
 	}
+
+	/**
+	 * raceID function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function raceID() {
+		$id=uci_results_get_race_id($this->_params['slug']);
+
+		return $id;
+	}
+
 }
 ?>
