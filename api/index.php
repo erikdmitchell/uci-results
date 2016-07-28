@@ -29,7 +29,7 @@ try {
 	  else :
 	  	$params['action']='';
 	  endif;
-
+print_r($params);
     //check if the controller exists. if not, throw an exception //
     if (file_exists(API_PATH."/controllers/{$controller}.php")) :
       include_once API_PATH."/controllers/{$controller}.php";
@@ -40,15 +40,13 @@ try {
     //create a new instance of the controller, and pass it the parameters from the request
     $controller = new $controller($params);
 
-    //check if the action exists in the controller. if not, throw an exception.
-/*
+    //check if the action exists in the controller. if not, throw an exception
     if (method_exists($controller, $action) === false) :
 			throw new Exception('Action is invalid.');
     endif;
-*/
 
     //execute the action
-    $result['data'] = $controller->result;
+    $result['data'] = $controller->action();
     $result['success'] = true;
 
 } catch( Exception $e ) {

@@ -4,9 +4,6 @@
  * Races class.
  */
 class Races {
-
-	public $result;
-
 	private $_params;
 
 	/**
@@ -19,25 +16,13 @@ class Races {
 	public function __construct($params) {
 		$this->_params=$params;
 
-		switch ($this->_params['action']) :
-			case 'seasons' :
-				$this->get_seasons();
-				break;
-			default :
-				$this->get_races();
-		endswitch;
-
+/*
 		if (empty($this->_params['action']))
 			$this->get_races();
+*/
 	}
 
-	/**
-	 * get_races function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function get_races() {
+	public function races() {
 		$default_args=array(
 			'limit' => 15
 		);
@@ -51,10 +36,10 @@ class Races {
 		$this->result=$races->posts;
 	}
 
-	public function get_seasons() {
+	public function seasons() {
 		global $ucicurl_races;
 
-		$this->result=$ucicurl_races->seasons();
+		return $ucicurl_races->seasons();
 	}
 
 }
