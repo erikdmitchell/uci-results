@@ -38,12 +38,13 @@ class Races {
 
 		$default_args=array(
 			'limit' => 15
+			'results' => true
 		);
 		$args=wp_parse_args($_REQUEST, $default_args);
 
 		// looking for single race //
 		if (isset($this->_params['race']))
-			return $ucicurl_races->get_race($this->_params['race']);
+			return $ucicurl_races->get_race($this->_params['race'], $args['results']);
 
 		$races=new UCI_Results_Query(array(
 			'per_page' => $args['limit'],

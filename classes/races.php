@@ -27,9 +27,10 @@ class UCIcURLRaces {
 	 *
 	 * @access public
 	 * @param int $race_id (default: 0)
+	 * @param bool $results (default: true)
 	 * @return void
 	 */
-	public function get_race($race_id=0) {
+	public function get_race($race_id=0, $results=true) {
 		global $wpdb;
 
 		// check if numeric, otherwise, it's a slug (code) //
@@ -41,21 +42,24 @@ class UCIcURLRaces {
 			return false;
 
 		$race=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_races WHERE id=$race_id");
-		$race->results=$wpdb->get_results("
-			SELECT
-				results.place,
-				results.name,
-				results.nat,
-				results.age,
-				results.result AS time,
-				results.par AS points,
-				results.pcr,
-				riders.slug
-			FROM {$wpdb->uci_results_results} AS results
-			LEFT JOIN {$wpdb->uci_results_riders} AS riders
-			ON results.rider_id=riders.id
-			WHERE results.race_id={$race_id}
-		");
+		$race->results='';
+
+		if ($results)
+			$race->results=$wpdb->get_results("
+				SELECT
+					results.place,
+					results.name,
+					results.nat,
+					results.age,
+					results.result AS time,
+					results.par AS points,
+					results.pcr,
+					riders.slug
+				FROM {$wpdb->uci_results_results} AS results
+				LEFT JOIN {$wpdb->uci_results_riders} AS riders
+				ON results.rider_id=riders.id
+				WHERE results.race_id={$race_id}
+			");
 
 		return $race;
 	}
