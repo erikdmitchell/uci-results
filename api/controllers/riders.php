@@ -56,6 +56,31 @@ class Riders {
 		return $rider;
 	}
 
+	public function raceResult() {
+		global $wpdb;
+
+		if (!isset($this->_params['rider_id']) || !isset($this->_params['race_code']))
+			return false;
+
+		$rider_id=$this->_params['rider_id'];
+		$code=$this->_params['race_code'];
+
+		$result=$wpdb->get_results("
+			SELECT
+      	riders.name,
+      	riders.nat,
+      	riders.slug,
+      	results.place,
+      	results.par AS points
+			FROM $wpdb->uci_results_races AS races
+			INNER JOIN $wpdb->uci_results_results AS results ON (results.rider_id=$rider_id AND races.id=results.race_id)
+			INNER JOIN wp_uci_curl_riders AS riders ON riders.id=$rider_id
+			WHERE races.code = '$code'
+		");
+
+		return $result;
+	}
+
 	/**
 	 * currentRank function.
 	 *
