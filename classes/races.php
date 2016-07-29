@@ -38,7 +38,7 @@ class UCIcURLRaces {
 			$race_id=uci_results_get_race_id($race_id);
 
 		// last race id check //
-		if (empty($race_id))
+		if (empty($race_id) || $race_id=='')
 			return false;
 
 		$race=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_races WHERE id=$race_id");

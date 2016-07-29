@@ -37,7 +37,7 @@ class Races {
 		global $ucicurl_races;
 
 		$default_args=array(
-			'limit' => 15
+			'limit' => 15,
 			'results' => true
 		);
 		$args=wp_parse_args($_REQUEST, $default_args);
