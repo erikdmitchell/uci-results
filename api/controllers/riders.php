@@ -56,6 +56,49 @@ class Riders {
 		return $rider;
 	}
 
+	/**
+	 * riderSearch function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function riderSearch() {
+		global $wpdb;
+
+		if (!isset($this->_params['rider']))
+			return false;
+
+		if (isset($this->_params['rider_ids']) && !empty($this->_params['rider_ids'])) :
+			$rider_ids=' AND riders.id IN ( '.implode(', ', $this->_params['rider_ids']).' )';
+		else :
+			$rider_ids='';
+		endif;
+
+		$sql="
+			SELECT
+				riders.id,
+				riders.name,
+				riders.nat,
+				rankings.rank,
+				rankings.points
+			FROM $wpdb->uci_results_riders AS riders
+			INNER JOIN $wpdb->uci_results_rider_rankings AS rankings ON riders.id = rankings.rider_id
+			WHERE riders.name LIKE '%".$this->_params['rider']."%'
+				AND rankings.season = '".$this->_params['season']."'
+				AND rankings.week = ".$this->_params['week']."
+				$rider_ids
+		";
+		$results=$wpdb->get_results($sql);
+
+		return $results;
+	}
+
+	/**
+	 * raceResult function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function raceResult() {
 		global $wpdb;
 
