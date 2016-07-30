@@ -782,6 +782,12 @@ function uci_results_admin_pagination($args='') {
 	echo $html;
 }
 
+/**
+ * uci_results_get_stored_rider_rankings function.
+ *
+ * @access public
+ * @return void
+ */
 function uci_results_get_stored_rider_rankings() {
 	return get_option('uci_results_current_rankings', array());
 }
