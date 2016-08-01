@@ -60,8 +60,8 @@ class UCIResultsRiders {
 
 			$results_sql="
 				SELECT *
-				FROM {$wpdb->uci_results_results}
-				LEFT JOIN {$wpdb->uci_results_races}
+				FROM $wpdb->uci_results_results
+				LEFT JOIN $wpdb->uci_results_races
 				ON {$wpdb->uci_results_results}.race_id={$wpdb->uci_results_races}.id
 				WHERE rider_id = $rider_id
 				$race_ids_sql
