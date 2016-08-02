@@ -12,7 +12,13 @@ get_header(); ?>
 <?php
 global $ucicurl_riders;
 
-$rider=$ucicurl_riders->get_rider(get_query_var('rider_slug'), true, true, true);
+$rider=$ucicurl_riders->get_rider(array(
+	'rider_id' => get_query_var('rider_slug'),
+	'results' => true,
+	'results_season' => '',
+	'ranking' => true,
+	'stats' => true
+));
 ?>
 
 <div class="uci-results uci-results-rider">
@@ -22,8 +28,8 @@ $rider=$ucicurl_riders->get_rider(get_query_var('rider_slug'), true, true, true)
 			<div class="em-col-md-4 general">
 				<h1 class="page-title"><?php echo ucicurl_rider_slug_to_name(get_query_var('rider_slug')); ?></h1>
 
-				<div class="country"><span class="label">Nationality:</span> <a href="<?php echo uci_results_country_url($rider->nat); ?>"><?php echo ucicurl_get_country_flag($rider->nat); ?></a></div>
-				<div class="rank"><span class="label">Ranking:</span> <?php echo $rider->rank; ?></div>
+				<div class="country"><span class="label">Nationality:</span> <a href="<?php echo uci_results_country_url($rider->nat); ?>"><?php echo uci_results_get_country_flag($rider->nat); ?></a></div>
+				<div class="rank"><span class="label">Ranking:</span> <?php echo $rider->rank->rank; ?></div>
 			</div>
 			<div class="em-col-md-4 top-results">
 				<h4>Top Results</h4>

@@ -622,7 +622,7 @@ function uci_results_build_search_results($posts='', $type='') {
 			$type=$post->type;
 
 		if ($type=='rider' || $type=='riders') :
-			$post_data=$ucicurl_riders->get_rider($post->id);
+			$post_data=$ucicurl_riders->get_rider(array('rider_id' => $post->id));
 			$icon='<i class="fa fa-user" aria-hidden="true"></i>';
 		elseif ($type=='race' || $type='races') :
 			$post_data=$ucicurl_races->get_race($post->id);
