@@ -29,7 +29,7 @@ get_header(); ?>
 		$riders_chunk=array_chunk($all_riders, ceil(count($all_riders)/$columns));
 		?>
 
-		<h1 class="page-title"><?php echo get_query_var('country_slug'); ?><span class="flag"><?php echo ucicurl_get_country_flag(get_query_var('country_slug')); ?></span></h1>
+		<h1 class="page-title"><?php echo get_query_var('country_slug'); ?><span class="flag"><?php echo uci_results_get_country_flag(get_query_var('country_slug')); ?></span></h1>
 
 		<?php if ($riders->have_posts()) : ?>
 			<div class="em-row country-riders">
