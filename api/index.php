@@ -20,11 +20,12 @@ try {
 
     //check first if the app id exists in the list of applications
     if( !isset($applications[$app_id]) ) {
-        throw new Exception('Application does not exist!');
+			throw new Exception('Application does not exist!');
     }
 
     //decrypt the request
-    $params = json_decode(trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $applications[$app_id], base64_decode($enc_request), MCRYPT_MODE_ECB)));
+    //$params = json_decode(trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $applications[$app_id], base64_decode($enc_request), MCRYPT_MODE_ECB)));
+    $params=json_decode(base64_decode($enc_request));
 
     //check if the request is valid by checking if it's an array and looking for the controller and action
     if ($params == false || isset($params->controller) == false || isset($params->action) == false) :
@@ -45,7 +46,7 @@ try {
     if (isset($params['action'])) :
 	    $action=strtolower($params['action']);
 	  else :
-	  	$action='_default';
+	  	$action='';
 	  endif;
 
     //check if the controller exists. if not, throw an exception //
