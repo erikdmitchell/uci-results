@@ -38,20 +38,7 @@ class Riders {
 	public function rider() {
 		global $ucicurl_riders;
 
-		$results=false;
-		$ranking=false;
-		$stats=false;
-
-		if (isset($this->_params['results']))
-			$results=$this->_params['results'];
-
-		if (isset($this->_params['ranking']))
-			$ranking=$this->_params['ranking'];
-
-		if (isset($this->_params['stats']))
-			$stats=$this->_params['stats'];
-
-		$rider=$ucicurl_riders->get_rider($this->_params['id'], $results, $ranking, $stats);
+		$rider=$ucicurl_riders->get_rider($this->_params);
 
 		return $rider;
 	}
