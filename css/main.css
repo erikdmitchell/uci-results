@@ -60,7 +60,9 @@
 .uci-results-rider .key-stats {
 	margin-top: 3em;
 }
-
+.uci-results-rider .single-rider-results .em-row:nth-child(odd) {
+	background: #eee;
+}
 /* search */
 .uci-results-search {
 	position: relative;
