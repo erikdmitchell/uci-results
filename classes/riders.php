@@ -226,6 +226,8 @@ class UCIResultsRiders {
 		$stats->final_rankings=$this->get_rider_final_rankings($rider_id);
 		$stats->wins=$this->get_rider_wins($rider_id);
 		$stats->podiums=$this->get_rider_podiums($rider_id);
+		$stats->world_champs=$this->world_championships($rider_id);
+		$stats->world_cup_wins=$this->world_cup_wins($rider_id);
 
 		return $stats;
 	}
@@ -292,6 +294,62 @@ class UCIResultsRiders {
 			return false;
 
 		return $podiums;
+	}
+
+	/**
+	 * world_championships function.
+	 *
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
+	public function world_championships($rider_id=0) {
+		global $wpdb;
+
+		$sql="
+			SELECT
+				*
+			FROM $wpdb->uci_results_results AS results
+			INNER JOIN $wpdb->uci_results_races AS races ON results.race_id = races.id
+			WHERE rider_id = $rider_id
+				AND races.class = 'CM'
+				AND place = 1
+		";
+
+		$wc=$wpdb->get_results($sql);
+
+		if (!count($wc))
+			return false;
+
+		return $wc;
+	}
+
+	/**
+	 * world_cup_wins function.
+	 *
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
+	public function world_cup_wins($rider_id=0) {
+		global $wpdb;
+
+		$sql="
+			SELECT
+				*
+			FROM $wpdb->uci_results_results AS results
+			INNER JOIN $wpdb->uci_results_races AS races ON results.race_id = races.id
+			WHERE rider_id = $rider_id
+				AND races.class = 'CDM'
+				AND place = 1
+		";
+
+		$wc=$wpdb->get_results($sql);
+
+		if (!count($wc))
+			return false;
+
+		return $wc;
 	}
 
 }
