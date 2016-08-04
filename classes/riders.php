@@ -228,6 +228,8 @@ class UCIResultsRiders {
 		$stats->podiums=$this->get_rider_podiums($rider_id);
 		$stats->world_champs=$this->world_championships($rider_id);
 		$stats->world_cup_wins=$this->world_cup_wins($rider_id);
+		$stats->superprestige_wins=$this->superprestige_wins($rider_id);
+		$stats->gva_bpost_bank_wins=$this->gva_bpost_bank_wins($rider_id);
 
 		return $stats;
 	}
@@ -350,6 +352,62 @@ class UCIResultsRiders {
 			return false;
 
 		return $wc;
+	}
+
+	/**
+	 * superprestige_wins function.
+	 *
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
+	public function superprestige_wins($rider_id=0) {
+		global $wpdb;
+
+		$sql="
+			SELECT
+				*
+			FROM $wpdb->uci_results_results AS results
+			INNER JOIN $wpdb->uci_results_races AS races ON results.race_id = races.id
+			WHERE rider_id = $rider_id
+				AND races.series_id = 1
+				AND place = 1
+		";
+
+		$wins=$wpdb->get_results($sql);
+
+		if (!count($wins))
+			return false;
+
+		return $wins;
+	}
+
+	/**
+	 * gva_bpost_bank_wins function.
+	 *
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
+	public function gva_bpost_bank_wins($rider_id=0) {
+		global $wpdb;
+
+		$sql="
+			SELECT
+				*
+			FROM $wpdb->uci_results_results AS results
+			INNER JOIN $wpdb->uci_results_races AS races ON results.race_id = races.id
+			WHERE rider_id = $rider_id
+				AND races.series_id IN (2,3)
+				AND place = 1
+		";
+
+		$wins=$wpdb->get_results($sql);
+
+		if (!count($wins))
+			return false;
+
+		return $wins;
 	}
 
 }
