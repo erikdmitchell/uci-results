@@ -5,6 +5,7 @@ $order_by=isset($_GET['orderby']) ? $_GET['orderby'] : '';
 $order=isset($_GET['order']) ? $_GET['order'] : '';
 
 $series=new UCI_Results_Query(array(
+	'per_page' => -1,
 	'type' => 'series',
 	'order_by' => $order_by,
 	'order' => $order
