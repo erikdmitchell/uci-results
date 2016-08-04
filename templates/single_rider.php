@@ -24,7 +24,7 @@ $rider=$ucicurl_riders->get_rider(array(
 <div class="uci-results uci-results-rider">
 
 	<?php if ($rider) : ?>
-		<div class="em-row rider-stats">
+		<div id="rider-<?php echo $rider->id; ?>" class="em-row rider-stats">
 			<div class="em-col-md-4 general">
 				<h1 class="page-title"><?php echo ucicurl_rider_slug_to_name(get_query_var('rider_slug')); ?></h1>
 
@@ -33,12 +33,20 @@ $rider=$ucicurl_riders->get_rider(array(
 			</div>
 			<div class="em-col-md-4 top-results">
 				<h4>Top Results</h4>
-				top results coming soon
+
+				<div class="world-titles"><span class="label">World Titles:</span> <?php echo count($rider->stats->world_champs); ?></div>
+				<div class="world-cup-titles"><span class="label">World Cup Titles:</span> soon</div>
+				<div class="superprestige-titles"><span class="label">Superprestige Titles:</span> soon</div>
+				<div class="bpost-bank-titles"><span class="label">Gva/BPost Bank Titles:</span> soon</div>
 			</div>
 			<div class="em-col-md-4 key-stats">
 				<h4>Key Stats</h4>
+
 				<div class="wins"><span class="label">Wins:</span> <?php echo count($rider->stats->wins); ?></div>
 				<div class="podiums"><span class="label">Podiums:</span> <?php echo count($rider->stats->podiums); ?></div>
+				<div class="world-cup-wins"><span class="label">World Cup Wins:</span> <?php echo count($rider->stats->world_cup_wins); ?></div>
+				<div class="superprestige-wins"><span class="label">Superprestige Wins:</span> <?php echo count($rider->stats->superprestige_wins); ?></div>
+				<div class="bpost-bank-wins"><span class="label">GvA/BPost Bank Wins:</span> <?php echo count($rider->stats->gva_bpost_bank_wins); ?></div>
 			</div>
 		</div>
 
