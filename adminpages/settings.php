@@ -221,39 +221,3 @@
 	</section>
 
 </div>
-
-<?php
-/*
-global $wpdb;
-
-$file_name=dirname(__FILE__).'/Superprestige Overall - 2013%2F2014.csv';
-
-$csvData = file_get_contents($file_name);
-$lines = explode(PHP_EOL, $csvData);
-$array = array();
-foreach ($lines as $line) {
-  $array[] = str_getcsv($line);
-}
-$header=$array[0];
-
-unset($array[0]);
-
-$array=array_values($array);
-
-foreach ($array as $arr) :
-	$riders[]=array_combine($header, $arr);
-endforeach;
-
-// get rider id from name //
-foreach ($riders as $k => $arr) :
-	$riders[$k]['rider_id']=$wpdb->get_var("SELECT id FROM $wpdb->uci_results_riders WHERE name LIKE '".trim($arr['rider_id'])."'");
-endforeach;
-
-// input //
-foreach ($riders as $rider) :
-	$wpdb->insert($wpdb->uci_results_series_overall, $rider);
-endforeach;
-
-echo 'fin';
-*/
-?>

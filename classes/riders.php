@@ -479,12 +479,18 @@ class UCIResultsRiders {
 		return $wins;
 	}
 
-/*
+	/**
+	 * gva_bpost_bank_titles function.
+	 *
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
 	public function gva_bpost_bank_titles($rider_id=0) {
 		global $wpdb;
 
-		$series_id=2;
-		$seasons=$wpdb->get_col("SELECT	DISTINCT season FROM $wpdb->uci_results_series_overall WHERE series_id = $series_id");
+		$series_ids='2,3';
+		$seasons=$wpdb->get_col("SELECT	DISTINCT season FROM $wpdb->uci_results_series_overall WHERE series_id IN ($series_ids)");
 		$seasons_string=implode("','", $seasons);
 		$sql="
 			SELECT
@@ -494,7 +500,7 @@ class UCIResultsRiders {
 			FROM $wpdb->uci_results_series_overall
 			WHERE rider_id = $rider_id
 				AND season IN ('$seasons_string')
-				AND series_id = $series_id
+				AND series_id IN ($series_ids)
 				AND rank = 1
 		";
 
@@ -505,7 +511,6 @@ class UCIResultsRiders {
 
 		return $titles;
 	}
-*/
 
 }
 
