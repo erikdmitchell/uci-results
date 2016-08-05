@@ -1,7 +1,7 @@
 <?php
 global $ucicurl_db_version;
 
-$ucicurl_db_version='0.1.6';
+$ucicurl_db_version='0.1.7';
 
 /**
  * ucicurl_set_db_tables function.
@@ -124,6 +124,7 @@ function ucicurl_db_install() {
 			points bigint(20) NOT NULL DEFAULT '0',
 			series_id bigint(20) NOT NULL,
 			season VARCHAR(50) NOT NULL,
+			rank bigint(20) NOT NULL DEFAULT '0',
 			PRIMARY KEY (`id`)
 		) $charset;
 	";
@@ -245,6 +246,7 @@ function ucicurl_db_update() {
 				points bigint(20) NOT NULL DEFAULT '0',
 				series_id bigint(20) NOT NULL,
 				season VARCHAR(50) NOT NULL,
+				rank bigint(20) NOT NULL DEFAULT '0',
 				PRIMARY KEY (`id`)
 			);
 		";
