@@ -35,9 +35,9 @@ $rider=$ucicurl_riders->get_rider(array(
 				<h4>Top Results</h4>
 
 				<div class="world-titles"><span class="label">World Titles:</span> <?php echo count($rider->stats->world_champs); ?></div>
-				<div class="world-cup-titles"><span class="label">World Cup Titles:</span> soon</div>
-				<div class="superprestige-titles"><span class="label">Superprestige Titles:</span> soon</div>
-				<div class="bpost-bank-titles"><span class="label">Gva/BPost Bank Titles:</span> soon</div>
+				<div class="world-cup-titles"><span class="label">World Cup Titles:</span> <?php echo count($rider->stats->world_cup_titles); ?></div>
+				<div class="superprestige-titles"><span class="label">Superprestige Titles:</span> <?php echo count($rider->stats->superprestige_titles); ?></div>
+				<div class="bpost-bank-titles"><span class="label">Gva/BPost Bank Titles:</span> <?php echo count($rider->stats->gva_bpost_bank_titles); ?></div>
 			</div>
 			<div class="em-col-md-4 key-stats">
 				<h4>Key Stats</h4>
