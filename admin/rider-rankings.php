@@ -308,7 +308,7 @@ class UCIResultsRiderRankings {
 		$sql="
 			SELECT
 			  results.rider_id,
-			  SUM(results.pcr) AS points,
+			  SUM(results.pcr) AS points
 			FROM $wpdb->uci_results_results AS results
 			INNER JOIN $wpdb->uci_results_races AS races ON results.race_id = races.id
 			WHERE races.series_id = $series_id

@@ -189,9 +189,9 @@ class UCIResultsCLI extends WP_CLI_Command {
 		endif;
 
 		// set our season //
-		if (isset($args[0]) || isset($assoc_args['season'])) :
-			if (isset($args[0])) :
-				$season=$args[0];
+		if (isset($args[1]) || isset($assoc_args['season'])) :
+			if (isset($args[1])) :
+				$season=$args[1];
 			elseif (isset($assoc_args['season'])) :
 				$season=$assoc_args['season'];
 			endif;
@@ -212,11 +212,11 @@ class UCIResultsCLI extends WP_CLI_Command {
 		$sql="
 			SELECT
 			  results.rider_id,
-			  SUM(results.pcr) AS points,
-			FROM $wpdb->uci_results_results AS results
-			INNER JOIN $wpdb->uci_results_races AS races ON results.race_id = races.id
-			WHERE races.series_id = $series_id
-			AND season='$season'
+			  SUM(results.pcr) AS points
+			FROM {$wpdb->uci_results_results} AS results
+			INNER JOIN {$wpdb->uci_results_races} AS races ON results.race_id = races.id
+			WHERE races.series_id = {$series_id}
+			AND season='{$season}'
 			GROUP BY results.rider_id
 			ORDER BY points DESC
 		";
