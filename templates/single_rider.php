@@ -31,16 +31,16 @@ $rider=$ucicurl_riders->get_rider(array(
 				<div class="country"><span class="label">Nationality:</span> <a href="<?php echo uci_results_country_url($rider->nat); ?>"><?php echo uci_results_get_country_flag($rider->nat); ?></a></div>
 				<div class="rank"><span class="label">Ranking:</span> <?php echo $rider->rank->rank; ?></div>
 			</div>
-			<div class="em-col-md-4 top-results">
-				<h4>Top Results</h4>
+			<div class="em-col-md-4 championships">
+				<h4>Championships</h4>
 
 				<div class="world-titles"><span class="label">World Titles:</span> <?php uci_results_display_total($rider->stats->world_champs); ?></div>
 				<div class="world-cup-titles"><span class="label">World Cup Titles:</span> <?php uci_results_display_total($rider->stats->world_cup_titles); ?></div>
 				<div class="superprestige-titles"><span class="label">Superprestige Titles:</span> <?php uci_results_display_total($rider->stats->superprestige_titles); ?></div>
 				<div class="bpost-bank-titles"><span class="label">Gva/BPost Bank Titles:</span> <?php uci_results_display_total($rider->stats->gva_bpost_bank_titles); ?></div>
 			</div>
-			<div class="em-col-md-4 key-stats">
-				<h4>Key Stats</h4>
+			<div class="em-col-md-4 top-results">
+				<h4>Top Results</h4>
 
 				<div class="wins"><span class="label">Wins:</span> <?php uci_results_display_total($rider->stats->wins); ?></div>
 				<div class="podiums"><span class="label">Podiums:</span> <?php uci_results_display_total($rider->stats->podiums); ?></div>
