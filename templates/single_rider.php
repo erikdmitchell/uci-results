@@ -34,19 +34,19 @@ $rider=$ucicurl_riders->get_rider(array(
 			<div class="em-col-md-4 top-results">
 				<h4>Top Results</h4>
 
-				<div class="world-titles"><span class="label">World Titles:</span> <?php echo count($rider->stats->world_champs); ?></div>
-				<div class="world-cup-titles"><span class="label">World Cup Titles:</span> <?php echo count($rider->stats->world_cup_titles); ?></div>
-				<div class="superprestige-titles"><span class="label">Superprestige Titles:</span> <?php echo count($rider->stats->superprestige_titles); ?></div>
-				<div class="bpost-bank-titles"><span class="label">Gva/BPost Bank Titles:</span> <?php echo count($rider->stats->gva_bpost_bank_titles); ?></div>
+				<div class="world-titles"><span class="label">World Titles:</span> <?php uci_results_display_total($rider->stats->world_champs); ?></div>
+				<div class="world-cup-titles"><span class="label">World Cup Titles:</span> <?php uci_results_display_total($rider->stats->world_cup_titles); ?></div>
+				<div class="superprestige-titles"><span class="label">Superprestige Titles:</span> <?php uci_results_display_total($rider->stats->superprestige_titles); ?></div>
+				<div class="bpost-bank-titles"><span class="label">Gva/BPost Bank Titles:</span> <?php uci_results_display_total($rider->stats->gva_bpost_bank_titles); ?></div>
 			</div>
 			<div class="em-col-md-4 key-stats">
 				<h4>Key Stats</h4>
 
-				<div class="wins"><span class="label">Wins:</span> <?php echo count($rider->stats->wins); ?></div>
-				<div class="podiums"><span class="label">Podiums:</span> <?php echo count($rider->stats->podiums); ?></div>
-				<div class="world-cup-wins"><span class="label">World Cup Wins:</span> <?php echo count($rider->stats->world_cup_wins); ?></div>
-				<div class="superprestige-wins"><span class="label">Superprestige Wins:</span> <?php echo count($rider->stats->superprestige_wins); ?></div>
-				<div class="bpost-bank-wins"><span class="label">GvA/BPost Bank Wins:</span> <?php echo count($rider->stats->gva_bpost_bank_wins); ?></div>
+				<div class="wins"><span class="label">Wins:</span> <?php uci_results_display_total($rider->stats->wins); ?></div>
+				<div class="podiums"><span class="label">Podiums:</span> <?php uci_results_display_total($rider->stats->podiums); ?></div>
+				<div class="world-cup-wins"><span class="label">World Cup Wins:</span> <?php uci_results_display_total($rider->stats->world_cup_wins); ?></div>
+				<div class="superprestige-wins"><span class="label">Superprestige Wins:</span> <?php uci_results_display_total($rider->stats->superprestige_wins); ?></div>
+				<div class="bpost-bank-wins"><span class="label">GvA/BPost Bank Wins:</span> <?php uci_results_display_total($rider->stats->gva_bpost_bank_wins); ?></div>
 			</div>
 		</div>
 
