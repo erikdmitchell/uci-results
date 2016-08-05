@@ -21,7 +21,7 @@ $races=new UCI_Results_Query(array(
 ));
 ?>
 
-<div class="uci-results">
+<div class="uci-results uci-results-main">
 	<div class="uci-results-riders">
 		<h3>Rider Rankings</h3>
 

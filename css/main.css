@@ -60,9 +60,18 @@
 .uci-results-rider .championships {
 	margin-top: 3em;
 }
+.uci-results-main .uci-results-races .em-row:nth-child(odd),
+.uci-results-main .uci-results-riders .em-row:nth-child(odd),
+.uci-results-rider-rankings .rider-rankings .em-row:nth-child(even),
+.uci-results-race .single-race .em-row:nth-child(even),
+.uci-results-races .em-row:nth-child(even),
 .uci-results-rider .single-rider-results .em-row:nth-child(odd) {
 	background: #eee;
 }
+.uci-results-main .uci-results-races .em-row:nth-child(even) {
+	background: transparent;
+}
+
 /* search */
 .uci-results-search {
 	position: relative;
