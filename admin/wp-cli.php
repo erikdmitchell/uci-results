@@ -156,6 +156,99 @@ class UCIResultsCLI extends WP_CLI_Command {
 
 		WP_CLI::success('Update rider rankings complete');
 	}
+	/**
+	 * Update series overall rankings
+	 *
+	 * ## OPTIONS
+	 *
+	 * <series_id>
+	 * : series id
+	 *
+	 * <season>
+	 * : the season
+	 *
+	 * ## EXAMPLES
+	 *
+	 * wp uciresults series-overall 4 2015/2016
+	 *
+	 * @subcommand series-overall
+	*/
+	public function update_series_overall($args, $assoc_args) {
+		global $wpdb, $uci_results_rider_rankings;
+
+		$series_id=0;
+		$season='';
+
+		// set our series_id //
+		if (isset($args[0]) || isset($assoc_args['series_id'])) :
+			if (isset($args[0])) :
+				$series_id=$args[0];
+			elseif (isset($assoc_args['series_id'])) :
+				$series_id=$assoc_args['series_id'];
+			endif;
+		endif;
+
+		// set our season //
+		if (isset($args[0]) || isset($assoc_args['season'])) :
+			if (isset($args[0])) :
+				$season=$args[0];
+			elseif (isset($assoc_args['season'])) :
+				$season=$assoc_args['season'];
+			endif;
+		endif;
+
+		if (!$series_id || $series_id=='')
+			WP_CLI::error('No series id found.');
+
+		if (!$season || empty($season) || $season=='')
+			WP_CLI::error('No season found.');
+
+		// clear db //
+		$wpdb->delete($wpdb->uci_results_series_overall, array('series_id' => $series_id, 'season' => $season));
+
+		WP_CLI::success('Series overall table for '.$series_id.' - '.$season.' cleared.');
+
+		// build vars and sql //
+		$sql="
+			SELECT
+			  results.rider_id,
+			  SUM(results.pcr) AS points,
+			FROM $wpdb->uci_results_results AS results
+			INNER JOIN $wpdb->uci_results_races AS races ON results.race_id = races.id
+			WHERE races.series_id = $series_id
+			AND season='$season'
+			GROUP BY results.rider_id
+			ORDER BY points DESC
+		";
+		$riders=$wpdb->get_results($sql);
+		$rank=1;
+
+		// weekly points progress bar //
+		$rider_count=count($riders);
+		$progress_bar = \WP_CLI\Utils\make_progress_bar( 'Updating weekly points', $rider_count );
+
+		// input into db //
+		foreach ($riders as $rider) :
+			$data=array(
+				'rider_id' => $rider->rider_id,
+				'points' => $rider->points,
+				'series_id' => $series_id,
+				'season' => $season,
+				'rank' => $rank
+			);
+
+			$rank++;
+
+			$wpdb->insert($wpdb->uci_results_series_overall, $data);
+
+			$progress_bar->tick();
+		endforeach;
+
+		$progress_bar->finish();
+
+
+		WP_CLI::success('Update series overall complete');
+	}
 
 	/**
 	 * Displays a list of seasons with results in db
