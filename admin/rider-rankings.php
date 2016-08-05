@@ -287,6 +287,56 @@ class UCIResultsRiderRankings {
 		$uci_results_twitter->update_status($status);
 	}
 
+	/**
+	 * update_series_overall function.
+	 *
+	 * @access public
+	 * @param int $series_id (default: 0)
+	 * @param string $season (default: '')
+	 * @return void
+	 */
+	public function update_series_overall($series_id=0, $season='') {
+		global $wpdb;
+
+		if (!$series_id || empty($season))
+			return false;
+
+		// clear db //
+		$wpdb->delete($wpdb->uci_results_series_overall, array('series_id' => $series_id, 'season' => $season));
+
+		// build vars and sql //
+		$sql="
+			SELECT
+			  results.rider_id,
+			  SUM(results.pcr) AS points,
+			FROM $wpdb->uci_results_results AS results
+			INNER JOIN $wpdb->uci_results_races AS races ON results.race_id = races.id
+			WHERE races.series_id = $series_id
+			AND season='$season'
+			GROUP BY results.rider_id
+			ORDER BY points DESC
+		";
+		$riders=$wpdb->get_results($sql);
+		$rank=1;
+
+		// input into db //
+		foreach ($riders as $rider) :
+			$data=array(
+				'rider_id' => $rider->rider_id,
+				'points' => $rider->points,
+				'series_id' => $series_id,
+				'season' => $season,
+				'rank' => $rank
+			);
+
+			$rank++;
+
+			$wpdb->insert($wpdb->uci_results_series_overall, $data);
+		endforeach;
+
+		return;
+	}
+
 }
 
 $uci_results_rider_rankings=new UCIResultsRiderRankings();
