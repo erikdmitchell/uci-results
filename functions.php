@@ -407,6 +407,15 @@ function uci_results_seasons_dropdown($name='seasons', $selected='') {
 
 	$html=null;
 	$seasons=$ucicurl_races->seasons();
+	$seasons_arr=explode('/', end($seasons));
+
+	// add one to each year //
+	foreach ($seasons_arr as $key => $year) :
+		$seasons_arr[$key]=absint($year)+1;
+	endforeach;
+
+	// append //
+	$seasons[]=implode('/', $seasons_arr);
 
 	$html.='<select id="'.$name.'" name="'.$name.'">';
 		$html.='<option value="0">'.__('Select One', '').'</option>';

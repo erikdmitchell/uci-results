@@ -75,9 +75,9 @@ class UCIResultsRiders {
 
 				// check we have string for rs //
 				if (is_array($results_season))
-					$results_season=implode(',', $results_season);
+					$results_season=implode("','", $results_season);
 
-				$where[]="season IN ($results_season)";
+				$where[]="season IN ('$results_season')";
 			endif;
 
 			// build our where query //
