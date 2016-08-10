@@ -134,12 +134,19 @@ class Races {
 	 * @return void
 	 */
 	public function related() {
-		global $wpdb;
+		global $wpdb, $ucicurl_races;
 
+		$related_races=array();
 		$race_id=uci_results_get_race_id($this->_params['slug']);
-		$related_race_ids=$wpdb->get_var("SELECT race_ids FROM $wpdb->uci_results_related_races WHERE race_ids LIKE '%$race_id%'");
+		$related_race_ids_string=$wpdb->get_var("SELECT race_ids FROM $wpdb->uci_results_related_races WHERE race_ids LIKE '%$race_id%'");
+		$related_race_ids=explode(',', $related_race_ids_string);
 
-		return $related_race_ids;
+		// get race details //
+		foreach ($related_race_ids as $id) :
+			$related_races[]=$ucicurl_races->get_race($id, false);
+		endforeach;
+
+		return $related_races;
 	}
 
 }

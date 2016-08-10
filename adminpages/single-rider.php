@@ -1,7 +1,7 @@
 <?php
 global $ucicurl_riders;
 
-$rider=$ucicurl_riders->get_rider(array('rider' => $attributes['rider_id']));
+$rider=$ucicurl_riders->get_rider(array('rider_id' => $attributes['rider_id'], 'results' => true));
 ?>
 
 <h2><?php echo $rider->name; ?> (ID <?php echo $attributes['rider_id']; ?>)</h2>

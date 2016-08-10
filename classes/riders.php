@@ -30,7 +30,8 @@ class UCIResultsRiders {
 			'rider_id' => 0,
 			'results' => false,
 			'race_ids' => '',
-			'results_season' => uci_results_get_current_season(),
+			//'results_season' => uci_results_get_current_season(),
+			'results_season' => '',
 			'ranking' => false,
 			'stats' => false
 		);
@@ -87,7 +88,7 @@ class UCIResultsRiders {
 				$where='';
 			endif;
 
-			$results_sql="
+			echo $results_sql="
 				SELECT *
 				FROM $wpdb->uci_results_results
 				LEFT JOIN $wpdb->uci_results_races
