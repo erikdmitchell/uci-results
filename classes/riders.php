@@ -88,7 +88,7 @@ class UCIResultsRiders {
 				$where='';
 			endif;
 
-			echo $results_sql="
+			$results_sql="
 				SELECT *
 				FROM $wpdb->uci_results_results
 				LEFT JOIN $wpdb->uci_results_races

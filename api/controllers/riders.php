@@ -133,5 +133,19 @@ class Riders {
 		return $current_rank;
 	}
 
+	/**
+	 * riderRank function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function riderRank() {
+		global $ucicurl_riders;
+
+		$rank=$ucicurl_riders->get_rider_rank($this->_params['rider_id']);
+
+		return $rank;
+	}
+
 }
 ?>
