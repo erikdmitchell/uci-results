@@ -127,5 +127,20 @@ class Races {
 		return $id;
 	}
 
+	/**
+	 * related function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function related() {
+		global $wpdb;
+
+		$race_id=uci_results_get_race_id($this->_params['slug']);
+		$related_race_ids=$wpdb->get_var("SELECT race_ids FROM $wpdb->uci_results_related_races WHERE race_ids LIKE '%$race_id%'");
+
+		return $related_race_ids;
+	}
+
 }
 ?>
