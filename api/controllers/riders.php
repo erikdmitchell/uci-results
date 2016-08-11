@@ -108,6 +108,9 @@ class Riders {
 			WHERE races.code = '$code'
 		");
 
+		if (isset($result[0]) && !empty($result[0]))
+			$result[0]->total_finishers=$wpdb->get_var("SELECT COUNT(*) FROM $wpdb->uci_results_races AS races INNER JOIN $wpdb->uci_results_results AS results ON races.id=results.race_id	WHERE races.code = '$code'");
+
 		return $result;
 	}
 

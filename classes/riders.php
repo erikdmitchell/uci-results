@@ -89,7 +89,9 @@ class UCIResultsRiders {
 			endif;
 
 			$results_sql="
-				SELECT *
+				SELECT
+					*,
+					COUNT(*) AS finishers
 				FROM $wpdb->uci_results_results
 				LEFT JOIN $wpdb->uci_results_races
 				ON {$wpdb->uci_results_results}.race_id={$wpdb->uci_results_races}.id
