@@ -147,5 +147,30 @@ class Riders {
 		return $rank;
 	}
 
+	/**
+	 * recentRankData function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function recentRankData() {
+		global $wpdb;
+
+		$data=array();
+		$current_season=$this->_params['current_season'];
+		$prev_season=$this->_params['prev_season'];
+		$current_season_week=$wpdb->get_var("SELECT MAX(week) AS week FROM $wpdb->uci_results_rider_rankings WHERE season='$current_season' ORDER BY week DESC");
+
+		if ($current_season_week===null) :
+			$data['season']=$prev_season;
+			$data['week']=$wpdb->get_var("SELECT MAX(week) AS week FROM $wpdb->uci_results_rider_rankings WHERE season='$prev_season' ORDER BY week DESC");
+		else :
+			$data['season']=$current_season;
+			$data['week']=$current_season_week;
+		endif;
+
+		return $data;
+	}
+
 }
 ?>
