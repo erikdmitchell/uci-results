@@ -54,53 +54,9 @@ class UCIResultsRiders {
 		$rider->ranking='';
 		$rider->stats='';
 
-		// get results, $results is either true, an array of race ids or string of race ids //
-		if ($results) :
-
-			// set vars //
-			$where=array();
-
-			// check race ids //
-			if (is_array($race_ids))
-				$race_ids=implode(',', $race_ids);
-
-			// set rider id //
-			$where[]="rider_id = $rider_id";
-
-			// we have specific ids //
-			if (!empty($race_ids))
-				$where[]="{$wpdb->uci_results_results}.race_id IN ($race_ids)";
-
-			// results season //
-			if (!empty($results_season)) :
-
-				// check we have string for rs //
-				if (is_array($results_season))
-					$results_season=implode("','", $results_season);
-
-				$where[]="season IN ('$results_season')";
-			endif;
-
-			// build our where query //
-			if (!empty($where)) :
-				$where=' WHERE '.implode(' AND ',$where);
-			else :
-				$where='';
-			endif;
-
-			$results_sql="
-				SELECT
-					*,
-					COUNT(*) AS finishers
-				FROM $wpdb->uci_results_results
-				LEFT JOIN $wpdb->uci_results_races
-				ON {$wpdb->uci_results_results}.race_id={$wpdb->uci_results_races}.id
-				$where
-				ORDER BY date DESC
-			";
-
-			$rider->results=$wpdb->get_results($results_sql);
-		endif;
+		// get results //
+		if ($results)
+			$rider->results=$this->get_rider_results($rider_id, $race_ids, $results_season);
 
 		// get ranking //
 		if ($ranking)
@@ -111,6 +67,61 @@ class UCIResultsRiders {
 			$rider->stats=$this->get_stats($rider_id);
 
 		return $rider;
+	}
+
+	public function get_rider_results($rider_id=0, $race_ids='', $season='') {
+		global $wpdb;
+
+		// set vars //
+		$where=array();
+
+		// check race ids //
+		if (is_array($race_ids))
+			$race_ids=implode(',', $race_ids);
+
+		// set rider id //
+		$where[]="rider_id = $rider_id";
+
+		// we have specific ids //
+		if (!empty($race_ids))
+			$where[]="{$wpdb->uci_results_results}.race_id IN ($race_ids)";
+
+		// results season //
+		if (!empty($season)) :
+
+			// check we have string for rs //
+			if (is_array($season))
+				$season=implode("','", $season);
+
+			$where[]="season IN ('$season')";
+		endif;
+
+		// build our where query //
+		if (!empty($where)) :
+			$where=' WHERE '.implode(' AND ',$where);
+		else :
+			$where='';
+		endif;
+
+		$results_sql="
+			SELECT
+				*,
+				(
+					SELECT
+						COUNT(*)
+					FROM wp_uci_curl_results
+					WHERE wp_uci_curl_results.race_id = wp_uci_curl_races.id
+				) AS finishers
+			FROM $wpdb->uci_results_results
+			LEFT JOIN $wpdb->uci_results_races
+			ON {$wpdb->uci_results_results}.race_id={$wpdb->uci_results_races}.id
+			$where
+			ORDER BY date DESC
+		";
+
+		$results=$wpdb->get_results($results_sql);
+
+		return $results;
 	}
 
 	/**
