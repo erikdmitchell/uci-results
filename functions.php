@@ -370,12 +370,11 @@ function uci_results_race_has_results($code='') {
  * @return void
  */
 function uci_results_get_default_rider_ranking_season() {
-	global $ucicurl_races;
+	global $wpdb;
 
-	$seasons=$ucicurl_races->seasons(); // get seasons
-	$latest_season=array_pop($seasons); // get last season in arr
+	$season=$wpdb->get_var("SELECT MAX(season) FROM $wpdb->uci_results_rider_rankings");
 
-	return $latest_season;
+	return $season;
 }
 
 /**
@@ -385,13 +384,12 @@ function uci_results_get_default_rider_ranking_season() {
  * @return void
  */
 function uci_results_get_default_rider_ranking_week() {
-	global $ucicurl_races;
+	global $wpdb;
 
 	$season=uci_results_get_default_rider_ranking_season(); // get latest season
-	$weeks=$ucicurl_races->weeks($season); // get weeks
-	$latest_week=array_pop($weeks); // get latest week
+	$week=$wpdb->get_var("SELECT MAX(week) FROM $wpdb->uci_results_rider_rankings WHERE season='$season'");
 
-	return $latest_week;
+	return $week;
 }
 
 /**
