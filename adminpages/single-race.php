@@ -9,6 +9,7 @@ $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 
 <div class="uci-results-admin-single-race two-col">
 	<h2><?php echo $race->event; ?></h2>
+	<span class="code"><?php echo $race->code; ?></span>
 
 	<!-- <div class="tablenav top single-race"> -->
 	<div class="single-race col-right">
@@ -43,8 +44,10 @@ $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 						<input type="text" name="nat" id="nat" class="nat" value="<?php echo $race->nat; ?>" />
 					</div>
 					<div class="row">
-						<label for="series_id">Series</label>
-						<?php $ucicurl_races->series_dropdown('series_id', $race->series_id); ?>
+						<p>
+							<label for="series_id">Series</label>
+							<?php $ucicurl_races->series_dropdown('series_id', $race->series_id); ?>
+						</p>
 					</div>
 					<div class="action-buttons">
 						<input type="submit" id="doaction" class="button action button-primary" value="Update">

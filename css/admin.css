@@ -29,6 +29,9 @@ h2 .ucicurl-admin-total {
 	float: left;
 
 }
+.uci-results span.code {
+	float: left;
+}
 .uci-results .col-right {
 	width: 280px;
 	float: right;

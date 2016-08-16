@@ -61,6 +61,12 @@ class Riders {
 			$rider_ids='';
 		endif;
 
+		if (!isset($this->_params['season']) || empty($this->_params['season']))
+			$this->_params['season']=uci_results_get_default_rider_ranking_season();
+
+		if (!isset($this->_params['week']) || empty($this->_params['week']))
+			$this->_params['week']=uci_results_get_default_rider_ranking_week();
+
 		$sql="
 			SELECT
 				riders.id,
