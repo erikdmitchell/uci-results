@@ -55,8 +55,10 @@ class UCIResultsRiders {
 		$rider->stats='';
 
 		// get results //
-		if ($results)
+		if ($results) :
 			$rider->results=$this->get_rider_results($rider_id, $race_ids, $results_season);
+			$rider->last_result=$rider->results[0];
+		endif;
 
 		// get ranking //
 		if ($ranking)

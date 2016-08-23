@@ -16,7 +16,7 @@ class UCI_Results_Query {
 
 	public $post;
 
-	public $rider_rankings_query=false;
+	public $rider_rankings=false;
 
 	public $max_num_pages=0;
 
@@ -54,8 +54,8 @@ class UCI_Results_Query {
 	public function default_query_vars() {
 		$array=array(
 			'per_page' => 30,
-			'order_by' => '', // date (races -- name (riders)
-			'order' => '', // DESC (races -- ASC (riders)
+			'order_by' => '', // date (races) -- name (riders)
+			'order' => '', // DESC (races -- ASC (riders))
 			'class' => false, // races
 			'season' => false, // races, rider ranks
 			'nat' => false,
@@ -67,6 +67,7 @@ class UCI_Results_Query {
 			'paged' => get_query_var('page'),
 			'type' => 'races',
 			'rankings' => false, // riders
+			'results' => false, // riders
 			'meta' => array()
 		);
 
@@ -99,12 +100,6 @@ class UCI_Results_Query {
 						$args['order']='DESC';
 					break;
 				case 'riders':
-					if ($args['rankings']) :
-						$args['order_by']='rank';
-
-						if (empty($args['order']))
-							$args['order']='ASC';
-					endif;
 					break;
 			endswitch;
 		endif;
@@ -155,9 +150,9 @@ class UCI_Results_Query {
 		// run specific query if need be //
 		if ($this->is_search) : // a search //
 			$this->query=$this->search_query($db_table);
-		elseif ($q['rankings']) : // we are looking for rider rankings //
-			$this->rider_rankings_query=$this->rider_rankings_query($q, $where, $order, $limit, $meta);
-			$this->query=$this->rider_rankings_query;
+		//elseif ($q['rankings']) : // we are looking for rider rankings //
+			//$this->rider_rankings_query=$this->rider_rankings_query($q, $where, $order, $limit, $meta);
+			//$this->query=$this->rider_rankings_query;
 		else : // general query //
 			// cycle through meta and attach our "queries" //
 			if (!empty($meta)) :
@@ -176,6 +171,11 @@ class UCI_Results_Query {
 			endif;
 
 			$this->query="SELECT SQL_CALC_FOUND_ROWS * FROM $db_table $where $order $limit";
+
+			if ($q['rankings']) :
+				$this->rider_rankings=true;
+				$this->query=$this->rider_rankings_query($q, $where, $order, $limit);
+			endif;
 		endif;
 
 		$this->get_posts();
@@ -234,7 +234,7 @@ class UCI_Results_Query {
 			$where[]="class='".$q['class']."'";
 
 		// check season //
-		if ($q['season'])
+		if ($q['type']=='races' && $q['season'])
 			$where[]="season='".$q['season']."'";
 
 		// check nat //
@@ -372,10 +372,9 @@ class UCI_Results_Query {
 	 * @param mixed $where
 	 * @param mixed $order
 	 * @param mixed $limit
-	 * @param mixed $meta
 	 * @return void
 	 */
-	protected function rider_rankings_query($q, $where, $order, $limit, $meta) {
+	protected function rider_rankings_query($q, $where, $order, $limit) {
 		global $wpdb;
 
 		// get stored rankings //
@@ -391,18 +390,28 @@ class UCI_Results_Query {
 
 		// if we have where append it, else make it where //
 		if (empty($where)) :
-			$where="WHERE week=$week";
+			$where="WHERE  $wpdb->uci_results_rider_rankings.week=$week AND  $wpdb->uci_results_rider_rankings.season='".$q['season']."'";
 		else :
-			$where.=" AND week=$week";
+			$where.=" AND  $wpdb->uci_results_rider_rankings.week=$week";
 		endif;
 
 		// square away a default order by //
 		if (empty($order))
 			$order="ORDER BY rank";
 
-		$sql="SELECT SQL_CALC_FOUND_ROWS * FROM $wpdb->uci_results_rider_rankings AS rankings	LEFT JOIN $wpdb->uci_results_riders AS riders	ON riders.id=rankings.rider_id $where	$order $limit";
+		$sql="
+			SELECT SQL_CALC_FOUND_ROWS
+				$wpdb->uci_results_riders.*,
+				$wpdb->uci_results_rider_rankings.points,
+				$wpdb->uci_results_rider_rankings.rank
+				FROM $wpdb->uci_results_riders
+				INNER JOIN $wpdb->uci_results_rider_rankings ON $wpdb->uci_results_riders.id = $wpdb->uci_results_rider_rankings.rider_id
+				$where
+				$limit
+		";
 
 		// check if we can use stored rankings and modify sql //
+/*
 		if (isset($q['season']) && isset($q['week']) && isset($stored_rankings->season) && isset($stored_rankings->week)) :
 			if ($q['season']==$stored_rankings->season && $q['week']==$stored_rankings->week) :
 				$this->is_rankings_stored=true;
@@ -410,7 +419,8 @@ class UCI_Results_Query {
 				$sql="SELECT SQL_CALC_FOUND_ROWS * FROM $wpdb->uci_results_riders AS riders $where $limit";
 			endif;
 		endif;
-
+*/
+//echo $sql;
 		return $sql;
 	}
 
