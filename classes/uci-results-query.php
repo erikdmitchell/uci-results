@@ -55,7 +55,7 @@ class UCI_Results_Query {
 		$array=array(
 			'per_page' => 30,
 			'order_by' => '', // date (races) -- name (riders)
-			'order' => '', // DESC (races -- ASC (riders))
+			'order' => 'DESC', // DESC (races -- ASC (riders))
 			'class' => false, // races
 			'season' => false, // races, rider ranks
 			'nat' => false,
@@ -400,12 +400,14 @@ class UCI_Results_Query {
 			$order="ORDER BY rank";
 
 		// check if we can use stored rankings and modify sql //
+/*
 		if (isset($q['season']) && isset($q['week']) && isset($stored_rankings->season) && isset($stored_rankings->week)) :
 			if ($q['season']==$stored_rankings->season && $q['week']==$stored_rankings->week) :
 				$this->is_rankings_stored=true;
 				$where=$this->stored_rankings_clean_where($q, $where);
 			endif;
 		endif;
+*/
 
 		$sql="
 			SELECT SQL_CALC_FOUND_ROWS
@@ -415,6 +417,7 @@ class UCI_Results_Query {
 				FROM $wpdb->uci_results_riders
 				INNER JOIN $wpdb->uci_results_rider_rankings ON $wpdb->uci_results_riders.id = $wpdb->uci_results_rider_rankings.rider_id
 				$where
+				$order
 				$limit
 		";
 
