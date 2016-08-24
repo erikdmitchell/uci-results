@@ -210,8 +210,8 @@ class UCI_Results_Query {
 			$posts=$this->races_clean_up($posts);
 
 		// stored, so we need to append //
-		if ($this->is_rankings_stored)
-			$posts=$this->update_posts_with_stored_rankings($posts);
+		//if ($this->is_rankings_stored)
+			//$posts=$this->update_posts_with_stored_rankings($posts);
 
 		$this->posts=$posts;
 		$this->post_count=count($posts);
@@ -399,6 +399,14 @@ class UCI_Results_Query {
 		if (empty($order))
 			$order="ORDER BY rank";
 
+		// check if we can use stored rankings and modify sql //
+		if (isset($q['season']) && isset($q['week']) && isset($stored_rankings->season) && isset($stored_rankings->week)) :
+			if ($q['season']==$stored_rankings->season && $q['week']==$stored_rankings->week) :
+				$this->is_rankings_stored=true;
+				$where=$this->stored_rankings_clean_where($q, $where);
+			endif;
+		endif;
+
 		$sql="
 			SELECT SQL_CALC_FOUND_ROWS
 				$wpdb->uci_results_riders.*,
@@ -410,17 +418,6 @@ class UCI_Results_Query {
 				$limit
 		";
 
-		// check if we can use stored rankings and modify sql //
-/*
-		if (isset($q['season']) && isset($q['week']) && isset($stored_rankings->season) && isset($stored_rankings->week)) :
-			if ($q['season']==$stored_rankings->season && $q['week']==$stored_rankings->week) :
-				$this->is_rankings_stored=true;
-				$where=$this->stored_rankings_clean_where($q, $where);
-				$sql="SELECT SQL_CALC_FOUND_ROWS * FROM $wpdb->uci_results_riders AS riders $where $limit";
-			endif;
-		endif;
-*/
-//echo $sql;
 		return $sql;
 	}
 
@@ -479,7 +476,12 @@ class UCI_Results_Query {
 			return $posts;
 
 		$stored_rankings=uci_results_get_stored_rankings();
-		$order_by=$this->query_vars['order_by'];
+
+		if (empty($this->query_vars['order_by'])) :
+			$order_by='rank';
+		else :
+			$order_by=$this->query_vars['order_by'];
+		endif;
 
 		// sort using our order and order by param //
 		// setup proper order //
@@ -496,11 +498,11 @@ class UCI_Results_Query {
 		array_multisort($sort, SORT_ASC, $stored_rankings->riders);
 
 		// if there's no where statement, we can just use the limit param //
-		if (strpos($this->rider_rankings_query, 'WHERE') === false) :
-			if (strpos($this->rider_rankings_query, 'LIMIT') === false) :
+		if (strpos($this->rider_rankings, 'WHERE') === false) :
+			if (strpos($this->rider_rankings, 'LIMIT') === false) :
 				return $stored_rankings->riders; // no LIMIT - return all
 			else :
-				$limit_exp=explode('LIMIT', $this->rider_rankings_query);
+				$limit_exp=explode('LIMIT', $this->rider_rankings);
 				$limit_arr=explode(',', $limit_exp[1]);
 
 				return array_slice($stored_rankings->riders, $limit_arr[0], $limit_arr[1]);
