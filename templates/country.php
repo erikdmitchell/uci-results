@@ -20,7 +20,8 @@ get_header(); ?>
 			'per_page' => -1,
 			'type' => 'riders',
 			'nat' => get_query_var('country_slug'),
-			'order_by' => 'name'
+			'order_by' => 'name',
+			'order' => 'ASC',
 		));
 
 		// build out three column setup //
