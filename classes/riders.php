@@ -71,6 +71,15 @@ class UCIResultsRiders {
 		return $rider;
 	}
 
+	/**
+	 * get_rider_results function.
+	 *
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @param string $race_ids (default: '')
+	 * @param string $season (default: '')
+	 * @return void
+	 */
 	public function get_rider_results($rider_id=0, $race_ids='', $season='') {
 		global $wpdb;
 
