@@ -13,6 +13,8 @@ $riders=new UCI_Results_Query(array(
 	'season' => $_season,
 	'week' => $_week,
 	'nat' => $_nat,
+	'order_by' => 'rank',
+	'order' => 'ASC'
 ));
 ?>
 
