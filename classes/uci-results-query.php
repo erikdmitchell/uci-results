@@ -18,6 +18,8 @@ class UCI_Results_Query {
 
 	public $rider_rankings=false;
 
+	public $rider_results=false;
+
 	public $max_num_pages=0;
 
 	public $found_posts=0;
@@ -172,6 +174,7 @@ class UCI_Results_Query {
 
 			$this->query="SELECT SQL_CALC_FOUND_ROWS * FROM $db_table $where $order $limit";
 
+			// setup query for rankings //
 			if ($q['rankings']) :
 				$this->rider_rankings=true;
 				$this->query=$this->rider_rankings_query($q, $where, $order, $limit);
@@ -212,6 +215,10 @@ class UCI_Results_Query {
 		// stored, so we need to append //
 		//if ($this->is_rankings_stored)
 			//$posts=$this->update_posts_with_stored_rankings($posts);
+
+		// we want results //
+		if ($this->query_vars['type']=='riders' && $this->query_vars['results'])
+			$posts=$this->rider_results_posts($posts);
 
 		$this->posts=$posts;
 		$this->post_count=count($posts);
@@ -523,6 +530,47 @@ class UCI_Results_Query {
 				endif;
 
 			endforeach;
+		endforeach;
+
+		return $posts;
+	}
+
+	/**
+	 * rider_results_posts function.
+	 *
+	 * @access protected
+	 * @param mixed $posts
+	 * @return void
+	 */
+	protected function rider_results_posts($posts) {
+		global $wpdb;
+
+		// double check //
+		if (empty($this->query_vars['results']))
+			return false;
+
+		$this->rider_results=true;
+
+		foreach ($posts as $post) :
+			$sql="
+				SELECT
+				 results.place,
+				 results.result,
+				 results.par AS points,
+				 races.date,
+				 races.event,
+				 races.class,
+				 races.season,
+				 races.code,
+				 races.related_races_id,
+				 races.series_id
+				FROM $wpdb->uci_results_results AS results
+				LEFT JOIN $wpdb->uci_results_races AS races ON results.race_id=races.id
+				WHERE rider_id = $post->id
+				ORDER BY date DESC
+			";
+			$post->results=$wpdb->get_results($sql);
+			$post->last_race=$post->results[0];
 		endforeach;
 
 		return $posts;
