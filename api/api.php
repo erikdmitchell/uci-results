@@ -25,13 +25,13 @@ add_filter('template_include', 'uci_results_api_template_loader');
 function uci_results_api_page_rewrite() {
   global $wp_rewrite;
 
-  //set up our query variable %test% which equates to index.php?test=
+  //set up our query variable %api% which equates to index.php?api=
   add_rewrite_tag( '%api%', '([^&]+)');
 
-  //add rewrite rule that matches /test
+  //add rewrite rule that matches /api
   add_rewrite_rule('^api/?','index.php?api=api','top');
 
-  //add endpoint, in this case 'test' to satisfy our rewrite rule /test
+  //add endpoint, in this case 'api' to satisfy our rewrite rule /api
   add_rewrite_endpoint( 'api', EP_PERMALINK | EP_PAGES );
 
   //flush rules to get this to work properly (do this once, then comment out)

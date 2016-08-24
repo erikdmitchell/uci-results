@@ -118,6 +118,10 @@ class UCI_Results_Query {
 		if (isset($_GET['search']) || (isset($query['search']) && $query['search']))
 			$this->is_search=true;
 
+		// due to a weird api pagination issue //
+		if (isset($args['api_page']))
+			$args['paged']=$args['api_page'];
+
 		// check if paged //
 		if ($args['paged'])
 			$this->is_paged=true;
