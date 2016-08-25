@@ -187,10 +187,6 @@ class UCI_Results_Query {
 
 		$this->get_posts();
 
-		// set total number of posts found //
-		if (!empty($limit))
-			$this->found_posts = $wpdb->get_var('SELECT FOUND_ROWS()');
-
 		// set max number of pages //
 		if (!empty($limit))
 			$this->max_num_pages=ceil($this->found_posts/$q['per_page']);
@@ -212,6 +208,9 @@ class UCI_Results_Query {
 		global $wpdb;
 
 		$posts=$wpdb->get_results($this->query);
+
+		// set total number of posts found //
+		$this->found_posts = $wpdb->get_var('SELECT FOUND_ROWS()');
 
 		if ($this->query_vars['type']=='races')
 			$posts=$this->races_clean_up($posts);
