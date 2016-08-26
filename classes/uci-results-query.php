@@ -212,6 +212,10 @@ class UCI_Results_Query {
 		// set total number of posts found //
 		$this->found_posts = $wpdb->get_var('SELECT FOUND_ROWS()');
 
+		// add flag //
+		$posts=$this->add_flag($posts);
+
+		// do minor clean up if this is races //
 		if ($this->query_vars['type']=='races')
 			$posts=$this->races_clean_up($posts);
 
@@ -649,6 +653,23 @@ class UCI_Results_Query {
 		endforeach;
 
 		return $meta_queries;
+	}
+
+	/**
+	 * add_flag function.
+	 *
+	 * @access protected
+	 * @param mixed $posts
+	 * @return void
+	 */
+	protected function add_flag($posts) {
+		foreach ($posts as $post) :
+			if (property_exists($post, 'nat')) :
+				$post->flag=uci_results_get_country_flag($post->nat);
+			endif;
+		endforeach;
+
+		return $posts;
 	}
 
 	/**
