@@ -35,7 +35,7 @@ function uci_results_api_page_rewrite() {
   add_rewrite_endpoint( 'api', EP_PERMALINK | EP_PAGES );
 
   //flush rules to get this to work properly (do this once, then comment out)
-  $wp_rewrite->flush_rules();
+  //$wp_rewrite->flush_rules();
 }
 add_action('init', 'uci_results_api_page_rewrite');
 ?>

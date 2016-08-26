@@ -22,8 +22,7 @@ try {
     if( !isset($applications[$app_id]) ) {
 			throw new Exception('Application does not exist!');
     }
-//print_r($_REQUEST);
-//print_r($enc_request);
+
     //decrypt the request - if it's a direct url, it will not be encoded //
     if (isset($_REQUEST['api_type']) && $_REQUEST['api_type']=='json') :
     	$params=(object) $_REQUEST;
@@ -31,7 +30,7 @@ try {
 	    //$params = json_decode(trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $applications[$app_id], base64_decode($enc_request), MCRYPT_MODE_ECB)));
 			$params=json_decode(base64_decode($enc_request));
 		endif;
-//print_r($params);
+
     //check if the request is valid by checking if it's an array and looking for the controller and action
     if ($params == false || isset($params->controller) == false || isset($params->action) == false) :
       throw new Exception('Request is not valid');
