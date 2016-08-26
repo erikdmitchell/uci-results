@@ -26,6 +26,8 @@ class Resultsquery {
 	public function q() {
 		$results_query=new UCI_Results_Query($this->_params);
 
+		$results_query=apply_filters('uci_results_api_results_query', $results_query, $this->_params);
+
 		return $results_query;
 	}
 
