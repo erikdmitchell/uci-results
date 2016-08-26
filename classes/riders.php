@@ -177,7 +177,10 @@ class UCIResultsRiders {
 
 		$results=$wpdb->get_results($results_sql);
 
-		return $results;
+		if (!count($results))
+			return false;
+
+		return $results[0];
 	}
 
 	/**

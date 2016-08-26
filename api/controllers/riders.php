@@ -111,7 +111,7 @@ class Riders {
 			WHERE races.code = '$code'
 		");
 
-		if ($result === null) :
+		if (!count($result)) :
 			$result = new stdClass();
 			$result->event = '';
 			$result->place = 0;
