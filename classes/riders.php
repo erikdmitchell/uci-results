@@ -29,8 +29,8 @@ class UCIResultsRiders {
 		$default_args=array(
 			'rider_id' => 0,
 			'results' => false,
+			'last_result' => false,
 			'race_ids' => '',
-			//'results_season' => uci_results_get_current_season(),
 			'results_season' => '',
 			'ranking' => false,
 			'stats' => false
@@ -51,14 +51,19 @@ class UCIResultsRiders {
 		$race_ids='';
 		$rider=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_riders WHERE id=$rider_id");
 		$rider->results='';
+		$rider->last_result='';
 		$rider->ranking='';
 		$rider->stats='';
 
 		// get results //
 		if ($results) :
 			$rider->results=$this->get_rider_results($rider_id, $race_ids, $results_season);
-			$rider->last_result=$rider->results[0];
+			$rider->last_result=$this->rider_last_race_result($rider_id);
 		endif;
+
+		// if no results, but last result //
+		if (!$results && $last_result)
+			$rider->last_result=$this->rider_last_race_result($rider_id);
 
 		// get ranking //
 		if ($ranking)
@@ -91,11 +96,11 @@ class UCIResultsRiders {
 			$race_ids=implode(',', $race_ids);
 
 		// set rider id //
-		$where[]="rider_id = $rider_id";
+		$where[]="results.rider_id = $rider_id";
 
 		// we have specific ids //
 		if (!empty($race_ids))
-			$where[]="{$wpdb->uci_results_results}.race_id IN ($race_ids)";
+			$where[]="results.race_id IN ($race_ids)";
 
 		// results season //
 		if (!empty($season)) :
@@ -104,30 +109,70 @@ class UCIResultsRiders {
 			if (is_array($season))
 				$season=implode("','", $season);
 
-			$where[]="season IN ('$season')";
+			$where[]="races.season IN ('$season')";
 		endif;
 
 		// build our where query //
 		if (!empty($where)) :
-			$where=' WHERE '.implode(' AND ',$where);
+			$where='WHERE '.implode(' AND ',$where);
 		else :
 			$where='';
 		endif;
 
 		$results_sql="
 			SELECT
-				*,
-				(
-					SELECT
-						COUNT(*)
-					FROM wp_uci_curl_results
-					WHERE wp_uci_curl_results.race_id = wp_uci_curl_races.id
-				) AS finishers
-			FROM $wpdb->uci_results_results
-			LEFT JOIN $wpdb->uci_results_races
-			ON {$wpdb->uci_results_results}.race_id={$wpdb->uci_results_races}.id
+				results.race_id,
+				results.place,
+				results.par,
+				races.date,
+				races.event,
+				races.class,
+				races.season,
+				races.code,
+				races.series_id
+			FROM $wpdb->uci_results_results AS results
+			LEFT JOIN $wpdb->uci_results_races AS races	ON results.race_id = races.id
 			$where
 			ORDER BY date DESC
+		";
+
+		$results=$wpdb->get_results($results_sql);
+
+		return $results;
+	}
+
+	/**
+	 * rider_last_race_result function.
+	 *
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @param string $season (default: '')
+	 * @return void
+	 */
+	public function rider_last_race_result($rider_id=0, $season='') {
+		global $wpdb;
+
+		$where="WHERE results.rider_id = $rider_id";
+
+		if (!empty($season))
+			$where = " AND races.season = '$season'";
+
+		$results_sql="
+			SELECT
+				results.race_id,
+				results.place,
+				results.par,
+				races.date,
+				races.event,
+				races.class,
+				races.season,
+				races.code,
+				races.series_id
+			FROM $wpdb->uci_results_results AS results
+			LEFT JOIN $wpdb->uci_results_races AS races	ON results.race_id = races.id
+			$where
+			ORDER BY date DESC
+			LIMIT 1
 		";
 
 		$results=$wpdb->get_results($results_sql);
