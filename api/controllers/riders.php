@@ -103,19 +103,22 @@ class Riders {
 
 		$result=$wpdb->get_results("
 			SELECT
-      	riders.name,
-      	riders.nat,
-      	riders.slug,
+				races.event,
       	results.place,
       	results.par AS points
 			FROM $wpdb->uci_results_races AS races
 			INNER JOIN $wpdb->uci_results_results AS results ON (results.rider_id=$rider_id AND races.id=results.race_id)
-			INNER JOIN wp_uci_curl_riders AS riders ON riders.id=$rider_id
 			WHERE races.code = '$code'
 		");
 
-		if (isset($result[0]) && !empty($result[0]))
-			$result[0]->total_finishers=$wpdb->get_var("SELECT COUNT(*) FROM $wpdb->uci_results_races AS races INNER JOIN $wpdb->uci_results_results AS results ON races.id=results.race_id	WHERE races.code = '$code'");
+		if ($result === null) :
+			$result = new stdClass();
+			$result->event = '';
+			$result->place = 0;
+			$result->points = 0;
+		else :
+			$result=$result[0];
+		endif;
 
 		return $result;
 	}
