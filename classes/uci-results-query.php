@@ -181,9 +181,18 @@ class UCI_Results_Query {
 			// setup query for rankings //
 			if ($q['rankings']) :
 				$this->rider_rankings=true;
-				$this->query=$this->rider_rankings_query($q, $where, $order, $limit);
+				$rrq=$this->rider_rankings_query($q, $where, $order, $limit);
+
+				$db_table = $rrq['db_table'];
+				$select = $rrq['select'];
+				$where = $rrq['where'];
+				$order = $rrq['order'];
+				$limit = $rrq['limit'];
+				$this->query = $rrq['sql'];
 			endif;
 		endif;
+
+		$this->query = apply_filters('uci_results_query_pre_posts', $this->query, $this->query_vars, 'SELECT SQL_CALC_FOUND_ROWS', $db_table, $select, $where, $order, $limit);
 
 		$this->get_posts();
 
@@ -435,7 +444,16 @@ class UCI_Results_Query {
 				$limit
 		";
 
-		return $sql;
+		$return=array(
+			'select' => "$wpdb->uci_results_riders.*,	$wpdb->uci_results_rider_rankings.points,	$wpdb->uci_results_rider_rankings.rank",
+			'db_table' => "FROM $wpdb->uci_results_riders	INNER JOIN $wpdb->uci_results_rider_rankings ON $wpdb->uci_results_riders.id = $wpdb->uci_results_rider_rankings.rider_id",
+			'where' => $where,
+			'order' => $order,
+			'limit' => $limit,
+			'sql' => $sql,
+		);
+
+		return $return;
 	}
 
 	/**
