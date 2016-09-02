@@ -462,13 +462,15 @@ class UCIResultsAddRaces {
 	 * add_race_to_db function.
 	 *
 	 * @access public
-	 * @param mixed $race_data
+	 * @param string $race_data (default: '')
+	 * @param bool $raw_response (default: false)
 	 * @return void
 	 */
-	public function add_race_to_db($race_data) {
+	public function add_race_to_db($race_data='', $raw_response=false) {
 		global $wpdb, $uci_results_twitter, $uci_results_pages;
 
 		$message=null;
+		$new_results=0;
 
 		// convert to object //
 		if (!is_object($race_data))
@@ -490,6 +492,7 @@ class UCIResultsAddRaces {
 		if (!$this->check_for_dups($data['code'])) :
 			if ($wpdb->insert($wpdb->uci_results_races, $data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
+				$new_results++;
 				$this->add_race_results_to_db($wpdb->insert_id, $race_data->link);
 
 				// update to twitter //
@@ -504,6 +507,9 @@ class UCIResultsAddRaces {
 		else :
 			$message='<div class="updated">'.$data['code'].' is already in the database</div>';
 		endif;
+
+		if ($raw_response)
+			return array('message' => $message, 'new_result' => $new_results);
 
 		return $message;
 	}
