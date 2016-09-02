@@ -259,6 +259,9 @@ class UCIResultsRiders {
 			$rank->prev_icon='';
 		endif;
 
+		// get actual rank amount //
+		$rank->prev_rank=$prev_week_rank;
+
 		// get max rank //
 		$rank->max=$wpdb->get_var("SELECT MAX(rank) FROM $wpdb->uci_results_rider_rankings WHERE season='$season' AND week=$rank->week");
 
