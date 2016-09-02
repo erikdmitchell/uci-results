@@ -2,3 +2,11 @@ fantasy/css/.DS_Store
 fantasy/js/.DS_Store
 fantasy/templates/.DS_Store
 fantasy/.DS_Store
+js/.DS_Store
+lib/.DS_Store
+log.txt
+admin/.DS_Store
+/api/.DS_Store
+/cron.log
+/api/controllers/.DS_Store
+/lib/flags/.DS_Store

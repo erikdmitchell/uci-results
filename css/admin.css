@@ -11,171 +11,177 @@
               no-repeat;
 	display: none;
 }
-.row.header {
+
+.uci-results table th {
 	font-weight: bold;
 }
-
-/**
- * form filter
- */
-.form-filter {
-	border: 1px solid #000;
-	padding: 10px;
-}
-.form-filter .title {
-	margin-top: -15px;
-	background: #f1f1f1;
-	width: 60px;
-	font-weight: bold;
-	padding-left: 10px;
-}
-.form-filter label {
-	font-weight: bold;
+h2 .ucicurl-admin-total {
+	font-size: 14px;
+	font-weight: normal;
 }
 
-/* field quality restults (formatted)
-------------------------------------- */
-.fq-results {
-	border-top: 1px solid #000;
-	padding-top: 10px;
-	margin-top: 10px;
+/* two column layout (admin) */
+.uci-results .two-col {
+	margin-right: 300px;
 }
-.fq-results .formula {
-	font-weight: bold;
-	font-style: inherit;
-	padding: 5px 0;
-}
-.fq-results .math {
-	width: 50%;
-}
-.fq-results .math tr.header {
-	font-weight: bold;
-}
-.fq-results .math tr {
+.uci-results .col-left {
+	width: 100%;
+	float: left;
 
 }
-.fq-results .math tr td,
-.fq-results .math tr th {
-	width: 15%;
-	padding-right: 1%;
-	text-align: center;
+.uci-results span.code {
+	float: left;
 }
-.fq-results .math tr td.race-total {
-	text-decoration: underline;
+.uci-results .col-right {
+	width: 280px;
+	float: right;
+	margin-right: -300px;
 }
-
-/* uci curl page
------------------*/
-.uci-curl {
-	width: 98%;
-}
-.get-races {
-
-}
-.get-races .row {
-	margin-bottom: 5px;
-}
-.get-races label {
+.uci-results-sidebox label {
 	font-weight: bold;
 	display: inline-block;
+	width: 58px;
 }
-.get-races .url {
-	width: 100%;
-	height: 85px;
+.uci-results-sidebox .upper-box {
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 10px;
 }
-.get-races .url-dd {
+.uci-results-sidebox .upper-box h2 {
+	font-size: 14px;
+  padding: 8px 12px;
+  margin: 0;
+  line-height: 1.4;
+}
+.uci-results-sidebox .inner-box {
+	padding: 5px 5px 5px 10px;
+}
+.uci-results-sidebox .action-buttons {
+  padding: 10px;
+  overflow: hidden;
+  border-top: 1px solid #ddd;
+  background: #f5f5f5;
+  margin: 10px -10px -5px -10px;
+}
+.uci-results-sidebox .action-buttons .button {
+	float: right;
+}
 
+/** races **/
+.tablenav.single-race > div {
+	margin-right: 15px;
 }
-.get-races .description {
-	margin-left: 5px;
-}
-.get-races .button {
-
-}
-#selectall {
-	font-weight: bold;
+.tablenav.single-race > div .season {
+	font-style: italic;
 }
 
-/**
- * view db
- */
-#loader {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: #fff;
-	opacity: 0.6;
+/** pagination **/
+.tablenav .pagination {
+	float: right;
+	margin-left: 30px;
+}
+.tablenav .pagination .uci-results-admin-pagination .next-link {
+	margin-left: 10px;
+}
+.tablenav .pagination .uci-results-admin-pagination {
+	margin-top: 3px;
+}
+.tablenav .pagination .uci-results-admin-pagination > div {
+	width: auto;
+  min-width: 17px;
+  border: 1px solid #ccc;
+  padding: 3px 5px 7px;
+  background: #e5e5e5;
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 400;
+  text-align: center;
+}
+.tablenav .pagination .uci-results-admin-pagination > div.hide {
 	display: none;
 }
-#loader .inner {
-	position: absolute;
-  top: 50%;
-  left: 50%;
+.tablenav .pagination .uci-results-admin-pagination > div a {
+	text-decoration: none;
 }
-#race-search-results-text,
-#rider-search-results-text {
-	border: 1px solid #000;
-	background: #fff;
-	padding: 5px;
-	display: none;
-}
-.results input,
-.filters input,
-.results #rider-rider {
-	width: 100%;
-}
-.tablesorter,
-.tablesorter th,
-.tablesorter td {
-	border: 1px solid #000;
-}
-.tablesorter .checkbox {
-	border: none;
-}
-.tablesorter th.header.checkbox {
-	background-image: none;
-}
-.tablesorter th,
-.tablesorter td {
-	padding: 5px 8px 5px 8px;
-}
-.tablesorter tbody tr:nth-child(odd) {
-		background: #e3e2e2;
-}
-.tablesorter th.header {
-	margin-left: 5px;
-	background-image: url('../images/bg.gif');
-	background-repeat: no-repeat;
-	background-position: center right;
-	cursor: pointer;
-	padding-right: 20px;
-}
-.tablesorter th.headerSortUp {
-	background-image: url('../images/asc.gif');
-}
-.tablesorter th.headerSortDown {
-	background-image: url('../images/desc.gif');
-}
-/**
- * uci cross admin
- */
-.season-rider-rankings > .row:nth-child(even) {
-	background: #ccc;
-}
-
-/**
- * pagination
- */
-.uci-pagination {
+.uci-results-admin-pagination {
 	overflow: hidden;
 	margin: 15px 0;
 }
-.uci-pagination > div {
+.uci-results-admin-pagination > div {
 	width: 50%;
 	float: left;
 }
-.uci-pagination .next-page {
+.uci-results-admin-pagination > div.hide {
+}
+.uci-results-admin-pagination .next-link {
 	text-align: right;
+}
+.uci-results-admin-races h2,
+.uci-results-admin-series h2,
+.uci-results-admin-update-series h2 {
+	width: 12%;
+	float: left;
+}
+.uci-results-admin-races a.view-series.button ,
+.uci-results-admin-series a.add-series.button,
+.uci-results-admin-update-series a.add-series.button {
+	margin-top: 12px;
+}
+
+/* update series */
+.uci-results-admin-update-series form {
+	clear: both;
+}
+.uci-results-admin-update-series form .row {
+	margin-bottom: 15px;
+}
+.uci-results-admin-update-series form label {
+	font-weight: bold;
+	width: 75px;
+	display: inline-block;
+}
+.uci-results-admin-update-series form .row input.season {
+	margin-left: 80px;
+}
+.uci-results-admin-update-series form .row input.season.first {
+	margin-left: 2px;
+}
+
+/* update rider rankings */
+.ucicurl-update-rankings .update-rankings .button {
+	margin: 15px 0;
+}
+.update-rider-ranking-notes {
+	margin: 15px 0;
+	display: none;
+	max-height: 500px;
+	overflow: scroll;
+}
+
+/* admin settings */
+.uci-results-settings .warning {
+	border-left: 4px solid #dd3d36;
+	background-color: #fff;
+	color: #424242;
+	padding: 5px 15px 15px 15px;
+}
+.uci-results-settings .warning-button,
+.uci-results-settings .warning-button:focus {
+  border: 1px solid #9E0B0F;
+  background: #9E0B0F;
+  color: #FFF;
+  -webkit-box-shadow: inset 0 2px 5px -3px rgba( 173, 12, 17, 0.5 );
+  box-shadow: inset 0 2px 5px -3px rgba( 173, 12, 17, 0.5 );
+  text-shadow: none !important;
+}
+.uci-results-settings .warning-button:hover,
+.uci-results-settings .warning-button:active {
+  border: 1px solid #DD3D36;
+  background: #DD3D36;
+  color: #FFF;
+  -webkit-box-shadow: inset 0 2px 5px -3px rgba( 173, 12, 17, 0.5 );
+  box-shadow: inset 0 2px 5px -3px rgba( 173, 12, 17, 0.5 );
+  text-shadow: none !important;
+}
+.uci-results-settings .message {
+	margin-bottom: 15px;
 }

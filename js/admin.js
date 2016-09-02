@@ -2,32 +2,34 @@ jQuery(document).ready(function($) {
 	var $modal=$('.loading-modal');
 
 	/**
-	 * on our curl page, this runs our select all checkbox functionality
+	 * populates the url field on the UCI cURL page when a year is selected (years are pre populated)
 	 */
-  $('#selectall').live('click',function(event) {
+	$('#season').change(function() {
+		var url=$('#season option:selected').data('url');
+
+		$('#url').val(url);
+	});
+
+	/**
+	 * select all
+	 */
+  $('#select-all').live('click',function(event) {
 	  event.preventDefault();
 
 	  if ($(this).hasClass('unselect')) {
 		 	$(this).removeClass('unselect');
-    	$('.race-checkbox').each(function() {
+    	$('.check-column > input').each(function() {
       	this.checked = false;  //select all checkboxes
       });
 		} else {
 			$(this).addClass('unselect');
-    	$('.race-checkbox').each(function() {
+    	$('.check-column > input').each(function() {
 	    	if (!$(this).is(':disabled')) {
 	      	this.checked = true; //deselect all checkboxes
 	      }
       });
 		}
   });
-
-	/**
-	 * populates the url field on the UCI cURL page when a year is selected (years are pre populated)
-	 */
-	$('#get-race-season').change(function() {
-		$('#url').val($(this).val());
-	});
 
 	/**
 	 * gets an output of races via the season selected
@@ -39,8 +41,7 @@ jQuery(document).ready(function($) {
 
 		var data={
 			'action' : 'get_race_data_non_db',
-			'url' : $('form.get-races').find('#url').val(),
-			'limit' : $('form.get-races').find('#limit').val()
+			'form' : $('form.get-races').serialize()
 		};
 
 		$.post(ajaxurl,data,function(response) {
@@ -56,6 +57,8 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 
 		var selected = [];
+		var season=$('.url-dd#season option:selected').text();
+
 		$('#add-races-to-db input:checked').each(function() {
 			if ($(this).attr('id')!='selectall')
 	    	selected.push($(this).val());
@@ -70,7 +73,7 @@ jQuery(document).ready(function($) {
 			$('#get-race-data').html('');
 
 			var races=$.parseJSON(response);
-			var counter=1;
+			var counter=0;
 
 			$('#get-race-data').append('<div id="counter"><span class="ctr">'+counter+'</span> out of '+races.length+' proccessed.');
 
@@ -83,13 +86,29 @@ jQuery(document).ready(function($) {
 				};
 
 				$.post(ajaxurl,data,function(response) {
+					counter++;
+
 					$('#get-race-data').append(response);
 					$('#get-race-data').find('#counter span.ctr').text(counter);
-					counter++;
+
 					//$modal.hide();
 					// after we are done races //
 					if (counter>=races.length) {
-						console.log('fin');
+						$('#get-race-data').find('#counter span.ctr').text(counter); // update counter on screen
+
+						var data={
+							action : 'update_rider_rankings',
+							season : season
+						};
+
+						$('#get-race-data').append('<div class="note">Calculating rider rankings...</div>');
+
+						$('#get-race-data').append('<div class="note">You need to do this on the other page for now.</div>');
+
+						//$.post(ajaxurl, data, function(response) {
+							//$('#get-race-data').append('<div class="updated">Rider rankings complete.</div>');
+						//});
+
 						return false;
 					}
 				});
@@ -98,21 +117,72 @@ jQuery(document).ready(function($) {
 	});
 
 	/**
-	 * updates our weekly rank based on season
+	 * related races ajax search
 	 */
-	$('#update-weekly-rank').click(function(e) {
-		$modal.show();
-		$('#get-race-data').html('');
+	$("#search-related-races").live("keyup", function(e) {
+		// Set Search String
+		var search_string = $(this).val();
+
+	  // Do Search
+	  if (search_string!=='' && search_string.length>=3) {
+			$.ajax({
+				type: 'post',
+				url: ajaxurl,
+				data: {
+					action : 'search_related_races',
+					query : search_string,
+					race_id : $('#main_race_id').val()
+				},
+				success: function(response){
+					$('#related-races-search-results').html(response);
+				}
+			});
+	  }
+
+	  return false;
+	});
+
+	/**
+	 * delete series
+	 */
+	$('.uci-results-series a.delete').click(function(e) {
 		e.preventDefault();
 
 		var data={
-			'action' : 'update_weekly_rank',
-			'season' : $('form.get-races #get-race-season option:selected').text()
+			'action' : 'delete_series',
+			'series_id' : $(this).data('id')
 		};
 
-		$.post(ajaxurl,data,function(response) {
-			$('#get-race-data').html(response);
-			$modal.hide();
+		$.post(ajaxurl, data, function(response) {
+			location.reload(); // refresh
+		});
+	});
+
+	/**
+	 * Remove Data button (settings) - remove all data from db
+	 */
+	$('#uci-results-empty-db').click(function(e) {
+		var data={
+			'action' : 'uci_results_empty_db',
+			'security' : $('#uci-results-empty-db-nonce').val()
+		}
+
+		$.post(ajaxurl, data, function(response) {
+			$('#uci-results-actions-message').append(response);
+		});
+	});
+
+	/**
+	 * Remove Database Tables button (settings) - remove all tables from db
+	 */
+	$('#uci-results-remove-db').click(function(e) {
+		var data={
+			'action' : 'uci_results_remove_db',
+			'security' : $('#uci-results-remove-db-nonce').val()
+		}
+
+		$.post(ajaxurl, data, function(response) {
+			$('#uci-results-actions-message').append(response);
 		});
 	});
 
