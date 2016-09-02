@@ -19,26 +19,39 @@ function uci_results_add_races($args='') {
 		'weekly_ranks' => true,
 	);
 	$args=wp_parse_args($args, $default_args);
+	$new_results=0;
 
 	extract($args);
+
+	do_action('before_uci_results_add_races_cron');
 
 	// add race(s) to db //
 	write_cron_log('[DATE: '.date('n/j/Y H:i:s').']');
 
 	foreach ($races as $race) :
-		$result=$uci_results_add_races->add_race_to_db($race);
-		write_cron_log(strip_tags($result));
+		$result=$uci_results_add_races->add_race_to_db($race, true);
+		write_cron_log(strip_tags($result['message']));
+
+		if ($result['new_result'])
+			$new_results++;
 	endforeach;
 
-	uci_results_build_season_weeks($season); // update season weeks
+	// only do this if we have new results //
+	if ($new_results) :
+		uci_results_build_season_weeks($season); // update season weeks
 
-	// run weekly points if need be //
-	if ($weekly_points)
-		uci_results_update_rider_weekly_points();
+		// run weekly points if need be //
+		if ($weekly_points)
+			uci_results_update_rider_weekly_points();
 
-	// run weekly ranks if need be //
-	if ($weekly_ranks)
-		uci_results_update_rider_weekly_rank();
+		// run weekly ranks if need be //
+		if ($weekly_ranks)
+			uci_results_update_rider_weekly_rank();
+
+		do_action('uci_results_add_races_cron_new_results');
+	endif;
+
+	do_action('after_uci_results_add_races_cron');
 
 	write_cron_log('The uci_results_add_races cron job finished.');
 
@@ -80,7 +93,7 @@ function uci_results_update_rider_weekly_points() {
 
 	return;
 }
-add_action('uci_results_update_rider_weekly_points', 'uci_results_update_rider_weekly_points');
+//add_action('uci_results_update_rider_weekly_points', 'uci_results_update_rider_weekly_points');
 
 /**
  * uci_results_update_rider_weekly_rank function.
@@ -112,11 +125,9 @@ function uci_results_update_rider_weekly_rank() {
 
 	return;
 }
-add_action('uci_results_update_rider_weekly_rank', 'uci_results_update_rider_weekly_rank');
+//add_action('uci_results_update_rider_weekly_rank', 'uci_results_update_rider_weekly_rank');
 
-
-
-
+// write to custom cron log function //
 if ( ! function_exists('write_cron_log')) {
    function write_cron_log($log)  {
       if ( is_array( $log ) || is_object( $log ) ) {
