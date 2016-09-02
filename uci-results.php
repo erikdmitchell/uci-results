@@ -51,7 +51,7 @@ function uci_results_activation() {
 
 function uci_results_deactivation() {
 	// remove crons //
-	wp_clear_scheduled_hook('fantasy_cycling_cron_lock_teams');
+	wp_clear_scheduled_hook('uci_results_add_races');
 
 	do_action('uci_results_deactivation');
 }
