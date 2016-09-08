@@ -57,7 +57,7 @@ function uci_results_add_races($args='') {
 
 	// alert admin //
 	$message="The uci_results_add_races cron job finished.";
-	wp_mail('erikdmitchell@gmail.com', 'Cron Job: UCI Results Add Races', $message);
+	wp_mail(get_option('admin_email'), 'Cron Job: UCI Results Add Races', $message);
 
 	return;
 }
@@ -89,7 +89,7 @@ function uci_results_update_rider_weekly_points() {
 
 	// alert admin //
 	$message="The uci_results_update_rider_weekly_points cron job finished.";
-	wp_mail('erikdmitchell@gmail.com', 'Cron Job: Updated Rider Weekly Points', $message);
+	wp_mail(get_option('admin_email'), 'Cron Job: Updated Rider Weekly Points', $message);
 
 	return;
 }
@@ -121,7 +121,7 @@ function uci_results_update_rider_weekly_rank() {
 
 	// alert admin //
 	$message="The uci_results_update_rider_weekly_rank cron job finished.";
-	wp_mail('erikdmitchell@gmail.com', 'Cron Job: Updated Rider Weekly Rank', $message);
+	wp_mail(get_option('admin_email'), 'Cron Job: Updated Rider Weekly Rank', $message);
 
 	return;
 }
