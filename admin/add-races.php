@@ -568,10 +568,10 @@ class UCIResultsAddRaces {
 			return false;
 
 		$race_results=$this->get_race_results($link);
-		$race=$wpdb->get_row("SELECT * FROM {$wpdb->uci_results_races} WHERE id={$race_id}");
+		$race=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_races WHERE id={$race_id}");
 
 		foreach ($race_results as $result) :
-			$rider_id=$wpdb->get_var("SELECT id FROM {$wpdb->uci_results_riders} WHERE name=\"{$result->name}\" AND nat='{$result->nat}'");
+			$rider_id=$wpdb->get_var("SELECT id FROM $wpdb->uci_results_riders WHERE name = \"$result->name\" AND nat = '$result->nat'");
 
 			// check if we have a rider id, otherwise create one //
 			if (!$rider_id) :
