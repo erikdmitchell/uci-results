@@ -137,4 +137,23 @@ if ( ! function_exists('write_cron_log')) {
       }
    }
 }
+
+/**
+ * fc_cron_schedules function.
+ *
+ * @access public
+ * @param mixed $schedules
+ * @return void
+ */
+function fc_cron_schedules($schedules) {
+	if (!isset($schedules['threehours'])) {
+		$schedules['threehours'] = array(
+			'interval' => 180*60,
+			'display' => __('Once Every 3 Hours')
+		);
+	}
+
+	return $schedules;
+}
+add_filter('cron_schedules', 'fc_cron_schedules');
 ?>
