@@ -20,6 +20,7 @@ function uci_results_add_races($args='') {
 	);
 	$args=wp_parse_args($args, $default_args);
 	$new_results=0;
+	$email_message='';
 
 	extract($args);
 
@@ -31,6 +32,8 @@ function uci_results_add_races($args='') {
 	foreach ($races as $race) :
 		$result=$uci_results_add_races->add_race_to_db($race, true);
 		write_cron_log(strip_tags($result['message']));
+
+		$email_message.=strip_tags($result['message'])."\n";
 
 		if ($result['new_result'])
 			$new_results++;
@@ -56,12 +59,27 @@ function uci_results_add_races($args='') {
 	write_cron_log('The uci_results_add_races cron job finished.');
 
 	// alert admin //
-	$message="The uci_results_add_races cron job finished.";
-	wp_mail(get_option('admin_email'), 'Cron Job: UCI Results Add Races', $message);
+	$message="The uci_results_add_races cron job finished. There were $new_results new results \n";
+	$message.=$email_message;
+	uci_results_cron_job_email('Cron Job: UCI Results Add Races', $message);
 
 	return;
 }
 add_action('uci_results_add_races', 'uci_results_add_races');
+
+/**
+ * uci_results_cron_job_email function.
+ *
+ * @access public
+ * @param string $subject (default: '')
+ * @param string $message (default: '')
+ * @return void
+ */
+function uci_results_cron_job_email($subject='', $message='') {
+	$to=	get_option('admin_email');
+
+	wp_mail($to, $subject, $message);
+}
 
 /**
  * uci_results_update_rider_weekly_points function.
