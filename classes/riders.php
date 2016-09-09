@@ -129,7 +129,8 @@ class UCIResultsRiders {
 				races.class,
 				races.season,
 				races.code,
-				races.series_id
+				races.series_id,
+				races.nat
 			FROM $wpdb->uci_results_results AS results
 			LEFT JOIN $wpdb->uci_results_races AS races	ON results.race_id = races.id
 			$where

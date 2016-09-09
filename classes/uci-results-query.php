@@ -143,6 +143,7 @@ class UCI_Results_Query {
 		$where='';
 		$order='';
 		$meta='';
+		$select='';
 
 		$this->query_vars=$this->set_query_vars($query);
 		$q=$this->query_vars;
