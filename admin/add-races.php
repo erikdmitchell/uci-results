@@ -166,7 +166,7 @@ class UCIResultsAddRaces {
 
 		// setup as object //
 		foreach ($races as $key => $value) :
-			if (empty((array) $value))
+			if (empty($value))
 				continue;
 
 			$races_obj->$key=$value;
