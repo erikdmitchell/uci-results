@@ -62,7 +62,8 @@ class UCIResultsAdminPages {
 			'series' => 'Series',
 			'riders' => 'Riders',
 			'rider-rankings' => 'Rider Rankings',
-			'settings' => 'Settings'
+			'settings' => 'Settings',
+			'api' => 'API'
 		);
 		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'uci-curl';
 
@@ -112,6 +113,9 @@ class UCIResultsAdminPages {
 						break;
 				case 'settings':
 					$html.=ucicurl_get_admin_page('settings');
+					break;
+				case 'api':
+					$html.=ucicurl_get_admin_page('api');
 					break;
 				default:
 					if (isset($_GET['action']) && $_GET['action']=='update-rankings') :
