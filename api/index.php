@@ -41,7 +41,7 @@ try {
 
     // get the controller and format it correctly so the first letter is always capitalized //
     if (isset($params['controller'])) :
-	    $controller = ucfirst(strtolower($params['controller']));
+	    $controller = strtolower($params['controller']);
 	  else :
 	  	$controller='';
 	  endif;

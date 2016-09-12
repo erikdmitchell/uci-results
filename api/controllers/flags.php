@@ -3,7 +3,7 @@
 /**
  * Flags class.
  */
-class Flags {
+class flags {
 	private $_params;
 
 	/**

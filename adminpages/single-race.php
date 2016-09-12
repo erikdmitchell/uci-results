@@ -1,6 +1,9 @@
 <?php
 global $ucicurl_races;
 
+if ((!isset($_GET['race_id']) || $_GET['race_id']==0) && isset($_POST['race_id']))
+	$_GET['race_id']==$_POST['race_id'];
+
 $race=$ucicurl_races->get_race($_GET['race_id']);
 $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 ?>
@@ -8,54 +11,57 @@ $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 <?php uci_results_admin_notices(); ?>
 
 <div class="uci-results-admin-single-race two-col">
-	<h2><?php echo $race->event; ?></h2>
-	<span class="code"><?php echo $race->code; ?></span>
 
-	<!-- <div class="tablenav top single-race"> -->
-	<div class="single-race col-right">
-		<div class="race-details postbox uci-results-sidebox">
-			<div class="upper-box">
-				<h2>Race Details</h2>
-			</div>
+	<form id="update-race-information" method="post" action="">
 
-			<div class="inner-box">
-				<form id="update-race-information" method="post" action="">
-					<?php wp_nonce_field('update_single_race_info', 'uci_results_admin'); ?>
-					<input type="hidden" name="race_id" value="<?php echo $_GET['race_id']; ?>" />
+		<h2><input type="text" name="name" id="name" value="<?php echo $race->event; ?>" placeholder="Race Name" /></h2>
+		<span class="code"><input type="text" name="code" id="code" value="<?php echo $race->code; ?>" placeholder="code" /></span>
 
-					<div class="row">
-						<label for="date">Date</label>
-						<input type="text" name="date" id="date" class="date" value="<?php echo date(get_option('date_format'), strtotime($race->date)); ?>" />
-					</div>
-					<div class="row season">
-						<label for="season">Season</label>
-						<?php uci_results_seasons_dropdown('season', $race->season); ?>
-					</div>
-					<div class="row">
-						<label for="week">Week</label>
-						<input type="text" name="week" id="week" class="week" value="<?php echo $race->week; ?>" />
-					</div>
-					<div class="row">
-						<label for="class">Class</label>
-						<input type="text" name="class" id="class" class="class" value="<?php echo $race->class; ?>" />
-					</div>
-					<div class="row">
-						<label for="nat">Nat.</label>
-						<input type="text" name="nat" id="nat" class="nat" value="<?php echo $race->nat; ?>" />
-					</div>
-					<div class="row">
-						<p>
-							<label for="series_id">Series</label>
-							<?php $ucicurl_races->series_dropdown('series_id', $race->series_id); ?>
-						</p>
-					</div>
-					<div class="action-buttons">
-						<input type="submit" id="doaction" class="button action button-primary" value="Update">
-					</div>
-				</form>
+		<div class="single-race col-right">
+			<div class="race-details postbox uci-results-sidebox">
+				<div class="upper-box">
+					<h2>Race Details</h2>
+				</div>
+
+				<div class="inner-box">
+
+						<?php wp_nonce_field('update_single_race_info', 'uci_results_admin'); ?>
+						<input type="hidden" name="race_id" value="<?php echo $_GET['race_id']; ?>" />
+
+						<div class="row">
+							<label for="date">Date</label>
+							<input type="text" name="date" id="date" class="date" value="<?php echo date(get_option('date_format'), strtotime($race->date)); ?>" />
+						</div>
+						<div class="row season">
+							<label for="season">Season</label>
+							<?php uci_results_seasons_dropdown('season', $race->season); ?>
+						</div>
+						<div class="row">
+							<label for="week">Week</label>
+							<input type="text" name="week" id="week" class="week" value="<?php echo $race->week; ?>" />
+						</div>
+						<div class="row">
+							<label for="class">Class</label>
+							<input type="text" name="class" id="class" class="class" value="<?php echo $race->class; ?>" />
+						</div>
+						<div class="row">
+							<label for="nat">Nat.</label>
+							<input type="text" name="nat" id="nat" class="nat" value="<?php echo $race->nat; ?>" />
+						</div>
+						<div class="row">
+							<p>
+								<label for="series_id">Series</label>
+								<?php $ucicurl_races->series_dropdown('series_id', $race->series_id); ?>
+							</p>
+						</div>
+						<div class="action-buttons">
+							<input type="submit" id="doaction" class="button action button-primary" value="Update">
+						</div>
+				</div>
 			</div>
 		</div>
-	</div>
+
+	</form>
 
 	<div class="col-left">
 		<table class="wp-list-table widefat fixed striped pages">

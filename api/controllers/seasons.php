@@ -3,7 +3,7 @@
 /**
  * Seasons class.
  */
-class Seasons {
+class seasons {
 	private $_params;
 
 	/**

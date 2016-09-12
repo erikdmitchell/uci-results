@@ -3,7 +3,7 @@
 /**
  * Resultsquery class.
  */
-class Resultsquery {
+class resultsquery {
 	private $_params;
 
 	/**

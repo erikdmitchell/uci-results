@@ -22,7 +22,7 @@ $races=new UCI_Results_Query(array(
 ?>
 
 <div class="uci-results-admin-races">
-	<h2>Races <span class="ucicurl-admin-total">(<?php echo $races->found_posts; ?>)</span></h2></a>
+	<h2>Races <span class="ucicurl-admin-total">(<?php echo $races->found_posts; ?>)</span></h2><a href="<?php echo admin_url(); ?>?page=uci-curl&tab=races&race_id=0">Add New</a>
 
 	<div class="tablenav top">
 		<div class="pagination">

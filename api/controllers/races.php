@@ -3,7 +3,7 @@
 /**
  * Races class.
  */
-class Races {
+class races {
 	private $_params;
 
 	/**

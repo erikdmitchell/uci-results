@@ -39,7 +39,7 @@ class UCIcURLRaces {
 
 		// last race id check //
 		if (empty($race_id) || $race_id=='')
-			return false;
+			return $this->empty_race();
 
 		$race=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_races WHERE id=$race_id");
 		$race->results='';
@@ -62,6 +62,32 @@ class UCIcURLRaces {
 			");
 
 		return $race;
+	}
+
+	/**
+	 * empty_race function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function empty_race() {
+		$race=array(
+			'id' => 0,
+			'date' => '',
+			'event' => '',
+			'nat' => '',
+			'class' => '',
+			'winner' => '',
+			'season' => '',
+			'week' => 0,
+			'link' => '',
+			'code' => '',
+			'related_races_id' => 0,
+			'series_id' => 0,
+			'results' => array(),
+		);
+
+		return (object) $race;
 	}
 
 	/**
@@ -280,27 +306,50 @@ class UCIcURLRaces {
 	 * @return void
 	 */
 	public function update_single_race_form() {
-		global $wpdb;
+		global $wpdb, $uci_results_admin_notices;
 
 		// verify nonce //
 		if (!isset($_POST['uci_results_admin']) || !wp_verify_nonce($_POST['uci_results_admin'], 'update_single_race_info'))
 			return false;
 
-		$data=array(
-			'date' => date('Y-m-d', strtotime($_POST['date'])),
-			'season' => $_POST['season'],
-			'week' => $_POST['week'],
-			'class' => $_POST['class'],
-			'nat' => $_POST['nat'],
-			'series_id' => $_POST['series_id'],
-		);
+		// update or insert ? //
+		if (!$_POST['race_id']) :
+			$data=array(
+				'event' => $_POST['name'],
+				'code' => $_POST['code'],
+				'date' => date('Y-m-d', strtotime($_POST['date'])),
+				'season' => $_POST['season'],
+				'week' => $_POST['week'],
+				'class' => $_POST['class'],
+				'nat' => $_POST['nat'],
+				'series_id' => $_POST['series_id'],
+			);
+			$race_id=$wpdb->insert($wpdb->uci_results_races, $data);
 
-		$result=$wpdb->update($wpdb->uci_results_races, $data, array('id' => $_POST['race_id']));
+			if ($race_id) :
+				$uci_results_admin_notices['updated'][]='Race created.';
+				$_POST['race_id']=$race_id;
+			else :
+				$uci_results_admin_notices['error'][]='Failed to create race.';
+			endif;
 
-		if ($result===false) :
-			$uci_results_admin_notices['error'][]='Race failed to update.';
-		else :
-			$uci_results_admin_notices['updated'][]='Race updated.';
+		else : // update //
+			$data=array(
+				'date' => date('Y-m-d', strtotime($_POST['date'])),
+				'season' => $_POST['season'],
+				'week' => $_POST['week'],
+				'class' => $_POST['class'],
+				'nat' => $_POST['nat'],
+				'series_id' => $_POST['series_id'],
+			);
+
+			$result=$wpdb->update($wpdb->uci_results_races, $data, array('id' => $_POST['race_id']));
+
+			if ($result===false) :
+				$uci_results_admin_notices['error'][]='Race failed to update.';
+			else :
+				$uci_results_admin_notices['updated'][]='Race updated.';
+			endif;
 		endif;
 	}
 

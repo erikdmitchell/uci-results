@@ -31,6 +31,9 @@ h2 .ucicurl-admin-total {
 }
 .uci-results span.code {
 	float: left;
+	display: inline-block;
+	width: 100%;
+	margin-bottom: 0.5em;
 }
 .uci-results .col-right {
 	width: 280px;
@@ -72,6 +75,23 @@ h2 .ucicurl-admin-total {
 }
 .tablenav.single-race > div .season {
 	font-style: italic;
+}
+#update-race-information #name {
+	width: 100%;
+	background: transparent;
+	border: none;
+	box-shadow: none;
+  color: #23282d;
+  font-size: 1.3em;
+  margin: 0.75em 0;
+	display: block;
+  font-weight: 600;
+}
+#update-race-information #code {
+	width: 100%;
+	background: transparent;
+	border: none;
+	box-shadow: none;
 }
 
 /** pagination **/
