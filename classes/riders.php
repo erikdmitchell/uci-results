@@ -77,6 +77,67 @@ class UCIResultsRiders {
 	}
 
 	/**
+	 * get_riders function.
+	 *
+	 * @access public
+	 * @param string $args (default: '')
+	 * @return void
+	 */
+	public function get_riders($args='') {
+		global $wpdb;
+
+		$default_args=array(
+			'rider_ids' => '',
+			'results' => false,
+			'last_result' => false,
+			'results_season' => '',
+			'ranking' => false,
+			'stats' => false
+		);
+		$args=wp_parse_args($args, $default_args);
+		$riders=array();
+
+		extract($args);
+
+		// setup rider ids //
+		if (!empty($rider_ids)) :
+			if (is_array($rider_ids))
+				$rider_ids=implode(',', $rider_ids);
+		endif;
+
+		// build our sql query //
+		$rider_ids=$wpdb->get_col("SELECT id FROM $wpdb->uci_results_riders WHERE id IN($rider_ids)");
+
+		foreach ($rider_ids as $rider_id) :
+			$rider=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_riders WHERE id=$rider_id");
+			$rider->results='';
+			$rider->last_result='';
+			$rider->ranking='';
+			$rider->stats='';
+
+			// get results //
+			if ($results)
+				$rider->results=$this->get_rider_results($rider_id, $race_ids, $results_season);
+
+			// last result //
+			if (!$results && $last_result)
+				$rider->last_result=$this->rider_last_race_result($rider_id);
+
+			// get ranking //
+			if ($ranking)
+				$rider->rank=$this->get_rider_rank($rider_id);
+
+			// get stats //
+			if ($stats)
+				$rider->stats=$this->get_stats($rider_id);
+
+			$riders[]=$rider;
+		endforeach;
+
+		return $riders;
+	}
+
+	/**
 	 * get_rider_results function.
 	 *
 	 * @access public

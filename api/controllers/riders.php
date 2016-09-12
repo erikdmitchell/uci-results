@@ -43,6 +43,14 @@ class riders {
 		return $rider;
 	}
 
+	public function riders() {
+		global $ucicurl_riders;
+
+		$rider=$ucicurl_riders->get_riders($this->_params);
+
+		return $rider;
+	}
+
 	/**
 	 * riderSearch function.
 	 *
