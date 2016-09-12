@@ -20,7 +20,11 @@ $races=new UCI_Results_Query(array(
 	),
 ));
 ?>
+<?php
+global $uci_results_add_races;
 
+$uci_results_add_races->check_for_race_already_created('rochester funky monkey day two', '2016-09-11');
+?>
 <div class="uci-results-admin-races">
 	<h2>Races <span class="ucicurl-admin-total">(<?php echo $races->found_posts; ?>)</span></h2><a href="<?php echo admin_url(); ?>?page=uci-curl&tab=races&race_id=0">Add New</a>
 

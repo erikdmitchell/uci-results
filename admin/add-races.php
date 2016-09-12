@@ -267,7 +267,7 @@ class UCIResultsAddRaces {
 					foreach ($obj as $result) :
 						$disabled='';
 						$date=$result->date;
-						$code=$this->build_race_code($result->event, $result->date);
+						$code=$this->build_race_code($result);
 
 						// check we have event //
 						if (!isset($result->event)) :
@@ -314,24 +314,44 @@ class UCIResultsAddRaces {
 		return $html;
 	}
 
-	/**
-	 * build_race_code function.
-	 *
-	 * takes the race name and date to build a string which becomes our "code" to prevent dups
-	 *
-	 * @access public
-	 * @param bool $name (default: false)
-	 * @param bool $date (default: false)
-	 * @return void
-	 */
-	public function build_race_code($name=false, $date=false) {
-		if (!$date || !$name)
-			return false;
+	public function build_race_code($args='') {
+		$default=array(
+			'name' => '',
+			'date' => date('Y-m-d'),
+		);
+		$args=wp_parse_args($args, $default);
+		$code_created=$this->check_for_race_already_created($args);
 
-		$code=$name.$date; // combine name and date
+		if ($code_created)
+			return $code_created;
+
+		$code=$args['name'].$args['date']; // combine name and date
 		$code=sanitize_title_with_dashes($code); // https://codex.wordpress.org/Function_Reference/sanitize_title_with_dashes
 
 		return $code;
+	}
+
+	public function check_for_race_already_created($args='') {
+		global $wpdb;
+
+		$default=array(
+			'date' => date('Y-m-d'),
+			'nat' => '',
+			'class' => '',
+			'season' => ''
+		);
+		$args=wp_parse_args($args, $default);
+
+		$empty_races=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_races WHERE winner = '' AND date = '".$args['date']."' AND nat = '".$args['nat']."' AND class = '".$args['class']."' AND season = '".$args['season']."'");
+
+		if (count($empty_races)==1)
+			return $empty_races[0]->code;
+
+/*
+we need some sort of search to compare names
+*/
+
+		return false;
 	}
 
 	/**
@@ -485,7 +505,7 @@ class UCIResultsAddRaces {
 			'winner' => $race_data->winner,
 			'season' => $race_data->season,
 			'link' => $race_data->link,
-			'code' => $this->build_race_code($race_data->event, $race_data->date),
+			'code' => $this->build_race_code($race_data),
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
 		);
 
