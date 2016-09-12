@@ -277,7 +277,7 @@ class UCI_Results_Query {
 		// check rider id //
 		if ($q['rider_id']) :
 			if ($q['rankings']) :
-				$where[]="riders.id=".$q['rider_id'];
+				$where[]="wp_uci_curl_riders.id=".$q['rider_id'];
 			else :
 				$where[]="id=".$q['rider_id'];
 			endif;
