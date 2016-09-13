@@ -29,5 +29,16 @@ class flags {
 		return $flag;
 	}
 
+	/**
+	 * flags function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function flags() {
+		$flags=uci_results_all_flags();
+
+		return $flags;
+	}
 }
 ?>
