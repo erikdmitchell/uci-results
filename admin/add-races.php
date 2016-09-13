@@ -314,6 +314,13 @@ class UCIResultsAddRaces {
 		return $html;
 	}
 
+	/**
+	 * build_race_code function.
+	 *
+	 * @access public
+	 * @param string $args (default: '')
+	 * @return void
+	 */
 	public function build_race_code($args='') {
 		$default=array(
 			'name' => '',
@@ -331,6 +338,13 @@ class UCIResultsAddRaces {
 		return $code;
 	}
 
+	/**
+	 * check_for_race_already_created function.
+	 *
+	 * @access public
+	 * @param string $args (default: '')
+	 * @return void
+	 */
 	public function check_for_race_already_created($args='') {
 		global $wpdb;
 
@@ -352,6 +366,24 @@ we need some sort of search to compare names
 */
 
 		return false;
+	}
+
+	/**
+	 * is_race_empty function.
+	 *
+	 * @access public
+	 * @param string $code (default: '')
+	 * @return void
+	 */
+	public function is_race_empty($code='') {
+		global $wpdb;
+
+		$winner=$wpdb->get_var("SELECT winner FROM $wpdb->uci_results_races WHERE code = '$code'");
+
+		if ($winner!==null)
+			return false;
+
+		return true;
 	}
 
 	/**
@@ -466,13 +498,15 @@ we need some sort of search to compare names
 	public function check_for_dups($code) {
 		global $wpdb;
 
-		$races_in_db=$wpdb->get_results("SELECT code FROM $wpdb->uci_results_races");
+		$id=$wpdb->get_var("SELECT id FROM $wpdb->uci_results_races WHERE code='$code'");
 
-		if (count($races_in_db)!=0) :
-			foreach ($races_in_db as $race) :
-				if ($race->code==$code)
-					return true;
-			endforeach;
+		// we have id (aka code), but make sure it's not empty ie we preloaded the race //
+		if ($id!==null) :
+			if (!$this->is_race_empty($code)) :
+				return true;
+			else :
+				return false;
+			endif;
 		endif;
 
 		return false;
