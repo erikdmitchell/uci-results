@@ -45,7 +45,7 @@ class UCIResultsRiderRankings {
 		global $wpdb;
 
 		$this->clear_db($_POST['season']);
-		$rider_ids=$wpdb->get_col("SELECT id FROM {$wpdb->uci_results_riders}"); // get all rider ids
+		$rider_ids=$wpdb->get_col("SELECT id FROM $wpdb->uci_results_riders LIMIT 5"); // get all rider ids
 
 		wp_send_json($rider_ids);
 	}
@@ -57,16 +57,16 @@ class UCIResultsRiderRankings {
 	 * @return void
 	 */
 	public function ajax_update_rider_weekly_points() {
-		global $wpdb;
-
+echo 'a';
 		extract($_POST);
 
-		if (!$rider_id || !$season)
-			return;
+		//if (!$rider_id || !$season)
+			//return;
+print_r($_POST);
 
-		$message=$this->update_rider_weekly_points($rider_id, $season);
+		//$message=$this->update_rider_weekly_points($rider_id, $season);
 
-		echo $message;
+		//echo $message;
 
 		wp_die();
 	}
@@ -107,7 +107,7 @@ class UCIResultsRiderRankings {
 		if (!$rider_id || empty($season))
 			return false;
 
-		$sql="
+		echo $sql="
 			SELECT
 				races.week AS week,
 				(
@@ -127,6 +127,7 @@ class UCIResultsRiderRankings {
 			GROUP BY races.week
 			ORDER BY races.week
 		";
+/*
 		$weekly_points=$wpdb->get_results($sql);
 
 		foreach ($weekly_points as $arr) :
@@ -147,6 +148,7 @@ class UCIResultsRiderRankings {
 		$message='<div class="updated">Rider ID '.$rider_id.' rankings have been updated!</div>';
 
 		return $message;
+*/
 	}
 
 	/**

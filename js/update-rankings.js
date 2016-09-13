@@ -45,8 +45,10 @@ jQuery(document).ready(function($) {
 					'rider_id' : rider_ids[i],
 					'season' : season
 				};
-
+console.log('pre update rider rankings ajax');
+console.log(update_data);
 				$.post(ajaxurl, update_data, function(response) {
+console.log(response);
 					rider_counter++;
 
 					$('.update-rider-ranking-notes .rider-ranking-totals .current-count').text(rider_counter);
