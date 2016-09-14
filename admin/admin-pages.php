@@ -57,15 +57,15 @@ class UCIResultsAdminPages {
 
 		$html=null;
 		$tabs=array(
-			'uci-curl' => 'Results',
+			'settings' => 'Settings',
+			'results' => 'Results',
 			'races' => 'Races',
 			'series' => 'Series',
 			'riders' => 'Riders',
 			'rider-rankings' => 'Rider Rankings',
-			'settings' => 'Settings',
 			'api' => 'API'
 		);
-		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'uci-curl';
+		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'settings';
 
 		$html.='<div class="wrap uci-results">';
 			$html.='<h1>UCI Results</h1>';
@@ -114,11 +114,14 @@ class UCIResultsAdminPages {
 				case 'settings':
 					$html.=ucicurl_get_admin_page('settings');
 					break;
+				case 'results':
+					$html.=ucicurl_get_admin_page('results');
+					break;
 				case 'api':
 					$html.=ucicurl_get_admin_page('api');
 					break;
 				default:
-						$html.=ucicurl_get_admin_page('curl');
+						$html.=ucicurl_get_admin_page('settings');
 			endswitch;
 
 		$html.='</div><!-- /.wrap -->';
