@@ -5,9 +5,9 @@ $season=null;
 $url=null;
 $limit=null;
 ?>
-<div class="uci-curl">
+<div class="uci-results">
 
-	<h2>cURL</h2>
+	<h2>Results (cURL)</h2>
 
 	<form class="get-races" name="get-races" method="post">
 

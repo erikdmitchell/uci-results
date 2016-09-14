@@ -31,7 +31,7 @@ class UCIResultsAdminPages {
 	 * @return void
 	 */
 	public function admin_page() {
-		add_menu_page('UCI Results', 'UCI Results', 'manage_options', 'uci-curl', array($this, 'display_admin_page'), 'dashicons-sos');
+		add_menu_page('UCI Results', 'UCI Results', 'manage_options', 'uci-results', array($this, 'display_admin_page'), 'dashicons-sos');
 	}
 
 	/**
@@ -41,9 +41,9 @@ class UCIResultsAdminPages {
 	 * @return void
 	 */
 	public function admin_scripts_styles() {
-		wp_enqueue_script('uci-curl-admin',UCI_RESULTS_URL.'/js/admin.js',array('jquery'), '0.1.0',true);
+		wp_enqueue_script('uci-results-admin',UCI_RESULTS_URL.'/js/admin.js',array('jquery'), '0.1.0',true);
 
-		wp_enqueue_style('uci-curl-admin',UCI_RESULTS_URL.'/css/admin.css',array(), '0.1.0');
+		wp_enqueue_style('uci-results-admin',UCI_RESULTS_URL.'/css/admin.css',array(), '0.1.0');
 	}
 
 	/**
@@ -78,7 +78,7 @@ class UCIResultsAdminPages {
 						$class=null;
 					endif;
 
-					$html.='<a href="?page=uci-curl&tab='.$key.'" class="nav-tab '.$class.'">'.$name.'</a>';
+					$html.='<a href="?page=uci-results&tab='.$key.'" class="nav-tab '.$class.'">'.$name.'</a>';
 				endforeach;
 			$html.='</h2>';
 

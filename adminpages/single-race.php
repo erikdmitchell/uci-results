@@ -80,7 +80,7 @@ $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 				<?php foreach ($race->results as $result) : ?>
 					<tr>
 						<td class="rider-place"><?php echo $result->place; ?></td>
-						<td class="rider-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=riders&rider='.urlencode($result->name)); ?>"><?php echo $result->name; ?></a></td>
+						<td class="rider-name"><a href="<?php echo admin_url('admin.php?page=uci-results&tab=riders&rider='.urlencode($result->name)); ?>"><?php echo $result->name; ?></a></td>
 						<td class="rider-nat"><?php echo $result->nat; ?></td>
 						<td class="rider-age"><?php echo $result->age; ?></td>
 						<td class="rider-result"><?php echo $result->time; ?></td>
@@ -91,7 +91,7 @@ $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 			</tbody>
 		</table>
 
-		<h2>Related Races <a href="<?php echo admin_url('admin.php?page=uci-curl&tab=races&race_id='.$_GET['race_id'].'&add_related_race=yes'); ?>" id="add-related-race" class="page-title-action">Add Related Race</a></h2>
+		<h2>Related Races <a href="<?php echo admin_url('admin.php?page=uci-results&tab=races&race_id='.$_GET['race_id'].'&add_related_race=yes'); ?>" id="add-related-race" class="page-title-action">Add Related Race</a></h2>
 
 		<table class="wp-list-table widefat fixed striped pages related-races">
 			<thead>
@@ -107,7 +107,7 @@ $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 				<?php if ($related_races) : foreach ($related_races as $race) : ?>
 					<tr>
 						<td class="race-date"><?php echo date(get_option('date_format'), strtotime($race->date)); ?></td>
-						<td class="race-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=races&race_id='.$race->id); ?>"><?php echo $race->event; ?></a></td>
+						<td class="race-name"><a href="<?php echo admin_url('admin.php?page=uci-results&tab=races&race_id='.$race->id); ?>"><?php echo $race->event; ?></a></td>
 						<td class="race-nat"><?php echo $race->nat; ?></td>
 						<td class="race-class"><?php echo $race->class; ?></td>
 						<td class="race-season"><?php echo $race->season; ?></td>

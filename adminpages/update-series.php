@@ -56,7 +56,7 @@ $series=$ucicurl_races->get_series_info();
 					<?php if ($races->have_posts()) : while ( $races->have_posts() ) : $races->the_post(); ?>
 						<tr>
 							<td class="race-date"><?php echo $uci_results_post->date; ?></td>
-							<td class="race-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=races&race_id='.$uci_results_post->id); ?>"><?php echo $uci_results_post->event; ?></a></td>
+							<td class="race-name"><a href="<?php echo admin_url('admin.php?page=uci-results&tab=races&race_id='.$uci_results_post->id); ?>"><?php echo $uci_results_post->event; ?></a></td>
 							<td class="race-nat"><?php echo $uci_results_post->nat; ?></td>
 							<td class="race-class"><?php echo $uci_results_post->class; ?></td>
 							<td class="race-season"><?php echo $uci_results_post->season; ?></td>

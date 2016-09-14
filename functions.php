@@ -481,8 +481,8 @@ function uci_results_admin_notices() {
  */
 function uci_results_admin_url($args='') {
 	$default_args=array(
-		'page' => 'uci-curl',
-		'tab' => 'uci-curl'
+		'page' => 'uci-results',
+		'tab' => 'results'
 	);
 	$args=wp_parse_args($args, $default_args);
 

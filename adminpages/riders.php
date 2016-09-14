@@ -20,7 +20,7 @@ $riders=new UCI_Results_Query(array(
 
 	<div class="alignright actions">
 		<form name="riders-search" method="get" action="">
-			<input type="hidden" name="page" value="uci-curl">
+			<input type="hidden" name="page" value="uci-results">
 			<input type="hidden" name="tab" value="riders">
 			<input id="riders-search" name="search" type="text" value="<?php echo $search; ?>" />
 			<input type="submit" id="search-submit" class="button action" value="Search">
@@ -28,7 +28,7 @@ $riders=new UCI_Results_Query(array(
 	</div>
 
 	<form name="riders-filter" method="get" action="">
-		<input type="hidden" name="page" value="uci-curl">
+		<input type="hidden" name="page" value="uci-results">
 		<input type="hidden" name="tab" value="riders">
 
 		<div class="alignleft actions">
@@ -54,7 +54,7 @@ $riders=new UCI_Results_Query(array(
 	<tbody>
 		<?php if ($riders->have_posts()) : while ( $riders->have_posts() ) : $riders->the_post(); ?>
 			<tr>
-				<td class="rider-name"><a href="<?php echo admin_url('admin.php?page=uci-curl&tab=riders&rider='.urlencode($uci_results_post->name)); ?>"><?php echo $uci_results_post->name; ?></a></td>
+				<td class="rider-name"><a href="<?php echo admin_url('admin.php?page=uci-results&tab=riders&rider='.urlencode($uci_results_post->name)); ?>"><?php echo $uci_results_post->name; ?></a></td>
 				<td class="rider-nat"><?php echo $uci_results_post->nat; ?></td>
 			</tr>
 		<?php endwhile; endif; ?>
