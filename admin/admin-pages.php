@@ -118,13 +118,7 @@ class UCIResultsAdminPages {
 					$html.=ucicurl_get_admin_page('api');
 					break;
 				default:
-					if (isset($_GET['action']) && $_GET['action']=='update-rankings') :
-						$html.=ucicurl_get_admin_page('update-rankings');
-					else :
 						$html.=ucicurl_get_admin_page('curl');
-					endif;
-
-					break;
 			endswitch;
 
 		$html.='</div><!-- /.wrap -->';

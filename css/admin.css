@@ -166,17 +166,6 @@ h2 .ucicurl-admin-total {
 	margin-left: 2px;
 }
 
-/* update rider rankings */
-.ucicurl-update-rankings .update-rankings .button {
-	margin: 15px 0;
-}
-.update-rider-ranking-notes {
-	margin: 15px 0;
-	display: none;
-	max-height: 500px;
-	overflow: scroll;
-}
-
 /* admin settings */
 .uci-results-settings .warning {
 	border-left: 4px solid #dd3d36;

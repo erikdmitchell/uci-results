@@ -13,83 +13,7 @@ class UCIResultsRiderRankings {
 	 * @return void
 	 */
 	public function __construct() {
-		add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
-		add_action('wp_ajax_update_rider_rankings_get_rider_ids', array($this, 'ajax_update_rider_rankings_get_rider_ids'));
-		add_action('wp_ajax_update_rider_rankings', array($this, 'ajax_update_rider_weekly_points'));
-		add_action('wp_ajax_update_rider_weekly_rank', array($this, 'ajax_update_rider_weekly_rank'));
 		add_action('wp_ajax_get_weeks_in_season', array($this, 'ajax_get_weeks_in_season'));
-	}
-
-	/**
-	 * admin_scripts_styles function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function admin_scripts_styles() {
-		wp_enqueue_script('uci-curl-update-rankings',UCI_RESULTS_URL.'/js/update-rankings.js',array('jquery'), '0.1.0',true);
-	}
-
-	/**
-	 * ajax_update_rider_rankings_get_rider_ids function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function ajax_update_rider_rankings_get_rider_ids() {
-		if (!isset($_POST['season']) || $_POST['season']=='') :
-			echo 'No season found';
-			return false;
-		endif;
-
-		global $wpdb;
-
-		$this->clear_db($_POST['season']);
-		$rider_ids=$wpdb->get_col("SELECT id FROM $wpdb->uci_results_riders LIMIT 5"); // get all rider ids
-
-		wp_send_json($rider_ids);
-	}
-
-	/**
-	 * ajax_update_rider_rankings function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function ajax_update_rider_weekly_points() {
-echo 'a';
-		extract($_POST);
-
-		//if (!$rider_id || !$season)
-			//return;
-print_r($_POST);
-
-		//$message=$this->update_rider_weekly_points($rider_id, $season);
-
-		//echo $message;
-
-		wp_die();
-	}
-
-	/**
-	 * ajax_update_rider_weekly_rank function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function ajax_update_rider_weekly_rank() {
-		if (!$_POST['season'] || !$_POST['week'])
-			return false;
-
-		$message=$this->update_rider_weekly_rankings($_POST['season'], $_POST['week']);
-
-		echo $message;
-
-		uci_results_store_rider_rankings(); // updates our stored option -- MAY NEED TO ADJUST
-
-		$this->update_twitter();
-
-		wp_die();
 	}
 
 	/**
@@ -107,7 +31,7 @@ print_r($_POST);
 		if (!$rider_id || empty($season))
 			return false;
 
-		echo $sql="
+		$sql="
 			SELECT
 				races.week AS week,
 				(
@@ -127,7 +51,7 @@ print_r($_POST);
 			GROUP BY races.week
 			ORDER BY races.week
 		";
-/*
+
 		$weekly_points=$wpdb->get_results($sql);
 
 		foreach ($weekly_points as $arr) :
@@ -148,7 +72,6 @@ print_r($_POST);
 		$message='<div class="updated">Rider ID '.$rider_id.' rankings have been updated!</div>';
 
 		return $message;
-*/
 	}
 
 	/**
