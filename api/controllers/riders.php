@@ -112,8 +112,8 @@ class riders {
 		$result=$wpdb->get_results("
 			SELECT
 				races.event,
-      	results.place,
-      	results.par AS points
+				results.place,
+				results.par AS points
 			FROM $wpdb->uci_results_races AS races
 			INNER JOIN $wpdb->uci_results_results AS results ON (results.rider_id=$rider_id AND races.id=results.race_id)
 			WHERE races.code = '$code'
