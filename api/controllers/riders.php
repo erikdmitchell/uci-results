@@ -43,6 +43,12 @@ class riders {
 		return $rider;
 	}
 
+	/**
+	 * riders function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function riders() {
 		global $ucicurl_riders;
 

@@ -91,17 +91,6 @@ class UCIcURLRaces {
 	}
 
 	/**
-	 * races function.
-	 *
-	 * @access public
-	 * @param array $args (default: array())
-	 * @return void
-	 */
-	public function races($args=array()) {
-		return $this->get_races($args);
-	}
-
-	/**
 	 * seasons function.
 	 *
 	 * @access public

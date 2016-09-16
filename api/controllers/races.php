@@ -40,7 +40,7 @@ class races {
 			'limit' => 15,
 			'results' => true
 		);
-		$args=wp_parse_args($_REQUEST, $default_args);
+		$args=wp_parse_args($this->_params, $default_args);
 
 		// looking for single race //
 		if (isset($this->_params['race']))
