@@ -225,7 +225,7 @@ class UCIResultsAddRaces {
 	public function is_multi_day_race($date='') {
 		// clean date //
 		$date = htmlentities($date, null, 'utf-8');
-    $date = str_replace("&nbsp;", "", $date);
+		$date = str_replace("&nbsp;", "", $date);
 
 		// if we have a '-' then it's a multi day so we return an array of start/end //
 		if (strpos($date, '-') !== false) :
@@ -332,7 +332,7 @@ class UCIResultsAddRaces {
 		if ($code_created)
 			return $code_created;
 
-		$code=$args['name'].$args['date']; // combine name and date
+		$code=$args['event'].$args['date']; // combine name and date
 		$code=sanitize_title_with_dashes($code); // https://codex.wordpress.org/Function_Reference/sanitize_title_with_dashes
 
 		return $code;
