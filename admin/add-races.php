@@ -323,7 +323,7 @@ class UCIResultsAddRaces {
 	 */
 	public function build_race_code($args='') {
 		$default=array(
-			'name' => '',
+			'event' => '',
 			'date' => date('Y-m-d'),
 		);
 		$args=wp_parse_args($args, $default);

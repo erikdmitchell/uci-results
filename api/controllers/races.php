@@ -110,7 +110,7 @@ class races {
 	public function buildRaceCode() {
 		global $uci_results_add_races;
 
-		$code=$uci_results_add_races->build_race_code($this->_params['name'], $this->_params['date']);
+		$code=$uci_results_add_races->build_race_code(array('event' => $this->_params['event'], 'date' => $this->_params['date']));
 
 		return $code;
 	}
