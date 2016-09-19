@@ -92,7 +92,7 @@ class UCIResultsRiders {
 			'last_result' => false,
 			'results_season' => '',
 			'ranking' => false,
-			'stats' => false
+			'stats' => false,
 		);
 		$args=wp_parse_args($args, $default_args);
 		$riders=array();
