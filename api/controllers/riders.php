@@ -198,5 +198,22 @@ class riders {
 		return $data;
 	}
 
+	/**
+	 * name function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function name() {
+		global $wpdb;
+
+		if (!isset($this->_params['id']))
+			return false;
+
+		$name=$wpdb->get_var("SELECT name FROM $wpdb->uci_results_riders WHERE id = ".$this->_params['id']);
+
+		return $name;
+	}
+
 }
 ?>
