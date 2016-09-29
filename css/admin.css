@@ -194,3 +194,12 @@ h2 .uci-results-admin-total {
 .uci-results-settings .message {
 	margin-bottom: 15px;
 }
+
+/* admin riders */
+.wp-admin .fc-riders .riders .rider-id,
+.wp-admin .fc-riders .riders .rider-rank,
+.wp-admin .fc-riders .riders .rider-nat,
+.wp-admin .fc-riders .riders .rider-cost,
+.wp-admin .fc-riders .riders .rider-perc-owned {
+	width: 5em;
+}

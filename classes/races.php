@@ -159,6 +159,13 @@ class UCIcURLRaces {
 			$related_races[]=$this->get_race($id);
 		endforeach;
 
+		// order by date //
+		$sort=array();
+		foreach ($related_races as $race) {
+			$sort[]=strtotime($race->date);
+		}
+		array_multisort($sort, SORT_DESC, $related_races);
+
 		return $related_races;
 	}
 
