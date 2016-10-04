@@ -257,12 +257,20 @@ class UCIcURLRaces {
 		if (!isset($_POST['uci_curl']) || !wp_verify_nonce($_POST['uci_curl'], 'add_related_races'))
 			return false;
 
+		$related_race_id=0;
+		$races=array();
+
 		if ($_POST['related_race_id']) :
+			$related_race_id=$_POST['related_race_id'];
+
 			// update if we have races, other wise remove //
 			if (isset($_POST['races']) && !empty($_POST['races'])) :
 				$data=array(
 					'race_ids' => implode(',', $_POST['races']).','.$_POST['race_id'] // get our ids and append the current race id
 				);
+
+				$races=$_POST['races'];
+				array_push($races, $_POST['race_id']);
 
 				$wpdb->update($wpdb->uci_results_related_races, $data, array('id' => $_POST['related_race_id']));
 			else :
@@ -274,8 +282,16 @@ class UCIcURLRaces {
 				'race_ids' => implode(',', $_POST['races']).','.$_POST['race_id'] // get our ids and append the current race id
 			);
 
-			$wpdb->insert($wpdb->uci_results_related_races, $data);
+			$races=$_POST['races'];
+			array_push($races, $_POST['race_id']);
+
+			$related_race_id=$wpdb->insert($wpdb->uci_results_related_races, $data);
 		endif;
+
+		// add related race id to each race //
+		foreach ($races as $race) :
+			$wpdb->update($wpdb->uci_results_races, array('related_races_id' => $related_race_id), array('id' => $race));
+		endforeach;
 
 		echo '<div class="updated">Related Races Updated!</div>';
 	}
