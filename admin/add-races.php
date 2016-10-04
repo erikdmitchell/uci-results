@@ -542,7 +542,7 @@ we need some sort of search to compare names
 			'code' => $this->build_race_code($race_data),
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
 		);
-
+print_r($data);
 		if (!$this->check_for_dups($data['code'])) :
 			if ($wpdb->insert($wpdb->uci_results_races, $data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
@@ -578,6 +578,9 @@ we need some sort of search to compare names
 	 */
 	public function get_race_week($date='', $season='') {
 		$season_data=uci_results_get_season_weeks($season);
+
+		if (!isset($season_data['weeks']) || empty($season_data['weeks']))
+			return 0;
 
 		return $this->get_week_of_date($date, $season_data['weeks']);
 	}
