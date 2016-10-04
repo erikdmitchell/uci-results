@@ -306,7 +306,7 @@ class UCIcURLRaces {
 	public function weeks($season='2015/2016') {
 		global $wpdb;
 
-		$weeks=$wpdb->get_col("SELECT week FROM {$wpdb->uci_results_races} WHERE season='{$season}' GROUP BY week ORDER BY week ASC");
+		$weeks=$wpdb->get_col("SELECT week FROM $wpdb->uci_results_races WHERE season='$season' GROUP BY week ORDER BY week ASC");
 
 		return $weeks;
 	}
