@@ -544,10 +544,10 @@ we need some sort of search to compare names
 		);
 
 		if (!$this->check_for_dups($data['code'])) :
-			if ($wpdb->insert($wpdb->uci_results_races, $data)) :
+			if ($race_id=$this->insert_race_into_db($data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
 				$new_results++;
-				$this->add_race_results_to_db($wpdb->insert_id, $race_data->link);
+				$this->add_race_results_to_db($race_id, $race_data->link);
 
 				// update to twitter //
 				if (uci_results_post_results_to_twitter()) :
@@ -566,6 +566,33 @@ we need some sort of search to compare names
 			return array('message' => $message, 'new_result' => $new_results);
 
 		return $message;
+	}
+
+	/**
+	 * insert_race_into_db function.
+	 *
+	 * @access public
+	 * @param string $data (default: '')
+	 * @return void
+	 */
+	public function insert_race_into_db($data='') {
+		global $wpdb;
+
+		$id=0;
+
+		if (empty($data))
+			return false;
+
+		$id=$wpdb->get_var("SELECT id FROM $wpdb->uci_results_races WHERE code = \"".$data['code']."\"");
+
+		// insert data and get id, else, update data //
+		if ($id === null) :
+			$id=$wpdb->insert($wpdb->uci_results_races, $data);
+		else :
+			$wpdb->update($wpdb->uci_results_races, $data, array('id' => $id));
+		endif;
+
+		return $id;
 	}
 
 	/**
