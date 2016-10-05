@@ -348,13 +348,13 @@ function uci_results_get_rider_id($slug='') {
 function uci_results_race_has_results($code='') {
 	global $wpdb;
 
-	$race_id=$wpdb->get_var("SELECT id FROM {$wpdb->uci_results_races} WHERE code=\"{$code}\"");
+	$race_id=$wpdb->get_var("SELECT id FROM $wpdb->uci_results_races WHERE code = \"$code\"");
 
 	// no race id, we out //
 	if (!$race_id)
 		return false;
 
-	$results=$wpdb->get_results("SELECT id FROM {$wpdb->uci_results_results} WHERE race_id={$race_id}");
+	$results=$wpdb->get_results("SELECT id FROM $wpdb->uci_results_results WHERE race_id = $race_id");
 
 	// do we have results? //
 	if (count($results))
