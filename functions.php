@@ -755,7 +755,7 @@ function uci_results_build_season_weeks($season='') {
 			$season_weeks[]=uci_results_set_season_weeks($season);
 		endforeach;
 	endif;
-
+print_r($season_weeks);
 	update_option('uci_results_season_weeks', $season_weeks);
 }
 

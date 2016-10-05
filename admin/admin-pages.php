@@ -20,6 +20,7 @@ class UCIResultsAdminPages {
 		add_action('admin_init', array($this, 'save_settings'));
 		add_action('wp_ajax_uci_results_empty_db', array($this, 'ajax_empty_db'));
 		add_action('wp_ajax_uci_results_remove_db', array($this, 'ajax_remove_db'));
+		add_action('wp_ajax_uci_results_build_season_weeks', array($this, 'ajax_uci_results_build_season_weeks'));
 
 		$this->setup_config($config);
 	}
@@ -284,6 +285,23 @@ class UCIResultsAdminPages {
 		uci_results_remove_database_tables();
 
 		echo '<div class="updated">Database tables removed.</div>';
+
+		wp_die();
+	}
+
+	/**
+	 * ajax_uci_results_build_season_weeks function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function ajax_uci_results_build_season_weeks() {
+		//ini_set("memory_limit", "-1");
+		//set_time_limit(0);
+
+		//uci_results_build_season_weeks();
+
+		echo '<div class="updated">Season weeks updated. THIS DOES NOT WORK</div>';
 
 		wp_die();
 	}

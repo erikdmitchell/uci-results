@@ -207,6 +207,22 @@
 
 		<div id="uci-results-actions-message"></div>
 
+		<table class="form-table">
+			<tbody>
+
+				<tr>
+					<th scope="row">
+						<label form="build-season-weeks">Build Season Weeks</label>
+					</th>
+					<td>
+						<button class="button button-primary" id="build-season-weeks">Build</button>
+						<p class="description">This operation will remove all data from the databases created by this plugin.</p>
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+
 		<div class="empty-db warning message">
 			<input type="hidden" id="uci-results-empty-db-nonce" value="<?php echo wp_create_nonce('uci-results-empty-db-nonce'); ?>" />
 			<p>This operation will remove all data from the databases created by this plugin.</p>

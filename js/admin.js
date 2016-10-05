@@ -159,6 +159,23 @@ jQuery(document).ready(function($) {
 	});
 
 	/**
+	 * build season weeks
+	 */
+	$('#build-season-weeks').click(function(e) {
+		showLoader('#wpcontent');
+
+		var data={
+			'action' : 'uci_results_build_season_weeks'
+		}
+
+		$.post(ajaxurl, data, function(response) {
+			hideLoader();
+
+			$('#uci-results-actions-message').append(response);
+		});
+	});
+
+	/**
 	 * Remove Data button (settings) - remove all data from db
 	 */
 	$('#uci-results-empty-db').click(function(e) {
@@ -187,3 +204,20 @@ jQuery(document).ready(function($) {
 	});
 
 });
+
+// create/display loader //
+function showLoader(self) {
+	var loaderContainer = jQuery( '<div/>', {
+		'class': 'loader-image-container'
+	}).appendTo( self ).show();
+
+	var loader = jQuery( '<img/>', {
+		src: '/wp-admin/images/wpspin_light-2x.gif',
+		'class': 'loader-image'
+	}).appendTo( loaderContainer );
+}
+
+// remove loader //
+function hideLoader() {
+	jQuery('.loader-image-container').remove();
+}
