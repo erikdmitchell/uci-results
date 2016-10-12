@@ -521,7 +521,7 @@ we need some sort of search to compare names
 	 * @return void
 	 */
 	public function add_race_to_db($race_data='', $raw_response=false) {
-		global $wpdb, $uci_results_twitter, $uci_results_pages;
+		global $wpdb, $uci_results_twitter, $uci_results_pages, $ucicurl_races;
 
 		$message=null;
 		$new_results=0;
@@ -552,7 +552,14 @@ we need some sort of search to compare names
 				// update to twitter //
 				if (uci_results_post_results_to_twitter()) :
 					$url=get_permalink($uci_results_pages['single_race']).$data['code'];
-					$status=$race_data->winner.' wins '.$race_data->event.' ('.$race_data->class.') '.$url;
+
+					// use twitter if we have it //
+					$twitter=$ucicurl_races->get_twitter($race_data->id);
+
+					if (!empty($twitter))
+						$twitter='@'.$twitter;
+
+					$status=$race_data->winner.' wins '.$race_data->event.' ('.$race_data->class.') '.$twitter.' '.$url;
 					$uci_results_twitter->update_status($status);
 				endif;
 			else :

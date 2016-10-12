@@ -499,6 +499,21 @@ class UCIcURLRaces {
 		return $series;
 	}
 
+	/**
+	 * get_twitter function.
+	 *
+	 * @access public
+	 * @param int $race_id (default: 0)
+	 * @return void
+	 */
+	public function get_twitter($race_id=0) {
+		global $wpdb;
+
+		$twitter=$wpdb->get_var("SELECT twitter FROM $wpdb->uci_results_races WHERE id = $race_id");
+
+		return $twitter;
+	}
+
 }
 
 $ucicurl_races=new UCIcURLRaces();
