@@ -21,6 +21,7 @@ class UCIResultsAdminPages {
 		add_action('wp_ajax_uci_results_empty_db', array($this, 'ajax_empty_db'));
 		add_action('wp_ajax_uci_results_remove_db', array($this, 'ajax_remove_db'));
 		add_action('wp_ajax_uci_results_build_season_weeks', array($this, 'ajax_uci_results_build_season_weeks'));
+		add_action('wp_ajax_uci_results_rider_rankings_dropdown', array($this, 'ajax_rider_rankings_dropdown'));
 
 		$this->setup_config($config);
 	}
@@ -302,6 +303,28 @@ class UCIResultsAdminPages {
 		//uci_results_build_season_weeks();
 
 		echo '<div class="updated">Season weeks updated. THIS DOES NOT WORK</div>';
+
+		wp_die();
+	}
+
+	/**
+	 * ajax_rider_rankings_dropdown function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function ajax_rider_rankings_dropdown() {
+		global $ucicurl_races;
+
+		$html=null;
+
+		$html.='<option value="0">-- Select Week --</option>';
+
+		foreach ($ucicurl_races->weeks($_POST['season']) as $week) :
+			$html.='<option value="'.$week.'">'.$week.'</option>';
+		endforeach;
+
+		echo $html;
 
 		wp_die();
 	}

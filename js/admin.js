@@ -203,6 +203,24 @@ jQuery(document).ready(function($) {
 		});
 	});
 
+	$('#rankings-filter #season').change(function(e) {
+		showLoader('#wpcontent');
+
+		e.preventDefault();
+
+		var data={
+			'action' : 'uci_results_rider_rankings_dropdown',
+			'season' : $(this).val()
+		};
+
+		$.post(ajaxurl, data, function(response) {
+			$('#rankings-filter #week').html(response); //add our new weeks
+			$('table.riders').html(''); // clear table
+
+			hideLoader();
+		});
+	});
+
 });
 
 // create/display loader //

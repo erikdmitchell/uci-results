@@ -1,7 +1,7 @@
 <?php
 global $uci_results_query, $uci_results_post, $ucicurl_riders, $ucicurl_races;
 
-$_season=isset($_GET['season']) ? $_GET['season'] : '2014/2015';
+$_season=isset($_GET['season']) ? $_GET['season'] : '2016/2017';
 $_nat=isset($_GET['nat']) ? $_GET['nat'] : '';
 $name='';
 $_week=isset($_GET['week']) ? $_GET['week'] : 1;
@@ -26,23 +26,12 @@ $riders=new UCI_Results_Query(array(
 			<?php uci_results_admin_pagination(); ?>
 		</div>
 
-		<!--
-		<div class="alignright actions">
-			<form name="races-search" method="get" action="">
-				<input type="hidden" name="page" value="uci-results">
-				<input type="hidden" name="tab" value="rider-rankings">
-				<input id="race-search" name="search" type="text" value="<?php echo $search; ?>" />
-				<input type="submit" id="search-submit" class="button action" value="Search">
-			</form>
-		</div>
-		-->
-
-		<form name="rankings-filter" method="get" action="">
+		<form id="rankings-filter" name="rankings-filter" method="get" action="">
 			<input type="hidden" name="page" value="uci-results">
 			<input type="hidden" name="tab" value="rider-rankings">
 
 			<div class="alignleft actions">
-				<select name="season" class="season">
+				<select id="season" name="season" class="season">
 					<option value="0">-- Select Season --</option>
 					<?php foreach ($ucicurl_races->seasons() as $season) : ?>
 						<option value="<?php echo $season; ?>" <?php selected($_season, $season); ?>><?php echo $season; ?></option>
@@ -51,7 +40,7 @@ $riders=new UCI_Results_Query(array(
 			</div>
 
 			<div class="alignleft actions">
-				<select name="week" class="week">
+				<select id="week" name="week" class="week">
 					<option value="0">-- Select Week --</option>
 					<?php foreach ($ucicurl_races->weeks($_season) as $week) : ?>
 						<option value="<?php echo $week; ?>" <?php selected($_week, $week); ?>><?php echo $week; ?></option>
@@ -72,7 +61,7 @@ $riders=new UCI_Results_Query(array(
 		</form>
 	</div>
 
-	<table class="wp-list-table widefat fixed striped pages">
+	<table class="wp-list-table widefat fixed striped riders">
 		<thead>
 			<tr>
 				<th scope="col" class="rider-rank">Rank</th>
