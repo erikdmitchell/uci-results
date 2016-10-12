@@ -76,6 +76,7 @@ class UCIcURLRaces {
 			'date' => '',
 			'event' => '',
 			'nat' => '',
+			'twitter' => '',
 			'class' => '',
 			'winner' => '',
 			'season' => '',
@@ -334,6 +335,7 @@ class UCIcURLRaces {
 				'week' => $_POST['week'],
 				'class' => $_POST['class'],
 				'nat' => $_POST['nat'],
+				'twitter' => $_POST['twitter'],
 				'series_id' => $_POST['series_id'],
 			);
 			$race_id=$wpdb->insert($wpdb->uci_results_races, $data);
@@ -352,6 +354,7 @@ class UCIcURLRaces {
 				'week' => $_POST['week'],
 				'class' => $_POST['class'],
 				'nat' => $_POST['nat'],
+				'twitter' => $_POST['twitter'],
 				'series_id' => $_POST['series_id'],
 			);
 

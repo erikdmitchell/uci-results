@@ -49,6 +49,10 @@ $related_races=$ucicurl_races->get_related_races($_GET['race_id']);
 							<input type="text" name="nat" id="nat" class="nat" value="<?php echo $race->nat; ?>" />
 						</div>
 						<div class="row">
+							<label for="twitter">Twitter</label>
+							<input type="text" name="twitter" id="twitter" class="twitter" value="<?php echo $race->twitter; ?>" />
+						</div>
+						<div class="row">
 							<p>
 								<label for="series_id">Series</label>
 								<?php $ucicurl_races->series_dropdown('series_id', $race->series_id); ?>
