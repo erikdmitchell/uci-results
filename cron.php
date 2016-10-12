@@ -51,6 +51,11 @@ function uci_results_add_races($args='') {
 		if ($weekly_ranks)
 			uci_results_update_rider_weekly_rank();
 
+		// alert admin //
+		$message="The uci_results_add_races cron job finished. There were $new_results new results \n";
+		$message.=$email_message;
+		uci_results_cron_job_email('Cron Job: UCI Results Add Races', $message);
+
 		do_action('uci_results_add_races_cron_new_results');
 	endif;
 
@@ -58,10 +63,7 @@ function uci_results_add_races($args='') {
 
 	write_cron_log('The uci_results_add_races cron job finished.');
 
-	// alert admin //
-	$message="The uci_results_add_races cron job finished. There were $new_results new results \n";
-	$message.=$email_message;
-	uci_results_cron_job_email('Cron Job: UCI Results Add Races', $message);
+
 
 	return;
 }
