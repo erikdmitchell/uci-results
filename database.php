@@ -1,7 +1,7 @@
 <?php
 global $ucicurl_db_version;
 
-$ucicurl_db_version='0.1.7';
+$ucicurl_db_version='0.1.8';
 
 /**
  * ucicurl_set_db_tables function.
@@ -58,6 +58,7 @@ function ucicurl_db_install() {
 			code TEXT NOT NULL,
 			related_races_id bigint(20) NOT NULL DEFAULT '0',
 			series_id bigint(20) NOT NULL DEFAULT '0',
+			twitter VARCHAR(75) NOT NULL,
 			PRIMARY KEY (`id`)
 		) $charset;
 	";
@@ -85,6 +86,7 @@ function ucicurl_db_install() {
 			name LONGTEXT NOT NULL,
 			nat VARCHAR(5) NOT NULL,
 			slug LONGTEXT NOT NULL,
+			twitter VARCHAR(75) NOT NULL,
 			PRIMARY KEY (`id`)
 		) $charset;
 	";
@@ -180,6 +182,7 @@ function ucicurl_db_update() {
 				code TEXT NOT NULL,
 				related_races_id bigint(20) NOT NULL DEFAULT '0',
 				series_id bigint(20) NOT NULL DEFAULT '0',
+				twitter VARCHAR(75) NOT NULL,
 				PRIMARY KEY (`id`)
 			);
 		";
@@ -207,6 +210,7 @@ function ucicurl_db_update() {
 				name LONGTEXT NOT NULL,
 				nat VARCHAR(5) NOT NULL,
 				slug LONGTEXT NOT NULL,
+				twitter VARCHAR(75) NOT NULL,
 				PRIMARY KEY (`id`)
 			);
 		";
