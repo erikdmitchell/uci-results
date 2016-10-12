@@ -189,7 +189,7 @@ class UCIResultsRiderRankings {
 	 * @return void
 	 */
 	public function update_twitter() {
-		global $uci_results_pages, $uci_results_twitter;
+		global $uci_results_pages, $uci_results_twitter, $ucicurl_riders;
 
 		if (!uci_results_post_rankings_updates_to_twitter())
 			return false;
@@ -204,7 +204,17 @@ class UCIResultsRiderRankings {
 		// get our leader info //
 		if (isset($riders->posts[0])) :
 			$rider=$riders->posts[0];
-			$rider_info=$rider->name.' ('.$rider->nat.') leads the rankings with '.$rider->points.' points.';
+
+			// use twitter if we have it //
+			$twitter=$ucicurl_riders->get_twitter($rider->id);
+
+			if (!empty($twitter)) :
+				$name='@'.$twitter;
+			else :
+				$name=$rider->name;
+			endif;
+
+			$rider_info=$name.' ('.$rider->nat.') leads the rankings with '.$rider->points.' points.';
 		endif;
 
 		$url=get_permalink($uci_results_pages['rider_rankings']);
