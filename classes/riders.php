@@ -14,7 +14,9 @@ class UCIResultsRiders {
 	 * @access public
 	 * @return void
 	 */
-	public function __construct() {}
+	public function __construct() {
+		add_action('admin_init', array($this, 'update_rider'));
+	}
 
 	/**
 	 * get_rider function.
@@ -72,6 +74,8 @@ class UCIResultsRiders {
 		// get stats //
 		if ($stats)
 			$rider->stats=$this->get_stats($rider_id);
+
+		$rider->twitter=$this->get_twitter($rider_id);
 
 		return $rider;
 	}
@@ -651,6 +655,53 @@ class UCIResultsRiders {
 			return false;
 
 		return $titles;
+	}
+
+	/**
+	 * get_twitter function.
+	 *
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
+	public function get_twitter($rider_id=0) {
+		global $wpdb;
+
+		$twitter=$wpdb->get_var("SELECT twitter FROM $wpdb->uci_results_riders WHERE id = $rider_id");
+
+		return $twitter;
+	}
+
+	/**
+	 * update_rider function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function update_rider() {
+		global $wpdb, $uci_results_admin_notices;
+
+		// verify nonce //
+		if (!isset($_POST['uci_results_admin']) || !wp_verify_nonce($_POST['uci_results_admin'], 'update_single_rider_info'))
+			return false;
+
+		// check for id //
+		if (!isset($_POST['id']) || empty($_POST['id']))
+			return false;
+
+		$data=array(
+			'slug' => $_POST['slug'],
+			'nat' => $_POST['nat'],
+			'twitter' => $_POST['twitter'],
+		);
+
+		$result=$wpdb->update($wpdb->uci_results_riders, $data, array('id' => $_POST['id']));
+
+		if ($result===false) :
+			$uci_results_admin_notices['error'][]='Rider failed to update.';
+		else :
+			$uci_results_admin_notices['updated'][]='Rider updated.';
+		endif;
 	}
 
 }
