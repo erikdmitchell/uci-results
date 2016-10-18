@@ -509,6 +509,9 @@ class UCIcURLRaces {
 	public function get_twitter($race_id=0) {
 		global $wpdb;
 
+		if (empty($race_id))
+			return false;
+
 		$twitter=$wpdb->get_var("SELECT twitter FROM $wpdb->uci_results_races WHERE id = $race_id");
 
 		return $twitter;
