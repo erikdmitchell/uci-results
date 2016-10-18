@@ -595,7 +595,8 @@ we need some sort of search to compare names
 
 		// insert data and get id, else, update data //
 		if ($id === null) :
-			$id=$wpdb->insert($wpdb->uci_results_races, $data);
+			$wpdb->insert($wpdb->uci_results_races, $data);
+			$id=$wpdb->insert_id;
 		else :
 			$wpdb->update($wpdb->uci_results_races, $data, array('id' => $id));
 		endif;
