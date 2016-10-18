@@ -327,6 +327,7 @@ class UCIResultsAddRaces {
 			'date' => date('Y-m-d'),
 		);
 		$args=wp_parse_args($args, $default);
+
 		$code_created=$this->check_for_race_already_created($args);
 
 		if ($code_created)
@@ -554,7 +555,7 @@ we need some sort of search to compare names
 					$url=get_permalink($uci_results_pages['single_race']).$data['code'];
 
 					// use twitter if we have it //
-					$twitter=$ucicurl_races->get_twitter($race_data->id);
+					$twitter=$ucicurl_races->get_twitter($race_id);
 
 					if (!empty($twitter))
 						$twitter='@'.$twitter;
