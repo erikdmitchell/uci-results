@@ -1,0 +1,14 @@
+.uci-results-metabox label {
+	font-weight: bold;
+	display: inline-block;
+	width: 125px;
+}
+.uci-results-metabox input.date {
+	width: 100px;
+}
+.uci-results-metabox input.url {
+	width: 80%;
+}
+.uci-results-metabox input.number {
+	width: 50px;
+}
