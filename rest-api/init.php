@@ -7,6 +7,8 @@ include_once(UCI_RESULTS_API_PATH.'races-post-type.php');
 include_once(UCI_RESULTS_API_PATH.'riders-metabox.php');
 include_once(UCI_RESULTS_API_PATH.'races-metabox.php');
 include_once(UCI_RESULTS_API_PATH.'taxonomies.php');
+include_once(UCI_RESULTS_API_PATH.'functions.php');
+include_once(UCI_RESULTS_API_PATH.'api-requests.php');
 
 function uci_results_api_admin_scripts_styles() {
 	wp_enqueue_style('uci-results-api-admin-styles', UCI_RESULTS_API_URL.'admin/css/admin.css');
