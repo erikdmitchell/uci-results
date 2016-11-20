@@ -133,11 +133,6 @@ class UCIResultsRacesMetabox {
         </div>                                                        
 
         <div class="row">
-	        <label for="date"><?php _e('Series ID', 'uci-results'); ?></label>
-			<input type="text" id="date" name="date" value="<?php echo esc_attr($value); ?>" size="25" />
-        </div>    
-
-        <div class="row">
 	        <label for="date"><?php _e('Twitter', 'uci-results'); ?></label>
 			<input type="text" id="date" name="date" value="<?php echo esc_attr($value); ?>" size="25" />
         </div>
