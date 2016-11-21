@@ -7,6 +7,7 @@ include_once(UCI_RESULTS_API_PATH.'post-types/races.php');
 include_once(UCI_RESULTS_API_PATH.'post-types/results.php');
 include_once(UCI_RESULTS_API_PATH.'metaboxes/riders.php');
 include_once(UCI_RESULTS_API_PATH.'metaboxes/races.php');
+include_once(UCI_RESULTS_API_PATH.'metaboxes/results.php');
 include_once(UCI_RESULTS_API_PATH.'taxonomies.php');
 include_once(UCI_RESULTS_API_PATH.'functions.php');
 include_once(UCI_RESULTS_API_PATH.'api-requests.php');
