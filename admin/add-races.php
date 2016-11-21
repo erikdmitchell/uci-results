@@ -548,7 +548,6 @@ we need some sort of search to compare names
 		);
 
 // rewrite check for dups //
-// retwrite inster race into db //
 // rewrite add results to db //
 echo '<pre>';
 //print_r($race_data);
@@ -615,13 +614,6 @@ echo 'this is a dup<br>';
 			'post_name' => $data['code'],			
 		);
 
-
-
-
-
-echo '<pre>';
-print_r($race_data);
-echo '</pre>';
 		// if race is null, add it, else update it //
 		if ($race === null) :
 			$post_id=wp_insert_post($race_data);
@@ -634,18 +626,17 @@ echo '</pre>';
 		if (is_wp_error($post_id))
 			return false;
 			
-// update taxonomies //
-//wp_set_object_terms($post_id, $data['nat'], 'country', false);
-//wp_set_object_terms($post_id, $data['class'], 'race_class', false);
-//wp_set_object_terms($post_id, $data['season'], 'season', false);
+		// update taxonomies //
+		wp_set_object_terms($post_id, $data['nat'], 'country', false);
+		wp_set_object_terms($post_id, $data['class'], 'race_class', false);
+		wp_set_object_terms($post_id, $data['season'], 'season', false);
+		
+		// update meta //
+		update_post_meta($post_id, '_race_date', $data['date']);
+		update_post_meta($post_id, '_race_winner', $data['winner']);
+		update_post_meta($post_id, '_race_week', $data['week']);
+		update_post_meta($post_id, '_race_link', $data['link']);
 
-// update meta //
-//update_post_meta($post_id, '_race_date', $data['date']);
-//update_post_meta($post_id, '_race_winner', $data['winner']);
-//update_post_meta($post_id, '_race_week', $data['week']);
-//update_post_meta($post_id, '_race_link', $data['link']);
-
-echo "ID: $post_id";
 		return $post_id;
 	}
 
