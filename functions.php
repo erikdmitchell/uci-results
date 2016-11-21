@@ -123,6 +123,28 @@ function ucicurl_get_admin_page($template_name=false, $attributes=null) {
 	return $html;
 }
 
+function uci_results_get_admin_page($template_name=false, $attributes=null) {
+	if (!$attributes )
+		$attributes = array();
+
+	if (!$template_name)
+		return false;
+
+	ob_start();
+
+	do_action('ucicurl_before_admin_'.$template_name);
+
+	include(UCI_RESULTS_PATH.'adminpages/'.$template_name.'.php');
+
+	do_action('ucicurl_after_admin_'.$template_name);
+
+	$html=ob_get_contents();
+
+	ob_end_clean();
+
+	return $html;
+}
+
 /**
  * curl_exec_utf8 function.
  *

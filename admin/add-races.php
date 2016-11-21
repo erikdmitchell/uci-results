@@ -13,8 +13,8 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function __construct() {
-		add_action('wp_ajax_get_race_data_non_db',array($this,'ajax_get_race_data_non_db'));
-		add_action('wp_ajax_prepare_add_races_to_db',array($this,'ajax_prepare_add_races_to_db'));
+		add_action('wp_ajax_get_race_data_non_db', array($this, 'ajax_get_race_data_non_db'));
+		add_action('wp_ajax_prepare_add_races_to_db', array($this, 'ajax_prepare_add_races_to_db'));
 		add_action('wp_ajax_add_race_to_db', array($this, 'ajax_add_race_to_db'));
 	}
 

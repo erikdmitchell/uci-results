@@ -13,10 +13,8 @@ include_once(UCI_RESULTS_API_PATH.'functions.php');
 include_once(UCI_RESULTS_API_PATH.'api-requests.php');
 include_once(UCI_RESULTS_API_PATH.'admin/admin.php');
 
-function uci_results_api_admin_scripts_styles() {
-	wp_enqueue_style('uci-results-api-admin-styles', UCI_RESULTS_API_URL.'admin/css/admin.css');
-}
-add_action('admin_enqueue_scripts', 'uci_results_api_admin_scripts_styles');
+
+
 
 // SUDO MIGRATION SCRIPT //
 /*
