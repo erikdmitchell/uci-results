@@ -335,9 +335,8 @@ class UCIResultsCLI extends WP_CLI_Command {
 		if (empty($races))
 			WP_CLI::error('No races found.');
 			
-print_r($races);
+//print_r($races);
 		// process our races //
-/*
 		foreach ($races as $race) :
 			$code=$uci_results_add_races->build_race_code($race->event, $race->date);
 
@@ -345,8 +344,9 @@ print_r($races);
 				WP_CLI::warning("Code for $race->event not crated!");
 				continue;
 			endif;
-
+WP_CLI::log($code);
 			// add to db //
+/*
 			if (!$uci_results_add_races->check_for_dups($code)) :
 				$formatted_result=$uci_results_add_races->add_race_to_db($race);
 				$result=strip_tags($formatted_result);
@@ -354,9 +354,9 @@ print_r($races);
 			else :
 				WP_CLI::warning("Already in db. ($code)");
 			endif;
+*/
 
 		endforeach;
-*/
 
 		WP_CLI::success("All done!");
 	}
