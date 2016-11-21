@@ -122,6 +122,14 @@ class UCIResultsRacesMetabox {
 		// get values in array by matching key w/ preifx //
 		$meta=array();
         $post_meta=get_post_meta($post->ID);
+        $default_meta=array(
+	        'date' => '',
+	        'winner' => '',
+	        'week' => '',
+	        'link' => '',
+	        'related' => '',
+	        'twitter' => '',
+	    );
  
         foreach ($post_meta as $key => $value) :
 			$exp_key=explode('_', $key);
@@ -129,6 +137,8 @@ class UCIResultsRacesMetabox {
 			if ($exp_key[1] == $prefix)
 				$meta[$exp_key[2]]=$value[0];
 		endforeach;
+		
+		$meta=wp_parse_args($meta, $default_meta);
 
         // Display the form, using the current value.
         ?>
