@@ -310,6 +310,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 		$race_id=0;
 		$limit=-1;
 		$output='raw';
+		$formatted=false;
 
 		// set our season //
 		if (isset($args[0]) || isset($assoc_args['season'])) :
@@ -359,7 +360,13 @@ class UCIResultsCLI extends WP_CLI_Command {
 				$stdout="\n\n";
 				$stdout.='$race_data='.var_export($race_data, true).';';
 				$stdout.="\n";
-				$stdout.='$results_data='.var_export($results_data, true).';';
+				
+				if (!$formatted) :
+					$stdout.='$results_data='.var_export(serialize($results_data), true).';';
+				else :
+					$stdout.='$results_data='.var_export($results_data, true).';';
+				endif;
+				
 				$stdout.="\n\n";
 				WP_CLI::log($stdout);
 			elseif ($output!='raw') :

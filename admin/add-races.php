@@ -601,7 +601,7 @@ we need some sort of search to compare names
 		return $data;
 	}
 	
-	public function get_add_race_to_db_results($link='') {
+	public function get_add_race_to_db_results($link='', $formatted=false) {
 		global $wpdb;
 		
 		if (empty($link))
@@ -610,6 +610,9 @@ we need some sort of search to compare names
 		// get race results data //
 		$data=array();
 		$race_results=$this->get_race_results($link);
+		
+		if (!$formatted)
+			return $race_results;
 
 		foreach ($race_results as $result) :
 			$rider_id=$wpdb->get_var("SELECT id FROM $wpdb->uci_results_riders WHERE name = \"$result->name\" AND nat = '$result->nat'");
