@@ -526,6 +526,9 @@ we need some sort of search to compare names
 
 		$message=null;
 		$new_results=0;
+		
+		if (empty($race_data))
+			return false;
 
 		// convert to object //
 		if (!is_object($race_data))
@@ -544,13 +547,23 @@ we need some sort of search to compare names
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
 		);
 
+// rewrite check for dups //
+// retwrite inster race into db //
+// rewrite add results to db //
+echo '<pre>';
+//print_r($race_data);
+print_r($data);
+echo '</pre>';
 		if (!$this->check_for_dups($data['code'])) :
+echo 'not a dup<br>';		
+
 			if ($race_id=$this->insert_race_into_db($data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
 				$new_results++;
-				$this->add_race_results_to_db($race_id, $race_data->link);
+				//$this->add_race_results_to_db($race_id, $race_data->link);
 
 				// update to twitter //
+/*
 				if (uci_results_post_results_to_twitter()) :
 					$url=get_permalink($uci_results_pages['single_race']).$data['code'];
 
@@ -563,11 +576,14 @@ we need some sort of search to compare names
 					$status=$race_data->winner.' wins '.$race_data->event.' ('.$race_data->class.') '.$twitter.' '.$url;
 					$uci_results_twitter->update_status($status);
 				endif;
+*/
 			else :
 				$message='<div class="error">Unable to insert '.$data['code'].' into the database.</div>';
 			endif;
+
 		else :
-			$message='<div class="updated">'.$data['code'].' is already in the database</div>';
+echo 'this is a dup<br>';		
+			//$message='<div class="updated">'.$data['code'].' is already in the database</div>';
 		endif;
 
 		if ($raw_response)
@@ -586,22 +602,51 @@ we need some sort of search to compare names
 	public function insert_race_into_db($data='') {
 		global $wpdb;
 
-		$id=0;
-
 		if (empty($data))
 			return false;
+		
+		$post_id=0;
+		$race=get_page_by_path($data['code'], OBJECT, 'races');
+		$race_data=array(
+			'post_title' => $data['event'],
+			'post_content' => '',
+			'post_status' => 'publish',	
+			'post_type' => 'races',
+			'post_name' => $data['code'],			
+		);
 
-		$id=$wpdb->get_var("SELECT id FROM $wpdb->uci_results_races WHERE code = \"".$data['code']."\"");
 
-		// insert data and get id, else, update data //
-		if ($id === null) :
-			$wpdb->insert($wpdb->uci_results_races, $data);
-			$id=$wpdb->insert_id;
+
+
+
+echo '<pre>';
+print_r($race_data);
+echo '</pre>';
+		// if race is null, add it, else update it //
+		if ($race === null) :
+			$post_id=wp_insert_post($race_data);
 		else :
-			$wpdb->update($wpdb->uci_results_races, $data, array('id' => $id));
-		endif;
+			$race_data['ID']=$race->ID;
+		 	$post_id=wp_update_post($race_data);
+		endif;		
+		
+		// check for error //
+		if (is_wp_error($post_id))
+			return false;
+			
+// update taxonomies //
+//wp_set_object_terms($post_id, $data['nat'], 'country', false);
+//wp_set_object_terms($post_id, $data['class'], 'race_class', false);
+//wp_set_object_terms($post_id, $data['season'], 'season', false);
 
-		return $id;
+// update meta //
+//update_post_meta($post_id, '_race_date', $data['date']);
+//update_post_meta($post_id, '_race_winner', $data['winner']);
+//update_post_meta($post_id, '_race_week', $data['week']);
+//update_post_meta($post_id, '_race_link', $data['link']);
+
+echo "ID: $post_id";
+		return $post_id;
 	}
 
 	/**

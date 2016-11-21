@@ -21,7 +21,7 @@ class UCIResultsAdmin {
 	public function admin_page() {
 		$html=null;
 		
-		$html.=uci_results_get_admin_page('results');
+		$html.=uci_results_get_admin_page('rest-api-admin');
 		
 		echo $html;
 	}
