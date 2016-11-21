@@ -270,6 +270,97 @@ class UCIResultsCLI extends WP_CLI_Command {
 		WP_CLI\Utils\format_items( 'table', $seasons, array( 'season' ) );
 	}
 
+	/**
+	 * Get the raw data from a seasons races and/or results
+	 *
+	 * ## OPTIONS
+	 *
+	 * <season>
+	 * : the season
+	 *
+	 * [--race_id=<race_id>]
+	 * : Get a specific race via id.
+	 *
+	 * [--limit=<limit>]
+	 * : Limit races returned.
+	 *
+	 * ## EXAMPLES
+	 *
+	 * wp uciresults get-race-data 2015/2016
+	 *
+	 * @subcommand get-race-data
+	*/
+	public function get_race_data($args, $assoc_args) {
+		global $wpdb, $uci_results_add_races, $uci_results_admin_pages;
+
+		$season=0;
+		$race_id=0;
+		$limit=-1;
+
+		// set our season //
+		if (isset($args[0]) || isset($assoc_args['season'])) :
+			if (isset($args[0])) :
+				$season=$args[0];
+			elseif (isset($assoc_args['season'])) :
+				$season=$assoc_args['season'];
+			endif;
+		endif;
+
+		// set our race id (optional) //
+		if (isset($assoc_args['race_id']))
+			$race_id=$assoc_args['race_id'];
+
+		// set our limit (optional) //
+		if (isset($assoc_args['limit']))
+			$limit=$assoc_args['limit'];
+
+		if (!$season || $season=='')
+			WP_CLI::error('No season found.');
+			
+		if ($race_id)
+			WP_CLI::log("Race ID: $race_id");
+
+		if ($limit > 0)
+			WP_CLI::log("Limit: $limit");
+
+		// find our urls //
+		if (!isset($uci_results_admin_pages->config->urls->$season) || empty($uci_results_admin_pages->config->urls->$season)) :
+			WP_CLI::error('No url found.');
+		else :
+			$url=$uci_results_admin_pages->config->urls->$season;
+		endif;
+
+		$races=$uci_results_add_races->get_race_data($season, $limit, true, $url);
+
+		if (empty($races))
+			WP_CLI::error('No races found.');
+			
+print_r($races);
+		// process our races //
+/*
+		foreach ($races as $race) :
+			$code=$uci_results_add_races->build_race_code($race->event, $race->date);
+
+			if (!$code) :
+				WP_CLI::warning("Code for $race->event not crated!");
+				continue;
+			endif;
+
+			// add to db //
+			if (!$uci_results_add_races->check_for_dups($code)) :
+				$formatted_result=$uci_results_add_races->add_race_to_db($race);
+				$result=strip_tags($formatted_result);
+				WP_CLI::success($result);
+			else :
+				WP_CLI::warning("Already in db. ($code)");
+			endif;
+
+		endforeach;
+*/
+
+		WP_CLI::success("All done!");
+	}
+
 }
 
 WP_CLI::add_command('uciresults', 'UCIResultsCLI');
