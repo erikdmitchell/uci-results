@@ -60,7 +60,7 @@ class UCIResultsResultsMetabox {
         $nonce = $_POST['uci_results_admin'];
  
         // Verify that the nonce is valid.
-        if ( ! wp_verify_nonce( $nonce, 'update_riders_twitter_meta' ) ) {
+        if ( ! wp_verify_nonce( $nonce, 'update_race_results_meta' ) ) {
             return $post_id;
         }
  
@@ -86,8 +86,10 @@ class UCIResultsResultsMetabox {
         /* OK, it's safe for us to save the data now. */
         // Sanitize the user input.
         //$mydata=sanitize_text_field($_POST['twitter_name']);
- 
- // key = _rider_ID
+		
+		// WE DO NOT NEED ANYTHING DONE HERE SINCE THEY'RE NOT INPUT FORMS
+		
+		// key = _rider_ID
  
         // Update the meta field.
         //update_post_meta($post_id, '_rider_twitter', $mydata);
@@ -101,7 +103,7 @@ class UCIResultsResultsMetabox {
      */
     public function render_meta_box_content($post) {
         // Add an nonce field so we can check for it later.
-        wp_nonce_field('update_riders_twitter_meta', 'uci_results_admin');
+        wp_nonce_field('update_race_results_meta', 'uci_results_admin');
  
         // Use get_post_meta to retrieve an existing value from the database.
 		$post_meta=get_post_meta($post->ID);
@@ -119,7 +121,7 @@ class UCIResultsResultsMetabox {
         // Display the form, using the current value.
         ?>
         
-        <table>
+        <table class="uci-results-race-results">
 	        <thead>
 		        <tr>
 			        <th class="place">Place</th>
@@ -144,8 +146,7 @@ class UCIResultsResultsMetabox {
 		        	</tr>
 		        <?php endforeach; ?>
 	        </tbody>
-        </table>      
-	        
+        </table>
 
         <?php
     }

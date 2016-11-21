@@ -12,3 +12,21 @@
 .uci-results-metabox input.number {
 	width: 50px;
 }
+table.uci-results-race-results th,
+table.uci-results-race-results td {
+	//width: 25px;
+	padding: 0 15px;
+}
+table.uci-results-race-results .place,
+table.uci-results-race-results .nat,
+table.uci-results-race-results .age,
+table.uci-results-race-results .par,
+table.uci-results-race-results .pcr {
+	//width: 8%;
+}
+table.uci-results-race-results .name {
+	width: 200px;
+}
+table.uci-results-race-results .result {
+	//width: 20%;
+}
