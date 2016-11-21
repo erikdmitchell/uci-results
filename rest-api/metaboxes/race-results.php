@@ -29,12 +29,12 @@ class UCIResultsResultsMetabox {
      */
     public function add_meta_box( $post_type ) {
         // Limit meta box to certain post types.
-        $post_types = array('results');
+        $post_types = array('races');
  
         if ( in_array( $post_type, $post_types ) ) {
             add_meta_box(
                 'results_details',
-                __( 'Results Details', 'uci-results' ),
+                __( 'Race Results', 'uci-results' ),
                 array($this, 'render_meta_box_content'),
                 $post_type,
                 'normal',

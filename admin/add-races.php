@@ -496,13 +496,14 @@ we need some sort of search to compare names
 	 * @param mixed $code
 	 * @return void
 	 */
-	public function check_for_dups($code) {
+	public function check_for_dups($code='') {
 		global $wpdb;
 
-		$id=$wpdb->get_var("SELECT id FROM $wpdb->uci_results_races WHERE code='$code'");
+		//$id=$wpdb->get_var("SELECT id FROM $wpdb->uci_results_races WHERE code='$code'");
+		$race=get_page_by_path($code, OBJECT, 'races');
 
 		// we have id (aka code), but make sure it's not empty ie we preloaded the race //
-		if ($id!==null) :
+		if ($race!==null) :
 			if (!$this->is_race_empty($code)) :
 				return true;
 			else :
@@ -547,19 +548,15 @@ we need some sort of search to compare names
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
 		);
 
-// rewrite check for dups //
-// rewrite add results to db //
-echo '<pre>';
-//print_r($race_data);
-print_r($data);
-echo '</pre>';
+// rewrite check for dups (is race empty) //
+// rewrite add results to db // -- IN PROGRESS
+// clean up race results //
+return "not run";		
 		if (!$this->check_for_dups($data['code'])) :
-echo 'not a dup<br>';		
-
 			if ($race_id=$this->insert_race_into_db($data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
 				$new_results++;
-				//$this->add_race_results_to_db($race_id, $race_data->link);
+				$this->add_race_results_to_db($race_id, $race_data->link);
 
 				// update to twitter //
 /*
@@ -580,9 +577,8 @@ echo 'not a dup<br>';
 				$message='<div class="error">Unable to insert '.$data['code'].' into the database.</div>';
 			endif;
 
-		else :
-echo 'this is a dup<br>';		
-			//$message='<div class="updated">'.$data['code'].' is already in the database</div>';
+		else :		
+			$message='<div class="updated">'.$data['code'].' is already in the database</div>';
 		endif;
 
 		if ($raw_response)
@@ -692,25 +688,34 @@ echo 'this is a dup<br>';
 	 */
 	public function add_race_results_to_db($race_id=0, $link=false) {
 		global $wpdb;
+		global $results_data;
+		global $results_raw;
 
 		if (!$race_id || !$link)
 			return false;
 
-		$race_results=$this->get_race_results($link);
-		$race=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_races WHERE id={$race_id}");
+		//$race_results=$this->get_race_results($link);
+		$race=get_post($race_id);
+
+
+		$race_results=$results_raw;
 
 		foreach ($race_results as $result) :
-			$rider_id=$wpdb->get_var("SELECT id FROM $wpdb->uci_results_riders WHERE name = \"$result->name\" AND nat = '$result->nat'");
+			$rider=get_page_by_title($result->name, OBJECT, 'riders');
 
 			// check if we have a rider id, otherwise create one //
-			if (!$rider_id) :
+			if ($rider===null || empty($rider->ID)) :
 				$rider_insert=array(
-					'name' => $result->name,
-					'nat' => $result->nat,
-					'slug' => sanitize_title_with_dashes($result->name)
+					'post_title' => $result->name,
+					'post_content' => '',
+					'post_status' => 'publish',	
+					'post_type' => 'riders',
+					'post_name' => sanitize_title_with_dashes($result->name)
 				);
-				$wpdb->insert($wpdb->uci_results_riders, $rider_insert);
-				$rider_id=$wpdb->insert_id;
+				$rider_id=wp_insert_post($rider_insert);
+				wp_set_object_terms($rider_id, $result->nat, 'country', false);
+			else :
+				$rider_id=$rider->ID;
 			endif;
 
 			if (!isset($result->par) || empty($result->par) || is_null($result->par)) :
@@ -725,8 +730,7 @@ echo 'this is a dup<br>';
 				$pcr=$result->pcr;
 			endif;
 
-			$insert=array(
-				'race_id' => $race_id,
+			$meta_value=array(
 				'place' => $result->place,
 				'name' => $result->name,
 				'nat' => $result->nat,
@@ -734,11 +738,8 @@ echo 'this is a dup<br>';
 				'result' => $result->result,
 				'par' => $par,
 				'pcr' => $pcr,
-				'rider_id' => $rider_id,
-			);
-
-			$wpdb->insert($wpdb->uci_results_results, $insert);
-
+			);			
+			update_post_meta($race_id, "_rider_$rider_id", $meta_value);
 		endforeach;
 	}
 
