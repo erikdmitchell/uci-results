@@ -291,6 +291,10 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 * options:
 	 *   - raw
 	 *   - table
+	 *   - yaml
+	 *   - json
+	 *	 _ csv
+	 *	 - php
 	 * ---	 
 	 *
 	 * ## EXAMPLES
@@ -351,16 +355,21 @@ class UCIResultsCLI extends WP_CLI_Command {
 			$race_data=$uci_results_add_races->get_add_race_to_db($race);
 			$results_data=$uci_results_add_races->get_add_race_to_db_results($race_data['link']);
 
-			if ($output=='table') :
+			if ($output=='php') :
+				$stdout='$race_data='.var_export($race_data, true).';';
+				$stdout.="\n";
+				$stdout.='$results_data='.var_export($results_data, true).';';
+				WP_CLI::log($stdout);
+			elseif ($output!='raw') :
 				$race_data=array($race_data);
 				$fields=array('date', 'event', 'nat', 'class', 'winner', 'season', 'link', 'code', 'week');
 				
-				WP_CLI\Utils\format_items('table', $race_data, $fields); // race
+				WP_CLI\Utils\format_items($output, $race_data, $fields); // race
 				
 				// results //
 				$fields=array('place', 'name', 'nat', 'age', 'result', 'par', 'pcr', 'rider_id');
 				
-				WP_CLI\Utils\format_items('table', $results_data, $fields);			
+				WP_CLI\Utils\format_items($output, $results_data, $fields);			
 			else :
 				print_r($race_data);
 				print_r($results_data);
