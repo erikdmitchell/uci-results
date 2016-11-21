@@ -284,6 +284,15 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 * [--limit=<limit>]
 	 * : Limit races returned.
 	 *
+	 * [--output=<output>]
+	 * : Type of output.
+	 * ---
+	 * default: raw
+	 * options:
+	 *   - raw
+	 *   - table
+	 * ---	 
+	 *
 	 * ## EXAMPLES
 	 *
 	 * wp uciresults get-race-data 2015/2016
@@ -296,6 +305,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 		$season=0;
 		$race_id=0;
 		$limit=-1;
+		$output='raw';
 
 		// set our season //
 		if (isset($args[0]) || isset($assoc_args['season'])) :
@@ -314,14 +324,15 @@ class UCIResultsCLI extends WP_CLI_Command {
 		if (isset($assoc_args['limit']))
 			$limit=$assoc_args['limit'];
 
+		// set our output (optional) //
+		if (isset($assoc_args['output']))
+			$output=$assoc_args['output'];
+
 		if (!$season || $season=='')
 			WP_CLI::error('No season found.');
 			
 		if ($race_id)
 			WP_CLI::log("Race ID: $race_id");
-
-		if ($limit > 0)
-			WP_CLI::log("Limit: $limit");
 
 		// find our urls //
 		if (!isset($uci_results_admin_pages->config->urls->$season) || empty($uci_results_admin_pages->config->urls->$season)) :
@@ -334,28 +345,26 @@ class UCIResultsCLI extends WP_CLI_Command {
 
 		if (empty($races))
 			WP_CLI::error('No races found.');
-			
-//print_r($races);
+
 		// process our races //
 		foreach ($races as $race) :
-			$code=$uci_results_add_races->build_race_code($race->event, $race->date);
+			$race_data=$uci_results_add_races->get_add_race_to_db($race);
+			$results_data=$uci_results_add_races->get_add_race_to_db_results($race_data['link']);
 
-			if (!$code) :
-				WP_CLI::warning("Code for $race->event not crated!");
-				continue;
-			endif;
-WP_CLI::log($code);
-			// add to db //
-/*
-			if (!$uci_results_add_races->check_for_dups($code)) :
-				$formatted_result=$uci_results_add_races->add_race_to_db($race);
-				$result=strip_tags($formatted_result);
-				WP_CLI::success($result);
+			if ($output=='table') :
+				$race_data=array($race_data);
+				$fields=array('date', 'event', 'nat', 'class', 'winner', 'season', 'link', 'code', 'week');
+				
+				WP_CLI\Utils\format_items('table', $race_data, $fields); // race
+				
+				// results //
+				$fields=array('place', 'name', 'nat', 'age', 'result', 'par', 'pcr', 'rider_id');
+				
+				WP_CLI\Utils\format_items('table', $results_data, $fields);			
 			else :
-				WP_CLI::warning("Already in db. ($code)");
+				print_r($race_data);
+				print_r($results_data);
 			endif;
-*/
-
 		endforeach;
 
 		WP_CLI::success("All done!");
