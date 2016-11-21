@@ -159,7 +159,7 @@ class UCIResultsAddRaces {
 			$row_count++;
 
 			// bail if we've reached our limit //
-			if ($limit && $row_count>$limit)
+			if ($limit > 0 && $row_count > $limit)
 				break;
 
 		endforeach;
