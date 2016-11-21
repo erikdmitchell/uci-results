@@ -104,26 +104,45 @@ class UCIResultsResultsMetabox {
         wp_nonce_field('update_riders_twitter_meta', 'uci_results_admin');
  
         // Use get_post_meta to retrieve an existing value from the database.
-
- 
+		$post_meta=get_post_meta($post->ID);
+		$riders=array();
+		
+		// get only meta (riders); we need //
+ 		foreach ($post_meta as $key => $value) :
+ 			if (strpos($key, '_rider_') !== false) :
+				if (isset($value[0])) :
+					$riders[]=unserialize($value[0]);
+				endif;			
+ 			endif;
+    	endforeach;
+	 
         // Display the form, using the current value.
         ?>
         
         <table>
 	        <thead>
 		        <tr>
-			        <th>Race ID</th>
-			        <th>Place</th>
-			        <th>Name</th>
-			        <th>Nat</th>
-			        <th>Age</th>
-			        <th>Result</th>
-			        <th>Par</th>
-			        <th>Pacr</th>
-			        <th>Rider ID</th>
+			        <th class="place">Place</th>
+			        <th class="name">Name</th>
+			        <th class="nat">Nat</th>
+			        <th class="age">Age</th>
+			        <th class="result">Result</th>
+			        <th class="par">Par</th>
+			        <th class="pcr">Pacr</th>
 		        </tr>
 	        </thead>
 	        <tbody>
+		        <?php foreach ($riders as $rider) : ?>
+		        	<tr id="rider-">
+			        	<td class="place"><?php echo $rider['place']; ?></td>
+			        	<td class="name"><?php echo $rider['name']; ?></td>
+			        	<td class="nat"><?php echo $rider['nat']; ?></td>
+			        	<td class="age"><?php echo $rider['age']; ?></td>
+			        	<td class="result"><?php echo $rider['result']; ?></td>
+			        	<td class="par"><?php echo $rider['par']; ?></td>
+			        	<td class="pcr"><?php echo $rider['pcr']; ?></td> 
+		        	</tr>
+		        <?php endforeach; ?>
 	        </tbody>
         </table>      
 	        
