@@ -61,10 +61,10 @@ class UCIResultsCLI extends WP_CLI_Command {
 
 		// process our races //
 		foreach ($races as $race) :
-			$code=$uci_results_add_races->build_race_code($race->event, $race->date);
+			$code=$uci_results_add_races->build_race_code(array('event' => $race->event, 'date' => $race->date));
 
 			if (!$code) :
-				WP_CLI::warning("Code for $race->event not crated!");
+				WP_CLI::warning("Code for $race->event not created!");
 				continue;
 			endif;
 
