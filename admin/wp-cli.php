@@ -356,9 +356,11 @@ class UCIResultsCLI extends WP_CLI_Command {
 			$results_data=$uci_results_add_races->get_add_race_to_db_results($race_data['link']);
 
 			if ($output=='php') :
-				$stdout='$race_data='.var_export($race_data, true).';';
+				$stdout="\n\n";
+				$stdout.='$race_data='.var_export($race_data, true).';';
 				$stdout.="\n";
 				$stdout.='$results_data='.var_export($results_data, true).';';
+				$stdout.="\n\n";
 				WP_CLI::log($stdout);
 			elseif ($output!='raw') :
 				$race_data=array($race_data);
