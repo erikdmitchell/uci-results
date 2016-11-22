@@ -687,11 +687,8 @@ we need some sort of search to compare names
 		if (!$race_id || !$link)
 			return false;
 
-		//$race_results=$this->get_race_results($link);
+		$race_results=$this->get_race_results($link);
 		$race=get_post($race_id);
-
-
-		$race_results=$results_raw;
 
 		foreach ($race_results as $result) :
 			$rider=get_page_by_title($result->name, OBJECT, 'riders');
