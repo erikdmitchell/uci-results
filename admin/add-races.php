@@ -373,15 +373,15 @@ we need some sort of search to compare names
 	 * is_race_empty function.
 	 *
 	 * @access public
-	 * @param string $code (default: '')
+	 * @param string $id (default: 0)
 	 * @return void
 	 */
-	public function is_race_empty($code='') {
+	public function is_race_empty($id=0) {
 		global $wpdb;
 
-		$winner=$wpdb->get_var("SELECT winner FROM $wpdb->uci_results_races WHERE code = '$code'");
+		$winner=get_post_meta($id, '_race_winner', true);	
 
-		if ($winner!==null)
+		if ($winner !== null || $winner != '')
 			return false;
 
 		return true;
@@ -499,12 +499,11 @@ we need some sort of search to compare names
 	public function check_for_dups($code='') {
 		global $wpdb;
 
-		//$id=$wpdb->get_var("SELECT id FROM $wpdb->uci_results_races WHERE code='$code'");
 		$race=get_page_by_path($code, OBJECT, 'races');
 
-		// we have id (aka code), but make sure it's not empty ie we preloaded the race //
-		if ($race!==null) :
-			if (!$this->is_race_empty($code)) :
+		// we have race, but make sure it's not empty ie we preloaded the race //
+		if ($race !== null) :
+			if (!$this->is_race_empty($race->ID)) :
 				return true;
 			else :
 				return false;
@@ -548,11 +547,7 @@ we need some sort of search to compare names
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
 		);
 
-// rewrite check for dups (is race empty) //
-// rewrite add results to db // -- IN PROGRESS
-// clean up race results //
-return "not run";		
-		if (!$this->check_for_dups($data['code'])) :
+		if (!$this->check_for_dups($data['code'])) :		
 			if ($race_id=$this->insert_race_into_db($data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
 				$new_results++;

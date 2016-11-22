@@ -303,7 +303,7 @@ function ucicurl_update_db_check() {
 		$ucicurl_db_version=ucicurl_db_update();
 	endif;
 
-echo $ucicurl_db_version;
+//echo $ucicurl_db_version;
 
 	//update_option('ucicurl_db_version', $ucicurl_db_version);
 

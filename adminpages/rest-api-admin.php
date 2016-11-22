@@ -4,12 +4,6 @@ global $race_data;
 global $results_data;
 global $uci_results_add_races;
 
-/*
-echo '<pre>';
-print_r($race_data);
-print_r($results_data);
-echo '</pre>';
-*/
 ?>
 
 <div class="uci-results">
@@ -18,8 +12,9 @@ echo '</pre>';
 
 	<p>Admin Testing</p>
 	
+	NOTHING
 	<?php
-	$uci_results_add_races->add_race_to_db($race_data);
+	//$uci_results_add_races->add_race_to_db($race_data);
 	?>
 
 </div>

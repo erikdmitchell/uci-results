@@ -5,7 +5,7 @@ function uci_results_upgrade_0_2_0() {
 	$db_version='0.0.7';
 	
 	// setup tables //
-	//$wpdb->hide_errors();
+	$wpdb->hide_errors();
 	$wpdb->uci_results_races=$wpdb->prefix.'uci_curl_races';
 	$wpdb->uci_results_results=$wpdb->prefix.'uci_curl_results';
 	$wpdb->uci_results_riders=$wpdb->prefix.'uci_curl_riders';
