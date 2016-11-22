@@ -15,6 +15,7 @@ function uci_results_upgrade_0_2_0() {
 	$wpdb->uci_results_series_overall=$wpdb->prefix.'uci_results_series_overall';
 	
 	// build in hardcore migration //
+	uci_results_migrate_series();
 // SUDO MIGRATION SCRIPT //
 /*
 global $wp_uci_curl_riders;
@@ -36,8 +37,24 @@ endforeach;
 	// remove tables //
 	$remove_tables_sql_query="DROP TABLE IF EXISTS $wpdb->uci_results_races, $wpdb->uci_results_results, $wpdb->uci_results_riders, $wpdb->uci_results_series;";
 	
-	$wpdb->query($remove_tables_sql_query);
+	//$wpdb->query($remove_tables_sql_query);
 	
 	return $db_version;
-}	
+}
+
+function uci_results_migrate_series() {
+	global $wpdb;
+	
+	$db_series=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_series");
+	
+	if (!count($db_series))
+		return;
+		
+	foreach ($db_series as $series)	:
+		if (!term_exists($series->name, 'series')) :	
+			$inserted=wp_insert_term($series->name, 'series');		
+		endif;
+			
+	endforeach;
+}
 ?>
