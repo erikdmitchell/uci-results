@@ -82,7 +82,6 @@ function race_class_init() {
 add_action('init', 'race_class_init');	
 
 function series_init() {
-echo "series tax init";	
 	register_taxonomy('series', array('races'), array(
 		'hierarchical'      => true,
 		'public'            => true,
