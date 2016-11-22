@@ -19,6 +19,7 @@ function uci_results_upgrade_0_2_0() {
 	//uci_results_migrate_related_races(); // fin
 	//uci_results_migrate_riders(); // fin
 	//uci_results_migrate_races();
+	
 	//$related_race_id=uci_results_convert_related_race_id($db_race->id, $db_race->related_races_id);
 		
 	// remove tables //
@@ -34,7 +35,7 @@ function uci_results_upgrade_0_2_0() {
 function uci_results_migrate_races() {
 	global $wpdb;
 	
-	$db_races=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_races LIMIT 3");
+	$db_races=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_races");
 	
 	if (!count($db_races))
 		return;
@@ -50,32 +51,31 @@ function uci_results_migrate_races() {
 			'post_type' => 'races',
 			'post_name' => $db_race->code,		
 		);
-$post_id=1;
+
 		// if race is null, add it, else update it //
 		if ($race === null) :
-			//$post_id=wp_insert_post($race_data);
+			$post_id=wp_insert_post($race_data);
 		else :
 			$race_data['ID']=$race->ID;
-		 	//$post_id=wp_update_post($race_data);
+		 	$post_id=wp_update_post($race_data);
 		endif;		
 		
 		// check for error //
-		//if (is_wp_error($post_id))
-			//return false;
+		if (is_wp_error($post_id))
+			return false;
 			
 		// update taxonomies //
-		
-		//wp_set_object_terms($post_id, $db_race->nat, 'country', false);
-		//wp_set_object_terms($post_id, $db_race->class, 'race_class', false);
-		//wp_set_object_terms($post_id, $db_race->season, 'season', false);
-		//wp_set_object_terms($post_id, $series, 'series', false);
+		wp_set_object_terms($post_id, $db_race->nat, 'country', false);
+		wp_set_object_terms($post_id, $db_race->class, 'race_class', false);
+		wp_set_object_terms($post_id, $db_race->season, 'season', false);
+		wp_set_object_terms($post_id, $series, 'series', false);
 		
 		// update meta //
-		//update_post_meta($post_id, '_race_date', $db_race->date);
-		//update_post_meta($post_id, '_race_winner', $db_race->winner);
-		//update_post_meta($post_id, '_race_week', $db_race->week);
-		//update_post_meta($post_id, '_race_link', $db_race->link);	
-		//update_post_meta($post_id, '_race_twitter', $db_race->twitter);	
+		update_post_meta($post_id, '_race_date', $db_race->date);
+		update_post_meta($post_id, '_race_winner', $db_race->winner);
+		update_post_meta($post_id, '_race_week', $db_race->week);
+		update_post_meta($post_id, '_race_link', $db_race->link);	
+		update_post_meta($post_id, '_race_twitter', $db_race->twitter);	
 	
 		uci_results_migrate_results($post_id, $old_id);
 	endforeach;
@@ -137,8 +137,8 @@ function uci_results_migrate_results($post_id=0, $old_id=0) {
 				'post_type' => 'riders',
 				'post_name' => sanitize_title_with_dashes($result->name)
 			);
-			//$rider_id=wp_insert_post($rider_insert);
-			//wp_set_object_terms($rider_id, $result->nat, 'country', false);
+			$rider_id=wp_insert_post($rider_insert);
+			wp_set_object_terms($rider_id, $result->nat, 'country', false);
 		else :
 			$rider_id=$rider->ID;
 		endif;
@@ -164,7 +164,7 @@ function uci_results_migrate_results($post_id=0, $old_id=0) {
 			'par' => $par,
 			'pcr' => $pcr,
 		);					
-		//update_post_meta($race_id, "_rider_$rider_id", $meta_value);
+		update_post_meta($post_id, "_rider_$rider_id", $meta_value);
 	endforeach;	
 }
 
