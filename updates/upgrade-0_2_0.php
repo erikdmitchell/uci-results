@@ -17,7 +17,7 @@ function uci_results_upgrade_0_2_0() {
 	// build in hardcore migration //
 	//uci_results_migrate_series(); // fin
 	//uci_results_migrate_related_races(); // fin
-	uci_results_migrate_riders();
+	//uci_results_migrate_riders(); // fin
 	//uci_results_migrate_races();
 	//$related_race_id=uci_results_convert_related_race_id($db_race->id, $db_race->related_races_id);
 		
@@ -167,25 +167,38 @@ function uci_results_migrate_results($post_id=0, $old_id=0) {
 		//update_post_meta($race_id, "_rider_$rider_id", $meta_value);
 	endforeach;	
 }
-	
-function uci_results_migrate_riders() {
-// SUDO MIGRATION SCRIPT //
-/*
-global $wp_uci_curl_riders;
 
-foreach ($wp_uci_curl_riders as $rider) :
-	$arr=array(
-		'post_title' => $rider['name'],
-		'post_content' => '',
-		'post_status' => 'publish',	
-		'post_type' => 'riders',
-		'post_name' => $rider['slug'],
-	);
-	//$post_id=wp_insert_post($arr);
-	//add_post_meta($post_id, '_rider_twitter', $rider['twitter']);
-	//wp_set_object_terms($post_id, $rider['nat'], 'country', false);
-endforeach;
-*/	
+/**
+ * uci_results_migrate_riders function.
+ * 
+ * @access public
+ * @return void
+ */
+function uci_results_migrate_riders() {
+	global $wpdb;
+	
+	$db_riders=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_riders");
+
+	foreach ($db_riders as $db_rider) :
+		$rider=get_page_by_title($db_rider->name, OBJECT, 'riders');
+
+		if ($rider === null) :
+			$arr=array(
+				'post_title' => $db_rider->name,
+				'post_content' => '',
+				'post_status' => 'publish',	
+				'post_type' => 'riders',
+				'post_name' => $db_rider->slug,
+			);
+			
+			$rider_id=wp_insert_post($arr);
+			
+			if (!is_wp_error($rider_id)) :
+				add_post_meta($rider_id, '_rider_twitter', $db_rider->twitter);
+				wp_set_object_terms($rider_id, $db_rider->nat, 'country', false);
+			endif;
+		endif;
+	endforeach;	
 }
 
 /**
