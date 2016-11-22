@@ -21,7 +21,7 @@ function riders_init() {
 		'show_ui'           => true,
 		'show_in_nav_menus' => false,
 		//'show_in_menu' 		=> 'uci-results-api',
-		'supports'          => array( 'title', 'editor' ),
+		'supports'          => array('title'),
 		'has_archive'       => true,
 		'rewrite'           => true,
 		'query_var'         => true,
