@@ -1,7 +1,7 @@
 <?php
 global $ucicurl_db_version;
 
-$ucicurl_db_version='0.1.8';
+$ucicurl_db_version='0.1.9';
 
 /**
  * ucicurl_set_db_tables function.
@@ -104,9 +104,10 @@ function ucicurl_db_install() {
 	";
 
 	$sql_related_races="
-		CREATE TABLE $wpdb->uci_results_related_races (
-		  id bigint(20) NOT NULL AUTO_INCREMENT,
-			race_ids TEXT NOT NULL,
+		CREATE TABLE $wpdb->uci_results_related_races (			
+			id bigint(20) NOT NULL AUTO_INCREMENT,
+			race_id bigint(20) NOT NULL DEFAULT '0',
+			related_race_id bigint(20) NOT NULL DEFAULT '0',
 			PRIMARY KEY (`id`)
 		) $charset;
 	";
@@ -229,8 +230,9 @@ function ucicurl_db_update() {
 
 		$sql_related_races="
 			CREATE TABLE $wpdb->uci_results_related_races (
-			  id bigint(20) NOT NULL AUTO_INCREMENT,
-				race_ids TEXT NOT NULL,
+				id bigint(20) NOT NULL AUTO_INCREMENT,
+				race_id bigint(20) NOT NULL DEFAULT '0',
+				related_race_id bigint(20) NOT NULL DEFAULT '0',
 				PRIMARY KEY (`id`)
 			);
 		";
