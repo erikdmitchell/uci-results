@@ -11,7 +11,7 @@
 
 define('UCI_RESULTS_PATH', plugin_dir_path(__FILE__));
 define('UCI_RESULTS_URL', plugin_dir_url(__FILE__));
-define('UCI_RESULTS_VERSION', get_option('uci_results_version', '0.1.0');
+define('UCI_RESULTS_VERSION', get_option('uci_results_version', '0.1.0'));
 
 include_once(UCI_RESULTS_PATH.'classes/races.php'); // our races functions
 include_once(UCI_RESULTS_PATH.'classes/riders.php'); // our riders functions
