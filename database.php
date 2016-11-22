@@ -309,7 +309,7 @@ function ucicurl_update_db_check() {
 
 	return;
 }
-add_action('plugins_loaded', 'ucicurl_update_db_check');
+add_action('init', 'ucicurl_update_db_check', 99);
 
 /**
  * uci_results_empty_database_tables function.

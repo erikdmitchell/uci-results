@@ -38,7 +38,7 @@ function country_init() {
 	) );
 
 }
-add_action( 'init', 'country_init' );
+add_action('init', 'country_init');
 
 function race_class_init() {
 	register_taxonomy('race_class', array('races'), array(
@@ -82,6 +82,7 @@ function race_class_init() {
 add_action('init', 'race_class_init');	
 
 function series_init() {
+echo "series tax init";	
 	register_taxonomy('series', array('races'), array(
 		'hierarchical'      => true,
 		'public'            => true,
