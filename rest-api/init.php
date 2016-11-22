@@ -4,7 +4,6 @@ define('UCI_RESULTS_API_URL', plugin_dir_url(__FILE__));
 
 include_once(UCI_RESULTS_API_PATH.'post-types/riders.php');
 include_once(UCI_RESULTS_API_PATH.'post-types/races.php');
-//include_once(UCI_RESULTS_API_PATH.'post-types/results.php');
 include_once(UCI_RESULTS_API_PATH.'metaboxes/riders.php');
 include_once(UCI_RESULTS_API_PATH.'metaboxes/races.php');
 include_once(UCI_RESULTS_API_PATH.'metaboxes/race-results.php');
