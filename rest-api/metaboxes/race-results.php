@@ -121,7 +121,7 @@ class UCIResultsResultsMetabox {
         // Display the form, using the current value.
         ?>
         
-        <table class="uci-results-race-results">
+        <table class="uci-results-race-results widefat fixed striped">
 	        <thead>
 		        <tr>
 			        <th class="place">Place</th>
