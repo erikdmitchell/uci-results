@@ -559,7 +559,6 @@ return "not run";
 				$this->add_race_results_to_db($race_id, $race_data->link);
 
 				// update to twitter //
-/*
 				if (uci_results_post_results_to_twitter()) :
 					$url=get_permalink($uci_results_pages['single_race']).$data['code'];
 
@@ -572,7 +571,6 @@ return "not run";
 					$status=$race_data->winner.' wins '.$race_data->event.' ('.$race_data->class.') '.$twitter.' '.$url;
 					$uci_results_twitter->update_status($status);
 				endif;
-*/
 			else :
 				$message='<div class="error">Unable to insert '.$data['code'].' into the database.</div>';
 			endif;
