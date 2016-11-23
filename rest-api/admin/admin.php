@@ -9,13 +9,19 @@ class UCIResultsAdmin {
 	public function register_menu_page() {
 	    add_menu_page(
 	        __('UCI Results 2', 'uci-results'),
-	        'uci-results',
+	        'UCI Results 2',
 	        'manage_options',
 	        'uci-results-api',
 	        array($this, 'admin_page'),
 	        '',
 	        80
 	    );
+	    add_submenu_page('uci-results-api', 'Riders', 'Riders', 'manage_options', 'edit.php?post_type=riders');
+	    add_submenu_page('uci-results-api', 'Races', 'Races', 'manage_options', 'edit.php?post_type=races');
+	    add_submenu_page('uci-results-api', 'Countries', 'Countries', 'manage_options', 'edit-tags.php?taxonomy=country&post_type=races');
+	    add_submenu_page('uci-results-api', 'Class', 'Class', 'manage_options', 'edit-tags.php?taxonomy=race_class&post_type=races');
+	    add_submenu_page('uci-results-api', 'Series', 'Series', 'manage_options', 'edit-tags.php?taxonomy=series&post_type=races');
+	    add_submenu_page('uci-results-api', 'Season', 'Season', 'manage_options', 'edit-tags.php?taxonomy=season&post_type=races'); 
 	}
 	
 	public function admin_page() {

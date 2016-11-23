@@ -20,7 +20,7 @@ function riders_init() {
 		'hierarchical'      => false,
 		'show_ui'           => true,
 		'show_in_nav_menus' => false,
-		//'show_in_menu' 		=> 'uci-results-api',
+		'show_in_menu' 		=> false,
 		'supports'          => array('title'),
 		'has_archive'       => true,
 		'rewrite'           => true,

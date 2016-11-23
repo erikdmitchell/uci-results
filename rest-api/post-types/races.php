@@ -20,7 +20,7 @@ function races_init() {
 		'hierarchical'      => false,
 		'show_ui'           => true,
 		'show_in_nav_menus' => false,
-		//'show_in_menu' 		=> 'uci-results-api',
+		'show_in_menu' 		=> false,
 		'supports'          => array( 'title' ),
 		'has_archive'       => true,
 		'rewrite'           => true,
@@ -58,5 +58,5 @@ function races_updated_messages( $messages ) {
 
 	return $messages;
 }
-add_filter( 'post_updated_messages', 'races_updated_messages' );	
+add_filter( 'post_updated_messages', 'races_updated_messages' );
 ?>
