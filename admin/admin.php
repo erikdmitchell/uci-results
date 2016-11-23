@@ -1,60 +1,45 @@
 <?php
-global $uci_results_admin_pages;
+global $uci_results_admin;
 
-/**
- * UCIResultsAdminPages class.
- */
-class UCIResultsAdminPages {
-
+class UCIResultsAdmin {
+	
 	public $config=array();
-
-	/**
-	 * __construct function.
-	 *
-	 * @access public
-	 * @return void
-	 */
+	
 	public function __construct($config=array()) {
-		add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
-		add_action('admin_menu', array($this, 'admin_page'));
+		add_action('admin_menu', array($this, 'register_menu_page'));
+		add_action('admin_enqueue_scripts', array($this, 'uci_results_api_admin_scripts_styles'));
 		add_action('admin_init', array($this, 'save_settings'));
 		add_action('wp_ajax_uci_results_empty_db', array($this, 'ajax_empty_db'));
 		add_action('wp_ajax_uci_results_remove_db', array($this, 'ajax_remove_db'));
-		add_action('wp_ajax_uci_results_build_season_weeks', array($this, 'ajax_uci_results_build_season_weeks'));
 		add_action('wp_ajax_uci_results_rider_rankings_dropdown', array($this, 'ajax_rider_rankings_dropdown'));
 
-		$this->setup_config($config);
+		$this->setup_config($config);		
 	}
 
-	/**
-	 * admin_page function.
-	 *
-	 * @access public
-	 * @return void
-	 */
+	public function uci_results_api_admin_scripts_styles() {
+		wp_enqueue_style('uci-results-api-admin-styles', UCI_RESULTS_API_URL.'admin/css/admin.css', '0.1.0');
+		
+		wp_enqueue_script('uci-results-admin', UCI_RESULTS_URL.'/js/admin.js', array('jquery'), '0.1.0',true);
+
+		wp_enqueue_style('uci-results-admin', UCI_RESULTS_URL.'/css/admin.css', array(), '0.1.0');		
+	}
+
+	public function register_menu_page() {
+	    add_menu_page(__('UCI Results', 'uci-results'), 'UCI Results', 'manage_options', 'uci-results-api', array($this, 'admin_page'), 'dashicons-sos', 80);
+	    add_submenu_page('uci-results-api', 'Riders', 'Riders', 'manage_options', 'edit.php?post_type=riders');
+	    add_submenu_page('uci-results-api', 'Races', 'Races', 'manage_options', 'edit.php?post_type=races');
+	    add_submenu_page('uci-results-api', 'Countries', 'Countries', 'manage_options', 'edit-tags.php?taxonomy=country&post_type=races');
+	    add_submenu_page('uci-results-api', 'Class', 'Class', 'manage_options', 'edit-tags.php?taxonomy=race_class&post_type=races');
+	    add_submenu_page('uci-results-api', 'Series', 'Series', 'manage_options', 'edit-tags.php?taxonomy=series&post_type=races');
+	    add_submenu_page('uci-results-api', 'Season', 'Season', 'manage_options', 'edit-tags.php?taxonomy=season&post_type=races'); 
+	}
+	
 	public function admin_page() {
-		add_menu_page('UCI Results', 'UCI Results', 'manage_options', 'uci-results', array($this, 'display_admin_page'), 'dashicons-sos');
-	}
+		$html=null;
+		
+		$html.=uci_results_get_admin_page('rest-api-admin');
 
-	/**
-	 * admin_scripts_styles function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function admin_scripts_styles() {
-		wp_enqueue_script('uci-results-admin',UCI_RESULTS_URL.'/js/admin.js',array('jquery'), '0.1.0',true);
-
-		wp_enqueue_style('uci-results-admin',UCI_RESULTS_URL.'/css/admin.css',array(), '0.1.0');
-	}
-
-	/**
-	 * display_admin_page function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function display_admin_page() {
+/*
 		global $ucicurl_riders;
 
 		$html=null;
@@ -109,7 +94,12 @@ class UCIResultsAdminPages {
 		$html.='</div><!-- /.wrap -->';
 
 		echo $html;
+*/		
+		
+		echo $html;
 	}
+
+
 
 	/**
 	 * setup_config function.
@@ -271,23 +261,6 @@ class UCIResultsAdminPages {
 	}
 
 	/**
-	 * ajax_uci_results_build_season_weeks function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function ajax_uci_results_build_season_weeks() {
-		//ini_set("memory_limit", "-1");
-		//set_time_limit(0);
-
-		//uci_results_build_season_weeks();
-
-		echo '<div class="updated">Season weeks updated. THIS DOES NOT WORK</div>';
-
-		wp_die();
-	}
-
-	/**
 	 * ajax_rider_rankings_dropdown function.
 	 *
 	 * @access public
@@ -311,5 +284,5 @@ class UCIResultsAdminPages {
 
 }
 
-$uci_results_admin_pages=new UCIResultsAdminPages();
+$uci_results_admin = new UCIResultsAdmin();
 ?>

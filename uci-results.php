@@ -19,7 +19,10 @@ include_once(UCI_RESULTS_PATH.'classes/uci-results-query.php'); // our query cla
 include_once(UCI_RESULTS_PATH.'database.php'); // sets up our db tables
 include_once(UCI_RESULTS_PATH.'functions.php'); // all our outlying functions
 include_once(UCI_RESULTS_PATH.'init.php'); // functions to run on init
-include_once(UCI_RESULTS_PATH.'admin/admin-pages.php'); // admin page
+include_once(UCI_RESULTS_PATH.'admin/admin.php'); // admin page
+
+//include_once(UCI_RESULTS_PATH.'admin/admin-pages.php'); // admin page
+
 include_once(UCI_RESULTS_PATH.'admin/add-races.php'); // cURL and add races/results to db
 include_once(UCI_RESULTS_PATH.'admin/rider-rankings.php'); // add and update rider rankings
 include_once(UCI_RESULTS_PATH.'admin/wp-cli.php'); // wp cli functions
