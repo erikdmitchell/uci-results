@@ -18,16 +18,16 @@ function uci_results_upgrade_0_2_0() {
 	//uci_results_migrate_series(); // fin
 	//uci_results_migrate_related_races(); // fin
 	//uci_results_migrate_riders(); // fin
-	//uci_results_migrate_races();
+	//uci_results_migrate_races(); // fin
+	//uci_results_update_series_overall_table(); // fin
 	
 	//$related_race_id=uci_results_convert_related_race_id($db_race->id, $db_race->related_races_id);
 		
 	// remove tables //
-	$remove_tables_sql_query="DROP TABLE IF EXISTS $wpdb->uci_results_races, $wpdb->uci_results_results, $wpdb->uci_results_riders, $wpdb->uci_results_series;";
+	//$wpdb->query("DROP TABLE IF EXISTS $wpdb->uci_results_races, $wpdb->uci_results_results, $wpdb->uci_results_riders, $wpdb->uci_results_series;");
 	
-	//$wpdb->query($remove_tables_sql_query);
-	
-	// remove race ids cold from related races
+	// remove race ids col from related races //
+	//$wpdb->query("ALTER TABLE $wpdb->uci_results_related_races DROP COLUMN race_ids");
 	
 	return $db_version;
 }
@@ -255,5 +255,77 @@ function uci_results_migrate_series() {
 		endif;
 			
 	endforeach;
+}
+
+/**
+ * uci_results_update_series_overall_table function.
+ * 
+ * @access public
+ * @return void
+ */
+function uci_results_update_series_overall_table() {
+	global $wpdb;
+	
+	$db_series_overall=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_series_overall");
+	
+	foreach ($db_series_overall as $db_row) :
+		// get "new" rider id //
+		$name=uci_results_get_rider_name_from_old_id($db_row->rider_id);		
+		$rider=get_page_by_title($name, OBJECT, 'riders');
+		
+		if ($rider===null) :
+			$rider_id=0;
+		else :
+			$rider_id=$rider->ID;
+		endif;
+		
+		// get "new" series id //
+		$name=uci_results_get_series_name_from_old_id($db_row->series_id);		
+		$term=get_term_by('name', $name, 'series');
+
+		if ($term===null) :
+			$series_id=0;
+		else :
+			$series_id=$term->term_id;
+		endif;
+		
+		$wpdb->update($wpdb->uci_results_series_overall, array('rider_id' => $rider_id, 'series_id' => $series_id), array('id' => $db_row->id));	
+	endforeach;
+}
+
+/**
+ * uci_results_get_rider_name_from_old_id function.
+ * 
+ * @access public
+ * @param int $id (default: 0)
+ * @return void
+ */
+function uci_results_get_rider_name_from_old_id($id=0) {
+	global $wpdb;
+	
+	$name=$wpdb->get_var("SELECT name FROM $wpdb->uci_results_riders WHERE id = $id");
+	
+	if ($name===null || is_wp_error($name))
+		return '';
+		
+	return $name;
+}
+
+/**
+ * uci_results_get_series_name_from_old_id function.
+ * 
+ * @access public
+ * @param int $id (default: 0)
+ * @return void
+ */
+function uci_results_get_series_name_from_old_id($id=0) {
+	global $wpdb;
+	
+	$name=$wpdb->get_var("SELECT name FROM $wpdb->uci_results_series WHERE id = $id");
+	
+	if ($name===null || is_wp_error($name))
+		return '';
+		
+	return $name;
 }
 ?>
