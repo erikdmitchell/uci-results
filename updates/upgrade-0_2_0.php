@@ -20,6 +20,7 @@ function uci_results_upgrade_0_2_0() {
 	//uci_results_migrate_riders(); // fin
 	//uci_results_migrate_races(); // fin
 	//uci_results_update_series_overall_table(); // fin
+	//uci_results_update_rider_rankings_table(); // fin
 	
 	//$related_race_id=uci_results_convert_related_race_id($db_race->id, $db_race->related_races_id);
 		
@@ -327,5 +328,31 @@ function uci_results_get_series_name_from_old_id($id=0) {
 		return '';
 		
 	return $name;
+}
+
+/**
+ * uci_results_update_rider_rankings_table function.
+ * 
+ * @access public
+ * @return void
+ */
+function uci_results_update_rider_rankings_table() {
+	global $wpdb;
+	
+	$db_rankings=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_rider_rankings");
+	
+	foreach ($db_rankings as $db_row) :
+		// get "new" rider id //
+		$name=uci_results_get_rider_name_from_old_id($db_row->rider_id);		
+		$rider=get_page_by_title($name, OBJECT, 'riders');
+		
+		if ($rider===null) :
+			$rider_id=0;
+		else :
+			$rider_id=$rider->ID;
+		endif;
+		
+		$wpdb->update($wpdb->uci_results_rider_rankings, array('rider_id' => $rider_id), array('id' => $db_row->id));	
+	endforeach;
 }
 ?>
