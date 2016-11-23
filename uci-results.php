@@ -22,6 +22,7 @@ include_once(UCI_RESULTS_PATH.'database.php'); // sets up our db tables
 include_once(UCI_RESULTS_PATH.'functions.php'); // all our outlying functions
 include_once(UCI_RESULTS_PATH.'init.php'); // functions to run on init
 include_once(UCI_RESULTS_PATH.'admin/admin.php'); // admin page
+include_once(UCI_RESULTS_PATH.'admin/functions.php'); // admin functions
 
 include_once(UCI_RESULTS_PATH.'post-types/riders.php');
 include_once(UCI_RESULTS_PATH.'post-types/races.php');

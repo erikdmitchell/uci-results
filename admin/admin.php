@@ -36,71 +36,53 @@ class UCIResultsAdmin {
 	}
 
 	public function register_menu_page() {
-	    add_menu_page(__('UCI Results', 'uci-results'), 'UCI Results', 'manage_options', 'uci-results-api', array($this, 'admin_page'), 'dashicons-sos', 80);
-	    add_submenu_page('uci-results-api', 'Riders', 'Riders', 'manage_options', 'edit.php?post_type=riders');
-	    add_submenu_page('uci-results-api', 'Races', 'Races', 'manage_options', 'edit.php?post_type=races');
-	    add_submenu_page('uci-results-api', 'Countries', 'Countries', 'manage_options', 'edit-tags.php?taxonomy=country&post_type=races');
-	    add_submenu_page('uci-results-api', 'Class', 'Class', 'manage_options', 'edit-tags.php?taxonomy=race_class&post_type=races');
-	    add_submenu_page('uci-results-api', 'Series', 'Series', 'manage_options', 'edit-tags.php?taxonomy=series&post_type=races');
-	    add_submenu_page('uci-results-api', 'Season', 'Season', 'manage_options', 'edit-tags.php?taxonomy=season&post_type=races');
-	    add_submenu_page('uci-results-api', 'Settings', 'Settings', 'manage_options', '');
-	    add_submenu_page('uci-results-api', 'Results', 'Results', 'manage_options', '');
-	    add_submenu_page('uci-results-api', 'Rider Rankings', 'Rider Rankings', 'manage_options', '');
-	    add_submenu_page('uci-results-api', 'API', 'API', 'manage_options', '');	    	    	    
+	    add_menu_page(__('UCI Results', 'uci-results'), 'UCI Results', 'manage_options', 'uci-results', array($this, 'admin_page'), 'dashicons-sos', 80);
+	    add_submenu_page('uci-results', 'Riders', 'Riders', 'manage_options', 'edit.php?post_type=riders');
+	    add_submenu_page('uci-results', 'Races', 'Races', 'manage_options', 'edit.php?post_type=races');
+	    add_submenu_page('uci-results', 'Countries', 'Countries', 'manage_options', 'edit-tags.php?taxonomy=country&post_type=races');
+	    add_submenu_page('uci-results', 'Class', 'Class', 'manage_options', 'edit-tags.php?taxonomy=race_class&post_type=races');
+	    add_submenu_page('uci-results', 'Series', 'Series', 'manage_options', 'edit-tags.php?taxonomy=series&post_type=races');
+	    add_submenu_page('uci-results', 'Season', 'Season', 'manage_options', 'edit-tags.php?taxonomy=season&post_type=races');
+	    add_submenu_page('uci-results', 'Settings', 'Settings', 'manage_options', 'admin.php?page=uci-results&subpage=settings');
+	    add_submenu_page('uci-results', 'Add Results', 'Add Results', 'manage_options', 'admin.php?page=uci-results&subpage=results');
+	    add_submenu_page('uci-results', 'Rider Rankings', 'Rider Rankings', 'manage_options', 'admin.php?page=uci-results&subpage=rider-rankings');
+	    add_submenu_page('uci-results', 'API', 'API', 'manage_options', 'admin.php?page=uci-results&subpage=api');	    	    	    
 	}
 	
+	/**
+	 * admin_page function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
 	public function admin_page() {
-		$html=null;
-		
-		$html.=uci_results_get_admin_page('rest-api-admin');
-
-/*
-		global $ucicurl_riders;
-
-		$html=null;
-
+		$html=null;	
+		$subpage=isset($_GET['subpage']) ? $_GET['subpage'] : 'settings';	
 
 		$html.='<div class="wrap uci-results">';
 			$html.='<h1>UCI Results</h1>';
 
-			$html.='<h2 class="nav-tab-wrapper">';
-				foreach ($tabs as $key => $name) :
-					if ($active_tab==$key) :
-						$class='nav-tab-active';
-					else :
-						$class=null;
-					endif;
-
-					$html.='<a href="?page=uci-results&tab='.$key.'" class="nav-tab '.$class.'">'.$name.'</a>';
-				endforeach;
-			$html.='</h2>';
-
-			switch ($active_tab) :
+			switch ($subpage) :
 				case 'rider-rankings' :
-						$html.=ucicurl_get_admin_page('rider-rankings');
-						break;
+					$html.=uci_results_get_admin_page('rider-rankings');
+					break;
 				case 'settings':
-					$html.=ucicurl_get_admin_page('settings');
+					$html.=uci_results_get_admin_page('settings');
 					break;
 				case 'results':
-					$html.=ucicurl_get_admin_page('results');
+					$html.=uci_results_get_admin_page('results');
 					break;
 				case 'api':
-					$html.=ucicurl_get_admin_page('api');
+					$html.=uci_results_get_admin_page('api');
 					break;
 				default:
-						$html.=ucicurl_get_admin_page('settings');
+					$html.=uci_results_get_admin_page('settings');
 			endswitch;
 
 		$html.='</div><!-- /.wrap -->';
-
-		echo $html;
-*/		
-		
+			
 		echo $html;
 	}
-
-
 
 	/**
 	 * setup_config function.
