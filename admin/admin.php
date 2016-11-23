@@ -5,6 +5,13 @@ class UCIResultsAdmin {
 	
 	public $config=array();
 	
+	/**
+	 * __construct function.
+	 * 
+	 * @access public
+	 * @param array $config (default: array())
+	 * @return void
+	 */
 	public function __construct($config=array()) {
 		add_action('admin_menu', array($this, 'register_menu_page'));
 		add_action('admin_enqueue_scripts', array($this, 'uci_results_api_admin_scripts_styles'));
@@ -16,6 +23,12 @@ class UCIResultsAdmin {
 		$this->setup_config($config);		
 	}
 
+	/**
+	 * uci_results_api_admin_scripts_styles function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
 	public function uci_results_api_admin_scripts_styles() {
 		wp_enqueue_script('uci-results-admin', UCI_RESULTS_ADMIN_URL.'/js/admin.js', array('jquery'), '0.1.0',true);
 
@@ -29,7 +42,11 @@ class UCIResultsAdmin {
 	    add_submenu_page('uci-results-api', 'Countries', 'Countries', 'manage_options', 'edit-tags.php?taxonomy=country&post_type=races');
 	    add_submenu_page('uci-results-api', 'Class', 'Class', 'manage_options', 'edit-tags.php?taxonomy=race_class&post_type=races');
 	    add_submenu_page('uci-results-api', 'Series', 'Series', 'manage_options', 'edit-tags.php?taxonomy=series&post_type=races');
-	    add_submenu_page('uci-results-api', 'Season', 'Season', 'manage_options', 'edit-tags.php?taxonomy=season&post_type=races'); 
+	    add_submenu_page('uci-results-api', 'Season', 'Season', 'manage_options', 'edit-tags.php?taxonomy=season&post_type=races');
+	    add_submenu_page('uci-results-api', 'Settings', 'Settings', 'manage_options', '');
+	    add_submenu_page('uci-results-api', 'Results', 'Results', 'manage_options', '');
+	    add_submenu_page('uci-results-api', 'Rider Rankings', 'Rider Rankings', 'manage_options', '');
+	    add_submenu_page('uci-results-api', 'API', 'API', 'manage_options', '');	    	    	    
 	}
 	
 	public function admin_page() {
@@ -41,14 +58,7 @@ class UCIResultsAdmin {
 		global $ucicurl_riders;
 
 		$html=null;
-		$tabs=array(
-			'settings' => 'Settings',
-			'results' => 'Results',
-			'series' => 'Series',
-			'rider-rankings' => 'Rider Rankings',
-			'api' => 'API'
-		);
-		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'settings';
+
 
 		$html.='<div class="wrap uci-results">';
 			$html.='<h1>UCI Results</h1>';
@@ -66,13 +76,6 @@ class UCIResultsAdmin {
 			$html.='</h2>';
 
 			switch ($active_tab) :
-				case 'series' :
-						if (isset($_GET['action']) && $_GET['action']=='update-series') :
-							$html.=ucicurl_get_admin_page('update-series');
-						else :
-							$html.=ucicurl_get_admin_page('series');
-						endif;
-					break;
 				case 'rider-rankings' :
 						$html.=ucicurl_get_admin_page('rider-rankings');
 						break;
