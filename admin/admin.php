@@ -17,11 +17,9 @@ class UCIResultsAdmin {
 	}
 
 	public function uci_results_api_admin_scripts_styles() {
-		wp_enqueue_style('uci-results-api-admin-styles', UCI_RESULTS_API_URL.'admin/css/admin.css', '0.1.0');
-		
-		wp_enqueue_script('uci-results-admin', UCI_RESULTS_URL.'/js/admin.js', array('jquery'), '0.1.0',true);
+		wp_enqueue_script('uci-results-admin', UCI_RESULTS_ADMIN_URL.'/js/admin.js', array('jquery'), '0.1.0',true);
 
-		wp_enqueue_style('uci-results-admin', UCI_RESULTS_URL.'/css/admin.css', array(), '0.1.0');		
+		wp_enqueue_style('uci-results-api-admin-styles', UCI_RESULTS_ADMIN_URL.'css/admin.css', '0.1.0');		
 	}
 
 	public function register_menu_page() {

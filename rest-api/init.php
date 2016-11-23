@@ -10,6 +10,4 @@ include_once(UCI_RESULTS_API_PATH.'metaboxes/race-results.php');
 include_once(UCI_RESULTS_API_PATH.'taxonomies.php');
 include_once(UCI_RESULTS_API_PATH.'functions.php');
 include_once(UCI_RESULTS_API_PATH.'api-requests.php');
-include_once(UCI_RESULTS_API_PATH.'admin/admin.php');
-include_once(UCI_RESULTS_API_PATH.'race-results.php');
 ?>
