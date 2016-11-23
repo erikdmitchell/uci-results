@@ -62,7 +62,6 @@ class UCIResultsAdminPages {
 			'settings' => 'Settings',
 			'results' => 'Results',
 			'series' => 'Series',
-			'riders' => 'Riders',
 			'rider-rankings' => 'Rider Rankings',
 			'api' => 'API'
 		);
@@ -90,15 +89,6 @@ class UCIResultsAdminPages {
 						else :
 							$html.=ucicurl_get_admin_page('series');
 						endif;
-					break;
-				case 'riders':
-					if (isset($_GET['rider']) && $_GET['rider']!='') :
-						$atts['rider_id']=$ucicurl_riders->get_rider_id($_GET['rider']);
-
-						$html.=ucicurl_get_admin_page('single-rider', $atts);
-					else :
-						$html.=ucicurl_get_admin_page('riders');
-					endif;
 					break;
 				case 'rider-rankings' :
 						$html.=ucicurl_get_admin_page('rider-rankings');
