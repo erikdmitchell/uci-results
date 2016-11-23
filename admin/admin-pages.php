@@ -61,7 +61,6 @@ class UCIResultsAdminPages {
 		$tabs=array(
 			'settings' => 'Settings',
 			'results' => 'Results',
-			'races' => 'Races',
 			'series' => 'Series',
 			'riders' => 'Riders',
 			'rider-rankings' => 'Rider Rankings',
@@ -85,15 +84,6 @@ class UCIResultsAdminPages {
 			$html.='</h2>';
 
 			switch ($active_tab) :
-				case 'races':
-					if (isset($_GET['race_id']) && isset($_GET['add_related_race'])) :
-						$html.=ucicurl_get_admin_page('add-related-race');
-					elseif (isset($_GET['race_id'])) :
-						$html.=ucicurl_get_admin_page('single-race');
-					else :
-						$html.=ucicurl_get_admin_page('races');
-					endif;
-					break;
 				case 'series' :
 						if (isset($_GET['action']) && $_GET['action']=='update-series') :
 							$html.=ucicurl_get_admin_page('update-series');
