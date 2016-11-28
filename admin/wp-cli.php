@@ -388,98 +388,6 @@ class UCIResultsCLI extends WP_CLI_Command {
 
 		WP_CLI::success("All done!");
 	}
-
-	/**
-	 * Update rider rankings in a season
-	 *
-	 * ## OPTIONS
-	 *
-	 * <season>
-	 * : the season
-	 *
-	 * [--race_id=<race_id>]
-	 * : Get a specific race via id. DOES NOT WORK
-	 *	 
-	 * ## EXAMPLES
-	 *
-	 * wp uciresults rider-rankings 2016/2017
-	 *
-	 * @subcommand rider-rankings
-	*/
-	public function rider_rankings_output($args, $assoc_args) {
-		global $wpdb, $uci_results_rider_rankings, $ucicurl_races;
-
-		$season=0;
-		$show_weeks=true;
-		$show_riders=true;
-
-		// set our season //
-		if (isset($args[0]) || isset($assoc_args['season'])) :
-			if (isset($args[0])) :
-				$season=$args[0];
-			elseif (isset($assoc_args['season'])) :
-				$season=$assoc_args['season'];
-			endif;
-		endif;
-
-		if (!$season || $season=='')
-			WP_CLI::error('No season found.');
-
-		$weeks=$ucicurl_races->weeks($season); // get weeks in season
-		//$wpdb->delete($wpdb->uci_results_rider_rankings, array('season' => $season)); // remove ranks from season to prevent dups
-		$rider_ids=$wpdb->get_col("SELECT id FROM $wpdb->uci_results_riders"); // get all rider ids
-
-		if ($show_weeks) :
-			$weeks_table=array();
-			
-			foreach ($weeks as $week) :
-				$weeks_table[]=array('week' => $week);
-			endforeach;
-			
-			WP_CLI\Utils\format_items('table', $weeks_table, array('week'));
-		endif;
-
-$season_data=uci_results_get_season_weeks($season);
-
-//print_r($season_data);
-
-//print_r($weeks_table);
-//print_r($rider_ids);
-
-		// weekly points progress bar //
-/*
-		$rider_id_count=count($rider_ids);
-		$weekly_points_progress = \WP_CLI\Utils\make_progress_bar( 'Updating weekly points', $rider_id_count );
-*/
-
-		// update weekly points //
-/*
-		for ( $i = 0; $i < $rider_id_count; $i++ ) :
-    	$uci_results_rider_rankings->update_rider_weekly_points($rider_ids[$i], $season);
-			$weekly_points_progress->tick();
-		endfor;
-
-		$weekly_points_progress->finish();
-*/
-
-		// weekly ranks progress bar //
-/*
-		$weeks_count=count($weeks);
-		$week_rank_progress = \WP_CLI\Utils\make_progress_bar( 'Updating weekly ranks', $weeks_count );
-*/
-
-		// update weekly points //
-/*
-		for ( $i = 0; $i < $weeks_count; $i++ ) :
-    		$uci_results_rider_rankings->update_rider_weekly_rankings($season, $weeks[$i]);
-			$week_rank_progress->tick();
-		endfor;
-
-		$week_rank_progress->finish();
-*/
-
-		WP_CLI::success('Update rider rankings complete');
-	}
 	
 	/**
 	 * Add weeks in a season.
@@ -516,12 +424,97 @@ $season_data=uci_results_get_season_weeks($season);
 		
 		foreach ($season_weeks as $value) :
 			if ($value['season'] == $season) :
-print_r($value);			
+				print_r($value);			
 			endif;
 		endforeach;
 
 		WP_CLI::success('Updated season weeks.');
 	}
+	
+	/**
+	 * format_season_data function.
+	 * 
+	 * @access protected
+	 * @param string $season_data (default: '')
+	 * @return void
+	 */
+	protected function format_season_data($season_data='') {
+		if (empty($season_data))
+			return $season_data;
+			
+		$arr=array(
+			'season' => $season_data['season'],
+			'start' => $season_data['start'],
+			'end' => $season_data['end'],
+		);
+		
+		return $arr;
+	}
+	
+	/**
+	 * Update races weeks.
+	 *
+	 * ## OPTIONS
+	 *
+	 * <season>
+	 * : the season
+	 *	 
+	 * [--update=<update>]
+	 * : Run the update (true/false).
+	 *	 
+	 * ## EXAMPLES
+	 *
+	 * wp uciresults update-race-weeks 2016/2017
+	 *
+	 * @subcommand update-race-weeks
+	*/
+	public function update_race_weeks($args, $assoc_args) {
+		global $wpdb, $uci_results_add_races;
+
+		$season=0;
+		$update=0;
+
+		// set our season //
+		if (isset($args[0]) || isset($assoc_args['season'])) :
+			if (isset($args[0])) :
+				$season=$args[0];
+			elseif (isset($assoc_args['season'])) :
+				$season=$assoc_args['season'];
+			endif;
+		endif;
+
+		// setup update //
+		if (isset($assoc_args['update'])) :
+			if (isset($assoc_args['update'])) :
+				$update=$assoc_args['update'];
+			endif;
+		endif;
+
+		if (!$season || $season=='')
+			WP_CLI::error('No season found.');
+		
+		// races //
+		$races=$wpdb->get_results("SELECT * FROM wp_uci_curl_races WHERE season = '$season' ORDER by week");
+		
+		// add generated week //
+		foreach ($races as $race) :
+			$race->genweek=$uci_results_add_races->get_race_week($race->date, $race->season);
+		endforeach;
+            
+        WP_CLI\Utils\format_items('table', $races, array('id', 'date', 'event', 'week', 'genweek'));
+        
+        if ($update) :
+        	WP_CLI::log("Running update...");
+        	
+	   		foreach ($races as $race) :
+				$wpdb->update($wpdb->uci_results_races, array('week' => $race->genweek), array('id' => $race->id));
+			endforeach;     	
+        else :
+        	WP_CLI::warning("Update not run.");
+        endif;
+
+		WP_CLI::success('Updated season weeks.');
+	}	
 	
 }
 
