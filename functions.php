@@ -722,7 +722,6 @@ function uci_results_get_season_weeks($season='') {
 	// specific season //
 	if (!empty($season)) :
 		foreach ($season_weeks as $key => $value) :
-print_r($value['season']);		
 			if ($value['season']==$season)
 				return $value;
 		endforeach;
