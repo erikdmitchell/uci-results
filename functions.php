@@ -722,6 +722,7 @@ function uci_results_get_season_weeks($season='') {
 	// specific season //
 	if (!empty($season)) :
 		foreach ($season_weeks as $key => $value) :
+print_r($value['season']);		
 			if ($value['season']==$season)
 				return $value;
 		endforeach;
@@ -741,13 +742,20 @@ function uci_results_build_season_weeks($season='') {
 	global $uci_results_admin_pages;
 
 	$season_weeks=get_option('uci_results_season_weeks', array());
+	$updated_season=0;
 
 	// check for a specific season //
 	if (!empty($season)) :
-		foreach ($season_weeks as $key => $value) :
-			if ($value['season']==$season)
+		foreach ($season_weeks as $key => $value) :		
+			if ($value['season']==$season) :
 				$season_weeks[$key]=uci_results_set_season_weeks($season);
+				$updated_season=1;
+			endif;
 		endforeach;
+		
+		if (!$updated_season) :
+			$season_weeks[]=uci_results_set_season_weeks($season);
+		endif;		
 	else :
 		$season_weeks=[]; // clear all
 
@@ -755,8 +763,18 @@ function uci_results_build_season_weeks($season='') {
 			$season_weeks[]=uci_results_set_season_weeks($season);
 		endforeach;
 	endif;
+	
+	// remove empties from $season_weeks //
+	foreach ($season_weeks as $key => $value) :
+		if (!count($value))
+			unset($season_weeks[$key]);
+	endforeach;
+	
+	$season_weeks=array_values($season_weeks);
 
 	update_option('uci_results_season_weeks', $season_weeks);
+	
+	return $season_weeks;
 }
 
 /**
@@ -777,6 +795,11 @@ function uci_results_set_season_weeks($season='') {
 
 	$season_url=$uci_results_urls[$season];
 	$season_races=$uci_results_add_races->get_race_data($season, false, true, $season_url);
+
+	// check count //
+	$season_races_arr=(array) $season_races;
+	if (!count($season_races_arr))
+		return;
 
 	$first_race=end($season_races);
 	$last_race=reset($season_races);
