@@ -145,9 +145,9 @@ class UCIcURLRaces {
 
 		$related_races=array();
 		$related_race_id=$this->get_related_race_id($race_id);
-		$related_races_db=$wpdb->get_var("SELECT race_ids FROM {$wpdb->uci_results_related_races} WHERE id={$related_race_id}");
+		$related_races_db=$wpdb->get_var("SELECT race_ids FROM $wpdb->uci_results_related_races WHERE id = $related_race_id");
 
-		if (!$related_races_db)
+		if ($related_races_db === null)
 			return false;
 
 		$related_race_ids=explode(',', $related_races_db);
@@ -349,6 +349,7 @@ class UCIcURLRaces {
 
 		else : // update //
 			$data=array(
+				'code' => $_POST['code'],
 				'date' => date('Y-m-d', strtotime($_POST['date'])),
 				'season' => $_POST['season'],
 				'week' => $_POST['week'],
