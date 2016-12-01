@@ -288,7 +288,7 @@ function uci_results_get_race_slug($id=0) {
 function uci_results_get_race_id($slug='') {
 	global $wpdb;
 
-	$id=$wpdb->get_var("SELECT id FROM {$wpdb->uci_results_races} WHERE code='$slug'");
+	$id=$wpdb->get_var("SELECT id FROM $wpdb->uci_results_races WHERE code = '$slug'");
 
 	return absint($id);
 }
