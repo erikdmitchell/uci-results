@@ -534,7 +534,7 @@ we need some sort of search to compare names
 		// build data array .. -- if you change this, please change get_add_race_to_db()
 		$data=array(
 			'date' => $date = date('Y-m-d', strtotime($race_data->date)),
-			'event' => $race_data->event,
+			'event' => trim($race_data->event),
 			'nat' => $race_data->nat,
 			'class' => $race_data->class,
 			'winner' => $race_data->winner,

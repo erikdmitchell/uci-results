@@ -34,6 +34,10 @@ coming soon...
 
 == Changelog ==
 
+= 0.1.2 =
+
+* Added trim function to race name.
+
 = 0.1.1 =
 
 * Added updater
