@@ -36,12 +36,20 @@ function uci_results_get_template_part($template_name='') {
 
 	do_action('uci_results_get_template_part'.$template_name);
 
-	if (file_exists(get_stylesheet_directory().'/uci-results/'.$template_name.'.php')) :
-		include(get_stylesheet_directory().'/uci-results/'.$template_name.'.php');
-	elseif (file_exists(get_template_directory().'/uci-results/'.$template_name.'.php')) :
-		include(get_template_directory().'/uci-results/'.$template_name.'.php');
+	// admin override //
+	if (get_option('uci_results_template_disable', 0) && is_user_logged_in() && current_user_can('manage_options')) :
+		if (file_exists(UCI_RESULTS_PATH.'templates/'.$template_name.'.php')) :
+			include(UCI_RESULTS_PATH.'templates/'.$template_name.'.php');
+		endif;
 	else :
-		include(UCI_RESULTS_PATH.'templates/'.$template_name.'.php');
+		// no admin override //
+		if (file_exists(get_stylesheet_directory().'/uci-results/'.$template_name.'.php')) :
+			include(get_stylesheet_directory().'/uci-results/'.$template_name.'.php');
+		elseif (file_exists(get_template_directory().'/uci-results/'.$template_name.'.php')) :
+			include(get_template_directory().'/uci-results/'.$template_name.'.php');
+		else :
+			include(UCI_RESULTS_PATH.'templates/'.$template_name.'.php');
+		endif;
 	endif;
 
 	$html=ob_get_contents();
@@ -74,6 +82,15 @@ function uci_results_template_loader($template) {
 				$template_slug=$slug;
 			endif;
 		endforeach;
+	endif;
+
+	// admin override //
+	if (get_option('uci_results_template_disable', 0) && is_user_logged_in() && current_user_can('manage_options')) :
+		if (file_exists(UCI_RESULTS_PATH.'templates/'.$template_slug.'.php')) :
+			return UCI_RESULTS_PATH.'templates/'.$template_slug.'.php';
+		else :
+			return $template;
+		endif;
 	endif;
 
 	// check theme(s), then plugin //

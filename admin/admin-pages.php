@@ -251,6 +251,12 @@ class UCIResultsAdminPages {
 			delete_option('uci_results_post_rankings_to_twitter');
 		endif;
 
+		if (isset($_POST['template_disable']) && $_POST['template_disable']!='') :
+			update_option('uci_results_template_disable', $_POST['template_disable']);
+		else :
+			delete_option('uci_results_template_disable');
+		endif;
+
 		echo '<div class="updated">Settings updated!</div>';
 
 		//flush_rewrite_rules(); // this may not be the best place for it - doesnt seem to work

@@ -127,6 +127,18 @@
 							<a target="_blank" href="<?php echo get_permalink($uci_results_pages['search']); ?>" class="button button-secondary">View Page</a>
 						</td>
 					</tr>
+					
+					<tr>
+						<th scope="row" valign="top">
+							<label for="template_disable">Disable Templates</label>
+						</th>
+						<td>
+							<input type="checkbox" name="template_disable" id="template_disable" value="1" <?php checked(get_option('uci_results_template_disable', 0), 1, true); ?> />
+							<p class="description">
+								When logged in as an admin, the default templates will be shown. Custom templates will be ignored.
+							</p>
+						</td>
+					</tr>
 
 				</tbody>
 			</table>
