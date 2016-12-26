@@ -1,12 +1,12 @@
 <?php
 /**
- * Plugin Name: UCI Results
- * Plugin URI: http://therunup.com
- * Description: Pulls in race results from the UCI website and adds it to your site.
- * Version: 0.1.1
- * Author: Erik Mitchell
- * Author URI: http://erikmitchell.net
- * Text Domain: uci-results
+  Plugin Name: UCI Results
+  Plugin URI: http://therunup.com
+  Description: Pulls in race results from the UCI website and adds it to your site.
+  Version: 0.1.1
+  Author: Erik Mitchell
+  Author URI: http://erikmitchell.net
+  Text Domain: uci-results
  */
 
 define('UCI_RESULTS_PATH', plugin_dir_path(__FILE__));
