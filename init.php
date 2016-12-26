@@ -67,26 +67,28 @@ add_filter( 'query_vars', 'uci_results_register_query_vars');
  * @return void
  */
 function uci_results_plugin_updater() {
+	if (!is_admin())
+		return false;
+
 	define( 'WP_GITHUB_FORCE_UPDATE', true );
-
-	if (is_admin()) {
-		$config = array(
-			'slug' => plugin_basename(UCI_RESULTS_PATH),
-			'proper_folder_name' => 'uci-results',
-			'api_url' => 'https://api.github.com/repos/erikdmitchell/uci-results',
-			'raw_url' => 'https://raw.github.com/erikdmitchell/uci-results/master',
-			'github_url' => 'https://github.com/erikdmitchell/uci-results',
-			'zip_url' => 'https://github.com/erikdmitchell/uci-results/archive/master.zip',
-			'sslverify' => true,
-			'requires' => '4.0',
-			'tested' => '4.7',
-			'readme' => 'readme.txt',
-			'access_token' => '',
-		);
-print_r($config);
-		new WP_GitHub_Updater($config);
-	}
-
+	$username='erikdmitchell';
+	$repo_name='uci-results';
+	$folder_name='uci-results';
+    
+    $config = array(
+        'slug' => plugin_basename(UCI_RESULTS_PATH), // this is the slug of your plugin
+        'proper_folder_name' => $folder_name, // this is the name of the folder your plugin lives in
+        'api_url' => 'https://api.github.com/repos/'.$username.'/'.$repo_name, // the github API url of your github repo
+        'raw_url' => 'https://raw.github.com/'.$username.'/'.$repo_name.'/master', // the github raw url of your github repo
+        'github_url' => 'https://github.com/'.$username.'/'.$repo_name, // the github url of your github repo
+        'zip_url' => 'https://github.com/'.$username.'/'.$repo_name.'/zipball/master', // the zip url of the github repo
+        'sslverify' => true, // wether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
+        'requires' => '4.0', // which version of WordPress does your plugin require?
+        'tested' => '4.7', // which version of WordPress is your plugin tested up to?
+        'readme' => 'readme.txt', // which file to use as the readme for the version number
+    );
+    
+	new WP_GitHub_Updater($config);
 }
-add_action('init', 'uci_results_plugin_updater');
+add_action('admin_init', 'uci_results_plugin_updater');
 ?>
