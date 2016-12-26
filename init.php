@@ -59,4 +59,34 @@ function uci_results_register_query_vars( $vars ) {
   return $vars;
 }
 add_filter( 'query_vars', 'uci_results_register_query_vars');
+
+/**
+ * uci_results_plugin_updater function.
+ * 
+ * @access public
+ * @return void
+ */
+function uci_results_plugin_updater() {
+	define( 'WP_GITHUB_FORCE_UPDATE', true );
+
+	if (is_admin()) {
+		$config = array(
+			'slug' => plugin_basename( __FILE__ ),
+			'proper_folder_name' => 'uci-results',
+			'api_url' => 'https://api.github.com/repos/erikdmitchell/uci-results',
+			'raw_url' => 'https://raw.github.com/erikdmitchell/uci-results/master',
+			'github_url' => 'https://github.com/erikdmitchell/uci-results',
+			'zip_url' => 'https://github.com/erikdmitchell/uci-results/archive/master.zip',
+			'sslverify' => true,
+			'requires' => '4.0',
+			'tested' => '4.6',
+			'readme' => 'README.md',
+			'access_token' => '',
+		);
+
+		new WP_GitHub_Updater($config);
+	}
+
+}
+add_action('init', 'uci_results_plugin_updater');
 ?>
