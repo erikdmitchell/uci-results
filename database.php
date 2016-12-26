@@ -1,7 +1,7 @@
 <?php
 global $ucicurl_db_version;
 
-$ucicurl_db_version='0.1.8';
+$ucicurl_db_version='0.1.9';
 
 /**
  * ucicurl_set_db_tables function.
@@ -278,12 +278,18 @@ function ucicurl_db_update() {
 function ucicurl_update_db_check() {
 	global $ucicurl_db_version;
 
-	if (get_option('ucicurl_db_version')!=$ucicurl_db_version)
-		ucicurl_db_update();
+	if (get_option('ucicurl_db_version') < '0.1.9') :
+		include_once(UCI_RESULTS_PATH.'updates/upgrade-0_1_9.php');
+		$ucicurl_db_version=uci_results_upgrade_0_1_9();
+	elseif (get_option('ucicurl_db_version') != $ucicurl_db_version) :
+		$ucicurl_db_version=ucicurl_db_update();
+	endif;
+
+	update_option('ucicurl_db_version', $ucicurl_db_version);
 
 	return;
 }
-add_action('plugins_loaded', 'ucicurl_update_db_check');
+add_action('init', 'ucicurl_update_db_check', 99);
 
 /**
  * uci_results_empty_database_tables function.

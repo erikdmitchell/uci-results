@@ -36,7 +36,8 @@ coming soon...
 
 = 0.1.2 =
 
-* Added trim function to race name.
+* Added trim function to race name. Also added this as part of db upgrade.
+* Added db update/upgrade functionality.
 
 = 0.1.1 =
 
