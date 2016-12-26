@@ -63,8 +63,6 @@ function uci_results_add_races($args='') {
 
 	write_cron_log('The uci_results_add_races cron job finished.');
 
-
-
 	return;
 }
 add_action('uci_results_add_races', 'uci_results_add_races');
