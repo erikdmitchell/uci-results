@@ -71,7 +71,7 @@ function uci_results_plugin_updater() {
 
 	if (is_admin()) {
 		$config = array(
-			'slug' => plugin_basename( __FILE__ ),
+			'slug' => plugin_basename(UCI_RESULTS_PATH),
 			'proper_folder_name' => 'uci-results',
 			'api_url' => 'https://api.github.com/repos/erikdmitchell/uci-results',
 			'raw_url' => 'https://raw.github.com/erikdmitchell/uci-results/master',
@@ -79,11 +79,11 @@ function uci_results_plugin_updater() {
 			'zip_url' => 'https://github.com/erikdmitchell/uci-results/archive/master.zip',
 			'sslverify' => true,
 			'requires' => '4.0',
-			'tested' => '4.6',
-			'readme' => 'README.md',
+			'tested' => '4.7',
+			'readme' => 'readme.txt',
 			'access_token' => '',
 		);
-
+print_r($config);
 		new WP_GitHub_Updater($config);
 	}
 
