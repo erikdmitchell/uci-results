@@ -10,3 +10,4 @@ admin/.DS_Store
 /cron.log
 /api/controllers/.DS_Store
 /lib/flags/.DS_Store
+/.DS_Store
