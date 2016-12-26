@@ -38,6 +38,7 @@ coming soon...
 
 * Added trim function to race name. Also added this as part of db upgrade.
 * Added db update/upgrade functionality.
+* Added admin override for custom templates.
 
 = 0.1.1 =
 
