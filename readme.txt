@@ -4,7 +4,7 @@ Donate link: erikdmitchell@gmail.com
 Tags: uci, cycling, bicycle, races
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 0.1.2
+Stable tag: 0.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,10 @@ coming soon...
 coming soon...
 
 == Changelog ==
+
+= 0.1.3 =
+
+* Database upgrade to version 0.2.0. Mainly added indexes for faster queries.
 
 = 0.1.2 =
 
