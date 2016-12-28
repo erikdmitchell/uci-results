@@ -82,7 +82,9 @@ function uci_results_plugin_updater() {
 	if (!is_admin())
 		return false;
 
-	define( 'WP_GITHUB_FORCE_UPDATE', true );
+	if (!defined('WP_GITHUB_FORCE_UPDATE'))
+		define('WP_GITHUB_FORCE_UPDATE', true);
+		
 	$username='erikdmitchell';
 	$repo_name='uci-results';
 	$folder_name='uci-results';
