@@ -219,3 +219,7 @@ h2 .uci-results-admin-total {
 .wp-admin .fc-riders .riders .rider-perc-owned {
 	width: 5em;
 }
+
+.wp-admin .uci-results .button-clear {
+	display: inline-block;
+}

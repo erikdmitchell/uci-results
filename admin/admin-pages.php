@@ -43,9 +43,9 @@ class UCIResultsAdminPages {
 	 * @return void
 	 */
 	public function admin_scripts_styles() {
-		wp_enqueue_script('uci-results-admin',UCI_RESULTS_URL.'/js/admin.js',array('jquery'), '0.1.0',true);
+		wp_enqueue_script('uci-results-admin', UCI_RESULTS_URL.'/js/admin.js', array('jquery'), '0.1.0', true);
 
-		wp_enqueue_style('uci-results-admin',UCI_RESULTS_URL.'/css/admin.css',array(), '0.1.0');
+		wp_enqueue_style('uci-results-admin', UCI_RESULTS_URL.'css/admin.css', array(), '0.1.0');
 	}
 
 	/**

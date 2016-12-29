@@ -1,7 +1,6 @@
 <?php
 global $uci_results_query, $uci_results_post, $ucicurl_riders;
 
-//$s_season=isset($_GET['season']) ? $_GET['season'] : '';
 $search=isset($_GET['search']) ? $_GET['search'] : '';
 $nat=isset($_GET['nat']) ? $_GET['nat'] : '';
 
@@ -39,8 +38,9 @@ $riders=new UCI_Results_Query(array(
 				<?php endforeach; ?>
 			</select>
 		</div>
-
+		
 		<input type="submit" id="doaction" class="button action" value="Apply">
+		<a href="<?php echo admin_url('admin.php?page=uci-results&tab=riders'); ?>" class="button button-clear">Clear</a>
 	</form>
 </div>
 
