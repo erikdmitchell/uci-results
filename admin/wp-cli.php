@@ -515,7 +515,107 @@ class UCIResultsCLI extends WP_CLI_Command {
 
 		WP_CLI::success('Updated season weeks.');
 	}	
-	
+
+	/**
+	 * Removes duplicate riders from the database
+	 *
+	 * ## OPTIONS
+	 *
+	 * <rider>
+	 * : Rider name
+	 *
+	 * [--loose=<loose>]
+	 * : Peform a loose search (default: true)	 
+	 *
+	 * [--update=<update>]
+	 * : Update the database
+	 *
+	 * ## EXAMPLES
+	 *
+	 * wp uciresults remove-rider-dup kerry
+	 * wp uciresults remove-rider-dup kerry --loose=false
+	 * wp uciresults remove-rider-dup kerry --update=true	 
+	 *
+	 * @subcommand remove-rider-dup
+	*/
+	public function remove_rider_duplicates($args, $assoc_args) {
+		global $wpdb, $uci_results_add_races, $uci_results_admin_pages;
+
+		$rider='';
+		$loose=false;
+		$update=false;
+
+		// set our rider (name) //
+		if (isset($args[0]) || isset($assoc_args['rider'])) :
+			if (isset($args[0])) :
+				$rider=$args[0];
+			elseif (isset($assoc_args['rider'])) :
+				$rider=$assoc_args['rider'];
+			endif;
+		endif;
+
+		// do a loose search (optional) //
+		if (isset($assoc_args['loose']))
+			$loose=$assoc_args['loose'];
+
+		// perform the update (optional) //
+		if (isset($assoc_args['update']))
+			$update=$assoc_args['update'];
+
+		if (!$rider || $rider=='')
+			WP_CLI::error('No season found.');
+			
+		if ($race_id)
+			WP_CLI::log("Race ID: $race_id");
+
+		// find our urls //
+		if (!isset($uci_results_admin_pages->config->urls->$season) || empty($uci_results_admin_pages->config->urls->$season)) :
+			WP_CLI::error('No url found.');
+		else :
+			$url=$uci_results_admin_pages->config->urls->$season;
+		endif;
+
+		$races=$uci_results_add_races->get_race_data($season, $limit, true, $url);
+
+		if (empty($races))
+			WP_CLI::error('No races found.');
+
+		// process our races //
+		foreach ($races as $race) :
+			$race_data=$uci_results_add_races->get_add_race_to_db($race);
+			$results_data=$uci_results_add_races->get_add_race_to_db_results($race_data['link']);
+
+			if ($output=='php') :
+				$stdout="\n\n";
+				$stdout.='$race_data='.var_export($race_data, true).';';
+				$stdout.="\n";
+				
+				if (!$formatted) :
+					$stdout.='$results_data='.var_export(serialize($results_data), true).';';
+				else :
+					$stdout.='$results_data='.var_export($results_data, true).';';
+				endif;
+				
+				$stdout.="\n\n";
+				WP_CLI::log($stdout);
+			elseif ($output!='raw') :
+				$race_data=array($race_data);
+				$fields=array('date', 'event', 'nat', 'class', 'winner', 'season', 'link', 'code', 'week');
+				
+				WP_CLI\Utils\format_items($output, $race_data, $fields); // race
+				
+				// results //
+				$fields=array('place', 'name', 'nat', 'age', 'result', 'par', 'pcr', 'rider_id');
+				
+				WP_CLI\Utils\format_items($output, $results_data, $fields);			
+			else :
+				print_r($race_data);
+				print_r($results_data);
+			endif;
+		endforeach;
+
+		WP_CLI::success("All done!");
+	}	
 }
 
 WP_CLI::add_command('uciresults', 'UCIResultsCLI');
