@@ -648,10 +648,10 @@ class UCIResultsCLI extends WP_CLI_Command {
 	public function show_rider_duplicates($args, $assoc_args) {
 		global $wpdb;
 
-		$riders=$wpdb->get_results("SELECT name, COUNT(*) c FROM wp_uci_curl_riders GROUP BY name HAVING c > 1");
+		$riders=$wpdb->get_results("SELECT name, COUNT(*) count FROM wp_uci_curl_riders GROUP BY name HAVING count > 1");
 		
 		// display rider table //
-		WP_CLI\Utils\format_items('table', $riders, array('name'));
+		WP_CLI\Utils\format_items('table', $riders, array('name', 'count'));
 	}		
 }
 
