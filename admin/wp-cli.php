@@ -595,13 +595,36 @@ class UCIResultsCLI extends WP_CLI_Command {
 		// ask if we want to do this thing //
 		WP_CLI::confirm('Are you sure you want to merge these riders results, rankings, etc?', $args);
 		
-		WP_CLI::log('yes');
+		// our first rider is the key we will use, we will replace the other ids with it //
+		$base_rider_id=$riders[0]->id;
+		$bad_rider_ids=array();
+		
+		foreach ($riders as $key => $rider) :
+			if ($key==0)
+				continue;
+				
+			$bad_rider_ids[]=$rider->id;
+		endforeach;	
+		
+		$bad_rider_ids=implode(',', $bad_rider_ids); // convert to string for mysql
+		
+		// update results table //
+		$results_table_rows=WP_CLI::log("UPDATE $wpdb->uci_results_results SET rider_id = $base_rider_id WHERE id IN ($bad_rider_ids)");
+		
+		if ($results_table_rows === false)
+			WP_CLI::success("Results table: $results_table_rows rows updated.");		
 
-/*
-$wpdb->uci_results_results (rider_id)
-$wpdb->uci_results_rider_rankings (rider_id)
-$wpdb->uci_results_series_overall (rider_id)
-*/
+		// update rankings table //
+		$rankings_table_rows=WP_CLI::log("UPDATE $wpdb->uci_results_rider_rankings SET rider_id = $base_rider_id WHERE id IN ($bad_rider_ids)");
+		
+		if ($rankings_table_rows === false)
+			WP_CLI::success("Rankings table: $rankings_table_rows rows updated.");
+			
+		// update series overall table //
+		$series_overall_table_rows=WP_CLI::log("UPDATE $wpdb->uci_results_series_overall SET rider_id = $base_rider_id WHERE id IN ($bad_rider_ids)");
+		
+		if ($series_overall_table_rows === false)
+			WP_CLI::success("Series overall table: $series_overall_table_rows rows updated.");					
 
 		WP_CLI::success("All done!");
 	}	
