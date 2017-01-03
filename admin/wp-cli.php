@@ -611,26 +611,48 @@ class UCIResultsCLI extends WP_CLI_Command {
 		// update results table //
 		$results_table_rows=$wpdb->query("UPDATE $wpdb->uci_results_results SET rider_id = $base_rider_id WHERE id IN ($bad_rider_ids)");
 		
-		if ($results_table_rows === false)
+		if ($results_table_rows !== false)
 			WP_CLI::success("Results table: $results_table_rows rows updated.");		
 
 		// update rankings table //
 		$rankings_table_rows=$wpdb->query("UPDATE $wpdb->uci_results_rider_rankings SET rider_id = $base_rider_id WHERE id IN ($bad_rider_ids)");
 		
-		if ($rankings_table_rows === false)
+		if ($rankings_table_rows !== false)
 			WP_CLI::success("Rankings table: $rankings_table_rows rows updated.");
 			
 		// update series overall table //
 		$series_overall_table_rows=$wpdb->query("UPDATE $wpdb->uci_results_series_overall SET rider_id = $base_rider_id WHERE id IN ($bad_rider_ids)");
 		
-		if ($series_overall_table_rows === false)
+		if ($series_overall_table_rows !== false)
 			WP_CLI::success("Series overall table: $series_overall_table_rows rows updated.");					
+
+		// merge rider info to get any missing data that may be elsewhere
+		$data=$wpdb->get_row("SELECT name, MAX(nat) AS nat, slug, MAX(twitter) AS twitter FROM $wpdb->uci_results_riders WHERE id IN ($bad_rider_ids) GROUP BY name");
+
+		$update_rider_info=$wpdb->update($wpdb->uci_results_riders, $data, array('id' => $base_rider_id));
+
+		if ($update_rider_info !== false)
+			WP_CLI::success("Rider info updated.");	
 
 		// remove old rider info //
 		$wpdb->query("DELETE FROM $wpdb->uci_results_riders WHERE id IN ($bad_rider_ids)");
 
 		WP_CLI::success("All done!");
-	}	
+	}
+	
+	/**
+	 * Displays duplicate riders from the database	  
+	 *
+	 * @subcommand show-rider-dups
+	*/
+	public function show_rider_duplicates($args, $assoc_args) {
+		global $wpdb;
+
+		$riders=$wpdb->get_results("SELECT name, COUNT(*) c FROM wp_uci_curl_riders GROUP BY name HAVING c > 1");
+		
+		// display rider table //
+		WP_CLI\Utils\format_items('table', $riders, array('name'));
+	}		
 }
 
 WP_CLI::add_command('uciresults', 'UCIResultsCLI');
