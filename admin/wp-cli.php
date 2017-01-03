@@ -539,10 +539,10 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 * @subcommand remove-rider-dup
 	*/
 	public function remove_rider_duplicates($args, $assoc_args) {
-		global $wpdb, $uci_results_add_races, $uci_results_admin_pages;
+		global $wpdb;
 
 		$rider='';
-		$loose=false;
+		$loose=true;
 		$update=false;
 
 		// set our rider (name) //
@@ -563,56 +563,38 @@ class UCIResultsCLI extends WP_CLI_Command {
 			$update=$assoc_args['update'];
 
 		if (!$rider || $rider=='')
-			WP_CLI::error('No season found.');
+			WP_CLI::error('No rider found.');
+
+		WP_CLI::log("Begin remove rider duplicates...");
+		
+		// are we actually updating ? //
+		if (!$update)
+			WP_CLI::warning("Updates will not occur.");
 			
-		if ($race_id)
-			WP_CLI::log("Race ID: $race_id");
-
-		// find our urls //
-		if (!isset($uci_results_admin_pages->config->urls->$season) || empty($uci_results_admin_pages->config->urls->$season)) :
-			WP_CLI::error('No url found.');
+		// run our search (loose or not) //
+		if ($loose) :
+			$eq='LIKE';
 		else :
-			$url=$uci_results_admin_pages->config->urls->$season;
+			$eq='=';
 		endif;
-
-		$races=$uci_results_add_races->get_race_data($season, $limit, true, $url);
-
-		if (empty($races))
-			WP_CLI::error('No races found.');
-
-		// process our races //
-		foreach ($races as $race) :
-			$race_data=$uci_results_add_races->get_add_race_to_db($race);
-			$results_data=$uci_results_add_races->get_add_race_to_db_results($race_data['link']);
-
-			if ($output=='php') :
-				$stdout="\n\n";
-				$stdout.='$race_data='.var_export($race_data, true).';';
-				$stdout.="\n";
-				
-				if (!$formatted) :
-					$stdout.='$results_data='.var_export(serialize($results_data), true).';';
-				else :
-					$stdout.='$results_data='.var_export($results_data, true).';';
-				endif;
-				
-				$stdout.="\n\n";
-				WP_CLI::log($stdout);
-			elseif ($output!='raw') :
-				$race_data=array($race_data);
-				$fields=array('date', 'event', 'nat', 'class', 'winner', 'season', 'link', 'code', 'week');
-				
-				WP_CLI\Utils\format_items($output, $race_data, $fields); // race
-				
-				// results //
-				$fields=array('place', 'name', 'nat', 'age', 'result', 'par', 'pcr', 'rider_id');
-				
-				WP_CLI\Utils\format_items($output, $results_data, $fields);			
-			else :
-				print_r($race_data);
-				print_r($results_data);
-			endif;
+		
+		$riders=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_riders WHERE name $eq '%$rider%'");
+		
+		// split into first name and last //
+		foreach ($riders as $rider) :
+			$name_arr=explode(' ', $rider->name, 2);
+			$rider->first=$name_arr[0];
+			$rider->last=$name_arr[1];
 		endforeach;
+
+		// display rider details in table graph	//
+		WP_CLI\Utils\format_items('table', $riders, array('id', 'first', 'last', 'nat', 'slug', 'twitter'));
+
+/*
+$wpdb->uci_results_results (rider_id)
+$wpdb->uci_results_rider_rankings (rider_id)
+$wpdb->uci_results_series_overall (rider_id)
+*/
 
 		WP_CLI::success("All done!");
 	}	
