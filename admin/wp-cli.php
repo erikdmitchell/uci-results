@@ -527,14 +527,10 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 * [--loose=<loose>]
 	 * : Peform a loose search (default: true)	 
 	 *
-	 * [--update=<update>]
-	 * : Update the database
-	 *
 	 * ## EXAMPLES
 	 *
 	 * wp uciresults remove-rider-dup kerry
-	 * wp uciresults remove-rider-dup kerry --loose=false
-	 * wp uciresults remove-rider-dup kerry --update=true	 
+	 * wp uciresults remove-rider-dup kerry --loose=false	 
 	 *
 	 * @subcommand remove-rider-dup
 	*/
@@ -543,7 +539,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 
 		$rider='';
 		$loose=true;
-		$update=false;
+		$name_match_perc=60;
 
 		// set our rider (name) //
 		if (isset($args[0]) || isset($assoc_args['rider'])) :
@@ -558,18 +554,9 @@ class UCIResultsCLI extends WP_CLI_Command {
 		if (isset($assoc_args['loose']))
 			$loose=$assoc_args['loose'];
 
-		// perform the update (optional) //
-		if (isset($assoc_args['update']))
-			$update=$assoc_args['update'];
-
+		// check for vaild rider value //
 		if (!$rider || $rider=='')
 			WP_CLI::error('No rider found.');
-
-		WP_CLI::log("Begin remove rider duplicates...");
-		
-		// are we actually updating ? //
-		if (!$update)
-			WP_CLI::warning("Updates will not occur.");
 			
 		// run our search (loose or not) //
 		if ($loose) :
@@ -580,15 +567,35 @@ class UCIResultsCLI extends WP_CLI_Command {
 		
 		$riders=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_riders WHERE name $eq '%$rider%'");
 		
-		// split into first name and last //
-		foreach ($riders as $rider) :
-			$name_arr=explode(' ', $rider->name, 2);
-			$rider->first=$name_arr[0];
-			$rider->last=$name_arr[1];
-		endforeach;
+		if (!count($riders))
+			WP_CLI::error('No riders found.');
 
-		// display rider details in table graph	//
-		WP_CLI\Utils\format_items('table', $riders, array('id', 'first', 'last', 'nat', 'slug', 'twitter'));
+		if (count($riders) == 1)
+			WP_CLI::error('Only one rider found.');
+				
+		// get matching percent //
+		$rider1=$riders[0]; // first rider
+		
+		foreach ($riders as $key => $rider) :
+			if ($key==0)
+				continue;
+				
+			similar_text(strtolower($rider1->name), strtolower($rider->name), $percent);
+			
+			// remove rider if less then our detemrined perc //
+			if ($percent < $name_match_perc)
+				unset($riders[$key]);
+		endforeach;
+		
+		$riders=array_values($riders); // reset keys
+		
+		// display rider table //
+		WP_CLI\Utils\format_items('table', $riders, array('id', 'name', 'nat', 'slug', 'twitter'));
+		
+		// ask if we want to do this thing //
+		WP_CLI::confirm('Are you sure you want to merge these riders results, rankings, etc?', $args);
+		
+		WP_CLI::log('yes');
 
 /*
 $wpdb->uci_results_results (rider_id)
