@@ -1,7 +1,7 @@
 <?php
 global $ucicurl_db_version;
 
-$ucicurl_db_version='0.2.0';
+$ucicurl_db_version='0.2.1';
 
 /**
  * ucicurl_set_db_tables function.
@@ -284,6 +284,9 @@ function ucicurl_update_db_check() {
 	elseif (get_option('ucicurl_db_version') < '0.2.0') :
 		include_once(UCI_RESULTS_PATH.'updates/upgrade-0_2_0.php');
 		$ucicurl_db_version=uci_results_upgrade_0_2_0();
+	elseif (get_option('ucicurl_db_version') < '0.2.1') :
+		include_once(UCI_RESULTS_PATH.'updates/upgrade-0_2_1.php');
+		$ucicurl_db_version=uci_results_upgrade_0_2_1();		
 	elseif (get_option('ucicurl_db_version') != $ucicurl_db_version) :
 		$ucicurl_db_version=ucicurl_db_update();
 	endif;
@@ -328,5 +331,48 @@ function uci_results_remove_database_tables() {
 	$wpdb->query("DROP TABLE $wpdb->uci_results_related_races");
 	$wpdb->query("DROP TABLE $wpdb->uci_results_series");
 	$wpdb->query("DROP TABLE $wpdb->uci_results_series_overall");
+}
+
+/**
+ * uci_results_index_exists function.
+ * 
+ * @access public
+ * @param string $table (default: '')
+ * @param string $id (default: '')
+ * @return void
+ */
+function uci_results_index_exists($table='', $id='') {
+	global $wpdb;
+	
+	if (empty($id) || empty($table))
+		return false;
+		
+	$key_name=$table.'_'.$id;
+	$index=$wpdb->get_row("SHOW INDEX FROM $table WHERE KEY_NAME = '$key_name'");
+	
+	if ($index===null)
+		return false;
+		
+	return true;
+}
+
+/**
+ * uci_results_create_index function.
+ * 
+ * @access public
+ * @param string $table (default: '')
+ * @param string $id (default: '')
+ * @return void
+ */
+function uci_results_create_index($table='', $id='') {
+	global $wpdb;
+	
+	if (empty($id) || empty($table))
+		return false;	
+		
+	$key_name=$table.'_'.$id;
+	$wpdb->query("CREATE INDEX $key_name ON $table($id)");
+
+	return;
 }
 ?>

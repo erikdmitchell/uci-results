@@ -13,10 +13,10 @@ function uci_results_upgrade_0_2_0() {
 	
 	// db indexs //
 	$indexs=array(	
-		$wpdb->uci_curl_riders => array(
+		$wpdb->uci_results_riders => array(
 			'id'
 		),
-		$wpdb->uci_curl_rider_rankings => array(
+		$wpdb->uci_results_rider_rankings => array(
 			'rider_id',
 			'season',
 			'week'
@@ -33,48 +33,4 @@ function uci_results_upgrade_0_2_0() {
 	
 	return $db_version;
 }
-
-/**
- * uci_results_index_exists function.
- * 
- * @access public
- * @param string $table (default: '')
- * @param string $id (default: '')
- * @return void
- */
-function uci_results_index_exists($table='', $id='') {
-	global $wpdb;
-	
-	if (empty($id) || empty($table))
-		return false;
-		
-	$key_name=$table.'_'.$id;
-	$index=$wpdb->get_row("SHOW INDEX FROM $table WHERE KEY_NAME = '$key_name'");
-	
-	if ($index===null)
-		return false;
-		
-	return true;
-}
-
-/**
- * uci_results_create_index function.
- * 
- * @access public
- * @param string $table (default: '')
- * @param string $id (default: '')
- * @return void
- */
-function uci_results_create_index($table='', $id='') {
-	global $wpdb;
-	
-	if (empty($id) || empty($table))
-		return false;	
-		
-	$key_name=$table.'_'.$id;
-	$wpdb->query("CREATE INDEX $key_name ON $table($id)");
-
-	return;
-}
-?>
 ?>
