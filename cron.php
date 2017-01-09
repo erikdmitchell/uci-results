@@ -9,35 +9,57 @@
  */
 function uci_results_add_races($args='') {
 	global $wpdb, $uci_results_add_races, $uci_results_admin_pages;
-
-	$uci_results_urls=get_object_vars($uci_results_admin_pages->config->urls);
+	
 	$season=uci_results_get_current_season();
-	$url=$uci_results_urls[$season];
+	$new_results=0;
+	
+	if (!$season || $season=='') :
+		echo 'No season found.';
+		
+		return;
+	endif;
+
+	$url=uci_results_get_season_url($season);
+
+	if (!$url) :
+		echo 'No url found';
+	
+		return;
+	endif;
+
 	$races=$uci_results_add_races->get_race_data($season, false, true, $url); // gets an output of races via the url
+
+	if (empty($races)) :
+		echo  'No races found.';
+		
+		return;
+	endif;
+
+	do_action('before_uci_results_add_races_cron');
+	
+	//write_cron_log('[DATE: '.date('n/j/Y H:i:s').']');
+	echo '[DATE: '.date('n/j/Y H:i:s').']<br>';
+		
+	foreach ($races as $race) :
+		$process_race_output=uci_results_process_race($race);
+		$output=uci_results_format_process_race_output($process_race_output);
+		
+		//write_cron_log(strip_tags($result['message']));
+		echo "$output<br>";
+
+		//$email_message.=strip_tags($result['message'])."\n";		
+	endforeach;
+
+/*
 	$default_args=array(
 		'weekly_points' => true,
 		'weekly_ranks' => true,
 	);
 	$args=wp_parse_args($args, $default_args);
-	$new_results=0;
+	
 	$email_message='';
 
-	extract($args);
-
-	do_action('before_uci_results_add_races_cron');
-
-	// add race(s) to db //
-	write_cron_log('[DATE: '.date('n/j/Y H:i:s').']');
-
-	foreach ($races as $race) :
-		$result=$uci_results_add_races->add_race_to_db($race, true);
-		write_cron_log(strip_tags($result['message']));
-
-		$email_message.=strip_tags($result['message'])."\n";
-
-		if ($result['new_result'])
-			$new_results++;
-	endforeach;
+	
 
 	// only do this if we have new results //
 	if ($new_results) :
@@ -58,14 +80,83 @@ function uci_results_add_races($args='') {
 
 		do_action('uci_results_add_races_cron_new_results');
 	endif;
-
+	*/
 	do_action('after_uci_results_add_races_cron');
 
-	write_cron_log('The uci_results_add_races cron job finished.');
+	//write_cron_log('The uci_results_add_races cron job finished.');
 
 	return;
 }
 add_action('uci_results_add_races', 'uci_results_add_races');
+
+
+function uci_results_get_season_url($season='') {
+	global $uci_results_admin_pages;
+	
+	if (empty($season))
+		$season=uci_results_get_current_season();
+		
+	if (!isset($uci_results_admin_pages->config->urls->$season) || empty($uci_results_admin_pages->config->urls->$season))
+		return false;
+		
+	return $uci_results_admin_pages->config->urls->$season;
+}
+
+function uci_results_process_race($race='') {
+	global $uci_results_add_races;
+	
+	if (empty($race))
+		return array('warning' => 'No race passed');
+
+	$code=$uci_results_add_races->build_race_code(array('event' => $race->event, 'date' => $race->date));
+
+	if (!$code)
+		return array('warning' => "Code for $race->event not created!");
+
+	// add to db //
+	if (!$uci_results_add_races->check_for_dups($code)) :
+		$formatted_result=$uci_results_add_races->add_race_to_db($race);
+		$result=strip_tags($formatted_result);
+		
+		return array('success' => $result);
+	else :
+		return array('warning' => "Already in db. ($code)");
+	endif;
+	
+	return;
+}
+
+function uci_results_format_process_race_output($arr=array()) {
+	if (empty($arr))
+		return;
+	
+	foreach ($arr as $type => $message) :
+		switch ($type) :
+			case 'warning':
+				return "Warning: $message";
+				break;
+			case 'success':
+				return "Success: $message";
+				break;
+			default:
+				return "$message";
+		endswitch;
+	endforeach;
+}
+
+function uci_results_process_race_is_success($arr=array()) {
+	if (empty($arr))
+		return false;
+	
+	foreach ($arr as $type => $message) :
+		if ($type=='success')
+			return true;
+	endforeach;	
+	
+	return false;
+}
+
+
 
 /**
  * uci_results_cron_job_email function.
