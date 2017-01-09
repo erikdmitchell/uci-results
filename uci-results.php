@@ -3,7 +3,7 @@
   Plugin Name: UCI Results
   Plugin URI: http://therunup.com
   Description: Pulls in race results from the UCI website and adds it to your site.
-  Version: 0.1.3
+  Version: 0.1.4
   Author: Erik Mitchell
   Author URI: http://erikmitchell.net
   Text Domain: uci-results

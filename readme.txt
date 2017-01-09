@@ -4,7 +4,7 @@ Donate link: erikdmitchell@gmail.com
 Tags: uci, cycling, bicycle, races
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 0.1.3
+Stable tag: 0.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,11 @@ coming soon...
 coming soon...
 
 == Changelog ==
+
+= 0.1.4 =
+
+* Reworked our backend for automatically adding races. Synched WP CLI and cron job functionality.
+* Added an automated class to handle our cron job/wp cli automatic functions.
 
 = 0.1.3 =
 
