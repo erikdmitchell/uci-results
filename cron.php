@@ -43,7 +43,7 @@ class UCIResultsAutomation {
 			return;
 		endif;
 	
-		do_action('before_uci_results_add_races_cron'); // CHECK THIS
+		do_action('before_uci_results_add_races_cron');
 		
 		$this->admin_output('[DATE: '.date('n/j/Y H:i:s').']', 'log', $output);
 			
@@ -59,14 +59,14 @@ class UCIResultsAutomation {
 		endforeach;
 		
 		if ($new_results) :
-			uci_results_build_season_weeks($season); // update season weeks - CHECK THIS
+			uci_results_build_season_weeks($season); // update season weeks - CHECK THIS (future)
 			
 			$this->update_rider_rankings($season, $output); // update rankings
 			
-			do_action('uci_results_add_races_cron_new_results'); // CHECK THIS
+			do_action('uci_results_add_races_cron_new_results'); // CHECK THIS - runs something in FC (cron.php:19)
 		endif;
 			
-		do_action('after_uci_results_add_races_cron'); // CHECK THIS
+		do_action('after_uci_results_add_races_cron');
 	
 		$this->admin_output('The uci_results_add_races cron job finished.', 'log', $output);
 
