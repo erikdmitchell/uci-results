@@ -49,45 +49,32 @@ class UCIResultsAutomation {
 			if ($this->process_race_is_success($process_race_output))
 				$new_results++;			
 		endforeach;
+		
+		if ($new_results) :
+			uci_results_build_season_weeks($season); // update season weeks - CHECK THIS
+			
+			$this->update_rider_rankings($season, $output); // update rankings
+			
+			do_action('uci_results_add_races_cron_new_results'); // CHECK THIS
+		endif;
+			
 	
 		do_action('after_uci_results_add_races_cron'); // CHECK THIS
 	
 		write_cron_log('The uci_results_add_races cron job finished.');
-/*
-	this now becomes a seperate function that we pass new results too ($new_results)
-	$default_args=array(
-		'weekly_points' => true,
-		'weekly_ranks' => true,
-	);
-	$args=wp_parse_args($args, $default_args);
-	
-	$email_message='';
 
-	
-
-	// only do this if we have new results //
-	if ($new_results) :
-		uci_results_build_season_weeks($season); // update season weeks
-
-		// run weekly points if need be //
-		if ($weekly_points)
-			uci_results_update_rider_weekly_points();
-
-		// run weekly ranks if need be //
-		if ($weekly_ranks)
-			uci_results_update_rider_weekly_rank();
-
-		// alert admin //
-		$message="The uci_results_add_races cron job finished. There were $new_results new results \n";
-		$message.=$email_message;
-		uci_results_cron_job_email('Cron Job: UCI Results Add Races', $message);
-
-		do_action('uci_results_add_races_cron_new_results'); // CHECK THIS
-	endif;
-	*/	
 		return;
 	}
 	
+	/**
+	 * admin_output function.
+	 * 
+	 * @access protected
+	 * @param string $message (default: '')
+	 * @param string $type (default: '')
+	 * @param string $output (default: '')
+	 * @return void
+	 */
 	protected function admin_output($message='', $type='', $output='') {
 		switch ($output) :
 			case 'wpcli':			
