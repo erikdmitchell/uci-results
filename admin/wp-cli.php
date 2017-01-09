@@ -4,42 +4,6 @@
 if (!defined('WP_CLI') || !WP_CLI)
 	return false;
 
-function uci_results_get_season_url($season='') {
-	global $uci_results_admin_pages;
-	
-	if (empty($season))
-		$season=uci_results_get_current_season();
-		
-	if (!isset($uci_results_admin_pages->config->urls->$season) || empty($uci_results_admin_pages->config->urls->$season))
-		return false;
-		
-	return $uci_results_admin_pages->config->urls->$season;
-}
-
-function uci_results_process_race($race='') {
-	global $uci_results_add_races;
-	
-	if (empty($race))
-		return array('warning' => 'No race passed');
-
-	$code=$uci_results_add_races->build_race_code(array('event' => $race->event, 'date' => $race->date));
-
-	if (!$code)
-		return array('warning' => "Code for $race->event not created!");
-
-	// add to db //
-	if (!$uci_results_add_races->check_for_dups($code)) :
-		$formatted_result=$uci_results_add_races->add_race_to_db($race);
-		$result=strip_tags($formatted_result);
-		
-		return array('success' => $result);
-	else :
-		return array('warning' => "Already in db. ($code)");
-	endif;
-	
-	return;
-}
-
 /**
  * Implements a series of useful WP-CLI commands.
  */
@@ -67,7 +31,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 * @subcommand add-races
 	*/
 	public function add_races($args, $assoc_args) {
-		global $wpdb, $uci_results_add_races, $uci_results_admin_pages;
+		global $uci_results_add_races;
 
 		$season=uci_results_get_current_season();
 
