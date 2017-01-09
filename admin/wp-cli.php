@@ -108,7 +108,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 
 		// update weekly points //
 		for ( $i = 0; $i < $rider_id_count; $i++ ) :
-    	$uci_results_rider_rankings->update_rider_weekly_points($rider_ids[$i], $season);
+    		$uci_results_rider_rankings->update_rider_weekly_points($rider_ids[$i], $season);
 			$weekly_points_progress->tick();
 		endfor;
 
