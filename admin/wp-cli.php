@@ -31,7 +31,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 * @subcommand add-races
 	*/
 	public function add_races($args, $assoc_args) {
-		global $uci_results_add_races;
+		global $uci_results_automation;
 
 		$season=uci_results_get_current_season();
 
@@ -47,20 +47,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 		if (!$season || $season=='')
 			WP_CLI::error('No season found.');
 
-		$url=uci_results_get_season_url($season);
-	
-		if (!$url)
-			WP_CLI::error('No url found');
-	
-		$races=$uci_results_add_races->get_race_data($season, false, true, $url); // gets an output of races via the url
-	
-		if (empty($races))
-			WP_CLI::error('No races found.');
-	
-		foreach ($races as $race) :
-			$output=uci_results_process_race($race);
-			$this->format_process_race_output($output);
-		endforeach;
+		$uci_results_automation->add_races($season, 'wpcli');
 	
 		WP_CLI::success("All done!");
 	}
@@ -80,7 +67,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 * @subcommand update-rider-rankings
 	*/
 	public function update_rider_rankings($args, $assoc_args) {
-		global $wpdb, $uci_results_rider_rankings, $ucicurl_races;
+		global $uci_results_automation;
 
 		$season=0;
 
@@ -96,35 +83,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 		if (!$season || $season=='')
 			WP_CLI::error('No season found.');
 
-		$weeks=$ucicurl_races->weeks($season); // get weeks in season
-		$wpdb->delete($wpdb->uci_results_rider_rankings, array('season' => $season)); // remove ranks from season to prevent dups
-		$rider_ids=$wpdb->get_col("SELECT id FROM {$wpdb->uci_results_riders}"); // get all rider ids
-
-		WP_CLI::success('Rider rankings table for '.$season.' cleared.');
-
-		// weekly points progress bar //
-		$rider_id_count=count($rider_ids);
-		$weekly_points_progress = \WP_CLI\Utils\make_progress_bar( 'Updating weekly points', $rider_id_count );
-
-		// update weekly points //
-		for ( $i = 0; $i < $rider_id_count; $i++ ) :
-    		$uci_results_rider_rankings->update_rider_weekly_points($rider_ids[$i], $season);
-			$weekly_points_progress->tick();
-		endfor;
-
-		$weekly_points_progress->finish();
-
-		// weekly ranks progress bar //
-		$weeks_count=count($weeks);
-		$week_rank_progress = \WP_CLI\Utils\make_progress_bar( 'Updating weekly ranks', $weeks_count );
-
-		// update weekly points //
-		for ( $i = 0; $i < $weeks_count; $i++ ) :
-    		$uci_results_rider_rankings->update_rider_weekly_rankings($season, $weeks[$i]);
-			$week_rank_progress->tick();
-		endfor;
-
-		$week_rank_progress->finish();
+		$uci_results_automation->update_rider_rankings($season, 'wpcli');
 
 		WP_CLI::success('Update rider rankings complete');
 	}
@@ -497,31 +456,6 @@ class UCIResultsCLI extends WP_CLI_Command {
         endif;
 
 		WP_CLI::success('Updated season weeks.');
-	}	
-	
-	/**
-	 * format_process_race_output function.
-	 * 
-	 * @access protected
-	 * @param array $arr (default: array())
-	 * @return void
-	 */
-	protected function format_process_race_output($arr=array()) {
-		if (empty($arr))
-			return;
-		
-		foreach ($arr as $type => $message) :
-			switch ($type) :
-				case 'warning':
-					WP_CLI::warning($message);
-					break;
-				case 'success':
-					WP_CLI::success($message);
-					break;
-				default:
-					WP_CLI::log($message);
-			endswitch;
-		endforeach;
 	}
 	
 }
