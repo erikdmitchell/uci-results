@@ -37,20 +37,32 @@ function uci_results_add_races($args='') {
 
 	do_action('before_uci_results_add_races_cron');
 	
-	//write_cron_log('[DATE: '.date('n/j/Y H:i:s').']');
-	echo '[DATE: '.date('n/j/Y H:i:s').']<br>';
+	write_cron_log('[DATE: '.date('n/j/Y H:i:s').']');
 		
 	foreach ($races as $race) :
 		$process_race_output=uci_results_process_race($race);
 		$output=uci_results_format_process_race_output($process_race_output);
 		
-		//write_cron_log(strip_tags($result['message']));
-		echo "$output<br>";
+		write_cron_log($output);
 
-		//$email_message.=strip_tags($result['message'])."\n";		
+		//$email_message.=strip_tags($result['message'])."\n";
+
+		if (uci_results_process_race_is_success($process_race_output))
+			$new_results++;			
 	endforeach;
 
+	do_action('after_uci_results_add_races_cron');
+
+	write_cron_log('The uci_results_add_races cron job finished.');
+
+	return;
+}
+add_action('uci_results_add_races', 'uci_results_add_races');
+
+
+
 /*
+	this now becomes a seperate function that we pass new results too ($new_results)
 	$default_args=array(
 		'weekly_points' => true,
 		'weekly_ranks' => true,
@@ -81,14 +93,6 @@ function uci_results_add_races($args='') {
 		do_action('uci_results_add_races_cron_new_results');
 	endif;
 	*/
-	do_action('after_uci_results_add_races_cron');
-
-	//write_cron_log('The uci_results_add_races cron job finished.');
-
-	return;
-}
-add_action('uci_results_add_races', 'uci_results_add_races');
-
 
 function uci_results_get_season_url($season='') {
 	global $uci_results_admin_pages;
