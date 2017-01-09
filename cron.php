@@ -62,8 +62,10 @@ class UCIResultsAutomation {
 			uci_results_build_season_weeks($season); // update season weeks - CHECK THIS (future)
 			
 			$this->update_rider_rankings($season, $output); // update rankings
-			
-			do_action('uci_results_add_races_cron_new_results'); // CHECK THIS - runs something in FC (cron.php:19)
+
+			get_option('uci_results_automation_new_races', $new_results);
+		else :
+			update_option('uci_results_automation_new_races', 0);
 		endif;
 			
 		do_action('after_uci_results_add_races_cron');
