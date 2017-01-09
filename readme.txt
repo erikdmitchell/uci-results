@@ -38,6 +38,7 @@ coming soon...
 
 * Reworked our backend for automatically adding races. Synched WP CLI and cron job functionality.
 * Added an automated class to handle our cron job/wp cli automatic functions.
+* Integrated duplicate rider cleanup functions into WP CLI.
 
 = 0.1.3 =
 
