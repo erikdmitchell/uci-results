@@ -456,8 +456,145 @@ class UCIResultsCLI extends WP_CLI_Command {
         endif;
 
 		WP_CLI::success('Updated season weeks.');
+	}	
+
+	/**
+	 * Removes duplicate riders from the database
+	 *
+	 * ## OPTIONS
+	 *
+	 * <rider>
+	 * : Rider name
+	 *
+	 * [--loose=<loose>]
+	 * : Peform a loose search (default: true)	 
+	 *
+	 * ## EXAMPLES
+	 *
+	 * wp uciresults remove-rider-dup kerry
+	 * wp uciresults remove-rider-dup kerry --loose=false	 
+	 *
+	 * @subcommand remove-rider-dup
+	*/
+	public function remove_rider_duplicates($args, $assoc_args) {
+		global $wpdb;
+
+		$rider='';
+		$loose=true;
+		$name_match_perc=60;
+
+		// set our rider (name) //
+		if (isset($args[0]) || isset($assoc_args['rider'])) :
+			if (isset($args[0])) :
+				$rider=$args[0];
+			elseif (isset($assoc_args['rider'])) :
+				$rider=$assoc_args['rider'];
+			endif;
+		endif;
+
+		// do a loose search (optional) //
+		if (isset($assoc_args['loose']))
+			$loose=$assoc_args['loose'];
+
+		// check for vaild rider value //
+		if (!$rider || $rider=='')
+			WP_CLI::error('No rider found.');
+			
+		// run our search (loose or not) //
+		if ($loose) :
+			$eq='LIKE';
+		else :
+			$eq='=';
+		endif;
+		
+		$riders=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_riders WHERE name $eq '%$rider%'");
+		
+		if (!count($riders))
+			WP_CLI::error('No riders found.');
+
+		if (count($riders) == 1)
+			WP_CLI::error('Only one rider found.');
+				
+		// get matching percent //
+		$rider1=$riders[0]; // first rider
+		
+		foreach ($riders as $key => $rider) :
+			if ($key==0)
+				continue;
+				
+			similar_text(strtolower($rider1->name), strtolower($rider->name), $percent);
+			
+			// remove rider if less then our detemrined perc //
+			if ($percent < $name_match_perc)
+				unset($riders[$key]);
+		endforeach;
+		
+		$riders=array_values($riders); // reset keys
+		
+		// display rider table //
+		WP_CLI\Utils\format_items('table', $riders, array('id', 'name', 'nat', 'slug', 'twitter'));
+		
+		// ask if we want to do this thing //
+		WP_CLI::confirm('Are you sure you want to merge these riders results, rankings, etc?', $args);
+		
+		// our first rider is the key we will use, we will replace the other ids with it //
+		$base_rider_id=$riders[0]->id;
+		$bad_rider_ids=array();
+		
+		foreach ($riders as $key => $rider) :
+			if ($key==0)
+				continue;
+				
+			$bad_rider_ids[]=$rider->id;
+		endforeach;	
+		
+		$bad_rider_ids=implode(',', $bad_rider_ids); // convert to string for mysql
+		
+		// update results table //
+		$results_table_rows=$wpdb->query("UPDATE $wpdb->uci_results_results SET rider_id = $base_rider_id WHERE id IN ($bad_rider_ids)");
+		
+		if ($results_table_rows !== false)
+			WP_CLI::success("Results table: $results_table_rows rows updated.");		
+
+		// update rankings table //
+		$rankings_table_rows=$wpdb->query("UPDATE $wpdb->uci_results_rider_rankings SET rider_id = $base_rider_id WHERE id IN ($bad_rider_ids)");
+		
+		if ($rankings_table_rows !== false)
+			WP_CLI::success("Rankings table: $rankings_table_rows rows updated.");
+			
+		// update series overall table //
+		$series_overall_table_rows=$wpdb->query("UPDATE $wpdb->uci_results_series_overall SET rider_id = $base_rider_id WHERE id IN ($bad_rider_ids)");
+		
+		if ($series_overall_table_rows !== false)
+			WP_CLI::success("Series overall table: $series_overall_table_rows rows updated.");					
+
+		// merge rider info to get any missing data that may be elsewhere
+		$data=$wpdb->get_row("SELECT name, MAX(nat) AS nat, slug, MAX(twitter) AS twitter FROM $wpdb->uci_results_riders WHERE id IN ($bad_rider_ids) GROUP BY name");
+
+		$update_rider_info=$wpdb->update($wpdb->uci_results_riders, $data, array('id' => $base_rider_id));
+
+		if ($update_rider_info !== false)
+			WP_CLI::success("Rider info updated.");	
+
+		// remove old rider info //
+		$wpdb->query("DELETE FROM $wpdb->uci_results_riders WHERE id IN ($bad_rider_ids)");
+
+		WP_CLI::success("All done!");
 	}
 	
+	/**
+	 * Displays duplicate riders from the database	  
+	 *
+	 * @subcommand show-rider-dups
+	*/
+	public function show_rider_duplicates($args, $assoc_args) {
+		global $wpdb;
+
+		$riders=$wpdb->get_results("SELECT name, COUNT(*) count FROM wp_uci_curl_riders GROUP BY name HAVING count > 1");
+		
+		// display rider table //
+		WP_CLI\Utils\format_items('table', $riders, array('name', 'count'));
+	}		
 }
 
 WP_CLI::add_command('uciresults', 'UCIResultsCLI');
