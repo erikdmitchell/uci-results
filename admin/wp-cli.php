@@ -4,6 +4,42 @@
 if (!defined('WP_CLI') || !WP_CLI)
 	return false;
 
+function uci_results_get_season_url($season='') {
+	global $uci_results_admin_pages;
+	
+	if (empty($season))
+		$season=uci_results_get_current_season();
+		
+	if (!isset($uci_results_admin_pages->config->urls->$season) || empty($uci_results_admin_pages->config->urls->$season))
+		return false;
+		
+	return $uci_results_admin_pages->config->urls->$season;
+}
+
+function uci_results_process_race($race='') {
+	global $uci_results_add_races;
+	
+	if (empty($race))
+		return array('warning' => 'No race passed');
+
+	$code=$uci_results_add_races->build_race_code(array('event' => $race->event, 'date' => $race->date));
+
+	if (!$code)
+		return array('warning' => "Code for $race->event not created!");
+
+	// add to db //
+	if (!$uci_results_add_races->check_for_dups($code)) :
+		$formatted_result=$uci_results_add_races->add_race_to_db($race);
+		$result=strip_tags($formatted_result);
+		
+		return array('success' => $result);
+	else :
+		return array('warning' => "Already in db. ($code)");
+	endif;
+	
+	return;
+}
+
 /**
  * Implements a series of useful WP-CLI commands.
  */
@@ -21,7 +57,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 *
 	 * ## OPTIONS
 	 *
-	 * <season>
+	 * [--season=<season>]
 	 * : the season
 	 *
 	 * ## EXAMPLES
@@ -33,7 +69,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 	public function add_races($args, $assoc_args) {
 		global $wpdb, $uci_results_add_races, $uci_results_admin_pages;
 
-		$season=0;
+		$season=uci_results_get_current_season();
 
 		// set our season //
 		if (isset($args[0]) || isset($assoc_args['season'])) :
@@ -47,38 +83,21 @@ class UCIResultsCLI extends WP_CLI_Command {
 		if (!$season || $season=='')
 			WP_CLI::error('No season found.');
 
-		// find our urls //
-		if (!isset($uci_results_admin_pages->config->urls->$season) || empty($uci_results_admin_pages->config->urls->$season)) :
-			WP_CLI::error('No url found.');
-		else :
-			$url=$uci_results_admin_pages->config->urls->$season;
-		endif;
-
-		$races=$uci_results_add_races->get_race_data($season, false, true, $url);
-
+		$url=uci_results_get_season_url($season);
+	
+		if (!$url)
+			WP_CLI::error('No url found');
+	
+		$races=$uci_results_add_races->get_race_data($season, false, true, $url); // gets an output of races via the url
+	
 		if (empty($races))
 			WP_CLI::error('No races found.');
-
-		// process our races //
+	
 		foreach ($races as $race) :
-			$code=$uci_results_add_races->build_race_code(array('event' => $race->event, 'date' => $race->date));
-
-			if (!$code) :
-				WP_CLI::warning("Code for $race->event not created!");
-				continue;
-			endif;
-
-			// add to db //
-			if (!$uci_results_add_races->check_for_dups($code)) :
-				$formatted_result=$uci_results_add_races->add_race_to_db($race);
-				$result=strip_tags($formatted_result);
-				WP_CLI::success($result);
-			else :
-				WP_CLI::warning("Already in db. ($code)");
-			endif;
-
+			$output=uci_results_process_race($race);
+			$this->format_process_race_output($output);
 		endforeach;
-
+	
 		WP_CLI::success("All done!");
 	}
 
@@ -515,6 +534,31 @@ class UCIResultsCLI extends WP_CLI_Command {
 
 		WP_CLI::success('Updated season weeks.');
 	}	
+	
+	/**
+	 * format_process_race_output function.
+	 * 
+	 * @access protected
+	 * @param array $arr (default: array())
+	 * @return void
+	 */
+	protected function format_process_race_output($arr=array()) {
+		if (empty($arr))
+			return;
+		
+		foreach ($arr as $type => $message) :
+			switch ($type) :
+				case 'warning':
+					WP_CLI::warning($message);
+					break;
+				case 'success':
+					WP_CLI::success($message);
+					break;
+				default:
+					WP_CLI::log($message);
+			endswitch;
+		endforeach;
+	}
 	
 }
 
