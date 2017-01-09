@@ -13,6 +13,14 @@ class UCIResultsAutomation {
 		add_action('uci_results_add_races', array($this, 'add_races'));
 	}
 
+	/**
+	 * add_races function.
+	 * 
+	 * @access public
+	 * @param string $season (default: '')
+	 * @param string $output (default: 'raw')
+	 * @return void
+	 */
 	public function add_races($season='', $output='raw') {
 		global $uci_results_add_races;
 		
@@ -35,7 +43,7 @@ class UCIResultsAutomation {
 			return;
 		endif;
 	
-		do_action('before_uci_results_add_races_cron');
+		do_action('before_uci_results_add_races_cron'); // CHECK THIS
 		
 		write_cron_log('[DATE: '.date('n/j/Y H:i:s').']');
 			
@@ -58,7 +66,6 @@ class UCIResultsAutomation {
 			do_action('uci_results_add_races_cron_new_results'); // CHECK THIS
 		endif;
 			
-	
 		do_action('after_uci_results_add_races_cron'); // CHECK THIS
 	
 		write_cron_log('The uci_results_add_races cron job finished.');
