@@ -45,7 +45,7 @@ class UCIResultsAutomation {
 	
 		do_action('before_uci_results_add_races_cron'); // CHECK THIS
 		
-		write_cron_log('[DATE: '.date('n/j/Y H:i:s').']');
+		$this->admin_output('[DATE: '.date('n/j/Y H:i:s').']', 'log', $output);
 			
 		foreach ($races as $race) :
 			$process_race_output=$this->process_race($race);
@@ -68,7 +68,7 @@ class UCIResultsAutomation {
 			
 		do_action('after_uci_results_add_races_cron'); // CHECK THIS
 	
-		write_cron_log('The uci_results_add_races cron job finished.');
+		$this->admin_output('The uci_results_add_races cron job finished.', 'log', $output);
 
 		return;
 	}
