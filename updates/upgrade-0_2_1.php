@@ -16,6 +16,10 @@ function uci_results_upgrade_0_2_1() {
 			'rider_id',
 			'race_id'
 		),
+		$wpdb->uci_results_races => array(
+			'id',
+			'date'
+		),		
 	);
 
 	// cycle through and setup queries //
