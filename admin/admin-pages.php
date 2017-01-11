@@ -258,6 +258,12 @@ class UCIResultsAdminPages {
 			delete_option('uci_results_template_disable');
 		endif;
 
+		if (isset($_POST['enable_cron_log']) && $_POST['enable_cron_log']!='') :
+			update_option('uci_results_enable_cron_log', $_POST['enable_cron_log']);
+		else :
+			delete_option('uci_results_enable_cron_log');
+		endif;
+
 		echo '<div class="updated">Settings updated!</div>';
 
 		//flush_rewrite_rules(); // this may not be the best place for it - doesnt seem to work
