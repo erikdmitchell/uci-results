@@ -356,15 +356,19 @@ function uci_results_cron_job_email($subject='', $message='') {
 	wp_mail($to, $subject, $message);
 }
 
-// write to custom cron log function //
-if ( ! function_exists('write_cron_log')) {
-   function write_cron_log($log)  {
-      if ( is_array( $log ) || is_object( $log ) ) {
-        error_log( print_r( $log, true )."\n", 3, UCI_RESULTS_PATH.'cron.log' );
-      } else {
-        error_log( "$log\n", 3, UCI_RESULTS_PATH.'cron.log' );
-      }
-   }
+/**
+ * uci_results_write_cron_log function.
+ * 
+ * @access public
+ * @param mixed $log
+ * @return void
+ */
+function uci_results_write_cron_log($log)  {
+  if ( is_array( $log ) || is_object( $log ) ) {
+    error_log( print_r( $log, true )."\n", 3, UCI_RESULTS_PATH.'cron.log' );
+  } else {
+    error_log( "$log\n", 3, UCI_RESULTS_PATH.'cron.log' );
+  }
 }
 
 /**
