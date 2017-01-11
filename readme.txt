@@ -34,6 +34,11 @@ coming soon...
 
 == Changelog ==
 
+= 0.1.5 =
+
+* Database upgraded to version 0.2.1
+* The cron job log is now controlled through admin settings. You can enable, view and clear the log.
+
 = 0.1.4 =
 
 * Reworked our backend for automatically adding races. Synched WP CLI and cron job functionality.
