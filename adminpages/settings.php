@@ -216,13 +216,13 @@
 
 					<tr>
 						<th scope="row">
-							<label form="enable_cron_log">Post Results</label>
+							<label form="enable_cron_log">Enable Cron Log</label>
 						</th>
 						<td>
 							<input type="checkbox" name="enable_cron_log" id="enable_cron_log" value="1" <?php checked(get_option('uci_results_enable_cron_log', ''), 1); ?>>
 							
-							<a href="<?php echo UCI_RESULTS_URL; ?>cron.log" class="button button-secondary">View Log</a> (<?php echo uci_results_format_size(filesize(UCI_RESULTS_PATH.'cron.log')); ?>)
-							<a href="" class="button button-secondary">Clear Log</a>
+							<a href="<?php echo UCI_RESULTS_URL; ?>cron.log" class="button button-secondary">View Log</a> (<span id="uci-results-cron-job-log-size"><?php echo uci_results_format_size(filesize(UCI_RESULTS_PATH.'cron.log')); ?></span>)
+							<a href="" class="button button-secondary" id="uci-results-clear-log">Clear Log</a>
 							
 							<p class="description">
 								Our primary results task is set to run via cron job. If this box is checked, the cron job will output information to the log.
