@@ -84,13 +84,19 @@ class UCIResultsAutomation {
 	 * @param string $output (default: '')
 	 * @return void
 	 */
-	protected function admin_output($message='', $type='', $output='') {
+	protected function admin_output($message='', $type='', $output='') {		
 		switch ($output) :
 			case 'wpcli':			
 				$this->wpcli_output_format($type, $message);
 				break;
-			default:
-				echo "$type: $message";
+			default:			
+				if (get_option('uci_results_enable_cron_log', 0)) :
+					if (!empty($type)) :
+						uci_results_write_cron_log("$type: $message");
+					else :
+						uci_results_write_cron_log($message);
+					endif;
+				endif;
 		endswitch;
 	}
 	
@@ -178,8 +184,7 @@ class UCIResultsAutomation {
 			if ($output=='wpcli') :
 				$progress->tick();
 			else :
-				//write_cron_log(strip_tags($result));
-				echo strip_tags($result);
+				$this->admin_output(strip_tags( $result), '', $output);
 			endif;
 		endfor;
 	
@@ -222,8 +227,7 @@ class UCIResultsAutomation {
 			if ($output=='wpcli') :
 				$progress->tick();
 			else :
-				//write_cron_log(strip_tags($result));
-				echo strip_tags($result);
+				$this->admin_output(strip_tags( $result), '', $output);
 			endif;
 		endfor;
 	
@@ -356,15 +360,19 @@ function uci_results_cron_job_email($subject='', $message='') {
 	wp_mail($to, $subject, $message);
 }
 
-// write to custom cron log function //
-if ( ! function_exists('write_cron_log')) {
-   function write_cron_log($log)  {
-      if ( is_array( $log ) || is_object( $log ) ) {
-        error_log( print_r( $log, true )."\n", 3, UCI_RESULTS_PATH.'cron.log' );
-      } else {
-        error_log( "$log\n", 3, UCI_RESULTS_PATH.'cron.log' );
-      }
-   }
+/**
+ * uci_results_write_cron_log function.
+ * 
+ * @access public
+ * @param mixed $log
+ * @return void
+ */
+function uci_results_write_cron_log($log)  {
+  if ( is_array( $log ) || is_object( $log ) ) {
+    error_log( print_r( $log, true )."\n", 3, UCI_RESULTS_PATH.'cron.log' );
+  } else {
+    error_log( "$log\n", 3, UCI_RESULTS_PATH.'cron.log' );
+  }
 }
 
 /**

@@ -935,4 +935,21 @@ function uci_results_display_total($arr=array()) {
 		echo count($arr);
 	endif;
 }
+
+/**
+ * uci_results_format_size function.
+ * 
+ * @access public
+ * @param string $size (default: '')
+ * @return void
+ */
+function uci_results_format_size($size='') {
+	$sizes = array(" Bytes", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB");
+	
+    if ($size == 0) : 
+	    return('n/a');
+	else :
+      	return (round($size/pow(1024, ($i = floor(log($size, 1024)))), 2) . $sizes[$i]);
+    endif;
+}
 ?>

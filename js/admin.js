@@ -220,6 +220,25 @@ jQuery(document).ready(function($) {
 			hideLoader();
 		});
 	});
+	
+	/**
+	 * clear cron job log
+	 */
+	$('#uci-results-clear-log').click(function(e) {
+		showLoader('#wpcontent');
+
+		e.preventDefault();
+
+		var data={
+			'action' : 'uci_results_clear_cron_log',
+		};
+
+		$.post(ajaxurl, data, function(response) {
+			$('#uci-results-cron-job-log-size').text('n/a');
+
+			hideLoader();
+		});		
+	});
 
 });
 

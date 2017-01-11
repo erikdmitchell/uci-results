@@ -1,26 +1,25 @@
 <?php
-
 /**
- * uci_results_upgrade_0_2_0 function.
+ * uci_results_upgrade_0_2_1 function.
  * 
  * @access public
  * @return void
  */
-function uci_results_upgrade_0_2_0() {
+function uci_results_upgrade_0_2_1() {
 	global $wpdb;
 	
-	$db_version='0.2.0';
+	$db_version='0.2.1';
 	
 	// db indexs //
 	$indexs=array(	
-		$wpdb->uci_results_riders => array(
-			'id'
-		),
-		$wpdb->uci_results_rider_rankings => array(
+		$wpdb->uci_results_results => array(
 			'rider_id',
-			'season',
-			'week'
+			'race_id'
 		),
+		$wpdb->uci_results_races => array(
+			'id',
+			'date'
+		),		
 	);
 
 	// cycle through and setup queries //

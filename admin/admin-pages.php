@@ -22,6 +22,7 @@ class UCIResultsAdminPages {
 		add_action('wp_ajax_uci_results_remove_db', array($this, 'ajax_remove_db'));
 		add_action('wp_ajax_uci_results_build_season_weeks', array($this, 'ajax_uci_results_build_season_weeks'));
 		add_action('wp_ajax_uci_results_rider_rankings_dropdown', array($this, 'ajax_rider_rankings_dropdown'));
+		add_action('wp_ajax_uci_results_clear_cron_log', array($this, 'ajax_clear_cron_log'));
 
 		$this->setup_config($config);
 	}
@@ -257,6 +258,12 @@ class UCIResultsAdminPages {
 			delete_option('uci_results_template_disable');
 		endif;
 
+		if (isset($_POST['enable_cron_log']) && $_POST['enable_cron_log']!='') :
+			update_option('uci_results_enable_cron_log', $_POST['enable_cron_log']);
+		else :
+			delete_option('uci_results_enable_cron_log');
+		endif;
+
 		echo '<div class="updated">Settings updated!</div>';
 
 		//flush_rewrite_rules(); // this may not be the best place for it - doesnt seem to work
@@ -332,6 +339,21 @@ class UCIResultsAdminPages {
 
 		echo $html;
 
+		wp_die();
+	}
+	
+	/**
+	 * ajax_clear_cron_log function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function ajax_clear_cron_log() {
+		$file=UCI_RESULTS_PATH.'cron.log';
+		$handle=fopen($file, "w+");
+		fwrite($handle , '');
+		fclose($handle);
+		
 		wp_die();
 	}
 
