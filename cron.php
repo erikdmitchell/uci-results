@@ -90,7 +90,11 @@ class UCIResultsAutomation {
 				$this->wpcli_output_format($type, $message);
 				break;
 			default:
-				echo "$type: $message";
+				if (!empty($type)) :
+					uci_results_write_cron_log("$type: $message");
+				else :
+					uci_results_write_cron_log($message);
+				endif;
 		endswitch;
 	}
 	
@@ -178,8 +182,7 @@ class UCIResultsAutomation {
 			if ($output=='wpcli') :
 				$progress->tick();
 			else :
-				//write_cron_log(strip_tags($result));
-				echo strip_tags($result);
+				$this->admin_output(strip_tags( $result), '', $output);
 			endif;
 		endfor;
 	
@@ -222,8 +225,7 @@ class UCIResultsAutomation {
 			if ($output=='wpcli') :
 				$progress->tick();
 			else :
-				//write_cron_log(strip_tags($result));
-				echo strip_tags($result);
+				$this->admin_output(strip_tags( $result), '', $output);
 			endif;
 		endfor;
 	
