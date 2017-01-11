@@ -1,4 +1,4 @@
-<?php global $uci_results_pages;	?>
+<?php global $uci_results_pages; ?>
 
 <div class="uci-results-settings">
 

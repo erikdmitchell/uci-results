@@ -84,16 +84,18 @@ class UCIResultsAutomation {
 	 * @param string $output (default: '')
 	 * @return void
 	 */
-	protected function admin_output($message='', $type='', $output='') {
+	protected function admin_output($message='', $type='', $output='') {		
 		switch ($output) :
 			case 'wpcli':			
 				$this->wpcli_output_format($type, $message);
 				break;
-			default:
-				if (!empty($type)) :
-					uci_results_write_cron_log("$type: $message");
-				else :
-					uci_results_write_cron_log($message);
+			default:			
+				if (get_option('uci_results_enable_cron_log', 0)) :
+					if (!empty($type)) :
+						uci_results_write_cron_log("$type: $message");
+					else :
+						uci_results_write_cron_log($message);
+					endif;
 				endif;
 		endswitch;
 	}
