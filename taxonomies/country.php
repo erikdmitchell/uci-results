@@ -15,7 +15,7 @@ function country_init() {
 			'assign_terms'  => 'edit_posts'
 		),
 		'labels'            => array(
-			'name'                       => __( 'Countries', 'uci-results' ),
+			'name'                       => __( 'Country', 'uci-results' ),
 			'singular_name'              => _x( 'Country', 'taxonomy general name', 'uci-results' ),
 			'search_items'               => __( 'Search countries', 'uci-results' ),
 			'popular_items'              => __( 'Popular countries', 'uci-results' ),
