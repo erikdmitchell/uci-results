@@ -36,7 +36,7 @@ class UCIResultsAdmin {
 	}
 
 	public function register_menu_page() {
-	    add_menu_page(__('UCI Results', 'uci-results'), 'UCI Results', 'manage_options', 'uci-results', array($this, 'admin_page'), 'dashicons-sos', 80);
+	    add_menu_page(__('UCI Results', 'uci-results'), 'UCI Results', 'manage_options', 'uci-results', array($this, 'admin_page'), 'dashicons-media-spreadsheet', 80);
 	    add_submenu_page('uci-results', 'Riders', 'Riders', 'manage_options', 'edit.php?post_type=riders');
 	    add_submenu_page('uci-results', 'Races', 'Races', 'manage_options', 'edit.php?post_type=races');
 	    add_submenu_page('uci-results', 'Countries', 'Countries', 'manage_options', 'edit-tags.php?taxonomy=country&post_type=races');
