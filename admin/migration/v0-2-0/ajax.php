@@ -91,6 +91,8 @@ function ajax_uci_results_run_clean_up() {
 	
 	//update_uci_results_version();
 	
+	//update_option('ucicurl_db_version', '0.2.0');
+	
 	echo json_encode(array(
 		'step' => 7,
 		'success' => true,

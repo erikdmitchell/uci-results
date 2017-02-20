@@ -298,14 +298,11 @@ function ucicurl_update_db_check() {
 
 	if (get_option('ucicurl_db_version') < '0.2.0') :
 		include_once(UCI_RESULTS_PATH.'updates/upgrade-0_2_0.php');
-		//$ucicurl_db_version=uci_results_upgrade_0_2_0();
 	elseif (get_option('ucicurl_db_version') != $ucicurl_db_version) :
 		$ucicurl_db_version=ucicurl_db_update();
 	endif;
 
-//echo $ucicurl_db_version;
-
-	//update_option('ucicurl_db_version', $ucicurl_db_version);
+	update_option('ucicurl_db_version', $ucicurl_db_version);
 
 	return;
 }

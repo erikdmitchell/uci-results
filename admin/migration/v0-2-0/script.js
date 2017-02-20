@@ -27,9 +27,7 @@ function run_migration() {
 		.then(update_series_overall_table)
 		.then(update_rider_rankings_table)
 		.then(run_clean_up)		
-		.then(function() {
-    		console.log("successful");
-		});		
+		.then(finalizeMigration);
 }
 
 /**
@@ -100,6 +98,17 @@ function update_rider_rankings_table() {
  */
 function run_clean_up() {
 	return runMigrationAJAX('run_clean_up');	
+}
+
+/**
+ * finalizeMigration function.
+ * 
+ * @access public
+ * @return void
+ */
+function finalizeMigration() {
+	jQuery('.migration-0_2_0.notice').remove(); // clear admin notice
+	jQuery('<div class="notice notice-success"><p><b>Database migration complete!</b> Enjoy the awesomeness.</p></div>').insertAfter(jQuery('.uci-results.wrap h1:first')); // notify we are done
 }
 
 /**
