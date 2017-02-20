@@ -16,6 +16,7 @@ class UCIResultsAdmin {
 		add_action('admin_menu', array($this, 'register_menu_page'));
 		add_action('admin_enqueue_scripts', array($this, 'uci_results_api_admin_scripts_styles'));
 		add_action('admin_init', array($this, 'save_settings'));
+		add_action('admin_init', array($this, 'include_migration_files'));
 		add_action('wp_ajax_uci_results_empty_db', array($this, 'ajax_empty_db'));
 		add_action('wp_ajax_uci_results_remove_db', array($this, 'ajax_remove_db'));
 		add_action('wp_ajax_uci_results_rider_rankings_dropdown', array($this, 'ajax_rider_rankings_dropdown'));
@@ -46,6 +47,7 @@ class UCIResultsAdmin {
 						wp_enqueue_script('uci-results-migration-0_2_0-script', UCI_RESULTS_ADMIN_URL.'migration/v0-2-0/script.js', array('jquery-ui-progressbar'), '0.1.0', true);
 						
 						wp_enqueue_style('uci-results-jquery-ui-css', "http://ajax.googleapis.com/ajax/libs/jqueryui/$jquery_ui_version/themes/ui-lightness/jquery-ui.min.css");
+						
 						break;
 				endswitch;
 			endif;
@@ -302,6 +304,19 @@ class UCIResultsAdmin {
 		wp_die();
 	}
 
+	public function include_migration_files() {
+		include_once(UCI_RESULTS_ADMIN_PATH.'/migration/v0-2-0/ajax.php');	
+		
+		if (isset($_GET['subpage']) && $_GET['subpage']=='migration') :
+			if (isset($_GET['version'])) :					
+				switch ($_GET['version']) :
+					case '0_2_0' :
+						include_once(UCI_RESULTS_ADMIN_PATH.'/migration/v0-2-0/ajax.php');	
+						break;
+				endswitch;
+			endif;
+		endif;
+	}
 }
 
 $uci_results_admin = new UCIResultsAdmin();
