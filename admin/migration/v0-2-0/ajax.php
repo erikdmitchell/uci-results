@@ -32,12 +32,51 @@ function ajax_uci_results_migrate_riders() {
 	echo json_encode(array(
 		'step' => 3,
 		'success' => true,
-		'percent' => 30
+		'percent' => 55
 	));
 	
 	wp_die();
 }
 add_action('wp_ajax_migrate_riders', 'ajax_uci_results_migrate_riders');
+
+function ajax_uci_results_migrate_races() {
+	//uci_results_migrate_related_races();
+	
+	echo json_encode(array(
+		'step' => 4,
+		'success' => true,
+		'percent' => 80
+	));
+	
+	wp_die();
+}
+add_action('wp_ajax_migrate_races', 'ajax_uci_results_migrate_races');
+
+function ajax_uci_results_update_series_overall_table() {
+	//uci_results_migrate_related_races();
+	
+	echo json_encode(array(
+		'step' => 5,
+		'success' => true,
+		'percent' => 90
+	));
+	
+	wp_die();
+}
+add_action('wp_ajax_update_series_overall_table', 'ajax_uci_results_update_series_overall_table');
+
+function ajax_uci_results_update_rider_rankings_table() {
+	//uci_results_migrate_related_races();
+	
+	echo json_encode(array(
+		'step' => 6,
+		'success' => true,
+		'percent' => 100
+	));
+	
+	wp_die();
+}
+add_action('wp_ajax_update_rider_rankings_table', 'ajax_uci_results_update_rider_rankings_table');
 
 /**
  * uci_results_migrate_series function.

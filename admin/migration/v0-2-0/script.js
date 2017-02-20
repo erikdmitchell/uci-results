@@ -10,14 +10,25 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		
 		run_migration();
-
 	});
 });
 
+/**
+ * run_migration function.
+ * 
+ * @access public
+ * @return void
+ */
 function run_migration() {
-	migrate_series().then(migrate_related_races).then(migrate_riders).then(function() {
-    	console.log("successful");
-	});		
+	migrate_series()
+		.then(migrate_related_races)
+		.then(migrate_riders)
+		.then(migrate_races)
+		.then(update_series_overall_table)
+		.then(update_rider_rankings_table)		
+		.then(function() {
+    		console.log("successful");
+		});		
 }
 
 /**
@@ -40,22 +51,53 @@ function migrate_related_races() {
 	return runMigrationAJAX('migrate_related_races');
 }
 
+/**
+ * migrate_riders function.
+ * 
+ * @access public
+ * @return void
+ */
 function migrate_riders() {
 	return runMigrationAJAX('migrate_riders');
 }
 
+/**
+ * migrate_races function.
+ * 
+ * @access public
+ * @return void
+ */
 function migrate_races() {
-console.log('d');	
+	return runMigrationAJAX('migrate_races');	
 }
 
+/**
+ * update_series_overall_table function.
+ * 
+ * @access public
+ * @return void
+ */
 function update_series_overall_table() {
-console.log('e');	
+	return runMigrationAJAX('update_series_overall_table');	
 }
 
+/**
+ * update_rider_rankings_table function.
+ * 
+ * @access public
+ * @return void
+ */
 function update_rider_rankings_table() {
-console.log('f');	
+	return runMigrationAJAX('update_rider_rankings_table');	
 }
 
+/**
+ * runMigrationAJAX function.
+ * 
+ * @access public
+ * @param mixed action
+ * @return void
+ */
 function runMigrationAJAX(action) {
 	var data={
 		'action' : action
