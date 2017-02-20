@@ -80,8 +80,6 @@ add_action('wp_ajax_update_rider_rankings_table', 'ajax_uci_results_update_rider
 
 function ajax_uci_results_run_clean_up() {
 	global $wpdb;
-	
-	//$related_race_id=uci_results_convert_related_race_id($db_race->id, $db_race->related_races_id);
 		
 	// remove tables //
 	//$wpdb->query("DROP TABLE IF EXISTS $wpdb->uci_results_races, $wpdb->uci_results_results, $wpdb->uci_results_riders, $wpdb->uci_results_series;");
@@ -193,10 +191,17 @@ function uci_results_migrate_riders() {
 	endforeach;	
 }
 
+/**
+ * uci_results_migrate_races function.
+ * 
+ * @access public
+ * @return void
+ */
 function uci_results_migrate_races() {
 	global $wpdb;
-	
-	$db_races=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_races");
+
+	$races_table=$wpdb->prefix.'uci_curl_races';	
+	$db_races=$wpdb->get_results("SELECT * FROM $races_table");
 	
 	if (!count($db_races))
 		return;
@@ -239,17 +244,29 @@ function uci_results_migrate_races() {
 		update_post_meta($post_id, '_race_twitter', $db_race->twitter);	
 	
 		uci_results_migrate_results($post_id, $old_id);
+		
+		uci_results_convert_related_race_id($db_race->id, $db_race->related_races_id, $db_race->code);
 	endforeach;
 	
 }
 
+/**
+ * uci_results_migrate_results function.
+ * 
+ * @access public
+ * @param int $post_id (default: 0)
+ * @param int $old_id (default: 0)
+ * @return void
+ */
 function uci_results_migrate_results($post_id=0, $old_id=0) {
 	global $wpdb;
+	
+	$table=$wpdb->prefix.'uci_curl_results';
 	
 	if (!$post_id || !$old_id)
 		return false;
 	
-	$race_results=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_results WHERE race_id = $old_id");
+	$race_results=$wpdb->get_results("SELECT * FROM $table WHERE race_id = $old_id");
 	
 	if (!count($race_results))
 		return;
@@ -310,7 +327,7 @@ function uci_results_convert_series($old_id=0) {
 	if (!$old_id)
 		return;
 		
-	$series=$wpdb->get_var("SELECT name FROM $wpdb->uci_results_series WHERE id = $old_id");
+	$series=$wpdb->get_var("SELECT name FROM ".$wpdb->prefix."uci_curl_series WHERE id = $old_id");
 	
 	return $series;
 }
@@ -361,7 +378,7 @@ function uci_results_update_series_overall_table() {
 function uci_results_get_rider_name_from_old_id($id=0) {
 	global $wpdb;
 	
-	$name=$wpdb->get_var("SELECT name FROM $wpdb->uci_results_riders WHERE id = $id");
+	$name=$wpdb->get_var("SELECT name FROM ".$wpdb->prefix."uci_curl_riders WHERE id = $id");
 	
 	if ($name===null || is_wp_error($name))
 		return '';
@@ -379,7 +396,7 @@ function uci_results_get_rider_name_from_old_id($id=0) {
 function uci_results_get_series_name_from_old_id($id=0) {
 	global $wpdb;
 	
-	$name=$wpdb->get_var("SELECT name FROM $wpdb->uci_results_series WHERE id = $id");
+	$name=$wpdb->get_var("SELECT name FROM ".$wpdb->prefix."uci_curl_series WHERE id = $id");
 	
 	if ($name===null || is_wp_error($name))
 		return '';
@@ -413,18 +430,28 @@ function uci_results_update_rider_rankings_table() {
 	endforeach;
 }
 
-function uci_results_convert_related_race_id($old_id=0, $old_related_races_id=0) {
+/**
+ * uci_results_convert_related_race_id function.
+ * 
+ * @access public
+ * @param int $old_id (default: 0)
+ * @param int $old_related_races_id (default: 0)
+ * @param string $slug (default: '')
+ * @return void
+ */
+function uci_results_convert_related_race_id($old_id=0, $old_related_races_id=0, $slug='') {
 	global $wpdb;
 	
+	$related_races_table=$wpdb->prefix.'uci_curl_related_races';
+
 	if (!$old_id || !$old_related_races_id)
 		return;
 		
-	$related_race_row=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_related_races WHERE related_race_id = $old_related_races_id AND race_id = $old_id");
-		
-	print_r($related_race_row);
-// race id is old, related race id, get post slug then get post id and convert
+	$related_race_row=$wpdb->get_row("SELECT * FROM $related_races_table WHERE related_race_id = $old_related_races_id AND race_id = $old_id");
+	$new_race_id=$wpdb->get_var("SELECT ID from $wpdb->posts WHERE post_name = '$slug' AND post_type = 'races'");
+	$wpdb->update($related_races_table, array('race_id' => $new_race_id), array('id' => $related_race_row->id));
 
-//update_post_meta($post_id, '_race_related', NULL); // there needs to be a conversion here
+	update_post_meta($new_race_id, '_race_related', $related_race_row->related_race_id);
 }
 
 /**
