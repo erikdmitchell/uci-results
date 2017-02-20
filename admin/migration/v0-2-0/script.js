@@ -20,17 +20,28 @@ function run_migration() {
 	});		
 }
 
+/**
+ * migrate_series function.
+ * 
+ * @access public
+ * @return void
+ */
 function migrate_series() {
 	return runMigrationAJAX('migrate_series');
 }
 
+/**
+ * migrate_related_races function.
+ * 
+ * @access public
+ * @return void
+ */
 function migrate_related_races() {
-console.log('b');
-	return 'b';
+	return runMigrationAJAX('migrate_related_races');
 }
 
 function migrate_riders() {
-console.log('c');
+	return runMigrationAJAX('migrate_riders');
 }
 
 function migrate_races() {

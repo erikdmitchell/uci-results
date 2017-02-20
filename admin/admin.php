@@ -304,6 +304,12 @@ class UCIResultsAdmin {
 		wp_die();
 	}
 
+	/**
+	 * include_migration_files function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
 	public function include_migration_files() {
 		include_once(UCI_RESULTS_ADMIN_PATH.'/migration/v0-2-0/ajax.php');	
 		
