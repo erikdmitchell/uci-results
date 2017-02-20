@@ -59,4 +59,24 @@ function uci_results_register_query_vars( $vars ) {
   return $vars;
 }
 add_filter( 'query_vars', 'uci_results_register_query_vars');
+
+/**
+ * uci_results_load_files function.
+ * 
+ * @access public
+ * @return void
+ */
+function uci_results_load_files() {
+	$dirs=array(
+		'post-types',
+		'taxonomies'
+	);
+
+	foreach ($dirs as $dir) :
+		foreach(glob(UCI_RESULTS_PATH.$dir.'/*.php') as $file) :
+			include_once($file);
+		endforeach;
+	endforeach;
+}
+add_action('init', 'uci_results_load_files', 1);
 ?>
