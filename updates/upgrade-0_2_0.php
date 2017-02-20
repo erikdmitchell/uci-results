@@ -1,5 +1,13 @@
 <?php
 // this is a major migration, so we wrote a script for it (seperate admin page) //
+
+
+/**
+ * uci_results_upgrade_0_2_0_notice function.
+ * 
+ * @access public
+ * @return void
+ */
 function uci_results_upgrade_0_2_0_notice() {
 	$class = 'migration-0_2_0 notice notice-warning';
 	$message = __('The UCI Results Plugin requires a major database upgrade. <a href="'.admin_url('?page=uci-results&subpage=migration&version=0_2_0').'">Click here</a>', 'uci-results');
