@@ -84,6 +84,17 @@ class UCIResultsAdmin {
 				case 'api':
 					$html.=uci_results_get_admin_page('api');
 					break;
+				case 'migration':
+					if (isset($_GET['version'])) :					
+						switch ($_GET['version']) :
+							case '0_2_0' :
+								$html.=uci_results_get_admin_page('migration-0_2_0');
+								break;
+						endswitch;
+					else :
+						$html.=uci_results_get_admin_page('settings');
+					endif;
+					break;
 				default:
 					$html.=uci_results_get_admin_page('settings');
 			endswitch;
