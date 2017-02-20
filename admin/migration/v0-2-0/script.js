@@ -25,7 +25,8 @@ function run_migration() {
 		.then(migrate_riders)
 		.then(migrate_races)
 		.then(update_series_overall_table)
-		.then(update_rider_rankings_table)		
+		.then(update_rider_rankings_table)
+		.then(run_clean_up)		
 		.then(function() {
     		console.log("successful");
 		});		
@@ -89,6 +90,16 @@ function update_series_overall_table() {
  */
 function update_rider_rankings_table() {
 	return runMigrationAJAX('update_rider_rankings_table');	
+}
+
+/**
+ * run_clean_up function.
+ * 
+ * @access public
+ * @return void
+ */
+function run_clean_up() {
+	return runMigrationAJAX('run_clean_up');	
 }
 
 /**
