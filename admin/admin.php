@@ -36,17 +36,20 @@ class UCIResultsAdmin {
 	}
 
 	public function register_menu_page() {
-	    add_menu_page(__('UCI Results', 'uci-results'), 'UCI Results', 'manage_options', 'uci-results', array($this, 'admin_page'), 'dashicons-media-spreadsheet', 80);
-	    add_submenu_page('uci-results', 'Riders', 'Riders', 'manage_options', 'edit.php?post_type=riders');
-	    add_submenu_page('uci-results', 'Races', 'Races', 'manage_options', 'edit.php?post_type=races');
-	    add_submenu_page('uci-results', 'Countries', 'Countries', 'manage_options', 'edit-tags.php?taxonomy=country&post_type=races');
-	    add_submenu_page('uci-results', 'Class', 'Class', 'manage_options', 'edit-tags.php?taxonomy=race_class&post_type=races');
-	    add_submenu_page('uci-results', 'Series', 'Series', 'manage_options', 'edit-tags.php?taxonomy=series&post_type=races');
-	    add_submenu_page('uci-results', 'Season', 'Season', 'manage_options', 'edit-tags.php?taxonomy=season&post_type=races');
-	    add_submenu_page('uci-results', 'Settings', 'Settings', 'manage_options', 'admin.php?page=uci-results&subpage=settings');
-	    add_submenu_page('uci-results', 'Add Results', 'Add Results', 'manage_options', 'admin.php?page=uci-results&subpage=results');
-	    add_submenu_page('uci-results', 'Rider Rankings', 'Rider Rankings', 'manage_options', 'admin.php?page=uci-results&subpage=rider-rankings');
-	    add_submenu_page('uci-results', 'API', 'API', 'manage_options', 'admin.php?page=uci-results&subpage=api');	    	    	    
+		$parent_slug='uci-results';
+		$manage_options_cap='manage_options';
+		
+	    add_menu_page(__('UCI Results', 'uci-results'), 'UCI Results', $manage_options_cap, $parent_slug, array($this, 'admin_page'), 'dashicons-media-spreadsheet', 80);
+	    add_submenu_page($parent_slug, 'Riders', 'Riders', $manage_options_cap, 'edit.php?post_type=riders');
+	    add_submenu_page($parent_slug, 'Races', 'Races', $manage_options_cap, 'edit.php?post_type=races');
+	    add_submenu_page($parent_slug, 'Countries', 'Countries', $manage_options_cap, 'edit-tags.php?taxonomy=country&post_type=races');
+	    add_submenu_page($parent_slug, 'Class', 'Class', $manage_options_cap, 'edit-tags.php?taxonomy=race_class&post_type=races');
+	    add_submenu_page($parent_slug, 'Series', 'Series', $manage_options_cap, 'edit-tags.php?taxonomy=series&post_type=races');
+	    add_submenu_page($parent_slug, 'Season', 'Season', $manage_options_cap, 'edit-tags.php?taxonomy=season&post_type=races');
+	    add_submenu_page($parent_slug, 'Settings', 'Settings', $manage_options_cap, $parent_slug);
+	    add_submenu_page($parent_slug, 'Add Results', 'Add Results', $manage_options_cap, 'admin.php?page='.$parent_slug.'&subpage=results');
+	    add_submenu_page($parent_slug, 'Rider Rankings', 'Rider Rankings', $manage_options_cap, 'admin.php?page='.$parent_slug.'&subpage=rider-rankings');
+	    add_submenu_page($parent_slug, 'API', 'API', $manage_options_cap, 'admin.php?page='.$parent_slug.'&subpage=api');
 	}
 	
 	/**
