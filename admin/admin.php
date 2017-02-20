@@ -35,6 +35,12 @@ class UCIResultsAdmin {
 		wp_enqueue_style('uci-results-api-admin-styles', UCI_RESULTS_ADMIN_URL.'css/admin.css', '0.1.0');		
 	}
 
+	/**
+	 * register_menu_page function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
 	public function register_menu_page() {
 		$parent_slug='uci-results';
 		$manage_options_cap='manage_options';

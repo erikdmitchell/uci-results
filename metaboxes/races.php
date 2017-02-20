@@ -32,7 +32,7 @@ class UCIResultsRacesMetabox {
 		$ui = $wp_scripts->query('jquery-ui-core');
 	    
 	    wp_enqueue_script('jquery-ui-datepicker');
-	    wp_enqueue_script('uci-results-admin-races-mb-script', UCI_RESULTS_API_URL.'admin/js/races-metabox.js', array('jquery-ui-datepicker'));
+	    wp_enqueue_script('uci-results-admin-races-mb-script', UCI_RESULTS_URL.'admin/js/races-metabox.js', array('jquery-ui-datepicker'));
 
 		wp_enqueue_style('jquery-ui-smoothness', "https://ajax.googleapis.com/ajax/libs/jqueryui/{$ui->ver}/themes/smoothness/jquery-ui.min.css");
     }
