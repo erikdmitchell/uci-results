@@ -1,6 +1,12 @@
 <?php
 class UCIResultsMigration020 {
 	
+	/**
+	 * __construct function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		global $wpdb;
 		
@@ -21,6 +27,12 @@ class UCIResultsMigration020 {
 		$wpdb->uci_results_series_overall=$wpdb->prefix.'uci_results_series_overall';									
 	}
 
+	/**
+	 * ajax_migrate_series function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
 	public function ajax_migrate_series() {
 		$this->migrate_series();
 		
@@ -33,9 +45,14 @@ class UCIResultsMigration020 {
 		wp_die();
 	}
 	
-	
+	/**
+	 * ajax_migrate_related_races function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
 	public function ajax_migrate_related_races() {
-		//uci_results_migrate_related_races();
+		$this->migrate_related_races();
 		
 		echo json_encode(array(
 			'step' => 2,
@@ -46,9 +63,14 @@ class UCIResultsMigration020 {
 		wp_die();
 	}
 	
-	
+	/**
+	 * ajax_migrate_riders function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
 	public function ajax_migrate_riders() {
-		//uci_results_migrate_riders();
+		$this->migrate_riders();
 		
 		echo json_encode(array(
 			'step' => 3,
@@ -145,14 +167,14 @@ class UCIResultsMigration020 {
 		
 		return true;
 	}
-	
+
 	/**
-	 * uci_results_migrate_related_races function.
+	 * migrate_related_races function.
 	 * 
 	 * @access public
 	 * @return void
 	 */
-	function uci_results_migrate_related_races() {
+	public function migrate_related_races() {
 		global $wpdb;
 		
 		$db_related_races=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_related_races");
@@ -177,16 +199,18 @@ class UCIResultsMigration020 {
 		$wpdb->query("
 			DELETE FROM $wpdb->uci_results_related_races USING $wpdb->uci_results_related_races, $wpdb->uci_results_related_races rr1
 			WHERE $wpdb->uci_results_related_races.id > rr1.id AND $wpdb->uci_results_related_races.race_id = rr1.race_id AND $wpdb->uci_results_related_races.related_race_id = rr1.related_race_id
-		");  
+		");
+		
+		return true;
 	}
-	
+
 	/**
-	 * uci_results_migrate_riders function.
+	 * migrate_riders function.
 	 * 
 	 * @access public
 	 * @return void
 	 */
-	function uci_results_migrate_riders() {
+	public function migrate_riders() {
 		global $wpdb;
 		
 		$db_riders=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_riders");
@@ -210,15 +234,11 @@ class UCIResultsMigration020 {
 					wp_set_object_terms($rider_id, $db_rider->nat, 'country', false);
 				endif;
 			endif;
-		endforeach;	
+		endforeach;
+		
+		return true;
 	}
-	
-	/**
-	 * uci_results_migrate_races function.
-	 * 
-	 * @access public
-	 * @return void
-	 */
+
 	function uci_results_migrate_races() {
 		global $wpdb;
 	
@@ -271,15 +291,7 @@ class UCIResultsMigration020 {
 		endforeach;
 		
 	}
-	
-	/**
-	 * uci_results_migrate_results function.
-	 * 
-	 * @access public
-	 * @param int $post_id (default: 0)
-	 * @param int $old_id (default: 0)
-	 * @return void
-	 */
+
 	function uci_results_migrate_results($post_id=0, $old_id=0) {
 		global $wpdb;
 		
@@ -335,14 +347,7 @@ class UCIResultsMigration020 {
 			update_post_meta($post_id, "_rider_$rider_id", $meta_value);
 		endforeach;	
 	}
-	
-	/**
-	 * uci_results_convert_series function.
-	 * 
-	 * @access public
-	 * @param int $old_id (default: 0)
-	 * @return void
-	 */
+
 	function uci_results_convert_series($old_id=0) {
 		global $wpdb;
 		
@@ -353,13 +358,7 @@ class UCIResultsMigration020 {
 		
 		return $series;
 	}
-	
-	/**
-	 * uci_results_update_series_overall_table function.
-	 * 
-	 * @access public
-	 * @return void
-	 */
+
 	function uci_results_update_series_overall_table() {
 		global $wpdb;
 		
@@ -389,14 +388,7 @@ class UCIResultsMigration020 {
 			$wpdb->update($wpdb->uci_results_series_overall, array('rider_id' => $rider_id, 'series_id' => $series_id), array('id' => $db_row->id));	
 		endforeach;
 	}
-	
-	/**
-	 * uci_results_get_rider_name_from_old_id function.
-	 * 
-	 * @access public
-	 * @param int $id (default: 0)
-	 * @return void
-	 */
+
 	function uci_results_get_rider_name_from_old_id($id=0) {
 		global $wpdb;
 		
@@ -407,14 +399,7 @@ class UCIResultsMigration020 {
 			
 		return $name;
 	}
-	
-	/**
-	 * uci_results_get_series_name_from_old_id function.
-	 * 
-	 * @access public
-	 * @param int $id (default: 0)
-	 * @return void
-	 */
+
 	function uci_results_get_series_name_from_old_id($id=0) {
 		global $wpdb;
 		
@@ -425,13 +410,7 @@ class UCIResultsMigration020 {
 			
 		return $name;
 	}
-	
-	/**
-	 * uci_results_update_rider_rankings_table function.
-	 * 
-	 * @access public
-	 * @return void
-	 */
+
 	function uci_results_update_rider_rankings_table() {
 		global $wpdb;
 		
@@ -451,16 +430,7 @@ class UCIResultsMigration020 {
 			$wpdb->update($wpdb->uci_results_rider_rankings, array('rider_id' => $rider_id), array('id' => $db_row->id));	
 		endforeach;
 	}
-	
-	/**
-	 * uci_results_convert_related_race_id function.
-	 * 
-	 * @access public
-	 * @param int $old_id (default: 0)
-	 * @param int $old_related_races_id (default: 0)
-	 * @param string $slug (default: '')
-	 * @return void
-	 */
+
 	function uci_results_convert_related_race_id($old_id=0, $old_related_races_id=0, $slug='') {
 		global $wpdb;
 		
@@ -475,13 +445,7 @@ class UCIResultsMigration020 {
 	
 		update_post_meta($new_race_id, '_race_related', $related_race_row->related_race_id);
 	}
-	
-	/**
-	 * update_uci_results_version function.
-	 * 
-	 * @access public
-	 * @return void
-	 */
+
 	function update_uci_results_version() {
 		if (UCI_RESULTS_VERSION != get_option('uci_results_version'))
 			update_option('uci_results_version', UCI_RESULTS_VERSION);
