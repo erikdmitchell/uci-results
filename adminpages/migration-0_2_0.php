@@ -1,5 +1,20 @@
-RANDOM TEXT
+<div class="uci-results-migration migration-0-2-0">
+
+	<h2>Version 0.2.0 Migration</h2>
+
+	<div id="uci-results-progressbar"></div>
+
+</div>
+
 <?php
+	
+	function uci_results_version_check() {
+	if (UCI_RESULTS_VERSION != get_option('uci_results_version'))
+		update_option('uci_results_version', UCI_RESULTS_VERSION);
+}
+//add_action('init', 'uci_results_version_check');
+
+
 echo 'foo';
 function uci_results_upgrade_0_2_0() {
 	global $wpdb;

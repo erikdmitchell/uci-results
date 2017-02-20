@@ -80,16 +80,4 @@ function uci_results_load_files() {
 	endforeach;
 }
 add_action('init', 'uci_results_load_files', 1);
-
-/**
- * uci_results_version_check function.
- * 
- * @access public
- * @return void
- */
-function uci_results_version_check() {
-	if (UCI_RESULTS_VERSION != get_option('uci_results_version'))
-		update_option('uci_results_version', UCI_RESULTS_VERSION);
-}
-//add_action('init', 'uci_results_version_check');
 ?>
