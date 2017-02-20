@@ -38,6 +38,7 @@ include_once(UCI_RESULTS_PATH.'update-to-twitter.php'); // updates results and r
 // REST API STUFF //
 include_once(UCI_RESULTS_PATH.'api-requests.php');
 include_once(UCI_RESULTS_PATH.'api-functions.php');
+include_once(UCI_RESULTS_PATH.'new-functions.php'); // we NEED these functions ;p
 
 /**
  * is_uci_results_active function.
