@@ -33,11 +33,11 @@ include_once(UCI_RESULTS_PATH.'lib/name-parser.php'); // a php nameparser
 include_once(UCI_RESULTS_PATH.'shortcode.php'); // our shortcodes
 include_once(UCI_RESULTS_PATH.'lib/flags.php'); // our flag stuff
 include_once(UCI_RESULTS_PATH.'cron.php'); // cron jobs
-include_once(UCI_RESULTS_PATH.'api/api.php'); // api
 include_once(UCI_RESULTS_PATH.'update-to-twitter.php'); // updates results and rankings to twitter
 
-
-include_once(UCI_RESULTS_PATH.'rest-api/init.php'); // the migration to a true rest api begins
+// REST API STUFF //
+include_once(UCI_RESULTS_PATH.'api-requests.php');
+include_once(UCI_RESULTS_PATH.'api-functions.php');
 
 /**
  * is_uci_results_active function.
