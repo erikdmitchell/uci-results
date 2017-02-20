@@ -69,7 +69,8 @@ add_filter( 'query_vars', 'uci_results_register_query_vars');
 function uci_results_load_files() {
 	$dirs=array(
 		'post-types',
-		'taxonomies'
+		'taxonomies',
+		'metaboxes',
 	);
 
 	foreach ($dirs as $dir) :

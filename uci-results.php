@@ -24,12 +24,6 @@ include_once(UCI_RESULTS_PATH.'init.php'); // functions to run on init
 include_once(UCI_RESULTS_PATH.'admin/admin.php'); // admin page
 include_once(UCI_RESULTS_PATH.'admin/functions.php'); // admin functions
 
-include_once(UCI_RESULTS_PATH.'post-types/riders.php');
-include_once(UCI_RESULTS_PATH.'post-types/races.php');
-include_once(UCI_RESULTS_PATH.'metaboxes/riders.php');
-include_once(UCI_RESULTS_PATH.'metaboxes/races.php');
-include_once(UCI_RESULTS_PATH.'metaboxes/race-results.php');
-
 include_once(UCI_RESULTS_PATH.'admin/add-races.php'); // cURL and add races/results to db
 include_once(UCI_RESULTS_PATH.'admin/rider-rankings.php'); // add and update rider rankings
 include_once(UCI_RESULTS_PATH.'admin/wp-cli.php'); // wp cli functions
