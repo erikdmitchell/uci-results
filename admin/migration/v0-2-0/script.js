@@ -37,7 +37,7 @@ function run_migration() {
  * @return void
  */
 function migrate_series() {
-	return runMigrationAJAX('migrate_series');
+	return runMigrationAJAX('migrate_series', '.uci-results-migration .migration-steps #step-1');
 }
 
 /**
@@ -47,7 +47,7 @@ function migrate_series() {
  * @return void
  */
 function migrate_related_races() {
-	return runMigrationAJAX('migrate_related_races');
+	return runMigrationAJAX('migrate_related_races', '.uci-results-migration .migration-steps #step-2');
 }
 
 /**
@@ -57,7 +57,7 @@ function migrate_related_races() {
  * @return void
  */
 function migrate_riders() {
-	return runMigrationAJAX('migrate_riders');
+	return runMigrationAJAX('migrate_riders', '.uci-results-migration .migration-steps #step-3');
 }
 
 /**
@@ -67,7 +67,7 @@ function migrate_riders() {
  * @return void
  */
 function migrate_races() {
-	return runMigrationAJAX('migrate_races');	
+	return runMigrationAJAX('migrate_races', '.uci-results-migration .migration-steps #step-4');	
 }
 
 /**
@@ -77,7 +77,7 @@ function migrate_races() {
  * @return void
  */
 function update_series_overall_table() {
-	return runMigrationAJAX('update_series_overall_table');	
+	return runMigrationAJAX('update_series_overall_table', '.uci-results-migration .migration-steps #step-5');	
 }
 
 /**
@@ -87,7 +87,7 @@ function update_series_overall_table() {
  * @return void
  */
 function update_rider_rankings_table() {
-	return runMigrationAJAX('update_rider_rankings_table');	
+	return runMigrationAJAX('update_rider_rankings_table', '.uci-results-migration .migration-steps #step-6');	
 }
 
 /**
@@ -97,7 +97,7 @@ function update_rider_rankings_table() {
  * @return void
  */
 function run_clean_up() {
-	return runMigrationAJAX('run_clean_up');	
+	return runMigrationAJAX('run_clean_up', '.uci-results-migration .migration-steps #step-7');	
 }
 
 /**
@@ -116,20 +116,45 @@ function finalizeMigration() {
  * 
  * @access public
  * @param mixed action
+ * @param mixed element
  * @return void
  */
-function runMigrationAJAX(action) {
+function runMigrationAJAX(action, element) {
+	spinner('show', element);
+	
 	var data={
 		'action' : action
 	};
-		
+			
 	return jQuery.post(ajaxurl, data).then(
 		function(response) {
+			console.log(action + ' run');
+			
 			var data=jQuery.parseJSON(response);			
 			jQuery('#step-' + data.step).addClass('strike');	
 			jQuery("#uci-results-progressbar").progressbar({
 				value: data.percent
-			});			
+			});	
+			
+			spinner('hide', element);		
 		}
 	);
+}
+
+/**
+ * spinner function.
+ * 
+ * @access public
+ * @param mixed action
+ * @param mixed element
+ * @return void
+ */
+function spinner(action, element) {
+	var spinner=jQuery('<img id="migration-moving-spinner" src="/wp-admin/images/wpspin_light-2x.gif" width="15px" />');
+
+	if (action=='show') {
+		jQuery(element).append(spinner);
+	} else {
+		jQuery('#migration-moving-spinner').remove();
+	}
 }
