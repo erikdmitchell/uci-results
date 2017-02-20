@@ -25,6 +25,13 @@ class UCIResultsRacesMetabox {
         add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
     }
     
+    /**
+     * admin_scripts_styles function.
+     * 
+     * @access public
+     * @param mixed $hook
+     * @return void
+     */
     public function admin_scripts_styles($hook) {	    
 		global $wp_scripts;
 
@@ -51,7 +58,7 @@ class UCIResultsRacesMetabox {
                 array($this, 'render_meta_box_content'),
                 $post_type,
                 'normal',
-                'default'
+                'high'
             );
         }
     }
