@@ -251,7 +251,8 @@ class UCIResultsMigration020 {
 					add_post_meta($rider_id, '_rider_twitter', $db_rider->twitter);
 					wp_set_object_terms($rider_id, $db_rider->nat, 'country', false);
 				endif;
-echo "added new rider\n";				
+				
+echo "added new rider: $db_rider->name\n";				
 			endif;
 		endforeach;
 		
@@ -274,10 +275,10 @@ echo "added new rider\n";
 			
 		foreach ($db_races as $db_race) :
 			$race=get_page_by_path($db_race->code, OBJECT, 'races');
+			$old_id=$db_race->id;
 			
 			// race does not exist - add it //
-			if ($race === null) :
-				$old_id=$db_race->id;
+			if ($race === null) :				
 				$series=$this->convert_series($db_race->series_id);
 			
 				$race_data=array(
@@ -302,7 +303,10 @@ echo "race added\n";
 echo "race in db\n";			 	
 			endif;		
 
-			//$this->migrate_results($post_id, $old_id);
+			if (uci_race_has_results($post_id)) :
+				echo "do results\n";
+				$this->migrate_results($post_id, $old_id);
+			endif;
 			
 			//$this->convert_related_race_id($db_race->id, $db_race->related_races_id, $db_race->code);
 		endforeach;
@@ -340,6 +344,10 @@ echo "race in db\n";
 		wp_set_object_terms($race_id, $race_data->class, 'race_class', false);
 		wp_set_object_terms($race_id, $race_data->season, 'season', false);
 		wp_set_object_terms($race_id, $series, 'series', false);
+	}
+	
+	protected function race_has_results() {
+		
 	}
 
 	/**

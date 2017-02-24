@@ -45,7 +45,7 @@ function uci_results_get_race_results($race_id=0) {
 	return $riders;
 }
 
-function uci_race_has_result($race_id=0) {
+function uci_race_has_results($race_id=0) {
 	$post_meta=get_post_meta($race_id);
 	$keys=array_keys($post_meta);    
 	
