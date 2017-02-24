@@ -1,7 +1,7 @@
 <?php
 global $ucicurl_db_version;
 
-$ucicurl_db_version='0.1.9';
+$ucicurl_db_version='0.2.0';
 
 /**
  * ucicurl_set_db_tables function.
@@ -12,12 +12,8 @@ $ucicurl_db_version='0.1.9';
 function ucicurl_set_db_tables() {
 	global $wpdb;
 
-	//$wpdb->uci_results_races=$wpdb->prefix.'uci_curl_races';
-	//$wpdb->uci_results_results=$wpdb->prefix.'uci_curl_results';
-	//$wpdb->uci_results_riders=$wpdb->prefix.'uci_curl_riders';
 	$wpdb->uci_results_rider_rankings=$wpdb->prefix.'uci_curl_rider_rankings';
 	$wpdb->uci_results_related_races=$wpdb->prefix.'uci_curl_related_races';
-	//$wpdb->uci_results_series=$wpdb->prefix.'uci_curl_series';
 	$wpdb->uci_results_series_overall=$wpdb->prefix.'uci_results_series_overall';
 }
 ucicurl_set_db_tables();
@@ -34,68 +30,12 @@ function ucicurl_db_install() {
 	global $wpdb, $ucicurl_db_version;
 
 	$wpdb->hide_errors();
-	//$wpdb->uci_results_races=$wpdb->prefix.'uci_curl_races';
-	//$wpdb->uci_results_results=$wpdb->prefix.'uci_curl_results';
-	//$wpdb->uci_results_riders=$wpdb->prefix.'uci_curl_riders';
+
 	$wpdb->uci_results_rider_rankings=$wpdb->prefix.'uci_curl_rider_rankings';
 	$wpdb->uci_results_related_races=$wpdb->prefix.'uci_curl_related_races';
-	//$wpdb->uci_results_series=$wpdb->prefix.'uci_curl_series';
 	$wpdb->uci_results_series_overall=$wpdb->prefix.'uci_results_series_overall';
 
 	$charset=$wpdb->get_charset_collate();
-
-/*
-	$sql_races="
-		CREATE TABLE $wpdb->uci_results_races (
-			id bigint(20) NOT NULL AUTO_INCREMENT,
-			date DATE NOT NULL,
-			event TEXT NOT NULL,
-			nat VARCHAR(5) NOT NULL,
-			class VARCHAR(5) NOT NULL ,
-			winner VARCHAR(250) NOT NULL,
-			season VARCHAR(50) NOT NULL,
-			week bigint(20) NOT NULL DEFAULT '0',
-			link TEXT NOT NULL,
-			code TEXT NOT NULL,
-			related_races_id bigint(20) NOT NULL DEFAULT '0',
-			series_id bigint(20) NOT NULL DEFAULT '0',
-			twitter VARCHAR(75) NOT NULL,
-			PRIMARY KEY (`id`)
-		) $charset;
-	";
-*/
-
-/*
-	$sql_results="
-		CREATE TABLE $wpdb->uci_results_results (
-			id bigint(20) NOT NULL AUTO_INCREMENT,
-			race_id bigint(20) NOT NULL,
-			place SMALLINT NOT NULL DEFAULT '0',
-			name LONGTEXT NOT NULL,
-			nat VARCHAR(5) NOT NULL,
-			age TINYINT NOT NULL DEFAULT '0',
-			result VARCHAR(10) NOT NULL,
-			pcr bigint(20) NOT NULL DEFAULT '0',
-			pcr VARCHAR(10) NOT NULL DEFAULT '0',
-			rider_id bigint(20) NOT NULL,
-			PRIMARY KEY (`id`)
-		) $charset;
-		ALTER DATABASE {$wpdb->uci_results_results} CHARACTER SET utf8;
-	";
-*/
-
-/*
-	$sql_riders="
-		CREATE TABLE $wpdb->uci_results_riders (
-		  id bigint(20) NOT NULL AUTO_INCREMENT,
-			name LONGTEXT NOT NULL,
-			nat VARCHAR(5) NOT NULL,
-			slug LONGTEXT NOT NULL,
-			twitter VARCHAR(75) NOT NULL,
-			PRIMARY KEY (`id`)
-		) $charset;
-	";
-*/
 
 	$sql_rider_rankings="
 		CREATE TABLE $wpdb->uci_results_rider_rankings (
@@ -118,16 +58,6 @@ function ucicurl_db_install() {
 		) $charset;
 	";
 
-/*
-	$sql_series="
-		CREATE TABLE $wpdb->uci_results_series (
-		  id bigint(20) NOT NULL AUTO_INCREMENT,
-			name TEXT NOT NULL,
-			PRIMARY KEY (`id`)
-		) $charset;
-	";
-*/
-
 	$sql_series_overall="
 		CREATE TABLE $wpdb->uci_results_series_overall (
 		  id bigint(20) NOT NULL AUTO_INCREMENT,
@@ -141,12 +71,8 @@ function ucicurl_db_install() {
 	";
 
 	dbDelta(array(
-		//$sql_races,
-		//$sql_results,
-		//$sql_riders,
 		$sql_rider_rankings,
 		$sql_related_races,
-		//$sql_series,
 		$sql_series_overall,
 	));
 
@@ -169,66 +95,10 @@ function ucicurl_db_update() {
 
 	if ($installed_version!=$ucicurl_db_version) :
 		$wpdb->hide_errors();
-		//$wpdb->uci_results_races=$wpdb->prefix.'uci_curl_races';
-		//$wpdb->uci_results_results=$wpdb->prefix.'uci_curl_results';
-		//$wpdb->uci_results_riders=$wpdb->prefix.'uci_curl_riders';
+		
 		$wpdb->uci_results_rider_rankings=$wpdb->prefix.'uci_curl_rider_rankings';
 		$wpdb->uci_results_related_races=$wpdb->prefix.'uci_curl_related_races';
-		//$wpdb->uci_results_series=$wpdb->prefix.'uci_curl_series';
 		$wpdb->uci_results_series_overall=$wpdb->prefix.'uci_results_series_overall';
-
-/*
-		$sql_races="
-			CREATE TABLE $wpdb->uci_results_races (
-				id bigint(20) NOT NULL AUTO_INCREMENT,
-				date DATE NOT NULL,
-				event TEXT NOT NULL,
-				nat VARCHAR(5) NOT NULL,
-				class VARCHAR(5) NOT NULL ,
-				winner VARCHAR(250) NOT NULL,
-				season VARCHAR(50) NOT NULL,
-				week bigint(20) NOT NULL DEFAULT '0',
-				link TEXT NOT NULL,
-				code TEXT NOT NULL,
-				related_races_id bigint(20) NOT NULL DEFAULT '0',
-				series_id bigint(20) NOT NULL DEFAULT '0',
-				twitter VARCHAR(75) NOT NULL,
-				PRIMARY KEY (`id`)
-			);
-		";
-*/
-
-/*
-		$sql_results="
-			CREATE TABLE $wpdb->uci_results_results (
-				id bigint(20) NOT NULL AUTO_INCREMENT,
-				race_id bigint(20) NOT NULL,
-				place SMALLINT NOT NULL DEFAULT '0',
-				name LONGTEXT NOT NULL,
-				nat VARCHAR(5) NOT NULL,
-				age TINYINT NOT NULL DEFAULT '0',
-				result VARCHAR(10) NOT NULL,
-				pcr bigint(20) NOT NULL DEFAULT '0',
-				pcr VARCHAR(10) NOT NULL DEFAULT '0',
-				rider_id bigint(20) NOT NULL,
-				PRIMARY KEY (`id`)
-			);
-			ALTER DATABASE {$wpdb->uci_results_results} CHARACTER SET utf8;
-		";
-*/
-
-/*
-		$sql_riders="
-			CREATE TABLE $wpdb->uci_results_riders (
-			  id bigint(20) NOT NULL AUTO_INCREMENT,
-				name LONGTEXT NOT NULL,
-				nat VARCHAR(5) NOT NULL,
-				slug LONGTEXT NOT NULL,
-				twitter VARCHAR(75) NOT NULL,
-				PRIMARY KEY (`id`)
-			);
-		";
-*/
 
 		$sql_rider_rankings="
 			CREATE TABLE $wpdb->uci_results_rider_rankings (
@@ -251,16 +121,6 @@ function ucicurl_db_update() {
 			);
 		";
 
-/*
-		$sql_series="
-			CREATE TABLE $wpdb->uci_results_series (
-			  id bigint(20) NOT NULL AUTO_INCREMENT,
-				name TEXT NOT NULL,
-				PRIMARY KEY (`id`)
-			);
-		";
-*/
-
 		$sql_series_overall="
 			CREATE TABLE $wpdb->uci_results_series_overall (
 			  id bigint(20) NOT NULL AUTO_INCREMENT,
@@ -274,12 +134,8 @@ function ucicurl_db_update() {
 		";
 
 		dbDelta(array(
-			//$sql_races,
-			//$sql_results,
-			//$sql_riders,
 			$sql_rider_rankings,
 			$sql_related_races,
-			//$sql_series,
 			$sql_series_overall,
 		));
 
