@@ -234,6 +234,10 @@
 			<p>This operation will remove all data and the database tables from the databases created by this plugin. Call it the <strong>Ultimate Uninstall</strong></p>
 			<button class="button button-primary warning-button" class="remove-db" id="uci-results-remove-db">Remove Database Tables</button>
 		</div>
+		
+		<div>
+			<a href="<?php echo admin_url('?page=uci-results&subpage=migration&version=0_2_0'); ?>">Run 0.2.0 Upgrade</a>
+		</div>
 	</section>
 
 </div>
