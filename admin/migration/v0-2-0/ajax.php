@@ -250,9 +250,7 @@ class UCIResultsMigration020 {
 				if (!is_wp_error($rider_id)) :
 					add_post_meta($rider_id, '_rider_twitter', $db_rider->twitter);
 					wp_set_object_terms($rider_id, $db_rider->nat, 'country', false);
-				endif;
-				
-echo "added new rider: $db_rider->name\n";				
+				endif;				
 			endif;
 		endforeach;
 		
