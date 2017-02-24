@@ -51,19 +51,8 @@ class UCIResultsResultsMetabox {
         // Add an nonce field so we can check for it later.
         wp_nonce_field('update_race_results_meta', 'uci_results_admin');
  
-        // Use get_post_meta to retrieve an existing value from the database.
-		$post_meta=get_post_meta($post->ID);
-		$riders=array();
-		
-		// get only meta (riders); we need //
- 		foreach ($post_meta as $key => $value) :
- 			if (strpos($key, '_rider_') !== false) :
-				if (isset($value[0])) :
-					$riders[]=unserialize($value[0]);
-				endif;			
- 			endif;
-    	endforeach;
-	 
+		$riders=uci_results_get_race_results($post->ID);
+	
         // Display the form, using the current value.
         ?>
         

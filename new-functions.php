@@ -28,4 +28,27 @@ function uci_results_get_rider_results($rider_id=0) {
 
 	return $results;
 }
+
+function uci_results_get_race_results($race_id=0) {
+	$post_meta=get_post_meta($race_id);
+	$riders=array();
+	
+	// get only meta (riders); we need //
+	foreach ($post_meta as $key => $value) :
+		if (strpos($key, '_rider_') !== false) :
+			if (isset($value[0])) :
+				$riders[]=unserialize($value[0]);
+			endif;			
+		endif;
+	endforeach;
+	
+	return $riders;
+}
+
+function uci_race_has_result($race_id=0) {
+	$post_meta=get_post_meta($race_id);
+	$keys=array_keys($post_meta);    
+	
+	return (int) preg_grep('/_rider_/', $keys);	
+}
 ?>
