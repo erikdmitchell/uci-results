@@ -21,7 +21,6 @@ class UCIResultsResultsMetabox {
      */
     public function __construct() {
         add_action('add_meta_boxes', array($this, 'add_meta_box'));
-        add_action('save_post', array($this, 'save'));
     }
  
     /**
@@ -42,59 +41,6 @@ class UCIResultsResultsMetabox {
             );
         }
     }
- 
-    /**
-     * Save the meta when the post is saved.
-     *
-     * @param int $post_id The ID of the post being saved.
-     */
-    public function save( $post_id ) {
-        /*
-         * We need to verify this came from the our screen and with proper authorization,
-         * because save_post can be triggered at other times.
-         */
-        // Check if our nonce is set.
-        if (!isset($_POST['uci_results_admin']))
-            return $post_id;
- 
-        $nonce = $_POST['uci_results_admin'];
- 
-        // Verify that the nonce is valid.
-        if ( ! wp_verify_nonce( $nonce, 'update_race_results_meta' ) ) {
-            return $post_id;
-        }
- 
-        /*
-         * If this is an autosave, our form has not been submitted,
-         * so we don't want to do anything.
-         */
-        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-            return $post_id;
-        }
- 
-        // Check the user's permissions.
-        if ( 'page' == $_POST['post_type'] ) {
-            if ( ! current_user_can( 'edit_page', $post_id ) ) {
-                return $post_id;
-            }
-        } else {
-            if ( ! current_user_can( 'edit_post', $post_id ) ) {
-                return $post_id;
-            }
-        }
- 
-        /* OK, it's safe for us to save the data now. */
-        // Sanitize the user input.
-        //$mydata=sanitize_text_field($_POST['twitter_name']);
-		
-		// WE DO NOT NEED ANYTHING DONE HERE SINCE THEY'RE NOT INPUT FORMS
-		
-		// key = _rider_ID
- 
-        // Update the meta field.
-        //update_post_meta($post_id, '_rider_twitter', $mydata);
-    }
- 
  
     /**
      * Render Meta Box content.
