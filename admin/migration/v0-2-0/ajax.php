@@ -197,6 +197,8 @@ class UCIResultsMigration020 {
 		
 		$db_related_races=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_related_races");
 	
+		$wpdb->query("ALTER TABLE $wpdb->uci_results_related_races ADD COLUMN race_id bigint(20) NOT NULL DEFAULT '0', ADD COLUMN related_race_id bigint(20) NOT NULL DEFAULT '0'");
+	
 		foreach ($db_related_races as $related_race_row) :
 			$related_race_id=$related_race_row->id;
 			$related_races=explode(',', $related_race_row->race_ids);
