@@ -234,9 +234,9 @@ class UCIResultsMigration020 {
 		$db_riders=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_riders");
 	
 		foreach ($db_riders as $db_rider) :
-			$rider=get_page_by_title($db_rider->name, OBJECT, 'riders');
+			$rider=get_page_by_title(trim($db_rider->name), OBJECT, 'riders');
 	
-			if ($rider === null) :
+			if ($rider === null) :			
 				$arr=array(
 					'post_title' => $db_rider->name,
 					'post_content' => '',
