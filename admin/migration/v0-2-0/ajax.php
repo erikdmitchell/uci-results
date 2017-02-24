@@ -34,7 +34,7 @@ class UCIResultsMigration020 {
 	 * @return void
 	 */
 	public function ajax_migrate_series() {
-		$this->migrate_series();
+		//$this->migrate_series();
 		
 		echo json_encode(array(
 			'step' => 1,
@@ -52,7 +52,7 @@ class UCIResultsMigration020 {
 	 * @return void
 	 */
 	public function ajax_migrate_related_races() {
-		$this->migrate_related_races();
+		//$this->migrate_related_races();
 		
 		echo json_encode(array(
 			'step' => 2,
@@ -70,7 +70,7 @@ class UCIResultsMigration020 {
 	 * @return void
 	 */
 	public function ajax_migrate_riders() {
-		$this->migrate_riders();
+		//$this->migrate_riders();
 		
 		echo json_encode(array(
 			'step' => 3,
@@ -295,18 +295,18 @@ class UCIResultsMigration020 {
 	
 				$this->update_race_terms($post_id, $db_race, $series); // update taxonomies //
 				$this->update_race_details($post_id, $db_race); // update meta //
-echo "race added\n";			
 			else :
-			 	$post_id=$race->ID;
-echo "race in db\n";			 	
+			 	$post_id=$race->ID;			 	
 			endif;		
 
-			if (uci_race_has_results($post_id)) :
-				echo "do results\n";
+			// if no results, try and add //
+			if (!uci_race_has_results($post_id))
 				$this->migrate_results($post_id, $old_id);
-			endif;
 			
-			//$this->convert_related_race_id($db_race->id, $db_race->related_races_id, $db_race->code);
+			// if not exits - convert related race id //
+			if (get_post_meta($post_id, '_race_related', true) === null)
+				$this->convert_related_race_id($db_race->id, $post_id, $db_race->related_races_id, $db_race->code);
+				
 		endforeach;
 		
 		return true;
@@ -537,21 +537,21 @@ echo "race in db\n";
 	 * 
 	 * @access public
 	 * @param int $old_id (default: 0)
+	 * @param int $new_id (default: 0)
 	 * @param int $old_related_races_id (default: 0)
 	 * @param string $slug (default: '')
 	 * @return void
 	 */
-	public function convert_related_race_id($old_id=0, $old_related_races_id=0, $slug='') {
+	public function convert_related_race_id($old_id=0, $new_id=0, $old_related_races_id=0, $slug='') {
 		global $wpdb;
 	
 		if (!$old_id || !$old_related_races_id)
 			return;
 			
 		$related_race_row=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_related_races WHERE related_race_id = $old_related_races_id AND race_id = $old_id");
-		$new_race_id=$wpdb->get_var("SELECT ID from $wpdb->posts WHERE post_name = '$slug' AND post_type = 'races'");
-		$wpdb->update($wpdb->uci_results_related_races, array('race_id' => $new_race_id), array('id' => $related_race_row->id));
+		$wpdb->update($wpdb->uci_results_related_races, array('race_id' => $new_id), array('id' => $related_race_row->id));
 	
-		update_post_meta($new_race_id, '_race_related', $related_race_row->related_race_id);
+		update_post_meta($new_id, '_race_related', $related_race_row->related_race_id);
 	}
 
 	/**
