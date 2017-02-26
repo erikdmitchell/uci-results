@@ -224,20 +224,11 @@
 		</table>
 
 		<div class="empty-db warning message">
-			<input type="hidden" id="uci-results-empty-db-nonce" value="<?php echo wp_create_nonce('uci-results-empty-db-nonce'); ?>" />
-			<p>This operation will remove all data from the databases created by this plugin.</p>
-			<button class="button button-primary warning-button" class="empty-db" id="uci-results-empty-db">Remove Data</button>
+			<input type="hidden" id="uci-results-remove-data-nonce" value="<?php echo wp_create_nonce('uci-results-remove-data-nonce'); ?>" /> 
+			<p>This operation will remove all data and databases created by this plugin.</p>
+			<button class="button button-primary warning-button" class="remove-data" id="uci-results-remove-data">Remove Data</button>
 		</div>
 
-		<div class="remove-db warning message">
-			<input type="hidden" id="uci-results-remove-db-nonce" value="<?php echo wp_create_nonce('uci-results-remove-db-nonce'); ?>" />
-			<p>This operation will remove all data and the database tables from the databases created by this plugin. Call it the <strong>Ultimate Uninstall</strong></p>
-			<button class="button button-primary warning-button" class="remove-db" id="uci-results-remove-db">Remove Database Tables</button>
-		</div>
-		
-		<div>
-			<a href="<?php echo admin_url('?page=uci-results&subpage=migration&version=0_2_0'); ?>">Run 0.2.0 Upgrade</a>
-		</div>
 	</section>
 
 </div>

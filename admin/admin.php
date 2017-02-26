@@ -17,8 +17,7 @@ class UCIResultsAdmin {
 		add_action('admin_enqueue_scripts', array($this, 'uci_results_api_admin_scripts_styles'));
 		add_action('admin_init', array($this, 'save_settings'));
 		add_action('admin_init', array($this, 'include_migration_files'));
-		add_action('wp_ajax_uci_results_empty_db', array($this, 'ajax_empty_db'));
-		add_action('wp_ajax_uci_results_remove_db', array($this, 'ajax_remove_db'));
+		add_action('wp_ajax_uci_results_remove_data', array($this, 'ajax_remove_data'));
 		add_action('wp_ajax_uci_results_rider_rankings_dropdown', array($this, 'ajax_rider_rankings_dropdown'));
 
 		$this->setup_config($config);		
@@ -249,35 +248,46 @@ class UCIResultsAdmin {
 	}
 
 	/**
-	 * ajax_empty_db function.
+	 * ajax_remove_data function.
 	 *
 	 * @access public
 	 * @return void
 	 */
-	public function ajax_empty_db() {
-		if (!check_ajax_referer('uci-results-empty-db-nonce', 'security', false))
+	public function ajax_remove_data() {
+		global $wpdb;
+		
+		if (!check_ajax_referer('uci-results-remove-data-nonce', 'security', false))
 			return;
 
-		uci_results_empty_database_tables();
+		$post_types=array(
+			'riders',
+			'races',
+		);
+		$taxonoimes=array(
+			'series',
+			'country',
+			'race_class',
+			'season',	
+		);
 
-		echo '<div class="updated">Database tables are empty.</div>';
+		// remove post types //
+		foreach ($post_types as $post_type) :
+			$wpdb->query("DELETE FROM $wpdb->posts WHERE post_type = '$post_type'");
+		endforeach;
 
-		wp_die();
-	}
-
-	/**
-	 * ajax_remove_db function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function ajax_remove_db() {
-		if (!check_ajax_referer('uci-results-remove-db-nonce', 'security', false))
-			return;
-
-		uci_results_remove_database_tables();
-
-		echo '<div class="updated">Database tables removed.</div>';
+		// remove taxonomies // WORK ON THIS
+		foreach ($taxonoimes as $slug) :
+			$term = get_term_by('slug', $slug, 'post_tag');
+			if ( ! is_wp_error($term) && ! empty($term) )
+				wp_delete_term( $term->term_id, 'post_tag');
+		endforeach;
+		
+		// remove db tables //
+		$wpdb->query("DROP TABLE $wpdb->uci_results_rider_rankings");
+		$wpdb->query("DROP TABLE $wpdb->uci_results_related_races");
+		$wpdb->query("DROP TABLE $wpdb->uci_results_series_overall");
+	
+		echo '<div class="updated">Data removed.</div>';
 
 		wp_die();
 	}
