@@ -70,7 +70,7 @@ class UCIResultsMigration020 {
 	 * @return void
 	 */
 	public function ajax_migrate_riders() {
-		$this->migrate_riders();
+		//$this->migrate_riders();
 		
 		echo json_encode(array(
 			'step' => 3,
@@ -88,7 +88,7 @@ class UCIResultsMigration020 {
 	 * @return void
 	 */
 	public function ajax_migrate_races() {
-		//$this->migrate_races();
+		$this->migrate_races();
 		
 		echo json_encode(array(
 			'step' => 4,
@@ -248,7 +248,7 @@ class UCIResultsMigration020 {
 				);
 				
 				$rider_id=wp_insert_post($arr);
-echo $db_rider->name."\n";				
+			
 				if (!is_wp_error($rider_id)) :
 					add_post_meta($rider_id, '_rider_twitter', $db_rider->twitter);
 					wp_set_object_terms($rider_id, $db_rider->nat, 'country', false);
@@ -306,8 +306,8 @@ echo $db_rider->name."\n";
 				$this->migrate_results($post_id, $old_id);
 			
 			// if not exits - convert related race id //
-			if (get_post_meta($post_id, '_race_related', true) === null)
-				$this->convert_related_race_id($db_race->id, $post_id, $db_race->related_races_id, $db_race->code);
+			if (!get_post_meta($post_id, '_race_related', true))
+				$this->convert_related_race_id($db_race->id, $post_id);
 				
 		endforeach;
 		
@@ -540,17 +540,15 @@ echo $db_rider->name."\n";
 	 * @access public
 	 * @param int $old_id (default: 0)
 	 * @param int $new_id (default: 0)
-	 * @param int $old_related_races_id (default: 0)
-	 * @param string $slug (default: '')
 	 * @return void
 	 */
-	public function convert_related_race_id($old_id=0, $new_id=0, $old_related_races_id=0, $slug='') {
+	public function convert_related_race_id($old_id=0, $new_id=0) {
 		global $wpdb;
 	
-		if (!$old_id || !$old_related_races_id)
+		if (!$old_id || !$new_id)
 			return;
-			
-		$related_race_row=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_related_races WHERE related_race_id = $old_related_races_id AND race_id = $old_id");
+
+		$related_race_row=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_related_races WHERE race_id = $old_id");	
 		$wpdb->update($wpdb->uci_results_related_races, array('race_id' => $new_id), array('id' => $related_race_row->id));
 	
 		update_post_meta($new_id, '_race_related', $related_race_row->related_race_id);
