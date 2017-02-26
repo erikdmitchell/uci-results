@@ -11,7 +11,7 @@ function set_custom_edit_riders_columns($columns) {
 	
     $columns['country'] = __('Country', 'uci-results');
     $columns['twitter'] = __('Twitter', 'uci-results');
-    $columns['date'] = __('Date', 'uci-results');
+    //$columns['date'] = __('Date', 'uci-results');
 
     return $columns;
 }
