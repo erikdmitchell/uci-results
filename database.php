@@ -173,12 +173,8 @@ add_action('init', 'ucicurl_update_db_check', 99);
 function uci_results_empty_database_tables() {
 	global $wpdb;
 
-	//$wpdb->query("TRUNCATE TABLE $wpdb->uci_results_races");
-	//$wpdb->query("TRUNCATE TABLE $wpdb->uci_results_results");
-	//$wpdb->query("TRUNCATE TABLE $wpdb->uci_results_riders");
 	$wpdb->query("TRUNCATE TABLE $wpdb->uci_results_rider_rankings");
 	$wpdb->query("TRUNCATE TABLE $wpdb->uci_results_related_races");
-	//$wpdb->query("TRUNCATE TABLE $wpdb->uci_results_series");
 	$wpdb->query("TRUNCATE TABLE $wpdb->uci_results_series_overall");
 }
 
@@ -191,12 +187,30 @@ function uci_results_empty_database_tables() {
 function uci_results_remove_database_tables() {
 	global $wpdb;
 
-	//$wpdb->query("DROP TABLE $wpdb->uci_results_races");
-	//$wpdb->query("DROP TABLE $wpdb->uci_results_results");
-	//$wpdb->query("DROP TABLE $wpdb->uci_results_riders");
 	$wpdb->query("DROP TABLE $wpdb->uci_results_rider_rankings");
 	$wpdb->query("DROP TABLE $wpdb->uci_results_related_races");
-	//$wpdb->query("DROP TABLE $wpdb->uci_results_series");
 	$wpdb->query("DROP TABLE $wpdb->uci_results_series_overall");
+}
+
+/**
+ * uci_results_column_exists function.
+ * 
+ * @access public
+ * @param string $table (default: '')
+ * @param string $column (default: '')
+ * @return void
+ */
+function uci_results_column_exists($table='', $column='') {
+	global $wpdb;
+	
+	if (empty($table) || empty($column))
+		return false;
+		
+	$column_info=$wpdb->get_row("SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = '$table' AND COLUMN_NAME = '$column'");
+	
+	if ($column_info===null || is_wp_error($column_info))
+		return false;
+		
+	return true;
 }
 ?>
