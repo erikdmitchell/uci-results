@@ -34,7 +34,7 @@ class UCIResultsMigration020 {
 	 * @return void
 	 */
 	public function ajax_migrate_series() {
-		$this->migrate_series();
+		//$this->migrate_series();
 		
 		echo json_encode(array(
 			'step' => 1,
@@ -52,7 +52,7 @@ class UCIResultsMigration020 {
 	 * @return void
 	 */
 	public function ajax_migrate_related_races() {
-		$this->migrate_related_races();
+		//$this->migrate_related_races();
 		
 		echo json_encode(array(
 			'step' => 2,
@@ -88,7 +88,7 @@ class UCIResultsMigration020 {
 	 * @return void
 	 */
 	public function ajax_migrate_races() {
-		$this->migrate_races();
+		//$this->migrate_races();
 		
 		echo json_encode(array(
 			'step' => 4,
@@ -106,7 +106,7 @@ class UCIResultsMigration020 {
 	 * @return void
 	 */
 	public function ajax_update_series_overall_table() {
-		$this->update_series_overall_table();
+		//$this->update_series_overall_table();
 		
 		echo json_encode(array(
 			'step' => 5,
@@ -124,7 +124,7 @@ class UCIResultsMigration020 {
 	 * @return void
 	 */
 	public function ajax_update_rider_rankings_table() {
-		$this->update_rider_rankings_table();
+		//$this->update_rider_rankings_table();
 		
 		echo json_encode(array(
 			'step' => 6,
@@ -145,14 +145,14 @@ class UCIResultsMigration020 {
 		global $wpdb;
 		
 		// remove tables //
-		$wpdb->query("DROP TABLE IF EXISTS $wpdb->uci_results_races, $wpdb->uci_results_results, $wpdb->uci_results_riders, $wpdb->uci_results_series;");
+		//$wpdb->query("DROP TABLE IF EXISTS $wpdb->uci_results_races, $wpdb->uci_results_results, $wpdb->uci_results_riders, $wpdb->uci_results_series;");
 		
 		// remove race ids col from related races //
-		$wpdb->query("ALTER TABLE $wpdb->uci_results_related_races DROP COLUMN race_ids");
+		//$wpdb->query("ALTER TABLE $wpdb->uci_results_related_races DROP COLUMN race_ids");
 		
-		$this->update_uci_results_version();
+		//$this->update_uci_results_version();
 		
-		update_option('ucicurl_db_version', '0.2.0');
+		//update_option('ucicurl_db_version', '0.2.0');
 		
 		echo json_encode(array(
 			'step' => 7,
@@ -236,19 +236,19 @@ class UCIResultsMigration020 {
 		$db_riders=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_riders");
 	
 		foreach ($db_riders as $db_rider) :
-			$rider=get_page_by_title(trim($db_rider->name), OBJECT, 'riders');
+			$rider=get_page_by_path(trim($db_rider->slug), OBJECT, 'riders');
 	
 			if ($rider === null) :			
 				$arr=array(
-					'post_title' => $db_rider->name,
+					'post_title' => trim($db_rider->name),
 					'post_content' => '',
 					'post_status' => 'publish',	
 					'post_type' => 'riders',
-					'post_name' => $db_rider->slug,
+					'post_name' => trim($db_rider->slug),
 				);
 				
 				$rider_id=wp_insert_post($arr);
-				
+echo $db_rider->name."\n";				
 				if (!is_wp_error($rider_id)) :
 					add_post_meta($rider_id, '_rider_twitter', $db_rider->twitter);
 					wp_set_object_terms($rider_id, $db_rider->nat, 'country', false);
