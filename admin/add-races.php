@@ -281,7 +281,8 @@ echo "build default race table";
 
 						if (!$result->event)
 							$event='No Event';
-
+echo $code.'<br>';							
+echo "check uci_results_race_has_results()";
 						// if we already have results, bail. there are other check later, but this is a good helper //
 						if (uci_results_race_has_results($code))
 							$disabled='disabled';
