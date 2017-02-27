@@ -14,7 +14,7 @@ class UCIResultsAdmin {
 	 */
 	public function __construct($config=array()) {
 		add_action('admin_menu', array($this, 'register_menu_page'));
-		add_action('admin_enqueue_scripts', array($this, 'uci_results_api_admin_scripts_styles'));
+		add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
 		add_action('admin_init', array($this, 'save_settings'));
 		add_action('admin_init', array($this, 'include_migration_files'));
 		add_action('wp_ajax_uci_results_remove_data', array($this, 'ajax_remove_data'));
@@ -24,12 +24,12 @@ class UCIResultsAdmin {
 	}
 
 	/**
-	 * uci_results_api_admin_scripts_styles function.
+	 * admin_scripts_styles function.
 	 * 
 	 * @access public
 	 * @return void
 	 */
-	public function uci_results_api_admin_scripts_styles($hook) {
+	public function admin_scripts_styles($hook) {
 		global $wp_scripts;
 		
 		$jquery_ui_version=$wp_scripts->registered['jquery-ui-core']->ver;

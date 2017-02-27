@@ -17,7 +17,7 @@ define('UCI_RESULTS_ADMIN_URL', plugin_dir_url(__FILE__).'admin/');
 
 include_once(UCI_RESULTS_PATH.'classes/races.php'); // our races functions
 include_once(UCI_RESULTS_PATH.'classes/riders.php'); // our riders functions
-include_once(UCI_RESULTS_PATH.'classes/uci-results-query.php'); // our query class and pagination
+include_once(UCI_RESULTS_PATH.'classes/rider-rankings-query.php'); // rider rankings query class
 include_once(UCI_RESULTS_PATH.'database.php'); // sets up our db tables
 include_once(UCI_RESULTS_PATH.'functions.php'); // all our outlying functions
 include_once(UCI_RESULTS_PATH.'init.php'); // functions to run on init

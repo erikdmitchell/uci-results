@@ -1,18 +1,13 @@
 <?php
-global $uci_results_query, $uci_results_post, $ucicurl_riders, $ucicurl_races;
+global $uci_results_query, $rider_rankings_post, $ucicurl_riders, $ucicurl_races;
 
-$_season=isset($_GET['season']) ? $_GET['season'] : '2016/2017';
-$_nat=isset($_GET['nat']) ? $_GET['nat'] : '';
 $name='';
-$_week=isset($_GET['week']) ? $_GET['week'] : 1;
 $search=isset($_GET['search']) ? $_GET['search'] : '';
 
-$riders=new UCI_Results_Query(array(
-	'type' => 'riders',
-	'rankings' => true,
-	'season' => $_season,
-	'week' => $_week,
-	'nat' => $_nat,
+$riders=new RiderRankingsQuery(array(
+	'season' => isset($_GET['season']) ? $_GET['season'] : '2016/2017',
+	'week' => isset($_GET['week']) ? $_GET['week'] : 1,
+	'nat' => isset($_GET['nat']) ? $_GET['nat'] : '',
 	'order_by' => 'rank',
 	'order' => 'ASC'
 ));
@@ -73,10 +68,10 @@ $riders=new UCI_Results_Query(array(
 		<tbody>
 			<?php if ($riders->have_posts()) : while ( $riders->have_posts() ) : $riders->the_post(); ?>
 				<tr>
-					<td class="rider-rank"><?php echo $uci_results_post->rank; ?></td>
-					<td class="rider-name"><a href="<?php echo admin_url('admin.php?page=uci-results&tab=riders&rider='.urlencode($uci_results_post->name)); ?>"><?php echo $uci_results_post->name; ?></a></td>
-					<td class="rider-nat"><?php echo $uci_results_post->nat; ?></td>
-					<td class="rider-points"><?php echo $uci_results_post->points; ?></td>
+					<td class="rider-rank"><?php echo $rider_rankings_post->rank; ?></td>
+					<td class="rider-name"><a href="<?php echo admin_url('admin.php?page=uci-results&tab=riders&rider='.urlencode($rider_rankings_post->post_name)); ?>"><?php echo $rider_rankings_post->post_title; ?></a></td>
+					<td class="rider-nat"><?php echo $rider_rankings_post->nat; ?></td>
+					<td class="rider-points"><?php echo $rider_rankings_post->points; ?></td>
 				</tr>
 			<?php endwhile; endif; ?>
 		</tbody>
