@@ -353,14 +353,41 @@ echo "build default race table";
 		);
 		$args=wp_parse_args($args, $default);
 
-		$empty_races=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_races WHERE winner = '' AND date = '".$args['date']."' AND nat = '".$args['nat']."' AND class = '".$args['class']."' AND season = '".$args['season']."'");
+		$races=get_posts(array(
+			'post_type' => 'races',
+			'tax_query' => array(
+				array(
+					'taxonomy' => 'country',
+					'field' => 'name',
+					'terms' => $args['nat']
+				),
+				array(
+					'taxonomy' => 'race_class',
+					'field' => 'name',
+					'terms' => $args['class']
+				),		
+				array(
+					'taxonomy' => 'season',
+					'field' => 'name',
+					'terms' => $args['season']
+				)
+			),
+			'meta_query' => array(
+				array(
+					'key' => '_race_winner',
+					'value' => '',
+				),
+				array(
+					'key' => '_race_date',
+					'value' => $args['date'],
+				),
+			)
+		));
 
-		if (count($empty_races)==1)
-			return $empty_races[0]->code;
+		if (count($races))
+			return $races[0]->post_slug;
 
-/*
-we need some sort of search to compare names
-*/
+		// we need some sort of search to compare names
 
 		return false;
 	}
