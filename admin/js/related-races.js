@@ -20,6 +20,24 @@ jQuery(document).ready(function($) {
 		});
 	});
 	
+	$('#add-related-race').on('click', function(e) {
+		e.preventDefault();
+
+		tb_show('Add Related Race', "#TB_inline?width=600&height=550");
+		
+		showLoader('#TB_ajaxContent');
+		
+		var data={
+			'action' : 'show_related_races_box'	
+		};
+		
+		$.post(ajaxurl, data, function(response) {
+console.log(response);			
+		});
+		
+        return false;	
+	});
+	
 	// add related race //
 	
 	/**

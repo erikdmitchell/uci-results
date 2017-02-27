@@ -101,7 +101,8 @@ class UCIRelatedRacesMetabox {
 	    
         // Add an nonce field so we can check for it later. //
         wp_nonce_field('update_related_races', 'uci_results_admin_related_races');
- 
+		add_thickbox();
+		
 		$related_races=uci_get_related_races($post->ID);
 		$related_race_id=uci_get_related_race_id($post->ID);
         ?>
@@ -115,7 +116,7 @@ class UCIRelatedRacesMetabox {
 				</div>
 			<?php endforeach; ?>
 			<div class="row add-race">
-				<a href="#"><span class="dashicons dashicons-plus-alt"></span></a>
+				<a id="add-related-race" href="#"><span class="dashicons dashicons-plus-alt"></span></a>
 			</div>
         </div>
         

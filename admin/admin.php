@@ -20,6 +20,7 @@ class UCIResultsAdmin {
 		add_action('wp_ajax_uci_results_remove_data', array($this, 'ajax_remove_data'));
 		add_action('wp_ajax_uci_results_rider_rankings_dropdown', array($this, 'ajax_rider_rankings_dropdown'));
 		add_action('wp_ajax_uci_remove_related_race', array($this, 'ajax_remove_related_race'));
+		add_action('wp_ajax_show_related_races_box', array($this, 'ajax_show_related_races_box'));
 
 		$this->setup_config($config);		
 	}
@@ -375,11 +376,17 @@ class UCIResultsAdmin {
 	public function ajax_remove_related_race() {
 	    global $wpdb;
 	    
-	    //$wpdb->delete($wpdb->uci_results_related_races, array('race_id' => $_POST['id'], 'related_race_id' => $_POST['rrid']));
+	    $wpdb->delete($wpdb->uci_results_related_races, array('race_id' => $_POST['id'], 'related_race_id' => $_POST['rrid']));
 
 	    echo true;
 	    
 	    wp_die();
+    }
+    
+    public function ajax_show_related_races_box() {
+print_r($_POST);
+
+		wp_die();	    
     }
 }
 

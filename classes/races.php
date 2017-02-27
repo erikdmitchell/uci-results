@@ -21,36 +21,6 @@ class UCIRaces {
 		add_action('wp_ajax_search_related_races', array($this, 'ajax_search_related_races'));
 	}
 
-
-
-	/**
-	 * get_related_races function.
-	 *
-	 * @access public
-	 * @param int $race_id (default: 0)
-	 * @return void
-	 */
-
-
-	/**
-	 * get_related_races_ids function.
-	 *
-	 * @access public
-	 * @param int $race_id (default: 0)
-	 * @return void
-	 */
-	public function get_related_races_ids($race_id=0) {
-		global $wpdb;
-
-		$related_race_id=$this->get_related_race_id($race_id);
-		$related_races_db=$wpdb->get_var("SELECT race_ids FROM {$wpdb->uci_results_related_races} WHERE id={$related_race_id}");
-
-		if (!$related_races_db)
-			return false;
-
-		return explode(',', $related_races_db);
-	}
-
 	/**
 	 * ajax_search_related_races function.
 	 *
