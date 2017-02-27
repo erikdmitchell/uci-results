@@ -1,5 +1,6 @@
 <?php
 global $uci_results_post;
+global $uci_results_pages;
 
 /**
  * uci_results_init function.

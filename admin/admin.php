@@ -270,6 +270,7 @@ class UCIResultsAdmin {
 		echo '<div class="updated">Settings updated!</div>';
 
 		//flush_rewrite_rules(); // this may not be the best place for it - doesnt seem to work
+		uci_results_init(); // updated pages
 	}
 
 	/**
