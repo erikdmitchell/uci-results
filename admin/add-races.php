@@ -13,9 +13,14 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function __construct() {
+		add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
 		add_action('wp_ajax_get_race_data_non_db', array($this, 'ajax_get_race_data_non_db'));
 		add_action('wp_ajax_prepare_add_races_to_db', array($this, 'ajax_prepare_add_races_to_db'));
 		add_action('wp_ajax_add_race_to_db', array($this, 'ajax_add_race_to_db'));
+	}
+	
+	public function admin_scripts_styles() {
+		wp_enqueue_script('uci-results-add-races-admin-script', UCI_RESULTS_ADMIN_URL.'js/add-races.js', array('jquery'), '0.1.0', true);
 	}
 
 	/**
@@ -26,19 +31,10 @@ class UCIResultsAddRaces {
 	 */
 	public function ajax_get_race_data_non_db() {
 		$form=array();
+		
 		parse_str($_POST['form'], $form);
 
-		if (empty($form['url']))
-			return false;
-
-		$this->config->url=$form['url']; // set url
-		$limit=false;
-
-		// set limit if passed //
-		if (!empty($form['limit']))
-			$limit=$form['limit'];
-
-		echo $this->get_race_data($form['season'], $limit);
+		echo $this->get_race_data($form['season']);
 
 		wp_die();
 	}
@@ -186,23 +182,23 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function get_race_data($season=false, $limit=false, $raw=false, $url=false) {
+		global $uci_results_admin;
+		
 		set_time_limit(0); // mex ececution time
 
 		$races_class_name='datatable';
 		$timeout = 5;
 
 		// if no passed url, use config //
-		if (!$url) :
-			if (!isset($this->config->url)) :
-				return false;
-			else :
-				$url=$this->config->url;
-			endif;
+		if (!$url && isset($uci_results_admin->config->urls->$season)) :
+			$url=$uci_results_admin->config->urls->$season;
+		else :
+			return false;
 		endif;
 
 		// check season //
 		if (!$season || empty($season))
-			$season=date('Y');
+			return false;
 
 		$html=$this->get_url_page($url, $timeout); // get the html from the url
 		$rows=$this->get_html_table_rows($html, $races_class_name); // grab our rows via dom object
@@ -250,7 +246,7 @@ class UCIResultsAddRaces {
 	 */
 	public function build_default_race_table($obj) {
 		$html=null;
-
+echo "build default race table";
 		$html.='<form name="add-races-to-db" id="add-races-to-db" method="post">';
 			$html.='<table class="wp-list-table widefat fixed striped pages">';
 				$html.='<thead>';
