@@ -70,4 +70,23 @@ jQuery(document).ready(function($) {
 	  return false;
 	});
 	
+	// truly add related race //
+	$('body').on('click', '.add-related-race #add', function(e) {
+		e.preventDefault();
+		
+		showLoader('#TB_ajaxContent');
+		
+		var data={
+			'action' : 'add_related_races_to_race',
+			'form' : $('form#add-races').serialize(),
+			id : $('#race_id').val()
+		};
+		
+		$.post(ajaxurl, data, function(response) {
+			hideLoader();
+			
+			tb_remove();		
+		});		
+	});
+	
 });

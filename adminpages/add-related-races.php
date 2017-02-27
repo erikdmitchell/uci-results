@@ -11,7 +11,7 @@
 
 		<h3><?php echo $race->event; ?></h3>
 
-		<form name="add-races" method="post" action="">
+		<form name="add-races" id="add-races" method="post" action="">
 			<table class="wp-list-table widefat fixed striped pages">
 				<thead>
 					<tr>
@@ -38,7 +38,7 @@
 				<tbody id="related-races-search-results"></tbody>
 			</table>
 
-			<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="ADD Races"></p>
+			<p class="submit"><input type="button" name="add" id="add" class="button button-primary" value="Add Race(s)"></p>
 		</form>
 
 	</div>

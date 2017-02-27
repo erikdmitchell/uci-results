@@ -22,6 +22,7 @@ class UCIResultsAdmin {
 		add_action('wp_ajax_uci_remove_related_race', array($this, 'ajax_remove_related_race'));
 		add_action('wp_ajax_show_related_races_box', array($this, 'ajax_show_related_races_box'));
 		add_action('wp_ajax_search_related_races', array($this, 'ajax_search_related_races'));
+		add_action('wp_ajax_add_related_races_to_race', array($this, 'ajax_add_related_races_to_race'));
 
 		$this->setup_config($config);		
 	}
@@ -436,7 +437,37 @@ class UCIResultsAdmin {
 		echo $html;
 
 		wp_die();
-	}    
+	} 
+	
+	/**
+	 * ajax_add_related_races_to_race function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function ajax_add_related_races_to_race() {
+		global $wpdb;
+		
+		parse_str($_POST['form'], $form);
+		
+		$races=$form['races'];
+		$related_race_id=uci_get_related_race_id($_POST['id']);
+		$last_related_race_id=$wpdb->get_var("SELECT MAX(related_race_id) FROM $wpdb->uci_results_related_races");
+		
+		// if no rr id - increase last by 1 //
+		if (!$related_race_id)
+			$related_race_id=$last_related_race_id+1;
+
+		foreach ($races as $race_id) :
+			$data=array(
+				'race_id' => $race_id,
+				'related_race_id' => $related_race_id
+			);
+			$wpdb->insert($wpdb->uci_results_related_races, $data);		
+		endforeach;
+		
+		wp_die();
+	}  
 }
 
 $uci_results_admin = new UCIResultsAdmin();
