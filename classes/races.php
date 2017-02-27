@@ -18,8 +18,6 @@ class UCIRaces {
 	 */
 	public function __construct() {
 		add_action('admin_init', array($this, 'add_related_races'));
-		add_action('admin_init', array($this, 'update_single_race_form'));
-		add_action('admin_init', array($this, 'update_series_form'));
 		add_action('wp_ajax_search_related_races', array($this, 'ajax_search_related_races'));
 	}
 
@@ -32,35 +30,7 @@ class UCIRaces {
 	 * @param int $race_id (default: 0)
 	 * @return void
 	 */
-	public function get_related_races($race_id=0) {
-		global $wpdb;
 
-		$related_races=array();
-		$related_race_id=$this->get_related_race_id($race_id);
-		$related_races_db=$wpdb->get_var("SELECT race_ids FROM {$wpdb->uci_results_related_races} WHERE id={$related_race_id}");
-
-		if (!$related_races_db)
-			return false;
-
-		$related_race_ids=explode(',', $related_races_db);
-
-		// build out races //
-		foreach ($related_race_ids as $id) :
-			if ($id==$race_id)
-				continue;
-
-			$related_races[]=$this->get_race($id);
-		endforeach;
-
-		// order by date //
-		$sort=array();
-		foreach ($related_races as $race) {
-			$sort[]=strtotime($race->date);
-		}
-		array_multisort($sort, SORT_DESC, $related_races);
-
-		return $related_races;
-	}
 
 	/**
 	 * get_related_races_ids function.
@@ -79,29 +49,6 @@ class UCIRaces {
 			return false;
 
 		return explode(',', $related_races_db);
-	}
-
-	/**
-	 * get_related_race_id function.
-	 *
-	 * @access public
-	 * @param int $race_id (default: 0)
-	 * @return void
-	 */
-	public function get_related_race_id($race_id=0) {
-		global $wpdb;
-
-		$related_db=$wpdb->get_results("SELECT * FROM {$wpdb->uci_results_related_races} WHERE race_ids LIKE '%{$race_id}%'");
-
-		foreach ($related_db as $arr) :
-			$ids=explode(',', $arr->race_ids);
-
-			if (in_array($race_id, $ids))
-				return $arr->id;
-
-		endforeach;
-
-		return 0;
 	}
 
 	/**

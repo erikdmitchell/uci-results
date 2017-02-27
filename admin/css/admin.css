@@ -77,3 +77,24 @@ table.uci-results-race-results .name {
 	top: 50%;
 	left: 50%;
 }
+
+/* related races meta */
+.uci-results-metabox.related-races .row {
+	overflow: hidden;
+}
+.uci-results-metabox.related-races .row a {
+	text-decoration: none;
+}
+.uci-results-metabox.related-races .race-name {
+	float: left;
+	margin-right: 15px;
+	width: 300px;
+}
+.uci-results-metabox.related-races .race-date {
+	float: left;
+	margin-right: 15px;
+	width: 125px;
+}
+.uci-results-metabox.related-races .action-icons {
+	float: left;
+}

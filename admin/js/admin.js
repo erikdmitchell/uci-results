@@ -25,34 +25,6 @@ jQuery(document).ready(function($) {
 
 
 
-
-
-	/**
-	 * related races ajax search
-	 */
-	$("#search-related-races").live("keyup", function(e) {
-		// Set Search String
-		var search_string = $(this).val();
-
-	  // Do Search
-	  if (search_string!=='' && search_string.length>=3) {
-			$.ajax({
-				type: 'post',
-				url: ajaxurl,
-				data: {
-					action : 'search_related_races',
-					query : search_string,
-					race_id : $('#main_race_id').val()
-				},
-				success: function(response){
-					$('#related-races-search-results').html(response);
-				}
-			});
-	  }
-
-	  return false;
-	});
-
 	/**
 	 * build season weeks
 	 */
@@ -69,6 +41,10 @@ jQuery(document).ready(function($) {
 			$('#uci-results-actions-message').append(response);
 		});
 	});
+	
+	
+	
+	
 
 	/**
 	 * Remove Data button (settings) - remove all data from db

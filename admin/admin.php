@@ -19,6 +19,7 @@ class UCIResultsAdmin {
 		add_action('admin_init', array($this, 'include_migration_files'));
 		add_action('wp_ajax_uci_results_remove_data', array($this, 'ajax_remove_data'));
 		add_action('wp_ajax_uci_results_rider_rankings_dropdown', array($this, 'ajax_rider_rankings_dropdown'));
+		add_action('wp_ajax_uci_remove_related_race', array($this, 'ajax_remove_related_race'));
 
 		$this->setup_config($config);		
 	}
@@ -364,6 +365,22 @@ class UCIResultsAdmin {
 			endif;
 		endif;
 	}
+	
+	/**
+	 * ajax_remove_related_race function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function ajax_remove_related_race() {
+	    global $wpdb;
+	    
+	    //$wpdb->delete($wpdb->uci_results_related_races, array('race_id' => $_POST['id'], 'related_race_id' => $_POST['rrid']));
+
+	    echo true;
+	    
+	    wp_die();
+    }
 }
 
 $uci_results_admin = new UCIResultsAdmin();

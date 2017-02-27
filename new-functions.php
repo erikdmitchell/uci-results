@@ -33,6 +33,13 @@ function uci_results_get_rider_results($rider_id=0) {
 
 ///////// RACES
 
+/**
+ * uci_results_get_race_results function.
+ * 
+ * @access public
+ * @param int $race_id (default: 0)
+ * @return void
+ */
 function uci_results_get_race_results($race_id=0) {
 	$post_meta=get_post_meta($race_id);
 	$riders=array();
@@ -49,6 +56,13 @@ function uci_results_get_race_results($race_id=0) {
 	return $riders;
 }
 
+/**
+ * uci_race_has_results function.
+ * 
+ * @access public
+ * @param int $race_id (default: 0)
+ * @return void
+ */
 function uci_race_has_results($race_id=0) {
 	$post_meta=get_post_meta($race_id);
 	$keys=array_keys($post_meta);    
@@ -56,10 +70,60 @@ function uci_race_has_results($race_id=0) {
 	return (int) preg_grep('/_rider_/', $keys);	
 }
 
+/**
+ * uci_get_race_twitter function.
+ * 
+ * @access public
+ * @param int $race_id (default: 0)
+ * @return void
+ */
 function uci_get_race_twitter($race_id=0) {
 	if (empty($race_id))
 		return false;
 
 	return get_post_meta($race_id, '_race_twitter', true);
+}
+
+function uci_get_related_races($race_id=0) {
+	global $wpdb;
+
+	$related_races=array();
+	$related_race_id=uci_get_related_race_id($race_id);
+	$related_races_ids=$wpdb->get_col("SELECT race_id FROM $wpdb->uci_results_related_races WHERE related_race_id = $related_race_id");
+
+	if (is_wp_error($related_races_ids) || $related_races_ids===null)
+		return false;
+
+	$related_races=get_posts(array(
+		'include' => $related_races_ids,
+		'post_type' => 'races',
+		'orderby' => 'meta_value',
+		'meta_key' => '_race_date',
+	));
+	
+	// append some meta //
+	foreach ($related_races as $race) :
+		$race->race_date=get_post_meta($race->ID, '_race_date', true);
+	endforeach;
+
+	return $related_races;
+}
+
+/**
+ * uci_get_related_race_id function.
+ * 
+ * @access public
+ * @param int $race_id (default: 0)
+ * @return void
+ */
+function uci_get_related_race_id($race_id=0) {
+	global $wpdb;
+
+	$related_race_id=$wpdb->get_var("SELECT related_race_id FROM $wpdb->uci_results_related_races WHERE race_id = $race_id");
+
+	if (is_wp_error($related_race_id) || $related_race_id===null)
+		return 0;
+		
+	return $related_race_id;
 }
 ?>
