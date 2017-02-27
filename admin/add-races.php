@@ -20,7 +20,7 @@ class UCIResultsAddRaces {
 	}
 	
 	public function admin_scripts_styles() {
-		wp_enqueue_script('uci-results-add-races-admin-script', UCI_RESULTS_ADMIN_URL.'js/add-races.js', array('jquery'), '0.1.0', true);
+		wp_enqueue_script('uci-results-add-races-admin-script', UCI_RESULTS_ADMIN_URL.'js/add-races.js', array('uci-results-admin'), '0.1.0', true);
 	}
 
 	/**
@@ -246,7 +246,7 @@ class UCIResultsAddRaces {
 	 */
 	public function build_default_race_table($obj) {
 		$html=null;
-echo "build default race table";
+
 		$html.='<form name="add-races-to-db" id="add-races-to-db" method="post">';
 			$html.='<table class="wp-list-table widefat fixed striped pages">';
 				$html.='<thead>';
@@ -281,8 +281,7 @@ echo "build default race table";
 
 						if (!$result->event)
 							$event='No Event';
-echo $code.'<br>';							
-echo "check uci_results_race_has_results()";
+
 						// if we already have results, bail. there are other check later, but this is a good helper //
 						if (uci_results_race_has_results($code))
 							$disabled='disabled';

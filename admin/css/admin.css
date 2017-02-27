@@ -61,3 +61,19 @@ table.uci-results-race-results .name {
 .uci-results-settings .message {
 	margin-bottom: 15px;
 }
+
+/* loader */
+.loader-image-container {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	background: rgba(204, 204, 204, 0.70);
+	display: none;
+}
+.loader-image-container .loader-image {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+}

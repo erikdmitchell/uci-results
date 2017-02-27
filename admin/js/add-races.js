@@ -1,13 +1,11 @@
 jQuery(document).ready(function($) {
-	var $modal=$('.loading-modal');
-	
 	/**
 	 * gets an output of races via the season selected
 	 */
 	$('#get-races-curl').click(function(e) {
 		e.preventDefault();
 		
-		$modal.show();
+		showLoader('#wpcontent');
 		
 		$('#get-race-data').html('');
 		
@@ -18,7 +16,7 @@ jQuery(document).ready(function($) {
 
 		$.post(ajaxurl,data,function(response) {
 			$('#get-race-data').html(response);
-			$modal.hide();
+			hideLoader();
 		});
 	});
 	
@@ -64,25 +62,6 @@ jQuery(document).ready(function($) {
 					$('#get-race-data').find('#counter span.ctr').text(counter);
 
 					//$modal.hide();
-					// after we are done races //
-					if (counter>=races.length) {
-						$('#get-race-data').find('#counter span.ctr').text(counter); // update counter on screen
-
-						var data={
-							action : 'update_rider_rankings',
-							season : season
-						};
-
-						$('#get-race-data').append('<div class="note">Calculating rider rankings...</div>');
-
-						$('#get-race-data').append('<div class="note">You need to do this on the other page for now.</div>');
-
-						//$.post(ajaxurl, data, function(response) {
-							//$('#get-race-data').append('<div class="updated">Rider rankings complete.</div>');
-						//});
-
-						return false;
-					}
 				});
 			}
 		});
