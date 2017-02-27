@@ -1,4 +1,6 @@
 <?php
+///////// RIDERS
+	
 function uci_results_get_rider_results($rider_id=0) {
 	if (!$rider_id)
 		return false;
@@ -29,6 +31,8 @@ function uci_results_get_rider_results($rider_id=0) {
 	return $results;
 }
 
+///////// RACES
+
 function uci_results_get_race_results($race_id=0) {
 	$post_meta=get_post_meta($race_id);
 	$riders=array();
@@ -50,5 +54,12 @@ function uci_race_has_results($race_id=0) {
 	$keys=array_keys($post_meta);    
 
 	return (int) preg_grep('/_rider_/', $keys);	
+}
+
+function uci_get_race_twitter($race_id=0) {
+	if (empty($race_id))
+		return false;
+
+	return get_post_meta($race_id, '_race_twitter', true);
 }
 ?>
