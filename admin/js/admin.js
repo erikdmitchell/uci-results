@@ -210,9 +210,6 @@ jQuery(document).ready(function($) {
 	});
 	
 	/* admin menu mod */
-	/*  */
-// 	   
-// .post-type-riders #adminmenumain 
 	if ($('body.post-type-riders').length || $('body.post-type-races').length) {
 		$('#toplevel_page_uci-results').removeClass('wp-not-current-submenu').addClass('wp-has-current-submenu wp-menu-open');	
 	}

@@ -23,7 +23,6 @@ include_once(UCI_RESULTS_PATH.'functions.php'); // all our outlying functions
 include_once(UCI_RESULTS_PATH.'init.php'); // functions to run on init
 
 include_once(UCI_RESULTS_PATH.'admin/admin.php'); // admin page
-include_once(UCI_RESULTS_PATH.'admin/functions.php'); // admin functions
 include_once(UCI_RESULTS_PATH.'admin/add-races.php'); // cURL and add races/results to db
 include_once(UCI_RESULTS_PATH.'admin/rider-rankings.php'); // add and update rider rankings
 include_once(UCI_RESULTS_PATH.'admin/wp-cli.php'); // wp cli functions

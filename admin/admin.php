@@ -91,35 +91,60 @@ class UCIResultsAdmin {
 
 			switch ($subpage) :
 				case 'rider-rankings' :
-					$html.=uci_results_get_admin_page('rider-rankings');
+					$html.=$this->get_admin_page('rider-rankings');
 					break;
 				case 'settings':
-					$html.=uci_results_get_admin_page('settings');
+					$html.=$this->get_admin_page('settings');
 					break;
 				case 'results':
-					$html.=uci_results_get_admin_page('results');
+					$html.=$this->get_admin_page('results');
 					break;
 				case 'api':
-					$html.=uci_results_get_admin_page('api');
+					$html.=$this->get_admin_page('api');
 					break;
 				case 'migration':
 					if (isset($_GET['version'])) :					
 						switch ($_GET['version']) :
 							case '0_2_0' :
-								$html.=uci_results_get_admin_page('migration-0_2_0');
+								$html.=$this->get_admin_page('migration-0_2_0');
 								break;
 						endswitch;
 					else :
-						$html.=uci_results_get_admin_page('settings');
+						$html.=$this->get_admin_page('settings');
 					endif;
 					break;
 				default:
-					$html.=uci_results_get_admin_page('settings');
+					$html.=$this->get_admin_page('settings');
 			endswitch;
 
 		$html.='</div><!-- /.wrap -->';
 			
 		echo $html;
+	}
+	
+	/**
+	 * get_admin_page function.
+	 * 
+	 * @access public
+	 * @param bool $template_name (default: false)
+	 * @return void
+	 */
+	public function get_admin_page($template_name=false) {
+		$html=null;
+		
+		if (!$template_name)
+			return false;
+	
+		ob_start();
+	
+		if (file_exists(UCI_RESULTS_PATH."adminpages/$template_name.php"))
+			include_once(UCI_RESULTS_PATH."adminpages/$template_name.php");
+	
+		$html=ob_get_contents();
+	
+		ob_end_clean();
+	
+		return $html;
 	}
 
 	/**
