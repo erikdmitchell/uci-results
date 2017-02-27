@@ -20,25 +20,29 @@ jQuery(document).ready(function($) {
 		});
 	});
 	
+	// add related race //
 	$('#add-related-race').on('click', function(e) {
 		e.preventDefault();
 
-		tb_show('Add Related Race', "#TB_inline?width=600&height=550");
+		tb_show('Add Related Race', "#TB_inline?width=700&height=650");
 		
 		showLoader('#TB_ajaxContent');
 		
+		var raceID=$(this).data('id');
 		var data={
 			'action' : 'show_related_races_box'	
 		};
 		
 		$.post(ajaxurl, data, function(response) {
-console.log(response);			
+			$('#TB_ajaxContent').append(response);
+			
+			$('#TB_ajaxContent #race_id').val(raceID);
+			
+			hideLoader();			
 		});
 		
         return false;	
 	});
-	
-	// add related race //
 	
 	/**
 	 * related races ajax search
@@ -47,21 +51,21 @@ console.log(response);
 		// Set Search String
 		var search_string = $(this).val();
 
-	  // Do Search
-	  if (search_string!=='' && search_string.length>=3) {
+		// Do Search
+		if (search_string!=='' && search_string.length>=3) {
 			$.ajax({
 				type: 'post',
 				url: ajaxurl,
 				data: {
 					action : 'search_related_races',
 					query : search_string,
-					race_id : $('#main_race_id').val()
+					id : $('#race_id').val()
 				},
 				success: function(response){
 					$('#related-races-search-results').html(response);
 				}
 			});
-	  }
+		}
 
 	  return false;
 	});

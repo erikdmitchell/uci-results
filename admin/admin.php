@@ -21,6 +21,7 @@ class UCIResultsAdmin {
 		add_action('wp_ajax_uci_results_rider_rankings_dropdown', array($this, 'ajax_rider_rankings_dropdown'));
 		add_action('wp_ajax_uci_remove_related_race', array($this, 'ajax_remove_related_race'));
 		add_action('wp_ajax_show_related_races_box', array($this, 'ajax_show_related_races_box'));
+		add_action('wp_ajax_search_related_races', array($this, 'ajax_search_related_races'));
 
 		$this->setup_config($config);		
 	}
@@ -383,11 +384,59 @@ class UCIResultsAdmin {
 	    wp_die();
     }
     
+    /**
+     * ajax_show_related_races_box function.
+     * 
+     * @access public
+     * @return void
+     */
     public function ajax_show_related_races_box() {
-print_r($_POST);
+		echo $this->get_admin_page('add-related-races');
 
 		wp_die();	    
     }
+    
+	/**
+	 * ajax_search_related_races function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function ajax_search_related_races() {
+		global $wpdb;
+
+		$html=null;
+		$query=$_POST['query'];
+		$races=$wpdb->get_results("
+			SELECT * 
+			FROM $wpdb->posts 
+			WHERE post_title LIKE '%$query%' AND post_type = 'races'
+		");
+		$related_races_ids=uci_get_related_races_ids($_POST['id']);
+
+		// build out html //
+		foreach ($races as $race) :
+			if ($race->ID==$_POST['id'] || in_array($race->ID, $related_races_ids))
+				continue; // skip if current race or already linked
+				
+			$country=array_pop(wp_get_post_terms($race->ID, 'country'));
+			$class=array_pop(wp_get_post_terms($race->ID, 'race_class'));			
+			$season=array_pop(wp_get_post_terms($race->ID, 'season'));
+
+			$html.='<tr>';
+				$html.='<th scope="row" class="check-column"><input id="cb-select-'.$race->ID.'" type="checkbox" name="races[]" value="'.$race->ID.'"></th>';
+				$html.='<td class="race-date">'.date(get_option('date_format'), strtotime(get_post_meta($race->ID, '_race_date', true))).'</td>';
+				$html.='<td class="race-name">'.$race->post_title.'</td>';
+				$html.='<td class="race-nat">'.$country->name.'</td>';
+				$html.='<td class="race-class">'.$class->name.'</td>';
+				$html.='<td class="race-season">'.$season->name.'</td>';
+			$html.='</tr>';
+		endforeach;
+
+		echo $html;
+
+		wp_die();
+	}    
 }
 
 $uci_results_admin = new UCIResultsAdmin();

@@ -84,12 +84,19 @@ function uci_get_race_twitter($race_id=0) {
 	return get_post_meta($race_id, '_race_twitter', true);
 }
 
+/**
+ * uci_get_related_races function.
+ * 
+ * @access public
+ * @param int $race_id (default: 0)
+ * @return void
+ */
 function uci_get_related_races($race_id=0) {
 	global $wpdb;
 
 	$related_races=array();
 	$related_race_id=uci_get_related_race_id($race_id);
-	$related_races_ids=$wpdb->get_col("SELECT race_id FROM $wpdb->uci_results_related_races WHERE related_race_id = $related_race_id");
+	$related_races_ids=uci_get_related_races_ids($race_id);
 
 	if (is_wp_error($related_races_ids) || $related_races_ids===null)
 		return false;
@@ -107,6 +114,25 @@ function uci_get_related_races($race_id=0) {
 	endforeach;
 
 	return $related_races;
+}
+
+/**
+ * uci_get_related_races_ids function.
+ * 
+ * @access public
+ * @param int $race_id (default: 0)
+ * @return void
+ */
+function uci_get_related_races_ids($race_id=0) {
+	global $wpdb;
+
+	$related_race_id=uci_get_related_race_id($race_id);
+	$related_races_ids=$wpdb->get_col("SELECT race_id FROM $wpdb->uci_results_related_races WHERE related_race_id = $related_race_id");
+
+	if (is_wp_error($related_races_ids) || $related_races_ids===null)
+		return false;
+
+	return $related_races_ids;
 }
 
 /**

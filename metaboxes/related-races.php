@@ -116,7 +116,7 @@ class UCIRelatedRacesMetabox {
 				</div>
 			<?php endforeach; ?>
 			<div class="row add-race">
-				<a id="add-related-race" href="#"><span class="dashicons dashicons-plus-alt"></span></a>
+				<a id="add-related-race" href="#" data-id="<?php echo $post->ID; ?>"><span class="dashicons dashicons-plus-alt"></span></a>
 			</div>
         </div>
         
