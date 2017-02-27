@@ -70,16 +70,16 @@ class UCIResultsRacesMetabox {
      */
     public function save($post_id) {	    
         $prefix='_race_';
-        
+      
         // Check if our nonce is set.
-        if (!isset($_POST['uci_results_admin']))
+        if (!isset($_POST['uci_results_admin_race_details']))
             return $post_id;
-  
+
         // Verify that the nonce is valid.
-        if ( ! wp_verify_nonce( $_POST['uci_results_admin'], 'update_race_details' ) ) {
+        if (!wp_verify_nonce($_POST['uci_results_admin_race_details'], 'update_race_details')) {
             return $post_id;
         }
- 
+
         /*
          * If this is an autosave, our form has not been submitted,
          * so we don't want to do anything.
@@ -107,7 +107,7 @@ class UCIResultsRacesMetabox {
 			$data[$prefix.$key]=$value;
 			unset($data[$key]);
 		endforeach;
- 
+
         // Update the meta //
         foreach ($data as $meta_key => $meta_value) :
         	update_post_meta($post_id, $meta_key, $meta_value);
@@ -124,7 +124,7 @@ class UCIResultsRacesMetabox {
 	    $prefix='race';
 	    
         // Add an nonce field so we can check for it later. //
-        wp_nonce_field('update_race_details', 'uci_results_admin');
+        wp_nonce_field('update_race_details', 'uci_results_admin_race_details');
  
 		// get values in array by matching key w/ preifx //
 		$meta=array();
