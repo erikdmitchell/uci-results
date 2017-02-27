@@ -275,11 +275,16 @@ class UCIResultsAdmin {
 			$wpdb->query("DELETE FROM $wpdb->posts WHERE post_type = '$post_type'");
 		endforeach;
 
-		// remove taxonomies // WORK ON THIS
-		foreach ($taxonoimes as $slug) :
-			$term = get_term_by('slug', $slug, 'post_tag');
-			if ( ! is_wp_error($term) && ! empty($term) )
-				wp_delete_term( $term->term_id, 'post_tag');
+		// remove taxonomies //
+		foreach ($taxonoimes as $taxonomy) :
+			$terms = get_terms( array(
+				'taxonomy' => $taxonomy,
+				'hide_empty' => false,
+			) );
+			
+			foreach ($terms as $term) :
+				wp_delete_term($term->term_id, $taxonomy);
+			endforeach;
 		endforeach;
 		
 		// remove db tables //
