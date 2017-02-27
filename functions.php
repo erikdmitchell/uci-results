@@ -373,54 +373,17 @@ function uci_results_get_default_rider_ranking_week() {
  * @return void
  */
 function uci_results_seasons_dropdown($name='seasons', $selected='') {
-	global $ucicurl_races;
-
-	$html=null;
-	$seasons=$ucicurl_races->seasons();
-	$seasons_arr=explode('/', end($seasons));
-
-	// add one to each year //
-	foreach ($seasons_arr as $key => $year) :
-		$seasons_arr[$key]=absint($year)+1;
-	endforeach;
-
-	// append //
-	$seasons[]=implode('/', $seasons_arr);
-
-	$html.='<select id="'.$name.'" name="'.$name.'">';
-		$html.='<option value="0">'.__('Select One', '').'</option>';
-		foreach ($seasons as $season) :
-			$html.='<option name="'.$season.'" '.selected($selected, $season, false).'>'.$season.'</option>';
-		endforeach;
-	$html.='</select>';
-
-	echo $html;
-}
-
-/**
- * uci_results_seasons_checkboxes function.
- *
- * @access public
- * @param string $name (default: 'seasons')
- * @param string $checked (default: '')
- * @return void
- */
-function uci_results_seasons_checkboxes($name='seasons', $checked='') {
-	global $ucicurl_races;
-
-	$html=null;
-	$seasons=$ucicurl_races->seasons();
-
-	foreach ($seasons as $key => $season) :
-		$class='';
-
-		if ($key==0)
-			$class='first';
-
-		$html.='<input type="checkbox" name="'.$name.'[]" class="'.$name.' '.$class.'" value="'.$season.'">'.$season.'<br />';
-	endforeach;
-
-	echo $html;
+	wp_dropdown_categories(array(
+		'show_option_none'   => 'Select One',
+		'orderby'            => 'name',
+		'order'              => 'DESC',
+		'hide_empty'         => 0,
+		'selected'           => $selected,
+		'name'               => $name,
+		'id'                 => $name,
+		'class'              => 'seasons-dropdown',
+		'taxonomy'           => 'season',
+	));
 }
 
 global $uci_results_admin_notices;
