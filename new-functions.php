@@ -147,13 +147,6 @@ function uci_get_related_races_ids($race_id=0) {
  * @return void
  */
 function uci_get_related_race_id($race_id=0) {
-	global $wpdb;
-
-	$related_race_id=$wpdb->get_var("SELECT related_race_id FROM $wpdb->uci_results_related_races WHERE race_id = $race_id");
-
-	if (is_wp_error($related_race_id) || $related_race_id===null)
-		return 0;
-		
-	return $related_race_id;
+	return get_post_meta($race_id, '_race_related', true);
 }
 ?>
