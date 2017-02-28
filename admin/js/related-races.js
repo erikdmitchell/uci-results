@@ -85,6 +85,8 @@ jQuery(document).ready(function($) {
 		$.post(ajaxurl, data, function(response) {
 			hideLoader();
 			
+			$(response).insertBefore('.row.add-race');
+			
 			tb_remove();		
 		});		
 	});

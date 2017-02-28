@@ -450,6 +450,7 @@ class UCIResultsAdmin {
 		
 		parse_str($_POST['form'], $form);
 		
+		$html=null;
 		$races=$form['races'];
 		$related_race_id=uci_get_related_race_id($_POST['id']);
 		$last_related_race_id=$wpdb->get_var("SELECT MAX(related_race_id) FROM $wpdb->uci_results_related_races");
@@ -465,6 +466,17 @@ class UCIResultsAdmin {
 			);
 			$wpdb->insert($wpdb->uci_results_related_races, $data);		
 		endforeach;
+		
+		// get races information //
+		foreach ($races as $race_id) :
+			$html.='<div id="race-'.$race_id.'" class="row">';
+				$html.='<div class="race-name">'.get_the_title($race_id).'</div>';
+				$html.='<div class="race-date">'.date(get_option('date_format'), strtotime(get_post_meta($race_id, '_race_date', true))).'</div>';
+				$html.='<div class="action-icons"><a href="#" class="remove-related-race" data-id="'.$race_id.'" data-rrid="'.$related_race_id.'"><span class="dashicons dashicons-dismiss"></span></a></div>';
+			$html.='</div>';
+		endforeach;
+		
+		echo $html;
 		
 		wp_die();
 	}  
