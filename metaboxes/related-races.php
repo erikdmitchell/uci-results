@@ -18,7 +18,6 @@ class UCIRelatedRacesMetabox {
      */
     public function __construct() {
         add_action('add_meta_boxes', array($this, 'add_meta_box'));
-        add_action('save_post', array($this, 'save'));
         add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
     }
     
@@ -50,47 +49,7 @@ class UCIRelatedRacesMetabox {
             );
         }
     }
- 
-    /**
-     * Save the meta when the post is saved.
-     *
-     * @param int $post_id The ID of the post being saved.
-     */
-    public function save($post_id) {	    
-        $prefix='_race_';
-      
-        // Check if our nonce is set.
-        if (!isset($_POST['uci_results_admin_related_races']))
-            return $post_id;
-
-        // Verify that the nonce is valid.
-        if (!wp_verify_nonce($_POST['uci_results_admin_related_races'], 'update_related_races')) {
-            return $post_id;
-        }
-
-        /*
-         * If this is an autosave, our form has not been submitted,
-         * so we don't want to do anything.
-         */
-        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-            return $post_id;
- 
-        // Check the user's permissions.
-        if ( 'page' == $_POST['post_type'] ) {
-            if ( ! current_user_can( 'edit_page', $post_id ) ) {
-                return $post_id;
-            }
-        } else {
-            if ( ! current_user_can( 'edit_post', $post_id ) ) {
-                return $post_id;
-            }
-        }
- 
-        // OK, it's safe for us to save the data now. //
-
-    }
- 
- 
+  
     /**
      * Render Meta Box content.
      *
