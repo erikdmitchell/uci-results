@@ -131,6 +131,10 @@ function uci_get_related_races_ids($race_id=0) {
 	global $wpdb;
 
 	$related_race_id=uci_get_related_race_id($race_id);
+	
+	if (!$related_race_id)
+		return array();
+	
 	$related_races_ids=$wpdb->get_col("SELECT race_id FROM $wpdb->uci_results_related_races WHERE related_race_id = $related_race_id");
 
 	if (is_wp_error($related_races_ids) || $related_races_ids===null)

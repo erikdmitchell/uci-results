@@ -456,8 +456,10 @@ class UCIResultsAdmin {
 		$last_related_race_id=$wpdb->get_var("SELECT MAX(related_race_id) FROM $wpdb->uci_results_related_races");
 		
 		// if no rr id - increase last by 1 //
-		if (!$related_race_id)
+		if (!$related_race_id) :
 			$related_race_id=$last_related_race_id+1;
+			update_post_meta($_POST['id'], '_race_related', $related_race_id);
+		endif;
 
 		foreach ($races as $race_id) :
 			$data=array(
@@ -476,7 +478,12 @@ class UCIResultsAdmin {
 			$html.='</div>';
 		endforeach;
 		
-		echo $html;
+		$return=array(
+			'related_race_id' => $related_race_id,
+			'html' => $html	
+		);
+		
+		echo json_encode($return);
 		
 		wp_die();
 	}  

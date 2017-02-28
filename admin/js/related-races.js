@@ -84,8 +84,11 @@ jQuery(document).ready(function($) {
 		
 		$.post(ajaxurl, data, function(response) {
 			hideLoader();
-			
-			$(response).insertBefore('.row.add-race');
+console.log(response);			
+			var data=$.parseJSON(response);
+console.log(data);			
+			$('#related-races-id').val(data.related_race_id);
+			$(data.html).insertBefore('.row.add-race');
 			
 			tb_remove();		
 		});		
