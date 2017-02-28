@@ -41,8 +41,6 @@ function uci_results_add_races($args='') {
 
 	// only do this if we have new results //
 	if ($new_results) :
-		uci_results_build_season_weeks($season); // update season weeks
-
 		// run weekly points if need be //
 		if ($weekly_points)
 			uci_results_update_rider_weekly_points();

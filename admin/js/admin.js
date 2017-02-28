@@ -23,29 +23,6 @@ jQuery(document).ready(function($) {
 		}
 	});
 
-
-
-	/**
-	 * build season weeks
-	 */
-	$('#build-season-weeks').click(function(e) {
-		showLoader('#wpcontent');
-
-		var data={
-			'action' : 'uci_results_build_season_weeks'
-		}
-
-		$.post(ajaxurl, data, function(response) {
-			hideLoader();
-
-			$('#uci-results-actions-message').append(response);
-		});
-	});
-	
-	
-	
-	
-
 	/**
 	 * Remove Data button (settings) - remove all data from db
 	 */
