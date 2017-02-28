@@ -96,6 +96,10 @@ function uci_get_related_races($race_id=0) {
 
 	$related_races=array();
 	$related_race_id=uci_get_related_race_id($race_id);
+	
+	if (!$related_race_id)
+		return array();
+	
 	$related_races_ids=uci_get_related_races_ids($race_id);
 
 	if (is_wp_error($related_races_ids) || $related_races_ids===null)
