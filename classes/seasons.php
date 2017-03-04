@@ -19,6 +19,13 @@ add_action('admin_enqueue_scripts', 'admin_season_scripts_styles');
 function season_edit_success($term_id) {
 	update_term_meta($term_id, '_season_start', $_POST['term_meta']['season_start']);
 	update_term_meta($term_id, '_season_end', $_POST['term_meta']['season_end']);
+	
+	$weeks=uci_results_add_weeks_to_season($_POST['term_meta']['season_start'], $_POST['term_meta']['season_end']);
+	
+echo '<pre>';
+print_r($weeks);
+echo '</pre>';	
+exit;
 }
 add_action('edited_season', 'season_edit_success');
 add_action('created_season', 'season_edit_success');
@@ -108,16 +115,17 @@ class CrossSeasons {
 
 	public function get_start_and_end_date_of_week($week,$year) {
 		$return=array();
-    $time = strtotime("1 January $year", time());
-    $day = date('w', $time);
-    $time += ((7*$week)+1-$day)*24*3600;
-    $return[0] = date('Y-m-d', $time);
-    $time += 6*24*3600;
-    $return[1] = date('Y-m-d', $time);
-
-    return $return;
+	    $time = strtotime("1 January $year", time());
+	    $day = date('w', $time);
+	    $time += ((7*$week)+1-$day)*24*3600;
+	    $return[0] = date('Y-m-d', $time);
+	    $time += 6*24*3600;
+	    $return[1] = date('Y-m-d', $time);
+	
+	    return $return;
 	}
 
+/*
 	public function get_races_in_season_by_week($season=false) {
 		if (!$season)
 			return false;
@@ -141,7 +149,9 @@ class CrossSeasons {
 
 		return $object;
 	}
+*/
 
+/*
 	public function get_races_in_dates($start_date=false,$end_date=false) {
 		global $wpdb;
 		if (!$start_date || !$end_date)
@@ -159,6 +169,7 @@ class CrossSeasons {
 
 		return $races;
 	}
+*/
 
 	public function get_week_from_date($date=false, $season=false) {
 		if (!$date || !$season)
@@ -203,74 +214,46 @@ function uci_results_build_season_weeks($season='') {
 }
 */
 
-/*
-function uci_results_set_season_weeks($season='') {
-	global $uci_results_admin_pages, $uci_results_add_races;
 
-	$uci_results_urls=get_object_vars($uci_results_admin_pages->config->urls);
 
-	// see if the season is set in our admin pages (config) //
-	if (!isset($uci_results_urls[$season]))
+
+function uci_results_add_weeks_to_season($start='', $end='') {
+	if (empty($start) || empty($end))
 		return false;
 
-	$season_url=$uci_results_urls[$season];
-	$season_races=$uci_results_add_races->get_race_data($season, false, true, $season_url);
-
-	$first_race=end($season_races);
-	$last_race=reset($season_races);
-
-	$dates=array(
-		'season' => $season,
-		'start' => date('M j Y', strtotime($first_race->date)),
-		'end' => date('M j Y', strtotime($last_race->date)),
-	);
-	$season_data=uci_results_add_weeks_to_season($dates);
-
-	return $season_data;
-}
-*/
-
-/*
-function uci_results_add_weeks_to_season($season='') {
-	if (empty($season))
-		return false;
+	$weeks=array();
 
 	// start (first) week //
-	$start_date_arr=explode(' ', $season['start']); // get start day
-	$next_monday=strtotime('monday', mktime(0, 0, 0, date('n', strtotime($season['start'])), $start_date_arr[1], $start_date_arr[2])); // get next monday
-	$next_sunday=strtotime('sunday', $next_monday); // get next sunday
-	$first_monday=strtotime('-1 week', $next_monday); // prev monday is start
-	$first_sunday=strtotime('-1 week', $next_sunday); // prev sunday is start
+	$start_date_arr=explode('-', $start); // get start day
+	$first_monday=strtotime('monday', mktime(0, 0, 0, date('n', strtotime($start)), $start_date_arr[2], $start_date_arr[0])); // get next monday
+	$first_sunday=strtotime('sunday', $first_monday); // get next sunday
 
 	// end (last) week //
-	$end_date_arr=explode(' ', $season['end']); // get end day
-	$last_monday=strtotime('monday', mktime(0, 0, 0, date('n', strtotime($season['end'])), $end_date_arr[1], $end_date_arr[2])); // get next monday
-	$last_sunday=strtotime('sunday', $last_monday); // get next sunday
-	$final_monday=strtotime('-1 week', $last_monday); // prev monday is start
-	$final_sunday=strtotime('-1 week', $last_sunday); // prev sunday is start
+	$end_date_arr=explode('-', $end); // get end day
+	$final_monday=strtotime('monday', mktime(0, 0, 0, date('n', strtotime($end)), $end_date_arr[2], $end_date_arr[0])); // get next monday
+	$final_sunday=strtotime('sunday', $final_monday); // get next sunday
 
 	// build out all our weeks //
 	$monday=$first_monday;
 	$sunday=$first_sunday;
 
 	while ($monday != $final_monday) :
-    $season['weeks'][]=array(
-    	'start' => date('c', $monday),
-    	'end' => date('c', $sunday)
-    );
-
-    $monday=strtotime('+1 week', $monday);
-    $sunday=strtotime('+1 week', $sunday);
+	    $weeks[]=array(
+	    	'start' => date('c', $monday),
+	    	'end' => date('c', $sunday)
+	    );
+	
+	    $monday=strtotime('+1 week', $monday);
+	    $sunday=strtotime('+1 week', $sunday);
 	endwhile;
 
 	// append final week //
-	$season['weeks'][]=array(
+	$weeks[]=array(
 		'start' => date('c', $final_monday),
 		'end' => date('c', $final_sunday)
 	);
 
-	return $season;
+	return $weeks;
 }
-*/
 
 ?>

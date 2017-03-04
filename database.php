@@ -75,6 +75,7 @@ function ucicurl_db_install() {
 	$sql_season_weeks="
 		CREATE TABLE $wpdb->uci_results_season_weeks (
 		  	id bigint(20) NOT NULL AUTO_INCREMENT,
+		  	term_id bigint(20) NOT NULL DEFAULT '0',
 		  	week bigint(20) NOT NULL DEFAULT '0',
 			start date NOT NULL,
 			end date NOT NULL,
@@ -150,6 +151,7 @@ function ucicurl_db_update() {
 		$sql_season_weeks="
 			CREATE TABLE $wpdb->uci_results_season_weeks (
 			  	id bigint(20) NOT NULL AUTO_INCREMENT,
+			  	term_id bigint(20) NOT NULL DEFAULT '0',
 			  	week bigint(20) NOT NULL DEFAULT '0',
 				start date NOT NULL,
 				end date NOT NULL,
