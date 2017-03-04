@@ -153,4 +153,21 @@ function uci_get_related_races_ids($race_id=0) {
 function uci_get_related_race_id($race_id=0) {
 	return get_post_meta($race_id, '_race_related', true);
 }
+
+function uci_get_race_seasons_dropdown($name='season', $selected='') {
+	$html=null;
+	$seasons=get_terms( array(
+	    'taxonomy' => 'season',
+		'hide_empty' => false,
+	));
+
+	$html.='<select id="'.$name.'" name="'.$name.'" class="'.$name.'">';
+		$html.='<option value="0">-- Select Season --</option>';
+			foreach ($seasons as $season) :
+				$html.='<option value="'.$season->term_id.'" '.selected($selected, $season->term_id).'>'.$season->name.'</option>';
+			endforeach;
+	$html.='</select>';
+	
+	return $html;
+}
 ?>

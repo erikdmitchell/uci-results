@@ -26,12 +26,7 @@ $riders=new RiderRankingsQuery(array(
 			<input type="hidden" name="tab" value="rider-rankings">
 
 			<div class="alignleft actions">
-				<select id="season" name="season" class="season">
-					<option value="0">-- Select Season --</option>
-					<?php foreach ($ucicurl_races->seasons() as $season) : ?>
-						<option value="<?php echo $season; ?>" <?php selected($_season, $season); ?>><?php echo $season; ?></option>
-					<?php endforeach; ?>
-				</select>
+				<?php echo uci_get_race_seasons_dropdown(); ?>
 			</div>
 
 			<div class="alignleft actions">
