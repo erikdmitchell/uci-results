@@ -21,10 +21,8 @@ function season_edit_success($term_id) {
 	update_term_meta($term_id, '_season_end', $_POST['term_meta']['season_end']);
 	
 	$weeks=uci_results_add_weeks_to_season($_POST['term_meta']['season_start'], $_POST['term_meta']['season_end']);
+	season_add_weeks_to_db($term_id, $weeks);
 	
-echo '<pre>';
-print_r($weeks);
-echo '</pre>';	
 exit;
 }
 add_action('edited_season', 'season_edit_success');
@@ -74,6 +72,34 @@ function season_edit_meta_field($term) {
 	echo $html;
 }
 add_action('season_edit_form_fields', 'season_edit_meta_field', 10, 1);
+
+function season_add_weeks_to_db($term_id=0, $weeks='') {
+	global $wpdb;
+	
+	if (empty($weeks) || !$term_id)
+		return;
+	
+	foreach ($weeks as $week) :
+		$id=$wpdb->get_var("SELECT id FROM $wpdb->uci_results_season_weeks WHERE term_id = $term_id AND start = '".$week['start']."' AND end = '".$week['end']."'");
+		
+		$data=array(
+			'term_id' => $term_id,
+			'week' => $week['week'],
+			'start' => $week['start'],
+			'end' => $week['end']
+		);
+echo '<pre>';
+print_r($data);
+echo '</pre>';		
+/*
+		if ($id) :
+			echo 'update<br>';
+		else :
+			$wpdb->insert($wpdb->uci_results_season_weeks, $data);
+		endif;
+*/
+	endforeach;	
+}
 
 /**
  * CrossSeasons class.
@@ -222,6 +248,7 @@ function uci_results_add_weeks_to_season($start='', $end='') {
 		return false;
 
 	$weeks=array();
+	$week=1;
 
 	// start (first) week //
 	$start_date_arr=explode('-', $start); // get start day
@@ -239,18 +266,21 @@ function uci_results_add_weeks_to_season($start='', $end='') {
 
 	while ($monday != $final_monday) :
 	    $weeks[]=array(
-	    	'start' => date('c', $monday),
-	    	'end' => date('c', $sunday)
+	    	'start' => date('Y-m-d', $monday),
+	    	'end' => date('Y-m-d', $sunday),
+	    	'week' => $week
 	    );
 	
 	    $monday=strtotime('+1 week', $monday);
 	    $sunday=strtotime('+1 week', $sunday);
+	    $week++;
 	endwhile;
 
 	// append final week //
 	$weeks[]=array(
-		'start' => date('c', $final_monday),
-		'end' => date('c', $final_sunday)
+		'start' => date('Y-m-d', $final_monday),
+		'end' => date('Y-m-d', $final_sunday),
+		'week' => $week
 	);
 
 	return $weeks;
