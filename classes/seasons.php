@@ -1,28 +1,84 @@
 <?php
-	/**
+	
+function admin_season_scripts_styles() {
+	global $wp_scripts;
+
+	// get registered script object for jquery-ui
+	$ui = $wp_scripts->query('jquery-ui-core');
+		
+	if (isset($_GET['taxonomy']) && $_GET['taxonomy']=='season') :
+		wp_enqueue_script('jquery-ui-datepicker');
+		wp_enqueue_script('uci-results-admin-season', UCI_RESULTS_ADMIN_URL.'js/seasons.js', array('jquery-ui-datepicker'), '0.1.0', true);
+
+		wp_enqueue_style('jquery-ui-smoothness', "https://ajax.googleapis.com/ajax/libs/jqueryui/{$ui->ver}/themes/smoothness/jquery-ui.min.css");
+	endif;
+}
+add_action('admin_enqueue_scripts', 'admin_season_scripts_styles');
+
+
+function season_edit_success($term_id) {
+	update_term_meta($term_id, '_season_start', $_POST['term_meta']['season_start']);
+	update_term_meta($term_id, '_season_end', $_POST['term_meta']['season_end']);
+}
+add_action('edited_season', 'season_edit_success');
+add_action('created_season', 'season_edit_success');
+
+function season_add_new_meta_fields() {
+	$html=null;
+	
+	$html.='<div class="form-field">';
+		$html.='<label for="term_meta[season_start]">Start of the Season</label>';
+		$html.='<input type="text" name="term_meta[season_start]" class="uci-season-dp" id="term_meta[season_start]" value="">';
+		$html.='<p class="description">Select the first week of the season.</p>';
+	$html.='</div>';
+
+	$html.='<div class="form-field">';
+		$html.='<label for="term_meta[season_end]">Start of the Season</label>';
+		$html.='<input type="text" name="term_meta[season_end]" class="uci-season-dp" id="term_meta[season_end]" value="">';
+		$html.='<p class="description">Select the first week of the season.</p>';
+	$html.='</div>';
+
+	echo $html;
+}
+add_action('season_add_form_fields', 'season_add_new_meta_fields');
+
+function season_edit_meta_field($term) {
+	$season_start=get_term_meta($term->term_id, '_season_start', true);
+	$season_end=get_term_meta($term->term_id, '_season_end', true);
+		
+	$html=null;
+			
+	$html.='<tr class="form-field">';
+		$html.='<th scope="row" valign="top"><label for="term_meta[season_start]">Start of the Season</label></th>';
+		$html.='<td>';
+			$html.='<input type="text" name="term_meta[season_start]" class="uci-season-dp regular-text" id="term_meta[season_start]" value="'.esc_attr($season_start).'">';
+			$html.='<p class="description">Select the first week of the season.</p>';
+		$html.='</td>';
+	$html.='</tr>';
+
+	$html.='<tr class="form-field">';
+		$html.='<th scope="row" valign="top"><label for="term_meta[season_end]">End of the Season</label></th>';
+		$html.='<td>';
+			$html.='<input type="text" name="term_meta[season_end]" class="uci-season-dp regular-text" id="term_meta[season_end]" value="'.esc_attr($season_end).'">';
+			$html.='<p class="description">Select the last week of the season.</p>';
+		$html.='</td>';
+	$html.='</tr>';
+
+	echo $html;
+}
+add_action('season_edit_form_fields', 'season_edit_meta_field', 10, 1);
+
+/**
  * CrossSeasons class.
  *
  * @since Version 1.1.0
  */
 class CrossSeasons {
 
-	public $table;
-	public $seasons=array();
-
 	public function __construct() {
-		global $wpdb;
 
-		$this->table=$wpdb->prefix.'uci_races';
-		$this->seasons=$wpdb->get_col("SELECT season FROM $this->table WHERE season!='false' GROUP BY season");
 	}
 
-	/**
-	 * get_weeks function.
-	 *
-	 * @access public
-	 * @param bool $season (default: false)
-	 * @return void
-	 */
 	public function get_weeks($season=false) {
 		if (!$season)
 			return false;
@@ -50,14 +106,6 @@ class CrossSeasons {
 		return $weeks;
 	}
 
-	/**
-	 * get_start_and_end_date_of_week function.
-	 *
-	 * @access public
-	 * @param mixed $week
-	 * @param mixed $year
-	 * @return void
-	 */
 	public function get_start_and_end_date_of_week($week,$year) {
 		$return=array();
     $time = strtotime("1 January $year", time());
@@ -70,13 +118,6 @@ class CrossSeasons {
     return $return;
 	}
 
-	/**
-	 * get_races_in_season_by_week function.
-	 *
-	 * @access public
-	 * @param bool $season (default: false)
-	 * @return void
-	 */
 	public function get_races_in_season_by_week($season=false) {
 		if (!$season)
 			return false;
@@ -101,14 +142,6 @@ class CrossSeasons {
 		return $object;
 	}
 
-	/**
-	 * get_races_in_dates function.
-	 *
-	 * @access public
-	 * @param bool $start_date (default: false)
-	 * @param bool $end_date (default: false)
-	 * @return void
-	 */
 	public function get_races_in_dates($start_date=false,$end_date=false) {
 		global $wpdb;
 		if (!$start_date || !$end_date)
@@ -127,14 +160,6 @@ class CrossSeasons {
 		return $races;
 	}
 
-	/**
-	 * get_week_from_date function.
-	 *
-	 * @access public
-	 * @param bool $date (default: false)
-	 * @param bool $season (default: false)
-	 * @return void
-	 */
 	public function get_week_from_date($date=false, $season=false) {
 		if (!$date || !$season)
 			return false;
@@ -153,4 +178,99 @@ class CrossSeasons {
 	}
 
 }
+
+/*
+function uci_results_build_season_weeks($season='') {
+	global $uci_results_admin_pages;
+
+	$season_weeks=get_option('uci_results_season_weeks', array());
+
+	// check for a specific season //
+	if (!empty($season)) :
+		foreach ($season_weeks as $key => $value) :
+			if ($value['season']==$season)
+				$season_weeks[$key]=uci_results_set_season_weeks($season);
+		endforeach;
+	else :
+		$season_weeks=[]; // clear all
+
+		foreach ($uci_results_admin_pages->config->urls as $season => $url) :
+			$season_weeks[]=uci_results_set_season_weeks($season);
+		endforeach;
+	endif;
+
+	update_option('uci_results_season_weeks', $season_weeks);
+}
+*/
+
+/*
+function uci_results_set_season_weeks($season='') {
+	global $uci_results_admin_pages, $uci_results_add_races;
+
+	$uci_results_urls=get_object_vars($uci_results_admin_pages->config->urls);
+
+	// see if the season is set in our admin pages (config) //
+	if (!isset($uci_results_urls[$season]))
+		return false;
+
+	$season_url=$uci_results_urls[$season];
+	$season_races=$uci_results_add_races->get_race_data($season, false, true, $season_url);
+
+	$first_race=end($season_races);
+	$last_race=reset($season_races);
+
+	$dates=array(
+		'season' => $season,
+		'start' => date('M j Y', strtotime($first_race->date)),
+		'end' => date('M j Y', strtotime($last_race->date)),
+	);
+	$season_data=uci_results_add_weeks_to_season($dates);
+
+	return $season_data;
+}
+*/
+
+/*
+function uci_results_add_weeks_to_season($season='') {
+	if (empty($season))
+		return false;
+
+	// start (first) week //
+	$start_date_arr=explode(' ', $season['start']); // get start day
+	$next_monday=strtotime('monday', mktime(0, 0, 0, date('n', strtotime($season['start'])), $start_date_arr[1], $start_date_arr[2])); // get next monday
+	$next_sunday=strtotime('sunday', $next_monday); // get next sunday
+	$first_monday=strtotime('-1 week', $next_monday); // prev monday is start
+	$first_sunday=strtotime('-1 week', $next_sunday); // prev sunday is start
+
+	// end (last) week //
+	$end_date_arr=explode(' ', $season['end']); // get end day
+	$last_monday=strtotime('monday', mktime(0, 0, 0, date('n', strtotime($season['end'])), $end_date_arr[1], $end_date_arr[2])); // get next monday
+	$last_sunday=strtotime('sunday', $last_monday); // get next sunday
+	$final_monday=strtotime('-1 week', $last_monday); // prev monday is start
+	$final_sunday=strtotime('-1 week', $last_sunday); // prev sunday is start
+
+	// build out all our weeks //
+	$monday=$first_monday;
+	$sunday=$first_sunday;
+
+	while ($monday != $final_monday) :
+    $season['weeks'][]=array(
+    	'start' => date('c', $monday),
+    	'end' => date('c', $sunday)
+    );
+
+    $monday=strtotime('+1 week', $monday);
+    $sunday=strtotime('+1 week', $sunday);
+	endwhile;
+
+	// append final week //
+	$season['weeks'][]=array(
+		'start' => date('c', $final_monday),
+		'end' => date('c', $final_sunday)
+	);
+
+	return $season;
+}
+*/
+
 ?>
