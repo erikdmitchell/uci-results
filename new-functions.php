@@ -154,6 +154,14 @@ function uci_get_related_race_id($race_id=0) {
 	return get_post_meta($race_id, '_race_related', true);
 }
 
+/**
+ * uci_get_race_seasons_dropdown function.
+ * 
+ * @access public
+ * @param string $name (default: 'season')
+ * @param string $selected (default: '')
+ * @return void
+ */
 function uci_get_race_seasons_dropdown($name='season', $selected='') {
 	$html=null;
 	$seasons=get_terms( array(
@@ -164,10 +172,39 @@ function uci_get_race_seasons_dropdown($name='season', $selected='') {
 	$html.='<select id="'.$name.'" name="'.$name.'" class="'.$name.'">';
 		$html.='<option value="0">-- Select Season --</option>';
 			foreach ($seasons as $season) :
-				$html.='<option value="'.$season->term_id.'" '.selected($selected, $season->term_id).'>'.$season->name.'</option>';
+				$html.='<option value="'.$season->slug.'" '.selected($selected, $season->slug, false).'>'.$season->name.'</option>';
 			endforeach;
 	$html.='</select>';
 	
 	return $html;
 }
+
+/**
+ * uci_get_season_weeks function.
+ * 
+ * @access public
+ * @param string $season (default: '')
+ * @param string $selected (default: '')
+ * @param string $name (default: 'weeks')
+ * @return void
+ */
+function uci_get_season_weeks($season='', $selected='', $name='weeks') {
+	global $uci_cross_seasons;	
+	
+	$html=null;
+	$weeks=$uci_cross_seasons->get_season_weeks($season);
+	
+	if (empty($weeks))
+		return;
+
+	$html.='<select id="'.$name.'" name="'.$name.'" class="'.$name.'">';
+		$html.='<option value="0">-- Select Season --</option>';
+			foreach ($weeks as $week) :
+				$html.='<option value="'.$week->week.'" '.selected($selected, $week->week, false).'>'.$week->week.'</option>';
+			endforeach;
+	$html.='</select>';
+	
+	return $html;	
+}
+
 ?>

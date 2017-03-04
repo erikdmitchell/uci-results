@@ -1,13 +1,15 @@
 <?php
 global $uci_results_query, $rider_rankings_post, $ucicurl_riders, $ucicurl_races;
 
-$name='';
 $search=isset($_GET['search']) ? $_GET['search'] : '';
+$season=isset($_GET['season']) ? $_GET['season'] : '20162017';
+$week=isset($_GET['week']) ? $_GET['week'] : 1;
+$nat=isset($_GET['nat']) ? $_GET['nat'] : '';
 
 $riders=new RiderRankingsQuery(array(
-	'season' => isset($_GET['season']) ? $_GET['season'] : '2016/2017',
-	'week' => isset($_GET['week']) ? $_GET['week'] : 1,
-	'nat' => isset($_GET['nat']) ? $_GET['nat'] : '',
+	'season' => $season,
+	'week' => $week,
+	'nat' => $nat,
 	'order_by' => 'rank',
 	'order' => 'ASC'
 ));
@@ -26,16 +28,11 @@ $riders=new RiderRankingsQuery(array(
 			<input type="hidden" name="tab" value="rider-rankings">
 
 			<div class="alignleft actions">
-				<?php echo uci_get_race_seasons_dropdown(); ?>
+				<?php echo uci_get_race_seasons_dropdown('season', $season); ?>
 			</div>
 
 			<div class="alignleft actions">
-				<select id="week" name="week" class="week">
-					<option value="0">-- Select Week --</option>
-					<?php foreach ($ucicurl_races->weeks($_season) as $week) : ?>
-						<option value="<?php echo $week; ?>" <?php selected($_week, $week); ?>><?php echo $week; ?></option>
-					<?php endforeach; ?>
-				</select>
+				<?php echo uci_get_season_weeks($season, $week); ?>
 			</div>
 
 			<div class="alignleft actions">

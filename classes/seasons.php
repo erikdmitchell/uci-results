@@ -8,6 +8,12 @@ global $uci_cross_seasons;
  */
 class CrossSeasons {
 
+	/**
+	 * __construct function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
 	public function __construct() {
 		add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
 		add_action('edited_season', array($this, 'update_taxonomy_meta'));
@@ -16,6 +22,12 @@ class CrossSeasons {
 		add_action('season_edit_form_fields', array($this, 'edit_taxonomy_meta_fields'));
 	}
 
+	/**
+	 * admin_scripts_styles function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
 	public function admin_scripts_styles() {
 		global $wp_scripts;
 	
@@ -30,6 +42,13 @@ class CrossSeasons {
 		endif;
 	}
 	
+	/**
+	 * update_taxonomy_meta function.
+	 * 
+	 * @access public
+	 * @param mixed $term_id
+	 * @return void
+	 */
 	public function update_taxonomy_meta($term_id) {
 		update_term_meta($term_id, '_season_start', $_POST['term_meta']['season_start']);
 		update_term_meta($term_id, '_season_end', $_POST['term_meta']['season_end']);
@@ -38,6 +57,12 @@ class CrossSeasons {
 		$this->add_weeks_to_db($term_id, $weeks);
 	}
 	
+	/**
+	 * add_new_taxonomy_meta_fields function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
 	public function add_new_taxonomy_meta_fields() {
 		$html=null;
 		
@@ -56,6 +81,13 @@ class CrossSeasons {
 		echo $html;
 	}
 	
+	/**
+	 * edit_taxonomy_meta_fields function.
+	 * 
+	 * @access public
+	 * @param mixed $term
+	 * @return void
+	 */
 	public function edit_taxonomy_meta_fields($term) {
 		$season_start=get_term_meta($term->term_id, '_season_start', true);
 		$season_end=get_term_meta($term->term_id, '_season_end', true);
@@ -81,6 +113,14 @@ class CrossSeasons {
 		echo $html;
 	}
 	
+	/**
+	 * add_weeks_to_db function.
+	 * 
+	 * @access protected
+	 * @param int $term_id (default: 0)
+	 * @param string $weeks (default: '')
+	 * @return void
+	 */
 	protected function add_weeks_to_db($term_id=0, $weeks='') {
 		global $wpdb;
 		
@@ -105,6 +145,14 @@ class CrossSeasons {
 		endforeach;	
 	}
 	
+	/**
+	 * add_weeks_to_season function.
+	 * 
+	 * @access protected
+	 * @param string $start (default: '')
+	 * @param string $end (default: '')
+	 * @return void
+	 */
 	protected function add_weeks_to_season($start='', $end='') {
 		if (empty($start) || empty($end))
 			return false;
@@ -145,6 +193,25 @@ class CrossSeasons {
 			'week' => $week
 		);
 	
+		return $weeks;
+	}
+	
+	/**
+	 * get_season_weeks function.
+	 * 
+	 * @access public
+	 * @param string $season (default: '')
+	 * @return void
+	 */
+	public function get_season_weeks($season='') {
+		global $wpdb;
+		
+		if (empty($season))
+			return;
+		
+		$term=get_term_by('slug', $season, 'season');
+		$weeks=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_season_weeks WHERE term_id = $term->term_id");
+		
 		return $weeks;
 	}
 /*
