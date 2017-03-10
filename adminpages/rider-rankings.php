@@ -2,7 +2,7 @@
 global $uci_results_query, $rider_rankings_post, $ucicurl_riders, $ucicurl_races;
 
 $search=isset($_GET['search']) ? $_GET['search'] : '';
-$season=isset($_GET['season']) ? $_GET['season'] : '20162017';
+$season=isset($_GET['season']) ? $_GET['season'] : '2016/2017';
 $week=isset($_GET['week']) ? $_GET['week'] : 1;
 $nat=isset($_GET['nat']) ? $_GET['nat'] : '';
 
@@ -20,7 +20,7 @@ $riders=new RiderRankingsQuery(array(
 
 	<div class="tablenav top">
 		<div class="pagination">
-			<?php uci_results_admin_pagination(); ?>
+			<?php uci_rider_rankings_admin_pagination(); ?>
 		</div>
 
 		<form id="rankings-filter" name="rankings-filter" method="get" action="">
@@ -64,5 +64,5 @@ $riders=new RiderRankingsQuery(array(
 		</tbody>
 	</table>
 
-	<?php uci_results_admin_pagination(); ?>
+	<?php uci_rider_rankings_admin_pagination(); ?>
 </div>
