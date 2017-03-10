@@ -189,7 +189,7 @@ class UCIResultsRiderRankings {
 	 * @return void
 	 */
 	public function update_twitter() {
-		global $uci_results_pages, $uci_results_twitter, $ucicurl_riders;
+		global $uci_results_pages, $uci_results_twitter, $uci_riders;
 
 		if (!uci_results_post_rankings_updates_to_twitter())
 			return false;
@@ -206,7 +206,7 @@ class UCIResultsRiderRankings {
 			$rider=$riders->posts[0];
 
 			// use twitter if we have it //
-			$twitter=$ucicurl_riders->get_twitter($rider->id);
+			$twitter=$uci_riders->get_twitter($rider->id);
 
 			if (!empty($twitter)) :
 				$name='@'.$twitter;

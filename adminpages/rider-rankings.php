@@ -1,5 +1,5 @@
 <?php
-global $uci_results_query, $rider_rankings_post, $ucicurl_riders, $ucicurl_races;
+global $rider_rankings_post;
 
 $search=isset($_GET['search']) ? $_GET['search'] : '';
 $season=isset($_GET['season']) ? $_GET['season'] : '20162017';

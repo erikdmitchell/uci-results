@@ -493,16 +493,8 @@ function uci_results_search_ajax() {
 add_action('wp_ajax_uci_results_search', 'uci_results_search_ajax');
 add_action('wp_ajax_nopriv_uci_results_search', 'uci_results_search_ajax');
 
-/**
- * uci_results_build_search_results function.
- *
- * @access public
- * @param string $posts (default: '')
- * @param string $type (default: '')
- * @return void
- */
 function uci_results_build_search_results($posts='', $type='') {
-	global $ucicurl_riders, $ucicurl_races;
+	global $uci_riders;
 
 	if (empty($posts))
 		return '<div class="not-found">No results found.</div>';
@@ -536,7 +528,6 @@ function uci_results_build_search_results($posts='', $type='') {
 
 	return $html;
 }
-
 /**
  * uci_results_build_search_details function.
  *
