@@ -569,8 +569,7 @@ class UCIResultsAddRaces {
 			'code' => $this->build_race_code($race_data),
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
 		);
-print_r($data);
-/*
+
 		if (!$this->check_for_dups($data['code'])) :		
 			if ($race_id=$this->insert_race_into_db($data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
@@ -602,7 +601,6 @@ print_r($data);
 			return array('message' => $message, 'new_result' => $new_results);
 
 		return $message;
-*/
 	}
 
 	/**
