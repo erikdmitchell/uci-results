@@ -1,17 +1,18 @@
 <?php
 ///////// RIDERS
 
-/**
- * uci_results_get_rider_results function.
- * 
- * @access public
- * @param int $rider_id (default: 0)
- * @param string $race_ids (default: '')
- * @param string $seasons (default: '')
- * @param string $places (default: '')
- * @return void
- */
-function uci_results_get_rider_results($rider_id=0, $race_ids='', $seasons='', $places='') {
+function uci_results_get_rider_results($args='') {
+	$default_args=array(
+		'rider_id' => 0, 
+		'race_ids' => '', 
+		'seasons' => '', 
+		'places' => '',
+		'race_classes' => '',
+	);
+	$args=wp_parse_args($args, $default_args);
+	
+	extract($args);
+	
 	if (!$rider_id)
 		return false;
 		
@@ -25,6 +26,9 @@ function uci_results_get_rider_results($rider_id=0, $race_ids='', $seasons='', $
 
 	if (!is_array($places) && !empty($places))
 		$places=explode(',', $places);
+
+	if (!is_array($race_classes) && !empty($race_classes))
+		$race_classes=explode(',', $race_classes);
 		
     // get race ids via meta //
 	$results_args_meta = array(
@@ -44,14 +48,22 @@ function uci_results_get_rider_results($rider_id=0, $race_ids='', $seasons='', $
 
 	// check specific seasons //
 	if (!empty($seasons))
-		$results_args_meta['tax_query']=array(
-			array(
-				'taxonomy' => 'season',
-				'field' => 'slug',
-				'terms' => $seasons
-			)
+		$results_args_meta['tax_query'][]=array(
+			'taxonomy' => 'season',
+			'field' => 'slug',
+			'terms' => $seasons
 		);
-	
+
+	// check specific race_classes //
+	if (!empty($race_classes))
+		$results_args_meta['tax_query'][]=array(
+			'taxonomy' => 'race_class',
+			'field' => 'slug',
+			'terms' => $race_classes
+		);
+echo '<pre>';
+print_r($results_args_meta);
+echo '</pre>';	
 	$race_ids=get_posts($results_args_meta);
 	
 	foreach ($race_ids as $race_id) :

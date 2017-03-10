@@ -48,7 +48,7 @@ class UCIResultsRiderResultsMetabox {
      * @param WP_Post $post The post object.
      */
     public function render_meta_box_content($post) {
-		$results=uci_results_get_rider_results($post->ID);
+		$results=uci_results_get_rider_results(array('rider_id' => $post->ID));
         ?>
         
         <table class="uci-results-rider-results widefat fixed striped">

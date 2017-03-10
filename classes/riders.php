@@ -51,7 +51,11 @@ class UCIRiders {
 
 		// get results //
 		if ($results) :
-			$rider->results=uci_results_get_rider_results($rider_id, $race_ids, $results_season);
+			$rider->results=uci_results_get_rider_results(array(
+				'rider_id' => $rider_id, 
+				'race_ids' => $race_ids, 
+				'season' => $results_season
+			));
 			$rider->last_result=$this->rider_last_race_result($rider_id);
 		endif;
 
@@ -106,7 +110,11 @@ class UCIRiders {
 
 			// get results //
 			if ($results)
-				$rider->results=$this->get_rider_results($rider_id, $race_ids, $results_season);
+				$rider->results=uci_results_get_rider_results(array(
+					'rider_id' => $rider_id, 
+					'race_ids' => $race_ids, 
+					'season' => $results_season
+				));
 
 			// last result //
 			if (!$results && $last_result)
@@ -233,26 +241,7 @@ class UCIRiders {
 
 
 
-	public function world_championships($rider_id=0) {
-		global $wpdb;
 
-		$sql="
-			SELECT
-				*
-			FROM $wpdb->uci_results_results AS results
-			INNER JOIN $wpdb->uci_results_races AS races ON results.race_id = races.id
-			WHERE rider_id = $rider_id
-				AND races.class = 'CM'
-				AND place = 1
-		";
-
-		$wc=$wpdb->get_results($sql);
-
-		if (!count($wc))
-			return false;
-
-		return $wc;
-	}
 
 	public function world_cup_wins($rider_id=0) {
 		global $wpdb;
