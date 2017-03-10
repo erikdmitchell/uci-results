@@ -266,20 +266,6 @@ class UCIRiders {
 	}
 
 	/**
-	 * nats function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function nats() {
-		global $wpdb;
-
-		$nats=$wpdb->get_col("SELECT DISTINCT(nat) FROM $wpdb->uci_results_riders ORDER BY nat ASC");
-
-		return $nats;
-	}
-
-	/**
 	 * get_rider_rank function.
 	 *
 	 * @access public
@@ -671,38 +657,6 @@ class UCIRiders {
 		$twitter=$wpdb->get_var("SELECT twitter FROM $wpdb->uci_results_riders WHERE id = $rider_id");
 
 		return $twitter;
-	}
-
-	/**
-	 * update_rider function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function update_rider() {
-		global $wpdb, $uci_results_admin_notices;
-
-		// verify nonce //
-		if (!isset($_POST['uci_results_admin']) || !wp_verify_nonce($_POST['uci_results_admin'], 'update_single_rider_info'))
-			return false;
-
-		// check for id //
-		if (!isset($_POST['id']) || empty($_POST['id']))
-			return false;
-
-		$data=array(
-			'slug' => $_POST['slug'],
-			'nat' => $_POST['nat'],
-			'twitter' => $_POST['twitter'],
-		);
-
-		$result=$wpdb->update($wpdb->uci_results_riders, $data, array('id' => $_POST['id']));
-
-		if ($result===false) :
-			$uci_results_admin_notices['error'][]='Rider failed to update.';
-		else :
-			$uci_results_admin_notices['updated'][]='Rider updated.';
-		endif;
 	}
 
 }
