@@ -35,7 +35,7 @@ $riders=new RiderRankingsQuery(array(
 			</div>
 
 			<div class="alignleft actions">
-				<?php echo uci_get_season_weeks($season, $week); ?>
+				<?php echo uci_get_season_weeks_dropdown($season, $week); ?>
 			</div>
 
 			<div class="alignleft actions">

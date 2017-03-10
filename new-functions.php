@@ -214,7 +214,7 @@ function uci_get_country_dropdown($name='country', $selected='') {
 ////////// SEASON
 
 /**
- * uci_get_season_weeks function.
+ * uci_get_season_weeks_dropdown function.
  * 
  * @access public
  * @param string $season (default: '')
@@ -222,7 +222,7 @@ function uci_get_country_dropdown($name='country', $selected='') {
  * @param string $name (default: 'week')
  * @return void
  */
-function uci_get_season_weeks($season='', $selected='', $name='week') {
+function uci_get_season_weeks_dropdown($season='', $selected='', $name='week') {
 	global $uci_cross_seasons;	
 	
 	$html=null;
