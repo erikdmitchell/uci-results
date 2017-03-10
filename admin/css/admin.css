@@ -78,6 +78,11 @@ table.uci-results-race-results .name {
 	left: 50%;
 }
 
+/* add races (results) */
+#add-races-to-db .wp-list-table tr:not(.inline-edit-row):not(.no-items) td:not(.check-column) {
+	display: table-cell;
+} 
+
 /* related races meta */
 .uci-results-metabox.related-races .row {
 	overflow: hidden;
