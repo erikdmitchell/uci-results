@@ -1,6 +1,15 @@
 <?php
 ///////// RIDERS
 
+/**
+ * uci_results_get_rider_results function.
+ * 
+ * @access public
+ * @param int $rider_id (default: 0)
+ * @param string $race_ids (default: '')
+ * @param string $seasons (default: '')
+ * @return void
+ */
 function uci_results_get_rider_results($rider_id=0, $race_ids='', $seasons='') {
 	if (!$rider_id)
 		return false;

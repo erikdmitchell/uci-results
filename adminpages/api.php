@@ -13,7 +13,7 @@
 	
 	$rider=$uci_riders->get_rider(array(
 		'rider_id' => 3544, //
-		'results' => true,
+		//'results' => true,
 		'last_result' => true,
 		//'race_ids' => array(8243, 8173),
 		//'results_season' => '20152016',

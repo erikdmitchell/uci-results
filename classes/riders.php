@@ -56,7 +56,7 @@ class UCIRiders {
 
 		// get results //
 		if ($results) :
-			$rider->results=$this->get_rider_results($rider_id, $race_ids, $results_season);
+			$rider->results=uci_results_get_rider_results($rider_id, $race_ids, $results_season);
 			$rider->last_result=$this->rider_last_race_result($rider_id);
 		endif;
 
@@ -131,42 +131,30 @@ class UCIRiders {
 		return $riders;
 	}
 
-	public function get_rider_results($rider_id=0, $race_ids='', $season='') {
-		return uci_results_get_rider_results($rider_id, $race_ids, $season);
-	}
-
-	public function rider_last_race_result($rider_id=0, $season='') {
-		global $wpdb;
-
-		$where="WHERE results.rider_id = $rider_id";
-
-		if (!empty($season))
-			$where = " AND races.season = '$season'";
-
-		$results_sql="
-			SELECT
-				results.race_id,
-				results.place,
-				results.par,
-				races.date,
-				races.event,
-				races.class,
-				races.season,
-				races.code,
-				races.series_id
-			FROM $wpdb->uci_results_results AS results
-			LEFT JOIN $wpdb->uci_results_races AS races	ON results.race_id = races.id
-			$where
-			ORDER BY date DESC
-			LIMIT 1
-		";
-
-		$results=$wpdb->get_results($results_sql);
-
-		if (!count($results))
-			return false;
-
-		return $results[0];
+	/**
+	 * rider_last_race_result function.
+	 * 
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
+	public function rider_last_race_result($rider_id=0) {
+	    // get race ids via meta //
+		$results_args_meta = array(
+			'posts_per_page' => 1,
+			'post_type' => 'races',
+			'orderby' => 'meta_value',
+			'meta_key' => '_race_date',
+			'meta_query' => array(
+			    array(
+			        'key' => '_rider_'.$rider_id,
+			    )
+			),
+			'fields' => 'ids'
+		);
+		$race_ids=get_posts($results_args_meta);
+		
+		return uci_results_get_rider_results($rider_id, $race_ids);
 	}
 
 	public function get_rider_id($name='') {
