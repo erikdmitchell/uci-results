@@ -13,6 +13,14 @@ class UCIRiderStats {
 	public $superprestige_titles=0;
 	public $gva_bpost_bank_titles=0;
 	
+	/**
+	 * __construct function.
+	 * 
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @param string $args (default: '')
+	 * @return void
+	 */
 	public function __construct($rider_id=0, $args='') {
 		if (!$rider_id)
 			return false;

@@ -5,9 +5,7 @@
 	Coming soon
 	
 	<h2>Rider Class Testing</h2>
-	// uci_results_get_rider_results
-	// 3544
-	// wout-van-aert
+
 	<?php
 	global $uci_riders;
 	
@@ -18,7 +16,7 @@
 		//'race_ids' => array(8243, 8173),
 		//'results_season' => '20152016',
 		//'ranking' => true,
-		'stats' => true		
+		//'stats' => true		
 	));
 	?>
 	<pre>
