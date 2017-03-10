@@ -211,6 +211,8 @@ function uci_get_country_dropdown($name='country', $selected='') {
 	return $html;
 }
 
+////////// SEASON
+
 /**
  * uci_get_season_weeks function.
  * 
@@ -239,4 +241,22 @@ function uci_get_season_weeks($season='', $selected='', $name='week') {
 	return $html;	
 }
 
+/**
+ * uci_results_get_season_weeks function.
+ *
+ * @access public
+ * @param string $season (default: '')
+ * @return void
+ */
+function uci_results_get_season_weeks($season='') {
+	global $uci_cross_seasons;	
+	
+	$html=null;
+	$weeks=$uci_cross_seasons->get_season_weeks($season);
+	
+	if (empty($weeks))
+		return;
+		
+	return $weeks;
+}
 ?>

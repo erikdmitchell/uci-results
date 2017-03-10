@@ -645,27 +645,6 @@ function uci_results_get_previous_season() {
 }
 
 /**
- * uci_results_get_season_weeks function.
- *
- * @access public
- * @param string $season (default: '')
- * @return void
- */
-function uci_results_get_season_weeks($season='') {
-	$season_weeks=get_option('uci_results_season_weeks', array());
-
-	// specific season //
-	if (!empty($season)) :
-		foreach ($season_weeks as $key => $value) :
-			if ($value['season']==$season)
-				return $value;
-		endforeach;
-	endif;
-
-	return $season_weeks;
-}
-
-/**
  * uci_results_store_rider_rankings function.
  *
  * @access public
