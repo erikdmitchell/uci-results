@@ -334,17 +334,7 @@ class UCIResultsAdmin {
 	 * @return void
 	 */
 	public function ajax_rider_rankings_dropdown() {
-		global $ucicurl_races;
-
-		$html=null;
-
-		$html.='<option value="0">-- Select Week --</option>';
-
-		foreach ($ucicurl_races->weeks($_POST['season']) as $week) :
-			$html.='<option value="'.$week.'">'.$week.'</option>';
-		endforeach;
-
-		echo $html;
+		echo uci_get_season_weeks($_POST['season']);
 
 		wp_die();
 	}

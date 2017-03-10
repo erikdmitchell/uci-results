@@ -2,12 +2,15 @@
 global $uci_results_query, $rider_rankings_post, $ucicurl_riders, $ucicurl_races;
 
 $search=isset($_GET['search']) ? $_GET['search'] : '';
-$season=isset($_GET['season']) ? $_GET['season'] : '2016/2017';
+$season=isset($_GET['season']) ? $_GET['season'] : '20162017';
 $week=isset($_GET['week']) ? $_GET['week'] : 1;
 $nat=isset($_GET['nat']) ? $_GET['nat'] : '';
 
+// convert season //
+$season_term=get_term_by('slug', $season, 'season');
+
 $riders=new RiderRankingsQuery(array(
-	'season' => $season,
+	'season' => $season_term->name,
 	'week' => $week,
 	'nat' => $nat,
 	'order_by' => 'rank',
@@ -25,7 +28,7 @@ $riders=new RiderRankingsQuery(array(
 
 		<form id="rankings-filter" name="rankings-filter" method="get" action="">
 			<input type="hidden" name="page" value="uci-results">
-			<input type="hidden" name="tab" value="rider-rankings">
+			<input type="hidden" name="subpage" value="rider-rankings">
 
 			<div class="alignleft actions">
 				<?php echo uci_get_race_seasons_dropdown('season', $season); ?>

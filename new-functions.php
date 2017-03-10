@@ -179,7 +179,7 @@ function uci_get_race_seasons_dropdown($name='season', $selected='') {
 	$html.='<select id="'.$name.'" name="'.$name.'" class="'.$name.'">';
 		$html.='<option value="0">-- Select Season --</option>';
 			foreach ($seasons as $season) :
-				$html.='<option value="'.$season->name.'" '.selected($selected, $season->name, false).'>'.$season->name.'</option>';
+				$html.='<option value="'.$season->slug.'" '.selected($selected, $season->slug, false).'>'.$season->name.'</option>';
 			endforeach;
 	$html.='</select>';
 	
@@ -217,10 +217,10 @@ function uci_get_country_dropdown($name='country', $selected='') {
  * @access public
  * @param string $season (default: '')
  * @param string $selected (default: '')
- * @param string $name (default: 'weeks')
+ * @param string $name (default: 'week')
  * @return void
  */
-function uci_get_season_weeks($season='', $selected='', $name='weeks') {
+function uci_get_season_weeks($season='', $selected='', $name='week') {
 	global $uci_cross_seasons;	
 	
 	$html=null;
