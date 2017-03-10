@@ -24,9 +24,9 @@ class UCIRiderStats {
 		$this->world_cup_wins=$this->world_cup_wins($rider_id);
 		$this->superprestige_wins=$this->superprestige_wins($rider_id);
 		$this->gva_bpost_bank_wins=$this->gva_bpost_bank_wins($rider_id);
-		$this->world_cup_titles=$this->world_cup_titles($rider_id);
-		$this->superprestige_titles=$this->superprestige_titles($rider_id);
-		$this->gva_bpost_bank_titles=$this->gva_bpost_bank_titles($rider_id);
+		$this->world_cup_titles=$this->overall_titles($rider_id, 5);
+		$this->superprestige_titles=$this->overall_titles($rider_id, 2);
+		$this->gva_bpost_bank_titles=$this->overall_titles($rider_id, '3, 8, 4');
 	}
 	
 	/**
@@ -129,28 +129,22 @@ class UCIRiderStats {
 		return count($results);
 	}
 
-	public function world_cup_titles($rider_id=0) {
+	/**
+	 * overall_titles function.
+	 * 
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @param string $series_ids (default: '')
+	 * @return void
+	 */
+	public function overall_titles($rider_id=0, $series_ids='') {
 		global $wpdb;
+		
+		$titles=$wpdb->get_var("SELECT COUNT(*) FROM $wpdb->uci_results_series_overall WHERE rider_id = $rider_id AND series_id IN ($series_ids) AND rank = 1");
 
-		$wc_series_id=4;
-		$seasons=$wpdb->get_col("SELECT	DISTINCT season FROM $wpdb->uci_results_series_overall WHERE series_id = $wc_series_id");
-		$seasons_string=implode("','", $seasons);
-		$sql="
-			SELECT
-				rank,
-				points,
-				season
-			FROM $wpdb->uci_results_series_overall
-			WHERE rider_id = $rider_id
-				AND season IN ('$seasons_string')
-				AND series_id = $wc_series_id
-				AND rank = 1
-		";
-
-		$titles=$wpdb->get_results($sql);
-
-		if (!count($titles))
-			return false;
+		if ($titles==null || is_wp_error($titles))
+			$titles=0;
+		
 
 		return $titles;
 	}
@@ -172,32 +166,6 @@ class UCIRiderStats {
 		return count($results);
 	}
 
-	public function superprestige_titles($rider_id=0) {
-		global $wpdb;
-
-		$series_id=1;
-		$seasons=$wpdb->get_col("SELECT	DISTINCT season FROM $wpdb->uci_results_series_overall WHERE series_id = $series_id");
-		$seasons_string=implode("','", $seasons);
-		$sql="
-			SELECT
-				rank,
-				points,
-				season
-			FROM $wpdb->uci_results_series_overall
-			WHERE rider_id = $rider_id
-				AND season IN ('$seasons_string')
-				AND series_id = $series_id
-				AND rank = 1
-		";
-
-		$titles=$wpdb->get_results($sql);
-
-		if (!count($titles))
-			return false;
-
-		return $titles;
-	}
-
 	/**
 	 * gva_bpost_bank_wins function.
 	 * 
@@ -213,32 +181,6 @@ class UCIRiderStats {
 		));
 		
 		return count($results);
-	}
-
-	public function gva_bpost_bank_titles($rider_id=0) {
-		global $wpdb;
-
-		$series_ids='2,3';
-		$seasons=$wpdb->get_col("SELECT	DISTINCT season FROM $wpdb->uci_results_series_overall WHERE series_id IN ($series_ids)");
-		$seasons_string=implode("','", $seasons);
-		$sql="
-			SELECT
-				rank,
-				points,
-				season
-			FROM $wpdb->uci_results_series_overall
-			WHERE rider_id = $rider_id
-				AND season IN ('$seasons_string')
-				AND series_id IN ($series_ids)
-				AND rank = 1
-		";
-
-		$titles=$wpdb->get_results($sql);
-
-		if (!count($titles))
-			return false;
-
-		return $titles;
 	}
 
 }	

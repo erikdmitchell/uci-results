@@ -74,10 +74,6 @@ function uci_results_get_rider_results($args='') {
 			'terms' => $race_series
 		);
 
-echo '<pre>';
-print_r($results_args_meta);
-echo '</pre>';
-
 	$race_ids=get_posts($results_args_meta);
 	
 	foreach ($race_ids as $race_id) :
