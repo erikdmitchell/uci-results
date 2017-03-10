@@ -53,7 +53,7 @@ class UCIRiders {
 		$rider=$wpdb->get_row("SELECT * FROM $wpdb->posts WHERE ID = $rider_id");	
 		$rider->results='';
 		$rider->last_result='';
-		$rider->ranking='';
+		$rider->rank='';
 		$rider->stats='';
 
 		// get results //
