@@ -398,26 +398,6 @@ function uci_results_admin_url($args='') {
 }
 
 /**
- * uci_results_get_rider_rank function.
- *
- * @access public
- * @param int $rider_id (default: 0)
- * @param string $season (default: '')
- * @param string $week (default: '')
- * @return void
- */
-function uci_results_get_rider_rank($rider_id=0, $season='', $week='') {
-	global $wpdb;
-
-	$rank=$wpdb->get_var("SELECT rank FROM $wpdb->uci_results_rider_rankings WHERE rider_id=$rider_id AND season='$season' AND week=$week");
-
-	if (!$rank)
-		$rank=0;
-
-	return $rank;
-}
-
-/**
  * uci_results_get_last_week_in_season function.
  *
  * @access public
@@ -580,38 +560,6 @@ function uci_results_build_search_details($query) {
  */
 function uci_results_current_season() {
 	echo uci_results_get_current_season();
-}
-
-/**
- * uci_results_get_current_season function.
- *
- * @access public
- * @return void
- */
-function uci_results_get_current_season() {
-	return get_option('uci_results_current_season', 0);
-}
-
-/**
- * uci_results_get_previous_season function.
- *
- * @access public
- * @return void
- */
-function uci_results_get_previous_season() {
-	global $fantasy_cycling_settings;
-
-	$current_season=get_option('uci_results_current_season', 0);
-	$current_season_arr=explode('/', $current_season);
-
-	// subtract one from each year //
-	foreach ($current_season_arr as $key => $year) :
-		$current_season_arr[$key]=absint($year)-1;
-	endforeach;
-
-	$prev_season=implode('/', $current_season_arr);
-
-	return $prev_season;
 }
 
 /**

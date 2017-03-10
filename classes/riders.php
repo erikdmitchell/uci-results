@@ -48,11 +48,6 @@ class UCIRiders {
 		$rider->last_result='';
 		$rider->ranking='';
 		$rider->stats='';
-		
-		
-		//$race_ids_sql='';
-		//$race_ids='';
-		
 
 		// get results //
 		if ($results) :
@@ -66,11 +61,11 @@ class UCIRiders {
 
 		// get ranking //
 		if ($ranking)
-			$rider->rank=$this->get_rider_rank($rider_id);
+			$rider->rank=$this->get_rider_rank($rider_id); //
 
 		// get stats //
 		if ($stats)
-			$rider->stats=$this->get_stats($rider_id);
+			$rider->stats=$this->get_stats($rider_id); //
 
 		$rider->twitter=$this->get_twitter($rider_id);
 
@@ -165,6 +160,13 @@ class UCIRiders {
 		return $id;
 	}
 
+	/**
+	 * get_rider_rank function.
+	 * 
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
 	public function get_rider_rank($rider_id=0) {
 		global $wpdb;
 
@@ -173,15 +175,15 @@ class UCIRiders {
 
 		$current_season=uci_results_get_current_season();
 		$prev_season=uci_results_get_previous_season();
-		$current_season_rank=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_rider_rankings WHERE season='$current_season' AND rider_id=$rider_id ORDER BY week DESC LIMIT 1");
+		$current_season_rank=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_rider_rankings WHERE season='$current_season->name' AND rider_id=$rider_id ORDER BY week DESC LIMIT 1");
 
 		// check for current rank, else get prev season //
 		if (null!==$current_season_rank) :
-			$season=$current_season;
+			$season=$current_season->name;
 			$rank=$current_season_rank;
 		else :
-			$season=$prev_season;
-			$rank=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_rider_rankings WHERE season='$prev_season' AND rider_id=$rider_id ORDER BY week DESC LIMIT 1");
+			$season=$prev_season->name;
+			$rank=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_rider_rankings WHERE season='$prev_season->name' AND rider_id=$rider_id ORDER BY week DESC LIMIT 1");
 		endif;
 
 		if (empty($rank))
@@ -194,15 +196,15 @@ class UCIRiders {
 
 		// set icon based on change //
 		if ($prev_week_rank === NULL) :
-			$rank->prev_icon='';
+			$rank->status='';
 		elseif ($prev_week_rank==$rank->rank) :
-			$rank->prev_icon='';
+			$rank->status='same';
 		elseif ($prev_week_rank < $rank->rank) :
-			$rank->prev_icon='<i class="fa fa-arrow-down" aria-hidden="true"></i>';
+			$rank->status='down';
 		elseif ($prev_week_rank > $rank->rank) :
-			$rank->prev_icon='<i class="fa fa-arrow-up" aria-hidden="true"></i>';
+			$rank->status='up';
 		else :
-			$rank->prev_icon='';
+			$rank->status='';
 		endif;
 
 		// get actual rank amount //
@@ -248,6 +250,13 @@ class UCIRiders {
 		return $stats;
 	}
 
+	/**
+	 * get_rider_final_rankings function.
+	 * 
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
 	public function get_rider_final_rankings($rider_id=0) {
 		global $wpdb;
 
@@ -255,7 +264,7 @@ class UCIRiders {
 			return false;
 
 		$current_season=uci_results_get_current_season();
-		$rankings=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_rider_rankings WHERE rider_id=$rider_id AND week=(SELECT MAX(week) FROM $wpdb->uci_results_rider_rankings) AND season!='$current_season' GROUP BY season");
+		$rankings=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_rider_rankings WHERE rider_id=$rider_id AND week=(SELECT MAX(week) FROM $wpdb->uci_results_rider_rankings) AND season!='$current_season->name' GROUP BY season");
 
 		if (!count($rankings))
 			return false;
@@ -453,12 +462,15 @@ class UCIRiders {
 		return $titles;
 	}
 
+	/**
+	 * get_twitter function.
+	 * 
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
 	public function get_twitter($rider_id=0) {
-		global $wpdb;
-
-		$twitter=$wpdb->get_var("SELECT twitter FROM $wpdb->uci_results_riders WHERE id = $rider_id");
-
-		return $twitter;
+		return get_post_meta($rider_id, '_rider_twitter', true);
 	}
 
 }
