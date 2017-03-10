@@ -88,13 +88,12 @@ function uci_results_cron_job_email($subject='', $message='') {
  * @return void
  */
 function uci_results_update_rider_weekly_points() {
-	global $wpdb, $ucicurl_races, $uci_results_rider_rankings;
+	global $wpdb, $uci_results_rider_rankings;
 
 	$season=uci_results_get_current_season();
 
 	// update rider rankings //
 	$rider_ids=$wpdb->get_col("SELECT id FROM $wpdb->uci_results_riders"); // get all rider ids
-	$weeks=$ucicurl_races->weeks($season);
 	$uci_results_rider_rankings->clear_db($season); // clear db for season to prevent dups
 
 	// update rider weekly points //
