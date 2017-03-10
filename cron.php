@@ -119,14 +119,14 @@ function uci_results_update_rider_weekly_points() {
  * @return void
  */
 function uci_results_update_rider_weekly_rank() {
-	global $ucicurl_races, $uci_results_rider_rankings;
+	global $uci_results_rider_rankings;
 
 	$season=uci_results_get_current_season();
-	$weeks=$ucicurl_races->weeks($season);
+	$weeks=uci_results_get_season_weeks($season);
 
 	// update rider weekly rank //
 	foreach ($weeks as $week) :
-		$result=$uci_results_rider_rankings->update_rider_weekly_rankings($season, $week);
+		$result=$uci_results_rider_rankings->update_rider_weekly_rankings($season, $week->week);
 		write_cron_log(strip_tags($result));
 	endforeach;
 
