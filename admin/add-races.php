@@ -569,7 +569,8 @@ class UCIResultsAddRaces {
 			'code' => $this->build_race_code($race_data),
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
 		);
-
+print_r($data);
+/*
 		if (!$this->check_for_dups($data['code'])) :		
 			if ($race_id=$this->insert_race_into_db($data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
@@ -601,6 +602,7 @@ class UCIResultsAddRaces {
 			return array('message' => $message, 'new_result' => $new_results);
 
 		return $message;
+*/
 	}
 
 	/**
@@ -661,12 +663,12 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function get_race_week($date='', $season='') {
-		$season_data=uci_results_get_season_weeks($season);
+		$season_weeks=uci_results_get_season_weeks($season);
 
-		if (!isset($season_data['weeks']) || empty($season_data['weeks']))
+		if (empty($season_weeks))
 			return 0;
 
-		return $this->get_week_of_date($date, $season_data['weeks']);
+		return $this->get_week_of_date($date, $season_weeks);
 	}
 
 	/**
@@ -674,24 +676,25 @@ class UCIResultsAddRaces {
 	 *
 	 * @access public
 	 * @param string $date (default: '')
-	 * @param array $weeks (default: array())
+	 * @param array $weeks (default:'')
 	 * @return void
 	 */
-	public function get_week_of_date($date='', $weeks=array()) {
-		$week_counter=1;
-
-		foreach ($weeks as $week) :
-			$week_start=strtotime($week['start']);
-			$week_end=strtotime($week['end']);
+	public function get_week_of_date($date='', $weeks='') {
+		if (empty($weeks))
+			return;
+			
+		// cycle through weeks and if date falls in there, return the week //
+		foreach ($weeks as $week) :		
+			$week_start=strtotime($week->start);
+			$week_end=strtotime($week->end);
 			$date_raw=strtotime($date);
 
 			if ($date_raw>=$week_start && $date_raw<=$week_end)
-				break;
-
-			$week_counter++;
+				return $week->week;
+				
 		endforeach;
 
-		return $week_counter;
+		return 0;
 	}
 
 	/**
