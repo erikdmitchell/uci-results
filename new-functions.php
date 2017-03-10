@@ -1,6 +1,13 @@
 <?php
 ///////// RIDERS
-	
+
+/**
+ * uci_results_get_rider_results function.
+ * 
+ * @access public
+ * @param int $rider_id (default: 0)
+ * @return void
+ */
 function uci_results_get_rider_results($rider_id=0) {
 	if (!$rider_id)
 		return false;
@@ -173,6 +180,31 @@ function uci_get_race_seasons_dropdown($name='season', $selected='') {
 		$html.='<option value="0">-- Select Season --</option>';
 			foreach ($seasons as $season) :
 				$html.='<option value="'.$season->slug.'" '.selected($selected, $season->slug, false).'>'.$season->name.'</option>';
+			endforeach;
+	$html.='</select>';
+	
+	return $html;
+}
+
+/**
+ * uci_get_country_dropdown function.
+ * 
+ * @access public
+ * @param string $name (default: 'country')
+ * @param string $selected (default: '')
+ * @return void
+ */
+function uci_get_country_dropdown($name='country', $selected='') {
+	$html=null;
+	$countries=get_terms( array(
+	    'taxonomy' => 'country',
+		'hide_empty' => false,
+	));
+
+	$html.='<select id="'.$name.'" name="'.$name.'" class="'.$name.'">';
+		$html.='<option value="0">-- Select Country --</option>';
+			foreach ($countries as $country) :
+				$html.='<option value="'.$country->slug.'" '.selected($selected, $country->slug, false).'>'.$country->name.'</option>';
 			endforeach;
 	$html.='</select>';
 	

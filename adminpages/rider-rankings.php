@@ -36,12 +36,7 @@ $riders=new RiderRankingsQuery(array(
 			</div>
 
 			<div class="alignleft actions">
-				<select name="nat" class="nat">
-					<option value="0">-- Select Country --</option>
-					<?php foreach ($ucicurl_races->nats() as $country) : ?>
-						<option value="<?php echo $country; ?>" <?php selected($_nat, $country); ?>><?php echo $country; ?></option>
-					<?php endforeach; ?>
-				</select>
+				<?php echo uci_get_country_dropdown('nat', $nat); ?>
 			</div>
 
 			<input type="submit" id="doaction" class="button action" value="Apply">
