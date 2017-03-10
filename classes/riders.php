@@ -19,6 +19,13 @@ class UCIRiders {
 		
 	}
 
+	/**
+	 * get_rider function.
+	 * 
+	 * @access public
+	 * @param string $args (default: '')
+	 * @return void
+	 */
 	public function get_rider($args='') {
 		global $wpdb;
 
@@ -76,6 +83,13 @@ class UCIRiders {
 		return $rider;
 	}
 
+	/**
+	 * get_riders function.
+	 * 
+	 * @access public
+	 * @param string $args (default: '')
+	 * @return void
+	 */
 	public function get_riders($args='') {
 		global $wpdb;
 
@@ -83,9 +97,10 @@ class UCIRiders {
 			'rider_ids' => '',
 			'results' => false,
 			'last_result' => false,
+			'race_ids' => '',
 			'results_season' => '',
 			'ranking' => false,
-			'stats' => false,
+			'stats' => false
 		);
 		$args=wp_parse_args($args, $default_args);
 		$riders=array();
@@ -93,42 +108,19 @@ class UCIRiders {
 		extract($args);
 
 		// setup rider ids //
-		if (!empty($rider_ids)) :
-			if (is_array($rider_ids))
-				$rider_ids=implode(',', $rider_ids);
-		endif;
-
-		// build our sql query //
-		$rider_ids=$wpdb->get_col("SELECT id FROM $wpdb->uci_results_riders WHERE id IN($rider_ids)");
+		if (!is_array($rider_ids) && !empty($rider_ids))
+			$rider_ids=explode(',', $rider_ids);
 
 		foreach ($rider_ids as $rider_id) :
-			$rider=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_riders WHERE id=$rider_id");
-			$rider->results='';
-			$rider->last_result='';
-			$rider->ranking='';
-			$rider->stats='';
-
-			// get results //
-			if ($results)
-				$rider->results=uci_results_get_rider_results(array(
-					'rider_id' => $rider_id, 
-					'race_ids' => $race_ids, 
-					'season' => $results_season
-				));
-
-			// last result //
-			if (!$results && $last_result)
-				$rider->last_result=$this->rider_last_race_result($rider_id);
-
-			// get ranking //
-			if ($ranking)
-				$rider->rank=$this->get_rider_rank($rider_id);
-
-			// get stats //
-			if ($stats)
-				$rider->stats=new UCIRiderStats($rider_id);
-
-			$riders[]=$rider;
+			$riders[]=$this->get_rider(array(
+				'rider_id' => $rider_id,
+				'results' => $results,
+				'last_result' => $last_result,
+				'race_ids' => $race_ids,
+				'results_season' => $results_season,
+				'ranking' => $ranking,
+				'stats' => $stats
+			));
 		endforeach;
 
 		return $riders;
@@ -158,14 +150,6 @@ class UCIRiders {
 		$race_ids=get_posts($results_args_meta);
 		
 		return uci_results_get_rider_results($rider_id, $race_ids);
-	}
-
-	public function get_rider_id($name='') {
-		global $wpdb;
-
-		$id=$wpdb->get_var("SELECT id FROM $wpdb->uci_results_riders WHERE name='{$name}'");
-
-		return $id;
 	}
 
 	/**
@@ -224,6 +208,13 @@ class UCIRiders {
 		return $rank;
 	}
 
+	/**
+	 * blank_rank function.
+	 * 
+	 * @access protected
+	 * @param string $season (default: '')
+	 * @return void
+	 */
 	protected function blank_rank($season='') {
 		$rank=new stdClass();
 
@@ -232,7 +223,7 @@ class UCIRiders {
 		$rank->season=$season;
 		$rank->rank=0;
 		$rank->week=0;
-		$rank->prev_icon='';
+		$rank->status='';
 
 		return $rank;
 	}
