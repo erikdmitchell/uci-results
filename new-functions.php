@@ -8,10 +8,10 @@
  * @param int $rider_id (default: 0)
  * @param string $race_ids (default: '')
  * @param string $seasons (default: '')
- * @param string $place (default: '')
+ * @param string $places (default: '')
  * @return void
  */
-function uci_results_get_rider_results($rider_id=0, $race_ids='', $seasons='', $place='') {
+function uci_results_get_rider_results($rider_id=0, $race_ids='', $seasons='', $places='') {
 	if (!$rider_id)
 		return false;
 		
@@ -22,6 +22,9 @@ function uci_results_get_rider_results($rider_id=0, $race_ids='', $seasons='', $
 
 	if (!is_array($seasons) && !empty($seasons))
 		$seasons=explode(',', $seasons);
+
+	if (!is_array($places) && !empty($places))
+		$places=explode(',', $places);
 		
     // get race ids via meta //
 	$results_args_meta = array(
@@ -56,8 +59,8 @@ function uci_results_get_rider_results($rider_id=0, $race_ids='', $seasons='', $
 		$result['race_id']=$race_id;
 		$result['race_name']=get_the_title($race_id);
 		
-		if (!empty($place)) :
-			if ($result['place']==$place) :	
+		if (!empty($places)) :
+			if (in_array($result['place'], $places)) :
 				$results[]=$result;			
 			endif;
 		else :

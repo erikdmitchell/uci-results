@@ -4,6 +4,7 @@ class UCIRiderStats {
 	
 	public $final_rankings;
 	public $wins;
+	public $podiums;
 	
 	public function __construct($rider_id=0, $args='') {
 		if (!$rider_id)
@@ -11,7 +12,7 @@ class UCIRiderStats {
 			
 		$this->final_rankings=$this->final_rankings($rider_id);
 		$this->wins=$this->wins($rider_id);
-		//$stats->podiums=$this->get_rider_podiums($rider_id);
+		$this->podiums=$this->podiums($rider_id);
 		//$stats->world_champs=$this->world_championships($rider_id);
 		//$stats->world_cup_wins=$this->world_cup_wins($rider_id);
 		//$stats->superprestige_wins=$this->superprestige_wins($rider_id);
@@ -21,6 +22,13 @@ class UCIRiderStats {
 		//$stats->gva_bpost_bank_titles=$this->gva_bpost_bank_titles($rider_id);
 	}
 	
+	/**
+	 * final_rankings function.
+	 * 
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
 	public function final_rankings($rider_id=0) {
 		global $wpdb;
 		global $uci_cross_seasons;
@@ -48,8 +56,23 @@ class UCIRiderStats {
 		return $rankings;
 	}	
 	
+	/**
+	 * wins function.
+	 * 
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
 	public function wins($rider_id=0) {
-		uci_results_get_rider_results($rider_id, '', '', 1);
+		$results=uci_results_get_rider_results($rider_id, '', '', 1);
+		
+		return count($results);
+	}
+	
+	public function podiums($rider_id=0) {
+		$results=uci_results_get_rider_results($rider_id, '', '', '1, 2, 3');
+		
+		return count($results);
 	}
 		
 }	

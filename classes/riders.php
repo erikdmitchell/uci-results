@@ -231,19 +231,7 @@ class UCIRiders {
 
 
 
-	public function get_rider_podiums($rider_id=0) {
-		global $wpdb;
 
-		if (!$rider_id)
-			return false;
-
-		$podiums=$wpdb->get_results("SELECT * FROM $wpdb->uci_results_results WHERE rider_id=$rider_id AND (place=1 OR place=2 OR place=3) ORDER BY race_id");
-
-		if (!count($podiums))
-			return false;
-
-		return $podiums;
-	}
 
 	public function world_championships($rider_id=0) {
 		global $wpdb;
