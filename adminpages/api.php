@@ -17,7 +17,7 @@
 		//'last_result' => true,
 		//'race_ids' => array(8243, 8173),
 		//'results_season' => '20152016',
-		'ranking' => true,
+		//'ranking' => true,
 		'stats' => true		
 	));
 	?>

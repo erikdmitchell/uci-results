@@ -61,7 +61,7 @@ class UCIRiders {
 
 		// get ranking //
 		if ($ranking)
-			$rider->rank=$this->get_rider_rank($rider_id); //
+			$rider->rank=$this->get_rider_rank($rider_id);
 
 		// get stats //
 		if ($stats)
@@ -118,7 +118,7 @@ class UCIRiders {
 
 			// get stats //
 			if ($stats)
-				$rider->stats=$this->get_stats($rider_id);
+				$rider->stats=$this->new UCIRiderStats($rider_id);
 
 			$riders[]=$rider;
 		endforeach;
@@ -227,27 +227,6 @@ class UCIRiders {
 		$rank->prev_icon='';
 
 		return $rank;
-	}
-
-	public function get_stats($rider_id=0) {
-		global $wpdb;
-
-		if (!$rider_id)
-			return false;
-
-		$stats=new stdClass();
-		$stats->final_rankings=$this->get_rider_final_rankings($rider_id);
-		$stats->wins=$this->get_rider_wins($rider_id);
-		$stats->podiums=$this->get_rider_podiums($rider_id);
-		$stats->world_champs=$this->world_championships($rider_id);
-		$stats->world_cup_wins=$this->world_cup_wins($rider_id);
-		$stats->superprestige_wins=$this->superprestige_wins($rider_id);
-		$stats->gva_bpost_bank_wins=$this->gva_bpost_bank_wins($rider_id);
-		$stats->world_cup_titles=$this->world_cup_titles($rider_id);
-		$stats->superprestige_titles=$this->superprestige_titles($rider_id);
-		$stats->gva_bpost_bank_titles=$this->gva_bpost_bank_titles($rider_id);
-
-		return $stats;
 	}
 
 	/**
