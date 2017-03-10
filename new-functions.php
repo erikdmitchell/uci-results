@@ -8,9 +8,10 @@
  * @param int $rider_id (default: 0)
  * @param string $race_ids (default: '')
  * @param string $seasons (default: '')
+ * @param string $place (default: '')
  * @return void
  */
-function uci_results_get_rider_results($rider_id=0, $race_ids='', $seasons='') {
+function uci_results_get_rider_results($rider_id=0, $race_ids='', $seasons='', $place='') {
 	if (!$rider_id)
 		return false;
 		
@@ -55,7 +56,13 @@ function uci_results_get_rider_results($rider_id=0, $race_ids='', $seasons='') {
 		$result['race_id']=$race_id;
 		$result['race_name']=get_the_title($race_id);
 		
-		$results[]=$result;
+		if (!empty($place)) :
+			if ($result['place']==$place) :	
+				$results[]=$result;			
+			endif;
+		else :
+			$results[]=$result;
+		endif;
 	endforeach;
 
 	return $results;
