@@ -8,6 +8,7 @@ function uci_results_get_rider_results($args='') {
 		'seasons' => '', 
 		'places' => '',
 		'race_classes' => '',
+		'race_series' => '',
 	);
 	$args=wp_parse_args($args, $default_args);
 	
@@ -29,6 +30,9 @@ function uci_results_get_rider_results($args='') {
 
 	if (!is_array($race_classes) && !empty($race_classes))
 		$race_classes=explode(',', $race_classes);
+
+	if (!is_array($race_series) && !empty($race_series))
+		$race_series=explode(',', $race_series);
 		
     // get race ids via meta //
 	$results_args_meta = array(
@@ -61,9 +65,19 @@ function uci_results_get_rider_results($args='') {
 			'field' => 'slug',
 			'terms' => $race_classes
 		);
+
+	// check specific race_series //
+	if (!empty($race_series))
+		$results_args_meta['tax_query'][]=array(
+			'taxonomy' => 'series',
+			'field' => 'slug',
+			'terms' => $race_series
+		);
+
 echo '<pre>';
 print_r($results_args_meta);
-echo '</pre>';	
+echo '</pre>';
+
 	$race_ids=get_posts($results_args_meta);
 	
 	foreach ($race_ids as $race_id) :
