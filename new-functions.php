@@ -259,4 +259,22 @@ function uci_results_get_season_weeks($season='') {
 		
 	return $weeks;
 }
+
+/**
+ * uci_results_get_default_rider_ranking_week function.
+ *
+ * @access public
+ * @return void
+ */
+function uci_results_get_default_rider_ranking_week() {
+	global $uci_cross_seasons;	
+	
+	$html=null;
+	$weeks=$uci_cross_seasons->get_last_season_week($season);
+	
+	if (empty($weeks))
+		return;
+		
+	return $weeks;
+}
 ?>

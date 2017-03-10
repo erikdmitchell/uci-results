@@ -350,21 +350,6 @@ function uci_results_get_default_rider_ranking_season() {
 }
 
 /**
- * uci_results_get_default_rider_ranking_week function.
- *
- * @access public
- * @return void
- */
-function uci_results_get_default_rider_ranking_week() {
-	global $wpdb;
-
-	$season=uci_results_get_default_rider_ranking_season(); // get latest season
-	$week=$wpdb->get_var("SELECT MAX(week) FROM $wpdb->uci_results_rider_rankings WHERE season='$season'");
-
-	return $week;
-}
-
-/**
  * uci_results_seasons_dropdown function.
  *
  * @access public

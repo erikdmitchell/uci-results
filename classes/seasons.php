@@ -214,6 +214,25 @@ class CrossSeasons {
 		
 		return $weeks;
 	}
+	
+	/**
+	 * get_last_season_week function.
+	 * 
+	 * @access public
+	 * @param string $season (default: '')
+	 * @return void
+	 */
+	public function get_last_season_week($season='') {
+		global $wpdb;
+		
+		if (empty($season))
+			return;
+		
+		$term=get_term_by('slug', $season, 'season');
+		$week=$wpdb->get_var("SELECT MAX(week) FROM $wpdb->uci_results_season_weeks WHERE term_id = $term->term_id");
+		
+		return $week;		
+	}
 /*
 	public function get_weeks($season=false) {
 		if (!$season)
