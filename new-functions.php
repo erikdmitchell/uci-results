@@ -1,18 +1,17 @@
 <?php
 ///////// RIDERS
 
-/**
- * uci_results_get_rider_results function.
- * 
- * @access public
- * @param int $rider_id (default: 0)
- * @return void
- */
-function uci_results_get_rider_results($rider_id=0) {
+function uci_results_get_rider_results($rider_id=0, $race_ids='', $seasons='') {
 	if (!$rider_id)
 		return false;
 		
 	$results=array();
+	
+	if (!is_array($race_ids) && !empty($race_ids))
+		$race_ids=explode(',', $race_ids);
+
+	if (!is_array($seasons) && !empty($seasons))
+		$seasons=explode(',', $seasons);
 		
     // get race ids via meta //
 	$results_args_meta = array(
@@ -25,6 +24,21 @@ function uci_results_get_rider_results($rider_id=0) {
 		),
 		'fields' => 'ids'
 	);
+	
+	// check specific race ids //
+	if (!empty($race_ids))
+		$results_args_meta['post__in']=$race_ids;
+
+	// check specific seasons //
+	if (!empty($seasons))
+		$results_args_meta['tax_query']=array(
+			array(
+				'taxonomy' => 'season',
+				'field' => 'slug',
+				'terms' => $seasons
+			)
+		);
+	
 	$race_ids=get_posts($results_args_meta);
 	
 	foreach ($race_ids as $race_id) :
@@ -36,6 +50,14 @@ function uci_results_get_rider_results($rider_id=0) {
 	endforeach;
 
 	return $results;
+}
+
+function uci_get_rider_id($slug='') {
+	global $wpdb;
+
+	$id=$wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE post_name = '$slug'");
+
+	return $id;
 }
 
 ///////// RACES

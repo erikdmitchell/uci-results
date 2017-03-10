@@ -16,16 +16,9 @@ class UCIRiders {
 	 * @return void
 	 */
 	public function __construct() {
-		add_action('admin_init', array($this, 'update_rider'));
+		
 	}
 
-	/**
-	 * get_rider function.
-	 *
-	 * @access public
-	 * @param string $args (default: '')
-	 * @return void
-	 */
 	public function get_rider($args='') {
 		global $wpdb;
 
@@ -44,19 +37,22 @@ class UCIRiders {
 
 		// if not an int, it's a slug //
 		if (!is_numeric($rider_id))
-			$rider_id=uci_results_get_rider_id($rider_id);
+			$rider_id=uci_get_rider_id($rider_id);
 
 		// last rider id check //
 		if (!$rider_id)
 			return false;
-
-		$race_ids_sql='';
-		$race_ids='';
-		$rider=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_riders WHERE id=$rider_id");
+			
+		$rider=$wpdb->get_row("SELECT * FROM $wpdb->posts WHERE ID = $rider_id");	
 		$rider->results='';
 		$rider->last_result='';
 		$rider->ranking='';
 		$rider->stats='';
+		
+		
+		//$race_ids_sql='';
+		//$race_ids='';
+		
 
 		// get results //
 		if ($results) :
@@ -81,13 +77,6 @@ class UCIRiders {
 		return $rider;
 	}
 
-	/**
-	 * get_riders function.
-	 *
-	 * @access public
-	 * @param string $args (default: '')
-	 * @return void
-	 */
 	public function get_riders($args='') {
 		global $wpdb;
 
@@ -142,80 +131,10 @@ class UCIRiders {
 		return $riders;
 	}
 
-	/**
-	 * get_rider_results function.
-	 *
-	 * @access public
-	 * @param int $rider_id (default: 0)
-	 * @param string $race_ids (default: '')
-	 * @param string $season (default: '')
-	 * @return void
-	 */
 	public function get_rider_results($rider_id=0, $race_ids='', $season='') {
-		global $wpdb;
-
-		// set vars //
-		$where=array();
-
-		// check race ids //
-		if (is_array($race_ids))
-			$race_ids=implode(',', $race_ids);
-
-		// set rider id //
-		$where[]="results.rider_id = $rider_id";
-
-		// we have specific ids //
-		if (!empty($race_ids))
-			$where[]="results.race_id IN ($race_ids)";
-
-		// results season //
-		if (!empty($season)) :
-
-			// check we have string for rs //
-			if (is_array($season))
-				$season=implode("','", $season);
-
-			$where[]="races.season IN ('$season')";
-		endif;
-
-		// build our where query //
-		if (!empty($where)) :
-			$where='WHERE '.implode(' AND ',$where);
-		else :
-			$where='';
-		endif;
-
-		$results_sql="
-			SELECT
-				results.race_id,
-				results.place,
-				results.par,
-				races.date,
-				races.event,
-				races.class,
-				races.season,
-				races.code,
-				races.series_id,
-				races.nat
-			FROM $wpdb->uci_results_results AS results
-			LEFT JOIN $wpdb->uci_results_races AS races	ON results.race_id = races.id
-			$where
-			ORDER BY date DESC
-		";
-
-		$results=$wpdb->get_results($results_sql);
-
-		return $results;
+		return uci_results_get_rider_results($rider_id, $race_ids, $season);
 	}
 
-	/**
-	 * rider_last_race_result function.
-	 *
-	 * @access public
-	 * @param int $rider_id (default: 0)
-	 * @param string $season (default: '')
-	 * @return void
-	 */
 	public function rider_last_race_result($rider_id=0, $season='') {
 		global $wpdb;
 
@@ -250,13 +169,6 @@ class UCIRiders {
 		return $results[0];
 	}
 
-	/**
-	 * get_rider_id function.
-	 *
-	 * @access public
-	 * @param string $name (default: '')
-	 * @return void
-	 */
 	public function get_rider_id($name='') {
 		global $wpdb;
 
@@ -265,13 +177,6 @@ class UCIRiders {
 		return $id;
 	}
 
-	/**
-	 * get_rider_rank function.
-	 *
-	 * @access public
-	 * @param int $rider_id (default: 0)
-	 * @return void
-	 */
 	public function get_rider_rank($rider_id=0) {
 		global $wpdb;
 
@@ -321,13 +226,6 @@ class UCIRiders {
 		return $rank;
 	}
 
-	/**
-	 * blank_rank function.
-	 *
-	 * @access protected
-	 * @param string $season (default: '')
-	 * @return void
-	 */
 	protected function blank_rank($season='') {
 		$rank=new stdClass();
 
@@ -341,13 +239,6 @@ class UCIRiders {
 		return $rank;
 	}
 
-	/**
-	 * get_stats function.
-	 *
-	 * @access public
-	 * @param int $rider_id (default: 0)
-	 * @return void
-	 */
 	public function get_stats($rider_id=0) {
 		global $wpdb;
 
@@ -369,13 +260,6 @@ class UCIRiders {
 		return $stats;
 	}
 
-	/**
-	 * get_rider_final_rankings function.
-	 *
-	 * @access public
-	 * @param int $rider_id (default: 0)
-	 * @return void
-	 */
 	public function get_rider_final_rankings($rider_id=0) {
 		global $wpdb;
 
@@ -391,13 +275,6 @@ class UCIRiders {
 		return $rankings;
 	}
 
-	/**
-	 * get_rider_wins function.
-	 *
-	 * @access public
-	 * @param int $rider_id (default: 0)
-	 * @return void
-	 */
 	public function get_rider_wins($rider_id=0) {
 		global $wpdb;
 
@@ -412,13 +289,6 @@ class UCIRiders {
 		return $wins;
 	}
 
-	/**
-	 * get_rider_podiums function.
-	 *
-	 * @access public
-	 * @param int $rider_id (default: 0)
-	 * @return void
-	 */
 	public function get_rider_podiums($rider_id=0) {
 		global $wpdb;
 
@@ -433,13 +303,6 @@ class UCIRiders {
 		return $podiums;
 	}
 
-	/**
-	 * world_championships function.
-	 *
-	 * @access public
-	 * @param int $rider_id (default: 0)
-	 * @return void
-	 */
 	public function world_championships($rider_id=0) {
 		global $wpdb;
 
@@ -461,13 +324,6 @@ class UCIRiders {
 		return $wc;
 	}
 
-	/**
-	 * world_cup_wins function.
-	 *
-	 * @access public
-	 * @param int $rider_id (default: 0)
-	 * @return void
-	 */
 	public function world_cup_wins($rider_id=0) {
 		global $wpdb;
 
@@ -489,13 +345,6 @@ class UCIRiders {
 		return $wc;
 	}
 
-	/**
-	 * world_cup_titles function.
-	 *
-	 * @access public
-	 * @param int $rider_id (default: 0)
-	 * @return void
-	 */
 	public function world_cup_titles($rider_id=0) {
 		global $wpdb;
 
@@ -522,13 +371,6 @@ class UCIRiders {
 		return $titles;
 	}
 
-	/**
-	 * superprestige_wins function.
-	 *
-	 * @access public
-	 * @param int $rider_id (default: 0)
-	 * @return void
-	 */
 	public function superprestige_wins($rider_id=0) {
 		global $wpdb;
 
@@ -550,13 +392,6 @@ class UCIRiders {
 		return $wins;
 	}
 
-	/**
-	 * superprestige_titles function.
-	 *
-	 * @access public
-	 * @param int $rider_id (default: 0)
-	 * @return void
-	 */
 	public function superprestige_titles($rider_id=0) {
 		global $wpdb;
 
@@ -583,13 +418,6 @@ class UCIRiders {
 		return $titles;
 	}
 
-	/**
-	 * gva_bpost_bank_wins function.
-	 *
-	 * @access public
-	 * @param int $rider_id (default: 0)
-	 * @return void
-	 */
 	public function gva_bpost_bank_wins($rider_id=0) {
 		global $wpdb;
 
@@ -611,13 +439,6 @@ class UCIRiders {
 		return $wins;
 	}
 
-	/**
-	 * gva_bpost_bank_titles function.
-	 *
-	 * @access public
-	 * @param int $rider_id (default: 0)
-	 * @return void
-	 */
 	public function gva_bpost_bank_titles($rider_id=0) {
 		global $wpdb;
 
@@ -644,13 +465,6 @@ class UCIRiders {
 		return $titles;
 	}
 
-	/**
-	 * get_twitter function.
-	 *
-	 * @access public
-	 * @param int $rider_id (default: 0)
-	 * @return void
-	 */
 	public function get_twitter($rider_id=0) {
 		global $wpdb;
 

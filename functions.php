@@ -298,21 +298,6 @@ function ucicurl_race_slug_to_name($slug='') {
 }
 
 /**
- * uci_results_get_rider_id function.
- *
- * @access public
- * @param string $slug (default: '')
- * @return void
- */
-function uci_results_get_rider_id($slug='') {
-	global $wpdb;
-
-	$id=$wpdb->get_var("SELECT id FROM {$wpdb->uci_results_riders} WHERE slug='{$slug}'");
-
-	return $id;
-}
-
-/**
  * uci_results_race_has_results function.
  *
  * @access public
