@@ -137,6 +137,41 @@ function uci_get_rider_id($slug='') {
 ///////// RACES
 
 /**
+ * uci_get_races function.
+ * 
+ * @access public
+ * @param string $args (default: '')
+ * @return void
+ */
+function uci_get_races($args='') {
+	$default_args=array(
+		'per_page' => -1,
+		'orderby' => 'meta_value',
+		'meta_key' => '_race_date',
+		'order' => 'DESC',
+		'results' => false,
+	);
+	$args=wp_parse_args($args, $default_args);
+	
+	extract($args);
+
+	$races=get_posts(array(
+		'posts_per_page' => $per_page,
+		'post_type' => 'races',
+		'orderby' => $orderby,
+		'meta_key' => $meta_key,
+		'order' => $order,
+	));
+
+	foreach ($races as $race) :
+		if ($results)
+			$race->results=uci_results_get_race_results($race->ID);
+	endforeach;
+	
+	return $races;
+}
+
+/**
  * uci_results_get_race_results function.
  * 
  * @access public
