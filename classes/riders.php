@@ -36,7 +36,7 @@ class UCIRiders {
 			'race_ids' => '',
 			'results_season' => '',
 			'ranking' => false,
-			'stats' => false
+			'stats' => false,
 		);
 		$args=wp_parse_args($args, $default_args);
 
@@ -110,24 +110,42 @@ class UCIRiders {
 			'race_ids' => '',
 			'results_season' => '',
 			'ranking' => false,
-			'stats' => false
+			'stats' => false,
+			'nat' => '',
+			'orderby' => 'title',
+			'order' => 'ASC'
 		);
 		$args=wp_parse_args($args, $default_args);
 		$riders=array();
 
 		extract($args);
 
+		
+
 		// setup rider ids //
 		if (!is_array($rider_ids) && !empty($rider_ids)) :
 			$rider_ids=explode(',', $rider_ids);
 		else :
-			$rider_ids=get_posts(array(
+			$riders_args=array(
 				'posts_per_page' => $per_page,
 				'post_type' => 'riders',
+				'orderby' => $orderby,
+				'order' => $order,
 				'fields' => 'ids'
-			));
-		endif;
+			);
 		
+			// check specific nat //
+			if (!empty($nat)) :
+				$riders_args['tax_query'][]=array(
+					'taxonomy' => 'country',
+					'field' => 'slug',
+					'terms' => $nat
+				);
+			endif;
+			
+			$rider_ids=get_posts($riders_args);
+		endif;
+	
 		if (empty($rider_ids))
 			return;
 

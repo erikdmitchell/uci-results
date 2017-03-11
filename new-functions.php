@@ -19,7 +19,8 @@ function uci_get_riders($args='') {
 		'race_ids' => '',
 		'results_season' => '',
 		'ranking' => false,
-		'stats' => false
+		'stats' => false,
+		'nat' => '',
 	);
 	$args=wp_parse_args($args, $default_args);	
 	$riders=$uci_riders->get_riders($args);
@@ -113,6 +114,7 @@ function uci_results_get_rider_results($args='') {
 		$result=get_post_meta($race_id, '_rider_'.$rider_id, true);
 		$result['race_id']=$race_id;
 		$result['race_name']=get_the_title($race_id);
+		$result['race_date']=get_post_meta($race_id, '_race_date', true);
 		
 		if (!empty($places)) :
 			if (in_array($result['place'], $places)) :
@@ -124,6 +126,22 @@ function uci_results_get_rider_results($args='') {
 	endforeach;
 
 	return $results;
+}
+
+/**
+ * uci_results_rider_url function.
+ *
+ * @access public
+ * @param string $slug (default: '')
+ * @return void
+ */
+function uci_results_rider_url($slug='') {
+	global $uci_results_pages;
+
+	$base_url=get_permalink($uci_results_pages['single_rider']);
+	$url=$base_url.$slug;
+
+	echo $url;
 }
 
 function uci_get_rider_id($slug='') {
