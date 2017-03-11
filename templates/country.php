@@ -16,28 +16,25 @@ get_header(); ?>
 	<?php else : ?>
 
 		<?php
-		$riders=new UCI_Results_Query(array(
+		$riders=uci_get_riders(array(
 			'per_page' => -1,
 			'type' => 'riders',
 			'nat' => get_query_var('country_slug'),
-			'order_by' => 'name',
-			'order' => 'ASC',
 		));
 
 		// build out three column setup //
 		$columns=3;
-		$all_riders=$riders->posts;
-		$riders_chunk=array_chunk($all_riders, ceil(count($all_riders)/$columns));
+		$riders_chunk=array_chunk($riders, ceil(count($riders)/$columns));
 		?>
 
 		<h1 class="page-title"><?php echo get_query_var('country_slug'); ?><span class="flag"><?php echo uci_results_get_country_flag(get_query_var('country_slug')); ?></span></h1>
 
-		<?php if ($riders->have_posts()) : ?>
+		<?php if (count($riders)) : ?>
 			<div class="em-row country-riders">
 				<?php foreach ($riders_chunk as $key => $chunk) : ?>
 				<div class="em-col-md-4 col-<?php echo $key; ?> columns-<?php echo $columns; ?>">
 					<?php foreach ($chunk as $arr) : ?>
-					<div class="rider-name"><a href="<?php echo uci_results_rider_url($arr->slug); ?>"><?php echo $arr->name; ?></a></div>
+					<div class="rider-name"><a href="<?php echo uci_results_rider_url($arr->post_name); ?>"><?php echo $arr->post_title; ?></a></div>
 					<?php endforeach; ?>
 				</div>
 				<?php endforeach; ?>
