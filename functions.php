@@ -171,39 +171,9 @@ function uci_results_rider_url($slug='') {
 	echo $url;
 }
 
-/**
- * uci_results_race_url function.
- *
- * @access public
- * @param string $slug (default: '')
- * @return void
- */
-function uci_results_race_url($slug='') {
-	global $uci_results_pages;
 
-	// check if id, not slug //
-	if (is_numeric($slug))
-		$slug=uci_results_get_race_slug($slug);
 
-	$base_url=get_permalink($uci_results_pages['single_race']);
-	$url=$base_url.$slug;
 
-	echo $url;
-}
-
-/**
- * uci_results_races_url function.
- *
- * @access public
- * @return void
- */
-function uci_results_races_url() {
-	global $uci_results_pages;
-
-	$url=get_permalink($uci_results_pages['races']);
-
-	echo $url;
-}
 
 /**
  * uci_results_get_race_slug function.
