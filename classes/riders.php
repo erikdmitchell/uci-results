@@ -94,6 +94,7 @@ class UCIRiders {
 		global $wpdb;
 
 		$default_args=array(
+			'per_page' => -1,
 			'rider_ids' => '',
 			'results' => false,
 			'last_result' => false,
@@ -108,8 +109,18 @@ class UCIRiders {
 		extract($args);
 
 		// setup rider ids //
-		if (!is_array($rider_ids) && !empty($rider_ids))
+		if (!is_array($rider_ids) && !empty($rider_ids)) :
 			$rider_ids=explode(',', $rider_ids);
+		else :
+			$rider_ids=get_posts(array(
+				'posts_per_page' => $per_page,
+				'post_type' => 'riders',
+				'fields' => 'ids'
+			));
+		endif;
+		
+		if (empty($rider_ids))
+			return;
 
 		foreach ($rider_ids as $rider_id) :
 			$riders[]=$this->get_rider(array(

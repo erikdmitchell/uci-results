@@ -1,6 +1,31 @@
 <?php
 ///////// RIDERS
 
+function uci_get_riders($args='') {
+	global $uci_riders;
+
+	$default_args=array(
+		'rider_ids' => '',
+		'results' => false,
+		'last_result' => false,
+		'race_ids' => '',
+		'results_season' => '',
+		'ranking' => false,
+		'stats' => false
+	);
+	$args=wp_parse_args($args, $default_args);	
+	$riders=$uci_riders->get_riders($args);
+
+	return $riders;
+}			
+
+/**
+ * uci_results_get_rider_results function.
+ * 
+ * @access public
+ * @param string $args (default: '')
+ * @return void
+ */
 function uci_results_get_rider_results($args='') {
 	$default_args=array(
 		'rider_id' => 0, 
