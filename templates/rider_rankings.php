@@ -13,6 +13,7 @@ get_header(); ?>
 $riders=uci_get_riders(array(
 	'per_page' => 15,
 	'ranking' => true,
+	'page' => get_query_var('page'),
 ));
 ?>
 
@@ -39,7 +40,7 @@ $riders=uci_get_riders(array(
 
 	</div>
 
-	<?php uci_results_pagination(); ?>
+	<?php uci_pagination(); ?>
 </div>
 
 <?php get_footer(); ?>

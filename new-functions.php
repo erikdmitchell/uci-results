@@ -21,6 +21,7 @@ function uci_get_riders($args='') {
 		'ranking' => false,
 		'stats' => false,
 		'nat' => '',
+		'page' => '',
 	);
 	$args=wp_parse_args($args, $default_args);	
 	$riders=$uci_riders->get_riders($args);
@@ -751,4 +752,39 @@ function uci_results_template_loader($template) {
 	return $template;
 }
 add_filter('template_include', 'uci_results_template_loader');
+
+
+
+
+/**
+ * uci_pagination function.
+ * 
+ * @access public
+ * @param string $type (default: 'rider_rankings')
+ * @return void
+ */
+function uci_pagination($type='rider_rankings') {
+	global $uci_results_pages;
+
+	$link=get_permalink($uci_results_pages[$type]);
+	$paged=get_query_var('page', 1);
+
+	if ($paged==0)
+		$paged=1;
+		
+	$next_paged=$paged+1;
+	$prev_paged=$paged-1;
+	
+	$next=$link.$next_paged;
+	$prev=$link.$prev_paged;
+	
+	//echo "$link<br>";
+	echo 'pagination for '.$type.'<br>';
+	echo "page: $paged<br>";
+	
+	echo '<a href="'.$next.'">NEXT</a><br>';
+	
+	if ($prev_paged>=1)
+		echo '<a href="'.$prev.'">PREV</a><br>';	
+}
 ?>

@@ -113,25 +113,31 @@ class UCIRiders {
 			'stats' => false,
 			'nat' => '',
 			'orderby' => 'title',
-			'order' => 'ASC'
+			'order' => 'ASC',
+			'page' => '',
 		);
 		$args=wp_parse_args($args, $default_args);
 		$riders=array();
 
 		extract($args);
 
-		
-
 		// setup rider ids //
 		if (!is_array($rider_ids) && !empty($rider_ids)) :
 			$rider_ids=explode(',', $rider_ids);
 		else :
+			if ($page) :
+				$offset=($page-1) * $per_page;
+			else :
+				$offset='';
+			endif;
+		
 			$riders_args=array(
 				'posts_per_page' => $per_page,
 				'post_type' => 'riders',
 				'orderby' => $orderby,
 				'order' => $order,
-				'fields' => 'ids'
+				'fields' => 'ids',
+				'offset' => $offset,
 			);
 		
 			// check specific nat //
@@ -142,7 +148,7 @@ class UCIRiders {
 					'terms' => $nat
 				);
 			endif;
-			
+print_r($riders_args);			
 			$rider_ids=get_posts($riders_args);
 		endif;
 	
