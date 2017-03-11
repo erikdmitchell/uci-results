@@ -115,6 +115,8 @@ function uci_results_get_rider_results($args='') {
 		$result['race_id']=$race_id;
 		$result['race_name']=get_the_title($race_id);
 		$result['race_date']=get_post_meta($race_id, '_race_date', true);
+		$result['race_class']=uci_get_first_term($race_id, 'race_class');
+		$result['race_season']=uci_get_first_term($race_id, 'season');		
 		
 		if (!empty($places)) :
 			if (in_array($result['place'], $places)) :
@@ -126,6 +128,26 @@ function uci_results_get_rider_results($args='') {
 	endforeach;
 
 	return $results;
+}
+
+/**
+ * uci_get_first_term function.
+ * 
+ * @access public
+ * @param int $post_id (default: 0)
+ * @param string $taxonomy (default: '')
+ * @return void
+ */
+function uci_get_first_term($post_id=0, $taxonomy='') {
+	$terms=wp_get_post_terms($post_id, $taxonomy, array('fields' => 'names'));
+	
+	if (is_wp_error($terms))
+		return false;
+		
+	if (isset($terms[0]))
+		return $terms[0];
+		
+	return false;
 }
 
 /**
@@ -429,12 +451,30 @@ function uci_results_race_url($slug='') {
 
 	// check if id, not slug //
 	if (is_numeric($slug))
-		$slug=uci_results_get_race_slug($slug);
+		$slug=uci_get_race_slug($slug);
 
 	$base_url=get_permalink($uci_results_pages['single_race']);
 	$url=$base_url.$slug;
 
 	echo $url;
+}
+
+/**
+ * uci_get_race_slug function.
+ *
+ * @access public
+ * @param int $id (default: 0)
+ * @return void
+ */
+function uci_get_race_slug($id=0) {
+	global $wpdb;
+
+	$race=get_post(absint($id));
+
+	if (isset($race->post_name))
+		return $race->post_name;
+
+	return false;
 }
 
 /**

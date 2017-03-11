@@ -161,22 +161,7 @@ function curl_exec_utf8($ch) {
 
 
 
-/**
- * uci_results_get_race_slug function.
- *
- * @access public
- * @param int $id (default: 0)
- * @return void
- */
-function uci_results_get_race_slug($id=0) {
-	global $wpdb;
 
-	$id=absint($id);
-
-	$slug=$wpdb->get_var("SELECT code FROM {$wpdb->uci_results_races} WHERE id=$id");
-
-	return $slug;
-}
 
 /**
  * uci_results_get_race_id function.
