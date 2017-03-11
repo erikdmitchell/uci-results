@@ -1,10 +1,18 @@
 <?php
 ///////// RIDERS
 
+/**
+ * uci_get_riders function.
+ * 
+ * @access public
+ * @param string $args (default: '')
+ * @return void
+ */
 function uci_get_riders($args='') {
 	global $uci_riders;
 
 	$default_args=array(
+		'per_page' => -1,
 		'rider_ids' => '',
 		'results' => false,
 		'last_result' => false,
