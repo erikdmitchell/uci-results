@@ -80,6 +80,15 @@ class UCIRiders {
 
 		$rider->twitter=$this->get_twitter($rider_id);
 
+		// nat (country) //
+		$countries=wp_get_post_terms($rider_id, 'country', array("fields" => "names"));
+
+		if (isset($countries[0])) :
+			$rider->nat=$countries[0];
+		else :
+			$rider->nat='';
+		endif;
+
 		return $rider;
 	}
 

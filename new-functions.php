@@ -164,11 +164,93 @@ function uci_get_races($args='') {
 	));
 
 	foreach ($races as $race) :
+		$race->race_date=get_post_meta($race->ID, '_race_date', true);
+		$race->nat=uci_race_country($race->ID);
+		$race->class=uci_race_class($race->ID);
+		$race->season=uci_race_season($race->ID);
+		$race->series=uci_race_series($race->ID);
+		
 		if ($results)
 			$race->results=uci_results_get_race_results($race->ID);
 	endforeach;
 	
 	return $races;
+}
+
+/**
+ * uci_race_country function.
+ * 
+ * @access public
+ * @param int $race_id (default: 0)
+ * @return void
+ */
+function uci_race_country($race_id=0) {
+	$countries=wp_get_post_terms($race_id, 'country', array('fields' => 'names'));
+
+	if (isset($countries[0])) :
+		$country=$countries[0];
+	else :
+		$country='';
+	endif;
+	
+	return $country;
+}
+
+/**
+ * uci_race_class function.
+ * 
+ * @access public
+ * @param int $race_id (default: 0)
+ * @return void
+ */
+function uci_race_class($race_id=0) {
+	$classes=wp_get_post_terms($race_id, 'race_class', array('fields' => 'names'));
+
+	if (isset($classes[0])) :
+		$class=$classes[0];
+	else :
+		$class='';
+	endif;
+	
+	return $class;
+}
+
+/**
+ * uci_race_season function.
+ * 
+ * @access public
+ * @param int $race_id (default: 0)
+ * @return void
+ */
+function uci_race_season($race_id=0) {
+	$seasons=wp_get_post_terms($race_id, 'season', array('fields' => 'names'));
+
+	if (isset($seasons[0])) :
+		$season=$seasons[0];
+	else :
+		$season='';
+	endif;
+	
+	return $season;
+}
+
+/**
+ * uci_race_series function.
+ * 
+ * @access public
+ * @param int $race_id (default: 0)
+ * @return void
+ */
+function uci_race_series($race_id=0) {
+	$series_arr=wp_get_post_terms($race_id, 'series', array('fields' => 'names'));
+
+	if (isset($series_arr[0])) :
+		$series=$series_arr[0];
+	else :
+		$series='';
+	endif;
+	
+	return $series;
 }
 
 /**
@@ -462,5 +544,42 @@ function uci_results_get_rider_rank($rider_id=0, $season='', $week='') {
 		$rank=0;
 
 	return $rank;
+}
+
+
+
+
+
+
+
+///////////////////
+/**
+ * uci_results_country_url function.
+ *
+ * @access public
+ * @param string $slug (default: '')
+ * @return void
+ */
+function uci_results_country_url($slug='') {
+	global $uci_results_pages;
+
+	$base_url=get_permalink($uci_results_pages['country']);
+	$url=$base_url.$slug;
+
+	echo $url;
+}
+
+/**
+ * uci_results_rider_rankings_url function.
+ *
+ * @access public
+ * @return void
+ */
+function uci_results_rider_rankings_url() {
+	global $uci_results_pages;
+
+	$url=get_permalink($uci_results_pages['rider_rankings']);
+
+	echo $url;
 }
 ?>
