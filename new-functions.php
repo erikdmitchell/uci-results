@@ -185,6 +185,7 @@ function uci_get_rider_id($slug='') {
  */
 function uci_get_races($args='') {
 	$default_args=array(
+		'id' => '',
 		'per_page' => -1,
 		'orderby' => 'meta_value',
 		'meta_key' => '_race_date',
@@ -197,6 +198,7 @@ function uci_get_races($args='') {
 
 	$races=get_posts(array(
 		'posts_per_page' => $per_page,
+		'include' => $id,
 		'post_type' => 'races',
 		'orderby' => $orderby,
 		'meta_key' => $meta_key,
@@ -467,8 +469,6 @@ function uci_results_race_url($slug='') {
  * @return void
  */
 function uci_get_race_slug($id=0) {
-	global $wpdb;
-
 	$race=get_post(absint($id));
 
 	if (isset($race->post_name))
@@ -491,7 +491,21 @@ function uci_results_races_url() {
 	echo $url;
 }
 
-
+/**
+ * uci_get_race_id function.
+ * 
+ * @access public
+ * @param string $slug (default: '')
+ * @return void
+ */
+function uci_get_race_id($slug='') {
+	$race=get_page_by_path($slug, OBJECT, 'races');
+	
+	if (isset($race->ID))
+		return $race->ID;
+		
+	return false;
+}
 
 
 
@@ -682,4 +696,48 @@ function uci_results_rider_rankings_url() {
 
 	echo $url;
 }
+
+
+
+/**
+ * uci_results_template_loader function.
+ *
+ * @access public
+ * @param mixed $template
+ * @return void
+ */
+function uci_results_template_loader($template) {
+	global $uci_results_pages, $post;
+
+	$located=false;
+	$template_slug='';
+
+	// it's a page //
+	if (is_page()) :
+		$template_slug='page';
+
+		// see if this page matches our set pages //
+		foreach ($uci_results_pages as $slug => $id) :
+			if ($post->ID==$id) :
+				$template_slug=$slug;
+			endif;
+		endforeach;
+	endif;
+
+	// check theme(s), then plugin //
+	if (file_exists(get_stylesheet_directory().'/uci-results/'.$template_slug.'.php')) :
+		$located=get_stylesheet_directory().'/uci-results/'.$template_slug.'.php';
+	elseif (file_exists(get_template_directory().'/uci-results/'.$template_slug.'.php')) :
+		$located=get_template_directory().'/uci-results/'.$template_slug.'.php';
+	elseif (file_exists(UCI_RESULTS_PATH.'templates/'.$template_slug.'.php')) :
+		$located=UCI_RESULTS_PATH.'templates/'.$template_slug.'.php';
+	endif;
+
+	// we found a template //
+	if ($located)
+		$template=$located;
+
+	return $template;
+}
+add_filter('template_include', 'uci_results_template_loader');
 ?>
