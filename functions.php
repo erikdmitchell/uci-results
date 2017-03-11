@@ -21,35 +21,7 @@ function uci_results_scripts_styles() {
 }
 add_action('wp_enqueue_scripts', 'uci_results_scripts_styles');
 
-/**
- * uci_results_get_template_part function.
- *
- * @access public
- * @param string $template_name (default: '')
- * @return void
- */
-function uci_results_get_template_part($template_name='') {
-	if (empty($template_name))
-		return false;
 
-	ob_start();
-
-	do_action('uci_results_get_template_part'.$template_name);
-
-	if (file_exists(get_stylesheet_directory().'/uci-results/'.$template_name.'.php')) :
-		include(get_stylesheet_directory().'/uci-results/'.$template_name.'.php');
-	elseif (file_exists(get_template_directory().'/uci-results/'.$template_name.'.php')) :
-		include(get_template_directory().'/uci-results/'.$template_name.'.php');
-	else :
-		include(UCI_RESULTS_PATH.'templates/'.$template_name.'.php');
-	endif;
-
-	$html=ob_get_contents();
-
-	ob_end_clean();
-
-	return $html;
-}
 
 
 

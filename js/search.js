@@ -85,6 +85,8 @@ function runSearch(searchData) {
 	};
 
 	jQuery.post(searchAJAXObject.ajax_url, data, function(response) {
+		response=jQuery.parseJSON(response);
+console.log(response);		
 		jQuery('#uci-results-search-results').html(response); // append search results
 
 		$loader.hide();
