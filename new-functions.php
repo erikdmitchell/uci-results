@@ -216,6 +216,10 @@ function uci_get_races($args='') {
 			$race->results=uci_results_get_race_results($race->ID);
 	endforeach;
 	
+	// check for single race //
+	if (count($races)==1)
+		$races=$races[0];
+	
 	return $races;
 }
 
@@ -314,6 +318,13 @@ function uci_results_get_race_results($race_id=0) {
 			endif;			
 		endif;
 	endforeach;
+	
+	// add rider details //
+	foreach ($riders as $key => $rider) :
+		$rider_post=get_page_by_title($rider['name'], OBJECT, 'riders');
+		$riders[$key]['ID']=$rider_post->ID;
+		$riders[$key]['slug']=$rider_post->post_name;
+	endforeach;	
 	
 	return $riders;
 }
