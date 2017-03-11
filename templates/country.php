@@ -9,7 +9,7 @@
 
 get_header(); ?>
 
-<div class="uci-results uci-results-country">
+<div class="em-container uci-results uci-results-country">
 
 	<?php if (empty(get_query_var('country_slug'))) : ?>
 		<div class="none-found">No country found.</div>

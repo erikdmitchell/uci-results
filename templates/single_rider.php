@@ -21,7 +21,7 @@ $rider=$uci_riders->get_rider(array(
 ));
 ?>
 
-<div class="uci-results uci-results-rider">
+<div class="em-container uci-results uci-results-rider">
 
 	<?php if ($rider) : ?>
 		<div id="rider-<?php echo $rider->ID; ?>" class="em-row rider-stats">

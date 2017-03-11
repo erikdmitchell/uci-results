@@ -83,12 +83,9 @@ function runSearch(searchData) {
 		'search' : jQuery('#uci-results-search').val(),
 		'search_data' : searchData
 	};
-console.log(data);
-	jQuery.post(searchAJAXObject.ajax_url, data, function(response) {
-		response=jQuery.parseJSON(response);
 
-		jQuery('#search-details').html(response.details); // append search details
-		jQuery('#uci-results-search-results').html(response.content); // append search results
+	jQuery.post(searchAJAXObject.ajax_url, data, function(response) {
+		jQuery('#uci-results-search-results').html(response); // append search results
 
 		$loader.hide();
 	});
@@ -97,9 +94,9 @@ console.log(data);
 function clearSearchFilters() {
 	jQuery('.uci-results-search .search-filters').find('input:text, input:password, input:file, textarea').val('');
 	jQuery('.uci-results-search .search-filters').find('select').val(0);
-  jQuery('.uci-results-search .search-filters').find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');
+	jQuery('.uci-results-search .search-filters').find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');
 
-  resetFilterSection();
+	resetFilterSection();
 }
 
 function resetFilterSection() {

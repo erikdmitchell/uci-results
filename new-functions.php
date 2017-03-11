@@ -192,11 +192,12 @@ function uci_get_races($args='') {
 		'meta_key' => '_race_date',
 		'order' => 'DESC',
 		'results' => false,
+		'offset' => '',
 	);
 	$args=wp_parse_args($args, $default_args);
 	
 	extract($args);
-
+print_r($args);
 	$races=get_posts(array(
 		'posts_per_page' => $per_page,
 		'include' => $id,
@@ -787,4 +788,51 @@ function uci_pagination($type='rider_rankings') {
 	if ($prev_paged>=1)
 		echo '<a href="'.$prev.'">PREV</a><br>';	
 }
+
+//////////// search
+
+function uci_search($args='') {
+	$default_args=array(
+		'posts_per_page' => 20,
+		'post_type' => array('riders', 'races')
+	);
+	$args=wp_parse_args($args, $default_args);
+	$results=get_posts($args);
+
+	return $results;
+}
+
+function ajax_uci_search() {
+	$return=array();
+	
+	// set type param //
+	if (isset($_POST['search_data']['types'])) :
+		if (count($_POST['search_data']['types']) == 1) : // just one type
+			$type=$_POST['search_data']['types'][0];
+		elseif (count($_POST['search_data']['types'])) : // multiple
+			$type='';
+		else : // a basic fallback
+			$type='';
+		endif;
+	else :
+		$type=array('riders', 'races');
+	endif;
+
+	// build args //
+	$args=array(
+		'posts_per_page' => 15,
+		'post_type' => $type,
+		'search' => $_POST['search']
+	);
+
+	// run query //
+	$results=uci_search($args);
+	$return['details']='query';
+
+	echo json_encode($results);
+
+	wp_die();
+}
+add_action('wp_ajax_uci_results_search', 'ajax_uci_search');
+add_action('wp_ajax_nopriv_uci_results_search', 'ajax_uci_search');
 ?>

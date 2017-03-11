@@ -17,7 +17,7 @@ $riders=uci_get_riders(array(
 ));
 ?>
 
-<div class="uci-results uci-results-rider-rankings">
+<div class="em-container uci-results uci-results-rider-rankings">
 
 	<h1 class="page-title">Rider Rankings</h1>
 

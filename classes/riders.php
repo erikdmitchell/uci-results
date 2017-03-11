@@ -148,7 +148,7 @@ class UCIRiders {
 					'terms' => $nat
 				);
 			endif;
-print_r($riders_args);			
+			
 			$rider_ids=get_posts($riders_args);
 		endif;
 	

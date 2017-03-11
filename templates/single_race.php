@@ -18,7 +18,7 @@ $race=uci_get_races(array(
 ));
 ?>
 
-<div class="uci-results uci-results-race">
+<div class="em-container uci-results uci-results-race">
 
 	<?php if (!$race) : ?>
 		<div class="race-results-not-found">Race results not found.</div>
