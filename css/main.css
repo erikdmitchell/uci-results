@@ -114,7 +114,7 @@
 }
 .uci-results-search #riders-search-filters,
 .uci-results-search #races-search-filters {
-	//display: none;
+	display: none;
 }
 .uci-results-search #search-loader {
 	display: none;

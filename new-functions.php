@@ -1,4 +1,26 @@
 <?php
+/**
+ * uci_scripts_styles function.
+ *
+ * @access public
+ * @return void
+ */
+function uci_scripts_styles() {
+	global $uci_results_pages;
+
+	// include on search page //
+	if (is_page($uci_results_pages['search'])) :
+		wp_enqueue_script('uci-results-search-script', UCI_RESULTS_URL.'/js/search.js', array('jquery'), '0.1.0');
+
+		wp_localize_script('uci-results-search-script', 'searchAJAXObject', array('ajax_url' => admin_url('admin-ajax.php')));
+	endif;
+
+	wp_enqueue_style('uci-results-fa-style', UCI_RESULTS_URL.'css/font-awesome.min.css');
+	wp_enqueue_style('uci-results-style', UCI_RESULTS_URL.'/css/main.css');
+	wp_enqueue_style('uci-results-grid', UCI_RESULTS_URL.'/css/em-bs-grid.css');
+}
+add_action('wp_enqueue_scripts', 'uci_scripts_styles');
+	
 ///////// RIDERS
 
 /**
@@ -824,7 +846,7 @@ function uci_pagination($type='rider_rankings') {
 function uci_search($args='') {
 	$default_args=array(
 		'posts_per_page' => 20,
-		'post_type' => array('riders', 'races')
+		'post_type' => array('riders', 'races'),
 	);
 	$args=wp_parse_args($args, $default_args);
 	$results=get_posts($args);
@@ -852,7 +874,7 @@ function ajax_uci_search() {
 	$args=array(
 		'posts_per_page' => 15,
 		'post_type' => $type,
-		'search' => $_POST['search']
+		's' => $_POST['search']
 	);
 
 	// run query //
