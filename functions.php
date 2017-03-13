@@ -145,7 +145,7 @@ function uci_pagination($numpages='', $pagerange='', $paged='') {
 	$paginate_links = paginate_links($pagination_args);
 	
 	if ($paginate_links) :
-		$html.="<nav class='custom-pagination'>";
+		$html.='<nav class="uci-pagination">';
 			//$html.="<span class='page-numbers page-num'>Page " . $paged . " of " . $numpages . "</span> ";
 			$html.=$paginate_links;
 		$html.="</nav>";
