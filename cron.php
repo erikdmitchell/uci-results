@@ -130,8 +130,6 @@ function uci_results_update_rider_weekly_rank() {
 		write_cron_log(strip_tags($result));
 	endforeach;
 
-	uci_results_store_rider_rankings(); // updates our stored option
-
 	$uci_results_rider_rankings->update_twitter();
 
 	write_cron_log ('The uci_results_update_rider_weekly_rank cron job finished.');
@@ -173,4 +171,24 @@ function uci_results_cron_schedules($schedules) {
 	return $schedules;
 }
 add_filter('cron_schedules', 'uci_results_cron_schedules');
+
+/**
+ * uci_results_schedule_event function.
+ * 
+ * @access public
+ * @param mixed $timestamp
+ * @param mixed $recurrence
+ * @param mixed $hook
+ * @param array $args (default: array())
+ * @return void
+ */
+function uci_results_schedule_event($timestamp, $recurrence, $hook, $args = array()) {
+	$next = wp_next_scheduled($hook, $args);
+
+	if (empty($next)) :
+		return wp_schedule_event($timestamp, $recurrence, $hook, $args);
+	else :
+		return false;
+	endif;
+}
 ?>

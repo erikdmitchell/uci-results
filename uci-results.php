@@ -21,7 +21,15 @@ include_once(UCI_RESULTS_PATH.'classes/rider-rankings-query.php'); // rider rank
 include_once(UCI_RESULTS_PATH.'classes/seasons.php');
 
 include_once(UCI_RESULTS_PATH.'database.php'); // sets up our db tables
-include_once(UCI_RESULTS_PATH.'functions.php'); // all our outlying functions
+include_once(UCI_RESULTS_PATH.'functions/ajax.php'); // ajax functions
+include_once(UCI_RESULTS_PATH.'functions/races.php'); // races functions
+include_once(UCI_RESULTS_PATH.'functions/riders.php'); // riders functions
+include_once(UCI_RESULTS_PATH.'functions/search.php'); // search functions
+include_once(UCI_RESULTS_PATH.'functions/seasons.php'); // seasons functions
+include_once(UCI_RESULTS_PATH.'functions/utility.php'); // utility functions
+include_once(UCI_RESULTS_PATH.'functions/wp-query.php'); // modify wp query functions
+include_once(UCI_RESULTS_PATH.'functions.php'); // generic functions
+
 include_once(UCI_RESULTS_PATH.'init.php'); // functions to run on init
 
 include_once(UCI_RESULTS_PATH.'admin/admin.php'); // admin page
@@ -36,8 +44,6 @@ include_once(UCI_RESULTS_PATH.'shortcode.php'); // our shortcodes
 include_once(UCI_RESULTS_PATH.'lib/flags.php'); // our flag stuff
 include_once(UCI_RESULTS_PATH.'cron.php'); // cron jobs
 include_once(UCI_RESULTS_PATH.'update-to-twitter.php'); // updates results and rankings to twitter
-
-include_once(UCI_RESULTS_PATH.'new-functions.php'); // we NEED these functions ;p
 
 /**
  * is_uci_results_active function.
