@@ -22,7 +22,7 @@ function races_init() {
 		'show_in_nav_menus' => false,
 		'show_in_menu' 		=> false,
 		'supports'          => array( 'title' ),
-		'has_archive'       => false,
+		'has_archive'       => true,
 		'rewrite'           => true,
 		'query_var'         => true,
 		'menu_icon'         => 'dashicons-admin-post',

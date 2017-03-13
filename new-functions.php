@@ -875,51 +875,46 @@ function uci_get_template_part($template_name='', $atts='') {
 
 
 function uci_pagination($numpages='', $pagerange='', $paged='') {
-  if (empty($pagerange)) {
-    $pagerange = 2;
-  }
+	global $paged;
+	
+	$html=null;
+	
+	if (empty($pagerange))
+		$pagerange = 2;
 
-  global $paged;
+	if (empty($paged))
+		$paged = 1;
+	
+	if ($numpages == '') :
+		global $wp_query;
+		
+		$numpages = $wp_query->max_num_pages;
+		
+		if (!$numpages) :
+			$numpages = 1;
+		endif;
+	endif;
 
-  if (empty($paged)) {
-    $paged = 1;
-  }
-
-  if ($numpages == '') {
-    global $wp_query;
-    $numpages = $wp_query->max_num_pages;
-    if(!$numpages) {
-        $numpages = 1;
-    }
-  }
-
-  $pagination_args = array(
-    //'base'            => get_pagenum_link(1) . '%_%',
-    'base' => add_query_arg('paged','%#%'),
-    'format'          => '?paged=%#%',
-    'total'           => $numpages,
-    'current'         => $paged,
-    ///'show_all'        => False,
-    ///'end_size'        => 1,
-    'mid_size'        => $pagerange,
-    ///'prev_next'       => True,
-    //'prev_text'       => __('&laquo;'),
-    //'next_text'       => __('&raquo;'),
-    ///'type'            => 'plain',
-    ///'add_args'        => false,
-    ///'add_fragment'    => ''
-  );
-echo '<pre>';
-print_r($pagination_args);
-echo '</pre>';
-  $paginate_links = paginate_links($pagination_args);
-
-  if ($paginate_links) {
-    echo "<nav class='custom-pagination'>";
-      echo "<span class='page-numbers page-num'>Page " . $paged . " of " . $numpages . "</span> ";
-      echo $paginate_links;
-    echo "</nav>";
-  }
+	$pagination_args = array(
+		'base'            => get_pagenum_link(1) . '%_%',
+		'format'          => '?paged=%#%',
+		'total'           => $numpages,
+		'current'         => $paged,
+		'mid_size'        => $pagerange,
+		'prev_text'       => __('&laquo;'),
+		'next_text'       => __('&raquo;'),
+	);
+	
+	$paginate_links = paginate_links($pagination_args);
+	
+	if ($paginate_links) :
+		$html.="<nav class='custom-pagination'>";
+			//$html.="<span class='page-numbers page-num'>Page " . $paged . " of " . $numpages . "</span> ";
+			$html.=$paginate_links;
+		$html.="</nav>";
+	endif;
+	
+	echo $html;
 }
 
 //////////// search

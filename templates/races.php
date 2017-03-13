@@ -40,7 +40,7 @@ $races=new WP_Query(array(
 
 	</div>
 
-	<?php uci_pagination($riders->max_num_pages); ?>
+	<?php uci_pagination($races->max_num_pages); ?>
 </div>
 
 <?php get_footer(); ?>
