@@ -37,11 +37,11 @@ $race_series_id='';
 				<label>Type</label>
 				<div class="search-type">
 					<div class="type-row">
-						<input type="checkbox" class="type" name="type" value="races" <?php checked($type, 'races'); ?>>
+						<input type="radio" class="type" name="type" value="races" <?php checked($type, 'races'); ?>>
 						<span>Races</span>
 					</div>
 					<div class="type-row">
-						<input type="checkbox" class="type" name="type" value="riders" <?php checked($type, 'riders'); ?>>
+						<input type="radio" class="type" name="type" value="riders" <?php checked($type, 'riders'); ?>>
 						<span>Riders</span>
 					</div>
 				</div>

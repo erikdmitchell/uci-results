@@ -219,7 +219,7 @@ function uci_get_races($args='') {
 	$args=wp_parse_args($args, $default_args);
 	
 	extract($args);
-print_r($args);
+//print_r($args);
 	$races=get_posts(array(
 		'posts_per_page' => $per_page,
 		'include' => $id,
@@ -843,6 +843,13 @@ function uci_pagination($type='rider_rankings') {
 
 //////////// search
 
+/**
+ * uci_search function.
+ * 
+ * @access public
+ * @param string $args (default: '')
+ * @return void
+ */
 function uci_search($args='') {
 	$default_args=array(
 		'posts_per_page' => 20,
@@ -854,6 +861,12 @@ function uci_search($args='') {
 	return $results;
 }
 
+/**
+ * ajax_uci_search function.
+ * 
+ * @access public
+ * @return void
+ */
 function ajax_uci_search() {
 	$rows=array();
 	
@@ -872,7 +885,7 @@ function ajax_uci_search() {
 
 	// build args //
 	$args=array(
-		'posts_per_page' => 15,
+		'posts_per_page' => -1,
 		'post_type' => $type,
 		's' => $_POST['search']
 	);
@@ -881,6 +894,12 @@ function ajax_uci_search() {
 	$results=uci_search($args);
 	
 	foreach ($results as $result) :
+		if (get_post_type($result->ID) == 'races') :
+			$result=uci_search_race_details($result);
+		elseif (get_post_type($result->ID) == 'riders') :
+			$result=uci_search_rider_details($result);
+		endif;
+		
 		$rows[]=uci_get_template_part('search/row', $result);
 	endforeach;
 
@@ -890,4 +909,40 @@ function ajax_uci_search() {
 }
 add_action('wp_ajax_uci_results_search', 'ajax_uci_search');
 add_action('wp_ajax_nopriv_uci_results_search', 'ajax_uci_search');
+
+/**
+ * uci_search_race_details function.
+ * 
+ * @access public
+ * @param string $race (default: '')
+ * @return void
+ */
+function uci_search_race_details($race='') {
+	if (empty($race))
+		return;
+		
+	$race->race_date=get_post_meta($race->ID, '_race_date', true);
+	$race->nat=uci_race_country($race->ID);
+	$race->class=uci_race_class($race->ID);
+	$race->season=uci_race_season($race->ID);
+	$race->series=uci_race_series($race->ID);
+	
+	return $race;
+}
+
+/**
+ * uci_search_rider_details function.
+ * 
+ * @access public
+ * @param string $rider (default: '')
+ * @return void
+ */
+function uci_search_rider_details($rider='') {
+	if (empty($rider))
+		return;
+		
+	$rider->nat=uci_get_first_term($rider->ID, 'country');
+	
+	return $rider;
+}
 ?>
