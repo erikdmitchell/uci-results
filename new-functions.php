@@ -153,6 +153,43 @@ function uci_results_get_rider_results($args='') {
 	return $results;
 }
 
+
+
+function riders_the_posts_details($posts, $query) {
+	global $uci_riders;
+	
+	if ($query->query_vars['post_type']!='riders')
+		return $posts;
+
+	foreach ($posts as $post) :
+		$post->nat=uci_get_first_term($post->ID, 'country');
+		$post->tiwtter=get_post_meta($post->ID, '_rider_twitter', true);
+		
+		if ($query->get('ranking')) :
+			$post->rank=$uci_riders->get_rider_rank($post->ID);
+		endif;
+	endforeach;
+
+	return $posts;
+}
+add_action('the_posts', 'riders_the_posts_details', 10, 2);
+
+
+function races_the_posts_details($posts, $query) {
+	global $uci_riders;
+	
+	if ($query->query_vars['post_type']!='races')
+		return $posts;
+
+	foreach ($posts as $post) :
+		$post=uci_race_details($post);
+	endforeach;
+
+	return $posts;
+}
+add_action('the_posts', 'races_the_posts_details', 10, 2);
+
+
 /**
  * uci_get_first_term function.
  * 
@@ -172,6 +209,10 @@ function uci_get_first_term($post_id=0, $taxonomy='') {
 		
 	return false;
 }
+
+
+
+
 
 /**
  * uci_results_rider_url function.
@@ -219,7 +260,7 @@ function uci_get_races($args='') {
 	$args=wp_parse_args($args, $default_args);
 	
 	extract($args);
-//print_r($args);
+
 	$races=get_posts(array(
 		'posts_per_page' => $per_page,
 		'include' => $id,
@@ -230,11 +271,7 @@ function uci_get_races($args='') {
 	));
 
 	foreach ($races as $race) :
-		$race->race_date=get_post_meta($race->ID, '_race_date', true);
-		$race->nat=uci_race_country($race->ID);
-		$race->class=uci_race_class($race->ID);
-		$race->season=uci_race_season($race->ID);
-		$race->series=uci_race_series($race->ID);
+		$race=uci_race_details($race);
 		
 		if ($results)
 			$race->results=uci_results_get_race_results($race->ID);
@@ -245,6 +282,23 @@ function uci_get_races($args='') {
 		$races=$races[0];
 	
 	return $races;
+}
+
+/**
+ * uci_race_details function.
+ * 
+ * @access public
+ * @param string $race (default: '')
+ * @return void
+ */
+function uci_race_details($race='') {
+	$race->race_date=get_post_meta($race->ID, '_race_date', true);
+	$race->nat=uci_race_country($race->ID);
+	$race->class=uci_race_class($race->ID);
+	$race->season=uci_race_season($race->ID);
+	$race->series=uci_race_series($race->ID);	
+		
+	return $race;
 }
 
 /**

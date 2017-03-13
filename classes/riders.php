@@ -50,7 +50,7 @@ class UCIRiders {
 		if (!$rider_id)
 			return false;
 			
-		$rider=$wpdb->get_row("SELECT * FROM $wpdb->posts WHERE ID = $rider_id");	
+		$rider=get_post($rider_id);
 		$rider->results='';
 		$rider->last_result='';
 		$rider->rank='';

@@ -10,10 +10,11 @@
 get_header(); ?>
 
 <?php
-$riders=uci_get_riders(array(
-	'per_page' => 15,
+$riders=new WP_Query(array(
+	'posts_per_page' => 15,
+	'post_type' => 'riders',
 	'ranking' => true,
-	'page' => get_query_var('page'),
+	'paged' => get_query_var( 'paged' ),
 ));
 ?>
 
@@ -29,18 +30,19 @@ $riders=uci_get_riders(array(
 			<div class="em-col-md-2 rider-points">Points</div>
 		</div>
 
-		<?php if ($riders) : foreach ($riders as $rider) : ?>
+		<?php if ($riders->posts) : while ($riders->have_posts() ) : $riders->the_post(); ?>
 			<div class="em-row">
-				<div class="em-col-md-1 rider-rank"><?php echo $rider->rank->rank; ?></div>
-				<div class="em-col-md-4 rider-name"><a href="<?php uci_results_rider_url($rider->post_name); ?>"><?php echo $rider->post_title; ?></a></div>
-				<div class="em-col-md-1 rider-nat"><a href="<?php echo uci_results_country_url($rider->nat); ?>"><?php echo uci_results_get_country_flag($rider->nat); ?></a></div>
-				<div class="em-col-md-2 rider-points"><?php echo $rider->rank->points; ?></div>
+				<div class="em-col-md-1 rider-rank"><?php echo $post->rank->rank; ?></div>
+				<div class="em-col-md-4 rider-name"><a href="<?php uci_results_rider_url($post->post_name); ?>"><?php the_title(); ?></a></div>
+				<div class="em-col-md-1 rider-nat"><a href="<?php echo uci_results_country_url($post->nat); ?>"><?php echo uci_results_get_country_flag($post->nat); ?></a></div>
+				<div class="em-col-md-2 rider-points"><?php echo $post->rank->points; ?></div>
 			</div>
-		<?php endforeach; endif; ?>
-
+		<?php endwhile; endif; ?>
 	</div>
 
 	<?php uci_pagination(); ?>
+	
+	<?php wp_reset_postdata(); ?>
 </div>
 
 <?php get_footer(); ?>

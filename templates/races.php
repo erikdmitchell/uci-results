@@ -10,8 +10,10 @@
 get_header(); ?>
 
 <?php
-$races=uci_get_races(array(
-	'per_page' => 15,
+$races=new WP_Query(array(
+	'posts_per_page' => 15,
+	'post_type' => 'races',
+	'paged' => get_query_var( 'paged' ),
 ));
 ?>
 
@@ -27,14 +29,14 @@ $races=uci_get_races(array(
 				<div class="em-col-md-1 race-class">Class</div>
 		</div>
 
-		<?php if ($races) : foreach ($races as $race) : ?>
+		<?php if ($races->posts) : while ($races->have_posts() ) : $races->the_post(); ?>
 			<div class="em-row">
-				<div class="em-col-md-6 race-name"><a href="<?php uci_results_race_url($race->post_name); ?>"><?php echo $race->post_title; ?></a></div>
-				<div class="em-col-md-2 race-date"><?php echo $race->race_date; ?></div>
-				<div class="em-col-md-1 race-nat"><?php echo uci_results_get_country_flag($race->nat); ?></div>
-				<div class="em-col-md-1 race-class"><?php echo $race->class; ?></div>
+				<div class="em-col-md-6 race-name"><a href="<?php uci_results_race_url($post->post_name); ?>"><?php the_title(); ?></a></div>
+				<div class="em-col-md-2 race-date"><?php echo $post->race_date; ?></div>
+				<div class="em-col-md-1 race-nat"><?php echo uci_results_get_country_flag($post->nat); ?></div>
+				<div class="em-col-md-1 race-class"><?php echo $post->class; ?></div>
 			</div>
-		<?php endforeach; endif; ?>
+		<?php endwhile; endif; ?>
 
 	</div>
 
