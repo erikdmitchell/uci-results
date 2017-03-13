@@ -82,17 +82,17 @@
 
 		      <tr>
 		      	<th scope="row" valign="top">
-							<label for="rider_rankings_page_id">Rider Rankings Page:</label>
+							<label for="riders_page_id">Riders Page:</label>
 						</th>
 						<td>
 							<?php wp_dropdown_pages(array(
-								'name' => 'rider_rankings_page_id',
+								'name' => 'riders_page_id',
 								'show_option_none' => '-- '.__('Select One', 'ucicurl').' --',
-								'selected' => $uci_results_pages['rider_rankings']
+								'selected' => $uci_results_pages['riders']
 							)); ?>
-							<a target="_blank" href="<?php echo admin_url('post.php?post='.$uci_results_pages['rider_rankings'].'&action=edit'); ?>" class="button button-secondary">Edit Page</a>
+							<a target="_blank" href="<?php echo admin_url('post.php?post='.$uci_results_pages['riders'].'&action=edit'); ?>" class="button button-secondary">Edit Page</a>
 							&nbsp;
-							<a target="_blank" href="<?php echo get_permalink($uci_results_pages['rider_rankings']); ?>" class="button button-secondary">View Page</a>
+							<a target="_blank" href="<?php echo get_permalink($uci_results_pages['riders']); ?>" class="button button-secondary">View Page</a>
 						</td>
 					</tr>
 

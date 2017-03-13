@@ -801,6 +801,19 @@ function uci_results_template_loader($template) {
 	$located=false;
 	$template_slug='';
 
+	if (is_archive()) :
+echo 'archive<br>';	
+		$template_slug='archive';
+
+		// see if this page matches our set pages //
+		foreach ($uci_results_pages as $slug => $id) :
+echo $post->ID.'<br>';		
+			if ($post->ID==$id) :
+				$template_slug=$slug;
+			endif;
+		endforeach;
+	endif;
+	
 	// it's a page //
 	if (is_page()) :
 		$template_slug='page';
@@ -812,7 +825,7 @@ function uci_results_template_loader($template) {
 			endif;
 		endforeach;
 	endif;
-
+echo "slug: $template_slug<br>";
 	// check theme(s), then plugin //
 	if (file_exists(get_stylesheet_directory().'/uci-results/'.$template_slug.'.php')) :
 		$located=get_stylesheet_directory().'/uci-results/'.$template_slug.'.php';
@@ -821,7 +834,7 @@ function uci_results_template_loader($template) {
 	elseif (file_exists(UCI_RESULTS_PATH.'templates/'.$template_slug.'.php')) :
 		$located=UCI_RESULTS_PATH.'templates/'.$template_slug.'.php';
 	endif;
-
+echo $located;
 	// we found a template //
 	if ($located)
 		$template=$located;
