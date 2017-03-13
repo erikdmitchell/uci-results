@@ -371,4 +371,5 @@ function uci_results_display_total($arr=array()) {
 		echo count($arr);
 	endif;
 }
+
 ?>

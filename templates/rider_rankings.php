@@ -1,20 +1,21 @@
 <?php
 /**
- * template for riders page
+ * shortcode template for riders page
  *
  * It can be overriden
  *
  * @since 2.0.0
  */
-
-get_header(); ?>
+?>
 
 <?php
+global $post;
+
 $riders=new WP_Query(array(
 	'posts_per_page' => 15,
 	'post_type' => 'riders',
 	'ranking' => true,
-	'paged' => get_query_var( 'paged' ),
+	'paged' => get_query_var('paged'),
 ));
 ?>
 
@@ -40,9 +41,9 @@ $riders=new WP_Query(array(
 		<?php endwhile; endif; ?>
 	</div>
 
-	<?php uci_pagination(); ?>
-	
+	<?php uci_pagination($riders->max_num_pages); ?>
+
 	<?php wp_reset_postdata(); ?>
 </div>
 
-<?php get_footer(); ?>
+<?php //get_footer(); ?>

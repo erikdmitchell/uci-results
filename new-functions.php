@@ -862,37 +862,52 @@ function uci_get_template_part($template_name='', $atts='') {
 }
 
 
+function uci_pagination($numpages='', $pagerange='', $paged='') {
+  if (empty($pagerange)) {
+    $pagerange = 2;
+  }
 
-/**
- * uci_pagination function.
- * 
- * @access public
- * @param string $type (default: 'rider_rankings')
- * @return void
- */
-function uci_pagination($type='rider_rankings') {
-	global $uci_results_pages;
+  global $paged;
 
-	$link=get_permalink($uci_results_pages[$type]);
-	$paged=get_query_var('page', 1);
+  if (empty($paged)) {
+    $paged = 1;
+  }
 
-	if ($paged==0)
-		$paged=1;
-		
-	$next_paged=$paged+1;
-	$prev_paged=$paged-1;
-	
-	$next=$link.$next_paged;
-	$prev=$link.$prev_paged;
-	
-	//echo "$link<br>";
-	echo 'pagination for '.$type.'<br>';
-	echo "page: $paged<br>";
-	
-	echo '<a href="'.$next.'">NEXT</a><br>';
-	
-	if ($prev_paged>=1)
-		echo '<a href="'.$prev.'">PREV</a><br>';	
+  if ($numpages == '') {
+    global $wp_query;
+    $numpages = $wp_query->max_num_pages;
+    if(!$numpages) {
+        $numpages = 1;
+    }
+  }
+
+  $pagination_args = array(
+    //'base'            => get_pagenum_link(1) . '%_%',
+    'base' => add_query_arg('paged','%#%'),
+    'format'          => '?paged=%#%',
+    'total'           => $numpages,
+    'current'         => $paged,
+    ///'show_all'        => False,
+    ///'end_size'        => 1,
+    'mid_size'        => $pagerange,
+    ///'prev_next'       => True,
+    //'prev_text'       => __('&laquo;'),
+    //'next_text'       => __('&raquo;'),
+    ///'type'            => 'plain',
+    ///'add_args'        => false,
+    ///'add_fragment'    => ''
+  );
+echo '<pre>';
+print_r($pagination_args);
+echo '</pre>';
+  $paginate_links = paginate_links($pagination_args);
+
+  if ($paginate_links) {
+    echo "<nav class='custom-pagination'>";
+      echo "<span class='page-numbers page-num'>Page " . $paged . " of " . $numpages . "</span> ";
+      echo $paginate_links;
+    echo "</nav>";
+  }
 }
 
 //////////// search
