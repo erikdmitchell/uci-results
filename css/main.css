@@ -39,17 +39,21 @@
 }
 
 /* pagination */
-.uci-results-pagination {
-	overflow: hidden;
+.uci-pagination {
+
 }
-.uci-results-pagination .prev-link {
+.uci-pagination .page-numbers {
 	float: left;
-	width: 50%;
+	padding: 3px;
 }
-.uci-results-pagination .next-link {
-	float: left;
-	width: 50%;
+.uci-pagination .next {
+	//width: 30%;
+	margin-left: 5%;
+}
+.uci-pagination .prev {
+	//width: 30%;
 	text-align: right;
+	margin-right: 5%;
 }
 
 /* single rder */
