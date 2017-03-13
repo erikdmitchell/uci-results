@@ -43,4 +43,18 @@ $races=new WP_Query(array(
 	<?php uci_pagination($races->max_num_pages); ?>
 </div>
 
+<?php
+$response = wp_remote_get('http://uci.dev/wp-json/uci/v1/races');
+
+	if( is_wp_error( $response ) ) {
+		return;
+	}
+
+	$posts = json_decode( wp_remote_retrieve_body( $response ) );
+
+echo '<pre>';
+print_R($posts);
+echo '</pre>';
+?>
+
 <?php get_footer(); ?>

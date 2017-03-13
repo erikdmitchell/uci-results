@@ -115,6 +115,7 @@ class UCIResultsRidersTwitterMetabox {
 }
 
 
+/*
 function setup_riders_twitter_rest_api() {
 	register_api_field(
 		'riders',
@@ -131,4 +132,5 @@ add_action('rest_api_init', 'setup_riders_twitter_rest_api');
 function slug_get_rider_twitter($object, $field_name, $request) {
 	return get_post_meta($object['id'], $field_name, true);
 }
+*/
 ?>

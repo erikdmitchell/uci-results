@@ -45,6 +45,8 @@ include_once(UCI_RESULTS_PATH.'lib/flags.php'); // our flag stuff
 include_once(UCI_RESULTS_PATH.'cron.php'); // cron jobs
 include_once(UCI_RESULTS_PATH.'update-to-twitter.php'); // updates results and rankings to twitter
 
+include_once(UCI_RESULTS_PATH.'rest-api/endpoints.php'); // rest api endpoints
+
 /**
  * is_uci_results_active function.
  *

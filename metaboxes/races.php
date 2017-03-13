@@ -187,6 +187,7 @@ class UCIResultsRacesMetabox {
 }
 
 
+/*
 function setup_race_meta_rest_api() {
 	register_api_field(
 		'races',
@@ -253,5 +254,6 @@ add_action('rest_api_init', 'setup_race_meta_rest_api');
 function slug_get_race_meta($object, $field_name, $request) {
 	return get_post_meta($object['id'], $field_name, true);
 }
+*/
 
 ?>
