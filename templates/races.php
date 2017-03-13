@@ -13,7 +13,7 @@ get_header(); ?>
 $races=new WP_Query(array(
 	'posts_per_page' => 15,
 	'post_type' => 'races',
-	'paged' => get_query_var( 'paged' ),
+	'paged' => get_query_var('paged'),
 ));
 ?>
 
@@ -40,7 +40,7 @@ $races=new WP_Query(array(
 
 	</div>
 
-	<?php uci_pagination('races'); ?>
+	<?php uci_pagination($riders->max_num_pages); ?>
 </div>
 
 <?php get_footer(); ?>

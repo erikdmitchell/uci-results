@@ -14,9 +14,4 @@ function uci_results_main($atts) {
 	return uci_get_template_part('main');
 }
 add_shortcode('uci_results', 'uci_results_main');
-
-function uci_riders_shrtcode($atts='') {
-	return uci_get_template_part('shortcode/riders');
-}
-add_shortcode('uci_riders', 'uci_riders_shrtcode');
 ?>

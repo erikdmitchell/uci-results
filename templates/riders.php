@@ -1,16 +1,15 @@
 <?php
 /**
- * shortcode template for riders page
+ * template for riders page
  *
  * It can be overriden
  *
  * @since 2.0.0
  */
-?>
+
+get_header(); ?>
 
 <?php
-global $post;
-
 $riders=new WP_Query(array(
 	'posts_per_page' => 15,
 	'post_type' => 'riders',
@@ -46,4 +45,4 @@ $riders=new WP_Query(array(
 	<?php wp_reset_postdata(); ?>
 </div>
 
-<?php //get_footer(); ?>
+<?php get_footer(); ?>
