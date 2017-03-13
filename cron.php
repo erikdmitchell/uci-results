@@ -76,7 +76,7 @@ add_action('uci_results_add_races', 'uci_results_add_races');
  * @return void
  */
 function uci_results_cron_job_email($subject='', $message='') {
-	$to=	get_option('admin_email');
+	$to=get_option('admin_email');
 
 	wp_mail($to, $subject, $message);
 }
