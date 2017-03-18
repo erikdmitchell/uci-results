@@ -141,4 +141,22 @@ function uci_get_template_part($template_name='', $atts='') {
 
 	return $html;
 }
+
+/**
+ * array_to_object function.
+ * 
+ * @access public
+ * @param mixed $array
+ * @return void
+ */
+function array_to_object($array) {
+    $object = new stdClass();
+    foreach ($array as $key => $value) {
+        if (is_array($value)) {
+            $value = array_to_object($value);
+        }
+        $object->$key = $value;
+    }
+    return $object;
+}
 ?>

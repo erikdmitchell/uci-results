@@ -48,6 +48,7 @@ include_once(UCI_RESULTS_PATH.'update-to-twitter.php'); // updates results and r
 include_once(UCI_RESULTS_PATH.'rest-api/uci-rest-controller.php'); // rest api controller
 include_once(UCI_RESULTS_PATH.'rest-api/uci-rest-posts-controller.php'); // rest api posts
 include_once(UCI_RESULTS_PATH.'rest-api/rest-api.php'); // basic rest api functions
+include_once(UCI_RESULTS_PATH.'rest-api/filters.php'); // filters for rest api functions
 
 /**
  * is_uci_results_active function.

@@ -164,9 +164,10 @@ function uci_race_series($race_id=0) {
  * 
  * @access public
  * @param int $race_id (default: 0)
+ * @param mixed $format (default: ARRAY)
  * @return void
  */
-function uci_results_get_race_results($race_id=0) {
+function uci_results_get_race_results($race_id=0, $format='array') {
 	$post_meta=get_post_meta($race_id);
 	$riders=array();
 	
@@ -185,6 +186,10 @@ function uci_results_get_race_results($race_id=0) {
 		$riders[$key]['ID']=$rider_post->ID;
 		$riders[$key]['slug']=$rider_post->post_name;
 	endforeach;	
+	
+	if ($format=='object') :
+		$riders=array_to_object($riders);
+	endif;
 	
 	return $riders;
 }
