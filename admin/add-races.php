@@ -155,7 +155,7 @@ class UCIResultsAddRaces {
 			$row_count++;
 
 			// bail if we've reached our limit //
-			if ($limit && $row_count>$limit)
+			if ($limit > 0 && $row_count > $limit)
 				break;
 
 		endforeach;
@@ -557,10 +557,10 @@ class UCIResultsAddRaces {
 		if (!is_object($race_data))
 			$race_data=json_decode(json_encode($race_data),FALSE);
 
-		// build data array ..
+		// build data array .. -- if you change this, please change get_add_race_to_db()
 		$data=array(
 			'date' => $date = date('Y-m-d', strtotime($race_data->date)),
-			'event' => $race_data->event,
+			'event' => trim($race_data->event),
 			'nat' => $race_data->nat,
 			'class' => $race_data->class,
 			'winner' => $race_data->winner,
@@ -601,6 +601,79 @@ class UCIResultsAddRaces {
 			return array('message' => $message, 'new_result' => $new_results);
 
 		return $message;
+	}
+	
+	public function get_add_race_to_db($race_data='', $args='') {
+		global $wpdb, $uci_results_twitter, $uci_results_pages, $ucicurl_races;
+
+		$data=array();
+
+		// convert to object //
+		if (!is_object($race_data))
+			$race_data=json_decode(json_encode($race_data),FALSE);
+
+		// build race data array //
+		$data=array(
+			'date' => $date = date('Y-m-d', strtotime($race_data->date)),
+			'event' => $race_data->event,
+			'nat' => $race_data->nat,
+			'class' => $race_data->class,
+			'winner' => $race_data->winner,
+			'season' => $race_data->season,
+			'link' => $race_data->link,
+			'code' => $this->build_race_code($race_data),
+			'week' => $this->get_race_week($race_data->date, $race_data->season),
+		);
+		
+		return $data;
+	}
+	
+	public function get_add_race_to_db_results($link='', $formatted=false) {
+		global $wpdb;
+		
+		if (empty($link))
+			return;
+
+		// get race results data //
+		$data=array();
+		$race_results=$this->get_race_results($link);
+		
+		if (!$formatted)
+			return $race_results;
+
+		foreach ($race_results as $result) :
+			$rider_id=$wpdb->get_var("SELECT id FROM $wpdb->uci_results_riders WHERE name = \"$result->name\" AND nat = '$result->nat'");
+
+			// check if we have a rider id, otherwise create one //
+			if (!$rider_id)
+				$rider_id='CREATE';
+
+			if (!isset($result->par) || empty($result->par) || is_null($result->par)) :
+				$par=0;
+			else :
+				$par=$result->par;
+			endif;
+
+			if (!isset($result->pcr) || empty($result->pcr) || is_null($result->pcr)) :
+				$pcr=0;
+			else :
+				$pcr=$result->pcr;
+			endif;
+
+			$data[]=array(
+				'race_id' => $race_id,
+				'place' => $result->place,
+				'name' => $result->name,
+				'nat' => $result->nat,
+				'age' => $result->age,
+				'result' => $result->result,
+				'par' => $par,
+				'pcr' => $pcr,
+				'rider_id' => $rider_id,
+			);
+		endforeach;
+
+		return $data;		
 	}
 
 	/**

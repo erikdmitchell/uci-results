@@ -36,18 +36,18 @@ class UCIResultsRiderRankings {
 				races.week AS week,
 				(
 					SELECT IFNULL(SUM(s_results.par), 0)
-					FROM {$wpdb->uci_results_results} AS s_results
-					LEFT JOIN {$wpdb->uci_results_races} AS s_races
+					FROM $wpdb->uci_results_results AS s_results
+					LEFT JOIN $wpdb->uci_results_races AS s_races
 					ON s_results.race_id = s_races.id
-					WHERE s_races.season='{$season}'
-						AND s_results.rider_id={$rider_id}
-						AND s_races.week<=races.week
+					WHERE s_races.season = '$season'
+						AND s_results.rider_id = $rider_id
+						AND s_races.week <= races.week
 				) AS points
-			FROM {$wpdb->uci_results_results} AS results
-			LEFT JOIN {$wpdb->uci_results_races} AS races
+			FROM $wpdb->uci_results_results AS results
+			LEFT JOIN $wpdb->uci_results_races AS races
 			ON results.race_id = races.id
-			WHERE races.season='{$season}'
-				AND results.rider_id={$rider_id}
+			WHERE races.season = '$season'
+				AND results.rider_id = $rider_id
 			GROUP BY races.week
 			ORDER BY races.week
 		";
@@ -89,9 +89,9 @@ class UCIResultsRiderRankings {
 
 		$sql="
 			SELECT id
-			FROM {$wpdb->uci_results_rider_rankings}
-			WHERE season='{$season}'
-				AND week={$week}
+			FROM $wpdb->uci_results_rider_rankings
+			WHERE season = '$season'
+				AND week = $week
 			ORDER BY points DESC
 		";
 
@@ -131,13 +131,13 @@ class UCIResultsRiderRankings {
 			return;
 
 		$prev_week=$week-1;
-		$prev_week_ranking_ids=$wpdb->get_col("SELECT rider_id FROM {$wpdb->uci_results_rider_rankings}	WHERE season='{$season}' AND week={$prev_week}");
-		$this_week_ranking_ids=$wpdb->get_col("SELECT rider_id FROM {$wpdb->uci_results_rider_rankings}	WHERE season='{$season}' AND week={$week}");
+		$prev_week_ranking_ids=$wpdb->get_col("SELECT rider_id FROM $wpdb->uci_results_rider_rankings WHERE season = '$season' AND week = $prev_week");	
+		$this_week_ranking_ids=$wpdb->get_col("SELECT rider_id FROM $wpdb->uci_results_rider_rankings WHERE season = '$season' AND week = $week");
 
 		// if missing from this week, use last weeks points //
 		foreach ($prev_week_ranking_ids as $rider_id) :
 			if (!in_array($rider_id, $this_week_ranking_ids)) :
-				$prev_points=$wpdb->get_var("SELECT points FROM {$wpdb->uci_results_rider_rankings}	WHERE rider_id={$rider_id} AND season='{$season}' AND week={$prev_week}");
+				$prev_points=$wpdb->get_var("SELECT points FROM $wpdb->uci_results_rider_rankings WHERE rider_id = $rider_id AND season = '$season' AND week = $prev_week");
 
 				$insert_data=array(
 					'rider_id' => $rider_id,

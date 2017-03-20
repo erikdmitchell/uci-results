@@ -11,6 +11,20 @@ function upgrade_0_2_0_db() {
 	require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 
 	global $wpdb;
+	
+	$db_version='0.2.0';
+	
+	// db indexs //
+	$indexs=array(	
+		$wpdb->uci_results_riders => array(
+			'id'
+		),
+		$wpdb->uci_results_rider_rankings => array(
+			'rider_id',
+			'season',
+			'week'
+		),
+	);
 
 	$wpdb->hide_errors();
 	$wpdb->uci_results_season_weeks=$wpdb->prefix.'uci_results_season_weeks';

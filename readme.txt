@@ -3,8 +3,8 @@ Contributors: erikdmitchell
 Donate link: erikdmitchell@gmail.com
 Tags: uci, cycling, bicycle, races
 Requires at least: 4.0
-Tested up to: 4.6
-Stable tag: 0.1.0
+Tested up to: 4.7
+Stable tag: 0.1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,31 @@ coming soon...
 coming soon...
 
 == Changelog ==
+
+= 0.1.5 =
+
+* Database upgraded to version 0.2.1
+* The cron job log is now controlled through admin settings. You can enable, view and clear the log.
+
+= 0.1.4 =
+
+* Reworked our backend for automatically adding races. Synched WP CLI and cron job functionality.
+* Added an automated class to handle our cron job/wp cli automatic functions.
+* Integrated duplicate rider cleanup functions into WP CLI.
+
+= 0.1.3 =
+
+* Database upgrade to version 0.2.0. Mainly added indexes for faster queries.
+
+= 0.1.2 =
+
+* Added trim function to race name. Also added this as part of db upgrade.
+* Added db update/upgrade functionality.
+* Added admin override for custom templates.
+
+= 0.1.1 =
+
+* Added updater
 
 = 0.1.0 =
 

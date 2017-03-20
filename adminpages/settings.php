@@ -1,4 +1,4 @@
-<?php global $uci_results_pages;	?>
+<?php global $uci_results_pages; ?>
 
 <div class="uci-results-settings">
 
@@ -127,12 +127,24 @@
 							<a target="_blank" href="<?php echo get_permalink($uci_results_pages['search']); ?>" class="button button-secondary">View Page</a>
 						</td>
 					</tr>
+					
+					<tr>
+						<th scope="row" valign="top">
+							<label for="template_disable">Disable Templates</label>
+						</th>
+						<td>
+							<input type="checkbox" name="template_disable" id="template_disable" value="1" <?php checked(get_option('uci_results_template_disable', 0), 1, true); ?> />
+							<p class="description">
+								When logged in as an admin, the default templates will be shown. Custom templates will be ignored.
+							</p>
+						</td>
+					</tr>
 
 				</tbody>
 			</table>
 		</section>
 
-		<section class="general">
+		<section class="twitter">
 			<h2>Updates to Twitter</h2>
 
 			<table class="form-table">
@@ -189,6 +201,32 @@
 						</th>
 						<td>
 							<input type="text" name="twitter_access_token_secret" id="twitter_access_token_secret" class="regular-text code" value="<?php echo get_option('uci_results_twitter_access_token_secret', ''); ?>" />
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+		</section>
+
+		<section class="admin">
+			<h2>Administrator</h2>
+
+			<table class="form-table">
+				<tbody>
+
+					<tr>
+						<th scope="row">
+							<label form="enable_cron_log">Enable Cron Log</label>
+						</th>
+						<td>
+							<input type="checkbox" name="enable_cron_log" id="enable_cron_log" value="1" <?php checked(get_option('uci_results_enable_cron_log', ''), 1); ?>>
+							
+							<a href="<?php echo UCI_RESULTS_URL; ?>cron.log" class="button button-secondary">View Log</a> (<span id="uci-results-cron-job-log-size"><?php echo uci_results_format_size(filesize(UCI_RESULTS_PATH.'cron.log')); ?></span>)
+							<a href="" class="button button-secondary" id="uci-results-clear-log">Clear Log</a>
+							
+							<p class="description">
+								Our primary results task is set to run via cron job. If this box is checked, the cron job will output information to the log.
+							</p>
 						</td>
 					</tr>
 
