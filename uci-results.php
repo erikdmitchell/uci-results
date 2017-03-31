@@ -50,6 +50,8 @@ include_once(UCI_RESULTS_PATH.'rest-api/uci-rest-posts-controller.php'); // rest
 include_once(UCI_RESULTS_PATH.'rest-api/rest-api.php'); // basic rest api functions
 include_once(UCI_RESULTS_PATH.'rest-api/filters.php'); // filters for rest api functions
 
+include_once(UCI_RESULTS_PATH.'inc/updater.php'); // github - wp version update function
+
 /**
  * is_uci_results_active function.
  *
