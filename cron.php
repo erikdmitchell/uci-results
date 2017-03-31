@@ -136,11 +136,17 @@ class UCIResultsAutomation {
 	public function update_rider_rankings($season='', $output='raw') {
 		global $wpdb, $uci_results_rider_rankings;
 	
-		if (!$season || $season=='')
+		if (!$season || $season=='') :
 			$season=uci_results_get_current_season();
+			$season=$season->slug;
+		endif;
 
 		// update rider rankings //
-		$rider_ids=$wpdb->get_col("SELECT id FROM $wpdb->uci_results_riders"); // get all rider ids
+		$rider_ids=get_posts(array(
+			'posts_per_page' => -1,
+			'post_type' => 'riders',
+			'fields' => 'ids',
+		));		
 		$uci_results_rider_rankings->clear_db($season); // clear db for season to prevent dups
 				
 		// output //
