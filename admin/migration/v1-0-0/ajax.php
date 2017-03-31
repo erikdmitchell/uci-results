@@ -152,7 +152,7 @@ class UCIResultsMigration100 {
 		
 		$this->update_uci_results_version();
 		
-		update_option('ucicurl_db_version', '0.2.0');
+		update_option('ucicurl_db_version', '1.0.0');
 		
 		echo json_encode(array(
 			'step' => 7,

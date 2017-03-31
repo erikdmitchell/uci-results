@@ -1,6 +1,6 @@
 <div class="uci-results-migration migration-0-2-0">
 
-	<h2>Version 0.2.0 Migration</h2>
+	<h2>DB Version 1.0.0 Migration</h2>
 
 	<div id="uci-results-progressbar"></div>
 	
