@@ -61,9 +61,7 @@ class UCIResultsAutomation {
 				$new_results++;			
 		endforeach;
 		
-		if ($new_results) :
-			uci_results_build_season_weeks($season); // update season weeks - CHECK THIS (future)
-			
+		if ($new_results) :	
 			$this->update_rider_rankings($season, $output); // update rankings
 
 			get_option('uci_results_automation_new_races', $new_results);
@@ -74,8 +72,9 @@ class UCIResultsAutomation {
 		do_action('after_uci_results_add_races_cron');
 	
 		$this->admin_output('The uci_results_add_races cron job finished.', 'log', $output);
-	$new_results=0;
-	$email_message='';
+		
+		$new_results=0;
+		$email_message='';
 
 		return;
 	}
