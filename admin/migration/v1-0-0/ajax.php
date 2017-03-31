@@ -1,5 +1,5 @@
 <?php
-class UCIResultsMigration020 {
+class UCIResultsMigration100 {
 	
 	/**
 	 * __construct function.
@@ -570,5 +570,5 @@ class UCIResultsMigration020 {
 	}		
 }	
 
-new UCIResultsMigration020();
+new UCIResultsMigration100();
 ?>

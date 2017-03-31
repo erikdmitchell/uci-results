@@ -107,7 +107,7 @@ function run_clean_up() {
  * @return void
  */
 function finalizeMigration() {
-	jQuery('.migration-0_2_0.notice').remove(); // clear admin notice
+	jQuery('.migration-1_0_0.notice').remove(); // clear admin notice
 	jQuery('<div class="notice notice-success"><p><b>Database migration complete!</b> Enjoy the awesomeness.</p></div>').insertAfter(jQuery('.uci-results.wrap h1:first')); // notify we are done
 }
 
