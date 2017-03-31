@@ -107,60 +107,10 @@ function ucicurl_db_update() {
 
 	if ($installed_version!=$ucicurl_db_version) :
 		$wpdb->hide_errors();
-		$wpdb->uci_results_races=$wpdb->prefix.'uci_curl_races';
-		$wpdb->uci_results_results=$wpdb->prefix.'uci_curl_results';
-		$wpdb->uci_results_riders=$wpdb->prefix.'uci_curl_riders';
 		$wpdb->uci_results_rider_rankings=$wpdb->prefix.'uci_curl_rider_rankings';
 		$wpdb->uci_results_related_races=$wpdb->prefix.'uci_curl_related_races';
-		$wpdb->uci_results_series=$wpdb->prefix.'uci_curl_series';
 		$wpdb->uci_results_series_overall=$wpdb->prefix.'uci_results_series_overall';
-
-		$sql_races="
-			CREATE TABLE $wpdb->uci_results_races (
-				id bigint(20) NOT NULL AUTO_INCREMENT,
-				date DATE NOT NULL,
-				event TEXT NOT NULL,
-				nat VARCHAR(5) NOT NULL,
-				class VARCHAR(5) NOT NULL ,
-				winner VARCHAR(250) NOT NULL,
-				season VARCHAR(50) NOT NULL,
-				week bigint(20) NOT NULL DEFAULT '0',
-				link TEXT NOT NULL,
-				code TEXT NOT NULL,
-				related_races_id bigint(20) NOT NULL DEFAULT '0',
-				series_id bigint(20) NOT NULL DEFAULT '0',
-				twitter VARCHAR(75) NOT NULL,
-				PRIMARY KEY (`id`)
-			);
-		";
-
-		$sql_results="
-			CREATE TABLE $wpdb->uci_results_results (
-				id bigint(20) NOT NULL AUTO_INCREMENT,
-				race_id bigint(20) NOT NULL,
-				place SMALLINT NOT NULL DEFAULT '0',
-				name LONGTEXT NOT NULL,
-				nat VARCHAR(5) NOT NULL,
-				age TINYINT NOT NULL DEFAULT '0',
-				result VARCHAR(10) NOT NULL,
-				pcr bigint(20) NOT NULL DEFAULT '0',
-				pcr VARCHAR(10) NOT NULL DEFAULT '0',
-				rider_id bigint(20) NOT NULL,
-				PRIMARY KEY (`id`)
-			);
-			ALTER DATABASE {$wpdb->uci_results_results} CHARACTER SET utf8;
-		";
-
-		$sql_riders="
-			CREATE TABLE $wpdb->uci_results_riders (
-			  id bigint(20) NOT NULL AUTO_INCREMENT,
-				name LONGTEXT NOT NULL,
-				nat VARCHAR(5) NOT NULL,
-				slug LONGTEXT NOT NULL,
-				twitter VARCHAR(75) NOT NULL,
-				PRIMARY KEY (`id`)
-			);
-		";
+		$wpdb->uci_results_season_weeks=$wpdb->prefix.'uci_results_season_weeks';
 
 		$sql_rider_rankings="
 			CREATE TABLE $wpdb->uci_results_rider_rankings (
@@ -176,16 +126,9 @@ function ucicurl_db_update() {
 
 		$sql_related_races="
 			CREATE TABLE $wpdb->uci_results_related_races (
-			  id bigint(20) NOT NULL AUTO_INCREMENT,
-				race_ids TEXT NOT NULL,
-				PRIMARY KEY (`id`)
-			);
-		";
-
-		$sql_series="
-			CREATE TABLE $wpdb->uci_results_series (
-			  id bigint(20) NOT NULL AUTO_INCREMENT,
-				name TEXT NOT NULL,
+				id bigint(20) NOT NULL AUTO_INCREMENT,
+				race_id bigint(20) NOT NULL DEFAULT '0',
+				related_race_id bigint(20) NOT NULL DEFAULT '0',
 				PRIMARY KEY (`id`)
 			);
 		";
@@ -202,14 +145,22 @@ function ucicurl_db_update() {
 			);
 		";
 
+		$sql_season_weeks="
+			CREATE TABLE $wpdb->uci_results_season_weeks (
+			  	id bigint(20) NOT NULL AUTO_INCREMENT,
+			  	term_id bigint(20) NOT NULL DEFAULT '0',
+			  	week bigint(20) NOT NULL DEFAULT '0',
+				start date NOT NULL,
+				end date NOT NULL,
+				PRIMARY KEY (`id`)
+			);
+		";
+
 		dbDelta(array(
-			$sql_races,
-			$sql_results,
-			$sql_riders,
 			$sql_rider_rankings,
 			$sql_related_races,
-			$sql_series,
 			$sql_series_overall,
+			$sql_season_weeks,
 		));
 
 		update_option('ucicurl_db_version', $ucicurl_db_version);
