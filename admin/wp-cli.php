@@ -323,49 +323,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 
 		WP_CLI::success("All done!");
 	}
-	
-	/**
-	 * Add weeks in a season.
-	 *
-	 * ## OPTIONS
-	 *
-	 * <season>
-	 * : the season
-	 *	 
-	 * ## EXAMPLES
-	 *
-	 * wp uciresults add-weeks 2016/2017
-	 *
-	 * @subcommand add-weeks
-	*/
-	public function add_weeks($args, $assoc_args) {
-		global $wpdb, $uci_results_rider_rankings, $ucicurl_races;
-
-		$season=0;
-
-		// set our season //
-		if (isset($args[0]) || isset($assoc_args['season'])) :
-			if (isset($args[0])) :
-				$season=$args[0];
-			elseif (isset($assoc_args['season'])) :
-				$season=$assoc_args['season'];
-			endif;
-		endif;
-
-		if (!$season || $season=='')
-			WP_CLI::error('No season found.');
-
-		$season_weeks=uci_results_build_season_weeks($season);
 		
-		foreach ($season_weeks as $value) :
-			if ($value['season'] == $season) :
-				print_r($value);			
-			endif;
-		endforeach;
-
-		WP_CLI::success('Updated season weeks.');
-	}
-	
 	/**
 	 * format_season_data function.
 	 * 
