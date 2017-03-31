@@ -297,26 +297,6 @@ function ucicurl_update_db_check() {
 }
 add_action('init', 'ucicurl_update_db_check', 99);
 
-
-
-/**
- * uci_results_remove_database_tables function.
- *
- * @access public
- * @return void
- */
-function uci_results_remove_database_tables() {
-	global $wpdb;
-
-	$wpdb->query("DROP TABLE $wpdb->uci_results_races");
-	$wpdb->query("DROP TABLE $wpdb->uci_results_results");
-	$wpdb->query("DROP TABLE $wpdb->uci_results_riders");
-	$wpdb->query("DROP TABLE $wpdb->uci_results_rider_rankings");
-	$wpdb->query("DROP TABLE $wpdb->uci_results_related_races");
-	$wpdb->query("DROP TABLE $wpdb->uci_results_series");
-	$wpdb->query("DROP TABLE $wpdb->uci_results_series_overall");
-}
-
 /**
  * uci_results_index_exists function.
  * 
