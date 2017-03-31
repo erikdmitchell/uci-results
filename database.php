@@ -375,4 +375,26 @@ function uci_results_create_index($table='', $id='') {
 
 	return;
 }
+
+/**
+ * uci_results_column_exists function.
+ * 
+ * @access public
+ * @param string $table (default: '')
+ * @param string $column (default: '')
+ * @return void
+ */
+function uci_results_column_exists($table='', $column='') {
+	global $wpdb;
+	
+	if (empty($table) || empty($column))
+		return false;
+		
+	$column_info=$wpdb->get_row("SELECT * FROM information_schema.COLUMNS WHERE TABLE_NAME = '$table' AND COLUMN_NAME = '$column'");
+	
+	if ($column_info===null || is_wp_error($column_info))
+		return false;
+		
+	return true;
+}
 ?>
