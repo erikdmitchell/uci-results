@@ -158,7 +158,7 @@ class UCIResultsAutomation {
 
 		// further updates //
 		$this->update_rider_weekly_points($rider_ids, $season, $output);
-		//$this->update_rider_weekly_rank($season, $output);
+		$this->update_rider_weekly_rank($season, $output);
 	
 		return;
 	}
