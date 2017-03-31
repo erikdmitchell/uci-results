@@ -169,7 +169,7 @@ function uci_get_rider_id($slug='') {
 function uci_results_rider_rankings_url() {
 	global $uci_results_pages;
 
-	$url=get_permalink($uci_results_pages['rider_rankings']);
+	$url=get_permalink($uci_results_pages['riders']);
 
 	echo $url;
 }
