@@ -1,7 +1,7 @@
 <?php
 global $ucicurl_db_version;
 
-$ucicurl_db_version='0.2.1';
+$ucicurl_db_version='1.0.0';
 
 /**
  * ucicurl_set_db_tables function.
@@ -286,7 +286,10 @@ function ucicurl_update_db_check() {
 		$ucicurl_db_version=uci_results_upgrade_0_2_0();
 	elseif (get_option('ucicurl_db_version') < '0.2.1') :
 		include_once(UCI_RESULTS_PATH.'updates/upgrade-0_2_1.php');
-		$ucicurl_db_version=uci_results_upgrade_0_2_1();		
+		$ucicurl_db_version=uci_results_upgrade_0_2_1();
+	elseif (get_option('ucicurl_db_version') < '1.0.0') :
+		include_once(UCI_RESULTS_PATH.'updates/upgrade-1_0_0.php');
+		upgrade_1_0_0_db();		
 	elseif (get_option('ucicurl_db_version') != $ucicurl_db_version) :
 		$ucicurl_db_version=ucicurl_db_update();
 	endif;
