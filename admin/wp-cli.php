@@ -10,13 +10,6 @@ if (!defined('WP_CLI') || !WP_CLI)
 class UCIResultsCLI extends WP_CLI_Command {
 
 	/**
-   * A basic message to know this thing is running.
-  */
-	public function active() {
-		WP_CLI::success('UCI Results CLI is active!');
-	}
-
-	/**
 	 * Add races (and results) to our db from a season
 	 *
 	 * ## OPTIONS
