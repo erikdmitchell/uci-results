@@ -21,7 +21,7 @@ class UCIRiderStats {
 	 * @param string $args (default: '')
 	 * @return void
 	 */
-	public function __construct($rider_id=0, $args='') {
+	public function __construct($rider_id=0, $args='') {		
 		if (!$rider_id)
 			return false;
 			
