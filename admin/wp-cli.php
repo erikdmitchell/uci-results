@@ -196,9 +196,9 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 * @subcommand list-seasons
 	*/
 	public function list_seasons_with_urls() {
-		global $uci_results_admin_pages;
+		global $uci_results_admin;
 
-		foreach ($uci_results_admin_pages->config->urls as $season => $url) :
+		foreach ($uci_results_admin->config->urls as $season => $url) :
 			$seasons[]=array('season' => $season);
 		endforeach;
 
@@ -215,7 +215,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 * : the season
 	 *
 	 * [--race_id=<race_id>]
-	 * : Get a specific race via id.
+	 * : Get a specific race via id. DOES NOT WORK
 	 *
 	 * [--limit=<limit>]
 	 * : Limit races returned.
@@ -229,7 +229,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 *   - table
 	 *   - yaml
 	 *   - json
-	 *	 _ csv
+	 *	 - csv
 	 *	 - php
 	 * ---	 
 	 *
@@ -240,7 +240,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 * @subcommand get-race-data
 	*/
 	public function get_race_data($args, $assoc_args) {
-		global $wpdb, $uci_results_add_races, $uci_results_admin_pages;
+		global $wpdb, $uci_results_add_races, $uci_results_admin;
 
 		$season=0;
 		$race_id=0;
@@ -276,10 +276,10 @@ class UCIResultsCLI extends WP_CLI_Command {
 			WP_CLI::log("Race ID: $race_id");
 
 		// find our urls //
-		if (!isset($uci_results_admin_pages->config->urls->$season) || empty($uci_results_admin_pages->config->urls->$season)) :
+		if (!isset($uci_results_admin->config->urls->$season) || empty($uci_results_admin->config->urls->$season)) :
 			WP_CLI::error('No url found.');
 		else :
-			$url=$uci_results_admin_pages->config->urls->$season;
+			$url=$uci_results_admin->config->urls->$season;
 		endif;
 
 		$races=$uci_results_add_races->get_race_data($season, $limit, true, $url);
@@ -287,10 +287,13 @@ class UCIResultsCLI extends WP_CLI_Command {
 		if (empty($races))
 			WP_CLI::error('No races found.');
 
+		if ($output!='php' && $output!='raw')
+			$formatted=true;
+
 		// process our races //
 		foreach ($races as $race) :
 			$race_data=$uci_results_add_races->get_add_race_to_db($race);
-			$results_data=$uci_results_add_races->get_add_race_to_db_results($race_data['link']);
+			$results_data=$uci_results_add_races->get_add_race_to_db_results($race_data['link'], $formatted, $race_id);
 
 			if ($output=='php') :
 				$stdout="\n\n";
@@ -322,26 +325,6 @@ class UCIResultsCLI extends WP_CLI_Command {
 		endforeach;
 
 		WP_CLI::success("All done!");
-	}
-		
-	/**
-	 * format_season_data function.
-	 * 
-	 * @access protected
-	 * @param string $season_data (default: '')
-	 * @return void
-	 */
-	protected function format_season_data($season_data='') {
-		if (empty($season_data))
-			return $season_data;
-			
-		$arr=array(
-			'season' => $season_data['season'],
-			'start' => $season_data['start'],
-			'end' => $season_data['end'],
-		);
-		
-		return $arr;
 	}
 	
 	/**

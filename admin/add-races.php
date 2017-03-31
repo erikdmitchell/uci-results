@@ -603,6 +603,14 @@ class UCIResultsAddRaces {
 		return $message;
 	}
 	
+	/**
+	 * get_add_race_to_db function.
+	 * 
+	 * @access public
+	 * @param string $race_data (default: '')
+	 * @param string $args (default: '')
+	 * @return void
+	 */
 	public function get_add_race_to_db($race_data='', $args='') {
 		global $wpdb, $uci_results_twitter, $uci_results_pages, $ucicurl_races;
 
@@ -628,21 +636,30 @@ class UCIResultsAddRaces {
 		return $data;
 	}
 	
-	public function get_add_race_to_db_results($link='', $formatted=false) {
+	/**
+	 * get_add_race_to_db_results function.
+	 * 
+	 * @access public
+	 * @param string $link (default: '')
+	 * @param bool $formatted (default: false)
+	 * @param int $race_id (default: 0)
+	 * @return void
+	 */
+	public function get_add_race_to_db_results($link='', $formatted=false, $race_id=0) {
 		global $wpdb;
-		
+
 		if (empty($link))
 			return;
 
 		// get race results data //
 		$data=array();
 		$race_results=$this->get_race_results($link);
-		
+	
 		if (!$formatted)
 			return $race_results;
 
 		foreach ($race_results as $result) :
-			$rider_id=$wpdb->get_var("SELECT id FROM $wpdb->uci_results_riders WHERE name = \"$result->name\" AND nat = '$result->nat'");
+			$rider_id=uci_get_rider_id_by_name($result->name);			
 
 			// check if we have a rider id, otherwise create one //
 			if (!$rider_id)
@@ -897,21 +914,21 @@ class UCIResultsAddRaces {
 				continue;
 
 			// process row //
-	  	$race_results[$row_key]=new stdClass();
-	  	$cols=$row->getElementsByTagName('td'); 	// get each column by tag name
-	  	$col_values=array();
+			$race_results[$row_key]=new stdClass();
+			$cols=$row->getElementsByTagName('td'); 	// get each column by tag name
+			$col_values=array();
 
-	  	// get col values //
-		  foreach ($cols as $key => $col) :
-		  	$col_values[]=$col->nodeValue;
-		  endforeach;
+			// get col values //
+			foreach ($cols as $key => $col) :
+		  		$col_values[]=$col->nodeValue;
+		  	endforeach;
 
-		  // make our results row array w/ header as key(s) //
-		  $race_results[$row_key]=array_combine($header_arr, $col_values);
+		  	// make our results row array w/ header as key(s) //
+		  	$race_results[$row_key]=array_combine($header_arr, $col_values);
 
-		  // we need to make one swap - rank/place //
-		  $race_results[$row_key]['place']=$race_results[$row_key]['rank'];
-		  unset($race_results[$row_key]['rank']);
+		  	// we need to make one swap - rank/place //
+		  	$race_results[$row_key]['place']=$race_results[$row_key]['rank'];
+		  	unset($race_results[$row_key]['rank']);
 		endforeach;
 
 		// convert everything to an object //

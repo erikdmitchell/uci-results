@@ -160,6 +160,14 @@ function uci_get_rider_id($slug='') {
 	return $id;
 }
 
+function uci_get_rider_id_by_name($name='') {
+	global $wpdb;
+
+	$id=$wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE post_title = '$name'");
+
+	return $id;
+}
+
 /**
  * uci_results_rider_rankings_url function.
  *
