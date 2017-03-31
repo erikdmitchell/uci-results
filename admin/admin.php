@@ -346,13 +346,13 @@ class UCIResultsAdmin {
 	 * @return void
 	 */
 	public function include_migration_files() {
-		include_once(UCI_RESULTS_ADMIN_PATH.'/migration/v0-2-0/ajax.php');	
+		include_once(UCI_RESULTS_ADMIN_PATH.'/migration/v1-0-0/ajax.php');	
 		
 		if (isset($_GET['subpage']) && $_GET['subpage']=='migration') :
 			if (isset($_GET['version'])) :					
 				switch ($_GET['version']) :
-					case '0_2_0' :
-						include_once(UCI_RESULTS_ADMIN_PATH.'/migration/v0-2-0/ajax.php');	
+					case '1_0_0' :
+						include_once(UCI_RESULTS_ADMIN_PATH.'/migration/v1-0-0/ajax.php');	
 						break;
 				endswitch;
 			endif;
