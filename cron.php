@@ -362,67 +362,6 @@ function uci_results_cron_job_email($subject='', $message='') {
 	wp_mail($to, $subject, $message);
 }
 
-/**
- * uci_results_write_cron_log function.
- * 
- * @access public
- * @param mixed $log
- * @return void
- */
-function uci_results_update_rider_weekly_points() {
-	global $wpdb, $uci_results_rider_rankings;
-
-	$season=uci_results_get_current_season();
-
-	// update rider rankings //
-	$rider_ids=$wpdb->get_col("SELECT id FROM $wpdb->uci_results_riders"); // get all rider ids
-	$uci_results_rider_rankings->clear_db($season); // clear db for season to prevent dups
-
-	// update rider weekly points //
-	foreach ($rider_ids as $rider_id) :
-		$result=$uci_results_rider_rankings->update_rider_weekly_points($rider_id, $season);
-		write_cron_log(strip_tags($result));
-	endforeach;
-
-	write_cron_log('The uci_results_update_rider_weekly_points cron job finished.');
-
-	// alert admin //
-	$message="The uci_results_update_rider_weekly_points cron job finished.";
-	wp_mail(get_option('admin_email'), 'Cron Job: Updated Rider Weekly Points', $message);
-
-	return;
-}
-    error_log( print_r( $log, true )."\n", 3, UCI_RESULTS_PATH.'cron.log' );
-
-/**
- * uci_results_update_rider_weekly_rank function.
- *
- * @access public
- * @return void
- */
-  } else {
-	global $uci_results_rider_rankings;
-
-	$season=uci_results_get_current_season();
-	$weeks=uci_results_get_season_weeks($season);
-
-	// update rider weekly rank //
-	foreach ($weeks as $week) :
-		$result=$uci_results_rider_rankings->update_rider_weekly_rankings($season, $week->week);
-		write_cron_log(strip_tags($result));
-	endforeach;
-
-	$uci_results_rider_rankings->update_twitter();
-
-    error_log( "$log\n", 3, UCI_RESULTS_PATH.'cron.log' );
-  }
-	$message="The uci_results_update_rider_weekly_rank cron job finished.";
-	wp_mail(get_option('admin_email'), 'Cron Job: Updated Rider Weekly Rank', $message);
-
-	return;
-}
-//add_action('uci_results_update_rider_weekly_rank', 'uci_results_update_rider_weekly_rank');
-
 // write to custom cron log function //
 if ( ! function_exists('write_cron_log')) {
    function write_cron_log($log)  {
