@@ -190,9 +190,9 @@ class UCIResultsAddRaces {
 		$timeout = 5;
 
 		// if no passed url, use config //
-		if (!$url && isset($uci_results_admin->config->urls->$season)) :
+		if (!$url && isset($uci_results_admin->config->urls->$season)) :		
 			$url=$uci_results_admin->config->urls->$season;
-		else :
+		elseif (!$url) :
 			return false;
 		endif;
 
