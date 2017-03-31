@@ -211,10 +211,10 @@ class UCIResultsAdmin {
 			delete_option('country_page_id');
 		endif;
 
-		if (isset($_POST['rider_rankings_page_id'])) :
-			update_option('rider_rankings_page_id', $_POST['rider_rankings_page_id']);
+		if (isset($_POST['riders_page_id'])) :
+			update_option('riders_page_id', $_POST['riders_page_id']);
 		else :
-			delete_option('rider_rankings_page_id');
+			delete_option('riders_page_id');
 		endif;
 
 		if (isset($_POST['races_page_id'])) :
