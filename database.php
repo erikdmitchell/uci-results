@@ -12,13 +12,10 @@ $ucicurl_db_version='1.0.0';
 function ucicurl_set_db_tables() {
 	global $wpdb;
 
-	$wpdb->uci_results_races=$wpdb->prefix.'uci_curl_races';
-	$wpdb->uci_results_results=$wpdb->prefix.'uci_curl_results';
-	$wpdb->uci_results_riders=$wpdb->prefix.'uci_curl_riders';
 	$wpdb->uci_results_rider_rankings=$wpdb->prefix.'uci_curl_rider_rankings';
 	$wpdb->uci_results_related_races=$wpdb->prefix.'uci_curl_related_races';
-	$wpdb->uci_results_series=$wpdb->prefix.'uci_curl_series';
 	$wpdb->uci_results_series_overall=$wpdb->prefix.'uci_results_series_overall';
+	$wpdb->uci_results_season_weeks=$wpdb->prefix.'uci_results_season_weeks';
 }
 ucicurl_set_db_tables();
 
