@@ -8,13 +8,21 @@
 		</code>
 		
 		<code>
-			or: wp uciresults get-race-data <season> [--race_id=<race_id>] [--limit=<limit>] [--output=<output>]<br />
-			or: wp uciresults list-seasons<br />
-			or: wp uciresults list-seasons-db<br />
+			wp uciresults get-race-data <season> [--race_id=<race_id>] [--limit=<limit>] [--output=<output>]
+		</code>
+			
+		<code>
+			wp uciresults list-seasons
+		</code>
+		
+		<code>
+			wp uciresults list-seasons-db
+		
+		</code>
 			or: wp uciresults remove-rider-dup <rider> [--loose=<loose>]<br />
 			or: wp uciresults series-overall <series_id> <season><br />
 			or: wp uciresults show-rider-dups<br />
-			or: wp uciresults update-race-weeks <season> [--update=<update>]<br />
+		
 		<code>	
 			wp uciresults update-rider-rankings <season>
 		</code>

@@ -184,9 +184,14 @@ class UCIResultsCLI extends WP_CLI_Command {
 	public function list_seasons_in_db() {
 		global $wpdb;
 
-		$seasons=$wpdb->get_results("SELECT season FROM {$wpdb->uci_results_races} GROUP BY season");
+		$terms=get_terms(array(
+			'taxonomy' => 'season',
+			'hide_empty' => false,
+		));
 
-		WP_CLI\Utils\format_items( 'table', $seasons, array( 'season' ) );
+		$fields=array('term_id', 'name', 'slug', 'count');
+		
+		WP_CLI\Utils\format_items( 'table', $terms, $fields);
 	}
 
 	/**
@@ -327,71 +332,6 @@ class UCIResultsCLI extends WP_CLI_Command {
 		WP_CLI::success("All done!");
 	}
 	
-	/**
-	 * Update races weeks.
-	 *
-	 * ## OPTIONS
-	 *
-	 * <season>
-	 * : the season
-	 *	 
-	 * [--update=<update>]
-	 * : Run the update (true/false).
-	 *	 
-	 * ## EXAMPLES
-	 *
-	 * wp uciresults update-race-weeks 2016/2017
-	 *
-	 * @subcommand update-race-weeks
-	*/
-	public function update_race_weeks($args, $assoc_args) {
-		global $wpdb, $uci_results_add_races;
-
-		$season=0;
-		$update=0;
-
-		// set our season //
-		if (isset($args[0]) || isset($assoc_args['season'])) :
-			if (isset($args[0])) :
-				$season=$args[0];
-			elseif (isset($assoc_args['season'])) :
-				$season=$assoc_args['season'];
-			endif;
-		endif;
-
-		// setup update //
-		if (isset($assoc_args['update'])) :
-			if (isset($assoc_args['update'])) :
-				$update=$assoc_args['update'];
-			endif;
-		endif;
-
-		if (!$season || $season=='')
-			WP_CLI::error('No season found.');
-		
-		// races //
-		$races=$wpdb->get_results("SELECT * FROM wp_uci_curl_races WHERE season = '$season' ORDER by week");
-		
-		// add generated week //
-		foreach ($races as $race) :
-			$race->genweek=$uci_results_add_races->get_race_week($race->date, $race->season);
-		endforeach;
-            
-        WP_CLI\Utils\format_items('table', $races, array('id', 'date', 'event', 'week', 'genweek'));
-        
-        if ($update) :
-        	WP_CLI::log("Running update...");
-        	
-	   		foreach ($races as $race) :
-				$wpdb->update($wpdb->uci_results_races, array('week' => $race->genweek), array('id' => $race->id));
-			endforeach;     	
-        else :
-        	WP_CLI::warning("Update not run.");
-        endif;
-
-		WP_CLI::success('Updated season weeks.');
-	}	
-
 	/**
 	 * Removes duplicate riders from the database
 	 *
