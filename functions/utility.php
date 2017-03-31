@@ -176,4 +176,19 @@ function uci_results_format_size($size='') {
       	return (round($size/pow(1024, ($i = floor(log($size, 1024)))), 2) . $sizes[$i]);
     endif;
 }
+
+/**
+ * uci_results_display_total function.
+ *
+ * @access public
+ * @param array $arr (default: array())
+ * @return void
+ */
+function uci_results_display_total($arr=array()) {
+	if (!$arr || empty($arr)) :
+		echo 0;
+	else :
+		echo count($arr);
+	endif;
+}
 ?>
