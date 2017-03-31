@@ -1,7 +1,7 @@
 <?php
 global $ucicurl_db_version;
 
-$ucicurl_db_version='0.2.0';
+$ucicurl_db_version='1.0.0';
 
 /**
  * ucicurl_set_db_tables function.
