@@ -23,12 +23,15 @@ class UCIResultsAutomation {
 	 */
 	public function add_races($season='', $output='raw') {
 		global $uci_results_add_races;
-		
+
 		$new_results=0;
 		
 		if (!$season || $season=='')
 			$season=uci_results_get_current_season();
-	
+
+		if (is_object($season))
+			$season=$season->slug;
+			
 		$url=$this->get_season_url($season);
 	
 		if (!$url) :
@@ -247,15 +250,18 @@ class UCIResultsAutomation {
 	 * @return void
 	 */
 	public function get_season_url($season='') {
-		global $uci_results_admin_pages;
+		global $uci_results_admin;
 		
 		if (empty($season))
 			$season=uci_results_get_current_season();
 			
-		if (!isset($uci_results_admin_pages->config->urls->$season) || empty($uci_results_admin_pages->config->urls->$season))
+		if (is_object($season))
+			$season=$season->slug;			
+	
+		if (!isset($uci_results_admin->config->urls->$season) || empty($uci_results_admin->config->urls->$season))
 			return false;
 			
-		return $uci_results_admin_pages->config->urls->$season;
+		return $uci_results_admin->config->urls->$season;
 	}
 	
 	/**
