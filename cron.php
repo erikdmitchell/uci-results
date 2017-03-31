@@ -134,23 +134,25 @@ class UCIResultsAutomation {
 	 * @return void
 	 */
 	public function update_rider_rankings($season='', $output='raw') {
-		global $wpdb, $uci_results_rider_rankings, $ucicurl_races;
+		global $wpdb, $uci_results_rider_rankings;
 	
 		if (!$season || $season=='')
 			$season=uci_results_get_current_season();
 
-		$weeks=$ucicurl_races->weeks($season); // get weeks in season
-		$uci_results_rider_rankings->clear_db($season); // clear db for season to prevent dups
+		// update rider rankings //
 		$rider_ids=$wpdb->get_col("SELECT id FROM $wpdb->uci_results_riders"); // get all rider ids
-		
+		$uci_results_rider_rankings->clear_db($season); // clear db for season to prevent dups
+				
+		// output //
 		if ($output=='wpcli') :
 			WP_CLI::log("Rider rankings table for $season cleared.");
 		else :
 			echo 'Rider rankings table for '.$season.' cleared.'; // shared
 		endif;
 
+		// further updates //
 		$this->update_rider_weekly_points($rider_ids, $season, $output);
-		$this->update_rider_weekly_rank($weeks, $season, $output);
+		$this->update_rider_weekly_rank($season, $output);
 	
 		return;
 	}
@@ -202,21 +204,20 @@ class UCIResultsAutomation {
 	 * update_rider_weekly_rank function.
 	 * 
 	 * @access public
-	 * @param string $weeks (default: '')
 	 * @param string $season (default: '')
 	 * @param string $output (default: 'raw')
 	 * @return void
 	 */
-	public function update_rider_weekly_rank($weeks='', $season='', $output='raw') {
+	public function update_rider_weekly_rank($season='', $output='raw') {
 		global $uci_results_rider_rankings;
-		
-		if (empty($weeks))
-			return false;
-			
-		if (empty($season))
-			$season=uci_results_get_current_season();
 
+		$weeks=uci_results_get_season_weeks($season);
 		$count=count($weeks);
+					
+		if (empty($season)) :
+			$season=uci_results_get_current_season();
+			$season=$season->slug;
+		endif;
 
 		if ($output=='wpcli') :
 			$progress=\WP_CLI\Utils\make_progress_bar('Updating weekly ranks', $count);
@@ -224,16 +225,16 @@ class UCIResultsAutomation {
 			$progress='';
 		endif;
 	
-		// update weekly points //
-		for ( $i = 0; $i < $count; $i++ ) :
-			$result=$uci_results_rider_rankings->update_rider_weekly_rankings($season, $weeks[$i]);
+		// update weekly rank //
+		foreach ($weeks as $week) :
+			$result=$uci_results_rider_rankings->update_rider_weekly_rankings($season, $week->week);
 			
 			if ($output=='wpcli') :
 				$progress->tick();
 			else :
 				$this->admin_output(strip_tags( $result), '', $output);
 			endif;
-		endfor;
+		endforeach;
 	
 		if ($output=='wpcli')
 			$progress->finish();	
