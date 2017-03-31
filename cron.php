@@ -172,8 +172,6 @@ class UCIResultsAutomation {
 			$season=uci_results_get_current_season();
 
 		$count=count($rider_ids);
-			$new_results++;
-	endforeach;
 
 		if ($output=='wpcli') :
 			$progress=\WP_CLI\Utils\make_progress_bar('Updating weekly points', $count);
@@ -195,7 +193,7 @@ class UCIResultsAutomation {
 		if ($output=='wpcli')
 			$progress->finish();	
 
-		return;		
+		return;	
 	}
 
 	/**
