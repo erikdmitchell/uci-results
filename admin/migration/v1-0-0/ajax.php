@@ -150,7 +150,10 @@ class UCIResultsMigration100 {
 		// remove race ids col from related races //
 		$wpdb->query("ALTER TABLE $wpdb->uci_results_related_races DROP COLUMN race_ids");
 		
-		$this->update_uci_results_version();
+		// convert years to slugs //
+		$this->convert_years_to_slugs();
+		
+		$this->update_version();
 		
 		update_option('ucicurl_db_version', '1.0.0');
 		
@@ -161,6 +164,30 @@ class UCIResultsMigration100 {
 		));
 		
 		wp_die();
+	}
+	
+	/**
+	 * convert_years_to_slugs function.
+	 * 
+	 * @access protected
+	 * @return void
+	 */
+	protected function convert_years_to_slugs() {
+		global $wpdb;
+		
+		$wpdb->query(
+			$wpdb->prepare( 
+				"UPDATE $wpdb->uci_results_rider_rankings SET season = REPLACE(season, '/', '')"
+			)
+		);
+		
+		$wpdb->query(
+			$wpdb->prepare( 
+				"UPDATE $wpdb->uci_results_series_overall SET season = REPLACE(season, '/', '')"
+			)
+		);
+		
+		return;
 	}
 
 	/**
@@ -559,12 +586,12 @@ class UCIResultsMigration100 {
 	}
 
 	/**
-	 * update_uci_results_version function.
+	 * update_version function.
 	 * 
 	 * @access protected
 	 * @return void
 	 */
-	protected function update_uci_results_version() {
+	protected function update_version() {
 		if (UCI_RESULTS_VERSION != get_option('uci_results_version'))
 			update_option('uci_results_version', UCI_RESULTS_VERSION);
 	}		
