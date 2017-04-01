@@ -19,10 +19,7 @@
 			wp uciresults list-seasons-db
 		
 		</code>
-			or: wp uciresults remove-rider-dup <rider> [--loose=<loose>]<br />
-			or: wp uciresults series-overall <series_id> <season><br />
-			or: wp uciresults show-rider-dups<br />
-		
+			or: wp uciresults series-overall <series_id> <season>
 		<code>	
 			wp uciresults update-rider-rankings <season>
 		</code>

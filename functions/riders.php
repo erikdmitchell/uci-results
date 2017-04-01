@@ -140,7 +140,7 @@ function uci_get_riders_by_rank($args='') {
 	$default_args=array(
 		'per_page' => 10,
 		'order_by' => 'rank',
-		'order' => 'DESC',
+		'order' => 'ASC',
 		'season' => uci_results_get_default_rider_ranking_season(),
 		'week' => uci_results_get_default_rider_ranking_week(),
 		'nat' => '',
@@ -148,7 +148,7 @@ function uci_get_riders_by_rank($args='') {
 	);
 	$args=wp_parse_args($args, $default_args);
 	$riders=new RiderRankingsQuery($args);
-	
+
 	return $riders->posts;
 }
 
