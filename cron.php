@@ -147,7 +147,7 @@ class UCIResultsAutomation {
 			'post_type' => 'riders',
 			'fields' => 'ids',
 		));		
-		$uci_results_rider_rankings->clear_db($season); // clear db for season to prevent dups
+		//$uci_results_rider_rankings->clear_db($season); // clear db for season to prevent dups
 				
 		// output //
 		if ($output=='wpcli') :
@@ -157,9 +157,12 @@ class UCIResultsAutomation {
 		endif;
 
 		// further updates //
-		$this->update_rider_weekly_points($rider_ids, $season, $output);
-		$this->update_rider_weekly_rank($season, $output);
+		//$this->update_rider_weekly_points($rider_ids, $season, $output);
+		//$this->update_rider_weekly_rank($season, $output);
 	
+		// do our twitter output //
+		$uci_results_rider_rankings->update_twitter();
+		
 		return;
 	}
 
