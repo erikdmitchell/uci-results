@@ -186,6 +186,8 @@ class RiderRankingsQuery {
 	 * @return void
 	 */
 	protected function where_clause($q) {
+		global $wpdb;
+		
 		$where=array();
 
 		// check season //
