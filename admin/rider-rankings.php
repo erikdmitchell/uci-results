@@ -209,10 +209,8 @@ class UCIResultsRiderRankings {
 			return false;
 
 		$rider_info='';
-		$riders=new UCI_Results_Query(array(
-			'per_page' => 5,
-			'type' => 'riders',
-			'rankings' => true
+		$riders=new RiderRankingsQuery(array(
+			'per_page' => 1,
 		));
 
 		// get our leader info //
@@ -220,7 +218,7 @@ class UCIResultsRiderRankings {
 			$rider=$riders->posts[0];
 
 			// use twitter if we have it //
-			$twitter=$uci_riders->get_twitter($rider->id);
+			$twitter=$uci_riders->get_twitter($rider->ID);
 
 			if (!empty($twitter)) :
 				$name='@'.$twitter;
@@ -231,7 +229,7 @@ class UCIResultsRiderRankings {
 			$rider_info=$name.' ('.$rider->nat.') leads the rankings with '.$rider->points.' points.';
 		endif;
 
-		$url=get_permalink($uci_results_pages['rider_rankings']);
+		$url=get_permalink($uci_results_pages['riders']);
 		$status=$rider_info.' '.$url;
 		$uci_results_twitter->update_status($status);
 	}
