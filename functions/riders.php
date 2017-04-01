@@ -129,6 +129,13 @@ function uci_results_get_rider_results($args='') {
 	return $results;
 }
 
+/**
+ * uci_get_riders_by_rank function.
+ * 
+ * @access public
+ * @param string $args (default: '')
+ * @return void
+ */
 function uci_get_riders_by_rank($args='') {
 	$default_args=array(
 		'per_page' => 10,
