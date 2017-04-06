@@ -23,7 +23,7 @@ function uci_get_riders($args='') {
 	);
 	$args=wp_parse_args($args, $default_args);	
 	$riders=$uci_riders->get_riders($args);
-
+	
 	return $riders;
 }			
 
@@ -130,6 +130,29 @@ function uci_results_get_rider_results($args='') {
 }
 
 /**
+ * uci_get_riders_by_rank function.
+ * 
+ * @access public
+ * @param string $args (default: '')
+ * @return void
+ */
+function uci_get_riders_by_rank($args='') {
+	$default_args=array(
+		'per_page' => 10,
+		'order_by' => 'rank',
+		'order' => 'ASC',
+		'season' => uci_results_get_default_rider_ranking_season(),
+		'week' => uci_results_get_default_rider_ranking_week(),
+		'nat' => '',
+		'paged' => get_query_var('page'),
+	);
+	$args=wp_parse_args($args, $default_args);
+	$riders=new RiderRankingsQuery($args);
+
+	return $riders->posts;
+}
+
+/**
  * uci_results_rider_url function.
  *
  * @access public
@@ -156,6 +179,14 @@ function uci_get_rider_id($slug='') {
 	global $wpdb;
 
 	$id=$wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE post_name = '$slug'");
+
+	return $id;
+}
+
+function uci_get_rider_id_by_name($name='') {
+	global $wpdb;
+
+	$id=$wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE post_title = '$name'");
 
 	return $id;
 }

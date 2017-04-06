@@ -57,7 +57,7 @@ class RiderRankingsQuery {
 		$array=array(
 			'per_page' => 30,
 			'order_by' => 'rank',
-			'order' => 'DESC',
+			'order' => 'ASC',
 			'season' => uci_results_get_default_rider_ranking_season(),
 			'week' => uci_results_get_default_rider_ranking_week(),
 			'nat' => '',
@@ -186,6 +186,8 @@ class RiderRankingsQuery {
 	 * @return void
 	 */
 	protected function where_clause($q) {
+		global $wpdb;
+		
 		$where=array();
 
 		// check season //

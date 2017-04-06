@@ -40,8 +40,9 @@ coming soon...
 * Fully REST API compatable.
 * Leveraged a lot of WordPress built in functionality and setup.
 * Custom post types, taxonomies and metaboxes are utalized throughout the plugin.
+* Eliminates almost all of the custom db tables (4 remain)
 * Updated templates.
-* More robust admin interface.
+* Massive speed increase
 
 = 0.1.5 =
 
@@ -71,6 +72,10 @@ coming soon...
 = 0.1.0 =
 
 * Now that the plugin is UCI Results, we rolled back the version.
+* A major rework of the entire plugin.
+* Now called UCI Results
+* Removed all "fantasy" aspects of plugin - see Fantasy Cycling plugin
+* Previous log removed. It is in git somewhere if need be.
 
 == Upgrade Notice ==
 

@@ -103,3 +103,21 @@ table.uci-results-race-results .name {
 .uci-results-metabox.related-races .action-icons {
 	float: left;
 }
+
+/* admin pagination */
+.uci-results-admin-pagination {
+	
+}
+.uci-results-admin-pagination > div {
+	width: 50%;
+	float: left;
+}
+.uci-results-admin-pagination a {
+	text-decoration: none;
+}
+.uci-results-admin-pagination .next-link {
+	text-align: right;
+}
+.uci-results-admin-pagination .prev-link {
+	
+}

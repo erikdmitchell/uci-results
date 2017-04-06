@@ -6,15 +6,10 @@ $season=isset($_GET['season']) ? $_GET['season'] : '20162017';
 $week=isset($_GET['week']) ? $_GET['week'] : 1;
 $nat=isset($_GET['nat']) ? $_GET['nat'] : '';
 
-// convert season //
-$season_term=get_term_by('slug', $season, 'season');
-
 $riders=new RiderRankingsQuery(array(
-	'season' => $season_term->name,
+	'season' => $season,
 	'week' => $week,
 	'nat' => $nat,
-	'order_by' => 'rank',
-	'order' => 'ASC'
 ));
 ?>
 

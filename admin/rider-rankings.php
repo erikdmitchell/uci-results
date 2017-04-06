@@ -30,43 +30,57 @@ class UCIResultsRiderRankings {
 		// check we have the required data //
 		if (!$rider_id || empty($season))
 			return false;
-
-		$sql="
-			SELECT
-				races.week AS week,
-				(
-					SELECT IFNULL(SUM(s_results.par), 0)
-					FROM $wpdb->uci_results_results AS s_results
-					LEFT JOIN $wpdb->uci_results_races AS s_races
-					ON s_results.race_id = s_races.id
-					WHERE s_races.season = '$season'
-						AND s_results.rider_id = $rider_id
-						AND s_races.week <= races.week
-				) AS points
-			FROM $wpdb->uci_results_results AS results
-			LEFT JOIN $wpdb->uci_results_races AS races
-			ON results.race_id = races.id
-			WHERE races.season = '$season'
-				AND results.rider_id = $rider_id
-			GROUP BY races.week
-			ORDER BY races.week
-		";
-
-		$weekly_points=$wpdb->get_results($sql);
-
-		foreach ($weekly_points as $arr) :
+			
+		// get weeks //
+		$weeks=uci_results_get_season_weeks($season);
+		$points=0;
+		
+		// cycle through weeks //
+		foreach ($weeks as $week) :	
+				
+			// get races in week/season where rider has result //
+			$races=get_posts(array(
+				'posts_per_page' => -1,
+				'post_type' => 'races',
+				'meta_query' => array(
+					array(
+						'key' => '_race_week',
+						'value' => $week->week,
+					),
+					array(
+						'key' => '_rider_'.$rider_id	
+					),
+				),
+				'tax_query' => array(
+					array(
+						'taxonomy' => 'season',
+						'field' => 'slug',
+						'terms' => $season,
+					),
+				),
+				'fields' => 'ids',		
+			));
+		
+			// get points //
+			foreach ($races as $race_id) :
+				$result=get_post_meta($race_id, '_rider_'.$rider_id, true);
+				$points+=$result['par'];		
+			endforeach;	
+			
 			// skip if no points //
-			if (empty($arr->points) || $arr->points==0)
+			if ($points==0)
 				continue;
-
+			
+			// update db //
 			$data=array(
 				'rider_id' => $rider_id,
-				'points' => $arr->points,
+				'points' => $points,
 				'season' => $season,
-				'week' => $arr->week,
+				'week' => $week->week,
 			);
 
-			$wpdb->insert($wpdb->uci_results_rider_rankings, $data);
+			$wpdb->insert($wpdb->uci_results_rider_rankings, $data);			
+			
 		endforeach;
 
 		$message='<div class="updated">Rider ID '.$rider_id.' rankings have been updated!</div>';
@@ -195,10 +209,8 @@ class UCIResultsRiderRankings {
 			return false;
 
 		$rider_info='';
-		$riders=new UCI_Results_Query(array(
-			'per_page' => 5,
-			'type' => 'riders',
-			'rankings' => true
+		$riders=new RiderRankingsQuery(array(
+			'per_page' => 1,
 		));
 
 		// get our leader info //
@@ -206,7 +218,7 @@ class UCIResultsRiderRankings {
 			$rider=$riders->posts[0];
 
 			// use twitter if we have it //
-			$twitter=$uci_riders->get_twitter($rider->id);
+			$twitter=$uci_riders->get_twitter($rider->ID);
 
 			if (!empty($twitter)) :
 				$name='@'.$twitter;
@@ -217,7 +229,7 @@ class UCIResultsRiderRankings {
 			$rider_info=$name.' ('.$rider->nat.') leads the rankings with '.$rider->points.' points.';
 		endif;
 
-		$url=get_permalink($uci_results_pages['rider_rankings']);
+		$url=get_permalink($uci_results_pages['riders']);
 		$status=$rider_info.' '.$url;
 		$uci_results_twitter->update_status($status);
 	}
