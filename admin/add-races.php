@@ -951,7 +951,8 @@ class UCIResultsAddRaces {
 			echo '<div class="notice notice-error is-dismissible"><p>'.__( 'Missing information!', 'sample-text-domain' ).'</p></div>';
 		endif;
 		
-print_r($_POST);		
+print_r($_POST);
+echo "PROCESS";		
 			
 	}
 
