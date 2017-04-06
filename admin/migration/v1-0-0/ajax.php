@@ -373,6 +373,7 @@ class UCIResultsMigration100 {
 	protected function update_race_terms($race_id=0, $race_data='', $series='') {
 		wp_set_object_terms($race_id, $race_data->nat, 'country', false);
 		wp_set_object_terms($race_id, $race_data->class, 'race_class', false);
+		wp_set_object_terms($race_id, 'cyclocross', 'race_class', true);
 		wp_set_object_terms($race_id, $race_data->season, 'season', false);
 		wp_set_object_terms($race_id, $series, 'series', false);
 	}
