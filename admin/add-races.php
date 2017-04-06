@@ -14,10 +14,10 @@ class UCIResultsAddRaces {
 	 */
 	public function __construct() {
 		add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
-		add_action('admin_init', array($this, 'upload_csv_results'));
 		add_action('wp_ajax_get_race_data_non_db', array($this, 'ajax_get_race_data_non_db'));
 		add_action('wp_ajax_prepare_add_races_to_db', array($this, 'ajax_prepare_add_races_to_db'));
 		add_action('wp_ajax_add_race_to_db', array($this, 'ajax_add_race_to_db'));
+		add_action('wp_ajax_process_csv_results', array($this, 'ajax_process_results_csv'));
 	}
 	
 	public function admin_scripts_styles() {
@@ -940,20 +940,122 @@ class UCIResultsAddRaces {
 		return $race_results_obj;
 	}
 
-	public function upload_csv_results() {
-		if (!isset($_POST['uci_results']) || !wp_verify_nonce($_POST['uci_results'], 'add-race-csv'))
+	public function ajax_process_results_csv() {
+		$form=array();
+		
+		foreach ($_POST['form'] as $arr) :
+			$form[$arr['name']]=$arr['value'];
+		endforeach;
+
+		$data=$this->upload_csv_results($form);
+	
+		echo $this->csv_file_display($data);
+	
+		wp_die();
+	}
+
+	/**
+	 * upload_csv_results function.
+	 * 
+	 * @access protected
+	 * @param array $form (default: array())
+	 * @return void
+	 */
+	protected function upload_csv_results($form=array()) {
+		if (!isset($form['uci_results']) || !wp_verify_nonce($form['uci_results'], 'add-race-csv'))
 			return false;
 			
-		if (empty($_POST['race_id']))
-			$_POST['race_id']=$_POST['race_search_id'];
+		if (empty($form['race_id']))
+			$form['race_id']=$form['race_search_id'];
+		
+		$data=$this->process_csv_file($form['file']);	
+		
+		return $data;
+	}
+	
+	/**
+	 * process_csv_file function.
+	 * 
+	 * @access protected
+	 * @param string $file (default: '')
+	 * @return void
+	 */
+	protected function process_csv_file($file='') {
+		global $wpdb;
+		
+		if (empty($file) || $file=='')
+			return false;
+		
+		ini_set('auto_detect_line_endings',TRUE); // added for issues with MAC
+		
+		$data=array();
+		$file=wp_remote_fopen($file);
+    	$file=str_replace("\r\n", "\n", trim($file));
+    	$rows=explode("\n", $file);
+ 
+		// turn into easier to digest array //
+    	foreach ($rows as $row => $cols) :
+			$cols=str_getcsv($cols, ',');
 			
-		if (empty($_POST['race_id']) || empty($_POST['file'])) :
-			echo '<div class="notice notice-error is-dismissible"><p>'.__( 'Missing information!', 'sample-text-domain' ).'</p></div>';
+			$data[]=$cols;
+		endforeach;
+		
+		if (empty($data))
+			return false;
+			
+		$header_row=array_shift($data);
+		$header_row=array_map('sanitize_key', $header_row);		
+		
+		// builds out a more cleaner arr //
+		foreach ($data as $key => $row) :
+			$arr=array();
+			
+			foreach ($row as $k => $v) :
+				$arr[$header_row[$k]]=$v;	
+			endforeach;
+			
+			$data[$key]=$arr;
+		endforeach;
+		
+		$clean_arr=array(
+			'header' => $header_row,
+			'rows' => $data	
+		);
+
+		return $clean_arr;		
+	}
+	
+	public function csv_file_display($arr=array()) {
+		if (empty($arr))
+			return;
+			
+		$html='';
+		
+		$html.='<table>';
+		
+		if (isset($arr['header'])) :
+			$html.='<tr>';
+			
+				foreach ($arr['header'] as $head) :
+					$html.='<th>'.$head.'</th>';
+				endforeach;
+			
+			$html.='</tr>';
 		endif;
 		
-print_r($_POST);
-echo "PROCESS";		
-			
+		foreach ($arr['rows'] as $row) :
+			$html.='<tr>';
+				
+				foreach ($row as $col) :
+					$html.='<td>'.$col.'</td>';
+				endforeach;
+				
+			$html.='</tr>';
+		endforeach;
+
+		$html.='<table>';
+		
+		return $html;
 	}
 
 }

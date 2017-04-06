@@ -43,12 +43,12 @@ $file=isset($_POST['file']) ? $_POST['file'] : '';
 		</table>
 
 		<p>
-			<input type="submit" name="submit" id="process-results" class="button button-primary" value="Process Results" />
+			<input type="button" name="button" id="process-results" class="button button-primary" value="Show Results" />
 		</p>
 	</form>
 
-	<div id="get-race-data"></div>
+	<div id="csv-data"></div>
+	
+	<input type="button" name="button" id="add-results" class="button button-primary" value="Add Results" />
 
 </div>
-
-<div class="loading-modal"></div>

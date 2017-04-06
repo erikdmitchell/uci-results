@@ -121,3 +121,8 @@ table.uci-results-race-results .name {
 .uci-results-admin-pagination .prev-link {
 	
 }
+
+/* results upload csv */
+.uci-results .button#add-results {
+	display: none;
+}

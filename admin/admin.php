@@ -534,7 +534,7 @@ class UCIResultsAdmin {
 			endforeach;
 		$html.='</select>';
 		
-echo $html;
+		echo $html;
 		
 		wp_die();
 	}

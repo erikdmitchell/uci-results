@@ -91,6 +91,22 @@ jQuery(document).ready(function($) {
 	    	return false;
 	});	
 	
+	// ajax load results csv //
+	$('.process-results #process-results').on('click', function(e) {
+		e.preventDefault();
+		
+		var data={
+			'action' : 'process_csv_results',
+			'form' : $('form.process-results').serializeArray()
+		};
+		
+		$.post(ajaxurl, data, function(response) {
+			$('#csv-data').html(response);
+			
+			$('.uci-results .button#add-results').show();
+		});		
+	});
+	
 	// race id search //
 	$('input#race-search').live('keyup', function() {
 		if (this.value.length < 3)
