@@ -17,6 +17,7 @@ class UCIResultsAdmin {
 		add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
 		add_action('admin_init', array($this, 'save_settings'));
 		add_action('admin_init', array($this, 'include_migration_files'));
+		add_action('save_post', array($this, 'assign_parent_terms'), 10, 2);
 		add_action('wp_ajax_uci_results_remove_data', array($this, 'ajax_remove_data'));
 		add_action('wp_ajax_uci_results_rider_rankings_dropdown', array($this, 'ajax_rider_rankings_dropdown'));
 		add_action('wp_ajax_uci_remove_related_race', array($this, 'ajax_remove_related_race'));
@@ -476,7 +477,33 @@ class UCIResultsAdmin {
 		echo json_encode($return);
 		
 		wp_die();
-	}  
+	} 
+	
+	/**
+	 * assign_parent_terms function.
+	 * 
+	 * @access public
+	 * @param mixed $post_id
+	 * @param mixed $post
+	 * @return void
+	 */
+	public function assign_parent_terms($post_id, $post) {
+		if ($post->post_type != 'races')
+        	return $post_id;
+
+	    // get all assigned terms in race_class // 
+	    $term_cat='race_class';
+	    $terms=wp_get_post_terms($post_id, $term_cat);
+	    
+	    foreach($terms as $term) :
+	        while ($term->parent != 0 && !has_term($term->parent, $term_cat, $post )) :
+	            // move upward until we get to 0 level terms
+	            wp_set_post_terms($post_id, array($term->parent), $term_cat, true);
+	            $term = get_term($term->parent, $term_cat);
+	        endwhile;
+	    endforeach;
+	}
+	
 }
 
 $uci_results_admin = new UCIResultsAdmin();
