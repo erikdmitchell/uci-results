@@ -123,6 +123,9 @@ table.uci-results-race-results .name {
 }
 
 /* results upload csv */
+.uci-results #csv-data {
+	margin: 15px 0;
+}
 .uci-results .button#add-results {
 	display: none;
 }
