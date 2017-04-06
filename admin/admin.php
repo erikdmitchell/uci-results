@@ -18,12 +18,14 @@ class UCIResultsAdmin {
 		add_action('admin_init', array($this, 'save_settings'));
 		add_action('admin_init', array($this, 'include_migration_files'));
 		add_action('save_post', array($this, 'assign_parent_terms'), 10, 2);
+		
 		add_action('wp_ajax_uci_results_remove_data', array($this, 'ajax_remove_data'));
 		add_action('wp_ajax_uci_results_rider_rankings_dropdown', array($this, 'ajax_rider_rankings_dropdown'));
 		add_action('wp_ajax_uci_remove_related_race', array($this, 'ajax_remove_related_race'));
 		add_action('wp_ajax_show_related_races_box', array($this, 'ajax_show_related_races_box'));
 		add_action('wp_ajax_search_related_races', array($this, 'ajax_search_related_races'));
 		add_action('wp_ajax_add_related_races_to_race', array($this, 'ajax_add_related_races_to_race'));
+		add_action('wp_ajax_race_id_search', array($this, 'ajax_race_id_search'));
 
 		$this->setup_config($config);		
 	}
@@ -46,9 +48,9 @@ class UCIResultsAdmin {
 		if ($hook=='toplevel_page_uci-results' && isset($_GET['subpage']) && $_GET['subpage']=='migration') :
 			if (isset($_GET['version'])) :					
 				switch ($_GET['version']) :
-					case '0_2_0' :
+					case '1_0_0' :
 						wp_enqueue_script('jquery-ui-progressbar');
-						wp_enqueue_script('uci-results-migration-0_2_0-script', UCI_RESULTS_ADMIN_URL.'migration/v0-2-0/script.js', array('jquery-ui-progressbar'), '0.1.0', true);
+						wp_enqueue_script('uci-results-migration-0_2_0-script', UCI_RESULTS_ADMIN_URL.'migration/v1-0-0/script.js', array('jquery-ui-progressbar'), '0.1.0', true);
 						
 						wp_enqueue_style('uci-results-jquery-ui-css', "http://ajax.googleapis.com/ajax/libs/jqueryui/$jquery_ui_version/themes/ui-lightness/jquery-ui.min.css");
 						
@@ -103,7 +105,11 @@ class UCIResultsAdmin {
 					$html.=$this->get_admin_page('settings');
 					break;
 				case 'results':
-					$html.=$this->get_admin_page('results');
+					if (isset($_GET['action']) && $_GET['action']=='add-csv') :
+						$html.=$this->get_admin_page('results-csv');
+					else :
+						$html.=$this->get_admin_page('results');
+					endif;
 					break;
 				case 'api':
 					$html.=$this->get_admin_page('api');
@@ -111,8 +117,8 @@ class UCIResultsAdmin {
 				case 'migration':
 					if (isset($_GET['version'])) :					
 						switch ($_GET['version']) :
-							case '0_2_0' :
-								$html.=$this->get_admin_page('migration-0_2_0');
+							case '1_0_0' :
+								$html.=$this->get_admin_page('migration-1_0_0');
 								break;
 						endswitch;
 					else :
@@ -506,6 +512,31 @@ class UCIResultsAdmin {
 	            $term = get_term($term->parent, $term_cat);
 	        endwhile;
 	    endforeach;
+	}
+	
+	/**
+	 * ajax_race_id_search function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function ajax_race_id_search() {
+		$html='';
+		$posts=get_posts(array(
+			'posts_per_page' => -1,
+			'post_type' => 'races',
+			's' => $_POST['string']
+		));
+		
+		$html.='<select multiple id="races-list" name="race_search_id" size=20 style="height: 100%;">';
+			foreach ($posts as $post) :
+				$html.='<option value="'.$post->ID.'">'.$post->post_title.'</option>';
+			endforeach;
+		$html.='</select>';
+		
+echo $html;
+		
+		wp_die();
 	}
 	
 }

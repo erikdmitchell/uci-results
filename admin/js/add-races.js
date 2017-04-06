@@ -65,5 +65,46 @@ jQuery(document).ready(function($) {
 				});
 			}
 		});
+	});
+	
+	// upload startlist button - opens media uploader, runs ajax on insert into post //
+	$('.button#add-file').click(function(e) {
+		e.preventDefault();
+	
+		var _custom_media = true;
+	    	var _orig_send_attachment = wp.media.editor.send.attachment;
+	    	var send_attachment_bkp = wp.media.editor.send.attachment;
+	    	var button = $(this);
+	
+	   	 _custom_media = true;
+	
+	   	 wp.media.editor.send.attachment = function(props, attachment) {
+	      		if (_custom_media) {
+		    		$('input#file').val(attachment.url);				
+	      		} else {
+					return _orig_send_attachment.apply( this, [props, attachment] );
+	      		}
+	    	}
+	
+	    	wp.media.editor.open(button);
+	
+	    	return false;
 	});	
+	
+	// race id search //
+	$('input#race-search').live('keyup', function() {
+		if (this.value.length < 3)
+			return;
+			
+		var data={
+			'action' :	'race_id_search',
+			'string' : this.value	
+		};
+
+		$.post(ajaxurl, data, function(response) {
+			$('.process-results #race-search-list').html(''); // clear
+			$('.process-results #race-search-list').html(response); // add data
+		});
+	});
+		
 });

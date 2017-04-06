@@ -14,6 +14,7 @@ class UCIResultsAddRaces {
 	 */
 	public function __construct() {
 		add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
+		add_action('admin_init', array($this, 'upload_csv_results'));
 		add_action('wp_ajax_get_race_data_non_db', array($this, 'ajax_get_race_data_non_db'));
 		add_action('wp_ajax_prepare_add_races_to_db', array($this, 'ajax_prepare_add_races_to_db'));
 		add_action('wp_ajax_add_race_to_db', array($this, 'ajax_add_race_to_db'));
@@ -937,6 +938,21 @@ class UCIResultsAddRaces {
 		endforeach;
 
 		return $race_results_obj;
+	}
+
+	public function upload_csv_results() {
+		if (!isset($_POST['uci_results']) || !wp_verify_nonce($_POST['uci_results'], 'add-race-csv'))
+			return false;
+			
+		if (empty($_POST['race_id']))
+			$_POST['race_id']=$_POST['race_search_id'];
+			
+		if (empty($_POST['race_id']) || empty($_POST['file'])) :
+			echo '<div class="notice notice-error is-dismissible"><p>'.__( 'Missing information!', 'sample-text-domain' ).'</p></div>';
+		endif;
+		
+print_r($_POST);		
+			
 	}
 
 }
