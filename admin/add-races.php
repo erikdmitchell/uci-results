@@ -804,49 +804,8 @@ class UCIResultsAddRaces {
 			return false;
 
 		$race_results=$this->get_race_results($link);
-		$race=get_post($race_id);
-// perhaps a split here
-		foreach ($race_results as $result) :
-			$rider=get_page_by_title($result->name, OBJECT, 'riders');
 
-			// check if we have a rider id, otherwise create one //
-			if ($rider===null || empty($rider->ID)) :
-				$rider_insert=array(
-					'post_title' => $result->name,
-					'post_content' => '',
-					'post_status' => 'publish',	
-					'post_type' => 'riders',
-					'post_name' => sanitize_title_with_dashes($result->name)
-				);
-				$rider_id=wp_insert_post($rider_insert);
-				wp_set_object_terms($rider_id, $result->nat, 'country', false);
-			else :
-				$rider_id=$rider->ID;
-			endif;
-
-			if (!isset($result->par) || empty($result->par) || is_null($result->par)) :
-				$par=0;
-			else :
-				$par=$result->par;
-			endif;
-
-			if (!isset($result->pcr) || empty($result->pcr) || is_null($result->pcr)) :
-				$pcr=0;
-			else :
-				$pcr=$result->pcr;
-			endif;
-
-			$meta_value=array(
-				'place' => $result->place,
-				'name' => $result->name,
-				'nat' => $result->nat,
-				'age' => $result->age,
-				'result' => $result->result,
-				'par' => $par,
-				'pcr' => $pcr,
-			);			
-			update_post_meta($race_id, "_rider_$rider_id", $meta_value);
-		endforeach;
+		$this->insert_race_results($race_id, $race_results);
 	}
 	
 	protected function insert_race_results($race_id='', $race_results='') {
@@ -867,7 +826,7 @@ class UCIResultsAddRaces {
 			// filter value //
 			$meta_value=apply_filters('uci_results_insert_race_result_'.$discipline, $meta_value, $race_id, $result, $rider_id);			
 
-			update_post_meta($race_id, "_rider_$rider_id", $meta_value);
+			//update_post_meta($race_id, "_rider_$rider_id", $meta_value);
 		endforeach;			
 	}
 	
