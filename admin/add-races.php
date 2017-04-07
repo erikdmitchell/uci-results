@@ -822,7 +822,7 @@ class UCIResultsAddRaces {
 			foreach ($result as $key => $value) :
 				$meta_value[$key]=$value;
 			endforeach;
-
+echo "'uci_results_insert_race_result_$discipline";
 			// filter value //
 			$meta_value=apply_filters('uci_results_insert_race_result_'.$discipline, $meta_value, $race_id, $result, $rider_id);			
 

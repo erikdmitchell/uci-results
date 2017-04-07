@@ -59,6 +59,10 @@ class UCIResultsResultsMetabox {
 		$rider_output=apply_filters('race_results_metabox_rider_output_'.$discipline, $rider_output, $post->ID);
         ?>
         
+        <p>
+        	<a href="<?php echo admin_url('admin.php?page=uci-results&subpage=results&action=add-csv&race_id='.$post->ID); ?>" class="button button-secondary">Add Results</a>
+        </p>
+        
         <table class="uci-results-race-results widefat fixed striped">
 	        <thead>
 		       <tr>

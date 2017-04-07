@@ -5,6 +5,9 @@
 <?php 
 $race_id=isset($_POST['race_id']) ? $_POST['race_id'] : '';
 $file=isset($_POST['file']) ? $_POST['file'] : '';
+
+if (empty($race_id) && isset($_GET['race_id']))
+	$race_id=$_GET['race_id'];
 ?>
 
 <div class="uci-results">
