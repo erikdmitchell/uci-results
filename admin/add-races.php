@@ -805,7 +805,7 @@ class UCIResultsAddRaces {
 
 		$race_results=$this->get_race_results($link);
 		$race=get_post($race_id);
-
+// perhaps a split here
 		foreach ($race_results as $result) :
 			$rider=get_page_by_title($result->name, OBJECT, 'riders');
 
@@ -847,6 +847,51 @@ class UCIResultsAddRaces {
 			);			
 			update_post_meta($race_id, "_rider_$rider_id", $meta_value);
 		endforeach;
+	}
+	
+	protected function insert_race_results($race_id='', $race_results='') {
+		if (empty($race_id) || empty($race_results))
+			return;
+
+		foreach ($race_results as $result) :
+			$meta_value=array();
+			$rider_id=$this->insert_race_results_rider_id($result->name, $result->nat);
+
+			// essentially converts our object to an array //			
+			foreach ($result as $key => $value) :
+				$meta_value[$key]=$value;
+			endforeach;
+
+			// filter value //
+			$meta_value=apply_filters('uci_results_insert_race_result', $meta_value, $race_id, $result, $rider_id);			
+
+			update_post_meta($race_id, "_rider_$rider_id", $meta_value);
+		endforeach;			
+	}
+	
+	protected function insert_race_results_rider_id($rider_name='', $rider_country='') {
+		if (empty($rider_name))
+			return 0;
+			
+		$rider=get_page_by_title($rider_name, OBJECT, 'riders');
+
+		// check if we have a rider id, otherwise create one //
+		if ($rider===null || empty($rider->ID)) :
+			$rider_insert=array(
+				'post_title' => $rider_name,
+				'post_content' => '',
+				'post_status' => 'publish',	
+				'post_type' => 'riders',
+				'post_name' => sanitize_title_with_dashes($rider_name)
+			);
+			$rider_id=wp_insert_post($rider_insert);
+			
+			wp_set_object_terms($rider_id, $rider_country, 'country', false);
+		else :
+			$rider_id=$rider->ID;
+		endif;
+		
+		return $rider_id;			
 	}
 
 	/**
@@ -1027,6 +1072,13 @@ class UCIResultsAddRaces {
 		return $clean_arr;		
 	}
 	
+	/**
+	 * csv_file_display function.
+	 * 
+	 * @access public
+	 * @param array $arr (default: array())
+	 * @return void
+	 */
 	public function csv_file_display($arr=array()) {
 		if (empty($arr))
 			return;
@@ -1064,13 +1116,19 @@ class UCIResultsAddRaces {
 		return $html;
 	}
 	
+	/**
+	 * add_csv_results_to_race function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
 	public function add_csv_results_to_race() {
 		if (!isset($_POST['uci_results']) || !wp_verify_nonce($_POST['uci_results'], 'add-csv-data'))
 			return;
 			
-		echo '<pre>';
-		print_r($_POST);
-		echo '</pre>';
+		$results=array_to_object($_POST['race']['results']);
+		
+		$this->insert_race_results($_POST['race']['race_id'], $results);
 	}
 
 }
