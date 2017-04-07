@@ -14,6 +14,7 @@ class UCIResultsAddRaces {
 	 */
 	public function __construct() {
 		add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
+		add_action('admin_init', array($this, 'add_csv_results_to_race'));
 		add_action('wp_ajax_get_race_data_non_db', array($this, 'ajax_get_race_data_non_db'));
 		add_action('wp_ajax_prepare_add_races_to_db', array($this, 'ajax_prepare_add_races_to_db'));
 		add_action('wp_ajax_add_race_to_db', array($this, 'ajax_add_race_to_db'));
@@ -942,7 +943,7 @@ class UCIResultsAddRaces {
 
 	public function ajax_process_results_csv() {
 		$form=array();
-		
+	
 		foreach ($_POST['form'] as $arr) :
 			$form[$arr['name']]=$arr['value'];
 		endforeach;
@@ -968,7 +969,8 @@ class UCIResultsAddRaces {
 		if (empty($form['race_id']))
 			$form['race_id']=$form['race_search_id'];
 		
-		$data=$this->process_csv_file($form['file']);	
+		$data=$this->process_csv_file($form['file']);
+		$data['race_id']=$form['race_id'];	
 		
 		return $data;
 	}
@@ -1031,7 +1033,11 @@ class UCIResultsAddRaces {
 			
 		$html='';
 		
-		$html.='<table>';
+		$html.='<div class="race-info">';
+			$html.='<h4>'.get_the_title($arr['race_id']).' <span class="race-date">'.get_post_meta($arr['race_id'], '_race_date', true).'</span></h4>';
+		$html.='</div>';		
+		
+		$html.='<table class="form-table">';
 		
 		if (isset($arr['header'])) :
 			$html.='<tr>';
@@ -1043,19 +1049,28 @@ class UCIResultsAddRaces {
 			$html.='</tr>';
 		endif;
 		
-		foreach ($arr['rows'] as $row) :
+		foreach ($arr['rows'] as $row_counter => $row) :
 			$html.='<tr>';
 				
-				foreach ($row as $col) :
-					$html.='<td>'.$col.'</td>';
+				foreach ($row as $key => $col) :
+					$html.='<td><input type="text" name="race[results]['.$row_counter.']['.$key.']" class="'.$key.'" value="'.$col.'" /></td>';
 				endforeach;
 				
 			$html.='</tr>';
 		endforeach;
 
-		$html.='<table>';
+		$html.='</table>';
 		
 		return $html;
+	}
+	
+	public function add_csv_results_to_race() {
+		if (!isset($_POST['uci_results']) || !wp_verify_nonce($_POST['uci_results'], 'add-csv-data'))
+			return;
+			
+		echo '<pre>';
+		print_r($_POST);
+		echo '</pre>';
 	}
 
 }

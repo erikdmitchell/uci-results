@@ -47,8 +47,15 @@ $file=isset($_POST['file']) ? $_POST['file'] : '';
 		</p>
 	</form>
 
-	<div id="csv-data"></div>
-	
-	<input type="button" name="button" id="add-results" class="button button-primary" value="Add Results" />
+	<form id="csv-data" name="csv-data-upload" method="post" action="">
+		<?php wp_nonce_field('add-csv-data', 'uci_results'); ?>
+		<input type="hidden" name="race[race_id]" id="race_id" value="" />
+				
+		<span id="csv-data-form-table"></span>
+		
+		<p>
+			<input type="submit" name="submit" id="add-results" class="button button-primary" value="Add Results" />
+		</p>
+	</form>
 
 </div>

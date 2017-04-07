@@ -129,3 +129,15 @@ table.uci-results-race-results .name {
 .uci-results .button#add-results {
 	display: none;
 }
+#csv-data .form-table th {
+	padding-top: 0;
+	padding-bottom: 5px;
+}
+#csv-data .form-table td {
+	padding: 0;
+}
+#csv-data .race-info .race-date {
+	display: inline-block;
+	font-weight: normal;
+	margin-left: 15px;
+}

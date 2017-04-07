@@ -530,7 +530,7 @@ class UCIResultsAdmin {
 		
 		$html.='<select multiple id="races-list" name="race_search_id" size=20 style="height: 100%;">';
 			foreach ($posts as $post) :
-				$html.='<option value="'.$post->ID.'">'.$post->post_title.'</option>';
+				$html.='<option value="'.$post->ID.'">'.$post->post_title.' ('.get_post_meta($post->ID, '_race_date', true).')</option>';
 			endforeach;
 		$html.='</select>';
 		
