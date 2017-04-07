@@ -500,18 +500,24 @@ class UCIResultsAdmin {
 	public function assign_parent_terms($post_id, $post) {
 		if ($post->post_type != 'races')
         	return $post_id;
+        	
+        // terms with parents //
+        $terms_with_parents=array('race_class', 'series', 'season');
 
-	    // get all assigned terms in race_class // 
-	    $term_cat='race_class';
-	    $terms=wp_get_post_terms($post_id, $term_cat);
-	    
-	    foreach($terms as $term) :
-	        while ($term->parent != 0 && !has_term($term->parent, $term_cat, $post )) :
-	            // move upward until we get to 0 level terms
-	            wp_set_post_terms($post_id, array($term->parent), $term_cat, true);
-	            $term = get_term($term->parent, $term_cat);
-	        endwhile;
+	    // get all assigned terms in race_class and update parent // 
+		foreach ($terms_with_parents as $term_cat) :
+		    $terms=wp_get_post_terms($post_id, $term_cat);
+		    
+		    foreach($terms as $term) :
+		        while ($term->parent != 0 && !has_term($term->parent, $term_cat, $post )) :
+		            // move upward until we get to 0 level terms
+		            wp_set_post_terms($post_id, array($term->parent), $term_cat, true);
+		            $term = get_term($term->parent, $term_cat);
+		        endwhile;
+		    endforeach;
 	    endforeach;
+	    
+	    
 	}
 	
 	/**
