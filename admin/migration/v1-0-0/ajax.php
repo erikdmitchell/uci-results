@@ -380,10 +380,6 @@ class UCIResultsMigration100 {
 		wp_set_object_terms($race_id, $series, 'series', false);
 	}
 	
-	protected function race_has_results() {
-		
-	}
-
 	/**
 	 * migrate_results function.
 	 * 
