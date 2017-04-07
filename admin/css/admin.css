@@ -141,3 +141,9 @@ table.uci-results-race-results .name {
 	font-weight: normal;
 	margin-left: 15px;
 }
+
+/* api page */
+.uci-results-api .examples code {
+	display: block;
+	margin-bottom: 15px;
+}
