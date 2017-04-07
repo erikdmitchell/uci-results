@@ -852,6 +852,8 @@ class UCIResultsAddRaces {
 	protected function insert_race_results($race_id='', $race_results='') {
 		if (empty($race_id) || empty($race_results))
 			return;
+			
+		$discipline=strtolower(uci_get_first_term($race_id, 'discipline'));
 
 		foreach ($race_results as $result) :
 			$meta_value=array();
@@ -863,7 +865,7 @@ class UCIResultsAddRaces {
 			endforeach;
 
 			// filter value //
-			$meta_value=apply_filters('uci_results_insert_race_result', $meta_value, $race_id, $result, $rider_id);			
+			$meta_value=apply_filters('uci_results_insert_race_result_'.$discipline, $meta_value, $race_id, $result, $rider_id);			
 
 			update_post_meta($race_id, "_rider_$rider_id", $meta_value);
 		endforeach;			
