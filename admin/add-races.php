@@ -114,7 +114,7 @@ class UCIResultsAddRaces {
 			'discipline' => 'cyclocross'
 		);
 		$args=wp_parse_args($args, $default_args);
-print_r($args);		
+	
 		extract($args);
 			
 		$races=array();
@@ -159,6 +159,7 @@ print_r($args);
 
 				$races[$row_count]->link=$link;
 				$races[$row_count]->season=$season;
+				$races[$row_count]->discipline=$discipline;
 			endif;
 
 			// increase counter //
@@ -218,7 +219,8 @@ print_r($args);
 		$races_obj=$this->build_races_object_from_rows(array(
 			'rows' => $rows,
 			'season' => $season, 
-			'limit' => $limit
+			'limit' => $limit,
+			'discipline' => $discipline,
 		));
 echo "get race data\n";
 print_r($races_obj);
