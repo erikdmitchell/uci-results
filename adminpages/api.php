@@ -64,7 +64,7 @@
 			</p>
 			
 			<code>
-				http://uci.dev/wp-json/wp/v2/taxonomies/country
+				http://uci.dev/wp-json/uci/v1/taxonomies/country
 			</code>
 			
 			<p>
