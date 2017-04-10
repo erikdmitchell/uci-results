@@ -222,8 +222,7 @@ class UCIResultsAddRaces {
 			'limit' => $limit,
 			'discipline' => $discipline,
 		));
-echo "get race data\n";
-print_r($races_obj);
+
 		// return object if $raw is true //
 		if ($raw)
 			return $races_obj;
@@ -521,15 +520,13 @@ print_r($races_obj);
 			return false;
 
 		$code=$this->build_race_code($_POST['race']);
-print_r($_POST['race']);
+
 		// add to db //
-/*
 		if (!$this->check_for_dups($code)) :
 			echo $this->add_race_to_db($_POST['race']);
 		else :
 			echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';
 		endif;
-*/
 
 		wp_die();
 	}
@@ -578,8 +575,7 @@ print_r($_POST['race']);
 		// convert to object //
 		if (!is_object($race_data))
 			$race_data=json_decode(json_encode($race_data),FALSE);
-print_r($race_data);
-return;
+
 		// build data array .. -- if you change this, please change get_add_race_to_db()
 		$data=array(
 			'date' => $date = date('Y-m-d', strtotime($race_data->date)),
@@ -591,6 +587,7 @@ return;
 			'link' => $race_data->link,
 			'code' => $this->build_race_code($race_data),
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
+			'discipline' => $race_data->discipline,
 		);
 
 		if (!$this->check_for_dups($data['code'])) :		
@@ -654,6 +651,7 @@ return;
 			'link' => $race_data->link,
 			'code' => $this->build_race_code($race_data),
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
+			'discipline' => $race_data->discipline,
 		);
 		
 		return $data;
@@ -755,6 +753,7 @@ return;
 		wp_set_object_terms($post_id, $data['nat'], 'country', false);
 		wp_set_object_terms($post_id, $data['class'], 'race_class', false);
 		wp_set_object_terms($post_id, $data['season'], 'season', false);
+		wp_set_object_terms($post_id, $data['discipline'], 'discipline', false);
 		
 		// update meta //
 		update_post_meta($post_id, '_race_date', $data['date']);
