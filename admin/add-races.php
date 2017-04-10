@@ -564,7 +564,7 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function add_race_to_db($race_data='', $raw_response=false) {
-		global $wpdb, $uci_results_twitter, $uci_results_pages, $ucicurl_races;
+		global $wpdb, $uci_results_twitter, $uci_results_pages;
 
 		$message=null;
 		$new_results=0;
@@ -601,7 +601,7 @@ class UCIResultsAddRaces {
 					$url=get_permalink($uci_results_pages['single_race']).$data['code'];
 
 					// use twitter if we have it //
-					$twitter=$ucicurl_races->get_twitter($race_id); // i dont think this works at all - we removed this global var i believe
+					$twitter=uci_get_race_twitter($race_id);
 
 					if (!empty($twitter))
 						$twitter='@'.$twitter;
