@@ -34,7 +34,7 @@ function race_class_init() {
 		),
 		'show_in_rest'      => true,
 		'rest_base'         => 'race_class',
-		'rest_controller_class' => 'WP_REST_Terms_Controller',
+		'rest_controller_class' => 'UCI_REST_Terms_Controller',
 	) );
 
 }

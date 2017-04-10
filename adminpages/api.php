@@ -72,7 +72,7 @@
 			</p>
 			
 			<code>
-				http://uci.dev/wp-json/wp/v2/country
+				http://uci.dev/wp-json/uci/v1/country
 			</code>
 			
 			<p>
@@ -80,7 +80,7 @@
 			</p>
 			
 			<code>
-				http://uci.dev/wp-json/wp/v2/country/{ID}
+				http://uci.dev/wp-json/uci/v1/country/{ID}
 			</code>
 		</section>
 
@@ -92,7 +92,7 @@
 			</p>
 			
 			<code>
-				http://uci.dev/wp-json/wp/v2/taxonomies/race_class
+				http://uci.dev/wp-json/uci/v1/taxonomies/race_class
 			</code>
 			
 			<p>
@@ -100,7 +100,7 @@
 			</p>
 			
 			<code>
-				http://uci.dev/wp-json/wp/v2/race_class
+				http://uci.dev/wp-json/uci/v1/race_class
 			</code>
 			
 			<p>
@@ -108,7 +108,7 @@
 			</p>
 			
 			<code>
-				http://uci.dev/wp-json/wp/v2/race_class/{ID}
+				http://uci.dev/wp-json/uci/v1/race_class/{ID}
 			</code>
 		</section>
 
@@ -120,7 +120,7 @@
 			</p>
 			
 			<code>
-				http://uci.dev/wp-json/wp/v2/taxonomies/series
+				http://uci.dev/wp-json/uci/v1/taxonomies/series
 			</code>
 			
 			<p>
@@ -128,7 +128,7 @@
 			</p>
 			
 			<code>
-				http://uci.dev/wp-json/wp/v2/series
+				http://uci.dev/wp-json/uci/v1/series
 			</code>
 			
 			<p>
@@ -136,7 +136,7 @@
 			</p>
 			
 			<code>
-				http://uci.dev/wp-json/wp/v2/series/{ID}
+				http://uci.dev/wp-json/uci/v1/series/{ID}
 			</code>
 		</section>
 
@@ -148,7 +148,7 @@
 			</p>
 			
 			<code>
-				http://uci.dev/wp-json/wp/v2/taxonomies/season
+				http://uci.dev/wp-json/uci/v1/taxonomies/season
 			</code>
 			
 			<p>
@@ -156,7 +156,7 @@
 			</p>
 			
 			<code>
-				http://uci.dev/wp-json/wp/v2/season
+				http://uci.dev/wp-json/uci/v1/season
 			</code>
 			
 			<p>
@@ -164,7 +164,7 @@
 			</p>
 			
 			<code>
-				http://uci.dev/wp-json/wp/v2/season/{ID}
+				http://uci.dev/wp-json/uci/v1/season/{ID}
 			</code>
 		</section>
 		
