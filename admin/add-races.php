@@ -35,9 +35,8 @@ class UCIResultsAddRaces {
 		$form=array();
 		
 		parse_str($_POST['form'], $form);
-echo "ajax_get_race_data_non_db\n";
-print_r($form);
-		echo $this->get_race_data($form['season']);
+
+		echo $this->get_race_data($form['season'], false, false, false, $form['discipline']);
 
 		wp_die();
 	}
@@ -176,15 +175,16 @@ print_r($form);
 
 	/**
 	 * get_race_data function.
-	 *
+	 * 
 	 * @access public
 	 * @param bool $season (default: false)
 	 * @param bool $limit (default: false)
 	 * @param bool $raw (default: false)
 	 * @param bool $url (default: false)
+	 * @param string $discipline (default: 'cyclocross')
 	 * @return void
 	 */
-	public function get_race_data($season=false, $limit=false, $raw=false, $url=false) {
+	public function get_race_data($season=false, $limit=false, $raw=false, $url=false, $discipline='cyclocross') {
 		global $uci_results_admin;
 		
 		set_time_limit(0); // mex ececution time
