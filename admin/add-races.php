@@ -35,7 +35,8 @@ class UCIResultsAddRaces {
 		$form=array();
 		
 		parse_str($_POST['form'], $form);
-
+echo "ajax_get_race_data_non_db\n";
+print_r($form);
 		echo $this->get_race_data($form['season']);
 
 		wp_die();
@@ -503,13 +504,15 @@ class UCIResultsAddRaces {
 			return false;
 
 		$code=$this->build_race_code($_POST['race']);
-
+print_r($_POST['race']);
 		// add to db //
+/*
 		if (!$this->check_for_dups($code)) :
 			echo $this->add_race_to_db($_POST['race']);
 		else :
 			echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';
 		endif;
+*/
 
 		wp_die();
 	}
@@ -558,7 +561,8 @@ class UCIResultsAddRaces {
 		// convert to object //
 		if (!is_object($race_data))
 			$race_data=json_decode(json_encode($race_data),FALSE);
-
+print_r($race_data);
+return;
 		// build data array .. -- if you change this, please change get_add_race_to_db()
 		$data=array(
 			'date' => $date = date('Y-m-d', strtotime($race_data->date)),
@@ -583,7 +587,7 @@ class UCIResultsAddRaces {
 					$url=get_permalink($uci_results_pages['single_race']).$data['code'];
 
 					// use twitter if we have it //
-					$twitter=$ucicurl_races->get_twitter($race_id);
+					$twitter=$ucicurl_races->get_twitter($race_id); // i dont think this works at all - we removed this global var i believe
 
 					if (!empty($twitter))
 						$twitter='@'.$twitter;
@@ -796,9 +800,9 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function add_race_results_to_db($race_id=0, $link=false) {
-		global $wpdb;
-		global $results_data;
-		global $results_raw;
+		//global $wpdb;
+		//global $results_data;
+		//global $results_raw;
 
 		if (!$race_id || !$link)
 			return false;
