@@ -101,14 +101,22 @@ class UCIResultsAddRaces {
 
 	/**
 	 * build_races_object_from_rows function.
-	 *
+	 * 
 	 * @access public
-	 * @param string $rows (default: '')
-	 * @param bool $season (default: false)
-	 * @param bool $limit (default: false)
+	 * @param string $args (default: '')
 	 * @return void
 	 */
-	public function build_races_object_from_rows($rows='', $season=false, $limit=false) {
+	public function build_races_object_from_rows($args='') {
+		$default_args=array(
+			'rows' => '',
+			'season' => false,
+			'limit' => false,
+			'discipline' => 'cyclocross'
+		);
+		$args=wp_parse_args($args, $default_args);
+print_r($args);		
+		extract($args);
+			
 		$races=array();
 		$races_obj=new stdClass();
 		$row_count=0;
@@ -205,8 +213,15 @@ class UCIResultsAddRaces {
 
 		$html=$this->get_url_page($url, $timeout); // get the html from the url
 		$rows=$this->get_html_table_rows($html, $races_class_name); // grab our rows via dom object
-		$races_obj=$this->build_races_object_from_rows($rows, $season, $limit); // build our races object from rows
-
+		
+		// build our races object from rows
+		$races_obj=$this->build_races_object_from_rows(array(
+			'rows' => $rows,
+			'season' => $season, 
+			'limit' => $limit
+		));
+echo "get race data\n";
+print_r($races_obj);
 		// return object if $raw is true //
 		if ($raw)
 			return $races_obj;
