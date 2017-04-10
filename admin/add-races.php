@@ -816,10 +816,6 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function add_race_results_to_db($race_id=0, $link=false) {
-		//global $wpdb;
-		//global $results_data;
-		//global $results_raw;
-
 		if (!$race_id || !$link)
 			return false;
 
@@ -828,6 +824,14 @@ class UCIResultsAddRaces {
 		$this->insert_race_results($race_id, $race_results);
 	}
 	
+	/**
+	 * insert_race_results function.
+	 * 
+	 * @access protected
+	 * @param string $race_id (default: '')
+	 * @param string $race_results (default: '')
+	 * @return void
+	 */
 	protected function insert_race_results($race_id='', $race_results='') {
 		if (empty($race_id) || empty($race_results))
 			return;
@@ -850,6 +854,14 @@ class UCIResultsAddRaces {
 		endforeach;			
 	}
 	
+	/**
+	 * insert_race_results_rider_id function.
+	 * 
+	 * @access protected
+	 * @param string $rider_name (default: '')
+	 * @param string $rider_country (default: '')
+	 * @return void
+	 */
 	protected function insert_race_results_rider_id($rider_name='', $rider_country='') {
 		if (empty($rider_name))
 			return 0;
