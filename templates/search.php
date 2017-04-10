@@ -9,8 +9,6 @@
 
 get_header();
 
-global $ucicurl_races;
-
 $type='';
 $rider_nat='';
 $race_season='';

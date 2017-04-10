@@ -165,20 +165,6 @@ class UCIResultsRiderRankings {
 	}
 
 	/**
-	 * ajax_get_weeks_in_season function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function ajax_get_weeks_in_season() {
-		global $ucicurl_races;
-
-		$weeks=$ucicurl_races->weeks($_POST['season']);
-
-		wp_send_json($weeks);
-	}
-
-	/**
 	 * clear_db function.
 	 *
 	 * @access public

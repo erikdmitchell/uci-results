@@ -10,8 +10,6 @@
 get_header(); ?>
 
 <?php
-global $ucicurl_races;
-
 $race=uci_get_races(array(
 	'id' => uci_get_race_id(get_query_var('race_code')),
 	'results' => true
