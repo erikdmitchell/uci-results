@@ -461,10 +461,6 @@ print_r($request);
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
 	 */
 	public function get_item( $request ) {
-//echo '<pre>';		
-//echo "req<br>";
-print_r($request);		
-//echo '</pre>';
 		$post = $this->get_post( $request['id'] );
 		if ( is_wp_error( $post ) ) {
 			return $post;
