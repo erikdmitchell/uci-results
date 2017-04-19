@@ -152,7 +152,6 @@ class UCI_REST_Posts_Controller extends UCI_REST_Controller {
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
 	 */
 	public function get_items( $request ) {
-print_r($request);
 		// Ensure a search string is set in case the orderby is set to 'relevance'.
 		if ( ! empty( $request['orderby'] ) && 'relevance' === $request['orderby'] && empty( $request['search'] ) ) {
 			return new WP_Error( 'rest_no_search_term_defined', __( 'You need to define a search term to order by relevance.' ), array( 'status' => 400 ) );
