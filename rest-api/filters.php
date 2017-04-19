@@ -24,5 +24,29 @@ print_r($request);
 	
 	return $response;
 }
-add_filter('rest_prepare_riders', 'rest_prepare_riders', 10, 3);
+//add_filter('rest_prepare_riders', 'rest_prepare_riders', 10, 3);
+
+function rest_riders_collection_params($query_params, $post_type) {
+	echo '<pre>';
+	print_r($query_params);
+	echo '</pre>';
+}
+//add_filter('rest_riders_collection_params', 'rest_riders_collection_params', 10, 2);
+
+function uci_posts_item_args($item_args, $post_type, $schema) {	
+	switch ($post_type) :
+		case 'riders' :
+			$item_args['foo']=array(
+				'description' => 'description',
+				'type' => 'string',
+				'sanitize_callback' => '',
+				'validate_callback' => '',
+				'default' => 1,
+			);
+			break;
+    endswitch;
+
+	return $item_args;
+}
+add_filter('uci_posts_item_args', 'uci_posts_item_args', 10, 3);
 ?>

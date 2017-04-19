@@ -76,7 +76,7 @@ class UCI_REST_Posts_Controller extends UCI_REST_Controller {
 
 		$schema = $this->get_item_schema();
 		$get_item_args = array(
-			'context'  => $this->get_context_param( array( 'default' => 'view' ) ),
+			'context'  => $this->get_context_param( array( 'default' => 'view' ) )
 		);
 		if ( isset( $schema['properties']['password'] ) ) {
 			$get_item_args['password'] = array(
@@ -84,6 +84,9 @@ class UCI_REST_Posts_Controller extends UCI_REST_Controller {
 				'type'        => 'string',
 			);
 		}
+		
+		$get_item_args=apply_filters('uci_posts_item_args', $get_item_args, $this->post_type, $schema);
+		
 		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', array(
 			'args' => array(
 				'id' => array(
@@ -149,7 +152,7 @@ class UCI_REST_Posts_Controller extends UCI_REST_Controller {
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
 	 */
 	public function get_items( $request ) {
-
+print_r($request);
 		// Ensure a search string is set in case the orderby is set to 'relevance'.
 		if ( ! empty( $request['orderby'] ) && 'relevance' === $request['orderby'] && empty( $request['search'] ) ) {
 			return new WP_Error( 'rest_no_search_term_defined', __( 'You need to define a search term to order by relevance.' ), array( 'status' => 400 ) );
@@ -458,6 +461,10 @@ class UCI_REST_Posts_Controller extends UCI_REST_Controller {
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
 	 */
 	public function get_item( $request ) {
+//echo '<pre>';		
+//echo "req<br>";
+print_r($request);		
+//echo '</pre>';
 		$post = $this->get_post( $request['id'] );
 		if ( is_wp_error( $post ) ) {
 			return $post;
