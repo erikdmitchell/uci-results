@@ -50,6 +50,17 @@
 			<code>
 				http://uci.dev/wp-json/uci/v1/riders/{ID}
 			</code>
+			
+			<p>
+				<strong>Params</strong>
+				
+				<ul class="params">
+					<li>results <i>boolean</i> (false)</li>
+					<li>lastrace <i>boolean</i> (false)</li>
+					<li>stats <i>boolean</i> (false)</li>
+				</ul>
+			</p>
+			
 		</section>
 
 		<section>

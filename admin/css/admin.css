@@ -147,3 +147,6 @@ table.uci-results-race-results .name {
 	display: block;
 	margin-bottom: 15px;
 }
+.uci-results-api .examples ul.params {
+	margin-left: 15px;
+}
