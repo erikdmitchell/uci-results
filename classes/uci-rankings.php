@@ -97,8 +97,12 @@ class UCIRankings {
 			$rank_arr=explode(' ', $row['rank']);
 			$name=trim(str_replace('*', '', $row['name']));
 			
+			if (isset($row['nation'])) :
+				$country=$this->convert_country($row['nation']);			
+			endif;
+			
 			$data[$key]['rank']=$rank_arr[0];
-			$data[$key]['rider_id']=uci_results_add_rider($name);
+			$data[$key]['rider_id']=uci_results_add_rider($name, $country);
 			$data[$key]['date']=$date;
 			$data[$key]['name']=$name;
 			$data[$key]['discipline']=$discipline;
@@ -111,6 +115,32 @@ class UCIRankings {
 		$this->last_update=$date;
 		
 		return true;
+	}
+	
+	/**
+	 * convert_country function.
+	 * 
+	 * @access protected
+	 * @param string $country (default: '')
+	 * @return void
+	 */
+	protected function convert_country($country='') {
+		global $flags_countries_arr;
+
+		$country_code='';
+		
+		if (strtolower($country)=='great britain') :
+			return 'GBR';
+		endif;
+
+		foreach ($flags_countries_arr as $code => $arr) :
+			if (strtolower($arr[0])==strtolower($country)) :
+				$country_code=$arr[2];
+				break;
+			endif;		
+		endforeach;
+
+		return $country_code;
 	}
 
 	/**
