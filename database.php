@@ -1,7 +1,7 @@
 <?php
 global $ucicurl_db_version;
 
-$ucicurl_db_version='1.0.0';
+$ucicurl_db_version='1.1.0';
 
 /**
  * ucicurl_set_db_tables function.
@@ -16,6 +16,7 @@ function ucicurl_set_db_tables() {
 	$wpdb->uci_results_related_races=$wpdb->prefix.'uci_curl_related_races';
 	$wpdb->uci_results_series_overall=$wpdb->prefix.'uci_results_series_overall';
 	$wpdb->uci_results_season_weeks=$wpdb->prefix.'uci_results_season_weeks';
+	$wpdb->uci_results_uci_rankings=$wpdb->prefix.'uci_results_uci_rankings';
 }
 ucicurl_set_db_tables();
 
@@ -34,6 +35,7 @@ function ucicurl_db_install() {
 	$wpdb->uci_results_related_races=$wpdb->prefix.'uci_curl_related_races';
 	$wpdb->uci_results_series_overall=$wpdb->prefix.'uci_results_series_overall';
 	$wpdb->uci_results_season_weeks=$wpdb->prefix.'uci_results_season_weeks';
+	$wpdb->uci_results_uci_rankings=$wpdb->prefix.'uci_results_uci_rankings';
 
 	$charset=$wpdb->get_charset_collate();
 
@@ -81,11 +83,25 @@ function ucicurl_db_install() {
 		) $charset;
 	";
 
+	$sql_uci_rankings="
+		CREATE TABLE $wpdb->uci_results_uci_rankings (
+			id bigint(20) NOT NULL AUTO_INCREMENT,
+			name TEXT NOT NULL,
+			rider_id bigint(20) NOT NULL DEFAULT '0',
+			rank bigint(20) NOT NULL DEFAULT '0',
+			age bigint(20) NOT NULL DEFAULT '0',
+			points bigint(20) NOT NULL DEFAULT '0',
+			date DATE NOT NULL,
+			PRIMARY KEY (`id`)
+		) $charset;
+	";
+
 	dbDelta(array(
 		$sql_rider_rankings,
 		$sql_related_races,
 		$sql_series_overall,
 		$sql_season_weeks,
+		$sql_uci_rankings,
 	));
 
 	add_option('ucicurl_db_version', $ucicurl_db_version);
@@ -111,6 +127,7 @@ function ucicurl_db_update() {
 		$wpdb->uci_results_related_races=$wpdb->prefix.'uci_curl_related_races';
 		$wpdb->uci_results_series_overall=$wpdb->prefix.'uci_results_series_overall';
 		$wpdb->uci_results_season_weeks=$wpdb->prefix.'uci_results_season_weeks';
+		$wpdb->uci_results_uci_rankings=$wpdb->prefix.'uci_results_uci_rankings';
 
 		$sql_rider_rankings="
 			CREATE TABLE $wpdb->uci_results_rider_rankings (
@@ -156,11 +173,25 @@ function ucicurl_db_update() {
 			);
 		";
 
+		$sql_uci_rankings="
+			CREATE TABLE $wpdb->uci_results_uci_rankings (
+				id bigint(20) NOT NULL AUTO_INCREMENT,
+				name TEXT NOT NULL,
+				rider_id bigint(20) NOT NULL DEFAULT '0',
+				rank bigint(20) NOT NULL DEFAULT '0',
+				age bigint(20) NOT NULL DEFAULT '0',
+				points bigint(20) NOT NULL DEFAULT '0',
+				date DATE NOT NULL,
+				PRIMARY KEY (`id`)
+			);
+		";
+
 		dbDelta(array(
 			$sql_rider_rankings,
 			$sql_related_races,
 			$sql_series_overall,
 			$sql_season_weeks,
+			$sql_uci_rankings,
 		));
 
 		update_option('ucicurl_db_version', $ucicurl_db_version);

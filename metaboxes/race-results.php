@@ -52,32 +52,31 @@ class UCIResultsResultsMetabox {
         wp_nonce_field('update_race_results_meta', 'uci_results_admin');
  
 		$riders=uci_results_get_race_results($post->ID);
+		$discipline=strtolower(uci_get_first_term($post->ID, 'discipline'));
+		$rider_output=array('place', 'name', 'nat', 'age', 'result', 'par', 'pcr');
 	
-        // Display the form, using the current value.
+		// FILTERS ??? //
+		$rider_output=apply_filters('race_results_metabox_rider_output_'.$discipline, $rider_output, $post->ID);
         ?>
+        
+        <p>
+        	<a href="<?php echo admin_url('admin.php?page=uci-results&subpage=results&action=add-csv&race_id='.$post->ID); ?>" class="button button-secondary">Add Results</a>
+        </p>
         
         <table class="uci-results-race-results widefat fixed striped">
 	        <thead>
-		        <tr>
-			        <th class="place">Place</th>
-			        <th class="name">Name</th>
-			        <th class="nat">Nat</th>
-			        <th class="age">Age</th>
-			        <th class="result">Result</th>
-			        <th class="par">Par</th>
-			        <th class="pcr">Pacr</th>
-		        </tr>
+		       <tr>
+			       <?php foreach ($rider_output as $slug) : ?>
+				        <th class="<?php echo $slug; ?>"><?php echo ucwords($slug); ?></th>
+			        <?php endforeach; ?>
+		       </tr>
 	        </thead>
 	        <tbody>
 		        <?php foreach ($riders as $rider) : ?>
-		        	<tr id="rider-">
-			        	<td class="place"><?php echo $rider['place']; ?></td>
-			        	<td class="name"><?php echo $rider['name']; ?></td>
-			        	<td class="nat"><?php echo $rider['nat']; ?></td>
-			        	<td class="age"><?php echo $rider['age']; ?></td>
-			        	<td class="result"><?php echo $rider['result']; ?></td>
-			        	<td class="par"><?php echo $rider['par']; ?></td>
-			        	<td class="pcr"><?php echo $rider['pcr']; ?></td> 
+		        	<tr>
+			        	<?php foreach ($rider_output as $slug) : ?>
+				        	<td class="<?php echo $slug; ?>"><?php echo $rider[$slug]; ?></td>
+			        	<?php endforeach; ?>
 		        	</tr>
 		        <?php endforeach; ?>
 	        </tbody>
@@ -85,5 +84,6 @@ class UCIResultsResultsMetabox {
 
         <?php
     }
+    
 }
 ?>

@@ -36,10 +36,12 @@ coming soon...
 
 = 1.0.0 =
 
-* DB version 1.0.0
-* Completely integrated into REST API
-* Virtually all of our components are custom post types, taxonomies and/or post meta.
+* Database version 1.0.0
+* Fully REST API compatable.
+* Leveraged a lot of WordPress built in functionality and setup.
+* Custom post types, taxonomies and metaboxes are utalized throughout the plugin.
 * Eliminates almost all of the custom db tables (4 remain)
+* Updated templates.
 * Massive speed increase
 
 = 0.1.5 =
@@ -77,5 +79,5 @@ coming soon...
 
 == Upgrade Notice ==
 
-* 1.0.0 is a massive restructuring of this plugin. It includes a migration page that will help.
+* 1.0.0 is also a major upgrade, but includes a migration script to help the update.
 * 0.1.0 is a major overhaul and renaming of plugin. Not backwards compatible.

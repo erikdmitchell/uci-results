@@ -28,7 +28,7 @@ function riders_init() {
 		'menu_icon'         => 'dashicons-admin-post',
 		'show_in_rest'      => true,
 		'rest_base'         => 'riders',
-		'rest_controller_class' => 'WP_REST_Posts_Controller',
+		'rest_controller_class' => 'UCI_REST_Posts_Controller',
 	) );
 
 }

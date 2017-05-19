@@ -14,9 +14,11 @@ class UCIResultsAddRaces {
 	 */
 	public function __construct() {
 		add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
+		add_action('admin_init', array($this, 'add_csv_results_to_race'));
 		add_action('wp_ajax_get_race_data_non_db', array($this, 'ajax_get_race_data_non_db'));
 		add_action('wp_ajax_prepare_add_races_to_db', array($this, 'ajax_prepare_add_races_to_db'));
 		add_action('wp_ajax_add_race_to_db', array($this, 'ajax_add_race_to_db'));
+		add_action('wp_ajax_process_csv_results', array($this, 'ajax_process_results_csv'));
 	}
 	
 	public function admin_scripts_styles() {
@@ -34,7 +36,7 @@ class UCIResultsAddRaces {
 		
 		parse_str($_POST['form'], $form);
 
-		echo $this->get_race_data($form['season']);
+		echo $this->get_race_data($form['season'], false, false, false, $form['discipline']);
 
 		wp_die();
 	}
@@ -99,14 +101,22 @@ class UCIResultsAddRaces {
 
 	/**
 	 * build_races_object_from_rows function.
-	 *
+	 * 
 	 * @access public
-	 * @param string $rows (default: '')
-	 * @param bool $season (default: false)
-	 * @param bool $limit (default: false)
+	 * @param string $args (default: '')
 	 * @return void
 	 */
-	public function build_races_object_from_rows($rows='', $season=false, $limit=false) {
+	public function build_races_object_from_rows($args='') {
+		$default_args=array(
+			'rows' => '',
+			'season' => false,
+			'limit' => false,
+			'discipline' => 'cyclocross'
+		);
+		$args=wp_parse_args($args, $default_args);
+	
+		extract($args);
+			
 		$races=array();
 		$races_obj=new stdClass();
 		$row_count=0;
@@ -149,6 +159,7 @@ class UCIResultsAddRaces {
 
 				$races[$row_count]->link=$link;
 				$races[$row_count]->season=$season;
+				$races[$row_count]->discipline=$discipline;
 			endif;
 
 			// increase counter //
@@ -173,15 +184,16 @@ class UCIResultsAddRaces {
 
 	/**
 	 * get_race_data function.
-	 *
+	 * 
 	 * @access public
 	 * @param bool $season (default: false)
 	 * @param bool $limit (default: false)
 	 * @param bool $raw (default: false)
 	 * @param bool $url (default: false)
+	 * @param string $discipline (default: 'cyclocross')
 	 * @return void
 	 */
-	public function get_race_data($season=false, $limit=false, $raw=false, $url=false) {
+	public function get_race_data($season=false, $limit=false, $raw=false, $url=false, $discipline='cyclocross') {
 		global $uci_results_admin;
 		
 		set_time_limit(0); // mex ececution time
@@ -202,7 +214,14 @@ class UCIResultsAddRaces {
 
 		$html=$this->get_url_page($url, $timeout); // get the html from the url
 		$rows=$this->get_html_table_rows($html, $races_class_name); // grab our rows via dom object
-		$races_obj=$this->build_races_object_from_rows($rows, $season, $limit); // build our races object from rows
+		
+		// build our races object from rows
+		$races_obj=$this->build_races_object_from_rows(array(
+			'rows' => $rows,
+			'season' => $season, 
+			'limit' => $limit,
+			'discipline' => $discipline,
+		));
 
 		// return object if $raw is true //
 		if ($raw)
@@ -454,7 +473,7 @@ class UCIResultsAddRaces {
 	 */
 	public function reformat_date($date) {
 		$date = htmlentities($date, null, 'utf-8');
-    $date = str_replace("&nbsp;", "", $date);
+		$date = str_replace("&nbsp;", "", $date);
 
 		// if we have a '-' then it's a multi day so we return base date //
 		if (strpos($date, '-') !== false)
@@ -465,7 +484,7 @@ class UCIResultsAddRaces {
 		$month=date('m', strtotime(substr($date, 2, 3)));
 		$year=substr($date, 5);
 
-    $date="$year-$month-$day";
+		$date="$year-$month-$day";
 
 		return $date;
 	}
@@ -545,7 +564,7 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function add_race_to_db($race_data='', $raw_response=false) {
-		global $wpdb, $uci_results_twitter, $uci_results_pages, $ucicurl_races;
+		global $wpdb, $uci_results_twitter, $uci_results_pages;
 
 		$message=null;
 		$new_results=0;
@@ -568,6 +587,7 @@ class UCIResultsAddRaces {
 			'link' => $race_data->link,
 			'code' => $this->build_race_code($race_data),
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
+			'discipline' => $race_data->discipline,
 		);
 
 		if (!$this->check_for_dups($data['code'])) :		
@@ -581,7 +601,7 @@ class UCIResultsAddRaces {
 					$url=get_permalink($uci_results_pages['single_race']).$data['code'];
 
 					// use twitter if we have it //
-					$twitter=$ucicurl_races->get_twitter($race_id);
+					$twitter=uci_get_race_twitter($race_id);
 
 					if (!empty($twitter))
 						$twitter='@'.$twitter;
@@ -631,6 +651,7 @@ class UCIResultsAddRaces {
 			'link' => $race_data->link,
 			'code' => $this->build_race_code($race_data),
 			'week' => $this->get_race_week($race_data->date, $race_data->season),
+			'discipline' => $race_data->discipline,
 		);
 		
 		return $data;
@@ -732,6 +753,7 @@ class UCIResultsAddRaces {
 		wp_set_object_terms($post_id, $data['nat'], 'country', false);
 		wp_set_object_terms($post_id, $data['class'], 'race_class', false);
 		wp_set_object_terms($post_id, $data['season'], 'season', false);
+		wp_set_object_terms($post_id, $data['discipline'], 'discipline', false);
 		
 		// update meta //
 		update_post_meta($post_id, '_race_date', $data['date']);
@@ -794,57 +816,75 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function add_race_results_to_db($race_id=0, $link=false) {
-		global $wpdb;
-		global $results_data;
-		global $results_raw;
-
 		if (!$race_id || !$link)
 			return false;
 
 		$race_results=$this->get_race_results($link);
-		$race=get_post($race_id);
+
+		$this->insert_race_results($race_id, $race_results);
+	}
+	
+	/**
+	 * insert_race_results function.
+	 * 
+	 * @access protected
+	 * @param string $race_id (default: '')
+	 * @param string $race_results (default: '')
+	 * @return void
+	 */
+	protected function insert_race_results($race_id='', $race_results='') {
+		if (empty($race_id) || empty($race_results))
+			return;
+			
+		$discipline=strtolower(uci_get_first_term($race_id, 'discipline'));
 
 		foreach ($race_results as $result) :
-			$rider=get_page_by_title($result->name, OBJECT, 'riders');
+			$meta_value=array();
+			$rider_id=$this->insert_race_results_rider_id($result->name, $result->nat);
 
-			// check if we have a rider id, otherwise create one //
-			if ($rider===null || empty($rider->ID)) :
-				$rider_insert=array(
-					'post_title' => $result->name,
-					'post_content' => '',
-					'post_status' => 'publish',	
-					'post_type' => 'riders',
-					'post_name' => sanitize_title_with_dashes($result->name)
-				);
-				$rider_id=wp_insert_post($rider_insert);
-				wp_set_object_terms($rider_id, $result->nat, 'country', false);
-			else :
-				$rider_id=$rider->ID;
-			endif;
+			// essentially converts our object to an array //			
+			foreach ($result as $key => $value) :
+				$meta_value[$key]=$value;
+			endforeach;
 
-			if (!isset($result->par) || empty($result->par) || is_null($result->par)) :
-				$par=0;
-			else :
-				$par=$result->par;
-			endif;
+			// filter value //
+			$meta_value=apply_filters('uci_results_insert_race_result_'.$discipline, $meta_value, $race_id, $result, $rider_id);			
 
-			if (!isset($result->pcr) || empty($result->pcr) || is_null($result->pcr)) :
-				$pcr=0;
-			else :
-				$pcr=$result->pcr;
-			endif;
-
-			$meta_value=array(
-				'place' => $result->place,
-				'name' => $result->name,
-				'nat' => $result->nat,
-				'age' => $result->age,
-				'result' => $result->result,
-				'par' => $par,
-				'pcr' => $pcr,
-			);			
 			update_post_meta($race_id, "_rider_$rider_id", $meta_value);
-		endforeach;
+		endforeach;			
+	}
+	
+	/**
+	 * insert_race_results_rider_id function.
+	 * 
+	 * @access protected
+	 * @param string $rider_name (default: '')
+	 * @param string $rider_country (default: '')
+	 * @return void
+	 */
+	protected function insert_race_results_rider_id($rider_name='', $rider_country='') {
+		if (empty($rider_name))
+			return 0;
+			
+		$rider=get_page_by_title($rider_name, OBJECT, 'riders');
+
+		// check if we have a rider id, otherwise create one //
+		if ($rider===null || empty($rider->ID)) :
+			$rider_insert=array(
+				'post_title' => $rider_name,
+				'post_content' => '',
+				'post_status' => 'publish',	
+				'post_type' => 'riders',
+				'post_name' => sanitize_title_with_dashes($rider_name)
+			);
+			$rider_id=wp_insert_post($rider_insert);
+			
+			wp_set_object_terms($rider_id, $rider_country, 'country', false);
+		else :
+			$rider_id=$rider->ID;
+		endif;
+		
+		return $rider_id;			
 	}
 
 	/**
@@ -937,6 +977,151 @@ class UCIResultsAddRaces {
 		endforeach;
 
 		return $race_results_obj;
+	}
+
+	public function ajax_process_results_csv() {
+		$form=array();
+	
+		foreach ($_POST['form'] as $arr) :
+			$form[$arr['name']]=$arr['value'];
+		endforeach;
+
+		$data=$this->upload_csv_results($form);
+	
+		echo $this->csv_file_display($data);
+	
+		wp_die();
+	}
+
+	/**
+	 * upload_csv_results function.
+	 * 
+	 * @access protected
+	 * @param array $form (default: array())
+	 * @return void
+	 */
+	protected function upload_csv_results($form=array()) {
+		if (!isset($form['uci_results']) || !wp_verify_nonce($form['uci_results'], 'add-race-csv'))
+			return false;
+			
+		if (empty($form['race_id']))
+			$form['race_id']=$form['race_search_id'];
+		
+		$data=$this->process_csv_file($form['file']);
+		$data['race_id']=$form['race_id'];	
+		
+		return $data;
+	}
+	
+	/**
+	 * process_csv_file function.
+	 * 
+	 * @access protected
+	 * @param string $file (default: '')
+	 * @return void
+	 */
+	protected function process_csv_file($file='') {
+		global $wpdb;
+		
+		if (empty($file) || $file=='')
+			return false;
+		
+		ini_set('auto_detect_line_endings',TRUE); // added for issues with MAC
+		
+		$data=array();
+		$file=wp_remote_fopen($file);
+    	$file=str_replace("\r\n", "\n", trim($file));
+    	$rows=explode("\n", $file);
+ 
+		// turn into easier to digest array //
+    	foreach ($rows as $row => $cols) :
+			$cols=str_getcsv($cols, ',');
+			
+			$data[]=$cols;
+		endforeach;
+		
+		if (empty($data))
+			return false;
+			
+		$header_row=array_shift($data);
+		$header_row=array_map('sanitize_key', $header_row);		
+		
+		// builds out a more cleaner arr //
+		foreach ($data as $key => $row) :
+			$arr=array();
+			
+			foreach ($row as $k => $v) :
+				$arr[$header_row[$k]]=$v;	
+			endforeach;
+			
+			$data[$key]=$arr;
+		endforeach;
+		
+		$clean_arr=array(
+			'header' => $header_row,
+			'rows' => $data	
+		);
+
+		return $clean_arr;		
+	}
+	
+	/**
+	 * csv_file_display function.
+	 * 
+	 * @access public
+	 * @param array $arr (default: array())
+	 * @return void
+	 */
+	public function csv_file_display($arr=array()) {
+		if (empty($arr))
+			return;
+			
+		$html='';
+		
+		$html.='<div class="race-info">';
+			$html.='<h4>'.get_the_title($arr['race_id']).' <span class="race-date">'.get_post_meta($arr['race_id'], '_race_date', true).'</span></h4>';
+		$html.='</div>';		
+		
+		$html.='<table class="form-table">';
+		
+		if (isset($arr['header'])) :
+			$html.='<tr>';
+			
+				foreach ($arr['header'] as $head) :
+					$html.='<th>'.$head.'</th>';
+				endforeach;
+			
+			$html.='</tr>';
+		endif;
+		
+		foreach ($arr['rows'] as $row_counter => $row) :
+			$html.='<tr>';
+				
+				foreach ($row as $key => $col) :
+					$html.='<td><input type="text" name="race[results]['.$row_counter.']['.$key.']" class="'.$key.'" value="'.$col.'" /></td>';
+				endforeach;
+				
+			$html.='</tr>';
+		endforeach;
+
+		$html.='</table>';
+		
+		return $html;
+	}
+	
+	/**
+	 * add_csv_results_to_race function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function add_csv_results_to_race() {
+		if (!isset($_POST['uci_results']) || !wp_verify_nonce($_POST['uci_results'], 'add-csv-data'))
+			return;
+			
+		$results=array_to_object($_POST['race']['results']);
+		
+		$this->insert_race_results($_POST['race']['race_id'], $results);
 	}
 
 }

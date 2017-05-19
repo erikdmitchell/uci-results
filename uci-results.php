@@ -11,7 +11,7 @@
 
 define('UCI_RESULTS_PATH', plugin_dir_path(__FILE__));
 define('UCI_RESULTS_URL', plugin_dir_url(__FILE__));
-define('UCI_RESULTS_VERSION', '0.2.0');
+define('UCI_RESULTS_VERSION', '1.0.0');
 define('UCI_RESULTS_ADMIN_PATH', plugin_dir_path(__FILE__).'admin/');
 define('UCI_RESULTS_ADMIN_URL', plugin_dir_url(__FILE__).'admin/');
 
@@ -19,6 +19,7 @@ include_once(UCI_RESULTS_PATH.'classes/riders.php'); // our riders functions
 include_once(UCI_RESULTS_PATH.'classes/rider-stats.php'); // rider stats function
 include_once(UCI_RESULTS_PATH.'classes/rider-rankings-query.php'); // rider rankings query class
 include_once(UCI_RESULTS_PATH.'classes/seasons.php');
+include_once(UCI_RESULTS_PATH.'classes/uci-rankings.php');
 
 include_once(UCI_RESULTS_PATH.'database.php'); // sets up our db tables
 include_once(UCI_RESULTS_PATH.'functions/ajax.php'); // ajax functions
@@ -38,6 +39,8 @@ include_once(UCI_RESULTS_PATH.'admin/add-races.php'); // cURL and add races/resu
 include_once(UCI_RESULTS_PATH.'admin/rider-rankings.php'); // add and update rider rankings
 include_once(UCI_RESULTS_PATH.'admin/wp-cli.php'); // wp cli functions
 include_once(UCI_RESULTS_PATH.'admin/custom-columns.php'); // custom columns for our admin pages
+include_once(UCI_RESULTS_PATH.'admin/race-results-meta.php'); // customize results meta before processing
+include_once(UCI_RESULTS_PATH.'admin/race-results-metabox-filters.php'); // customize races mteabox output
 
 include_once(UCI_RESULTS_PATH.'lib/name-parser.php'); // a php nameparser
 include_once(UCI_RESULTS_PATH.'shortcode.php'); // our shortcodes
@@ -47,6 +50,8 @@ include_once(UCI_RESULTS_PATH.'update-to-twitter.php'); // updates results and r
 
 include_once(UCI_RESULTS_PATH.'rest-api/uci-rest-controller.php'); // rest api controller
 include_once(UCI_RESULTS_PATH.'rest-api/uci-rest-posts-controller.php'); // rest api posts
+include_once(UCI_RESULTS_PATH.'rest-api/uci-rest-taxonomies-controller.php'); // rest api taxonomies
+include_once(UCI_RESULTS_PATH.'rest-api/uci-rest-terms-controller.php'); // rest api terms
 include_once(UCI_RESULTS_PATH.'rest-api/rest-api.php'); // basic rest api functions
 include_once(UCI_RESULTS_PATH.'rest-api/filters.php'); // filters for rest api functions
 

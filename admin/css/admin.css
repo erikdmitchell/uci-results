@@ -121,3 +121,32 @@ table.uci-results-race-results .name {
 .uci-results-admin-pagination .prev-link {
 	
 }
+
+/* results upload csv */
+.uci-results #csv-data {
+	margin: 15px 0;
+}
+.uci-results .button#add-results {
+	display: none;
+}
+#csv-data .form-table th {
+	padding-top: 0;
+	padding-bottom: 5px;
+}
+#csv-data .form-table td {
+	padding: 0;
+}
+#csv-data .race-info .race-date {
+	display: inline-block;
+	font-weight: normal;
+	margin-left: 15px;
+}
+
+/* api page */
+.uci-results-api .examples code {
+	display: block;
+	margin-bottom: 15px;
+}
+.uci-results-api .examples ul.params {
+	margin-left: 15px;
+}
