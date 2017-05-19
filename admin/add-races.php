@@ -473,7 +473,7 @@ class UCIResultsAddRaces {
 	 */
 	public function reformat_date($date) {
 		$date = htmlentities($date, null, 'utf-8');
-    $date = str_replace("&nbsp;", "", $date);
+		$date = str_replace("&nbsp;", "", $date);
 
 		// if we have a '-' then it's a multi day so we return base date //
 		if (strpos($date, '-') !== false)
@@ -484,7 +484,7 @@ class UCIResultsAddRaces {
 		$month=date('m', strtotime(substr($date, 2, 3)));
 		$year=substr($date, 5);
 
-    $date="$year-$month-$day";
+		$date="$year-$month-$day";
 
 		return $date;
 	}
