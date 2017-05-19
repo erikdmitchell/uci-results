@@ -38,6 +38,13 @@ class UCIRiderStats {
 		$this->options=$args['options'];
 	}
 
+	/**
+	 * get_stats function.
+	 * 
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @return void
+	 */
 	public function get_stats($rider_id=0) {
 		return 'stats should be overridden in sub class';
 	}

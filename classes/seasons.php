@@ -245,7 +245,7 @@ class UCIResultsSeasons {
 		    'hide_empty' => false,
 		);
 		$args=wp_parse_args($args, $default_args);
-		$terms = get_terms($args);
+		$terms=get_terms($args);
 
 		return $terms;
 	}

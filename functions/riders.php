@@ -117,7 +117,8 @@ function uci_results_get_rider_results($args='') {
 		$result['race_class']=uci_get_first_term($race_id, 'race_class');
 		$result['race_season']=uci_get_first_term($race_id, 'season');		
 		
-		if (!empty($places)) :
+		// check place //
+		if (!empty($places)) :		
 			if (in_array($result['place'], $places)) :
 				$results[]=$result;			
 			endif;

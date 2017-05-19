@@ -209,6 +209,8 @@ class UCIRiders {
 		if (!$rider_id)
 			return false;
 
+		$rank='fix';
+/*
 		$current_season=uci_results_get_current_season();
 		$prev_season=uci_results_get_previous_season();
 		$current_season_rank=$wpdb->get_row("SELECT * FROM $wpdb->uci_results_rider_rankings WHERE season='$current_season->name' AND rider_id=$rider_id ORDER BY week DESC LIMIT 1");
@@ -248,6 +250,7 @@ class UCIRiders {
 
 		// get max rank //
 		$rank->max=$wpdb->get_var("SELECT MAX(rank) FROM $wpdb->uci_results_rider_rankings WHERE season='$season' AND week=$rank->week");
+*/
 
 		return $rank;
 	}
