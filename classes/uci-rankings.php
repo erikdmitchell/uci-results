@@ -102,8 +102,8 @@ class UCIRankings {
 			$data[$key]['date']=$date;
 			$data[$key]['name']=$name;
 		endforeach;
-print_r($data);
-		//$this->insert_rankings_into_db($data);
+
+		$this->insert_rankings_into_db($data);
 		
 		// update our option so we know we have a ranking change //
 		//update_option('fc_uci_rankings_last_update', $date);
@@ -298,6 +298,17 @@ print_r($data);
 		return false;
 	}
 
+	/**
+	 * get_columns function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function get_columns() {
+		global $wpdb;
+		
+		return $wpdb->get_col("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '".$this->table_name."'");
+	}
 }
 
 $uci_rankings = new UCIRankings();		
