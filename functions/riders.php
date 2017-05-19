@@ -183,6 +183,13 @@ function uci_get_rider_id($slug='') {
 	return $id;
 }
 
+/**
+ * uci_get_rider_id_by_name function.
+ * 
+ * @access public
+ * @param string $name (default: '')
+ * @return void
+ */
 function uci_get_rider_id_by_name($name='') {
 	global $wpdb;
 
@@ -203,5 +210,37 @@ function uci_results_rider_rankings_url() {
 	$url=get_permalink($uci_results_pages['riders']);
 
 	echo $url;
+}
+
+/**
+ * uci_results_add_rider function.
+ * 
+ * @access public
+ * @param string $name (default: '')
+ * @return void
+ */
+function uci_results_add_rider($name='') {
+	if (empty($name))
+		return 0;
+		
+	$rider=get_page_by_title($name, OBJECT, 'riders');
+
+	// check if we have a rider id, otherwise create one //
+	if ($rider===null || empty($rider->ID)) :
+		$rider_insert=array(
+			'post_title' => $name,
+			'post_content' => '',
+			'post_status' => 'publish',	
+			'post_type' => 'riders',
+			'post_name' => sanitize_title_with_dashes($name)
+		);
+		$rider_id=wp_insert_post($rider_insert);
+		
+		//wp_set_object_terms($rider_id, $rider_country, 'country', false);
+	else :
+		$rider_id=$rider->ID;
+	endif;
+	
+	return $rider_id;		
 }
 ?>
