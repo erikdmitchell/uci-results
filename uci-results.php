@@ -16,7 +16,6 @@ define('UCI_RESULTS_ADMIN_PATH', plugin_dir_path(__FILE__).'admin/');
 define('UCI_RESULTS_ADMIN_URL', plugin_dir_url(__FILE__).'admin/');
 
 include_once(UCI_RESULTS_PATH.'classes/riders.php'); // our riders functions
-include_once(UCI_RESULTS_PATH.'classes/rider-stats.php'); // rider stats function
 include_once(UCI_RESULTS_PATH.'classes/rider-rankings-query.php'); // rider rankings query class
 include_once(UCI_RESULTS_PATH.'classes/seasons.php');
 include_once(UCI_RESULTS_PATH.'classes/uci-rankings.php');
@@ -56,6 +55,10 @@ include_once(UCI_RESULTS_PATH.'rest-api/rest-api.php'); // basic rest api functi
 include_once(UCI_RESULTS_PATH.'rest-api/filters.php'); // filters for rest api functions
 
 include_once(UCI_RESULTS_PATH.'inc/updater.php'); // github - wp version update function
+
+include_once(UCI_RESULTS_PATH.'stats/base.php'); // base stats class
+include_once(UCI_RESULTS_PATH.'stats/base-factory.php'); // base factory class
+include_once(UCI_RESULTS_PATH.'stats/cross.php'); // cross stats class
 
 /**
  * is_uci_results_active function.

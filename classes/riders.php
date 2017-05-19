@@ -76,7 +76,7 @@ class UCIRiders {
 
 		// get stats //
 		if ($stats)
-			$rider->stats=new UCIRiderStats($rider_id);
+			$rider->stats=uci_results_get_rider_stats($rider_id);
 
 		$rider->twitter=$this->get_twitter($rider_id);
 

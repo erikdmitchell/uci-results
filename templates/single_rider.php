@@ -21,6 +21,10 @@ $rider=$uci_riders->get_rider(array(
 ));
 ?>
 
+<pre>
+	<?php print_r($rider->stats); ?>
+</pre>
+
 <div class="em-container uci-results uci-results-rider">
 
 	<?php if ($rider) : ?>

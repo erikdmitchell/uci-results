@@ -1,7 +1,17 @@
 <?php
+global $uci_results_cross_stats;
 
-class UCIRiderStats {
-	
+class UCICrossStats extends UCIRiderStats {
+
+	public function __construct() {
+		parent::__construct(array(
+			'id' => 'cyclocross',
+			'name' => 'Cyclocross Stats',
+			'discipline' => 'cyclocross',
+		));
+	}
+
+/*
 	public $final_rankings;
 	public $wins=0;
 	public $podiums=0;
@@ -12,6 +22,7 @@ class UCIRiderStats {
 	public $world_cup_titles=0;
 	public $superprestige_titles=0;
 	public $gva_bpost_bank_titles=0;
+*/
 	
 	/**
 	 * __construct function.
@@ -21,6 +32,7 @@ class UCIRiderStats {
 	 * @param string $args (default: '')
 	 * @return void
 	 */
+/*
 	public function __construct($rider_id=0, $args='') {		
 		if (!$rider_id)
 			return false;
@@ -36,6 +48,7 @@ class UCIRiderStats {
 		$this->superprestige_titles=$this->overall_titles($rider_id, 2);
 		$this->gva_bpost_bank_titles=$this->overall_titles($rider_id, '3, 8, 4');
 	}
+*/
 	
 	/**
 	 * final_rankings function.
@@ -191,5 +204,7 @@ class UCIRiderStats {
 		return count($results);
 	}
 
-}	
+}
+
+$uci_results_cross_stats=new UCICrossStats();
 ?>

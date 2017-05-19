@@ -244,4 +244,15 @@ function uci_results_add_rider($name='', $country='') {
 	
 	return $rider_id;		
 }
+
+function uci_results_get_rider_stats($rider_id=0) {
+	global $uci_rider_stats;
+	
+	if (!$rider_id)
+		return;
+echo "uci_results_get_rider_stats";		
+	foreach ($uci_rider_stats as $id => $class) {
+		echo $class->get_stats();
+	}
+}
 ?>
