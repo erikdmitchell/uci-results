@@ -37,15 +37,9 @@ class UCIRiderStats {
 		$this->discipline=$args['discipline'];
 		$this->options=$args['options'];
 	}
-	
-	/**
-	 * get_stats function.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function get_stats() {
-		return 'stats';
+
+	public function get_stats($rider_id=0) {
+		return 'stats should be overridden in sub class';
 	}
 
     /**

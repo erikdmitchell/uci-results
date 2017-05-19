@@ -10,6 +10,15 @@ class UCICrossStats extends UCIRiderStats {
 			'discipline' => 'cyclocross',
 		));
 	}
+	
+	public function get_stats($rider_id=0) {
+		$stats=new stdClass();
+		
+		if (!$rider_id)
+			return $stats;
+			
+		return $stats;
+	}
 
 /*
 	public $final_rankings;

@@ -245,14 +245,25 @@ function uci_results_add_rider($name='', $country='') {
 	return $rider_id;		
 }
 
+/**
+ * uci_results_get_rider_stats function.
+ * 
+ * @access public
+ * @param int $rider_id (default: 0)
+ * @return void
+ */
 function uci_results_get_rider_stats($rider_id=0) {
 	global $uci_rider_stats;
 	
+	$stats=array();
+	
 	if (!$rider_id)
 		return;
-echo "uci_results_get_rider_stats";		
-	foreach ($uci_rider_stats as $id => $class) {
-		echo $class->get_stats();
-	}
+	
+	foreach ($uci_rider_stats as $id => $class) :
+		$stats[$class->discipline]=$class->get_stats($rider_id);
+	endforeach;
+	
+	return $stats;
 }
 ?>
