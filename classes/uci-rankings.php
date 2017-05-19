@@ -19,7 +19,6 @@ class UCIRankings {
 		$this->version='1.0.0';
 		$this->last_update=get_option('uci_rankings_last_update', 0);
 		
-		//add_action('wp_ajax_uci_upload_csv_file', array($this, 'ajax_upload_csv_file'));
 		add_action('wp_ajax_uci_add_rider_rankings', array($this, 'ajax_process_csv_file'));
 		
         add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));

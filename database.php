@@ -1,7 +1,7 @@
 <?php
 global $ucicurl_db_version;
 
-$ucicurl_db_version='1.1.0';
+$ucicurl_db_version='1.1.1';
 
 /**
  * ucicurl_set_db_tables function.
@@ -91,6 +91,7 @@ function ucicurl_db_install() {
 			rank bigint(20) NOT NULL DEFAULT '0',
 			age bigint(20) NOT NULL DEFAULT '0',
 			points bigint(20) NOT NULL DEFAULT '0',
+			discipline bigint(20) NOT NULL DEFAULT '0',
 			date DATE NOT NULL,
 			PRIMARY KEY (`id`)
 		) $charset;
@@ -181,6 +182,7 @@ function ucicurl_db_update() {
 				rank bigint(20) NOT NULL DEFAULT '0',
 				age bigint(20) NOT NULL DEFAULT '0',
 				points bigint(20) NOT NULL DEFAULT '0',
+				discipline bigint(20) NOT NULL DEFAULT '0',
 				date DATE NOT NULL,
 				PRIMARY KEY (`id`)
 			);
@@ -216,7 +218,7 @@ function ucicurl_update_db_check() {
 	elseif (get_option('ucicurl_db_version') < '0.2.1') :
 		include_once(UCI_RESULTS_PATH.'updates/upgrade-0_2_1.php');
 		$ucicurl_db_version=uci_results_upgrade_0_2_1();
-	elseif (get_option('ucicurl_db_version') < '1.0.0') :
+	elseif (get_option('ucicurl_db_version') < '1.0.0') :	
 		include_once(UCI_RESULTS_PATH.'updates/upgrade-1_0_0.php');
 		upgrade_1_0_0_db();		
 	elseif (get_option('ucicurl_db_version') != $ucicurl_db_version) :
