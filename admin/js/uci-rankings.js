@@ -5,6 +5,7 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		
 		var customDate=$(this).parents('form').find('input#custom-date').val();
+		var discipline=$(this).parents('form').find('select#discipline').val();		
 		var _custom_media = true;
 	    var _orig_send_attachment = wp.media.editor.send.attachment;
 	    var send_attachment_bkp = wp.media.editor.send.attachment;
@@ -20,6 +21,7 @@ jQuery(document).ready(function($) {
 				'action' : 'uci_add_rider_rankings',
 				'file' : attachment.url,
 				'custom_date' : customDate,
+				'discipline' : discipline,
 			};
 
 			$.post(ajaxurl, data, function(response) {
@@ -27,6 +29,7 @@ jQuery(document).ready(function($) {
 
 				hideLoader();
 			});
+
 	      } else {
 	        return _orig_send_attachment.apply( this, [props, attachment] );
 	      }

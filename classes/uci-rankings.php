@@ -19,7 +19,6 @@ class UCIRankings {
 		$this->version='1.0.0';
 		$this->last_update=get_option('uci_rankings_last_update', 0);
 		
-		//add_action('wp_ajax_uci_upload_csv_file', array($this, 'ajax_upload_csv_file'));
 		add_action('wp_ajax_uci_add_rider_rankings', array($this, 'ajax_process_csv_file'));
 		
         add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
@@ -45,7 +44,7 @@ class UCIRankings {
 	 * @return void
 	 */
 	public function ajax_process_csv_file() {
-		$this->process_csv_file($_POST['file'], $_POST['custom_date']);
+		$this->process_csv_file($_POST['file'], $_POST['custom_date'], $_POST['discipline']);
 		
 		echo '<div class="success">CSV file processed and inserted into db.</div>';
 		
@@ -58,9 +57,10 @@ class UCIRankings {
 	 * @access public
 	 * @param string $file (default: '')
 	 * @param string $date (default: '')
+	 * @param int $discipline (default: 0)
 	 * @return void
 	 */
-	public function process_csv_file($file='', $date='') {
+	public function process_csv_file($file='', $date='', $discipline=0) {
 		global $wpdb;
 	
 		if (empty($file) || $file=='')
@@ -97,19 +97,50 @@ class UCIRankings {
 			$rank_arr=explode(' ', $row['rank']);
 			$name=trim(str_replace('*', '', $row['name']));
 			
+			if (isset($row['nation'])) :
+				$country=$this->convert_country($row['nation']);			
+			endif;
+			
 			$data[$key]['rank']=$rank_arr[0];
-			$data[$key]['rider_id']=uci_results_add_rider($name);
+			$data[$key]['rider_id']=uci_results_add_rider($name, $country);
 			$data[$key]['date']=$date;
 			$data[$key]['name']=$name;
+			$data[$key]['discipline']=$discipline;
 		endforeach;
 
 		$this->insert_rankings_into_db($data);
 		
 		// update our option so we know we have a ranking change //
-		//update_option('fc_uci_rankings_last_update', $date);
-		//$this->last_update=$date;
+		update_option('fc_uci_rankings_last_update', $date);
+		$this->last_update=$date;
 		
 		return true;
+	}
+	
+	/**
+	 * convert_country function.
+	 * 
+	 * @access protected
+	 * @param string $country (default: '')
+	 * @return void
+	 */
+	protected function convert_country($country='') {
+		global $flags_countries_arr;
+
+		$country_code='';
+		
+		if (strtolower($country)=='great britain') :
+			return 'GBR';
+		endif;
+
+		foreach ($flags_countries_arr as $code => $arr) :
+			if (strtolower($arr[0])==strtolower($country)) :
+				$country_code=$arr[2];
+				break;
+			endif;		
+		endforeach;
+
+		return $country_code;
 	}
 
 	/**
@@ -296,6 +327,26 @@ class UCIRankings {
 			return true;
 		
 		return false;
+	}
+	
+	/**
+	 * get_rank function.
+	 * 
+	 * @access public
+	 * @param int $rider_id (default: 0)
+	 * @param string $discipline (default: '')
+	 * @return void
+	 */
+	public function get_rank($rider_id=0, $discipline='') {
+		global $wpdb;
+		
+		$rank=$wpdb->get_row("SELECT rank, points, date, discipline FROM ".$this->table_name." WHERE rider_id = 1429 ORDER BY date ASC LIMIT 1");
+		
+		// render discipline
+		$discipline=get_term_by('id', $rank->discipline, 'discipline');
+		$rank->discipline=$discipline->name;
+		
+		return $rank;
 	}
 
 	/**

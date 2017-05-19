@@ -150,3 +150,11 @@ table.uci-results-race-results .name {
 .uci-results-api .examples ul.params {
 	margin-left: 15px;
 }
+
+/* uci rankings */
+.uci-results-admin.uci-rankings form label {
+	font-weight: bold;
+}
+.uci-results-admin.uci-rankings form td > div {
+	margin-top: 10px;
+}
