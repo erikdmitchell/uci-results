@@ -2,6 +2,8 @@
 
 <div class="uci-results uci-rankings">
 	<h2>UCI Rankings</h2>
+	
+	<div id="uci-admin-message"></div>
 
 	<form name="add-uci-rankings" action="" method="post">
 		<table class="form-table">

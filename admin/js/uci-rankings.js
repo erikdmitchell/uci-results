@@ -23,7 +23,7 @@ jQuery(document).ready(function($) {
 			};
 
 			$.post(ajaxurl, data, function(response) {
-				$('#fc-admin-message').html(response);
+				$('#uci-admin-message').html(response);
 
 				hideLoader();
 			});

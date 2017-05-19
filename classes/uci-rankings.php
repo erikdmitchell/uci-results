@@ -19,7 +19,7 @@ class UCIRankings {
 		$this->version='1.0.0';
 		$this->last_update=get_option('uci_rankings_last_update', 0);
 		
-		add_action('wp_ajax_uci_upload_csv_file', array($this, 'ajax_upload_csv_file'));
+		//add_action('wp_ajax_uci_upload_csv_file', array($this, 'ajax_upload_csv_file'));
 		add_action('wp_ajax_uci_add_rider_rankings', array($this, 'ajax_process_csv_file'));
 		
         add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
@@ -33,7 +33,9 @@ class UCIRankings {
      * @return void
      */
     public function admin_scripts_styles($hook) {
-		wp_enqueue_script('uci-rankings-script', UCI_RESULTS_URL.'admin/js/uci-rankings.js', array('jquery'), '0.1.0');
+		wp_enqueue_script('uci-rankings-script', UCI_RESULTS_ADMIN_URL.'js/uci-rankings.js', array('jquery'), '0.1.0');
+		
+		wp_enqueue_media();
     }
 
 	/**
@@ -96,16 +98,16 @@ class UCIRankings {
 			$name=trim(str_replace('*', '', $row['name']));
 			
 			$data[$key]['rank']=$rank_arr[0];
-			$data[$key]['rider_id']=fc_get_rider_id($name, true); // adds them to fc if not in fc/uci
+			$data[$key]['rider_id']=uci_results_add_rider($name);
 			$data[$key]['date']=$date;
 			$data[$key]['name']=$name;
 		endforeach;
-
-		$this->insert_rankings_into_db($data);
+print_r($data);
+		//$this->insert_rankings_into_db($data);
 		
 		// update our option so we know we have a ranking change //
-		update_option('fc_uci_rankings_last_update', $date);
-		$this->last_update=$date;
+		//update_option('fc_uci_rankings_last_update', $date);
+		//$this->last_update=$date;
 		
 		return true;
 	}
