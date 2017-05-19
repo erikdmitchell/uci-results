@@ -1,4 +1,14 @@
 <?php
+	
+/**
+ * rest_prepare_races function.
+ * 
+ * @access public
+ * @param mixed $response
+ * @param mixed $post
+ * @param mixed $request
+ * @return void
+ */
 function rest_prepare_races($response, $post, $request) {
 	$response->data['country']['rendered']=uci_get_first_term($post->ID, 'country');
 	$response->data['race_class']['rendered']=uci_get_first_term($post->ID, 'race_class');
@@ -11,6 +21,15 @@ function rest_prepare_races($response, $post, $request) {
 }
 add_filter('rest_prepare_races', 'rest_prepare_races', 10, 3);
 
+/**
+ * rest_prepare_riders function.
+ * 
+ * @access public
+ * @param mixed $response
+ * @param mixed $post
+ * @param mixed $request
+ * @return void
+ */
 function rest_prepare_riders($response, $post, $request) {
 	global $uci_riders;
 	
@@ -43,6 +62,15 @@ function rest_prepare_riders($response, $post, $request) {
 }
 add_filter('rest_prepare_riders', 'rest_prepare_riders', 10, 3);
 
+/**
+ * uci_posts_item_args function.
+ * 
+ * @access public
+ * @param mixed $item_args
+ * @param mixed $post_type
+ * @param mixed $schema
+ * @return void
+ */
 function uci_posts_item_args($item_args, $post_type, $schema) {	
 	switch ($post_type) :
 		case 'riders' :
