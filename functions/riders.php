@@ -217,9 +217,10 @@ function uci_results_rider_rankings_url() {
  * 
  * @access public
  * @param string $name (default: '')
+ * @param string $country (default: '')
  * @return void
  */
-function uci_results_add_rider($name='') {
+function uci_results_add_rider($name='', $country='') {
 	if (empty($name))
 		return 0;
 		
@@ -236,7 +237,7 @@ function uci_results_add_rider($name='') {
 		);
 		$rider_id=wp_insert_post($rider_insert);
 		
-		//wp_set_object_terms($rider_id, $rider_country, 'country', false);
+		wp_set_object_terms($rider_id, $country, 'country', false);
 	else :
 		$rider_id=$rider->ID;
 	endif;
