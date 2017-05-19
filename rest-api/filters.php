@@ -31,7 +31,7 @@ add_filter('rest_prepare_races', 'rest_prepare_races', 10, 3);
  * @return void
  */
 function rest_prepare_riders($response, $post, $request) {
-	global $uci_riders;
+	global $uci_riders, $uci_rankings;
 	
 	// append results if need be //
 	if ($request['results'])
@@ -44,8 +44,12 @@ function rest_prepare_riders($response, $post, $request) {
 	// append stats if need be //
 	if ($request['stats'])
 		$response->data['stats']=new UCIRiderStats($post->ID);
+
+	// append recent uci rank if need be //
+	if ($request['uci_rank'])
+		$response->data['uci_rank']=$uci_rankings->get_rank($post->ID);
 		
-	// append ranking if need be //
+	// append ranking //
 	$response->data['ranking']=$uci_riders->get_rider_rank($post->ID);
 		
 	// append acutal country //

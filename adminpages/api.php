@@ -58,6 +58,7 @@
 					<li>results <i>boolean</i> (false)</li>
 					<li>lastrace <i>boolean</i> (false)</li>
 					<li>stats <i>boolean</i> (false)</li>
+					<li>uci_rank <i>boolean</i> (false)</li>
 				</ul>
 			</p>
 			
