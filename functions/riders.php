@@ -271,4 +271,20 @@ function uci_results_get_rider_stats($rider_id=0, $discipline='') {
 	
 	return $stats;
 }
+
+/**
+ * uci_results_stats_info function.
+ * 
+ * @access public
+ * @param string $slug (default: '')
+ * @return void
+ */
+function uci_results_stats_info($slug='') {
+	global $uci_rider_stats;
+	
+	if (isset($uci_rider_stats[$slug]))
+		return $uci_rider_stats[$slug];
+		
+	return;
+}
 ?>
