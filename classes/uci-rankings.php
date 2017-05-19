@@ -44,7 +44,7 @@ class UCIRankings {
 	 * @return void
 	 */
 	public function ajax_process_csv_file() {
-		$this->process_csv_file($_POST['file'], $_POST['custom_date']);
+		$this->process_csv_file($_POST['file'], $_POST['custom_date'], $_POST['discipline']);
 		
 		echo '<div class="success">CSV file processed and inserted into db.</div>';
 		
@@ -57,9 +57,10 @@ class UCIRankings {
 	 * @access public
 	 * @param string $file (default: '')
 	 * @param string $date (default: '')
+	 * @param int $discipline (default: 0)
 	 * @return void
 	 */
-	public function process_csv_file($file='', $date='') {
+	public function process_csv_file($file='', $date='', $discipline=0) {
 		global $wpdb;
 	
 		if (empty($file) || $file=='')
@@ -100,13 +101,14 @@ class UCIRankings {
 			$data[$key]['rider_id']=uci_results_add_rider($name);
 			$data[$key]['date']=$date;
 			$data[$key]['name']=$name;
+			$data[$key]['discipline']=$discipline;
 		endforeach;
 
 		$this->insert_rankings_into_db($data);
 		
 		// update our option so we know we have a ranking change //
-		//update_option('fc_uci_rankings_last_update', $date);
-		//$this->last_update=$date;
+		update_option('fc_uci_rankings_last_update', $date);
+		$this->last_update=$date;
 		
 		return true;
 	}
