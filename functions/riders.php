@@ -251,9 +251,10 @@ function uci_results_add_rider($name='', $country='') {
  * 
  * @access public
  * @param int $rider_id (default: 0)
+ * @param string $discipline (default: '')
  * @return void
  */
-function uci_results_get_rider_stats($rider_id=0) {
+function uci_results_get_rider_stats($rider_id=0, $discipline='') {
 	global $uci_rider_stats;
 	
 	$stats=array();
@@ -264,6 +265,9 @@ function uci_results_get_rider_stats($rider_id=0) {
 	foreach ($uci_rider_stats as $id => $class) :
 		$stats[$class->discipline]=$class->get_stats($rider_id);
 	endforeach;
+	
+	if (!empty($discipline) && isset($stats[$discipline]))
+		return $stats[$discipline];
 	
 	return $stats;
 }
