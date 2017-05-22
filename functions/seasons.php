@@ -21,7 +21,7 @@ function uci_results_seasons_dropdown($name='seasons', $selected='') {
 	));
 }
 
-/*
+/**
  * uci_results_current_season function.
  *
  * @access public
