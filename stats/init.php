@@ -2,9 +2,9 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-global $uci_rider_stats_factory;
+global $uci_rider_stats_init;
 
-class UCIRiderStatsFactory {
+class UCIRiderStatsInit {
 
 	public $stats=array();
 
@@ -64,5 +64,18 @@ class UCIRiderStatsFactory {
 	}    
 }
 
-$uci_rider_stats_factory=new UCIRiderStatsFactory();
+$uci_rider_stats_init=new UCIRiderStatsInit();
+
+/**
+ * uci_results_register_stats function.
+ * 
+ * @access public
+ * @param mixed $stat
+ * @return void
+ */
+function uci_results_register_stats($stat) {
+    global $uci_rider_stats_init;
+ 
+    $uci_rider_stats_init->register($stat);
+}
 ?>

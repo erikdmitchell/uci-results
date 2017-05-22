@@ -75,17 +75,4 @@ function uci_rider_stats_init() {
     do_action('uci_rider_stats_init');
 }
 add_action('init', 'uci_rider_stats_init', 1);
-
-/**
- * uci_results_register_stats function.
- * 
- * @access public
- * @param mixed $stat
- * @return void
- */
-function uci_results_register_stats($stat) {
-    global $uci_rider_stats_factory;
- 
-    $uci_rider_stats_factory->register($stat);
-}
 ?>

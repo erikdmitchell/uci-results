@@ -57,7 +57,7 @@ include_once(UCI_RESULTS_PATH.'rest-api/filters.php'); // filters for rest api f
 include_once(UCI_RESULTS_PATH.'inc/updater.php'); // github - wp version update function
 
 include_once(UCI_RESULTS_PATH.'stats/base.php'); // base stats class
-include_once(UCI_RESULTS_PATH.'stats/base-factory.php'); // base factory class
+include_once(UCI_RESULTS_PATH.'stats/init.php'); // init class
 include_once(UCI_RESULTS_PATH.'stats/cross.php'); // cross stats class
 
 /**
