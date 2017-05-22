@@ -55,10 +55,10 @@ function uci_results_get_default_rider_ranking_season() {
  * @return void
  */
 function uci_get_season_weeks_dropdown($season='', $selected='', $name='week') {
-	global $uci_cross_seasons;	
+	global $uci_results_seasons;	
 	
 	$html=null;
-	$weeks=$uci_cross_seasons->get_season_weeks($season);
+	$weeks=$uci_results_seasons->get_season_weeks($season);
 	
 	if (empty($weeks))
 		return;
@@ -81,10 +81,10 @@ function uci_get_season_weeks_dropdown($season='', $selected='', $name='week') {
  * @return void
  */
 function uci_results_get_season_weeks($season='') {
-	global $uci_cross_seasons;	
+	global $uci_results_seasons;	
 	
 	$html=null;
-	$weeks=$uci_cross_seasons->get_season_weeks($season);
+	$weeks=$uci_results_seasons->get_season_weeks($season);
 	
 	if (empty($weeks))
 		return;
@@ -99,11 +99,11 @@ function uci_results_get_season_weeks($season='') {
  * @return void
  */
 function uci_results_get_default_rider_ranking_week() {
-	global $uci_cross_seasons;	
+	global $uci_results_seasons;	
 	
 	$html=null;
-	$season=uci_results_get_current_season();
-	$weeks=$uci_cross_seasons->get_last_season_week($season->slug);
+	$season=uci_results_get_current_season();	
+	$weeks=$uci_results_seasons->get_last_season_week($season->slug);
 	
 	if (empty($weeks))
 		return;
