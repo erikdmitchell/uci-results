@@ -1,12 +1,7 @@
 <?php
-global $uci_cross_seasons;
+global $uci_results_seasons;
 
-/**
- * CrossSeasons class.
- *
- * @since Version 0.1.0
- */
-class CrossSeasons {
+class UCIResultsSeasons {
 
 	/**
 	 * __construct function.
@@ -250,7 +245,7 @@ class CrossSeasons {
 		    'hide_empty' => false,
 		);
 		$args=wp_parse_args($args, $default_args);
-		$terms = get_terms($args);
+		$terms=get_terms($args);
 
 		return $terms;
 	}
@@ -350,5 +345,5 @@ class CrossSeasons {
 
 }
 
-$uci_cross_seasons=new CrossSeasons();
+$uci_results_seasons=new UCIResultsSeasons();
 ?>

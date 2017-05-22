@@ -117,7 +117,8 @@ function uci_results_get_rider_results($args='') {
 		$result['race_class']=uci_get_first_term($race_id, 'race_class');
 		$result['race_season']=uci_get_first_term($race_id, 'season');		
 		
-		if (!empty($places)) :
+		// check place //
+		if (!empty($places)) :		
 			if (in_array($result['place'], $places)) :
 				$results[]=$result;			
 			endif;
@@ -243,5 +244,47 @@ function uci_results_add_rider($name='', $country='') {
 	endif;
 	
 	return $rider_id;		
+}
+
+/**
+ * uci_results_get_rider_stats function.
+ * 
+ * @access public
+ * @param int $rider_id (default: 0)
+ * @param string $discipline (default: '')
+ * @return void
+ */
+function uci_results_get_rider_stats($rider_id=0, $discipline='') {
+	global $uci_rider_stats;
+	
+	$stats=array();
+	
+	if (!$rider_id)
+		return;
+	
+	foreach ($uci_rider_stats as $id => $class) :
+		$stats[$class->discipline]=$class->get_stats($rider_id);
+	endforeach;
+	
+	if (!empty($discipline) && isset($stats[$discipline]))
+		return $stats[$discipline];
+	
+	return $stats;
+}
+
+/**
+ * uci_results_stats_info function.
+ * 
+ * @access public
+ * @param string $slug (default: '')
+ * @return void
+ */
+function uci_results_stats_info($slug='') {
+	global $uci_rider_stats;
+	
+	if (isset($uci_rider_stats[$slug]))
+		return $uci_rider_stats[$slug];
+		
+	return;
 }
 ?>

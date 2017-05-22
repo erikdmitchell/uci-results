@@ -76,7 +76,7 @@ class UCIRiders {
 
 		// get stats //
 		if ($stats)
-			$rider->stats=new UCIRiderStats($rider_id);
+			$rider->stats=uci_results_get_rider_stats($rider_id);
 
 		$rider->twitter=$this->get_twitter($rider_id);
 
@@ -192,8 +192,13 @@ class UCIRiders {
 			'fields' => 'ids'
 		);
 		$race_ids=get_posts($results_args_meta);
+	
+		$last_race=uci_results_get_rider_results(array('rider_id' => $rider_id, 'race_ids' => $race_ids));
 		
-		return uci_results_get_rider_results($rider_id, $race_ids);
+		if (isset($last_race[0]))
+			return $last_race[0];
+			
+		return;
 	}
 
 	/**
