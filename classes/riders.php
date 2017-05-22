@@ -192,8 +192,8 @@ class UCIRiders {
 			'fields' => 'ids'
 		);
 		$race_ids=get_posts($results_args_meta);
-		
-		return uci_results_get_rider_results($rider_id, $race_ids);
+	
+		return uci_results_get_rider_results(array('rider_id' => $rider_id, 'race_ids' => $race_ids));
 	}
 
 	/**

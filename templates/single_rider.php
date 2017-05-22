@@ -22,8 +22,8 @@ $rider=$uci_riders->get_rider(array(
 ?>
 
 <pre>
-	<?php print_r($rider->stats); ?>
-	<?php print_r($rider->rank); ?>
+	<?php print_r($rider->last_result); ?>
+	<?php //print_r($rider->rank); ?>
 </pre>
 
 <div class="em-container uci-results uci-results-rider">
