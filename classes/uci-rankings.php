@@ -349,6 +349,20 @@ class UCIRankings {
 		
 		return $rank;
 	}
+	
+	/**
+	 * max_rank function.
+	 * 
+	 * @access public
+	 * @param string $date (default: '')
+	 * @param string $discipline (default: '')
+	 * @return void
+	 */
+	public function max_rank($date='', $discipline='') {
+		global $wpdb;
+		
+		return $wpdb->get_var("SELECT MAX(rank) FROM ".$this->table_name." ORDER BY date ASC");
+	}	
 
 	/**
 	 * get_columns function.
