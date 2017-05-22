@@ -117,10 +117,8 @@ function uci_results_get_rider_results($args='') {
 			'compare' => 'BETWEEN',
 			'type' => 'DATE',
 		);
-print_r($results_args_meta);
+
 	$race_ids=get_posts($results_args_meta);
-	
-	print_r($race_ids);
 	
 	foreach ($race_ids as $race_id) :
 		$result=get_post_meta($race_id, '_rider_'.$rider_id, true);
