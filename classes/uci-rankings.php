@@ -111,7 +111,7 @@ class UCIRankings {
 		$this->insert_rankings_into_db($data);
 		
 		// update our option so we know we have a ranking change //
-		update_option('fc_uci_rankings_last_update', $date);
+		update_option('uci_rankings_last_update', $date);
 		$this->last_update=$date;
 		
 		return true;
@@ -362,5 +362,17 @@ class UCIRankings {
 	}
 }
 
-$uci_rankings = new UCIRankings();		
+$uci_rankings = new UCIRankings();
+
+/**
+ * uci_rankings_last_update function.
+ * 
+ * @access public
+ * @return void
+ */
+function uci_rankings_last_update() {
+	global $uci_rankings;
+	
+	return $uci_rankings->last_update;
+}		
 ?>

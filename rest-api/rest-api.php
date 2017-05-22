@@ -34,4 +34,20 @@ function uci_register_rest_routes() {
 	endforeach;	
 }
 add_action('rest_api_init', 'uci_register_rest_routes', 99);
+
+/**
+ * uci_register_custom_rest_routes function.
+ * 
+ * @access public
+ * @return void
+ */
+function uci_register_custom_rest_routes() {
+	global $uci_rankings;
+	
+	register_rest_route('uci/v1/', 'uci-rankings/last-update', array(
+		'methods' => 'GET',
+		'callback' => 'uci_rankings_last_update',
+	));
+}
+add_action('rest_api_init', 'uci_register_custom_rest_routes');
 ?>
