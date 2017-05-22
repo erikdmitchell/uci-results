@@ -341,7 +341,7 @@ class UCIRankings {
 	public function get_rank($rider_id=0, $discipline='') {
 		global $wpdb;
 		
-		$rank=$wpdb->get_row("SELECT rank, points, date, discipline FROM ".$this->table_name." WHERE rider_id = 1429 ORDER BY date ASC LIMIT 1");
+		$rank=$wpdb->get_row("SELECT rank, points, date, discipline FROM ".$this->table_name." WHERE rider_id = $rider_id ORDER BY date ASC LIMIT 1");
 		
 		// render discipline
 		$discipline=get_term_by('id', $rank->discipline, 'discipline');
@@ -375,5 +375,5 @@ function uci_rankings_last_update() {
 	global $uci_rankings;
 	
 	return $uci_rankings->last_update;
-}		
+}	
 ?>
