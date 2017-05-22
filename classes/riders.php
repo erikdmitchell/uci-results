@@ -193,7 +193,12 @@ class UCIRiders {
 		);
 		$race_ids=get_posts($results_args_meta);
 	
-		return uci_results_get_rider_results(array('rider_id' => $rider_id, 'race_ids' => $race_ids));
+		$last_race=uci_results_get_rider_results(array('rider_id' => $rider_id, 'race_ids' => $race_ids));
+		
+		if (isset($last_race[0]))
+			return $last_race[0];
+			
+		return;
 	}
 
 	/**

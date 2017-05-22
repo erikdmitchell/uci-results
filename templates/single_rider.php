@@ -21,11 +21,6 @@ $rider=$uci_riders->get_rider(array(
 ));
 ?>
 
-<pre>
-	<?php print_r($rider->last_result); ?>
-	<?php //print_r($rider->rank); ?>
-</pre>
-
 <div class="em-container uci-results uci-results-rider">
 
 	<?php if ($rider) : ?>
@@ -38,7 +33,7 @@ $rider=$uci_riders->get_rider(array(
 			
 			<?php foreach ($rider->stats as $slug => $stats) : ?>
 				<?php echo uci_results_stats_info($slug)->name; ?>
-				<div class="rank"><span class="">Ranking:</span> <?php echo $rider->rank; ?></div>
+				<div class="rank"><span class="">Ranking:</span> <?php echo $rider->rank->rank; ?></div>
 				<div class="em-col-md-4 championships">
 					<h4>Championships</h4>
 	
