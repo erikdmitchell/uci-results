@@ -220,43 +220,6 @@ class UCIRankings {
 			
 		return $html;
 	}
-	
-	/**
-	 * rankings_list_dropdown function.
-	 * 
-	 * @access public
-	 * @param string $args (default: '')
-	 * @return void
-	 */
-	public function rankings_list_dropdown($args='') {
-		$default_args=array(
-			'echo' => true,
-			'selected' => '',
-		);
-		$args=wp_parse_args($args, $default_args);
-		$html='';
-		$rankings_dates=$this->get_rankings(array(
-			'group_by' => 'date',
-			'fields' => 'date',
-		));
-		
-		if (!$rankings_dates)
-			return;
-			
-		$html.='<select name="fc_rankings_list_date">';
-			$html.='<option value="0">Select Date</option>';
-			
-			foreach ($rankings_dates as $arr) :
-				$html.='<option value="'.$arr->date.'" '.selected($args['selected'], $arr->date, false).'>'.date(get_option('date_format'), strtotime($arr->date)).'</option>';		
-			endforeach;
-			
-		$html.='</select>';
-		
-		if ($args['echo'])
-			echo $html;
-			
-		return $html;
-	}
 
 	/**
 	 * get_rankings function.
