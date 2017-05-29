@@ -161,7 +161,8 @@ class UCIRankings {
 			// skip if no name //
 			if ($arr['name']=='')
 				continue;
-			
+				
+			// check if this entry exists and pull ID so we can update //
 			$id=$wpdb->get_var("SELECT id FROM ".$this->table_name." WHERE name = \"".$arr['name']."\" AND date = '".$arr['date']."'");
 			
 			if ($id !== null) :
