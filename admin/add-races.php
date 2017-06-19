@@ -347,8 +347,7 @@ class UCIResultsAddRaces {
 	public function ajax_add_race_to_db() {
 		if (!$_POST['race'])
 			return false;
-print_r($_POST);
-/*
+
 		$code=$this->build_race_code($_POST['race']);
 
 		// add to db //
@@ -357,7 +356,6 @@ print_r($_POST);
 		else :
 			echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';
 		endif;
-*/
 
 		wp_die();
 	}
@@ -395,6 +393,8 @@ print_r($_POST);
 	 * @return void
 	 */
 	public function add_race_to_db($race_data='', $raw_response=false) {
+return "add race to db";
+/*
 		global $wpdb, $uci_results_twitter, $uci_results_pages;
 
 		$message=null;
@@ -452,6 +452,7 @@ print_r($_POST);
 			return array('message' => $message, 'new_result' => $new_results);
 
 		return $message;
+*/
 	}
 	
 	/**

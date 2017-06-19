@@ -125,11 +125,11 @@ jQuery(document).ready(function($) {
 		
 });
 
-function addRace(id) {
+function addRace(race) {
 	jQuery.ajax({
 		type: 'POST',
 		url: ajaxurl,
-		data: {action: 'add_race_to_db', id: id},
+		data: {action: 'add_race_to_db', race: race},
 		success: function(response) {
 			processRaceResponse(response);
 
