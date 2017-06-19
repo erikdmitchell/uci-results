@@ -562,8 +562,8 @@ echo '</pre>';
 	 * @return void
 	 */
 	public function get_race_week($date='', $season='') {
-		$season_weeks=uci_results_get_season_weeks($season);
-
+		$season_weeks=$uci_results_seasons->get_season_weeks($season);
+// THIS IS AN ISSUE
 		if (empty($season_weeks))
 			return 0;
 
