@@ -38,147 +38,6 @@ class UCIResultsAddRaces {
 	}
 
 	/**
-	 * get_url_page function.
-	 *
-	 * @access public
-	 * @param string $url (default: '')
-	 * @param int $timeout (default: 5)
-	 * @return void
-	 */
-	public function get_url_page($url='', $timeout=5) {
-		if (empty($url))
-			return false;
-
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-
-		$html=curl_exec($ch);
-
-		curl_close($ch);
-
-		return $html;
-	}
-
-	/**
-	 * get_html_table_rows function.
-	 *
-	 * @access public
-	 * @param string $html (default: '')
-	 * @param string $class_name (default: 'datatable')
-	 * @return void
-	 */
-	public function get_html_table_rows($html='', $class_name='datatable') {
-		if (empty($html))
-			return false;
-
-		// Create a DOM parser object
-		$dom = new DOMDocument();
-
-		// Parse HTML - The @ before the method call suppresses any warnings that loadHTML might throw because of invalid HTML in the page.
-		@$dom->loadHTML($html);
-
-		//discard white space
-		@$dom->preserveWhiteSpace = false;
-
-		$finder = new DomXPath($dom);
-
-		$nodes = $finder->query("//*[contains(@class, '$class_name')]");
-
-		if ($nodes->length==0)
-			return false;
-			//return '<div class="error">No rows (nodes) found. Check the url and the "races class name" ('.$class_name.').</div>';
-
-		$rows=$nodes->item(0)->getElementsByTagName('tr'); //get all rows from the table
-
-		return $rows;
-	}
-
-	/**
-	 * build_races_object_from_rows function.
-	 * 
-	 * @access public
-	 * @param string $args (default: '')
-	 * @return void
-	 */
-	public function build_races_object_from_rows($args='') {
-		$default_args=array(
-			'rows' => '',
-			'season' => false,
-			'limit' => false,
-			'discipline' => 'cyclocross'
-		);
-		$args=wp_parse_args($args, $default_args);
-	
-		extract($args);
-			
-		$races=array();
-		$races_obj=new stdClass();
-		$row_count=0;
-		$timeout=5;
-		$races_class_name='datatable';
-
-		// bail if no rows //
-		if (empty($rows))
-			return $races_obj;
-
-		// cycle through rows //
-		foreach ($rows as $row) :
-			if ($row_count!=0) :
-				$races[$row_count]=new stdClass();
-
-				// get columns (td) //
-			  $cols=$row->getElementsByTagName('td'); // get each column by tag name
-
-			  // get (results) link //
-			  $link=$this->alter_race_link($row->getElementsByTagName('a')->item(0)->getAttribute('href'));
-
-			  // check for multi day event //
-			  if ($days=$this->is_multi_day_race($cols->item(0)->nodeValue))
-			  	continue;
-
-				// use our cols to build out races object //
-				foreach ($cols as $key => $col) :
-					if ($key==0) {
-						$races[$row_count]->date=$this->reformat_date($col->nodeValue);
-					} else if ($key==1) {
-						$races[$row_count]->event=$col->nodeValue;
-					} else if ($key==2) {
-						$races[$row_count]->nat=$col->nodeValue;
-					} else if ($key==3) {
-						$races[$row_count]->class=$col->nodeValue;
-					} else if ($key==4) {
-						$races[$row_count]->winner=$col->nodeValue;
-					}
-				endforeach;
-
-				$races[$row_count]->link=$link;
-				$races[$row_count]->season=$season;
-				$races[$row_count]->discipline=$discipline;
-			endif;
-
-			// increase counter //
-			$row_count++;
-
-			// bail if we've reached our limit //
-			if ($limit > 0 && $row_count > $limit)
-				break;
-
-		endforeach;
-
-		// setup as object //
-		foreach ($races as $key => $value) :
-			if (empty($value))
-				continue;
-
-			$races_obj->$key=$value;
-		endforeach;
-
-		return $races_obj;
-	}
-
-	/**
 	 * get_race_data function.
 	 * 
 	 * @access public
@@ -194,9 +53,6 @@ class UCIResultsAddRaces {
 		
 		set_time_limit(0); // mex ececution time
 
-		$races_class_name='datatable';
-		$timeout = 5;
-
 		// if no passed url, use config //
 		if (!$url && isset($uci_results_admin->config->urls->$discipline->$season)) :		
 			$url=$uci_results_admin->config->urls->$discipline->$season;
@@ -207,23 +63,15 @@ class UCIResultsAddRaces {
 		// check season //
 		if (!$season || empty($season))
 			return false;
-
-		$html=$this->get_url_page($url, $timeout); // get the html from the url
-		$rows=$this->get_html_table_rows($html, $races_class_name); // grab our rows via dom object
 		
-		// build our races object from rows
-		$races_obj=$this->build_races_object_from_rows(array(
-			'rows' => $rows,
-			'season' => $season, 
-			'limit' => $limit,
-			'discipline' => $discipline,
-		));
+		$uci_parse_results=new UCIParseResults();
+		$races=$uci_parse_results->get_races($url);
 
 		// return object if $raw is true //
 		if ($raw)
-			return $races_obj;
+			return $races;
 
-		return $this->build_default_race_table($races_obj);
+		return $this->build_default_race_table($races);
 	}
 
 	/**
@@ -261,7 +109,9 @@ class UCIResultsAddRaces {
 	 */
 	public function build_default_race_table($obj) {
 		$html=null;
-
+echo '<pre>';
+print_r($obj);
+echo '</pre>';
 		$html.='<form name="add-races-to-db" id="add-races-to-db" method="post">';
 			$html.='<table class="wp-list-table widefat fixed striped pages">';
 				$html.='<thead>';
