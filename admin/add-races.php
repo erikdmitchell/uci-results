@@ -66,6 +66,12 @@ class UCIResultsAddRaces {
 		
 		$uci_parse_results=new UCIParseResults();
 		$races=$uci_parse_results->get_races($url);
+		
+		// append data //
+		foreach ($races as $race) :
+			$race->discipline=$discipline;
+			$race->season=$season;
+		endforeach;
 
 		// return object if $raw is true //
 		if ($raw)
@@ -366,14 +372,8 @@ class UCIResultsAddRaces {
 		if (empty($race_data))
 			return false;
 
-		// convert to object //
-		if (!is_object($race_data))
-			$race_data=json_decode(json_encode($race_data),FALSE);
-
 		// build data array .. -- if you change this, please change get_add_race_to_db()
-		$race_data->season=''; // add
 		$race_data->week=$this->get_race_week($race_data->date, $race_data->season); // not working
-		$race_data->discipline=$race_data->discipline; // add
 echo '<pre>';
 print_r($race_data);
 echo '</pre>';
