@@ -102,16 +102,14 @@ class UCIResultsAddRaces {
 
 	/**
 	 * build_default_race_table function.
-	 *
+	 * 
 	 * @access public
-	 * @param mixed $obj
+	 * @param array $races (default: array())
 	 * @return void
 	 */
-	public function build_default_race_table($obj) {
+	public function build_default_race_table($races=array()) {
 		$html=null;
-echo '<pre>';
-print_r($obj);
-echo '</pre>';
+
 		$html.='<form name="add-races-to-db" id="add-races-to-db" method="post">';
 			$html.='<table class="wp-list-table widefat fixed striped pages">';
 				$html.='<thead>';
@@ -125,42 +123,27 @@ echo '</pre>';
 				$html.='</thead>';
 				$html.='<tbody id="the-list">';
 
-					foreach ($obj as $result) :
+					foreach ($races as $race) :
 						$disabled='';
-						$date=$result->date;
-						$code=$this->build_race_code($result);
+						$code=$this->build_race_code($race);
 
-						// check we have event //
-						if (!isset($result->event)) :
-							$result->event=false;
+						// setup date //
+						if ($race->single) :
+							$date=$race->start;
 						else :
-							$event=$result->event;
+							$date=$race->start.' - '.$race->end;
 						endif;
-
-						// disable if no event (data error) //
-						if (!$result->date || !$result->event)
-							$disabled='disabled';
-
-						if (!$result->date)
-							$date='No Date';
-
-						if (!$result->event)
-							$event='No Event';
 
 						// if we already have results, bail. there are other check later, but this is a good helper //
 						if (uci_results_race_has_results($code))
 							$disabled='disabled';
 
 						$html.='<tr>';
-							$html.='<th scope="row" class="check-column"><input type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" '.$disabled.'></th>';
+							$html.='<th scope="row" class="check-column"><input type="checkbox" name="races[]" value="'.base64_encode(serialize($race)).'" '.$disabled.'></th>';
 							$html.='<td class="race-date">'.$date.'</td>';
-							$html.='<td class="race-name">'.$event.'</td>';
-
-							if ($result->event) :
-								$html.='<td class="race-nat">'.$result->nat.'</td>';
-								$html.='<td class="race-class">'.$result->class.'</td>';
-							endif;
-
+							$html.='<td class="race-name">'.$race->event.'</td>';
+							$html.='<td class="race-nat">'.$race->nat.'</td>';
+							$html.='<td class="race-class">'.$race->class.'</td>';
 						$html.='</tr>';
 					endforeach;
 

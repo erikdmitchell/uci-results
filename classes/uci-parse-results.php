@@ -12,12 +12,19 @@ class UCIParseResults {
 		include_once(UCI_RESULTS_PATH.'admin/simple_html_dom.php');		
 	}
 	
+	/**
+	 * get_races function.
+	 * 
+	 * @access public
+	 * @param string $url (default: '')
+	 * @return void
+	 */
 	public function get_races($url='') {
 		if (empty($url))
 			return false;
 
 		$html=file_get_html($url);		
-		$races=$this->parse_datatable($html, array('parse_date' => true, 'limit' => 1));
+		$races=$this->parse_datatable($html, array('parse_date' => true));
 		
 		if (empty($races))
 			return false;
