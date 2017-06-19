@@ -34,17 +34,11 @@ class UCIRR {
 			return false;
 		
 		// get race results //
-/*
 		foreach ($races as $key => $race) :
-			$race['results']=$this->get_race_results($race);
-			$races[$key]=$race; // not sure why we need to do this
+			$race->results=$this->get_race_results($race);
+			//$races[$key]=$race; // not sure why we need to do this
 		endforeach;
-*/
 
-			
-			// multi d convert to class //
-
-		
 echo '<pre>';
 
 print_r($races);
@@ -83,14 +77,16 @@ echo '</pre>';
 				$headers_key=$headers[$key];
 				
 				if ($headers_key=='date' && $args['parse_date']) :
-					$date=$this->get_date_details(str_replace('&nbsp;', ' ', $td->plaintext));
-					//$arr=array_merge($arr, $date);
+					$date_arr=$this->get_date_details(str_replace('&nbsp;', ' ', $td->plaintext));
+					
+					foreach ($date_arr as $key => $value) :
+						$row->$key=$value;
+					endforeach;
 				else :
 					if ($url=$this->has_url($td)) :
 						$row->url=$url;
 					endif;
 
-					//$arr[$headers[$key]]=str_replace('&nbsp;', ' ', $td->plaintext);
 					$row->$headers_key=str_replace('&nbsp;', ' ', $td->plaintext);
 				endif;
 
@@ -155,17 +151,18 @@ echo '</pre>';
 	function get_race_results($race='') {
 		$results='';
 		
-		if ($race['single']) :
-			$html=file_get_html($race['url']);
+		if ($race->single) :
+			$html=file_get_html($race->url);
 			$url=$this->find_all_url($html);
 			$results=$this->get_results_from_url($url);
 		else :
-			$html=file_get_html($race['url']);
+			$html=file_get_html($race->url);
 			$stages=$this->parse_datatable($html, array('limit' => 1));			
 			$html->clear();
 			
 			foreach ($stages as $key => $stage) :
-				$stage_html=file_get_html($stage['url']);
+				$stage->results=new stdClass();
+				$stage_html=file_get_html($stage->url);
 				$all_url=$this->find_all_url($stage_html);
 				$stage_html->clear();
 				
@@ -182,7 +179,7 @@ echo '</pre>';
 						$results_all_url=$results_url;
 					
 					$results_all_html=file_get_html($results_all_url);	
-					$stages[$key]['results'][$results_key]=$this->parse_datatable($results_all_html);
+					$stage->results->$results_key=$this->parse_datatable($results_all_html);
 				endforeach;
 
 				$stage_all_html->clear();
