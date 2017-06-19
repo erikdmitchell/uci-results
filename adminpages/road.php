@@ -18,6 +18,8 @@ class UCIRR {
 	
 	protected $base_url='http://www.uci.infostradasports.com';
 	
+	protected $all_img='/images/buttons/AllPagesOn.gif';
+	
 	public function __construct() {
 		include_once(UCI_RESULTS_PATH.'admin/simple_html_dom.php');		
 	}
@@ -26,9 +28,32 @@ class UCIRR {
 		// url is current road url (all) //
 		$url='http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=102&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=492&StartDateSort=20161022&EndDateSort=20171024&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8';
 		$html=file_get_html($url);
+		$races=$this->parse_datatable($html, array('parse_date' => true));
+		
+		// get race results //
+		foreach ($races as $key => $race) :
+			$race['results']=$this->get_race_results($race);
+			$races[$key]=$race; // not sure why we need to do this
+		endforeach;
+
+			
+			// multi d convert to class //
+
+		
+echo '<pre>';
+
+print_r($races);
+echo '</pre>';		
+	}
+	
+	function parse_datatable($html='', $args='') {
 		$headers=array();
-		$races=array();
-		$counter=0;
+		$rows=array();
+		$counter=0;		
+		$default_args=array(
+			'parse_date' => false,	
+		);
+		$args=wp_parse_args($args, $default_args);
 		
 		// table headers //
 		foreach ($html->find('td.caption') as $td) :
@@ -44,8 +69,8 @@ class UCIRR {
 				continue;
 			endif;
 			
-			foreach ($tr->find('td') as $key => $td) :	
-				if ($headers[$key]=='date') :
+			foreach ($tr->find('td') as $key => $td) :
+				if ($headers[$key]=='date' && $args['parse_date']) :
 					$date=$this->get_date_details(str_replace('&nbsp;', ' ', $td->plaintext));
 					$arr=array_merge($arr, $date);
 				elseif ($headers[$key]=='event') :
@@ -58,18 +83,26 @@ class UCIRR {
 				else :
 					$arr[$headers[$key]]=str_replace('&nbsp;', ' ', $td->plaintext);
 				endif;
+
 			endforeach;
-			$races[]=$arr;
-		endforeach;
+			
+			$rows[]=$arr;
+			
+			if ($counter==10)
+				break;
+		endforeach;		
 		
-		// cycle through links and see if it's reults or not -- this may also be easily done my our single marker //
-		
-echo '<pre>';
-print_r($races);
-echo '</pre>';		
+		return $rows;
 	}
 	
-	function get_date_details($date='') {
+	/**
+	 * get_date_details function.
+	 * 
+	 * @access protected
+	 * @param string $date (default: '')
+	 * @return void
+	 */
+	protected function get_date_details($date='') {
 		$date_arr=array();
 		$date=explode('-', $date);
 
@@ -88,6 +121,54 @@ echo '</pre>';
 		return $date_arr;		
 	}
 	
+	function get_race_results($race='') {
+		$results='';
+		
+		if ($race['single']) :
+			$html=file_get_html($race['url']);
+			$url=$this->find_all_url($html);
+			$results=$this->get_results_from_url($url);
+		else :
+			$results='';
+		endif;
+
+		return 'foo';	
+	}
+	
+	function get_results_from_url($url='') {		
+		$html=file_get_html($url);
+		
+		// get proper frame //
+		foreach ($html->find('frame') as $frame) :
+			if ($frame->getAttribute('name')=='content') :
+				$url=$this->base_url.$frame->src;		
+				
+				break;
+			endif;
+		endforeach;
+
+		$html=file_get_html($url);
+		$results=$this->parse_datatable($html);
+		
+		return $results;
+	}
+	
+	function find_all_url($html='') {
+		$all_url='';
+		
+		foreach ($html->find('img') as $img) :
+			if ($img->src==$this->all_img) :					
+				$all_url=$this->base_url.$img->parent()->href;
+				break;
+			endif;
+		endforeach;		
+		
+		// clean url to get all results //
+		$all_url=str_replace('TheASP.asp', '/asp/lib/TheASP.asp', $all_url);
+		
+		return $all_url;
+	}
+/*	
 	public function startlist($url='') {
 		include_once(UCI_RESULTS_PATH.'admin/simple_html_dom.php');
 		// sample is http://www.procyclingstats.com/race/Tour_de_Suisse_2017_Startlist
@@ -136,7 +217,7 @@ function rider($rider_url='') {
 	
 }
 */
-
+/*
 function rider($rider_info='') {
 	$url_overview=$this->base_url.$rider_info['url'];
 	$rider_html=file_get_html($url_overview);
@@ -264,6 +345,6 @@ function rider_statistics($url='') {
 	
 	return $stats;
 }
-	
+*/	
 }
 ?>
