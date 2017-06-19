@@ -347,7 +347,8 @@ class UCIResultsAddRaces {
 	public function ajax_add_race_to_db() {
 		if (!$_POST['race'])
 			return false;
-
+print_r($_POST);
+/*
 		$code=$this->build_race_code($_POST['race']);
 
 		// add to db //
@@ -356,6 +357,7 @@ class UCIResultsAddRaces {
 		else :
 			echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';
 		endif;
+*/
 
 		wp_die();
 	}
