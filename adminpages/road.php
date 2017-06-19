@@ -28,7 +28,7 @@ class UCIRR {
 		// url is current road url (all) //
 		$url='http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=102&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=492&StartDateSort=20161022&EndDateSort=20171024&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8';
 		$html=file_get_html($url);
-		$races=$this->parse_datatable($html, array('parse_date' => true));
+		$races=$this->parse_datatable($html, array('parse_date' => true, 'limit' => 10));
 		
 		// get race results //
 		foreach ($races as $key => $race) :
@@ -51,6 +51,7 @@ echo '</pre>';
 		$rows=array();
 		$counter=0;		
 		$default_args=array(
+			'limit' => -1,
 			'parse_date' => false,	
 		);
 		$args=wp_parse_args($args, $default_args);
@@ -88,7 +89,7 @@ echo '</pre>';
 			
 			$rows[]=$arr;
 			
-			if ($counter==10)
+			if ($counter==$args['limit'])
 				break;
 		endforeach;		
 		
