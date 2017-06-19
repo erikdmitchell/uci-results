@@ -82,7 +82,8 @@ class UCIResultsAdmin {
 	    add_submenu_page($parent_slug, 'Rider Rankings', 'Rider Rankings', $manage_options_cap, 'admin.php?page='.$parent_slug.'&subpage=rider-rankings');
 	    add_submenu_page($parent_slug, 'UCI Rankings', 'UCI Rankings', $manage_options_cap, 'admin.php?page='.$parent_slug.'&subpage=uci-rankings');
 	    add_submenu_page($parent_slug, 'API', 'API', $manage_options_cap, 'admin.php?page='.$parent_slug.'&subpage=api');
-	    add_submenu_page($parent_slug, 'WP CLI', 'WP CLI', $manage_options_cap, 'admin.php?page='.$parent_slug.'&subpage=wpcli');	    
+	    add_submenu_page($parent_slug, 'WP CLI', 'WP CLI', $manage_options_cap, 'admin.php?page='.$parent_slug.'&subpage=wpcli');	
+	    add_submenu_page($parent_slug, 'Road', 'Road', $manage_options_cap, 'admin.php?page='.$parent_slug.'&subpage=road');		        
 	}
 	
 	/**
@@ -125,6 +126,9 @@ class UCIResultsAdmin {
 					else :
 						$html.=$this->get_admin_page('settings');
 					endif;
+					break;
+				case 'road':
+					$html.=$this->get_admin_page('road');
 					break;
 				case 'uci-rankings':
 					$html.=$this->get_admin_page('uci-rankings');
