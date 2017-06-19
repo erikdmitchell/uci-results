@@ -1,51 +1,38 @@
-<?php ini_set('default_socket_timeout', 100); // 900 Seconds = 15 Minutes ?>
-
-<div class="uci-results">
-	<h2>UCI RR</h2>
-
-<?php
-	
-$ucirr=new UCIRR();
-$ucirr->run();
-
-?>
-
-</div>
-
 <?php
 
-class UCIRR {
+class UCIParseResults {
 	
 	protected $base_url='http://www.uci.infostradasports.com';
 	
 	protected $all_img='/images/buttons/AllPagesOn.gif';
 	
 	public function __construct() {
+		ini_set('default_socket_timeout', 100);
+		
 		include_once(UCI_RESULTS_PATH.'admin/simple_html_dom.php');		
 	}
 	
-	function run() {
-		// url is current road url (all) //
-		$url='http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=102&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=492&StartDateSort=20161022&EndDateSort=20171024&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8';
+	public function get_races($url='') {
+		if (empty($url))
+			return false;
+
 		$html=file_get_html($url);		
 		$races=$this->parse_datatable($html, array('parse_date' => true, 'limit' => 1));
 		
 		if (empty($races))
 			return false;
 		
-		// get race results //
-		foreach ($races as $key => $race) :
-			$race->results=$this->get_race_results($race);
-			//$races[$key]=$race; // not sure why we need to do this
-		endforeach;
-
-echo '<pre>';
-
-print_r($races);
-echo '</pre>';		
+		return $races;
 	}
 	
-	function parse_datatable($html='', $args='') {
+	public function get_race_results($race='') {
+		if (empty($race))
+			return false;
+			
+		return $this->get_race_results($race);
+	}
+	
+	protected function parse_datatable($html='', $args='') {
 		$headers=array();
 		$rows=array();
 		$counter=0;
@@ -95,7 +82,8 @@ echo '</pre>';
 			$rows[]=$row;
 			$row_counter++;
 
-			if ($row_counter==$args['limit']) // +1 accounts for org counter setting
+			// bail if over limit //
+			if ($row_counter==$args['limit'])
 				break;
 		endforeach;		
 		
@@ -148,7 +136,7 @@ echo '</pre>';
 		return $date_arr;		
 	}
 	
-	function get_race_results($race='') {
+	protected function get_race_results($race='') {
 		$results='';
 		
 		if ($race->single) :
@@ -157,7 +145,7 @@ echo '</pre>';
 			$results=$this->get_results_from_url($url);
 		else :
 			$html=file_get_html($race->url);
-			$stages=$this->parse_datatable($html, array('limit' => 1));			
+			$stages=$this->parse_datatable($html);			
 			$html->clear();
 			
 			foreach ($stages as $key => $stage) :
@@ -194,11 +182,11 @@ echo '</pre>';
 	/**
 	 * get_results_from_url function.
 	 * 
-	 * @access public
+	 * @access protected
 	 * @param string $url (default: '')
 	 * @return void
 	 */
-	function get_results_from_url($url='') {
+	protected function get_results_from_url($url='') {
 		if (empty($url))
 			return 'empty results url';
 					
@@ -227,11 +215,11 @@ echo '</pre>';
 	/**
 	 * find_all_url function.
 	 * 
-	 * @access public
+	 * @access protected
 	 * @param string $html (default: '')
 	 * @return void
 	 */
-	function find_all_url($html='') {
+	protected function find_all_url($html='') {
 		$all_url='';
 		
 		if (empty($html))

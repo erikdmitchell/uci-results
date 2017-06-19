@@ -13,12 +13,7 @@
 						<label for="season">Season</label>
 					</th>
 					<td>
-						<select class="url-dd" id="season" name="season">
-							<option value="0">Select Year</option>
-							<?php foreach ($uci_results_admin->config->urls as $season => $s_url) : ?>
-								<option value="<?php echo $season; ?>" data-url="<?php echo $s_url; ?>"><?php echo $season; ?></option>
-							<?php endforeach; ?>
-						</select>
+						<?php $uci_results_admin->race_urls_dropdown(); ?>
 					</td>
 				</tr>
 			</tbody>
