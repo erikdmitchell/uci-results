@@ -259,41 +259,6 @@ class UCIResultsAddRaces {
 	}
 
 	/**
-	 * alter_race_link function.
-	 *
-	 * @access protected
-	 * @param mixed $link
-	 * @return void
-	 */
-	protected function alter_race_link($link) {
-		$final_url='http://www.uci.infostradasports.com/asp/lib/TheASP.asp?';
-		parse_str($link, $arr);
-
-		$final_url.='PageID=19006';
-		$final_url.='&SportID='.$arr['SportID'];
-		$final_url.='&CompetitionID='.$arr['CompetitionID'];
-		$final_url.='&EditionID='.$arr['EditionID'];
-		$final_url.='&SeasonID='.$arr['SeasonID'];
-		$final_url.='&ClassID='.$arr['ClassID'];
-		$final_url.='&GenderID='.$arr['GenderID'];
-		$final_url.='&EventID='.$arr['EventID'];
-		$final_url.='&EventPhaseID='.$arr['EventPhaseID'];
-		$final_url.='&Phase1ID='.$arr['Phase1ID'];
-		$final_url.='&Phase2ID=0';
-		$final_url.='&Phase3ID=0';
-		$final_url.='&PhaseClassificationID=-1';
-		$final_url.='&Detail='.$arr['Detail'];
-		//$final_url.='&Ranking='.$arr['Ranking']; -- causes an error
-		$final_url.='&All=0';
-		$final_url.='&TaalCode=2';
-		$final_url.='&StyleID=0';
-		$final_url.='&Cache=8';
-		$final_url.='&PageNr0=-1';
-
-		return $final_url;
-	}
-
-	/**
 	 * reformat_date function.
 	 *
 	 * @access public
@@ -393,8 +358,6 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function add_race_to_db($race_data='', $raw_response=false) {
-return "add race to db";
-/*
 		global $wpdb, $uci_results_twitter, $uci_results_pages;
 
 		$message=null;
@@ -408,19 +371,13 @@ return "add race to db";
 			$race_data=json_decode(json_encode($race_data),FALSE);
 
 		// build data array .. -- if you change this, please change get_add_race_to_db()
-		$data=array(
-			'date' => $date = date('Y-m-d', strtotime($race_data->date)),
-			'event' => trim($race_data->event),
-			'nat' => $race_data->nat,
-			'class' => $race_data->class,
-			'winner' => $race_data->winner,
-			'season' => $race_data->season,
-			'link' => $race_data->link,
-			'code' => $this->build_race_code($race_data),
-			'week' => $this->get_race_week($race_data->date, $race_data->season),
-			'discipline' => $race_data->discipline,
-		);
-
+		$race_data->season=''; // add
+		$race_data->week=$this->get_race_week($race_data->date, $race_data->season); // not working
+		$race_data->discipline=$race_data->discipline; // add
+echo '<pre>';
+print_r($race_data);
+echo '</pre>';
+/*
 		if (!$this->check_for_dups($data['code'])) :		
 			if ($race_id=$this->insert_race_into_db($data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
@@ -450,9 +407,9 @@ return "add race to db";
 
 		if ($raw_response)
 			return array('message' => $message, 'new_result' => $new_results);
+*/
 
 		return $message;
-*/
 	}
 	
 	/**
