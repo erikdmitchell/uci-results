@@ -34,10 +34,12 @@ class UCIRR {
 			return false;
 		
 		// get race results //
+/*
 		foreach ($races as $key => $race) :
 			$race['results']=$this->get_race_results($race);
 			$races[$key]=$race; // not sure why we need to do this
 		endforeach;
+*/
 
 			
 			// multi d convert to class //
@@ -71,30 +73,30 @@ echo '</pre>';
 		// get our race data //
 		foreach ($html->find('table.datatable tr') as $tr) :
 			$counter++;
-			$arr=array();
+			$row=new stdClass();
 			
 			if ($counter==1) :
 				continue;
 			endif;
 			
 			foreach ($tr->find('td') as $key => $td) :
-				if ($headers[$key]=='date' && $args['parse_date']) :
+				$headers_key=$headers[$key];
+				
+				if ($headers_key=='date' && $args['parse_date']) :
 					$date=$this->get_date_details(str_replace('&nbsp;', ' ', $td->plaintext));
-					$arr=array_merge($arr, $date);
-				elseif ($headers[$key]=='event') :
-					
-					foreach ($td->find('a') as $a) :
-						$arr['url']=$this->base_url.$a->href;
-					endforeach;
-					
-					$arr[$headers[$key]]=str_replace('&nbsp;', ' ', $td->plaintext);
+					//$arr=array_merge($arr, $date);
 				else :
-					$arr[$headers[$key]]=str_replace('&nbsp;', ' ', $td->plaintext);
+					if ($url=$this->has_url($td)) :
+						$row->url=$url;
+					endif;
+
+					//$arr[$headers[$key]]=str_replace('&nbsp;', ' ', $td->plaintext);
+					$row->$headers_key=str_replace('&nbsp;', ' ', $td->plaintext);
 				endif;
 
 			endforeach;
 			
-			$rows[]=$arr;
+			$rows[]=$row;
 			$row_counter++;
 
 			if ($row_counter==$args['limit']) // +1 accounts for org counter setting
@@ -102,6 +104,26 @@ echo '</pre>';
 		endforeach;		
 		
 		return $rows;
+	}
+	
+	/**
+	 * has_url function.
+	 * 
+	 * @access protected
+	 * @param string $el (default: '')
+	 * @return void
+	 */
+	protected function has_url($el='') {
+		$url=false;
+		
+		foreach ($el->find('a') as $a) :
+			$url=$this->base_url.$a->href;
+		endforeach;
+		
+		if ($url && !empty($url))
+			return $url;
+			
+		return false;
 	}
 	
 	/**
@@ -139,18 +161,46 @@ echo '</pre>';
 			$results=$this->get_results_from_url($url);
 		else :
 			$html=file_get_html($race['url']);
-			$datatable=$this->parse_datatable($html);			
-//echo $html->innertext;
-echo '<pre>';
-print_r($datatable);
-echo '</pre>';
+			$stages=$this->parse_datatable($html, array('limit' => 1));			
+			$html->clear();
+			
+			foreach ($stages as $key => $stage) :
+				$stage_html=file_get_html($stage['url']);
+				$all_url=$this->find_all_url($stage_html);
+				$stage_html->clear();
+				
+				$stage_all_html=file_get_html($all_url);
+				
+				foreach ($stage_all_html->find('div.menu_item_white_border a') as $a) :
+					$results_key=sanitize_key($a->plaintext);
+					$results_url=$this->base_url.$a->href;
+					$results_html=file_get_html($results_url);
+					$results_all_url=$this->find_all_url($results_html);
+					$results_html->clear();
+					
+					if ($results_all_url=='')
+						$results_all_url=$results_url;
+					
+					$results_all_html=file_get_html($results_all_url);	
+					$stages[$key]['results'][$results_key]=$this->parse_datatable($results_all_html);
+				endforeach;
 
-			$results='multi';
+				$stage_all_html->clear();
+			endforeach;
+
+			$results=$stages;
 		endif;
 
 		return $results;	
 	}
 	
+	/**
+	 * get_results_from_url function.
+	 * 
+	 * @access public
+	 * @param string $url (default: '')
+	 * @return void
+	 */
 	function get_results_from_url($url='') {
 		if (empty($url))
 			return 'empty results url';
@@ -177,6 +227,13 @@ echo '</pre>';
 		return $results;
 	}
 	
+	/**
+	 * find_all_url function.
+	 * 
+	 * @access public
+	 * @param string $html (default: '')
+	 * @return void
+	 */
 	function find_all_url($html='') {
 		$all_url='';
 		
@@ -188,7 +245,7 @@ echo '</pre>';
 				$all_url=$this->base_url.$img->parent()->href;
 				break;
 			endif;
-		endforeach;		
+		endforeach;	
 		
 		// clean url to get all results //
 		$all_url=str_replace('TheASP.asp', '/asp/lib/TheASP.asp', $all_url);
