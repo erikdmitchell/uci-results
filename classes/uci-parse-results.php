@@ -25,13 +25,6 @@ class UCIParseResults {
 		return $races;
 	}
 	
-	public function get_race_results($race='') {
-		if (empty($race))
-			return false;
-			
-		return $this->get_race_results($race);
-	}
-	
 	protected function parse_datatable($html='', $args='') {
 		$headers=array();
 		$rows=array();

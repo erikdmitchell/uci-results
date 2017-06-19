@@ -19,6 +19,7 @@ include_once(UCI_RESULTS_PATH.'classes/riders.php'); // our riders functions
 include_once(UCI_RESULTS_PATH.'classes/rider-rankings-query.php'); // rider rankings query class
 include_once(UCI_RESULTS_PATH.'classes/seasons.php');
 include_once(UCI_RESULTS_PATH.'classes/uci-rankings.php');
+include_once(UCI_RESULTS_PATH.'classes/uci-parse-results.php'); // parses our races from uci site
 
 include_once(UCI_RESULTS_PATH.'database.php'); // sets up our db tables
 include_once(UCI_RESULTS_PATH.'functions/ajax.php'); // ajax functions
