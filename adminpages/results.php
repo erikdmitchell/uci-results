@@ -23,8 +23,7 @@
 			<input type="button" name="button" id="get-races-curl" class="button button-primary" value="Get Races" />
 			<a href="<?php echo admin_url('admin.php?page=uci-results&subpage=results&action=add-csv'); ?>" id="add-results-csv" class="button button-secondary">Upload CSV</a>
 		</p>
-		
-		<input type="hidden" name="discipline" value="cyclocross" />
+
 	</form>
 
 	<div id="get-race-data"></div>

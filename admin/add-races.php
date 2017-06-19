@@ -32,11 +32,7 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function ajax_get_race_data_non_db() {
-		$form=array();
-		
-		parse_str($_POST['form'], $form);
-
-		echo $this->get_race_data($form['season'], false, false, false, $form['discipline']);
+		echo $this->get_race_data($_POST['season'], false, false, false, $_POST['discipline']);
 
 		wp_die();
 	}
@@ -202,8 +198,8 @@ class UCIResultsAddRaces {
 		$timeout = 5;
 
 		// if no passed url, use config //
-		if (!$url && isset($uci_results_admin->config->urls->$season)) :		
-			$url=$uci_results_admin->config->urls->$season;
+		if (!$url && isset($uci_results_admin->config->urls->$discipline->$season)) :		
+			$url=$uci_results_admin->config->urls->$discipline->$season;
 		elseif (!$url) :
 			return false;
 		endif;

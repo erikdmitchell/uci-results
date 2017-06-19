@@ -8,13 +8,15 @@ jQuery(document).ready(function($) {
 		showLoader('#wpcontent');
 		
 		$('#get-race-data').html('');
-		
+	
 		var data={
 			'action' : 'get_race_data_non_db',
-			'form' : $('form.get-races').serialize()
+			'url' : $('.url-dd').find(':selected').data('url'),
+			'discipline' : $('.url-dd').find(':selected').data('discipline'),
+			'season' : $('.url-dd').find(':selected').data('season')
 		};
 
-		$.post(ajaxurl,data,function(response) {
+		$.post(ajaxurl, data, function(response) {
 			$('#get-race-data').html(response);
 			hideLoader();
 		});

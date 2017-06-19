@@ -559,7 +559,7 @@ class UCIResultsAdmin {
 				$html.='<option>'.$discipline.'</option>';
 				
 				foreach ($discipline_urls as $season => $url) :
-					$html.='<option value="'.$season.'" data-url="'.$url.'">&nbsp;&nbsp;&nbsp;'.$season.'</option>';
+					$html.='<option value="'.$season.'" data-url="'.$url.'" data-season="'.$season.'" data-discipline="'.$discipline.'">&nbsp;&nbsp;&nbsp;'.$season.'</option>';
 				endforeach;
 				
 			endforeach;
