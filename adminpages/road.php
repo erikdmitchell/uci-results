@@ -132,7 +132,7 @@ echo '</pre>';
 			$results='';
 		endif;
 
-		return 'foo';	
+		return $results;	
 	}
 	
 	function get_results_from_url($url='') {		
