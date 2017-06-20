@@ -320,10 +320,9 @@ class UCIResultsAddRaces {
 			return false;
 
 		$code=$this->build_race_code($_POST['race']);
-
 		// add to db //
 		if (!$this->check_for_dups($code)) :
-			echo $this->add_race_to_db($_POST['race']);
+			echo $this->add_race_to_db($_POST['race']);			
 		else :
 			echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';
 		endif;
@@ -355,14 +354,6 @@ class UCIResultsAddRaces {
 		return false;
 	}
 
-	/**
-	 * add_race_to_db function.
-	 *
-	 * @access public
-	 * @param string $race_data (default: '')
-	 * @param bool $raw_response (default: false)
-	 * @return void
-	 */
 	public function add_race_to_db($race_data='', $raw_response=false) {
 		global $wpdb, $uci_results_twitter, $uci_results_pages;
 
@@ -372,11 +363,16 @@ class UCIResultsAddRaces {
 		if (empty($race_data))
 			return false;
 
-		// build data array .. -- if you change this, please change get_add_race_to_db()
-		$race_data->week=$this->get_race_week($race_data->date, $race_data->season); // not working
+		if (!is_object($race_data))
+			$race_data=array_to_object($race_data);
+
 echo '<pre>';
 print_r($race_data);
 echo '</pre>';
+
+		// build data array .. -- if you change this, please change get_add_race_to_db() - EM has removed this //
+		$race_data->week=$this->get_race_week($race_data->date, $race_data->season); // not working
+
 /*
 		if (!$this->check_for_dups($data['code'])) :		
 			if ($race_id=$this->insert_race_into_db($data)) :
@@ -420,6 +416,7 @@ echo '</pre>';
 	 * @param string $args (default: '')
 	 * @return void
 	 */
+/*
 	public function get_add_race_to_db($race_data='', $args='') {
 		global $wpdb, $uci_results_twitter, $uci_results_pages, $ucicurl_races;
 
@@ -445,6 +442,7 @@ echo '</pre>';
 		
 		return $data;
 	}
+*/
 	
 	/**
 	 * get_add_race_to_db_results function.
@@ -553,17 +551,14 @@ echo '</pre>';
 		return $post_id;
 	}
 
-	/**
-	 * get_race_week function.
-	 *
-	 * @access public
-	 * @param string $date (default: '')
-	 * @param mixed $season (default: )
-	 * @return void
-	 */
 	public function get_race_week($date='', $season='') {
+		global $uci_results_seasons;
+		
 		$season_weeks=$uci_results_seasons->get_season_weeks($season);
 // THIS IS AN ISSUE
+echo '<pre>';
+print_r($season_weeks);
+echo '</pre>';
 		if (empty($season_weeks))
 			return 0;
 
