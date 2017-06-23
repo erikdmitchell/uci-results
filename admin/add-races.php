@@ -183,7 +183,7 @@ class UCIResultsAddRaces {
 		if ($code_created)
 			return $code_created;
 
-		$code=$args['event'].$args['date']; // combine name and date
+		$code=$args['season'].'-'.$args['event']; // combine season and name
 		$code=sanitize_title_with_dashes($code); // https://codex.wordpress.org/Function_Reference/sanitize_title_with_dashes
 
 		return $code;
@@ -338,8 +338,6 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function check_for_dups($code='') {
-		global $wpdb;
-
 		$race=get_page_by_path($code, OBJECT, 'races');
 
 		// we have race, but make sure it's not empty ie we preloaded the race //
@@ -357,47 +355,23 @@ class UCIResultsAddRaces {
 	public function add_race_to_db($race_data='', $raw_response=false) {
 		global $wpdb, $uci_results_twitter, $uci_results_pages;
 
-		$message=null;
-		$new_results=0;
+		$new_results=0; // WE NEED TO FIX THIS
 		
 		if (empty($race_data))
 			return false;
 
 		if (!is_object($race_data))
 			$race_data=array_to_object($race_data);
-
-
-
-		// build data array .. -- if you change this, please change get_add_race_to_db() - EM has removed this //
+			
+		// add race data //
 		$race_data->week=$this->get_race_week($race_data->end, $race_data->season); // not working
+		$race_data->code=$this->build_race_code((array) $race_data);
 
-		if (!$this->check_for_dups($data['code'])) :		
-			if ($race_id=$this->insert_race_into_db($data)) :
-				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
-				$new_results++;
-				$this->add_race_results_to_db($race_id, $race_data->link);
-
-				// update to twitter //
-/*
-				if (uci_results_post_results_to_twitter()) :
-					$url=get_permalink($uci_results_pages['single_race']).$data['code'];
-
-					// use twitter if we have it //
-					$twitter=uci_get_race_twitter($race_id);
-
-					if (!empty($twitter))
-						$twitter='@'.$twitter;
-
-					$status=$race_data->winner.' wins '.$race_data->event.' ('.$race_data->class.') '.$twitter.' '.$url;
-					$uci_results_twitter->update_status($status);
-				endif;
-*/
-			else :
-				$message='<div class="error">Unable to insert '.$data['code'].' into the database.</div>';
-			endif;
-
-		else :		
-			$message='<div class="updated">'.$data['code'].' is already in the database</div>';
+		// single race - or no //
+		if ($race->single) :
+			$message=$this->add_single_race($race_data);
+		else :
+			$message=$this->add_stage_race($race_data);
 		endif;
 
 		if ($raw_response)
@@ -406,41 +380,65 @@ class UCIResultsAddRaces {
 		return $message;
 	}
 	
-	/**
-	 * get_add_race_to_db function.
-	 * 
-	 * @access public
-	 * @param string $race_data (default: '')
-	 * @param string $args (default: '')
-	 * @return void
-	 */
-/*
-	public function get_add_race_to_db($race_data='', $args='') {
-		global $wpdb, $uci_results_twitter, $uci_results_pages, $ucicurl_races;
+	protected function add_single_race($race='') {
+		if (!$this->check_for_dups($race->code)) :			
+			if ($race_id=$this->insert_race_into_db($race)) :
+				//$message='<div class="updated">Added '.$race->code.' to database.</div>';
+				//$new_results++;
+				//$this->add_race_results_to_db($race_id, $race->url);
+				// update to twitter //
+			else :
+				$message='<div class="error">Unable to insert '.$race->code.' into the database.</div>';
+			endif;
 
-		$data=array();
-
-		// convert to object //
-		if (!is_object($race_data))
-			$race_data=json_decode(json_encode($race_data),FALSE);
-
-		// build race data array //
-		$data=array(
-			'date' => $date = date('Y-m-d', strtotime($race_data->date)),
-			'event' => $race_data->event,
-			'nat' => $race_data->nat,
-			'class' => $race_data->class,
-			'winner' => $race_data->winner,
-			'season' => $race_data->season,
-			'link' => $race_data->link,
-			'code' => $this->build_race_code($race_data),
-			'week' => $this->get_race_week($race_data->date, $race_data->season),
-			'discipline' => $race_data->discipline,
-		);
+		else :		
+			$message='<div class="updated">'.$race->code.' is already in the database</div>';
+		endif;
 		
-		return $data;
+		return $message;
 	}
+
+	protected function add_stage_race($race='') {
+		$parent_id=$this->add_stage_race_parent($race);
+		
+echo $parent_id;
+/*
+		if (!$this->check_for_dups($race->code)) :			
+			if ($race_id=$this->insert_race_into_db($race)) :
+				//$message='<div class="updated">Added '.$race->code.' to database.</div>';
+				//$new_results++;
+				//$this->add_race_results_to_db($race_id, $race->url);
+				// update to twitter //
+			else :
+				$message='<div class="error">Unable to insert '.$race->code.' into the database.</div>';
+			endif;
+
+		else :		
+			$message='<div class="updated">'.$race->code.' is already in the database</div>';
+		endif;
 */
+	}
+	
+	protected function add_stage_race_parent($race='') {	
+		$id=$this->insert_race_into_db($race);
+		
+		return $id;
+	}
+	
+	protected function update_to_twitter() {
+		if (uci_results_post_results_to_twitter()) :
+			$url=get_permalink($uci_results_pages['single_race']).$data['code'];
+	
+			// use twitter if we have it //
+			$twitter=uci_get_race_twitter($race_id);
+	
+			if (!empty($twitter))
+				$twitter='@'.$twitter;
+	
+			$status=$race_data->winner.' wins '.$race_data->event.' ('.$race_data->class.') '.$twitter.' '.$url;
+			$uci_results_twitter->update_status($status);
+		endif;		
+	}
 	
 	/**
 	 * get_add_race_to_db_results function.
@@ -511,15 +509,15 @@ class UCIResultsAddRaces {
 
 		if (empty($data))
 			return false;
-		
+
 		$post_id=0;
-		$race=get_page_by_path($data['code'], OBJECT, 'races');
+		$race=get_page_by_path($data->code, OBJECT, 'races');
 		$race_data=array(
-			'post_title' => $data['event'],
+			'post_title' => $data->event,
 			'post_content' => '',
 			'post_status' => 'publish',	
 			'post_type' => 'races',
-			'post_name' => $data['code'],			
+			'post_name' => $data->code,			
 		);
 
 		// if race is null, add it, else update it //
@@ -535,16 +533,17 @@ class UCIResultsAddRaces {
 			return false;
 			
 		// update taxonomies //
-		wp_set_object_terms($post_id, $data['nat'], 'country', false);
-		wp_set_object_terms($post_id, $data['class'], 'race_class', false);
-		wp_set_object_terms($post_id, $data['season'], 'season', false);
-		wp_set_object_terms($post_id, $data['discipline'], 'discipline', false);
+		wp_set_object_terms($post_id, $data->nat, 'country', false);
+		wp_set_object_terms($post_id, $data->class, 'race_class', false);
+		wp_set_object_terms($post_id, $data->season, 'season', false);
+		wp_set_object_terms($post_id, $data->discipline, 'discipline', false);
 		
 		// update meta //
-		update_post_meta($post_id, '_race_date', $data['date']);
-		update_post_meta($post_id, '_race_winner', $data['winner']);
-		update_post_meta($post_id, '_race_week', $data['week']);
-		update_post_meta($post_id, '_race_link', $data['link']);
+		update_post_meta($post_id, '_race_start', $data->start);
+		update_post_meta($post_id, '_race_end', $data->end);		
+		update_post_meta($post_id, '_race_winner', $data->winner);
+		update_post_meta($post_id, '_race_week', $data->week);
+		update_post_meta($post_id, '_race_link', $data->url);
 
 		return $post_id;
 	}

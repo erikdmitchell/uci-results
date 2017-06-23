@@ -24,15 +24,62 @@ class UCIParseResults {
 			return false;
 
 		$html=file_get_html($url);		
-		$races=$this->parse_datatable($html, array('parse_date' => true));
+		$races=$this->parse_datatable($html, array('parse_date' => true, 'limit' => 18));
 		
 		if (empty($races))
 			return false;
+			
+		// get stages for non single races //
+		foreach ($races as $race) :
+			if (!$race->single) :
+				$race->stages=$this->get_race_stages($race->url);			
+			endif;		
+		endforeach;
 		
 		return $races;
 	}
 	
-	protected function parse_datatable($html='', $args='') {
+	/**
+	 * get_race_stages function.
+	 * 
+	 * @access protected
+	 * @param string $url (default: '')
+	 * @return void
+	 */
+	protected function get_race_stages($url='') {
+		$stages=array();
+		$html=file_get_html($url);
+		$counter=0;
+		
+		foreach ($html->find('table.datatable tr') as $tr) :
+			$counter++;
+			$stage=new stdClass();
+			
+			// ignore first row //
+			if ($counter==1) :
+				continue;
+			endif;
+			
+			// ignore gc //
+			if ($tr->find('td', 1)->plaintext == 'General classification') :
+				continue;
+			endif;
+			
+			$stage->date=str_replace('&nbsp;', ' ', $tr->find('td', 0)->plaintext);
+			$stage->name=$tr->find('td', 1)->plaintext;
+			$stage->winner=$tr->find('td', 2)->plaintext;
+			
+			$stages[]=$stage;
+		endforeach; 
+		
+		$html->clear();
+		
+		$stages=array_reverse($stages); // sets stage 1 first
+		
+		return $stages;
+	}
+	
+	protected function parse_datatable($html='', $args='') {	
 		$headers=array();
 		$rows=array();
 		$counter=0;
