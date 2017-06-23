@@ -366,14 +366,11 @@ class UCIResultsAddRaces {
 		if (!is_object($race_data))
 			$race_data=array_to_object($race_data);
 
-echo '<pre>';
-print_r($race_data);
-echo '</pre>';
+
 
 		// build data array .. -- if you change this, please change get_add_race_to_db() - EM has removed this //
-		$race_data->week=$this->get_race_week($race_data->date, $race_data->season); // not working
+		$race_data->week=$this->get_race_week($race_data->end, $race_data->season); // not working
 
-/*
 		if (!$this->check_for_dups($data['code'])) :		
 			if ($race_id=$this->insert_race_into_db($data)) :
 				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
@@ -381,6 +378,7 @@ echo '</pre>';
 				$this->add_race_results_to_db($race_id, $race_data->link);
 
 				// update to twitter //
+/*
 				if (uci_results_post_results_to_twitter()) :
 					$url=get_permalink($uci_results_pages['single_race']).$data['code'];
 
@@ -393,6 +391,7 @@ echo '</pre>';
 					$status=$race_data->winner.' wins '.$race_data->event.' ('.$race_data->class.') '.$twitter.' '.$url;
 					$uci_results_twitter->update_status($status);
 				endif;
+*/
 			else :
 				$message='<div class="error">Unable to insert '.$data['code'].' into the database.</div>';
 			endif;
@@ -403,7 +402,6 @@ echo '</pre>';
 
 		if ($raw_response)
 			return array('message' => $message, 'new_result' => $new_results);
-*/
 
 		return $message;
 	}
@@ -551,14 +549,19 @@ echo '</pre>';
 		return $post_id;
 	}
 
+	/**
+	 * get_race_week function.
+	 * 
+	 * @access public
+	 * @param string $date (default: '')
+	 * @param string $season (default: '')
+	 * @return void
+	 */
 	public function get_race_week($date='', $season='') {
 		global $uci_results_seasons;
 		
 		$season_weeks=$uci_results_seasons->get_season_weeks($season);
-// THIS IS AN ISSUE
-echo '<pre>';
-print_r($season_weeks);
-echo '</pre>';
+
 		if (empty($season_weeks))
 			return 0;
 
