@@ -404,39 +404,30 @@ class UCIResultsAddRaces {
 		
 		foreach ($race->stages as $stage) :
 			$stage->code=get_permalink($parent_id).sanitize_title_with_dashes($stage->name);
-			$this->check_stage_dup($stage);
-//print_r($stage);		
-		endforeach;
-		
-//echo $parent_id;
-/*
-		if (!$this->check_for_dups($race->code)) :			
-			if ($race_id=$this->insert_race_into_db($race)) :
+			
+		if (!$this->check_for_dups($stage->code)) :		
+echo "insert stage";			
+			//if ($race_id=$this->insert_race_into_db($stage)) :
 				//$message='<div class="updated">Added '.$race->code.' to database.</div>';
 				//$new_results++;
 				//$this->add_race_results_to_db($race_id, $race->url);
 				// update to twitter //
-			else :
-				$message='<div class="error">Unable to insert '.$race->code.' into the database.</div>';
-			endif;
+			//else :
+				//$message='<div class="error">Unable to insert '.$race->code.' into the database.</div>';
+			//endif;
 
 		else :		
 			$message='<div class="updated">'.$race->code.' is already in the database</div>';
 		endif;
-*/
+			
+//print_r($stage);		
+		endforeach;
 	}
 	
 	protected function add_stage_race_parent($race='') {	
 		$id=$this->insert_race_into_db($race);
 		
 		return $id;
-	}
-	
-	protected function check_stage_dup($stage='') {
-echo '<pre>';
-print_r($stage);
-echo '</pre>';		
-		//$race=get_page_by_path($code, OBJECT, 'races');
 	}
 	
 	protected function update_to_twitter() {
