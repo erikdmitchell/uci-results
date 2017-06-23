@@ -320,11 +320,12 @@ class UCIResultsAddRaces {
 			return false;
 
 		$code=$this->build_race_code($_POST['race']);
+
 		// add to db //
-		if (!$this->check_for_dups($code)) :
-			echo $this->add_race_to_db($_POST['race']);			
+		if ($this->check_for_dups($code) && $_POST['race']['single']) :
+			echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';			
 		else :
-			echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';
+			echo $this->add_race_to_db($_POST['race']);	
 		endif;
 
 		wp_die();
@@ -401,7 +402,13 @@ class UCIResultsAddRaces {
 	protected function add_stage_race($race='') {
 		$parent_id=$this->add_stage_race_parent($race);
 		
-echo $parent_id;
+		foreach ($race->stages as $stage) :
+			$stage->code=get_permalink($parent_id).sanitize_title_with_dashes($stage->name);
+			$this->check_stage_dup($stage);
+//print_r($stage);		
+		endforeach;
+		
+//echo $parent_id;
 /*
 		if (!$this->check_for_dups($race->code)) :			
 			if ($race_id=$this->insert_race_into_db($race)) :
@@ -423,6 +430,13 @@ echo $parent_id;
 		$id=$this->insert_race_into_db($race);
 		
 		return $id;
+	}
+	
+	protected function check_stage_dup($stage='') {
+echo '<pre>';
+print_r($stage);
+echo '</pre>';		
+		//$race=get_page_by_path($code, OBJECT, 'races');
 	}
 	
 	protected function update_to_twitter() {
