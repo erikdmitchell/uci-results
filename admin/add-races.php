@@ -32,40 +32,42 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function ajax_get_race_data_non_db() {
-		echo $this->get_race_data($_POST['season'], false, false, false, $_POST['discipline']);
+		echo $this->get_race_data(array(
+			'season' => $_POST['season'],
+			'discipline' => $_POST['discipline'],	
+		));
 
 		wp_die();
 	}
 
-	/**
-	 * get_race_data function.
-	 * 
-	 * @access public
-	 * @param bool $season (default: false)
-	 * @param bool $limit (default: false)
-	 * @param bool $raw (default: false)
-	 * @param bool $url (default: false)
-	 * @param string $discipline (default: 'cyclocross')
-	 * @return void
-	 */
-	public function get_race_data($season=false, $limit=false, $raw=false, $url=false, $discipline='cyclocross') {
+	public function get_race_data($args) {
 		global $uci_results_admin;
+		
+		$default_args=array(
+			'season' => false,
+			'limit' => -1,
+			'raw' => false,
+			'discipline' => 'cyclocross',	
+		);
+		$args=wp_parse_args($args, $default_args);
+		
+		extract($args);
 		
 		set_time_limit(0); // mex ececution time
 
-		// if no passed url, use config //
-		if (!$url && isset($uci_results_admin->config->urls->$discipline->$season)) :		
-			$url=$uci_results_admin->config->urls->$discipline->$season;
-		elseif (!$url) :
-			return false;
-		endif;
+		// if no passed url, use config // disabled bt EM
+		//if (!$url && isset($uci_results_admin->config->urls->$discipline->$season)) :		
+		$url=$uci_results_admin->config->urls->$discipline->$season;
+		//elseif (!$url) :
+			//return false;
+		//endif;
 
 		// check season //
 		if (!$season || empty($season))
 			return false;
 		
 		$uci_parse_results=new UCIParseResults();
-		$races=$uci_parse_results->get_races($url);
+		$races=$uci_parse_results->get_races($url, $limit);
 		
 		// append data //
 		foreach ($races as $race) :

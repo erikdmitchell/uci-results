@@ -247,6 +247,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 *
 	 * @subcommand get-race-data
 	*/
+/*
 	public function get_race_data($args, $assoc_args) {
 		global $wpdb, $uci_results_add_races, $uci_results_admin;
 
@@ -333,6 +334,72 @@ class UCIResultsCLI extends WP_CLI_Command {
 		endforeach;
 
 		WP_CLI::success("All done!");
+	}
+*/
+
+	/**
+	 * Add race results to db
+	 *
+	 * ## OPTIONS
+	 *
+	 * <discipline>
+	 * : the discipline
+	 *
+	 * <season>
+	 * : the season
+	 *
+	 * [--limit=<limt>]
+	 * : Number of races
+	 *
+	 * ## EXAMPLES
+	 *
+	 * wp uciresults add-race-results road 2017 --limit=20
+	 *
+	 * @subcommand add-race-results
+	*/
+	public function add_race_results($args, $assoc_args) {
+		global $uci_results_add_races;
+
+		$discipline='';
+		$season='';
+		$limit=-1;
+
+		// set our discipline //
+		if (isset($args[0]) || isset($assoc_args['discipline'])) :
+			if (isset($args[0])) :
+				$discipline=$args[0];
+			elseif (isset($assoc_args['discipline'])) :
+				$discipline=$assoc_args['discipline'];
+			endif;
+		endif;
+
+		// set season //
+		if (isset($args[1]) || isset($assoc_args['season'])) :
+			if (isset($args[1])) :
+				$season=$args[1];
+			elseif (isset($assoc_args['season'])) :
+				$season=$assoc_args['season'];
+			endif;
+		endif;
+
+		// set our limit (optional) //
+		if (isset($assoc_args['limit']))
+			$limit=$assoc_args['limit'];
+			
+		if (!$discipline || $discipline=='')
+			WP_CLI::error('No discipline found.');
+
+		if (!$season || $season=='')
+			WP_CLI::error('No season found.');			
+			
+		$races=$uci_results_add_races->get_race_data(array(
+			'season' => $season,
+			'limit' => $limit,
+			'raw' => true,
+			'discipline' => $discipline,	
+		));
+//print_r($races);
+		WP_CLI::success('Add race results complete.');
 	}
 			
 }

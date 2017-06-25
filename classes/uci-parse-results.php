@@ -11,30 +11,25 @@ class UCIParseResults {
 		
 		include_once(UCI_RESULTS_PATH.'admin/simple_html_dom.php');		
 	}
-	
-	/**
-	 * get_races function.
-	 * 
-	 * @access public
-	 * @param string $url (default: '')
-	 * @return void
-	 */
-	public function get_races($url='') {
+
+	public function get_races($url='', $limit=-1) {
 		if (empty($url))
 			return false;
 
 		$html=file_get_html($url);		
-		$races=$this->parse_datatable($html, array('parse_date' => true, 'limit' => 18));
+		$races=$this->parse_datatable($html, array('parse_date' => true, 'limit' => $limit));
 		
 		if (empty($races))
 			return false;
 			
 		// get stages for non single races //
+/*
 		foreach ($races as $race) :
 			if (!$race->single) :
 				$race->stages=$this->get_race_stages($race->url);			
 			endif;		
 		endforeach;
+*/
 		
 		return $races;
 	}
@@ -110,22 +105,34 @@ class UCIParseResults {
 			foreach ($tr->find('td') as $key => $td) :
 				$headers_key=$headers[$key];
 				
-				if ($headers_key=='date' && $args['parse_date']) :
-					$date_arr=$this->get_date_details(str_replace('&nbsp;', ' ', $td->plaintext));
-					
-					foreach ($date_arr as $key => $value) :
-						$row->$key=$value;
-					endforeach;
-				else :
-					if ($url=$this->has_url($td)) :
-						$row->url=$url;
-					endif;
-
-					$row->$headers_key=str_replace('&nbsp;', ' ', $td->plaintext);
+				if ($url=$this->has_url($td)) :
+					$row->url=$url;
 				endif;
 
+				$row->$headers_key=str_replace('&nbsp;', ' ', $td->plaintext);
 			endforeach;
-			
+
+			// single check
+			if ($this->is_single($row->url)) :
+				$row->single=1;
+			else :
+				$row->single=0;
+			endif;
+
+			// clean up date if need be //
+			if (isset($row->date) && $args['parse_date']) :
+				$date_arr=$this->get_date_details($row->date);
+
+				// mod for single //
+				if ($row->single && ($date_arr['start'] != $date_arr['end'])) :
+					$date_arr['start']=$date_arr['end'];
+				endif;
+									
+				foreach ($date_arr as $key => $value) :
+					$row->$key=$value;
+				endforeach;
+			endif;
+								
 			$rows[]=$row;
 			$row_counter++;
 
@@ -135,6 +142,16 @@ class UCIParseResults {
 		endforeach;		
 		
 		return $rows;
+	}
+	
+	protected function is_single($url='') {
+		$html=file_get_html($url);
+
+		if (($html->find('.subtitlered', 0))) :
+			return true;
+		else :
+			return false;
+		endif;
 	}
 	
 	/**
@@ -171,13 +188,11 @@ class UCIParseResults {
 		if (count($date)==1) :
 			$date_arr['start']=$date[0];
 			$date_arr['end']=$date[0];
-			$date_arr['single']=1;
 		else :
 			$date_details=explode(' ' , $date[1]);
 			
 			$date_arr['start']=$date[0].' '.$date_details[2];
-			$date_arr['end']=$date[1];
-			$date_arr['single']=0;		
+			$date_arr['end']=$date[1];		
 		endif;
 		
 		return $date_arr;		
