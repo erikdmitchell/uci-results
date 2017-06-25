@@ -355,26 +355,26 @@ class UCIResultsAddRaces {
 		return false;
 	}
 
-	public function add_race_to_db($race_data='', $raw_response=false) {
-		global $wpdb, $uci_results_twitter, $uci_results_pages;
+	public function add_race_to_db($race='', $raw_response=false) {
+		global $wpdb, $uci_results_pages;
 
 		$new_results=0; // WE NEED TO FIX THIS
 		
-		if (empty($race_data))
+		if (empty($race))
 			return false;
 
-		if (!is_object($race_data))
-			$race_data=array_to_object($race_data);
+		if (!is_object($race))
+			$race=array_to_object($race);
 			
 		// add race data //
-		$race_data->week=$this->get_race_week($race_data->end, $race_data->season); // not working
-		$race_data->code=$this->build_race_code((array) $race_data);
+		$race->week=$this->get_race_week($race->end, $race->season);
+		$race->code=$this->build_race_code((array) $race);
 
 		// single race - or no //
 		if ($race->single) :
-			$message=$this->add_single_race($race_data);
+			$message=$this->add_single_race($race);
 		else :
-			$message=$this->add_stage_race($race_data);
+			$message=$this->add_stage_race($race);
 		endif;
 
 		if ($raw_response)
@@ -384,6 +384,7 @@ class UCIResultsAddRaces {
 	}
 	
 	protected function add_single_race($race='') {
+		echo "add single race\n";
 		if (!$this->check_for_dups($race->code)) :			
 			if ($race_id=$this->insert_race_into_db($race)) :
 				//$message='<div class="updated">Added '.$race->code.' to database.</div>';
@@ -402,13 +403,15 @@ class UCIResultsAddRaces {
 	}
 
 	protected function add_stage_race($race='') {
+echo "add stage race\n";		
 		$parent_id=$this->add_stage_race_parent($race);
-		
+// add_race_results_to_db - this needs to have a parent param
+// each stage should trigger this ie each stage is a race, we will worry about results in that function		
 		foreach ($race->stages as $stage) :
 			$stage->code=get_permalink($parent_id).sanitize_title_with_dashes($stage->name);
 			
 		if (!$this->check_for_dups($stage->code)) :		
-echo "insert stage";			
+echo "insert stage\n";			
 			//if ($race_id=$this->insert_race_into_db($stage)) :
 				//$message='<div class="updated">Added '.$race->code.' to database.</div>';
 				//$new_results++;

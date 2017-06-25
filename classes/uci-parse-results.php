@@ -23,13 +23,11 @@ class UCIParseResults {
 			return false;
 			
 		// get stages for non single races //
-/*
 		foreach ($races as $race) :
 			if (!$race->single) :
 				$race->stages=$this->get_race_stages($race->url);			
 			endif;		
 		endforeach;
-*/
 		
 		return $races;
 	}

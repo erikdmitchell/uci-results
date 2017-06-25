@@ -353,11 +353,11 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 * wp uciresults add-race-results road 2017 --limit=20
+	 * wp uciresults add-races-results road 2017 --limit=20
 	 *
-	 * @subcommand add-race-results
+	 * @subcommand add-races-results
 	*/
-	public function add_race_results($args, $assoc_args) {
+	public function add_races_results($args, $assoc_args) {
 		global $uci_results_add_races;
 
 		$discipline='';
@@ -398,10 +398,51 @@ class UCIResultsCLI extends WP_CLI_Command {
 			'raw' => true,
 			'discipline' => $discipline,	
 		));
-//print_r($races);
+
+		foreach ($races as $race) :
+			$code=$uci_results_add_races->build_race_code($race);
+			$race_encoded=json_encode($race);
+
+			if ($uci_results_add_races->check_for_dups($code) && $race->single) :
+				//echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';			
+				echo "in db - disp message\n";		
+			else :
+				echo "add to db via other command (wp cli)\n";
+				echo $race->event."\n";
+				echo json_encode($race)."\n";	
+				//echo $uci_results_add_races->add_race_to_db($_POST['race']);	
+			endif;
+		endforeach;
+		
 		WP_CLI::success('Add race results complete.');
 	}
-			
+
+	/**
+	 * Add race results to db
+	 *
+	 * ## OPTIONS
+	 *
+	 * <race>
+	 * : race in json format
+	 *
+	 * ## EXAMPLES
+	 *
+	 * wp uciresults add-race-results '{"date":"10 Jun-18 Jun 2017","url":"http:\/\/www.uci.infostradasports.com\/asp\/redirect\/uci.asp?Page=resultoverview&SportID=102&CompetitionID=20583&CompetitionCodeInv=1&EditionID=1628203&SeasonID=492&EventID=12146&EventPhaseID=1628237&GenderID=1&ClassID=1&Phase1ID=-1&Detail=1&DerivedEventPhaseID=-1&Ranking=0","event":"Tour de Suisse","nat":"SUI","class":"UWT","winner":"\u0160PILAK (SLO)","single":0,"start":"10 Jun 2017","end":"18 Jun 2017","stages":[{"date":"10 Jun 2017","name":"Stage 1 (ITT)","winner":"DENNIS (AUS)"},{"date":"11 Jun 2017","name":"Stage 2","winner":"GILBERT (BEL)"},{"date":"12 Jun 2017","name":"Stage 3","winner":"MATTHEWS (AUS)"},{"date":"13 Jun 2017","name":"Stage 4","winner":"WARBASSE (USA)"},{"date":"14 Jun 2017","name":"Stage 5","winner":"SAGAN (SVK)"},{"date":"15 Jun 2017","name":"Stage 6","winner":"POZZOVIVO (ITA)"},{"date":"16 Jun 2017","name":"Stage 7","winner":"\u0160PILAK (SLO)"},{"date":"17 Jun 2017","name":"Stage 8","winner":"SAGAN (SVK)"},{"date":"18 Jun 2017","name":"Stage 9 (ITT)","winner":"DENNIS (AUS)"}],"discipline":"road","season":"2017"}'
+	 *
+	 * @subcommand add-race-results
+	*/
+	public function add_race_results($args, $assoc_args) {
+		global $uci_results_add_races;
+		
+		$value = WP_CLI::get_value_from_arg_or_stdin($args, 0);
+		$value = WP_CLI::read_value($value, $assoc_args);
+		$race=json_decode($value);
+
+		$uci_results_add_races->add_race_to_db($race);
+		
+		WP_CLI::success('add_race_results complete.');
+	}
+		
 }
 
 WP_CLI::add_command('uciresults', 'UCIResultsCLI');
