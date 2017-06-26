@@ -115,10 +115,12 @@ class UCIParseResults {
 			endforeach;
 
 			// single check
-			if ($this->is_single($row->url)) :
-				$row->single=1;
-			else :
-				$row->single=0;
+			if (isset($row->url)) :
+				if ($this->is_single($row->url)) :
+					$row->single=1;
+				else :
+					$row->single=0;
+				endif;
 			endif;
 
 			// clean up date if need be //
@@ -146,7 +148,17 @@ class UCIParseResults {
 		return $rows;
 	}
 	
+	/**
+	 * is_single function.
+	 * 
+	 * @access protected
+	 * @param string $url (default: '')
+	 * @return void
+	 */
 	protected function is_single($url='') {
+		if (empty($url))
+			return false;
+			
 		$html=file_get_html($url);
 
 		if (($html->find('.subtitlered', 0))) :
@@ -200,7 +212,7 @@ class UCIParseResults {
 		return $date_arr;		
 	}
 	
-	protected function get_race_results($race='') {
+	public function get_race_results($race='') {
 		$results='';
 		
 		if ($race->single) :

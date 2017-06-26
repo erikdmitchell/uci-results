@@ -376,9 +376,9 @@ class UCIResultsAddRaces {
 		echo "add single race\n";
 		if (!$this->check_for_dups($race->code)) :			
 			if ($race_id=$this->insert_race_into_db($race)) :
-				//$message='<div class="updated">Added '.$race->code.' to database.</div>';
+				$message='<div class="updated">Added '.$race->code.' to database.</div>';
 				//$new_results++;
-				//$this->add_race_results_to_db($race_id, $race->url);
+				//$this->add_race_results_to_db($race);
 				// update to twitter //
 			else :
 				$message='<div class="error">Unable to insert '.$race->code.' into the database.</div>';
@@ -411,7 +411,7 @@ class UCIResultsAddRaces {
 				if ($race_id=$this->insert_race_into_db($stage)) :
 					$message.='<div class="updated">Added '.$race->code.' to database.</div>';
 					//$new_results++;
-					//$this->add_race_results_to_db($race_id, $race->url);
+					$this->add_race_results_to_db($race);
 					// update to twitter //
 				else :
 					$message.='<div class="error">Unable to insert '.$race->code.' into the database.</div>';
@@ -424,6 +424,13 @@ class UCIResultsAddRaces {
 		return $message;
 	}
 	
+	/**
+	 * add_stage_race_parent function.
+	 * 
+	 * @access protected
+	 * @param string $race (default: '')
+	 * @return void
+	 */
 	protected function add_stage_race_parent($race='') {	
 		$id=$this->insert_race_into_db($race);
 		
@@ -599,32 +606,22 @@ class UCIResultsAddRaces {
 		return 0;
 	}
 
-	/**
-	 * add_race_results_to_db function.
-	 *
-	 * @access public
-	 * @param bool $race_id (default: 0)
-	 * @param bool $link (default: false)
-	 * @return void
-	 */
-	public function add_race_results_to_db($race_id=0, $link=false) {
-		if (!$race_id || !$link)
+	public function add_race_results_to_db($race='') {
+		if (empty($race))
 			return false;
 
-		$race_results=$this->get_race_results($link);
-
-		$this->insert_race_results($race_id, $race_results);
-	}
-	
-	/**
-	 * insert_race_results function.
-	 * 
-	 * @access protected
-	 * @param string $race_id (default: '')
-	 * @param string $race_results (default: '')
-	 * @return void
-	 */
-	protected function insert_race_results($race_id='', $race_results='') {
+		// removed
+		$uci_parse_results=new UCIParseResults();
+		$results=$uci_parse_results->get_race_results($race);
+print_r($results);
+/*
+results
+	[type]
+		result (add rider id)	
+*/
+		//$this->insert_race_results($race_id, $race_results);
+		
+		/*
 		if (empty($race_id) || empty($race_results))
 			return;
 			
@@ -645,7 +642,9 @@ class UCIResultsAddRaces {
 			update_post_meta($race_id, "_rider_$rider_id", $meta_value);
 		endforeach;	
 		
-		// update race meta _race_results = 1 //		
+		// update race meta _race_results = 1 //
+		*/		
+			
 	}
 	
 	/**
@@ -679,98 +678,6 @@ class UCIResultsAddRaces {
 		endif;
 		
 		return $rider_id;			
-	}
-
-	/**
-	 * get_race_results function.
-	 *
-	 * @access public
-	 * @param mixed $url
-	 * @return void
-	 */
-	public function get_race_results($url) {
-		// Use the Curl extension to query Google and get back a page of results
-		$timeout = 5;
-		$race_results=array();
-		$race_results_obj=new stdClass();
-		$results_class_name="datatable";
-		//$race_results_row_arr=array('place', 'name', 'nat', 'age', 'result', 'par', 'pcr');
-
-		// get header so that we can get the charset ? //
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-		//$html = curl_exec_utf8($ch); // external function in this file //
-		$html=curl_exec($ch);
-		curl_close($ch);
-
-		// modify html //
-		$html=preg_replace('/<script\b[^>]*>(.*?)<\/script>/is',"",$html); // remove js
-
-		// Create a DOM parser object
-		$dom = new DOMDocument();
-
-		// Parse HTML - The @ before the method call suppresses any warnings that loadHTML might throw because of invalid HTML in the page.
-		@$dom->loadHTML($html);
-
-		//discard white space
-		$dom->preserveWhiteSpace = false;
-
-		// get our results table //
-		$finder = new DomXPath($dom);
-
-		$nodes = $finder->query("//*[contains(@class, '$results_class_name')]");
-
-		// if for some reason we can't find that class, we bail and return an empty object //
-		if ($nodes->length==0)
-			return new stdClass();
-
-		// get all rows from the table //
-		$rows=$nodes->item(0)->getElementsByTagName('tr');
-
-		// get header row //
-		$header_row=$rows->item(0); //->getElementsByTagName('tr'); //get all rows from the table
-		$header_cols=$header_row->getElementsByTagName('td');
-		$header_arr=array();
-
-		foreach ($header_cols as $col) :
-			$col_value=preg_replace("/[^A-Za-z0-9 ]/", '', $col->nodeValue); // remove non alpha chars
-			$col_value=strtolower($col_value); // make lowercase
-
-			$header_arr[]=$col_value;
-		endforeach;
-
-		// build our rows (results) //
-		foreach ($rows as $row_key => $row) :
-			// skip header row (first) //
-			if ($row_key==0)
-				continue;
-
-			// process row //
-			$race_results[$row_key]=new stdClass();
-			$cols=$row->getElementsByTagName('td'); 	// get each column by tag name
-			$col_values=array();
-
-			// get col values //
-			foreach ($cols as $key => $col) :
-		  		$col_values[]=$col->nodeValue;
-		  	endforeach;
-
-		  	// make our results row array w/ header as key(s) //
-		  	$race_results[$row_key]=array_combine($header_arr, $col_values);
-
-		  	// we need to make one swap - rank/place //
-		  	$race_results[$row_key]['place']=$race_results[$row_key]['rank'];
-		  	unset($race_results[$row_key]['rank']);
-		endforeach;
-
-		// convert everything to an object //
-		foreach ($race_results as $key => $value) :
-			$race_results_obj->$key=(object) $value;
-		endforeach;
-
-		return $race_results_obj;
 	}
 
 	public function ajax_process_results_csv() {
