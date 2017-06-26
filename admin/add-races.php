@@ -411,7 +411,7 @@ class UCIResultsAddRaces {
 				if ($race_id=$this->insert_race_into_db($stage)) :
 					$message.='<div class="updated">Added '.$race->code.' to database.</div>';
 					//$new_results++;
-					$this->add_race_results_to_db($race);
+					$this->add_race_results_to_db($stage);
 					// update to twitter //
 				else :
 					$message.='<div class="error">Unable to insert '.$race->code.' into the database.</div>';
@@ -609,37 +609,40 @@ class UCIResultsAddRaces {
 	public function add_race_results_to_db($race='') {
 		if (empty($race))
 			return false;
-
-		// removed
+//print_r($race);
 		$uci_parse_results=new UCIParseResults();
-		$results=$uci_parse_results->get_race_results($race);
+		$results=$uci_parse_results->get_stage_results($race);
+
 print_r($results);
+
+		//foreach ($results->results as $type => $result_list) :
+//print_r($result_list);
 /*
-results
-	[type]
-		result (add rider id)	
+			if (is_string($type)) :
+				foreach ($result_list as $type_results_list) :
+					foreach ($type_results_list as $r) :
+print_r($r);					
+						//$this->insert_rider_result($r);
+					endforeach;
+				endforeach;
+			else :
+				//$this->insert_rider_result($result_list);
+			endif;
 */
-		//$this->insert_race_results($race_id, $race_results);
+
+		//endforeach;
+
+
 		
 		/*
-		if (empty($race_id) || empty($race_results))
-			return;
+
 			
-		$discipline=strtolower(uci_get_first_term($race_id, 'discipline'));
+
 
 		foreach ($race_results as $result) :
-			$meta_value=array();
-			$rider_id=$this->insert_race_results_rider_id($result->name, $result->nat);
 
-			// essentially converts our object to an array //			
-			foreach ($result as $key => $value) :
-				$meta_value[$key]=$value;
-			endforeach;
 
-			// filter value //
-			$meta_value=apply_filters('uci_results_insert_race_result_'.$discipline, $meta_value, $race_id, $result, $rider_id);			
 
-			update_post_meta($race_id, "_rider_$rider_id", $meta_value);
 		endforeach;	
 		
 		// update race meta _race_results = 1 //
@@ -647,15 +650,31 @@ results
 			
 	}
 	
+	protected function insert_rider_result($result='') {
+		$meta_values=array();
+		$rider_id=$this->get_rider_id($result->name, $result->nat);
+
+		// essentially converts our object to an array //			
+		foreach ($result as $key => $value) :
+			$meta_values[$key]=$value;
+		endforeach;		
+
+		// filter value //
+		//$meta_value=apply_filters('uci_results_insert_race_result_'.$discipline, $meta_value, $race_id, $result, $rider_id);			
+echo "mv\n";
+print_r($meta_values);
+		//update_post_meta($race_id, "_rider_$rider_id", $meta_value);
+	}
+	
 	/**
-	 * insert_race_results_rider_id function.
+	 * get_rider_id function.
 	 * 
 	 * @access protected
 	 * @param string $rider_name (default: '')
 	 * @param string $rider_country (default: '')
 	 * @return void
 	 */
-	protected function insert_race_results_rider_id($rider_name='', $rider_country='') {
+	protected function get_rider_id($rider_name='', $rider_country='') {
 		if (empty($rider_name))
 			return 0;
 			

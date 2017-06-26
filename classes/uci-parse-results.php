@@ -215,7 +215,7 @@ class UCIParseResults {
 	public function get_race_results($race='') {
 		$results='';
 		
-		if ($race->single) :
+		if (isset($race->single) && $race->single) :
 			$html=file_get_html($race->url);
 			$url=$this->find_all_url($html);
 			$results=$this->get_results_from_url($url);
@@ -253,6 +253,30 @@ class UCIParseResults {
 		endif;
 
 		return $results;	
+	}
+	
+	public function get_stage_results($race='') {
+		$results=new stdClass();
+		
+		$html=file_get_html($race->url);
+				
+		foreach ($html->find('div.menu_item_white_border a') as $a) :
+			$results_key=sanitize_key($a->plaintext);
+			$results_url=$this->base_url.$a->href;
+			$results_html=file_get_html($results_url);
+			$results_all_url=$this->find_all_url($results_html);
+			$results_html->clear();
+			
+			if ($results_all_url=='')
+				$results_all_url=$results_url;
+			
+			$results_all_html=file_get_html($results_all_url);	
+			$results->$results_key=$this->parse_datatable($results_all_html);
+		endforeach;
+
+		$html->clear();
+		
+		return $results;
 	}
 	
 	/**

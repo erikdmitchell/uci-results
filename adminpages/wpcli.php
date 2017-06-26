@@ -4,11 +4,11 @@
 		
 	<div>
 		<code>
-			wp uciresults add-races [--season=<season>]
+			wp uciresults add-races '--season=<season>'
 		</code>
 		
 		<code>
-			wp uciresults get-race-data <season> [--race_id=<race_id>] [--limit=<limit>] [--output=<output>]
+			wp uciresults get-race-data <season> '--race_id=<race_id>' '--limit=<limit>' '--output=<output>'
 		</code>
 			
 		<code>
