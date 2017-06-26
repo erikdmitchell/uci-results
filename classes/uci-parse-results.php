@@ -47,7 +47,7 @@ class UCIParseResults {
 		foreach ($html->find('table.datatable tr') as $tr) :
 			$counter++;
 			$stage=new stdClass();
-			
+	
 			// ignore first row //
 			if ($counter==1) :
 				continue;
@@ -59,8 +59,12 @@ class UCIParseResults {
 			endif;
 			
 			$stage->date=str_replace('&nbsp;', ' ', $tr->find('td', 0)->plaintext);
-			$stage->name=$tr->find('td', 1)->plaintext;
+			$stage->event=$tr->find('td', 1)->plaintext;
 			$stage->winner=$tr->find('td', 2)->plaintext;
+			
+			foreach ($tr->find('a') as $e) :
+				$stage->url=$this->base_url.$e->href;
+			endforeach;
 			
 			$stages[]=$stage;
 		endforeach; 

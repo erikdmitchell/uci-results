@@ -249,24 +249,6 @@ class UCIResultsAddRaces {
 	}
 
 	/**
-	 * is_race_empty function.
-	 *
-	 * @access public
-	 * @param string $id (default: 0)
-	 * @return void
-	 */
-	public function is_race_empty($id=0) {
-		global $wpdb;
-
-		$winner=get_post_meta($id, '_race_winner', true);	
-
-		if ($winner !== null || $winner != '')
-			return false;
-
-		return true;
-	}
-
-	/**
 	 * reformat_date function.
 	 *
 	 * @access public
@@ -345,13 +327,20 @@ class UCIResultsAddRaces {
 
 		// we have race, but make sure it's not empty ie we preloaded the race //
 		if ($race !== null) :
-			if (!$this->is_race_empty($race->ID)) :
+			if (!$this->has_results($race->ID)) :
 				return true;
 			else :
 				return false;
 			endif;
 		endif;
 
+		return false;
+	}
+	
+	public function has_results($id=0) {
+		if (get_post_meta($id, '_race_results', true) == 1)
+			return true;
+			
 		return false;
 	}
 
@@ -403,30 +392,36 @@ class UCIResultsAddRaces {
 	}
 
 	protected function add_stage_race($race='') {
-echo "add stage race\n";		
+		$message='';		
 		$parent_id=$this->add_stage_race_parent($race);
-// add_race_results_to_db - this needs to have a parent param
-// each stage should trigger this ie each stage is a race, we will worry about results in that function		
-		foreach ($race->stages as $stage) :
-			$stage->code=get_permalink($parent_id).sanitize_title_with_dashes($stage->name);
-			
-		if (!$this->check_for_dups($stage->code)) :		
-echo "insert stage\n";			
-			//if ($race_id=$this->insert_race_into_db($stage)) :
-				//$message='<div class="updated">Added '.$race->code.' to database.</div>';
-				//$new_results++;
-				//$this->add_race_results_to_db($race_id, $race->url);
-				// update to twitter //
-			//else :
-				//$message='<div class="error">Unable to insert '.$race->code.' into the database.</div>';
-			//endif;
 
-		else :		
-			$message='<div class="updated">'.$race->code.' is already in the database</div>';
-		endif;
-			
-//print_r($stage);		
+		foreach ($race->stages as $stage) :
+			// add on info //
+			$stage->code=sanitize_title_with_dashes($stage->event);
+			$stage->parent=$parent_id;
+			$stage->nat=$race->nat;
+			$stage->class=$race->class;
+			$stage->season=$race->season;
+			$stage->discipline=$race->discipline;
+			$stage->start=$stage->date;
+			$stage->end=$stage->date;
+			$stage->week=$race->week;
+		
+			if (!$this->check_for_dups($stage->code)) :		
+				if ($race_id=$this->insert_race_into_db($stage)) :
+					$message.='<div class="updated">Added '.$race->code.' to database.</div>';
+					//$new_results++;
+					//$this->add_race_results_to_db($race_id, $race->url);
+					// update to twitter //
+				else :
+					$message.='<div class="error">Unable to insert '.$race->code.' into the database.</div>';
+				endif;
+			else :		
+				$message.='<div class="updated">'.$race->code.' is already in the database</div>';
+			endif;		
 		endforeach;
+		
+		return $message;
 	}
 	
 	protected function add_stage_race_parent($race='') {	
@@ -519,7 +514,7 @@ echo "insert stage\n";
 
 		if (empty($data))
 			return false;
-
+			
 		$post_id=0;
 		$race=get_page_by_path($data->code, OBJECT, 'races');
 		$race_data=array(
@@ -527,7 +522,8 @@ echo "insert stage\n";
 			'post_content' => '',
 			'post_status' => 'publish',	
 			'post_type' => 'races',
-			'post_name' => $data->code,			
+			'post_name' => $data->code,	
+			'post_parent' => isset($data->parent) ? $data->parent : 0,		
 		);
 
 		// if race is null, add it, else update it //
@@ -647,7 +643,9 @@ echo "insert stage\n";
 			$meta_value=apply_filters('uci_results_insert_race_result_'.$discipline, $meta_value, $race_id, $result, $rider_id);			
 
 			update_post_meta($race_id, "_rider_$rider_id", $meta_value);
-		endforeach;			
+		endforeach;	
+		
+		// update race meta _race_results = 1 //		
 	}
 	
 	/**
