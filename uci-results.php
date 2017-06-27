@@ -39,8 +39,6 @@ include_once(UCI_RESULTS_PATH.'admin/add-races.php'); // cURL and add races/resu
 include_once(UCI_RESULTS_PATH.'admin/rider-rankings.php'); // add and update rider rankings
 include_once(UCI_RESULTS_PATH.'admin/wp-cli.php'); // wp cli functions
 include_once(UCI_RESULTS_PATH.'admin/custom-columns.php'); // custom columns for our admin pages
-include_once(UCI_RESULTS_PATH.'admin/race-results-meta.php'); // customize results meta before processing
-include_once(UCI_RESULTS_PATH.'admin/race-results-metabox-filters.php'); // customize races mteabox output
 
 include_once(UCI_RESULTS_PATH.'lib/name-parser.php'); // a php nameparser
 include_once(UCI_RESULTS_PATH.'shortcode.php'); // our shortcodes
@@ -60,6 +58,11 @@ include_once(UCI_RESULTS_PATH.'inc/updater.php'); // github - wp version update 
 include_once(UCI_RESULTS_PATH.'stats/base.php'); // base stats class
 include_once(UCI_RESULTS_PATH.'stats/init.php'); // init class
 include_once(UCI_RESULTS_PATH.'stats/cross.php'); // cross stats class
+
+// discipline classes //
+include_once(UCI_RESULTS_PATH.'disciplines/base.php');
+include_once(UCI_RESULTS_PATH.'disciplines/road.php');
+include_once(UCI_RESULTS_PATH.'disciplines/cross.php');
 
 /**
  * is_uci_results_active function.
