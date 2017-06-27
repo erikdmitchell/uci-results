@@ -612,15 +612,13 @@ class UCIResultsAddRaces {
 
 		$uci_parse_results=new UCIParseResults();
 		$results=$uci_parse_results->get_stage_results($race);
-		
-echo $race->event."\n";
+
 		foreach ($results as $type => $result_list) :
 			// stage races offer all sorts of fun results //
 			if (is_string($type)) :
 				foreach ($result_list as $type_results_list) :
 					$this->insert_rider_result($type_results_list, $race, array('type' => $type));
 				endforeach;
-
 			else :
 				// basic results list, most likely single day //			
 				//$this->insert_rider_result($result_list);
@@ -631,16 +629,6 @@ echo $race->event."\n";
 
 		
 		/*
-
-			
-
-
-		foreach ($race_results as $result) :
-
-
-
-		endforeach;	
-		
 		// update race meta _race_results = 1 //
 		*/		
 			
@@ -659,15 +647,21 @@ echo $race->event."\n";
 		endforeach;		
 
 		// filter value //
-		$meta_values=apply_filters('uci_results_insert_race_result_'.$race->discipline, $meta_values, $race, $args);	
-		// ^^ i think this is key, type may come into play to filter and adjust stuff - this should be part of disciplines to help filter
-		//$meta_values['rider_id']=$this->get_rider_id($result->name, $result->nat, $args['insert']); // this needs to return something (0) if not found - it's adding them, we need to check this
-echo "mv\n";
+		$meta_values=apply_filters('uci_results_insert_race_result_'.$race->discipline, $meta_values, $race, $args);
+	
+		// get rider id if non exists //	
+		if ((!isset($meta_values['rider_id']) || $meta_values['rider_id']=='') && !empty($meta_values))	
+			$meta_values['rider_id']=$this->get_rider_id($result->name, $result->nat, $args['insert']);
+
+		// bail if no id //
+		if (empty($meta_values['rider_id']) || !$meta_values['rider_id'])
+			return;
 print_r($meta_values);
+// _rider_rider_id_name
 		//update_post_meta($race_id, "_rider_$rider_id", $meta_value);
 	}
 
-	protected function get_rider_id($rider_name='', $rider_country='', $insert=true) {
+	public function get_rider_id($rider_name='', $rider_country='', $insert=true) {
 		if (empty($rider_name))
 			return 0;
 			
