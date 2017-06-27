@@ -1,6 +1,6 @@
 <?php
 
-class UCIResultsCross extends UCIResultsDiscipline {
+class UCI_Results_Cross extends UCI_Results_Discipline {
 	
 	public function __construct() {	
 		add_filter('uci_results_insert_race_result_cyclocross', array($this, 'clean_results'), 10, 3);

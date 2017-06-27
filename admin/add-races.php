@@ -609,28 +609,24 @@ class UCIResultsAddRaces {
 	public function add_race_results_to_db($race='') {
 		if (empty($race))
 			return false;
-//print_r($race);
+
 		$uci_parse_results=new UCIParseResults();
 		$results=$uci_parse_results->get_stage_results($race);
-
-print_r($results);
-
-		//foreach ($results->results as $type => $result_list) :
-//print_r($result_list);
-/*
+		
+echo $race->event."\n";
+		foreach ($results as $type => $result_list) :
+			// stage races offer all sorts of fun results //
 			if (is_string($type)) :
 				foreach ($result_list as $type_results_list) :
-					foreach ($type_results_list as $r) :
-print_r($r);					
-						//$this->insert_rider_result($r);
-					endforeach;
+					$this->insert_rider_result($type_results_list, $race, array('type' => $type));
 				endforeach;
+
 			else :
+				// basic results list, most likely single day //			
 				//$this->insert_rider_result($result_list);
 			endif;
-*/
 
-		//endforeach;
+		endforeach;
 
 
 		
@@ -650,9 +646,12 @@ print_r($r);
 			
 	}
 	
-	protected function insert_rider_result($result='') {
+	protected function insert_rider_result($result='', $race='', $args='') {
 		$meta_values=array();
-		$rider_id=$this->get_rider_id($result->name, $result->nat);
+		$default_args=array(
+			'insert' => true,
+		);
+		$args=wp_parse_args($args, $default_args);
 
 		// essentially converts our object to an array //			
 		foreach ($result as $key => $value) :
@@ -660,21 +659,15 @@ print_r($r);
 		endforeach;		
 
 		// filter value //
-		//$meta_value=apply_filters('uci_results_insert_race_result_'.$discipline, $meta_value, $race_id, $result, $rider_id);			
+		$meta_values=apply_filters('uci_results_insert_race_result_'.$race->discipline, $meta_values, $race, $args);	
+		// ^^ i think this is key, type may come into play to filter and adjust stuff - this should be part of disciplines to help filter
+		//$meta_values['rider_id']=$this->get_rider_id($result->name, $result->nat, $args['insert']); // this needs to return something (0) if not found - it's adding them, we need to check this
 echo "mv\n";
 print_r($meta_values);
 		//update_post_meta($race_id, "_rider_$rider_id", $meta_value);
 	}
-	
-	/**
-	 * get_rider_id function.
-	 * 
-	 * @access protected
-	 * @param string $rider_name (default: '')
-	 * @param string $rider_country (default: '')
-	 * @return void
-	 */
-	protected function get_rider_id($rider_name='', $rider_country='') {
+
+	protected function get_rider_id($rider_name='', $rider_country='', $insert=true) {
 		if (empty($rider_name))
 			return 0;
 			
@@ -682,16 +675,20 @@ print_r($meta_values);
 
 		// check if we have a rider id, otherwise create one //
 		if ($rider===null || empty($rider->ID)) :
-			$rider_insert=array(
-				'post_title' => $rider_name,
-				'post_content' => '',
-				'post_status' => 'publish',	
-				'post_type' => 'riders',
-				'post_name' => sanitize_title_with_dashes($rider_name)
-			);
-			$rider_id=wp_insert_post($rider_insert);
-			
-			wp_set_object_terms($rider_id, $rider_country, 'country', false);
+			if ($insert) :
+				$rider_insert=array(
+					'post_title' => $rider_name,
+					'post_content' => '',
+					'post_status' => 'publish',	
+					'post_type' => 'riders',
+					'post_name' => sanitize_title_with_dashes($rider_name)
+				);
+				$rider_id=wp_insert_post($rider_insert);
+				
+				wp_set_object_terms($rider_id, $rider_country, 'country', false);
+			else :
+				$rider_id=0;
+			endif;
 		else :
 			$rider_id=$rider->ID;
 		endif;
