@@ -44,7 +44,7 @@ class UCI_Results_Road extends UCI_Results_Discipline {
 		endswitch;
 
 		// append rider id //
-		$meta_values['rider_id']=$uci_results_add_races->get_rider_id($meta_values['name'], $meta_values['nat'], true); 
+		//$meta_values['rider_id']=$uci_results_add_races->get_rider_id($meta_values['name'], $meta_values['nat'], true); 
 
 		// remove what we do not need //
 		unset($meta_values['name']);
@@ -54,8 +54,8 @@ class UCI_Results_Road extends UCI_Results_Discipline {
 		
 		// append type //
 		foreach ($meta_values as $key => $meta_value) :
-			$meta_value[$key.'_'.$arr['type']]=$meta_value;
-			unset($meta_value[$key]);
+			$meta_values[$args['type'].'_'.$key]=$meta_value;
+			unset($meta_values[$key]);
 		endforeach;
 		
 		return $meta_values;		

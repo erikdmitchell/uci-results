@@ -409,6 +409,7 @@ class UCIResultsAddRaces {
 		
 			if (!$this->check_for_dups($stage->code)) :		
 				if ($race_id=$this->insert_race_into_db($stage)) :
+					$stage->race_id=$race_id;
 					$message.='<div class="updated">Added '.$race->code.' to database.</div>';
 					//$new_results++;
 					$this->add_race_results_to_db($stage);
@@ -649,15 +650,18 @@ class UCIResultsAddRaces {
 		// filter value //
 		$meta_values=apply_filters('uci_results_insert_race_result_'.$race->discipline, $meta_values, $race, $args);
 	
-		// get rider id if non exists //	
-		if ((!isset($meta_values['rider_id']) || $meta_values['rider_id']=='') && !empty($meta_values))	
-			$meta_values['rider_id']=$this->get_rider_id($result->name, $result->nat, $args['insert']);
+		// get rider id //	
+		$rider_id=$this->get_rider_id($result->name, $result->nat, $args['insert']);
 
 		// bail if no id //
-		if (empty($meta_values['rider_id']) || !$meta_values['rider_id'])
+		if (empty($rider_id) || !$rider_id)
 			return;
-print_r($meta_values);
-// _rider_rider_id_name
+		
+		// input meta values //
+		foreach ($meta_values as $meta_key => $meta_value) :
+			echo $race->race_id." | _rider_".$rider_id."_".$meta_key." $meta_value\n"; // not right
+		endforeach;
+
 		//update_post_meta($race_id, "_rider_$rider_id", $meta_value);
 	}
 
