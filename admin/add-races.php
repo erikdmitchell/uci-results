@@ -656,6 +656,10 @@ class UCIResultsAddRaces {
 		// bail if no id //
 		if (empty($rider_id) || !$rider_id)
 			return;
+			
+		// bail on no meta values //
+		if (empty($meta_values) || $meta_values=='')
+			return;
 		
 		// input meta values //
 		foreach ($meta_values as $meta_key => $meta_value) :
