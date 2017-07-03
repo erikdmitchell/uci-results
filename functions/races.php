@@ -42,17 +42,29 @@ function uci_get_races($args='') {
 	$args=wp_parse_args($args, $default_args);
 	
 	extract($args);
-echo '<pre>';
-print_r($args);
-echo '</pre>';
-	$races=get_posts(array(
+
+$argss=array(
 		'posts_per_page' => $per_page,
 		'include' => $id,
 		'post_type' => 'races',
-		'orderby' => $orderby,
-		'meta_key' => $meta_key,
-		'order' => $order,
-	));
+		//'orderby' => $orderby,
+		//'meta_key' => $meta_key,
+		//'order' => $order,
+		'meta_query'      => array(
+			'relation'    => 'OR',
+			'_race_date' => array(
+				'key'     => '_race_date',
+				'compare' => 'EXISTS',
+			),
+			'_race_start' => array(
+				'key'     => '_race_start',
+				'compare' => 'EXISTS',
+			),
+		)
+	);
+
+	$races=get_posts($argss);
+	global $wpdb;
 
 	foreach ($races as $race) :
 		$race=uci_race_details($race);
