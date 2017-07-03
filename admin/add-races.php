@@ -378,7 +378,7 @@ class UCIResultsAddRaces {
 			if ($race_id=$this->insert_race_into_db($race)) :
 				$message='<div class="updated">Added '.$race->code.' to database.</div>';
 				//$new_results++;
-				//$this->add_race_results_to_db($race);
+				$this->add_race_results_to_db($race);
 				// update to twitter //
 			else :
 				$message='<div class="error">Unable to insert '.$race->code.' into the database.</div>';
@@ -523,8 +523,8 @@ class UCIResultsAddRaces {
 		if (empty($data))
 			return false;
 			
-		$post_id=0;
-		$race=get_page_by_path($data->code, OBJECT, 'races');
+		$post_id=0;		
+		$race=$this->get_race_by_code($data->code);
 		$race_data=array(
 			'post_title' => $data->event,
 			'post_content' => '',
@@ -535,13 +535,13 @@ class UCIResultsAddRaces {
 		);
 
 		// if race is null, add it, else update it //
-		if ($race === null) :
+		if (!$race) :
 			$post_id=wp_insert_post($race_data);
 		else :
 			$race_data['ID']=$race->ID;
 		 	$post_id=wp_update_post($race_data);
-		endif;		
-		
+		endif;
+
 		// check for error //
 		if (is_wp_error($post_id))
 			return false;
@@ -560,6 +560,17 @@ class UCIResultsAddRaces {
 		update_post_meta($post_id, '_race_link', $data->url);
 
 		return $post_id;
+	}
+	
+	protected function get_race_by_code($code='') {
+		global $wpdb;
+		
+		$post_id=$wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE post_name IN ('$code') AND post_type IN ('races')");
+		
+		if ($post_id===null || is_wp_error($post_id))
+			return false;
+			
+		return get_post($post_id);
 	}
 
 	/**
@@ -627,12 +638,8 @@ class UCIResultsAddRaces {
 
 		endforeach;
 
-
-		
-		/*
-		// update race meta _race_results = 1 //
-		*/		
-			
+		// update race results //
+		update_post_meta($race->race_id, '_races_results', 1);
 	}
 	
 	protected function insert_rider_result($result='', $race='', $args='') {
@@ -663,10 +670,10 @@ class UCIResultsAddRaces {
 		
 		// input meta values //
 		foreach ($meta_values as $meta_key => $meta_value) :
-			echo $race->race_id." | _rider_".$rider_id."_".$meta_key." $meta_value\n"; // not right
+			$mk="_rider_".$rider_id."_".$meta_key;
+			
+			update_post_meta($race->race_id, $mk, $meta_value);
 		endforeach;
-
-		//update_post_meta($race_id, "_rider_$rider_id", $meta_value);
 	}
 
 	public function get_rider_id($rider_name='', $rider_country='', $insert=true) {

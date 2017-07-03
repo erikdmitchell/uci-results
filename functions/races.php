@@ -42,7 +42,9 @@ function uci_get_races($args='') {
 	$args=wp_parse_args($args, $default_args);
 	
 	extract($args);
-
+echo '<pre>';
+print_r($args);
+echo '</pre>';
 	$races=get_posts(array(
 		'posts_per_page' => $per_page,
 		'include' => $id,

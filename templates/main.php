@@ -15,7 +15,9 @@ $races=uci_get_races(array(
 	'per_page' => 10,
 ));
 ?>
-
+<pre>
+	<?php print_r($races); ?>
+</pre>
 <div class="uci-results uci-results-main">
 	<div class="uci-results-riders">
 		<h3>Rider Rankings</h3>
