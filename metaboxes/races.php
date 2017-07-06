@@ -130,7 +130,8 @@ class UCIResultsRacesMetabox {
 		$meta=array();
         $post_meta=get_post_meta($post->ID);
         $default_meta=array(
-	        'date' => '',
+	        'start' => '',
+	        'end' => '',
 	        'winner' => '',
 	        'week' => '',
 	        'link' => '',
