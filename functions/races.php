@@ -184,7 +184,9 @@ function uci_race_series($race_id=0) {
 function uci_results_get_race_results($race_id=0, $format='array') {
 	$post_meta=get_post_meta($race_id);
 	$riders=array();
-	
+echo '<pre>';
+print_r($post_meta);
+echo '</pre>';	
 	// get only meta (riders); we need //
 	foreach ($post_meta as $key => $value) :
 		if (strpos($key, '_rider_') !== false) :
