@@ -182,16 +182,17 @@ function uci_race_series($race_id=0) {
  * @return void
  */
 function uci_results_get_race_results($race_id=0, $format='array') {
-	$post_meta=get_post_meta($race_id);
-	$riders=array();
+	$rider_ids=uci_race_results_rider_ids($race_id);
 echo '<pre>';
-print_r($post_meta);
+print_r($rider_ids);
+
 echo '</pre>';	
+/*
 	// get only meta (riders); we need //
 	foreach ($post_meta as $key => $value) :
 		if (strpos($key, '_rider_') !== false) :
 			if (isset($value[0])) :
-				$riders[]=unserialize($value[0]);
+				$riders[]=$value[0];
 			endif;			
 		endif;
 	endforeach;
@@ -203,11 +204,26 @@ echo '</pre>';
 		$riders[$key]['slug']=$rider_post->post_name;
 	endforeach;	
 	
-	if ($format=='object') :
+	if ($format=='object')
 		$riders=array_to_object($riders);
-	endif;
 	
 	return $riders;
+*/
+}
+
+/**
+ * uci_race_results_rider_ids function.
+ * 
+ * @access public
+ * @param int $race_id (default: 0)
+ * @return void
+ */
+function uci_race_results_rider_ids($race_id=0) {
+	global $wpdb;
+	
+	$ids=$wpdb->get_col("SELECT REPLACE (REPLACE (meta_key, '_rider_', ''), '_result_place', '') AS id FROM wp_postmeta WHERE post_id = $race_id AND meta_key LIKE '_rider_%_result_place'");
+	
+	return $ids;	
 }
 
 /**
