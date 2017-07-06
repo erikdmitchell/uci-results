@@ -182,33 +182,53 @@ function uci_race_series($race_id=0) {
  * @return void
  */
 function uci_results_get_race_results($race_id=0, $format='array') {
+	$riders=array();
 	$rider_ids=uci_race_results_rider_ids($race_id);
-echo '<pre>';
-print_r($rider_ids);
-
-echo '</pre>';	
-/*
-	// get only meta (riders); we need //
-	foreach ($post_meta as $key => $value) :
-		if (strpos($key, '_rider_') !== false) :
-			if (isset($value[0])) :
-				$riders[]=$value[0];
-			endif;			
-		endif;
-	endforeach;
+	$cols=uci_race_results_columns($race_id);
 	
+echo '<pre>';
+print_r($cols);
 	// add rider details //
-	foreach ($riders as $key => $rider) :
-		$rider_post=get_page_by_title($rider['name'], OBJECT, 'riders');
-		$riders[$key]['ID']=$rider_post->ID;
-		$riders[$key]['slug']=$rider_post->post_name;
+	foreach ($rider_ids as $id) :
+		$post=get_post($id);
+		$arr=array(
+			'ID' => $id,
+			'name' => $post->post_title,
+			'slug' => $post->post_name,
+		);
+		$riders[]=$arr;
 	endforeach;	
 	
 	if ($format=='object')
 		$riders=array_to_object($riders);
-	
+
+print_r($riders);
+
+echo '</pre>';	
 	return $riders;
-*/
+}
+
+/**
+ * uci_race_results_columns function.
+ * 
+ * @access public
+ * @param int $race_id (default: 0)
+ * @return void
+ */
+function uci_race_results_columns($race_id=0) {
+	global $wpdb;
+	
+	$meta_keys=$wpdb->get_col("SELECT meta_key FROM $wpdb->postmeta WHERE post_id = $race_id AND meta_key LIKE '_rider_%'");
+	$cols=array();
+	
+	foreach ($meta_keys as $meta_key) :
+		$mk_arr=explode('_', $meta_key);
+		$cols[]=array_pop($mk_arr);		
+	endforeach;
+	
+	$cols=array_values(array_unique($cols));
+	
+	return $cols;
 }
 
 /**
@@ -221,7 +241,7 @@ echo '</pre>';
 function uci_race_results_rider_ids($race_id=0) {
 	global $wpdb;
 	
-	$ids=$wpdb->get_col("SELECT REPLACE (REPLACE (meta_key, '_rider_', ''), '_result_place', '') AS id FROM wp_postmeta WHERE post_id = $race_id AND meta_key LIKE '_rider_%_result_place'");
+	$ids=$wpdb->get_col("SELECT REPLACE (REPLACE (meta_key, '_rider_', ''), '_result_place', '') AS id FROM $wpdb->postmeta WHERE post_id = $race_id AND meta_key LIKE '_rider_%_result_place'");
 	
 	return $ids;	
 }
