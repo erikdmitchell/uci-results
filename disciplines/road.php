@@ -62,7 +62,7 @@ class UCI_Results_Road extends UCI_Results_Discipline {
 	}
 	
 	public function race_results_metabox($output, $post_id) {
-		$output=array('place', 'name', 'nat', 'age', 'result');
+		$output=array('result_place', 'name', 'nat', 'result_time');
 		
 		return $output;
 	}

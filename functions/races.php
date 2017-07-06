@@ -189,11 +189,20 @@ function uci_results_get_race_results($race_id=0, $format='array') {
 	// add rider details //
 	foreach ($rider_ids as $id) :
 		$post=get_post($id);
+	
+		$country=wp_get_post_terms($id, 'country', array("fields" => "names"));
+	
+		if (isset($country[0])) :
+			$nat=$country[0];
+		else :
+			$nat='';
+		endif;
+			
 		$arr=array(
 			'ID' => $id,
 			'name' => $post->post_title,
 			'slug' => $post->post_name,
-			'nat' => wp_get_post_terms($id, 'country', array("fields" => "names"))[0],
+			'nat' => $nat,
 		);
 		
 		// add results cols //
