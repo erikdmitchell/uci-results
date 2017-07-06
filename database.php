@@ -223,7 +223,7 @@ function ucicurl_update_db_check() {
 		upgrade_1_0_0_db();		
 	elseif (get_option('ucicurl_db_version') < '1.2.0') :	
 		include_once(UCI_RESULTS_PATH.'updates/upgrade-1_2_0.php');
-		upgrade_1_2_0_db();	
+		$ucicurl_db_version=upgrade_1_2_0_db();	
 	elseif (get_option('ucicurl_db_version') != $ucicurl_db_version) :
 		$ucicurl_db_version=ucicurl_db_update();
 	endif;

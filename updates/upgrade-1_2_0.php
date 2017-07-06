@@ -10,7 +10,7 @@ function upgrade_1_2_0_db() {
 
 	$db_version='1.2.0';
 	
-	//upgrade_1_2_0_update_race_dates(); // convert _race_date to _race_start/_race_end - for stage race compatability
+	upgrade_1_2_0_update_race_dates(); // convert _race_date to _race_start/_race_end - for stage race compatability
 	upgrade_1_2_0_update_rider_results(); // migrate results to "new" format
 	
 	return $db_version;
@@ -33,6 +33,12 @@ function upgrade_1_2_0_update_race_dates() {
 	endforeach;	
 }
 
+/**
+ * upgrade_1_2_0_update_rider_results function.
+ * 
+ * @access public
+ * @return void
+ */
 function upgrade_1_2_0_update_rider_results() {
 	global $wpdb;
 
