@@ -193,6 +193,7 @@ function uci_results_get_race_results($race_id=0, $format='array') {
 			'ID' => $id,
 			'name' => $post->post_title,
 			'slug' => $post->post_name,
+			'nat' => wp_get_post_terms($id, 'country', array("fields" => "names"))[0],
 		);
 		
 		// add results cols //
