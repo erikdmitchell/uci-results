@@ -39,6 +39,7 @@ include_once(UCI_RESULTS_PATH.'admin/add-races.php'); // cURL and add races/resu
 include_once(UCI_RESULTS_PATH.'admin/rider-rankings.php'); // add and update rider rankings
 include_once(UCI_RESULTS_PATH.'admin/wp-cli.php'); // wp cli functions
 include_once(UCI_RESULTS_PATH.'admin/custom-columns.php'); // custom columns for our admin pages
+include_once(UCI_RESULTS_PATH.'admin/pcs.php'); // PCS parse funcs
 
 include_once(UCI_RESULTS_PATH.'lib/name-parser.php'); // a php nameparser
 include_once(UCI_RESULTS_PATH.'shortcode.php'); // our shortcodes

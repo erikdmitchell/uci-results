@@ -138,7 +138,7 @@ class UCIResultsRacesMetabox {
 	        'related' => '',
 	        'twitter' => '',
 	    );
- 
+
         foreach ($post_meta as $key => $value) :
 			$exp_key=explode('_', $key);
 
