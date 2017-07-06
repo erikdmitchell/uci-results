@@ -152,8 +152,13 @@ class UCIResultsRacesMetabox {
         
         <div class="uci-results-metabox">
 	        <div class="row">
-		        <label for="date"><?php _e('Date', 'uci-results'); ?></label>
-				<input type="text" id="date" name="race[date]" class="uci-results-datepicker date" value="<?php echo esc_attr($meta['date']); ?>" size="25" />
+		        <label for="start"><?php _e('Start Date', 'uci-results'); ?></label>
+				<input type="text" id="start" name="race[start]" class="uci-results-datepicker date" value="<?php echo esc_attr($meta['start']); ?>" size="25" />
+	        </div>
+	        
+	        <div class="row">
+		        <label for="end-date"><?php _e('End Date', 'uci-results'); ?></label>
+				<input type="text" id="end" name="race[end]" class="uci-results-datepicker date" value="<?php echo esc_attr($meta['end']); ?>" size="25" />
 	        </div>
 	                
 	        <div class="row">
@@ -184,76 +189,6 @@ class UCIResultsRacesMetabox {
         
         <?php
     }
+
 }
-
-
-/*
-function setup_race_meta_rest_api() {
-	register_api_field(
-		'races',
-    	'_race_date',
-		array(
-			'get_callback' => 'slug_get_race_meta',
-			'update_callback' => null,
-			'schema' => null,
-		)
-	);
-
-	register_api_field(
-		'races',
-    	'_race_winner',
-		array(
-			'get_callback' => 'slug_get_race_meta',
-			'update_callback' => null,
-			'schema' => null,
-		)
-	);
-	
-	register_api_field(
-		'races',
-    	'_race_week',
-		array(
-			'get_callback' => 'slug_get_race_meta',
-			'update_callback' => null,
-			'schema' => null,
-		)
-	);
-	
-	register_api_field(
-		'races',
-    	'_race_link',
-		array(
-			'get_callback' => 'slug_get_race_meta',
-			'update_callback' => null,
-			'schema' => null,
-		)
-	);
-	
-	register_api_field(
-		'races',
-    	'_race_related_races_id',
-		array(
-			'get_callback' => 'slug_get_race_meta',
-			'update_callback' => null,
-			'schema' => null,
-		)
-	);			
-
-	register_api_field(
-		'races',
-    	'_race_twitter',
-		array(
-			'get_callback' => 'slug_get_race_meta',
-			'update_callback' => null,
-			'schema' => null,
-		)
-	);
-}
-add_action('rest_api_init', 'setup_race_meta_rest_api');
-
-function slug_get_race_meta($object, $field_name, $request) {
-	return get_post_meta($object['id'], $field_name, true);
-}
-*/
-
 ?>
