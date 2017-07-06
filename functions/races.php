@@ -173,13 +173,19 @@ function uci_race_series($race_id=0) {
 	return $series;
 }
 
+/**
+ * uci_results_get_race_results function.
+ * 
+ * @access public
+ * @param int $race_id (default: 0)
+ * @param string $format (default: 'array')
+ * @return void
+ */
 function uci_results_get_race_results($race_id=0, $format='array') {
 	$riders=array();
 	$rider_ids=uci_race_results_rider_ids($race_id);
 	$cols=uci_race_results_columns($race_id);
-	
-echo '<pre>';
-print_r($cols);
+
 	// add rider details //
 	foreach ($rider_ids as $id) :
 		$post=get_post($id);
@@ -191,8 +197,7 @@ print_r($cols);
 		
 		// add results cols //
 		foreach ($cols as $col) :
-echo '_rider_'.$id.$col.'<br>';	
-			$arr[$col]=get_post_meta($race_id, '_rider_'.$id.$col, true);
+			$arr[$col]=get_post_meta($race_id, '_rider_'.$id.'_'.$col, true);
 		endforeach;
 		
 		$riders[]=$arr;
@@ -201,9 +206,6 @@ echo '_rider_'.$id.$col.'<br>';
 	if ($format=='object')
 		$riders=array_to_object($riders);
 
-print_r($riders);
-
-echo '</pre>';	
 	return $riders;
 }
 
