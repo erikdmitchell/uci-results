@@ -122,6 +122,22 @@ jQuery(document).ready(function($) {
 			$('.process-results #race-search-list').html(response); // add data
 		});
 	});
+	
+	$('#csv-data #add-results').on('click', function(e) {
+		e.preventDefault();	
+		
+		showLoader('#wpcontent');
+		
+		var data = {
+			'action' : 'csv_add_results',
+			'data' : $('#csv-data').serialize()
+		};
+
+		$.post(ajaxurl, data, function(url) {
+			hideLoader();		
+			window.location.replace(url);
+		});	
+	});
 		
 });
 

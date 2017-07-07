@@ -14,11 +14,11 @@ class UCIResultsAddRaces {
 	 */
 	public function __construct() {
 		add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
-		add_action('admin_init', array($this, 'add_csv_results_to_race'));
 		add_action('wp_ajax_get_race_data_non_db', array($this, 'ajax_get_race_data_non_db'));
 		add_action('wp_ajax_prepare_add_races_to_db', array($this, 'ajax_prepare_add_races_to_db'));
 		add_action('wp_ajax_add_race_to_db', array($this, 'ajax_add_race_to_db'));
 		add_action('wp_ajax_process_csv_results', array($this, 'ajax_process_results_csv'));
+		add_action('wp_ajax_csv_add_results', array($this, 'add_csv_results_to_race'));
 	}
 	
 	public function admin_scripts_styles() {
@@ -618,28 +618,34 @@ class UCIResultsAddRaces {
 		return 0;
 	}
 
-	public function add_race_results_to_db($race='') {
+	public function add_race_results_to_db($race='', $results='') {
 		if (empty($race))
 			return false;
+			
+		// use uci results as backup //
+		if (empty($results)) :
+			$uci_parse_results=new UCIParseResults();
+			$results=$uci_parse_results->get_stage_results($race);
+		endif;
 
-		$uci_parse_results=new UCIParseResults();
-		$results=$uci_parse_results->get_stage_results($race);
-
+		// insert rider results //
 		foreach ($results as $type => $result_list) :
 			// stage races offer all sorts of fun results //
-			if (is_string($type)) :
+			if (is_string($type)) :			
 				foreach ($result_list as $type_results_list) :
 					$this->insert_rider_result($type_results_list, $race, array('type' => $type));
 				endforeach;
 			else :
-				// basic results list, most likely single day //			
-				//$this->insert_rider_result($result_list);
+				// basic results list, most likely single day -- not tested //
+				$this->insert_rider_result($result_list, $race);
 			endif;
 
 		endforeach;
 
 		// update race results //
 		update_post_meta($race->race_id, '_races_results', 1);
+		
+		return;
 	}
 	
 	protected function insert_rider_result($result='', $race='', $args='') {
@@ -648,6 +654,9 @@ class UCIResultsAddRaces {
 			'insert' => true,
 		);
 		$args=wp_parse_args($args, $default_args);
+		
+		if (is_array($result))
+			$result=array_to_object($result);
 
 		// essentially converts our object to an array //			
 		foreach ($result as $key => $value) :
@@ -657,8 +666,14 @@ class UCIResultsAddRaces {
 		// filter value //
 		$meta_values=apply_filters('uci_results_insert_race_result_'.$race->discipline, $meta_values, $race, $args);
 	
-		// get rider id //	
-		$rider_id=$this->get_rider_id($result->name, $result->nat, $args['insert']);
+		// get rider id //
+		if (isset($result->nat)) :
+			$rider_nat=$result->nat;
+		else :
+			$rider_nat='';
+		endif;
+			
+		$rider_id=$this->get_rider_id($result->name, $rider_nat, $args['insert']);
 
 		// bail if no id //
 		if (empty($rider_id) || !$rider_id)
@@ -667,7 +682,7 @@ class UCIResultsAddRaces {
 		// bail on no meta values //
 		if (empty($meta_values) || $meta_values=='')
 			return;
-		
+
 		// input meta values //
 		foreach ($meta_values as $meta_key => $meta_value) :
 			$mk="_rider_".$rider_id."_".$meta_key;
@@ -842,12 +857,66 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function add_csv_results_to_race() {
-		if (!isset($_POST['uci_results']) || !wp_verify_nonce($_POST['uci_results'], 'add-csv-data'))
+		$this->deep_parse_str($_POST['data'], $formdata);
+
+		if (!isset($formdata['uci_results']) || !wp_verify_nonce($formdata['uci_results'], 'add-csv-data'))
 			return;
-			
-		$results=array_to_object($_POST['race']['results']);
 		
-		$this->insert_race_results($_POST['race']['race_id'], $results);
+		$results=array_to_object($formdata['race']['results']);
+		$race=get_post($formdata['race']['race_id']);
+		
+		$this->add_race_results_to_db($race, $results);
+		
+		echo admin_url('post.php?post='.$formdata['race']['race_id'].'&action=edit');
+		
+		wp_die();
+	}
+
+	/**
+	 * deep_parse_str function.
+	 * 
+	 * https://gist.github.com/rubo77/6821632
+	 *
+	 * @access public
+	 * @param mixed $string
+	 * @param mixed &$result
+	 * @return void
+	 */
+	public function deep_parse_str($string, &$result) {
+		if($string==='') return false;
+		$result = array();
+		// find the pairs "name=value"
+		$pairs = explode('&', $string);
+		foreach ($pairs as $pair) {
+			// use the original parse_str() on each element
+			parse_str($pair, $params);
+			$k=key($params);
+			if(!isset($result[$k])) $result+=$params;
+			else $result[$k] = $this->array_merge_recursive_distinct($result[$k], $params[$k]);
+		}
+		return true;
+	}
+
+	/**
+	 * array_merge_recursive_distinct function.
+	 * 
+	 * better recursive array merge function 
+	 *
+	 * @access public
+	 * @param array &$array1
+	 * @param array &$array2
+	 * @return void
+	 */
+	public function array_merge_recursive_distinct ( array &$array1, array &$array2 ){
+		$merged = $array1;
+		foreach ( $array2 as $key => &$value ) {
+			if ( is_array ( $value ) && isset ( $merged [$key] ) && is_array ( $merged [$key] ) ){
+			    $merged [$key] = $this->array_merge_recursive_distinct ( $merged [$key], $value );
+			} else {
+			    $merged [$key] = $value;
+			}
+		}
+		return $merged;
 	}
 
 }
