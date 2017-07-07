@@ -864,6 +864,7 @@ class UCIResultsAddRaces {
 		
 		$results=array_to_object($formdata['race']['results']);
 		$race=get_post($formdata['race']['race_id']);
+		$race->race_id=$race->ID;
 		
 		$this->add_race_results_to_db($race, $results);
 		
