@@ -1,10 +1,7 @@
 <div class="uci-results uci-results-api">
 
 	<h2>REST API</h2>
-<?php
-$pcs=new PCS();	
-$pcs->race_results('http://www.procyclingstats.com/race.php?id=171067');
-?>	
+	
 	<div class="examples">
 		<section>
 			<p>
