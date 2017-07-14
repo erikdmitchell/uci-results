@@ -445,4 +445,20 @@ function uci_get_race_id($slug='') {
 		
 	return false;
 }
+
+/**
+ * uci_get_race_discipline function.
+ * 
+ * @access public
+ * @param int $race_id (default: 0)
+ * @return void
+ */
+function uci_get_race_discipline($race_id=0) {
+	$disciplines=wp_get_post_terms($race_id, 'discipline');
+	
+	if (isset($disciplines[0]))
+		return $disciplines[0]->slug;
+		
+	return;
+}
 ?>
