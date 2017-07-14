@@ -686,8 +686,8 @@ class UCIResultsAddRaces {
 		// input meta values //
 		foreach ($meta_values as $meta_key => $meta_value) :
 			$mk="_rider_".$rider_id."_".$meta_key;
-echo $race->race_id." | $mk | $meta_value<br>";			
-			//update_post_meta($race->race_id, $mk, $meta_value);
+
+			update_post_meta($race->race_id, $mk, $meta_value);
 		endforeach;
 	}
 
