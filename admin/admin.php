@@ -22,9 +22,7 @@ class UCIResultsAdmin {
 		add_action('wp_ajax_show_related_races_box', array($this, 'ajax_show_related_races_box'));
 		add_action('wp_ajax_search_related_races', array($this, 'ajax_search_related_races'));
 		add_action('wp_ajax_add_related_races_to_race', array($this, 'ajax_add_related_races_to_race'));
-		add_action('wp_ajax_race_id_search', array($this, 'ajax_race_id_search'));
-
-		$this->setup_config();		
+		add_action('wp_ajax_race_id_search', array($this, 'ajax_race_id_search'));		
 	}
 
 	/**
@@ -75,7 +73,6 @@ class UCIResultsAdmin {
 	    add_submenu_page($parent_slug, 'Series', 'Series', $manage_options_cap, 'edit-tags.php?taxonomy=series&post_type=races');
 	    add_submenu_page($parent_slug, 'Season', 'Season', $manage_options_cap, 'edit-tags.php?taxonomy=season&post_type=races');
 	    add_submenu_page($parent_slug, 'Settings', 'Settings', $manage_options_cap, $parent_slug);
-	    add_submenu_page($parent_slug, 'Add Results', 'Add Results', $manage_options_cap, 'admin.php?page='.$parent_slug.'&subpage=results');
 	    add_submenu_page($parent_slug, 'Rider Rankings', 'Rider Rankings', $manage_options_cap, 'admin.php?page='.$parent_slug.'&subpage=rider-rankings');
 	    add_submenu_page($parent_slug, 'UCI Rankings', 'UCI Rankings', $manage_options_cap, 'admin.php?page='.$parent_slug.'&subpage=uci-rankings');
 	    add_submenu_page($parent_slug, 'API', 'API', $manage_options_cap, 'admin.php?page='.$parent_slug.'&subpage=api');
@@ -105,8 +102,6 @@ class UCIResultsAdmin {
 				case 'results':
 					if (isset($_GET['action']) && $_GET['action']=='add-csv') :
 						$html.=$this->get_admin_page('results-csv');
-					else :
-						$html.=$this->get_admin_page('results');
 					endif;
 					break;
 				case 'api':
@@ -161,33 +156,6 @@ class UCIResultsAdmin {
 		ob_end_clean();
 	
 		return $html;
-	}
-
-	/**
-	 * setup_config function.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function setup_config() {
-		$config['urls']=array(
-			'cross' => array(
-				'20162017' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=-1&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
-				'20152016' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=489&StartDateSort=20150830&EndDateSort=20160301&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
-				'20142015' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=487&StartDateSort=20140830&EndDateSort=20150809&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
-				'20132014' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=485&StartDateSort=20130907&EndDateSort=20140223&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
-				'20122013' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=483&StartDateSort=20120908&EndDateSort=20130224&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
-				'20112012' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=481&StartDateSort=20110910&EndDateSort=20120708&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
-				'20102011' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=479&StartDateSort=20100911&EndDateSort=20110220&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
-				'20092010' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=477&StartDateSort=20090913&EndDateSort=20100221&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
-				'20082009' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=306&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=475&StartDateSort=20080914&EndDateSort=20090222&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',
-			),
-			'road' => array(
-				'2017' => 'http://www.uci.infostradasports.com/asp/lib/TheASP.asp?PageID=19004&TaalCode=2&StyleID=0&SportID=102&CompetitionID=-1&EditionID=-1&EventID=-1&GenderID=1&ClassID=1&EventPhaseID=0&Phase1ID=0&Phase2ID=0&CompetitionCodeInv=1&PhaseStatusCode=262280&DerivedEventPhaseID=-1&SeasonID=492&StartDateSort=20161022&EndDateSort=20171024&Detail=1&DerivedCompetitionID=-1&S00=-3&S01=2&S02=1&PageNr0=-1&Cache=8',	
-			),
-		);
-
-		$this->config=json_decode(json_encode($config), FALSE); // convert to object and store
 	}
 
 	/**
@@ -539,33 +507,6 @@ class UCIResultsAdmin {
 		echo $html;
 		
 		wp_die();
-	}
-	
-	/**
-	 * race_urls_dropdown function.
-	 * 
-	 * @access public
-	 * @param string $name (default: 'season')
-	 * @param string $selected (default: '')
-	 * @return void
-	 */
-	public function race_urls_dropdown($name='season', $selected='') {
-		$html='';
-		
-		$html.='<select class="url-dd" id="'.$name.'" name="'.$name.'">';
-			$html.='<option value="0">Select Year</option>';
-			
-			foreach ($this->config->urls as $discipline => $discipline_urls) :
-				$html.='<option>'.$discipline.'</option>';
-				
-				foreach ($discipline_urls as $season => $url) :
-					$html.='<option value="'.$season.'" data-url="'.$url.'" data-season="'.$season.'" data-discipline="'.$discipline.'">&nbsp;&nbsp;&nbsp;'.$season.'</option>';
-				endforeach;
-				
-			endforeach;
-		$html.='</select>';
-						
-		echo $html;
 	}
 	
 }
