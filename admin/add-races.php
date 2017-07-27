@@ -629,17 +629,10 @@ class UCIResultsAddRaces {
 		endif;
 
 		// insert rider results //
-		foreach ($results as $type => $result_list) :
-			// stage races offer all sorts of fun results //
-			if (is_string($type)) :			
-				foreach ($result_list as $type_results_list) :
-					$this->insert_rider_result($type_results_list, $race, array('type' => $type));
-				endforeach;
-			else :
-				// basic results list, most likely single day -- not tested //
-				$this->insert_rider_result($result_list, $race);
-			endif;
-
+		foreach ($results as $type => $result_list) :			
+			foreach ($result_list as $type_results_list) :
+				$this->insert_rider_result($type_results_list, $race, array('type' => $type));
+			endforeach;
 		endforeach;
 
 		// update race results //
@@ -648,6 +641,15 @@ class UCIResultsAddRaces {
 		return;
 	}
 	
+	/**
+	 * insert_rider_result function.
+	 * 
+	 * @access protected
+	 * @param string $result (default: '')
+	 * @param string $race (default: '')
+	 * @param string $args (default: '')
+	 * @return void
+	 */
 	protected function insert_rider_result($result='', $race='', $args='') {
 		$meta_values=array();
 		$default_args=array(
@@ -660,7 +662,8 @@ class UCIResultsAddRaces {
 
 		// essentially converts our object to an array //			
 		foreach ($result as $key => $value) :
-			$meta_values[$key]=$value;
+			$_key=$args['type'].'_'.$key;
+			$meta_values[$_key]=$value;
 		endforeach;		
 
 		// filter value //
@@ -691,6 +694,15 @@ class UCIResultsAddRaces {
 		endforeach;
 	}
 
+	/**
+	 * get_rider_id function.
+	 * 
+	 * @access public
+	 * @param string $rider_name (default: '')
+	 * @param string $rider_country (default: '')
+	 * @param bool $insert (default: true)
+	 * @return void
+	 */
 	public function get_rider_id($rider_name='', $rider_country='', $insert=true) {
 		if (empty($rider_name))
 			return 0;
@@ -720,6 +732,12 @@ class UCIResultsAddRaces {
 		return $rider_id;			
 	}
 
+	/**
+	 * ajax_process_results_csv function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
 	public function ajax_process_results_csv() {
 		$form=array();
 	
@@ -820,7 +838,7 @@ class UCIResultsAddRaces {
 		$html='';
 		
 		$html.='<div class="race-info">';
-			$html.='<h4>'.get_the_title($arr['race_id']).' <span class="race-date">'.get_post_meta($arr['race_id'], '_race_date', true).'</span></h4>';
+			$html.='<h4>'.get_the_title($arr['race_id']).' <span class="race-date">'.get_post_meta($arr['race_id'], '_race_start', true).'</span></h4>';
 		$html.='</div>';		
 		
 		$html.='<table class="form-table">';
@@ -839,7 +857,7 @@ class UCIResultsAddRaces {
 			$html.='<tr>';
 				
 				foreach ($row as $key => $col) :
-					$html.='<td><input type="text" name="race[results]['.$row_counter.']['.$key.']" class="'.$key.'" value="'.$col.'" /></td>';
+					$html.='<td><input type="text" name="race[results][result]['.$row_counter.']['.$key.']" class="'.$key.'" value="'.$col.'" /></td>';
 				endforeach;
 				
 			$html.='</tr>';
@@ -865,9 +883,9 @@ class UCIResultsAddRaces {
 		$results=array_to_object($formdata['race']['results']);
 		$race=get_post($formdata['race']['race_id']);
 		$race->race_id=$race->ID;
-		$race->discipline=uci_get_race_discipline($race->ID);
+		$race->discipline=uci_get_race_discipline($race->ID);	
 		$this->add_race_results_to_db($race, $results);
-		
+	
 		echo admin_url('post.php?post='.$formdata['race']['race_id'].'&action=edit');
 		
 		wp_die();
