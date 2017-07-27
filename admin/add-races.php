@@ -29,13 +29,6 @@ class UCIResultsAddRaces {
 		wp_enqueue_script('uci-results-add-races-admin-script', UCI_RESULTS_ADMIN_URL.'js/add-races.js', array('uci-results-admin'), '0.1.0', true);
 	}
 
-	/**
-	 * build_race_code function.
-	 *
-	 * @access public
-	 * @param string $args (default: '')
-	 * @return void
-	 */
 	public function build_race_code($args='') {
 		$default=array(
 			'event' => '',
@@ -54,13 +47,6 @@ class UCIResultsAddRaces {
 		return $code;
 	}
 
-	/**
-	 * check_for_race_already_created function.
-	 *
-	 * @access public
-	 * @param string $args (default: '')
-	 * @return void
-	 */
 	public function check_for_race_already_created($args='') {
 		global $wpdb;
 
@@ -111,13 +97,6 @@ class UCIResultsAddRaces {
 		return false;
 	}
 
-	/**
-	 * reformat_date function.
-	 *
-	 * @access public
-	 * @param mixed $date
-	 * @return void
-	 */
 	public function reformat_date($date) {
 		$date = htmlentities($date, null, 'utf-8');
 		$date = str_replace("&nbsp;", "", $date);
@@ -134,28 +113,6 @@ class UCIResultsAddRaces {
 		$date="$year-$month-$day";
 
 		return $date;
-	}
-
-	/**
-	 * ajax_add_race_to_db function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function ajax_add_race_to_db() {
-		if (!$_POST['race'])
-			return false;
-
-		$code=$this->build_race_code($_POST['race']);
-
-		// add to db //
-		if ($this->check_for_dups($code) && $_POST['race']['single']) :
-			echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';			
-		else :
-			echo $this->add_race_to_db($_POST['race']);	
-		endif;
-
-		wp_die();
 	}
 
 	/**
@@ -200,69 +157,6 @@ class UCIResultsAddRaces {
 			$status=$race_data->winner.' wins '.$race_data->event.' ('.$race_data->class.') '.$twitter.' '.$url;
 			$uci_results_twitter->update_status($status);
 		endif;		
-	}
-	
-	/**
-	 * insert_race_into_db function.
-	 *
-	 * @access public
-	 * @param string $data (default: '')
-	 * @return void
-	 */
-	public function insert_race_into_db($data='') {
-		global $wpdb;
-
-		if (empty($data))
-			return false;
-			
-		$post_id=0;		
-		$race=$this->get_race_by_code($data->code);
-		$race_data=array(
-			'post_title' => $data->event,
-			'post_content' => '',
-			'post_status' => 'publish',	
-			'post_type' => 'races',
-			'post_name' => $data->code,	
-			'post_parent' => isset($data->parent) ? $data->parent : 0,		
-		);
-
-		// if race is null, add it, else update it //
-		if (!$race) :
-			$post_id=wp_insert_post($race_data);
-		else :
-			$race_data['ID']=$race->ID;
-		 	$post_id=wp_update_post($race_data);
-		endif;
-
-		// check for error //
-		if (is_wp_error($post_id))
-			return false;
-			
-		// update taxonomies //
-		wp_set_object_terms($post_id, $data->nat, 'country', false);
-		wp_set_object_terms($post_id, $data->class, 'race_class', false);
-		wp_set_object_terms($post_id, $data->season, 'season', false);
-		wp_set_object_terms($post_id, $data->discipline, 'discipline', false);
-		
-		// update meta //
-		update_post_meta($post_id, '_race_start', $data->start);
-		update_post_meta($post_id, '_race_end', $data->end);		
-		update_post_meta($post_id, '_race_winner', $data->winner);
-		update_post_meta($post_id, '_race_week', $data->week);
-		update_post_meta($post_id, '_race_link', $data->url);
-
-		return $post_id;
-	}
-	
-	protected function get_race_by_code($code='') {
-		global $wpdb;
-		
-		$post_id=$wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE post_name IN ('$code') AND post_type IN ('races')");
-		
-		if ($post_id===null || is_wp_error($post_id))
-			return false;
-			
-		return get_post($post_id);
 	}
 
 	/**
@@ -310,6 +204,14 @@ class UCIResultsAddRaces {
 		return 0;
 	}
 
+	/**
+	 * add_race_results_to_db function.
+	 * 
+	 * @access public
+	 * @param string $race (default: '')
+	 * @param string $results (default: '')
+	 * @return void
+	 */
 	public function add_race_results_to_db($race='', $results='') {
 		if (empty($race))
 			return false;
