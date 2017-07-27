@@ -216,7 +216,7 @@ class UCIResultsAddRaces {
 		if (empty($race))
 			return false;
 			
-		if (empty($results)) :
+		if (empty($results))
 			return false;
 
 		// insert rider results //
