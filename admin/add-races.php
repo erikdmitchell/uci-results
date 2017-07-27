@@ -14,11 +14,11 @@ class UCIResultsAddRaces {
 	 */
 	public function __construct() {
 		add_action('admin_enqueue_scripts', array($this, 'admin_scripts_styles'));
-		add_action('admin_init', array($this, 'add_csv_results_to_race'));
 		add_action('wp_ajax_get_race_data_non_db', array($this, 'ajax_get_race_data_non_db'));
 		add_action('wp_ajax_prepare_add_races_to_db', array($this, 'ajax_prepare_add_races_to_db'));
 		add_action('wp_ajax_add_race_to_db', array($this, 'ajax_add_race_to_db'));
 		add_action('wp_ajax_process_csv_results', array($this, 'ajax_process_results_csv'));
+		add_action('wp_ajax_csv_add_results', array($this, 'add_csv_results_to_race'));
 	}
 	
 	public function admin_scripts_styles() {
@@ -32,202 +32,54 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function ajax_get_race_data_non_db() {
-		$form=array();
-		
-		parse_str($_POST['form'], $form);
-
-		echo $this->get_race_data($form['season'], false, false, false, $form['discipline']);
+		echo $this->get_race_data(array(
+			'season' => $_POST['season'],
+			'discipline' => $_POST['discipline'],	
+		));
 
 		wp_die();
 	}
 
-	/**
-	 * get_url_page function.
-	 *
-	 * @access public
-	 * @param string $url (default: '')
-	 * @param int $timeout (default: 5)
-	 * @return void
-	 */
-	public function get_url_page($url='', $timeout=5) {
-		if (empty($url))
-			return false;
-
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-
-		$html=curl_exec($ch);
-
-		curl_close($ch);
-
-		return $html;
-	}
-
-	/**
-	 * get_html_table_rows function.
-	 *
-	 * @access public
-	 * @param string $html (default: '')
-	 * @param string $class_name (default: 'datatable')
-	 * @return void
-	 */
-	public function get_html_table_rows($html='', $class_name='datatable') {
-		if (empty($html))
-			return false;
-
-		// Create a DOM parser object
-		$dom = new DOMDocument();
-
-		// Parse HTML - The @ before the method call suppresses any warnings that loadHTML might throw because of invalid HTML in the page.
-		@$dom->loadHTML($html);
-
-		//discard white space
-		@$dom->preserveWhiteSpace = false;
-
-		$finder = new DomXPath($dom);
-
-		$nodes = $finder->query("//*[contains(@class, '$class_name')]");
-
-		if ($nodes->length==0)
-			return false;
-			//return '<div class="error">No rows (nodes) found. Check the url and the "races class name" ('.$class_name.').</div>';
-
-		$rows=$nodes->item(0)->getElementsByTagName('tr'); //get all rows from the table
-
-		return $rows;
-	}
-
-	/**
-	 * build_races_object_from_rows function.
-	 * 
-	 * @access public
-	 * @param string $args (default: '')
-	 * @return void
-	 */
-	public function build_races_object_from_rows($args='') {
+	public function get_race_data($args) {
+		global $uci_results_admin;
+		
 		$default_args=array(
-			'rows' => '',
 			'season' => false,
-			'limit' => false,
-			'discipline' => 'cyclocross'
+			'limit' => -1,
+			'raw' => false,
+			'discipline' => 'cyclocross',	
 		);
 		$args=wp_parse_args($args, $default_args);
-	
+		
 		extract($args);
-			
-		$races=array();
-		$races_obj=new stdClass();
-		$row_count=0;
-		$timeout=5;
-		$races_class_name='datatable';
-
-		// bail if no rows //
-		if (empty($rows))
-			return $races_obj;
-
-		// cycle through rows //
-		foreach ($rows as $row) :
-			if ($row_count!=0) :
-				$races[$row_count]=new stdClass();
-
-				// get columns (td) //
-			  $cols=$row->getElementsByTagName('td'); // get each column by tag name
-
-			  // get (results) link //
-			  $link=$this->alter_race_link($row->getElementsByTagName('a')->item(0)->getAttribute('href'));
-
-			  // check for multi day event //
-			  if ($days=$this->is_multi_day_race($cols->item(0)->nodeValue))
-			  	continue;
-
-				// use our cols to build out races object //
-				foreach ($cols as $key => $col) :
-					if ($key==0) {
-						$races[$row_count]->date=$this->reformat_date($col->nodeValue);
-					} else if ($key==1) {
-						$races[$row_count]->event=$col->nodeValue;
-					} else if ($key==2) {
-						$races[$row_count]->nat=$col->nodeValue;
-					} else if ($key==3) {
-						$races[$row_count]->class=$col->nodeValue;
-					} else if ($key==4) {
-						$races[$row_count]->winner=$col->nodeValue;
-					}
-				endforeach;
-
-				$races[$row_count]->link=$link;
-				$races[$row_count]->season=$season;
-				$races[$row_count]->discipline=$discipline;
-			endif;
-
-			// increase counter //
-			$row_count++;
-
-			// bail if we've reached our limit //
-			if ($limit > 0 && $row_count > $limit)
-				break;
-
-		endforeach;
-
-		// setup as object //
-		foreach ($races as $key => $value) :
-			if (empty($value))
-				continue;
-
-			$races_obj->$key=$value;
-		endforeach;
-
-		return $races_obj;
-	}
-
-	/**
-	 * get_race_data function.
-	 * 
-	 * @access public
-	 * @param bool $season (default: false)
-	 * @param bool $limit (default: false)
-	 * @param bool $raw (default: false)
-	 * @param bool $url (default: false)
-	 * @param string $discipline (default: 'cyclocross')
-	 * @return void
-	 */
-	public function get_race_data($season=false, $limit=false, $raw=false, $url=false, $discipline='cyclocross') {
-		global $uci_results_admin;
 		
 		set_time_limit(0); // mex ececution time
 
-		$races_class_name='datatable';
-		$timeout = 5;
-
-		// if no passed url, use config //
-		if (!$url && isset($uci_results_admin->config->urls->$season)) :		
-			$url=$uci_results_admin->config->urls->$season;
-		elseif (!$url) :
-			return false;
-		endif;
+		// if no passed url, use config // disabled bt EM
+		//if (!$url && isset($uci_results_admin->config->urls->$discipline->$season)) :		
+		$url=$uci_results_admin->config->urls->$discipline->$season;
+		//elseif (!$url) :
+			//return false;
+		//endif;
 
 		// check season //
 		if (!$season || empty($season))
 			return false;
-
-		$html=$this->get_url_page($url, $timeout); // get the html from the url
-		$rows=$this->get_html_table_rows($html, $races_class_name); // grab our rows via dom object
 		
-		// build our races object from rows
-		$races_obj=$this->build_races_object_from_rows(array(
-			'rows' => $rows,
-			'season' => $season, 
-			'limit' => $limit,
-			'discipline' => $discipline,
-		));
+		$uci_parse_results=new UCIParseResults();
+		$races=$uci_parse_results->get_races($url, $limit);
+		
+		// append data //
+		foreach ($races as $race) :
+			$race->discipline=$discipline;
+			$race->season=$season;
+		endforeach;
 
 		// return object if $raw is true //
 		if ($raw)
-			return $races_obj;
+			return $races;
 
-		return $this->build_default_race_table($races_obj);
+		return $this->build_default_race_table($races);
 	}
 
 	/**
@@ -258,12 +110,12 @@ class UCIResultsAddRaces {
 
 	/**
 	 * build_default_race_table function.
-	 *
+	 * 
 	 * @access public
-	 * @param mixed $obj
+	 * @param array $races (default: array())
 	 * @return void
 	 */
-	public function build_default_race_table($obj) {
+	public function build_default_race_table($races=array()) {
 		$html=null;
 
 		$html.='<form name="add-races-to-db" id="add-races-to-db" method="post">';
@@ -279,42 +131,27 @@ class UCIResultsAddRaces {
 				$html.='</thead>';
 				$html.='<tbody id="the-list">';
 
-					foreach ($obj as $result) :
+					foreach ($races as $race) :
 						$disabled='';
-						$date=$result->date;
-						$code=$this->build_race_code($result);
+						$code=$this->build_race_code($race);
 
-						// check we have event //
-						if (!isset($result->event)) :
-							$result->event=false;
+						// setup date //
+						if ($race->single) :
+							$date=$race->start;
 						else :
-							$event=$result->event;
+							$date=$race->start.' - '.$race->end;
 						endif;
-
-						// disable if no event (data error) //
-						if (!$result->date || !$result->event)
-							$disabled='disabled';
-
-						if (!$result->date)
-							$date='No Date';
-
-						if (!$result->event)
-							$event='No Event';
 
 						// if we already have results, bail. there are other check later, but this is a good helper //
 						if (uci_results_race_has_results($code))
 							$disabled='disabled';
 
 						$html.='<tr>';
-							$html.='<th scope="row" class="check-column"><input type="checkbox" name="races[]" value="'.base64_encode(serialize($result)).'" '.$disabled.'></th>';
+							$html.='<th scope="row" class="check-column"><input type="checkbox" name="races[]" value="'.base64_encode(serialize($race)).'" '.$disabled.'></th>';
 							$html.='<td class="race-date">'.$date.'</td>';
-							$html.='<td class="race-name">'.$event.'</td>';
-
-							if ($result->event) :
-								$html.='<td class="race-nat">'.$result->nat.'</td>';
-								$html.='<td class="race-class">'.$result->class.'</td>';
-							endif;
-
+							$html.='<td class="race-name">'.$race->event.'</td>';
+							$html.='<td class="race-nat">'.$race->nat.'</td>';
+							$html.='<td class="race-class">'.$race->class.'</td>';
 						$html.='</tr>';
 					endforeach;
 
@@ -348,7 +185,7 @@ class UCIResultsAddRaces {
 		if ($code_created)
 			return $code_created;
 
-		$code=$args['event'].$args['date']; // combine name and date
+		$code=$args['season'].'-'.$args['event']; // combine season and name
 		$code=sanitize_title_with_dashes($code); // https://codex.wordpress.org/Function_Reference/sanitize_title_with_dashes
 
 		return $code;
@@ -412,59 +249,6 @@ class UCIResultsAddRaces {
 	}
 
 	/**
-	 * is_race_empty function.
-	 *
-	 * @access public
-	 * @param string $id (default: 0)
-	 * @return void
-	 */
-	public function is_race_empty($id=0) {
-		global $wpdb;
-
-		$winner=get_post_meta($id, '_race_winner', true);	
-
-		if ($winner !== null || $winner != '')
-			return false;
-
-		return true;
-	}
-
-	/**
-	 * alter_race_link function.
-	 *
-	 * @access protected
-	 * @param mixed $link
-	 * @return void
-	 */
-	protected function alter_race_link($link) {
-		$final_url='http://www.uci.infostradasports.com/asp/lib/TheASP.asp?';
-		parse_str($link, $arr);
-
-		$final_url.='PageID=19006';
-		$final_url.='&SportID='.$arr['SportID'];
-		$final_url.='&CompetitionID='.$arr['CompetitionID'];
-		$final_url.='&EditionID='.$arr['EditionID'];
-		$final_url.='&SeasonID='.$arr['SeasonID'];
-		$final_url.='&ClassID='.$arr['ClassID'];
-		$final_url.='&GenderID='.$arr['GenderID'];
-		$final_url.='&EventID='.$arr['EventID'];
-		$final_url.='&EventPhaseID='.$arr['EventPhaseID'];
-		$final_url.='&Phase1ID='.$arr['Phase1ID'];
-		$final_url.='&Phase2ID=0';
-		$final_url.='&Phase3ID=0';
-		$final_url.='&PhaseClassificationID=-1';
-		$final_url.='&Detail='.$arr['Detail'];
-		//$final_url.='&Ranking='.$arr['Ranking']; -- causes an error
-		$final_url.='&All=0';
-		$final_url.='&TaalCode=2';
-		$final_url.='&StyleID=0';
-		$final_url.='&Cache=8';
-		$final_url.='&PageNr0=-1';
-
-		return $final_url;
-	}
-
-	/**
 	 * reformat_date function.
 	 *
 	 * @access public
@@ -522,10 +306,10 @@ class UCIResultsAddRaces {
 		$code=$this->build_race_code($_POST['race']);
 
 		// add to db //
-		if (!$this->check_for_dups($code)) :
-			echo $this->add_race_to_db($_POST['race']);
+		if ($this->check_for_dups($code) && $_POST['race']['single']) :
+			echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';			
 		else :
-			echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';
+			echo $this->add_race_to_db($_POST['race']);	
 		endif;
 
 		wp_die();
@@ -539,13 +323,11 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function check_for_dups($code='') {
-		global $wpdb;
-
 		$race=get_page_by_path($code, OBJECT, 'races');
 
 		// we have race, but make sure it's not empty ie we preloaded the race //
 		if ($race !== null) :
-			if (!$this->is_race_empty($race->ID)) :
+			if (!$this->has_results($race->ID)) :
 				return true;
 			else :
 				return false;
@@ -554,67 +336,34 @@ class UCIResultsAddRaces {
 
 		return false;
 	}
+	
+	public function has_results($id=0) {
+		if (get_post_meta($id, '_race_results', true) == 1)
+			return true;
+			
+		return false;
+	}
 
-	/**
-	 * add_race_to_db function.
-	 *
-	 * @access public
-	 * @param string $race_data (default: '')
-	 * @param bool $raw_response (default: false)
-	 * @return void
-	 */
-	public function add_race_to_db($race_data='', $raw_response=false) {
-		global $wpdb, $uci_results_twitter, $uci_results_pages;
+	public function add_race_to_db($race='', $raw_response=false) {
+		global $wpdb, $uci_results_pages;
 
-		$message=null;
-		$new_results=0;
+		$new_results=0; // WE NEED TO FIX THIS
 		
-		if (empty($race_data))
+		if (empty($race))
 			return false;
 
-		// convert to object //
-		if (!is_object($race_data))
-			$race_data=json_decode(json_encode($race_data),FALSE);
+		if (!is_object($race))
+			$race=array_to_object($race);
+			
+		// add race data //
+		$race->week=$this->get_race_week($race->end, $race->season);
+		$race->code=$this->build_race_code((array) $race);
 
-		// build data array .. -- if you change this, please change get_add_race_to_db()
-		$data=array(
-			'date' => $date = date('Y-m-d', strtotime($race_data->date)),
-			'event' => trim($race_data->event),
-			'nat' => $race_data->nat,
-			'class' => $race_data->class,
-			'winner' => $race_data->winner,
-			'season' => $race_data->season,
-			'link' => $race_data->link,
-			'code' => $this->build_race_code($race_data),
-			'week' => $this->get_race_week($race_data->date, $race_data->season),
-			'discipline' => $race_data->discipline,
-		);
-
-		if (!$this->check_for_dups($data['code'])) :		
-			if ($race_id=$this->insert_race_into_db($data)) :
-				$message='<div class="updated">Added '.$data['code'].' to database.</div>';
-				$new_results++;
-				$this->add_race_results_to_db($race_id, $race_data->link);
-
-				// update to twitter //
-				if (uci_results_post_results_to_twitter()) :
-					$url=get_permalink($uci_results_pages['single_race']).$data['code'];
-
-					// use twitter if we have it //
-					$twitter=uci_get_race_twitter($race_id);
-
-					if (!empty($twitter))
-						$twitter='@'.$twitter;
-
-					$status=$race_data->winner.' wins '.$race_data->event.' ('.$race_data->class.') '.$twitter.' '.$url;
-					$uci_results_twitter->update_status($status);
-				endif;
-			else :
-				$message='<div class="error">Unable to insert '.$data['code'].' into the database.</div>';
-			endif;
-
-		else :		
-			$message='<div class="updated">'.$data['code'].' is already in the database</div>';
+		// single race - or no //
+		if ($race->single) :
+			$message=$this->add_single_race($race);
+		else :
+			$message=$this->add_stage_race($race);
 		endif;
 
 		if ($raw_response)
@@ -623,38 +372,85 @@ class UCIResultsAddRaces {
 		return $message;
 	}
 	
+	protected function add_single_race($race='') {
+		echo "add single race\n";
+		if (!$this->check_for_dups($race->code)) :			
+			if ($race_id=$this->insert_race_into_db($race)) :
+				$message='<div class="updated">Added '.$race->code.' to database.</div>';
+				//$new_results++;
+				$this->add_race_results_to_db($race);
+				// update to twitter //
+			else :
+				$message='<div class="error">Unable to insert '.$race->code.' into the database.</div>';
+			endif;
+
+		else :		
+			$message='<div class="updated">'.$race->code.' is already in the database</div>';
+		endif;
+		
+		return $message;
+	}
+
+	protected function add_stage_race($race='') {
+		$message='';		
+		$parent_id=$this->add_stage_race_parent($race);
+
+		foreach ($race->stages as $stage) :
+			// add on info //
+			$stage->code=sanitize_title_with_dashes($stage->event);
+			$stage->parent=$parent_id;
+			$stage->nat=$race->nat;
+			$stage->class=$race->class;
+			$stage->season=$race->season;
+			$stage->discipline=$race->discipline;
+			$stage->start=$stage->date;
+			$stage->end=$stage->date;
+			$stage->week=$race->week;
+		
+			if (!$this->check_for_dups($stage->code)) :		
+				if ($race_id=$this->insert_race_into_db($stage)) :
+					$stage->race_id=$race_id;
+					$message.='<div class="updated">Added '.$race->code.' to database.</div>';
+					//$new_results++;
+					$this->add_race_results_to_db($stage);
+					// update to twitter //
+				else :
+					$message.='<div class="error">Unable to insert '.$race->code.' into the database.</div>';
+				endif;
+			else :		
+				$message.='<div class="updated">'.$race->code.' is already in the database</div>';
+			endif;		
+		endforeach;
+		
+		return $message;
+	}
+	
 	/**
-	 * get_add_race_to_db function.
+	 * add_stage_race_parent function.
 	 * 
-	 * @access public
-	 * @param string $race_data (default: '')
-	 * @param string $args (default: '')
+	 * @access protected
+	 * @param string $race (default: '')
 	 * @return void
 	 */
-	public function get_add_race_to_db($race_data='', $args='') {
-		global $wpdb, $uci_results_twitter, $uci_results_pages, $ucicurl_races;
-
-		$data=array();
-
-		// convert to object //
-		if (!is_object($race_data))
-			$race_data=json_decode(json_encode($race_data),FALSE);
-
-		// build race data array //
-		$data=array(
-			'date' => $date = date('Y-m-d', strtotime($race_data->date)),
-			'event' => $race_data->event,
-			'nat' => $race_data->nat,
-			'class' => $race_data->class,
-			'winner' => $race_data->winner,
-			'season' => $race_data->season,
-			'link' => $race_data->link,
-			'code' => $this->build_race_code($race_data),
-			'week' => $this->get_race_week($race_data->date, $race_data->season),
-			'discipline' => $race_data->discipline,
-		);
+	protected function add_stage_race_parent($race='') {	
+		$id=$this->insert_race_into_db($race);
 		
-		return $data;
+		return $id;
+	}
+	
+	protected function update_to_twitter() {
+		if (uci_results_post_results_to_twitter()) :
+			$url=get_permalink($uci_results_pages['single_race']).$data['code'];
+	
+			// use twitter if we have it //
+			$twitter=uci_get_race_twitter($race_id);
+	
+			if (!empty($twitter))
+				$twitter='@'.$twitter;
+	
+			$status=$race_data->winner.' wins '.$race_data->event.' ('.$race_data->class.') '.$twitter.' '.$url;
+			$uci_results_twitter->update_status($status);
+		endif;		
 	}
 	
 	/**
@@ -726,54 +522,69 @@ class UCIResultsAddRaces {
 
 		if (empty($data))
 			return false;
-		
-		$post_id=0;
-		$race=get_page_by_path($data['code'], OBJECT, 'races');
+			
+		$post_id=0;		
+		$race=$this->get_race_by_code($data->code);
 		$race_data=array(
-			'post_title' => $data['event'],
+			'post_title' => $data->event,
 			'post_content' => '',
 			'post_status' => 'publish',	
 			'post_type' => 'races',
-			'post_name' => $data['code'],			
+			'post_name' => $data->code,	
+			'post_parent' => isset($data->parent) ? $data->parent : 0,		
 		);
 
 		// if race is null, add it, else update it //
-		if ($race === null) :
+		if (!$race) :
 			$post_id=wp_insert_post($race_data);
 		else :
 			$race_data['ID']=$race->ID;
 		 	$post_id=wp_update_post($race_data);
-		endif;		
-		
+		endif;
+
 		// check for error //
 		if (is_wp_error($post_id))
 			return false;
 			
 		// update taxonomies //
-		wp_set_object_terms($post_id, $data['nat'], 'country', false);
-		wp_set_object_terms($post_id, $data['class'], 'race_class', false);
-		wp_set_object_terms($post_id, $data['season'], 'season', false);
-		wp_set_object_terms($post_id, $data['discipline'], 'discipline', false);
+		wp_set_object_terms($post_id, $data->nat, 'country', false);
+		wp_set_object_terms($post_id, $data->class, 'race_class', false);
+		wp_set_object_terms($post_id, $data->season, 'season', false);
+		wp_set_object_terms($post_id, $data->discipline, 'discipline', false);
 		
 		// update meta //
-		update_post_meta($post_id, '_race_date', $data['date']);
-		update_post_meta($post_id, '_race_winner', $data['winner']);
-		update_post_meta($post_id, '_race_week', $data['week']);
-		update_post_meta($post_id, '_race_link', $data['link']);
+		update_post_meta($post_id, '_race_start', $data->start);
+		update_post_meta($post_id, '_race_end', $data->end);		
+		update_post_meta($post_id, '_race_winner', $data->winner);
+		update_post_meta($post_id, '_race_week', $data->week);
+		update_post_meta($post_id, '_race_link', $data->url);
 
 		return $post_id;
+	}
+	
+	protected function get_race_by_code($code='') {
+		global $wpdb;
+		
+		$post_id=$wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE post_name IN ('$code') AND post_type IN ('races')");
+		
+		if ($post_id===null || is_wp_error($post_id))
+			return false;
+			
+		return get_post($post_id);
 	}
 
 	/**
 	 * get_race_week function.
-	 *
+	 * 
 	 * @access public
 	 * @param string $date (default: '')
-	 * @param mixed $season (default: )
+	 * @param string $season (default: '')
 	 * @return void
 	 */
 	public function get_race_week($date='', $season='') {
-		$season_weeks=uci_results_get_season_weeks($season);
+		global $uci_results_seasons;
+		
+		$season_weeks=$uci_results_seasons->get_season_weeks($season);
 
 		if (empty($season_weeks))
 			return 0;
@@ -807,62 +618,92 @@ class UCIResultsAddRaces {
 		return 0;
 	}
 
-	/**
-	 * add_race_results_to_db function.
-	 *
-	 * @access public
-	 * @param bool $race_id (default: 0)
-	 * @param bool $link (default: false)
-	 * @return void
-	 */
-	public function add_race_results_to_db($race_id=0, $link=false) {
-		if (!$race_id || !$link)
+	public function add_race_results_to_db($race='', $results='') {
+		if (empty($race))
 			return false;
+			
+		// use uci results as backup //
+		if (empty($results)) :
+			$uci_parse_results=new UCIParseResults();
+			$results=$uci_parse_results->get_stage_results($race);
+		endif;
 
-		$race_results=$this->get_race_results($link);
+		// insert rider results //
+		foreach ($results as $type => $result_list) :			
+			foreach ($result_list as $type_results_list) :
+				$this->insert_rider_result($type_results_list, $race, array('type' => $type));
+			endforeach;
+		endforeach;
 
-		$this->insert_race_results($race_id, $race_results);
+		// update race results //
+		update_post_meta($race->race_id, '_races_results', 1);
+		
+		return;
 	}
 	
 	/**
-	 * insert_race_results function.
+	 * insert_rider_result function.
 	 * 
 	 * @access protected
-	 * @param string $race_id (default: '')
-	 * @param string $race_results (default: '')
+	 * @param string $result (default: '')
+	 * @param string $race (default: '')
+	 * @param string $args (default: '')
 	 * @return void
 	 */
-	protected function insert_race_results($race_id='', $race_results='') {
-		if (empty($race_id) || empty($race_results))
+	protected function insert_rider_result($result='', $race='', $args='') {
+		$meta_values=array();
+		$default_args=array(
+			'insert' => true,
+		);
+		$args=wp_parse_args($args, $default_args);
+		
+		if (is_array($result))
+			$result=array_to_object($result);
+
+		// essentially converts our object to an array //			
+		foreach ($result as $key => $value) :
+			$_key=$args['type'].'_'.$key;
+			$meta_values[$_key]=$value;
+		endforeach;		
+
+		// filter value //
+		$meta_values=apply_filters('uci_results_insert_race_result_'.$race->discipline, $meta_values, $race, $args);
+	
+		// get rider id //
+		if (isset($result->nat)) :
+			$rider_nat=$result->nat;
+		else :
+			$rider_nat='';
+		endif;
+			
+		$rider_id=$this->get_rider_id($result->name, $rider_nat, $args['insert']);
+
+		// bail if no id //
+		if (empty($rider_id) || !$rider_id)
 			return;
 			
-		$discipline=strtolower(uci_get_first_term($race_id, 'discipline'));
+		// bail on no meta values //
+		if (empty($meta_values) || $meta_values=='')
+			return;
 
-		foreach ($race_results as $result) :
-			$meta_value=array();
-			$rider_id=$this->insert_race_results_rider_id($result->name, $result->nat);
+		// input meta values //
+		foreach ($meta_values as $meta_key => $meta_value) :
+			$mk="_rider_".$rider_id."_".$meta_key;
 
-			// essentially converts our object to an array //			
-			foreach ($result as $key => $value) :
-				$meta_value[$key]=$value;
-			endforeach;
-
-			// filter value //
-			$meta_value=apply_filters('uci_results_insert_race_result_'.$discipline, $meta_value, $race_id, $result, $rider_id);			
-
-			update_post_meta($race_id, "_rider_$rider_id", $meta_value);
-		endforeach;			
+			update_post_meta($race->race_id, $mk, $meta_value);
+		endforeach;
 	}
-	
+
 	/**
-	 * insert_race_results_rider_id function.
+	 * get_rider_id function.
 	 * 
-	 * @access protected
+	 * @access public
 	 * @param string $rider_name (default: '')
 	 * @param string $rider_country (default: '')
+	 * @param bool $insert (default: true)
 	 * @return void
 	 */
-	protected function insert_race_results_rider_id($rider_name='', $rider_country='') {
+	public function get_rider_id($rider_name='', $rider_country='', $insert=true) {
 		if (empty($rider_name))
 			return 0;
 			
@@ -870,16 +711,20 @@ class UCIResultsAddRaces {
 
 		// check if we have a rider id, otherwise create one //
 		if ($rider===null || empty($rider->ID)) :
-			$rider_insert=array(
-				'post_title' => $rider_name,
-				'post_content' => '',
-				'post_status' => 'publish',	
-				'post_type' => 'riders',
-				'post_name' => sanitize_title_with_dashes($rider_name)
-			);
-			$rider_id=wp_insert_post($rider_insert);
-			
-			wp_set_object_terms($rider_id, $rider_country, 'country', false);
+			if ($insert) :
+				$rider_insert=array(
+					'post_title' => $rider_name,
+					'post_content' => '',
+					'post_status' => 'publish',	
+					'post_type' => 'riders',
+					'post_name' => sanitize_title_with_dashes($rider_name)
+				);
+				$rider_id=wp_insert_post($rider_insert);
+				
+				wp_set_object_terms($rider_id, $rider_country, 'country', false);
+			else :
+				$rider_id=0;
+			endif;
 		else :
 			$rider_id=$rider->ID;
 		endif;
@@ -888,97 +733,11 @@ class UCIResultsAddRaces {
 	}
 
 	/**
-	 * get_race_results function.
-	 *
+	 * ajax_process_results_csv function.
+	 * 
 	 * @access public
-	 * @param mixed $url
 	 * @return void
 	 */
-	public function get_race_results($url) {
-		// Use the Curl extension to query Google and get back a page of results
-		$timeout = 5;
-		$race_results=array();
-		$race_results_obj=new stdClass();
-		$results_class_name="datatable";
-		//$race_results_row_arr=array('place', 'name', 'nat', 'age', 'result', 'par', 'pcr');
-
-		// get header so that we can get the charset ? //
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-		//$html = curl_exec_utf8($ch); // external function in this file //
-		$html=curl_exec($ch);
-		curl_close($ch);
-
-		// modify html //
-		$html=preg_replace('/<script\b[^>]*>(.*?)<\/script>/is',"",$html); // remove js
-
-		// Create a DOM parser object
-		$dom = new DOMDocument();
-
-		// Parse HTML - The @ before the method call suppresses any warnings that loadHTML might throw because of invalid HTML in the page.
-		@$dom->loadHTML($html);
-
-		//discard white space
-		$dom->preserveWhiteSpace = false;
-
-		// get our results table //
-		$finder = new DomXPath($dom);
-
-		$nodes = $finder->query("//*[contains(@class, '$results_class_name')]");
-
-		// if for some reason we can't find that class, we bail and return an empty object //
-		if ($nodes->length==0)
-			return new stdClass();
-
-		// get all rows from the table //
-		$rows=$nodes->item(0)->getElementsByTagName('tr');
-
-		// get header row //
-		$header_row=$rows->item(0); //->getElementsByTagName('tr'); //get all rows from the table
-		$header_cols=$header_row->getElementsByTagName('td');
-		$header_arr=array();
-
-		foreach ($header_cols as $col) :
-			$col_value=preg_replace("/[^A-Za-z0-9 ]/", '', $col->nodeValue); // remove non alpha chars
-			$col_value=strtolower($col_value); // make lowercase
-
-			$header_arr[]=$col_value;
-		endforeach;
-
-		// build our rows (results) //
-		foreach ($rows as $row_key => $row) :
-			// skip header row (first) //
-			if ($row_key==0)
-				continue;
-
-			// process row //
-			$race_results[$row_key]=new stdClass();
-			$cols=$row->getElementsByTagName('td'); 	// get each column by tag name
-			$col_values=array();
-
-			// get col values //
-			foreach ($cols as $key => $col) :
-		  		$col_values[]=$col->nodeValue;
-		  	endforeach;
-
-		  	// make our results row array w/ header as key(s) //
-		  	$race_results[$row_key]=array_combine($header_arr, $col_values);
-
-		  	// we need to make one swap - rank/place //
-		  	$race_results[$row_key]['place']=$race_results[$row_key]['rank'];
-		  	unset($race_results[$row_key]['rank']);
-		endforeach;
-
-		// convert everything to an object //
-		foreach ($race_results as $key => $value) :
-			$race_results_obj->$key=(object) $value;
-		endforeach;
-
-		return $race_results_obj;
-	}
-
 	public function ajax_process_results_csv() {
 		$form=array();
 	
@@ -1079,7 +838,7 @@ class UCIResultsAddRaces {
 		$html='';
 		
 		$html.='<div class="race-info">';
-			$html.='<h4>'.get_the_title($arr['race_id']).' <span class="race-date">'.get_post_meta($arr['race_id'], '_race_date', true).'</span></h4>';
+			$html.='<h4>'.get_the_title($arr['race_id']).' <span class="race-date">'.get_post_meta($arr['race_id'], '_race_start', true).'</span></h4>';
 		$html.='</div>';		
 		
 		$html.='<table class="form-table">';
@@ -1098,7 +857,7 @@ class UCIResultsAddRaces {
 			$html.='<tr>';
 				
 				foreach ($row as $key => $col) :
-					$html.='<td><input type="text" name="race[results]['.$row_counter.']['.$key.']" class="'.$key.'" value="'.$col.'" /></td>';
+					$html.='<td><input type="text" name="race[results][result]['.$row_counter.']['.$key.']" class="'.$key.'" value="'.$col.'" /></td>';
 				endforeach;
 				
 			$html.='</tr>';
@@ -1116,12 +875,67 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function add_csv_results_to_race() {
-		if (!isset($_POST['uci_results']) || !wp_verify_nonce($_POST['uci_results'], 'add-csv-data'))
+		$this->deep_parse_str($_POST['data'], $formdata);
+
+		if (!isset($formdata['uci_results']) || !wp_verify_nonce($formdata['uci_results'], 'add-csv-data'))
 			return;
-			
-		$results=array_to_object($_POST['race']['results']);
 		
-		$this->insert_race_results($_POST['race']['race_id'], $results);
+		$results=array_to_object($formdata['race']['results']);
+		$race=get_post($formdata['race']['race_id']);
+		$race->race_id=$race->ID;
+		$race->discipline=uci_get_race_discipline($race->ID);	
+		$this->add_race_results_to_db($race, $results);
+	
+		echo admin_url('post.php?post='.$formdata['race']['race_id'].'&action=edit');
+		
+		wp_die();
+	}
+
+	/**
+	 * deep_parse_str function.
+	 * 
+	 * https://gist.github.com/rubo77/6821632
+	 *
+	 * @access public
+	 * @param mixed $string
+	 * @param mixed &$result
+	 * @return void
+	 */
+	public function deep_parse_str($string, &$result) {
+		if($string==='') return false;
+		$result = array();
+		// find the pairs "name=value"
+		$pairs = explode('&', $string);
+		foreach ($pairs as $pair) {
+			// use the original parse_str() on each element
+			parse_str($pair, $params);
+			$k=key($params);
+			if(!isset($result[$k])) $result+=$params;
+			else $result[$k] = $this->array_merge_recursive_distinct($result[$k], $params[$k]);
+		}
+		return true;
+	}
+
+	/**
+	 * array_merge_recursive_distinct function.
+	 * 
+	 * better recursive array merge function 
+	 *
+	 * @access public
+	 * @param array &$array1
+	 * @param array &$array2
+	 * @return void
+	 */
+	public function array_merge_recursive_distinct ( array &$array1, array &$array2 ){
+		$merged = $array1;
+		foreach ( $array2 as $key => &$value ) {
+			if ( is_array ( $value ) && isset ( $merged [$key] ) && is_array ( $merged [$key] ) ){
+			    $merged [$key] = $this->array_merge_recursive_distinct ( $merged [$key], $value );
+			} else {
+			    $merged [$key] = $value;
+			}
+		}
+		return $merged;
 	}
 
 }

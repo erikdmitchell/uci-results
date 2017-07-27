@@ -24,7 +24,7 @@ if (empty($race_id) && isset($_GET['race_id']))
 						<label for="race-id">Race ID</label>
 					</th>
 					<td>
-						<input type="text" name="race_id" id="race-id" class="small-text" value="<?php echo $race_id ?>" />
+						<input type="text" name="race_id" id="race-id" class="regular-text" value="<?php echo $race_id ?>" />
 						<p>
 							<input type="text" name="_race_search" id="race-search" class="regular-text" value="" placeholder="Enter Race Name to Find ID" />
 							<div id="race-search-list"></div>
@@ -41,6 +41,8 @@ if (empty($race_id) && isset($_GET['race_id']))
 						<input type="button" name="button" id="add-file" class="button button-secondary" value="Add File" />
 					</td>
 				</tr>				
+				
+				<?php do_action('uci_results_process_results_admin_table'); ?>				
 				
 			</tbody>
 		</table>

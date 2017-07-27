@@ -34,8 +34,16 @@ function rest_prepare_riders($response, $post, $request) {
 	global $uci_riders, $uci_rankings;
 	
 	// append results if need be //
-	if ($request['results'])
-		$response->data['results']=uci_results_get_rider_results(array('rider_id' => $post->ID));
+	if ($request['results']) :
+		$args=array('rider_id' => $post->ID);
+		
+		if (isset($request['start_date']) && isset($request['end_date'])) :
+			$args['start_date']=$request['start_date'];
+			$args['end_date']=$request['end_date'];			
+		endif;
+		
+		$response->data['results']=uci_results_get_rider_results($args);
+	endif;
 		
 	// append last race results if need be //
 	if ($request['lastrace'])

@@ -179,6 +179,26 @@
 				http://uci.dev/wp-json/uci/v1/season/{ID}
 			</code>
 		</section>
+
+		<section>
+			<h3>UCI Rankings</h3>
+
+			<p>
+				Last Update:
+			</p>
+			
+			<code>
+				http://uci.dev/wp-json/uci/v1/uci-rankings/last-update
+			</code>
+			
+			<p>
+				Get rider rank:
+			</p>
+			
+			<code>
+				http://uci.dev/wp-json/uci/v1/uci-rankings/{ID}
+			</code>
+		</section>
 		
 	</div>
 

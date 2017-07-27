@@ -23,6 +23,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 *
 	 * @subcommand add-races
 	*/
+/*
 	public function add_races($args, $assoc_args) {
 		global $uci_results_automation;
 
@@ -44,6 +45,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 	
 		WP_CLI::success("All done!");
 	}
+*/
 
 	/**
 	 * Update rider rankings in a season
@@ -59,6 +61,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 *
 	 * @subcommand update-rider-rankings
 	*/
+/*
 	public function update_rider_rankings($args, $assoc_args) {
 		global $uci_results_automation;
 
@@ -80,6 +83,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 
 		WP_CLI::success('Update rider rankings complete');
 	}
+*/
 	
 	/**
 	 * Update series overall rankings
@@ -98,6 +102,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 *
 	 * @subcommand series-overall
 	*/
+/*
 	public function update_series_overall($args, $assoc_args) {
 		global $wpdb, $uci_results_rider_rankings;
 
@@ -173,6 +178,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 
 		WP_CLI::success('Update series overall complete');
 	}
+*/
 
 	/**
 	 * Displays a list of seasons with results in db
@@ -243,6 +249,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 *
 	 * @subcommand get-race-data
 	*/
+/*
 	public function get_race_data($args, $assoc_args) {
 		global $wpdb, $uci_results_add_races, $uci_results_admin;
 
@@ -330,7 +337,120 @@ class UCIResultsCLI extends WP_CLI_Command {
 
 		WP_CLI::success("All done!");
 	}
+*/
+
+	/**
+	 * Add race results to db
+	 *
+	 * ## OPTIONS
+	 *
+	 * <discipline>
+	 * : the discipline
+	 *
+	 * <season>
+	 * : the season
+	 *
+	 * [--limit=<limt>]
+	 * : Number of races
+	 *
+	 * ## EXAMPLES
+	 *
+	 * wp uciresults add-races-results road 2017 --limit=20
+	 *
+	 * @subcommand add-races-results
+	*/
+/*
+	public function add_races_results($args, $assoc_args) {
+		global $uci_results_add_races;
+
+		$discipline='';
+		$season='';
+		$limit=-1;
+
+		// set our discipline //
+		if (isset($args[0]) || isset($assoc_args['discipline'])) :
+			if (isset($args[0])) :
+				$discipline=$args[0];
+			elseif (isset($assoc_args['discipline'])) :
+				$discipline=$assoc_args['discipline'];
+			endif;
+		endif;
+
+		// set season //
+		if (isset($args[1]) || isset($assoc_args['season'])) :
+			if (isset($args[1])) :
+				$season=$args[1];
+			elseif (isset($assoc_args['season'])) :
+				$season=$assoc_args['season'];
+			endif;
+		endif;
+
+		// set our limit (optional) //
+		if (isset($assoc_args['limit']))
+			$limit=$assoc_args['limit'];
 			
+		if (!$discipline || $discipline=='')
+			WP_CLI::error('No discipline found.');
+
+		if (!$season || $season=='')
+			WP_CLI::error('No season found.');			
+			
+		$races=$uci_results_add_races->get_race_data(array(
+			'season' => $season,
+			'limit' => $limit,
+			'raw' => true,
+			'discipline' => $discipline,	
+		));
+
+		foreach ($races as $race) :
+			$code=$uci_results_add_races->build_race_code($race);
+			$race_encoded=json_encode($race);
+
+			if ($uci_results_add_races->check_for_dups($code) && $race->single) :
+				//echo '<div class="updated add-race-to-db-message">Already in db. ('.$code.')</div>';			
+				echo "in db - disp message\n";		
+			else :
+				echo "add to db via other command (wp cli)\n";
+				echo $race->event."\n";
+				echo json_encode($race)."\n";	
+				//echo $uci_results_add_races->add_race_to_db($_POST['race']);	
+			endif;
+		endforeach;
+		
+		WP_CLI::success('Add race results complete.');
+	}
+*/
+
+	/**
+	 * Add race results to db
+	 *
+	 * ## OPTIONS
+	 *
+	 * <race>
+	 * : race in json format
+	 *
+	 * ## EXAMPLES
+	 *
+	 * wp uciresults add-race-results '{"date":"10 Jun-18 Jun 2017","url":"http:\/\/www.uci.infostradasports.com\/asp\/redirect\/uci.asp?Page=resultoverview&SportID=102&CompetitionID=20583&CompetitionCodeInv=1&EditionID=1628203&SeasonID=492&EventID=12146&EventPhaseID=1628237&GenderID=1&ClassID=1&Phase1ID=-1&Detail=1&DerivedEventPhaseID=-1&Ranking=0","event":"Tour de Suisse","nat":"SUI","class":"UWT","winner":"\u0160PILAK (SLO)","single":0,"start":"10 Jun 2017","end":"18 Jun 2017","stages":[{"date":"10 Jun 2017","event":"Stage 1 (ITT)","winner":"DENNIS (AUS)","url":"http:\/\/www.uci.infostradasports.com\/asp\/redirect\/uci.asp?Page=result&SportID=102&CompetitionID=20583&CompetitionCodeInv=1&EditionID=1628203&SeasonID=492&EventID=12146&GenderID=1&ClassID=1&Phase1ID=1628511&Phase2ID=0&Phase3ID=0&DerivedEventPhaseID=-1&Detail=1&Ranking=0"},{"date":"11 Jun 2017","event":"Stage 2","winner":"GILBERT (BEL)","url":"http:\/\/www.uci.infostradasports.com\/asp\/redirect\/uci.asp?Page=result&SportID=102&CompetitionID=20583&CompetitionCodeInv=1&EditionID=1628203&SeasonID=492&EventID=12146&GenderID=1&ClassID=1&Phase1ID=1628512&Phase2ID=0&Phase3ID=0&DerivedEventPhaseID=-1&Detail=1&Ranking=0"},{"date":"12 Jun 2017","event":"Stage 3","winner":"MATTHEWS (AUS)","url":"http:\/\/www.uci.infostradasports.com\/asp\/redirect\/uci.asp?Page=result&SportID=102&CompetitionID=20583&CompetitionCodeInv=1&EditionID=1628203&SeasonID=492&EventID=12146&GenderID=1&ClassID=1&Phase1ID=1628513&Phase2ID=0&Phase3ID=0&DerivedEventPhaseID=-1&Detail=1&Ranking=0"},{"date":"13 Jun 2017","event":"Stage 4","winner":"WARBASSE (USA)","url":"http:\/\/www.uci.infostradasports.com\/asp\/redirect\/uci.asp?Page=result&SportID=102&CompetitionID=20583&CompetitionCodeInv=1&EditionID=1628203&SeasonID=492&EventID=12146&GenderID=1&ClassID=1&Phase1ID=1628514&Phase2ID=0&Phase3ID=0&DerivedEventPhaseID=-1&Detail=1&Ranking=0"},{"date":"14 Jun 2017","event":"Stage 5","winner":"SAGAN (SVK)","url":"http:\/\/www.uci.infostradasports.com\/asp\/redirect\/uci.asp?Page=result&SportID=102&CompetitionID=20583&CompetitionCodeInv=1&EditionID=1628203&SeasonID=492&EventID=12146&GenderID=1&ClassID=1&Phase1ID=1628515&Phase2ID=0&Phase3ID=0&DerivedEventPhaseID=-1&Detail=1&Ranking=0"},{"date":"15 Jun 2017","event":"Stage 6","winner":"POZZOVIVO (ITA)","url":"http:\/\/www.uci.infostradasports.com\/asp\/redirect\/uci.asp?Page=result&SportID=102&CompetitionID=20583&CompetitionCodeInv=1&EditionID=1628203&SeasonID=492&EventID=12146&GenderID=1&ClassID=1&Phase1ID=1628516&Phase2ID=0&Phase3ID=0&DerivedEventPhaseID=-1&Detail=1&Ranking=0"},{"date":"16 Jun 2017","event":"Stage 7","winner":"\u0160PILAK (SLO)","url":"http:\/\/www.uci.infostradasports.com\/asp\/redirect\/uci.asp?Page=result&SportID=102&CompetitionID=20583&CompetitionCodeInv=1&EditionID=1628203&SeasonID=492&EventID=12146&GenderID=1&ClassID=1&Phase1ID=1628517&Phase2ID=0&Phase3ID=0&DerivedEventPhaseID=-1&Detail=1&Ranking=0"},{"date":"17 Jun 2017","event":"Stage 8","winner":"SAGAN (SVK)","url":"http:\/\/www.uci.infostradasports.com\/asp\/redirect\/uci.asp?Page=result&SportID=102&CompetitionID=20583&CompetitionCodeInv=1&EditionID=1628203&SeasonID=492&EventID=12146&GenderID=1&ClassID=1&Phase1ID=1628518&Phase2ID=0&Phase3ID=0&DerivedEventPhaseID=-1&Detail=1&Ranking=0"},{"date":"18 Jun 2017","event":"Stage 9 (ITT)","winner":"DENNIS (AUS)","url":"http:\/\/www.uci.infostradasports.com\/asp\/redirect\/uci.asp?Page=result&SportID=102&CompetitionID=20583&CompetitionCodeInv=1&EditionID=1628203&SeasonID=492&EventID=12146&GenderID=1&ClassID=1&Phase1ID=1628519&Phase2ID=0&Phase3ID=0&DerivedEventPhaseID=-1&Detail=1&Ranking=0"}],"discipline":"road","season":"2017"}'
+	 *
+	 * @subcommand add-race-results
+	*/
+/*
+	public function add_race_results($args, $assoc_args) {
+		global $uci_results_add_races;
+		
+		$value = WP_CLI::get_value_from_arg_or_stdin($args, 0);
+		$value = WP_CLI::read_value($value, $assoc_args);
+		$race=json_decode($value);
+
+		$output=$uci_results_add_races->add_race_to_db($race);
+		
+		WP_CLI::log(strip_tags($output));
+		
+		WP_CLI::success('add_race_results complete.');
+	}
+*/
+		
 }
 
 WP_CLI::add_command('uciresults', 'UCIResultsCLI');

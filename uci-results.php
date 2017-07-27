@@ -19,6 +19,7 @@ include_once(UCI_RESULTS_PATH.'classes/riders.php'); // our riders functions
 include_once(UCI_RESULTS_PATH.'classes/rider-rankings-query.php'); // rider rankings query class
 include_once(UCI_RESULTS_PATH.'classes/seasons.php');
 include_once(UCI_RESULTS_PATH.'classes/uci-rankings.php');
+include_once(UCI_RESULTS_PATH.'classes/uci-parse-results.php'); // parses our races from uci site
 
 include_once(UCI_RESULTS_PATH.'database.php'); // sets up our db tables
 include_once(UCI_RESULTS_PATH.'functions/ajax.php'); // ajax functions
@@ -38,8 +39,6 @@ include_once(UCI_RESULTS_PATH.'admin/add-races.php'); // cURL and add races/resu
 include_once(UCI_RESULTS_PATH.'admin/rider-rankings.php'); // add and update rider rankings
 include_once(UCI_RESULTS_PATH.'admin/wp-cli.php'); // wp cli functions
 include_once(UCI_RESULTS_PATH.'admin/custom-columns.php'); // custom columns for our admin pages
-include_once(UCI_RESULTS_PATH.'admin/race-results-meta.php'); // customize results meta before processing
-include_once(UCI_RESULTS_PATH.'admin/race-results-metabox-filters.php'); // customize races mteabox output
 
 include_once(UCI_RESULTS_PATH.'lib/name-parser.php'); // a php nameparser
 include_once(UCI_RESULTS_PATH.'shortcode.php'); // our shortcodes
@@ -59,6 +58,9 @@ include_once(UCI_RESULTS_PATH.'inc/updater.php'); // github - wp version update 
 include_once(UCI_RESULTS_PATH.'stats/base.php'); // base stats class
 include_once(UCI_RESULTS_PATH.'stats/init.php'); // init class
 include_once(UCI_RESULTS_PATH.'stats/cross.php'); // cross stats class
+
+// discipline classes //
+include_once(UCI_RESULTS_PATH.'disciplines/base.php');
 
 /**
  * is_uci_results_active function.

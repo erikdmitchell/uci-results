@@ -111,7 +111,8 @@ class UCIRankings {
 		$this->insert_rankings_into_db($data);
 		
 		// update our option so we know we have a ranking change //
-		update_option('fc_uci_rankings_last_update', $date);
+		$update_date=$date.' '.date('H:i:s');
+		update_option('uci_rankings_last_update', $update_date);
 		$this->last_update=$date;
 		
 		return true;
@@ -160,7 +161,8 @@ class UCIRankings {
 			// skip if no name //
 			if ($arr['name']=='')
 				continue;
-			
+				
+			// check if this entry exists and pull ID so we can update //
 			$id=$wpdb->get_var("SELECT id FROM ".$this->table_name." WHERE name = \"".$arr['name']."\" AND date = '".$arr['date']."'");
 			
 			if ($id !== null) :
@@ -215,43 +217,6 @@ class UCIRankings {
 		$html.='<a class="button add-rider-rankings" href="">Add Rider Rankings</a>';
 		
 		if ($echo)
-			echo $html;
-			
-		return $html;
-	}
-	
-	/**
-	 * rankings_list_dropdown function.
-	 * 
-	 * @access public
-	 * @param string $args (default: '')
-	 * @return void
-	 */
-	public function rankings_list_dropdown($args='') {
-		$default_args=array(
-			'echo' => true,
-			'selected' => '',
-		);
-		$args=wp_parse_args($args, $default_args);
-		$html='';
-		$rankings_dates=$this->get_rankings(array(
-			'group_by' => 'date',
-			'fields' => 'date',
-		));
-		
-		if (!$rankings_dates)
-			return;
-			
-		$html.='<select name="fc_rankings_list_date">';
-			$html.='<option value="0">Select Date</option>';
-			
-			foreach ($rankings_dates as $arr) :
-				$html.='<option value="'.$arr->date.'" '.selected($args['selected'], $arr->date, false).'>'.date(get_option('date_format'), strtotime($arr->date)).'</option>';		
-			endforeach;
-			
-		$html.='</select>';
-		
-		if ($args['echo'])
 			echo $html;
 			
 		return $html;
@@ -340,7 +305,7 @@ class UCIRankings {
 	public function get_rank($rider_id=0, $discipline='') {
 		global $wpdb;
 		
-		$rank=$wpdb->get_row("SELECT rank, points, date, discipline FROM ".$this->table_name." WHERE rider_id = 1429 ORDER BY date ASC LIMIT 1");
+		$rank=$wpdb->get_row("SELECT rank, points, date, discipline FROM ".$this->table_name." WHERE rider_id = $rider_id ORDER BY date ASC LIMIT 1");
 		
 		// render discipline
 		$discipline=get_term_by('id', $rank->discipline, 'discipline');
@@ -348,6 +313,20 @@ class UCIRankings {
 		
 		return $rank;
 	}
+	
+	/**
+	 * max_rank function.
+	 * 
+	 * @access public
+	 * @param string $date (default: '')
+	 * @param string $discipline (default: '')
+	 * @return void
+	 */
+	public function max_rank($date='', $discipline='') {
+		global $wpdb;
+		
+		return $wpdb->get_var("SELECT MAX(rank) FROM ".$this->table_name." ORDER BY date ASC");
+	}	
 
 	/**
 	 * get_columns function.
@@ -362,5 +341,17 @@ class UCIRankings {
 	}
 }
 
-$uci_rankings = new UCIRankings();		
+$uci_rankings = new UCIRankings();
+
+/**
+ * uci_rankings_last_update function.
+ * 
+ * @access public
+ * @return void
+ */
+function uci_rankings_last_update() {
+	global $uci_rankings;
+	
+	return $uci_rankings->last_update;
+}	
 ?>

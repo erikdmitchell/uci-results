@@ -1,3 +1,7 @@
+var counter=0;
+var totalRaces=0;
+var races=[];
+
 jQuery(document).ready(function($) {
 	/**
 	 * gets an output of races via the season selected
@@ -8,13 +12,15 @@ jQuery(document).ready(function($) {
 		showLoader('#wpcontent');
 		
 		$('#get-race-data').html('');
-		
+	
 		var data={
 			'action' : 'get_race_data_non_db',
-			'form' : $('form.get-races').serialize()
+			'url' : $('.url-dd').find(':selected').data('url'),
+			'discipline' : $('.url-dd').find(':selected').data('discipline'),
+			'season' : $('.url-dd').find(':selected').data('season')
 		};
 
-		$.post(ajaxurl,data,function(response) {
+		$.post(ajaxurl, data, function(response) {
 			$('#get-race-data').html(response);
 			hideLoader();
 		});
@@ -39,27 +45,16 @@ jQuery(document).ready(function($) {
 			'races' : selected
 		};
 
-		$.post(ajaxurl,data,function(response) {
+		$.post(ajaxurl, data, function(response) {
 			$('#get-race-data').html('');
 
 			var races=$.parseJSON(response);
-			var counter=0;
+			totalRaces=races.length;
 
-			$('#get-race-data').append('<div id="counter"><span class="ctr">'+counter+'</span> out of '+races.length+' proccessed.');
+			$('#get-race-data').append('<div id="counter"><span class="ctr">0</span> out of '+totalRaces+' proccessed.');
 
-			for (var i in races) {
-				var data={
-					'action' : 'add_race_to_db',
-					'race' : races[i]
-				};
+			addRace(races.shift());	
 
-				$.post(ajaxurl,data,function(response) {
-					counter++;
-
-					$('#get-race-data').append(response);
-					$('#get-race-data').find('#counter span.ctr').text(counter);
-				});
-			}
 		});
 	});
 	
@@ -127,5 +122,64 @@ jQuery(document).ready(function($) {
 			$('.process-results #race-search-list').html(response); // add data
 		});
 	});
+	
+	$('#csv-data #add-results').on('click', function(e) {
+		e.preventDefault();	
+		
+		showLoader('#wpcontent');
+		
+		var data = {
+			'action' : 'csv_add_results',
+			'data' : $('#csv-data').serialize()
+		};
+
+		$.post(ajaxurl, data, function(url) {
+			hideLoader();		
+			window.location.replace(url);
+		});	
+	});
 		
 });
+
+function addRace(race) {
+	jQuery.ajax({
+		type: 'POST',
+		url: ajaxurl,
+		data: {action: 'add_race_to_db', race: race},
+		success: function(response) {
+			processRaceResponse(response);
+
+			if (races.length) {
+				addRace(races.shift());
+			}
+			else {
+				finishProgressBar();
+			}
+		},
+		error: function(response) {
+			processRaceResponse(response);
+
+			if (races.length) {
+				addRace(races.shift());
+			}
+			else {
+				finishProgressBar();
+			}
+		}
+	});
+	
+}
+
+function processRaceResponse(response) {
+	jQuery('#get-race-data').append(response);
+
+	counter++;
+	updateProgressBar(counter, totalRaces);	
+}	
+
+function updateProgressBar(counter, total) {
+	jQuery('#get-race-data').find('#counter span.ctr').text(counter);	
+}
+
+function finishProgressBar() {	
+}

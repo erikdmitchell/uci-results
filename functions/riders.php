@@ -42,6 +42,8 @@ function uci_results_get_rider_results($args='') {
 		'places' => '',
 		'race_classes' => '',
 		'race_series' => '',
+		'start_date' => '',
+		'end_date' => '',
 	);
 	$args=wp_parse_args($args, $default_args);
 	
@@ -105,6 +107,15 @@ function uci_results_get_rider_results($args='') {
 			'taxonomy' => 'series',
 			'field' => 'slug',
 			'terms' => $race_series
+		);
+		
+	// between two dates //
+	if (!empty($start_date) && !empty($end_date))	
+		$results_args_meta['meta_query'][]=array(
+			'key' => '_race_date',
+			'value' => array($start_date, $end_date),
+			'compare' => 'BETWEEN',
+			'type' => 'DATE',
 		);
 
 	$race_ids=get_posts($results_args_meta);

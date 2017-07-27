@@ -53,12 +53,11 @@ class UCIResultsResultsMetabox {
  
 		$riders=uci_results_get_race_results($post->ID);
 		$discipline=strtolower(uci_get_first_term($post->ID, 'discipline'));
-		$rider_output=array('place', 'name', 'nat', 'age', 'result', 'par', 'pcr');
 	
 		// FILTERS ??? //
-		$rider_output=apply_filters('race_results_metabox_rider_output_'.$discipline, $rider_output, $post->ID);
+		$rider_output=apply_filters('race_results_metabox_rider_output_'.$discipline, array('result_place', 'name', 'nat', 'result_time', 'result_par', 'result_pcr'), $post->ID);
         ?>
-        
+     
         <p>
         	<a href="<?php echo admin_url('admin.php?page=uci-results&subpage=results&action=add-csv&race_id='.$post->ID); ?>" class="button button-secondary">Add Results</a>
         </p>
@@ -67,7 +66,7 @@ class UCIResultsResultsMetabox {
 	        <thead>
 		       <tr>
 			       <?php foreach ($rider_output as $slug) : ?>
-				        <th class="<?php echo $slug; ?>"><?php echo ucwords($slug); ?></th>
+				        <th class="<?php echo $slug; ?>"><?php echo ucwords(str_replace('_', ' ', $slug)); ?></th>
 			        <?php endforeach; ?>
 		       </tr>
 	        </thead>
