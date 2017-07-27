@@ -61,8 +61,6 @@ include_once(UCI_RESULTS_PATH.'stats/cross.php'); // cross stats class
 
 // discipline classes //
 include_once(UCI_RESULTS_PATH.'disciplines/base.php');
-//include_once(UCI_RESULTS_PATH.'disciplines/road.php');
-//include_once(UCI_RESULTS_PATH.'disciplines/cross.php');
 
 /**
  * is_uci_results_active function.
