@@ -102,6 +102,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 *
 	 * @subcommand series-overall
 	*/
+/*
 	public function update_series_overall($args, $assoc_args) {
 		global $wpdb, $uci_results_rider_rankings;
 
@@ -177,6 +178,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 
 		WP_CLI::success('Update series overall complete');
 	}
+*/
 
 	/**
 	 * Displays a list of seasons with results in db
@@ -357,6 +359,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 *
 	 * @subcommand add-races-results
 	*/
+/*
 	public function add_races_results($args, $assoc_args) {
 		global $uci_results_add_races;
 
@@ -416,6 +419,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 		
 		WP_CLI::success('Add race results complete.');
 	}
+*/
 
 	/**
 	 * Add race results to db
@@ -431,6 +435,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 	 *
 	 * @subcommand add-race-results
 	*/
+/*
 	public function add_race_results($args, $assoc_args) {
 		global $uci_results_add_races;
 		
@@ -444,6 +449,7 @@ class UCIResultsCLI extends WP_CLI_Command {
 		
 		WP_CLI::success('add_race_results complete.');
 	}
+*/
 		
 }
 
