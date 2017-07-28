@@ -19,7 +19,6 @@ include_once(UCI_RESULTS_PATH.'classes/riders.php'); // our riders functions
 include_once(UCI_RESULTS_PATH.'classes/rider-rankings-query.php'); // rider rankings query class
 include_once(UCI_RESULTS_PATH.'classes/seasons.php');
 include_once(UCI_RESULTS_PATH.'classes/uci-rankings.php');
-include_once(UCI_RESULTS_PATH.'classes/uci-parse-results.php'); // parses our races from uci site
 
 include_once(UCI_RESULTS_PATH.'database.php'); // sets up our db tables
 include_once(UCI_RESULTS_PATH.'functions/ajax.php'); // ajax functions
@@ -43,7 +42,6 @@ include_once(UCI_RESULTS_PATH.'admin/custom-columns.php'); // custom columns for
 include_once(UCI_RESULTS_PATH.'lib/name-parser.php'); // a php nameparser
 include_once(UCI_RESULTS_PATH.'shortcode.php'); // our shortcodes
 include_once(UCI_RESULTS_PATH.'lib/flags.php'); // our flag stuff
-include_once(UCI_RESULTS_PATH.'cron.php'); // cron jobs
 include_once(UCI_RESULTS_PATH.'update-to-twitter.php'); // updates results and rankings to twitter
 
 include_once(UCI_RESULTS_PATH.'rest-api/uci-rest-controller.php'); // rest api controller
@@ -74,35 +72,6 @@ function is_uci_results_active() {
 
 	return false;
 }
-
-/**
- * uci_results_activation function.
- *
- * @access public
- * @return void
- */
-function uci_results_activation() {
-	// schedule crons	//
-	uci_results_schedule_event(current_time('timestamp'), 'threehours', 'uci_results_add_races');
-
-	do_action('uci_results_activation');
-}
-
-/**
- * uci_results_deactivation function.
- *
- * @access public
- * @return void
- */
-function uci_results_deactivation() {
-	// remove crons //
-	wp_clear_scheduled_hook('uci_results_add_races');
-
-	do_action('uci_results_deactivation');
-}
-
-register_activation_hook(__FILE__, 'uci_results_activation');
-register_deactivation_hook(__FILE__, 'uci_results_deactivation');
 
 /**
  * uci_results_plugin_updater function.
