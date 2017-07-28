@@ -238,6 +238,7 @@ class UCIRankings {
 			'order_by' => 'date',
 			'group_by' => '',
 			'date' => '',
+			'discipline' => '',
 		);
 		$args=wp_parse_args($args, $default_args);
 		$where=array();
@@ -256,6 +257,15 @@ class UCIRankings {
 		// setup where vars //
 		if (!empty($date))
 			$where[]="date = '$date'";
+			
+		if (!empty($discipline)) :
+			if (!is_numeric($discipline)) :
+				$term=get_term_by('slug', $discipline, 'discipline');
+				$discipline=$term->term_id;
+			endif;
+			
+			$where[]="discipline = '$discipline'";
+		endif;
 			
 		// clean where var //
 		if (!empty($where)) :
