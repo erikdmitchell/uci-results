@@ -239,6 +239,7 @@ class UCIRankings {
 			'group_by' => '',
 			'date' => '',
 			'discipline' => '',
+			'limit' => -1,
 		);
 		$args=wp_parse_args($args, $default_args);
 		$where=array();
@@ -274,11 +275,19 @@ class UCIRankings {
 			$where='';
 		endif;
 		
+		// setup limit //
+		if ($limit >= 0) :
+			$limit=" LIMIT $limit";
+		else :
+			$limit='';
+		endif;
+		
 		$db_results=$wpdb->get_results("
 			SELECT $fields FROM $this->table_name
 			$where
 			$group_by			
 			ORDER BY $order_by $order
+			$limit
 		");
 		
 		if (is_wp_error($db_results))
