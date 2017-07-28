@@ -173,6 +173,11 @@ function uci_get_riders_by_rank($args='') {
  */
 function uci_results_rider_url($slug='') {
 	global $uci_results_pages;
+	
+	if (is_numeric($slug)) :
+		$rider=get_post($slug);
+		$slug=$rider->post_name;
+	endif;
 
 	$base_url=get_permalink($uci_results_pages['single_rider']);
 	$url=$base_url.$slug;
