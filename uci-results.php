@@ -74,35 +74,6 @@ function is_uci_results_active() {
 }
 
 /**
- * uci_results_activation function.
- *
- * @access public
- * @return void
- */
-function uci_results_activation() {
-	// schedule crons	//
-	uci_results_schedule_event(current_time('timestamp'), 'threehours', 'uci_results_add_races');
-
-	do_action('uci_results_activation');
-}
-
-/**
- * uci_results_deactivation function.
- *
- * @access public
- * @return void
- */
-function uci_results_deactivation() {
-	// remove crons //
-	wp_clear_scheduled_hook('uci_results_add_races');
-
-	do_action('uci_results_deactivation');
-}
-
-register_activation_hook(__FILE__, 'uci_results_activation');
-register_deactivation_hook(__FILE__, 'uci_results_deactivation');
-
-/**
  * uci_results_plugin_updater function.
  * 
  * @access public

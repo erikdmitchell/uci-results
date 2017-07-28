@@ -113,24 +113,4 @@ class UCIResultsRidersTwitterMetabox {
         <?php
     }
 }
-
-
-/*
-function setup_riders_twitter_rest_api() {
-	register_api_field(
-		'riders',
-    	'_rider_twitter',
-		array(
-			'get_callback' => 'slug_get_rider_twitter',
-			'update_callback' => null,
-			'schema' => null,
-		)
-	);
-}
-add_action('rest_api_init', 'setup_riders_twitter_rest_api');
-
-function slug_get_rider_twitter($object, $field_name, $request) {
-	return get_post_meta($object['id'], $field_name, true);
-}
-*/
 ?>
