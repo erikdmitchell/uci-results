@@ -153,4 +153,18 @@ function uci_pagination($numpages='', $pagerange='', $paged='') {
 	
 	echo $html;
 }
+
+/**
+ * uci_results_uci_rankings_url function.
+ * 
+ * @access public
+ * @return void
+ */
+function uci_results_uci_rankings_url() {
+	global $uci_results_pages;
+
+	$url=get_permalink($uci_results_pages['uci_rankings']);
+
+	echo $url;
+}
 ?>

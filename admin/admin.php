@@ -204,6 +204,12 @@ class UCIResultsAdmin {
 			delete_option('uci_results_search_page_id');
 		endif;
 
+		if (isset($_POST['uci_results_uci_rankings_page_id'])) :
+			update_option('uci_results_uci_rankings_page_id', $_POST['uci_results_uci_rankings_page_id']);
+		else :
+			delete_option('uci_results_uci_rankings_page_id');
+		endif;
+
 		if (isset($_POST['current_season']) && $_POST['current_season']!='') :
 			update_option('uci_results_current_season', $_POST['current_season']);
 		else :

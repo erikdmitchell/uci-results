@@ -327,6 +327,31 @@ class UCIRankings {
 		
 		return $wpdb->get_var("SELECT MAX(rank) FROM ".$this->table_name." ORDER BY date ASC");
 	}	
+	
+	/**
+	 * get_rankings_dates function.
+	 * 
+	 * @access public
+	 * @param int $discipline (default: 0)
+	 * @return void
+	 */
+	public function get_rankings_dates($discipline=0) {
+		global $wpdb;
+		
+		$select='date, t.name AS discipline';
+		$join=" INNER JOIN ".$wpdb->terms." t ON ".$this->table_name.".discipline = t.term_id";
+		$where='';
+		
+		if ($discipline) :
+			$select='date';
+			$join='';
+			$where="WHERE discipline = $discipline";
+		endif;
+		
+		$dates=$wpdb->get_results("SELECT DISTINCT $select FROM ".$this->table_name." $join $where");
+		
+		return $dates;
+	}
 
 	/**
 	 * get_columns function.
