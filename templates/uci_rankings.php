@@ -8,9 +8,12 @@
  */
  
 global $uci_rankings;
-?>
 
-<div class="uci-results uci-rankings">
+get_header(); ?>
+
+<div class="em-container uci-results uci-rankings">
 	<h1>UCI Rankings</h1>
-	
+	monkey
 </div>
+
+<?php get_footer(); ?>

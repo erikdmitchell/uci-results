@@ -34,6 +34,7 @@ function uci_results_rewrite_rules() {
 	$single_rider_url=ltrim(str_replace( home_url(), "", get_permalink($uci_results_pages['single_rider'])), '/');
 	$single_race_url=ltrim(str_replace( home_url(), "", get_permalink($uci_results_pages['single_race'])), '/');
 	$country_url=ltrim(str_replace( home_url(), "", get_permalink($uci_results_pages['country'])), '/');
+	$uci_rankings_url=ltrim(str_replace( home_url(), "", get_permalink($uci_results_pages['uci_rankings'])), '/');
 
 	if (!empty($single_rider_url))
 		add_rewrite_rule($single_rider_url.'([^/]*)/?', 'index.php?page_id='.$uci_results_pages['single_rider'].'&rider_slug=$matches[1]', 'top');
@@ -43,6 +44,9 @@ function uci_results_rewrite_rules() {
 
 	if (!empty($country_url))
 		add_rewrite_rule($country_url.'([^/]*)/?', 'index.php?page_id='.$uci_results_pages['country'].'&country_slug=$matches[1]', 'top');
+
+	if (!empty($uci_rankings_url))
+		add_rewrite_rule($uci_rankings_url.'([^/]*)/([^/]*)/?', 'index.php?page_id='.$uci_results_pages['uci_rankings'].'&rankings_discipline=$matches[1]&rankings_date=$matches[2]', 'top');
 }
 add_action('init', 'uci_results_rewrite_rules', 10, 0);
 
@@ -57,6 +61,8 @@ function uci_results_register_query_vars( $vars ) {
   $vars[] = 'rider_slug';
   $vars[] = 'race_code';
   $vars[] = 'country_slug';
+  $vars[] = 'rankings_date';
+  $vars[] = 'rankings_discipline';
 
   return $vars;
 }

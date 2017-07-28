@@ -41,7 +41,7 @@
 					<td>
 						<?php $dates=$uci_rankings->get_rankings_dates(); ?>
 						<?php foreach ($dates as $date) : ?>
-							<a href="<?php uci_results_uci_rankings_url(); ?>"><?php echo $date->date; ?> (<?php echo $date->discipline; ?>)</a><br />
+							<a href="<?php uci_results_uci_rankings_url($date->discipline, $date->date); ?>"><?php echo $date->date; ?> (<?php echo $date->discipline; ?>)</a><br />
 						<?php endforeach; ?>
 					</td>
 				</tr>
