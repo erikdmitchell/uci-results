@@ -303,4 +303,12 @@ function uci_results_stats_info($slug='') {
 		
 	return;
 }
+
+function uci_rider_country($rider_id=0, $echo=true) {
+	
+	if ($echo)
+		echo $country;
+		
+	return $country;
+}
 ?>
