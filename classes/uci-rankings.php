@@ -205,16 +205,35 @@ class UCIRankings {
 	}
 
 	/**
-	 * add_button function.
+	 * file_input function.
 	 * 
 	 * @access public
 	 * @param bool $echo (default: true)
 	 * @return void
 	 */
-	public function add_button($echo=true) {
+	public function file_input($echo=true) {
 		$html=null;
 	
-		$html.='<a class="button add-rider-rankings" href="">Add Rider Rankings</a>';
+		$html.='<input type="text" id="add-rider-rankings-input" name="file" value="" class="regular-text" /> <a class="button add-rider-rankings" href="">Add File</a>';
+		
+		if ($echo)
+			echo $html;
+			
+		return $html;
+	}
+
+	/**
+	 * process_button function.
+	 * 
+	 * @access public
+	 * @param string $text (default: 'Insert Into DB')
+	 * @param bool $echo (default: true)
+	 * @return void
+	 */
+	public function process_button($text='Insert Into DB', $echo=true) {
+		$html=null;
+	
+		$html.='<p><a class="button button-primary" id="insert-rider-rankings" href="">'.$text.'</a></p>';
 		
 		if ($echo)
 			echo $html;

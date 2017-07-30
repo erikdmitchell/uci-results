@@ -14,11 +14,11 @@
 						<label form="add-rankings">Add New Rankings</label>
 					</th>
 					<td>
-						<?php $uci_rankings->add_button(); ?>
+						 <?php $uci_rankings->file_input(); ?>
 
 						<div class="custom-date">
 							<label form="custom-date">Custom Date</label>
-							<input type="text" name="custom-date" id="custom-date" class="date" value="">
+							<input type="text" name="custom-date" id="custom-date" class="date" value="<?php echo date('Y-m-d'); ?>">
 							<p class="description">If empty, current date will be used. <i>Format: YYYY-MM-DD</i></p>
 						</div>
 						
@@ -33,6 +33,8 @@
 								'taxonomy'           => 'discipline',
 							)); ?>
 						</div>
+						
+						<?php $uci_rankings->process_button(); ?>
 					</td>
 				</tr>
 				
