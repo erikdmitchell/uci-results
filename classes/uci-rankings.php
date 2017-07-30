@@ -257,7 +257,7 @@ class UCIRankings {
 			'order_by' => 'date',
 			'group_by' => '',
 			'date' => '',
-			'discipline' => '',
+			'discipline' => 'road',
 			'limit' => -1,
 		);
 		$args=wp_parse_args($args, $default_args);
@@ -274,10 +274,7 @@ class UCIRankings {
 		if ($fields=='all')
 			$fields='*';
 			
-		// setup where vars //
-		if (!empty($date))
-			$where[]="date = '$date'";
-			
+		// setup where vars //	
 		if (!empty($discipline)) :
 			if (!is_numeric($discipline)) :
 				$term=get_term_by('slug', $discipline, 'discipline');
@@ -285,6 +282,12 @@ class UCIRankings {
 			endif;
 			
 			$where[]="discipline = '$discipline'";
+		endif;
+		
+		if (!empty($date)) :
+			$where[]="date = '$date'";
+		else :
+			$where[]="date = '".$wpdb->get_var("SELECT date FROM ".$this->table_name." WHERE discipline = $discipline ORDER BY date DESC LIMIT 1")."'";
 		endif;
 			
 		// clean where var //
@@ -300,7 +303,7 @@ class UCIRankings {
 		else :
 			$limit='';
 		endif;
-		
+
 		$db_results=$wpdb->get_results("
 			SELECT $fields FROM $this->table_name
 			$where
