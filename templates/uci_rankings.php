@@ -19,7 +19,7 @@ $rankings=$uci_rankings->get_rankings(array(
 ));
 ?>
 <div class="em-container uci-results uci-rankings">
-	<h1>UCI Rankings</h1>
+	<h1>UCI Rankings <span class="date"><?php echo get_query_var('rankings_date'); ?></span></h1>
 	
 	<div class="em-row header">
 		<div class="em-col-sm-2">Rank</div>
