@@ -26,7 +26,10 @@ jQuery(document).ready(function($) {
 			var $div=$('.uci-rankings');
 			
 			$div.find('.em-row.rider').remove();
-console.log(data.ranks);			
+
+			$.each(data.ranks, function() {
+			    $div.append(this);
+			});			
 		});
 	});
 	

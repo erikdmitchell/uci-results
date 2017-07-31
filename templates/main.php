@@ -92,13 +92,7 @@ $races=uci_get_races(array(
 				</div>
 		
 				<?php if (count($riders)) : foreach ($riders as $rider) : ?>
-					<?php $country=uci_rider_country($rider->rider_id, false); ?>
-					<div class="em-row rider">
-						<div class="em-col-md-1 rider-rank"><?php echo $rider->rank; ?></div>
-						<div class="em-col-md-5 rider-name"><a href="<?php uci_results_rider_url($rider->rider_id); ?>"><?php echo $rider->name; ?></a></div>
-						<div class="em-col-md-1 rider-nat"><a href="<?php echo uci_results_country_url($country); ?>"><?php echo $country; ?></a></div>
-						<div class="em-col-md-2 rider-points"><?php echo $rider->points; ?></div>
-					</div>
+					<?php echo uci_get_template_part('uci-rankings-rider-row', $rider); ?>
 				<?php endforeach; endif; ?>
 		
 				<a class="view-all" href="#">View All Riders &raquo;</a>

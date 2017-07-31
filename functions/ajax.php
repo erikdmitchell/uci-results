@@ -69,13 +69,23 @@ function ajax_uci_rankings_discipline_dd() {
 			'value' => $date->date,	
 		);
 	endforeach;
-
-	//$date_options=json_encode($date_options);
+	
+	// get rankings //
+	$rankings=array();
+	$riders=$uci_rankings->get_rankings(array(
+		'order_by' => 'rank',
+		'discipline' => $_POST['discipline'],
+		'limit' => 10,
+	));
+	
+	foreach ($riders as $rider) :
+		$rankings[]=uci_get_template_part('uci-rankings-rider-row', $rider);
+	endforeach;
 	
 	$return=array(
 		'date_options' => $date_options,
 		'selected_date' => $uci_rankings->recent_date($_POST['discipline']),
-		'ranks' => '',
+		'ranks' => $rankings,
 	);
 	
 	echo json_encode($return);
