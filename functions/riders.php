@@ -304,6 +304,14 @@ function uci_results_stats_info($slug='') {
 	return;
 }
 
+/**
+ * uci_rider_country function.
+ * 
+ * @access public
+ * @param int $rider_id (default: 0)
+ * @param bool $echo (default: true)
+ * @return void
+ */
 function uci_rider_country($rider_id=0, $echo=true) {
 	$country=uci_get_first_term(1429, 'country');
 	

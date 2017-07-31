@@ -15,7 +15,11 @@ function uci_scripts_styles() {
 		wp_localize_script('uci-results-search-script', 'searchAJAXObject', array('ajax_url' => admin_url('admin-ajax.php')));
 	endif;
 	
-	wp_enqueue_script('uci-results-front-end', UCI_RESULTS_URL.'/js/front-end.js', array('jquery'), '0.1.0', true);
+	wp_register_script('uci-results-front-end', UCI_RESULTS_URL.'/js/front-end.js', array('jquery'), '0.1.0', true);
+
+	wp_localize_script('uci-results-front-end', 'UCIResultsFrontEnd', array('ajax_url' => admin_url('admin-ajax.php')));
+	
+	wp_enqueue_script('uci-results-front-end');
 
 	wp_enqueue_style('uci-results-fa-style', UCI_RESULTS_URL.'css/font-awesome.min.css');
 	wp_enqueue_style('uci-results-style', UCI_RESULTS_URL.'/css/main.css');

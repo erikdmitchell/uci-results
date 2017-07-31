@@ -46,5 +46,34 @@ function ajax_uci_search() {
 	wp_die();
 }
 add_action('wp_ajax_uci_results_search', 'ajax_uci_search');
-add_action('wp_ajax_nopriv_uci_results_search', 'ajax_uci_search');	
+add_action('wp_ajax_nopriv_uci_results_search', 'ajax_uci_search');
+
+function ajax_uci_rankings_discipline_dd() {
+	global $uci_rankings;
+	
+	if (empty($_POST['discipline']))
+		return;
+
+	// get dates //
+	$date_options=array();
+	$dates=$uci_rankings->get_rankings_dates($_POST['discipline']);
+	
+	$date_options[]=array(
+		'name' => 'Select Date',
+		'value' => 0,	
+	);
+	
+	foreach ($dates as $date) :
+		$date_options[]=array(
+			'name' => $date->date,
+			'value' => $date->date,	
+		);
+	endforeach;
+
+	echo json_encode($date_options);
+	
+	wp_die();
+}
+add_action('wp_ajax_uci_rankings_discipline_dd', 'ajax_uci_rankings_discipline_dd');
+add_action('wp_ajax_nopriv_uci_rankings_discipline_dd', 'ajax_uci_rankings_discipline_dd');	
 ?>

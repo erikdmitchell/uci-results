@@ -393,7 +393,7 @@ class UCIRankings {
 			$join='';
 			$where="WHERE discipline = $discipline";
 		endif;
-		echo "SELECT DISTINCT $select FROM ".$this->table_name." $join $where";
+
 		$dates=$wpdb->get_results("SELECT DISTINCT $select FROM ".$this->table_name." $join $where");
 		
 		return $dates;
