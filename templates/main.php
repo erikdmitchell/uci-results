@@ -9,13 +9,12 @@
 
 global $uci_results_post, $uci_rankings;
 
+$selected_discipline=89;
+$selected_date=$uci_rankings->recent_date($selected_discipline);
+
 $riders=$uci_rankings->get_rankings(array(
-	//'fields' => 'all',
-	//'order' => 'ASC',
 	'order_by' => 'rank',
-	//'group_by' => '',
-	//'date' => '',
-	'discipline' => 'road',
+	'discipline' => $selected_discipline,
 	'limit' => 10,
 ));
 
@@ -57,7 +56,34 @@ $races=uci_get_races(array(
 			
 			<div class="uci-rankings">
 				<h3>UCI Rankings</h3>
-		Discipline / Date
+				
+				<div class="row filters">
+					<div class="em-col-md-3">
+						
+						<select name="discipline" id="uci-rankings-discipline">
+							
+							<option value="0">Select Discipline</option>
+							
+							<?php foreach ($uci_rankings->disciplines() as $discipline) : ?>
+								<option value="<?php echo $discipline->id; ?>" <?php selected($selected_discipline, $discipline->id, true); ?>><?php echo $discipline->discipline; ?></option>
+							<?php endforeach; ?>
+						</select>
+						
+					</div>
+					<div class="em-col-md-3">
+
+						<select name="date" id="uci-rankings-date">
+							
+							<option value="0">Select Date</option>
+							
+							<?php foreach ($uci_rankings->get_rankings_dates($selected_discipline) as $date) : ?>
+								<option value="<?php echo $date->date; ?>" <?php selected($selected_date, $date->date, true); ?>><?php echo $date->date; ?></option>
+							<?php endforeach; ?>
+						</select>
+
+					</div>
+				</div>
+
 				<div class="em-row header">
 					<div class="em-col-md-1 rider-rank">Rank</div>
 					<div class="em-col-md-5 rider-name">Rider</div>
@@ -66,10 +92,11 @@ $races=uci_get_races(array(
 				</div>
 		
 				<?php if (count($riders)) : foreach ($riders as $rider) : ?>
+					<?php $country=uci_rider_country($rider->rider_id, false); ?>
 					<div class="em-row">
 						<div class="em-col-md-1 rider-rank"><?php echo $rider->rank; ?></div>
-						<div class="em-col-md-5 rider-name"><a href="<?php uci_results_rider_url($rider->name); ?>"><?php echo $rider->name; ?></a></div>
-						<div class="em-col-md-1 rider-nat"><a href="<?php echo uci_results_country_url($rider->nat); ?>"></a></div>
+						<div class="em-col-md-5 rider-name"><a href="<?php uci_results_rider_url($rider->rider_id); ?>"><?php echo $rider->name; ?></a></div>
+						<div class="em-col-md-1 rider-nat"><a href="<?php echo uci_results_country_url($country); ?>"><?php echo $country; ?></a></div>
 						<div class="em-col-md-2 rider-points"><?php echo $rider->points; ?></div>
 					</div>
 				<?php endforeach; endif; ?>

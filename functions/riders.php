@@ -305,6 +305,7 @@ function uci_results_stats_info($slug='') {
 }
 
 function uci_rider_country($rider_id=0, $echo=true) {
+	$country=uci_get_first_term(1429, 'country');
 	
 	if ($echo)
 		echo $country;

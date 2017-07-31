@@ -383,15 +383,52 @@ class UCIRankings {
 		$join=" INNER JOIN ".$wpdb->terms." t ON ".$this->table_name.".discipline = t.term_id";
 		$where='';
 		
-		if ($discipline) :
+		if ($discipline) :		
+			if (!is_numeric($discipline)) :
+				$term=get_term_by('slug', $discipline, 'discipline');
+				$discipline=$term->term_id;
+			endif;
+		
 			$select='date';
 			$join='';
 			$where="WHERE discipline = $discipline";
 		endif;
-		
+		echo "SELECT DISTINCT $select FROM ".$this->table_name." $join $where";
 		$dates=$wpdb->get_results("SELECT DISTINCT $select FROM ".$this->table_name." $join $where");
 		
 		return $dates;
+	}
+	
+	/**
+	 * disciplines function.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function disciplines() {
+		global $wpdb;
+		
+		$results=$wpdb->get_results("SELECT DISTINCT discipline AS id, t.name AS discipline FROM ".$this->table_name." INNER JOIN ".$wpdb->terms." t ON ".$this->table_name.".discipline = t.term_id");
+		
+		return $results;
+	}
+
+	/**
+	 * recent_date function.
+	 * 
+	 * @access public
+	 * @param int $discipline (default: 0)
+	 * @return void
+	 */
+	public function recent_date($discipline=0) {
+		global $wpdb;
+		
+		if (!is_numeric($discipline)) :
+			$term=get_term_by('slug', $discipline, 'discipline');
+			$discipline=$term->term_id;
+		endif;
+		
+		return $wpdb->get_var("SELECT date FROM ".$this->table_name." WHERE discipline = $discipline ORDER BY date DESC LIMIT 1");
 	}
 
 	/**
