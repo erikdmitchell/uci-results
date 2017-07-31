@@ -25,10 +25,10 @@ jQuery(document).ready(function($) {
 			// setup date //
 			var $div=$('.uci-rankings');
 			
-			$div.find('.em-row.rider').remove();
+			$div.find('.riders-list-wrap').html('');
 
 			$.each(data.ranks, function() {
-			    $div.append(this);
+			    $div.find('.riders-list-wrap').append(this);
 			});			
 		});
 	});

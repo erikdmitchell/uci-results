@@ -91,9 +91,11 @@ $races=uci_get_races(array(
 					<div class="em-col-md-2 rider-points">Points</div>
 				</div>
 		
-				<?php if (count($riders)) : foreach ($riders as $rider) : ?>
-					<?php echo uci_get_template_part('uci-rankings-rider-row', $rider); ?>
-				<?php endforeach; endif; ?>
+				<div class="riders-list-wrap">
+					<?php if (count($riders)) : foreach ($riders as $rider) : ?>
+						<?php echo uci_get_template_part('uci-rankings-rider-row', $rider); ?>
+					<?php endforeach; endif; ?>
+				</div>
 		
 				<a class="view-all" href="#">View All Riders &raquo;</a>
 			</div>
