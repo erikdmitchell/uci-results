@@ -8,17 +8,25 @@ jQuery(document).ready(function($) {
 			'discipline' : $(this).val()
 		};
 		
-		$.post(UCIResultsFrontEnd.ajax_url, data, function(options) {
-			var select=$('#uci-rankings-date');
-			
-			select.html('');
-			
-			options=$.parseJSON(options);
+		$.post(UCIResultsFrontEnd.ajax_url, data, function(data) {
+			data=$.parseJSON(data);
 
-			$.each(options, function() {
-				console.log(this);
-			    select.append($("<option />").val(this.value).text(this.name));
+			// setup dates dropdown //
+			var $select=$('#uci-rankings-date');
+			
+			$select.html('');
+			
+			$.each(data.date_options, function() {
+			    $select.append($("<option />").val(this.value).text(this.name));
 			});
+			
+			$select.val(data.selected_date); // set value
+			
+			// setup date //
+			var $div=$('.uci-rankings');
+			
+			$div.find('.em-row.rider').remove();
+console.log(data.ranks);			
 		});
 	});
 	

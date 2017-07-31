@@ -93,7 +93,7 @@ $races=uci_get_races(array(
 		
 				<?php if (count($riders)) : foreach ($riders as $rider) : ?>
 					<?php $country=uci_rider_country($rider->rider_id, false); ?>
-					<div class="em-row">
+					<div class="em-row rider">
 						<div class="em-col-md-1 rider-rank"><?php echo $rider->rank; ?></div>
 						<div class="em-col-md-5 rider-name"><a href="<?php uci_results_rider_url($rider->rider_id); ?>"><?php echo $rider->name; ?></a></div>
 						<div class="em-col-md-1 rider-nat"><a href="<?php echo uci_results_country_url($country); ?>"><?php echo $country; ?></a></div>

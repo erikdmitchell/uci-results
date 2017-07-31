@@ -70,7 +70,15 @@ function ajax_uci_rankings_discipline_dd() {
 		);
 	endforeach;
 
-	echo json_encode($date_options);
+	//$date_options=json_encode($date_options);
+	
+	$return=array(
+		'date_options' => $date_options,
+		'selected_date' => $uci_rankings->recent_date($_POST['discipline']),
+		'ranks' => '',
+	);
+	
+	echo json_encode($return);
 	
 	wp_die();
 }
