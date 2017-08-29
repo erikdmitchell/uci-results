@@ -70,6 +70,7 @@ class UCIResultsAdmin {
 	    add_submenu_page($parent_slug, 'Races', 'Races', $manage_options_cap, 'edit.php?post_type=races');
 	    add_submenu_page($parent_slug, 'Countries', 'Countries', $manage_options_cap, 'edit-tags.php?taxonomy=country&post_type=races');
 	    add_submenu_page($parent_slug, 'Class', 'Class', $manage_options_cap, 'edit-tags.php?taxonomy=race_class&post_type=races');
+	    add_submenu_page($parent_slug, 'Discipline', 'Discipline', $manage_options_cap, 'edit-tags.php?taxonomy=discipline&post_type=races');
 	    add_submenu_page($parent_slug, 'Series', 'Series', $manage_options_cap, 'edit-tags.php?taxonomy=series&post_type=races');
 	    add_submenu_page($parent_slug, 'Season', 'Season', $manage_options_cap, 'edit-tags.php?taxonomy=season&post_type=races');
 	    add_submenu_page($parent_slug, 'Settings', 'Settings', $manage_options_cap, $parent_slug);
