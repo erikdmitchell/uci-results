@@ -32,16 +32,12 @@ class UCIResultsRacesMetabox {
      * @param mixed $hook
      * @return void
      */
-    public function admin_scripts_styles($hook) {	    
-		global $wp_scripts;
-
-		// get registered script object for jquery-ui
-		$ui = $wp_scripts->query('jquery-ui-core');
-	    
-	    wp_enqueue_script('jquery-ui-datepicker');
+    public function admin_scripts_styles($hook) {
+		wp_enqueue_script('flatpickr-script', UCI_RESULTS_URL.'admin/js/flatpickr.min.js', array('jquery'), '2.4.8', true);
+		
+		wp_enqueue_style('flatpickr-style', UCI_RESULTS_URL.'admin/css/flatpickr.min.css', '', '2.4.8');
+		
 	    wp_enqueue_script('uci-results-admin-races-mb-script', UCI_RESULTS_URL.'js/races-metabox.js', array('jquery-ui-datepicker'));
-
-		wp_enqueue_style('jquery-ui-smoothness', "https://ajax.googleapis.com/ajax/libs/jqueryui/{$ui->ver}/themes/smoothness/jquery-ui.min.css");
     }
  
     /**
