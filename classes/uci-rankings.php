@@ -108,7 +108,7 @@ class UCIRankings {
 			$data[$key]['discipline']=$discipline;
 		endforeach;
 
-		$this->insert_rankings_into_db($data);
+		//$this->insert_rankings_into_db($data);
 		
 		// update our option so we know we have a ranking change //
 		$update_date=$date.' '.date('H:i:s');

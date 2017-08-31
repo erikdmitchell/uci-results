@@ -242,8 +242,62 @@ function uci_results_add_rider($name='', $country='') {
 		return 0;
 		
 	$rider=get_page_by_title($name, OBJECT, 'riders');
+	
+	global $wpdb;
+	
+	//$rider=$wpdb->get_row("SELECT * FROM $wpdb->posts WHERE post_title LIKE ");
+	
+	$name_arr=explode(' ', $name);
+	$search='';
+		
+		foreach ($name_arr as $term ) {
+			$n='%';
+				$like_op  = 'LIKE';
+				$andor_op = 'OR';
+			
 
+
+
+			$like = $n . $wpdb->esc_like( strtolower($term) ) . $n;
+			$search .= $wpdb->prepare( "{$searchand}(({$wpdb->posts}.post_title $like_op %s))", $like );
+			$searchand = ' AND ';
+		}
+	/*
+SELECT *
+FROM wp_posts 
+WHERE
+((wp_posts.post_title LIKE '%van%')) AND ((wp_posts.post_title LIKE '%aert%')) AND ((wp_posts.post_title LIKE '%wout%'))
+ORDER BY (CASE
+WHEN wp_posts.post_title LIKE '%wout van aert%'
+THEN 1
+WHEN wp_posts.post_title LIKE '%wout%'
+AND wp_posts.post_title LIKE '%van%'
+AND wp_posts.post_title LIKE '%aert%'
+THEN 2
+WHEN wp_posts.post_title LIKE '%wout%'
+OR wp_posts.post_title LIKE '%van%'
+OR wp_posts.post_title LIKE '%aert%'
+THEN 3
+WHEN wp_posts.post_excerpt LIKE '%wout van aert%'
+THEN 4
+WHEN wp_posts.post_content LIKE '%wout van aert%'
+THEN 5
+ELSE 6 END)*/		
+	
+echo "$name<br>";
+echo "$search<br>";
+echo '<pre>';
+print_r($name_arr);
+print_r($rider);
+echo '</pre>';
+/*
+			'post_per_page' => 1,
+		'post_type' => 'riders',
+		's' => $name,
+		'fields' => 'ids',
+		*/
 	// check if we have a rider id, otherwise create one //
+/*
 	if ($rider===null || empty($rider->ID)) :
 		$rider_insert=array(
 			'post_title' => $name,
@@ -258,6 +312,7 @@ function uci_results_add_rider($name='', $country='') {
 	else :
 		$rider_id=$rider->ID;
 	endif;
+*/
 	
 	return $rider_id;		
 }
