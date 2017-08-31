@@ -43,7 +43,7 @@ function uci_get_races($args='') {
 	
 	extract($args);
 
-$argss=array(
+	$argss=array(
 		'posts_per_page' => $per_page,
 		'include' => $id,
 		'post_type' => 'races',
@@ -153,6 +153,26 @@ function uci_race_season($race_id=0) {
 	
 	return $season;
 }
+
+/**
+ * uci_race_discipline function.
+ * 
+ * @access public
+ * @param int $race_id (default: 0)
+ * @return void
+ */
+function uci_race_discipline($race_id=0) {
+	$disciplines=wp_get_post_terms($race_id, 'discipline', array('fields' => 'names'));
+
+	if (isset($disciplines[0])) :
+		$discipline=$disciplines[0];
+	else :
+		$discipline='';
+	endif;
+	
+	return $discipline;
+}
+
 
 /**
  * uci_race_series function.
