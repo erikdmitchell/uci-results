@@ -167,4 +167,40 @@ function uci_results_uci_rankings_url($discipline='road', $date='') {
 
 	echo $url;
 }
+
+/**
+ * uci_results_uci_rankings_list_dropdown function.
+ * 
+ * @access public
+ * @param string $args (default: '')
+ * @return void
+ */
+function uci_results_uci_rankings_list_dropdown($args='') {
+	global $uci_rankings;
+	
+	$default_args=array(
+		'echo' => true,
+		'selected' => '',
+	);
+	$args=wp_parse_args($args, $default_args);
+	$html='';
+	$dates=$uci_rankings->get_rankings_dates();
+	
+	if (empty($dates))
+		return;
+
+	$html.='<select name="fc_rankings_list_date">';
+		$html.='<option value="0">Select Date</option>';
+		
+		foreach ($dates as $date) :
+			$html.='<option value="'.$date->date.'" '.selected($args['selected'], $date->date, false).'>'.date(get_option('date_format'), strtotime($date->date)).' ('.$date->discipline.')</option>';		
+		endforeach;
+		
+	$html.='</select>';
+	
+	if ($args['echo'])
+		echo $html;
+		
+	return $html;
+}
 ?>
