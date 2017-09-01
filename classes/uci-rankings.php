@@ -49,8 +49,11 @@ class UCIRankings {
 	 * @return void
 	 */
 	public function ajax_process_csv_file() {
-		$this->process_csv_file($_POST['file'], $_POST['custom_date'], $_POST['discipline']);
-		
+		$args=array();
+		parse_str($_POST['form'], $args);
+
+		$this->process_csv_file($args);
+
 		echo '<div class="success">CSV file processed and inserted into db.</div>';
 		
 		wp_die();
@@ -60,13 +63,21 @@ class UCIRankings {
 	 * process_csv_file function.
 	 * 
 	 * @access public
-	 * @param string $file (default: '')
-	 * @param string $date (default: '')
-	 * @param int $discipline (default: 0)
+	 * @param string $args (default: '')
 	 * @return void
 	 */
-	public function process_csv_file($file='', $date='', $discipline=0) {
+	public function process_csv_file($args='') {
 		global $wpdb;
+	
+		$default_args=array(
+			'file' => '', 
+			'date' => '', 
+			'discipline' => 0,
+			'clean_names' => 0,
+		);
+		$args=wp_parse_args($args, $default_args);
+	
+		extract($args);
 	
 		if (empty($file) || $file=='')
 			return false;
@@ -98,16 +109,20 @@ class UCIRankings {
 	    endforeach;
 	    	
 		// clean rank, add rider id via name and add date //
-		foreach ($data as $key => $row) :
+		foreach ($data as $key => $row) :		
 			$rank_arr=explode(' ', $row['rank']);
 			$name=trim(str_replace('*', '', $row['name']));
+			
+			// clean name //
+			if ($clean_names)
+				$name=$this->clean_names($name);
 			
 			// nation check //
 			$found_nation_key=false;
 			
-			foreach ($row as $key => $value) :		
-				if (strpos($key, 'nation')!==false) :
-					$found_nation_key=$key;
+			foreach ($row as $k => $v) :		
+				if (strpos($k, 'nation')!==false) :
+					$found_nation_key=$k;
 					break;
 				endif;
 			endforeach;
@@ -124,7 +139,7 @@ class UCIRankings {
 			$data[$key]['discipline']=$discipline;
 		endforeach;
 
-		//$this->insert_rankings_into_db($data);
+		$this->insert_rankings_into_db($data);
 		
 		// update our option so we know we have a ranking change THIS NEEDS TO CHANGE TO INCLUDE DISCIPLINE //
 		$update_date=$date.' '.date('H:i:s');
@@ -132,6 +147,24 @@ class UCIRankings {
 		$this->last_update=$date;
 		
 		return true;
+	}
+	
+	/**
+	 * clean_names function.
+	 * 
+	 * @access protected
+	 * @param string $name (default: '')
+	 * @return void
+	 */
+	protected function clean_names($name='') {
+		if (empty($name))
+			return '';
+		
+		$name_arr=explode(' ', $name);
+		$last_el=array_pop($name_arr);
+		array_unshift($name_arr, $last_el);
+		
+		return implode(' ', $name_arr);
 	}
 	
 	/**

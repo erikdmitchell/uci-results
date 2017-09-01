@@ -241,10 +241,10 @@ function uci_results_add_rider($name='', $country='') {
 	if (empty($name))
 		return 0;
 		
-	$rider=uci_results_search_rider($name);
+	$rider_id=uci_results_search_rider($name);
 
 	// check if we have a rider id, otherwise create one //
-	if (!$rider) :
+	if (!$rider_id) :
 		$rider_insert=array(
 			'post_title' => $name,
 			'post_content' => '',
@@ -252,16 +252,22 @@ function uci_results_add_rider($name='', $country='') {
 			'post_type' => 'riders',
 			'post_name' => sanitize_title_with_dashes($name)
 		);
+		
 		$rider_id=wp_insert_post($rider_insert);
 		
 		wp_set_object_terms($rider_id, $country, 'country', false);
-	else :
-		$rider_id=$rider->ID;
 	endif;
 	
 	return $rider_id;		
 }
 
+/**
+ * uci_results_search_rider function.
+ * 
+ * @access public
+ * @param string $name (default: '')
+ * @return void
+ */
 function uci_results_search_rider($name='') {
 	$rider=get_page_by_title($name, OBJECT, 'riders');
 	
@@ -277,7 +283,7 @@ function uci_results_search_rider($name='') {
 			return $posts[0];
 		endif;
 	else :
-		return $rider;
+		return $rider->ID;
 	endif;
 	
 	return false;

@@ -5,7 +5,7 @@
 	
 	<div id="uci-admin-message"></div>
 
-	<form name="add-uci-rankings" action="" method="post">
+	<form id="add-uci-rankings" name="add-uci-rankings" action="" method="post">
 		<table class="form-table">
 			<tbody>
 				
@@ -33,6 +33,12 @@
 								'id' => 'discipline',
 								'taxonomy'           => 'discipline',
 							)); ?>
+						</div>
+						
+						<div class="clean-names">
+							<label form="clean-names">Clean Names</label>
+							<input type="checkbox" name="clean_names" id="clean-names" class="checkbox" value="1">
+							<p class="description">If names are not in correct order, this will use the UCI name sort where the last name is first.</p>
 						</div>
 						
 						<?php $uci_rankings->process_button(); ?>

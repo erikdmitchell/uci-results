@@ -3,7 +3,8 @@ jQuery(document).ready(function($) {
 	// datepicker //
 	$('.uci-results-datepicker').datepicker({
 		changeMonth: true,
-		changeYear: true
+		changeYear: true,
+		dateFormat: 'yy-mm-dd'
     });
 	
 	// add-rider-rankings button - opens media uploader //
@@ -38,9 +39,7 @@ jQuery(document).ready(function($) {
 	
 		var data={
 			'action' : 'uci_add_rider_rankings',
-			'file' : $('#add-rider-rankings-input').val(),
-			'custom_date' : $(this).parents('form').find('input#custom-date').val(),
-			'discipline' : $(this).parents('form').find('select#discipline').val(),
+			'form' : $('#add-uci-rankings').serialize()
 		};
 		
 		$.post(ajaxurl, data, function(response) {
