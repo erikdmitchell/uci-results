@@ -97,9 +97,20 @@ class UCIRankings {
 			$rank_arr=explode(' ', $row['rank']);
 			$name=trim(str_replace('*', '', $row['name']));
 			
-			if (isset($row['nation'])) :
-				$country=$this->convert_country($row['nation']);			
+			// nation check //
+			$found_nation_key=false;
+			
+			foreach ($row as $key => $value) :		
+				if (strpos($key, 'nation')!==false) :
+					$found_nation_key=$key;
+					break;
+				endif;
+			endforeach;
+
+			if ($found_nation_key) :			
+				$country=$this->convert_country($row[$found_nation_key]);			
 			endif;
+			// end nation check //
 			
 			$data[$key]['rank']=$rank_arr[0];
 			$data[$key]['rider_id']=uci_results_add_rider($name, $country);
