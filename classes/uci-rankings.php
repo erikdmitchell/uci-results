@@ -389,17 +389,19 @@ class UCIRankings {
 	 * 
 	 * @access public
 	 * @param int $rider_id (default: 0)
-	 * @param string $discipline (default: '')
+	 * @param string $discipline (default: 0)
 	 * @return void
 	 */
-	public function get_rank($rider_id=0, $discipline='') {
+	public function get_rank($rider_id=0, $discipline=0) {
 		global $wpdb;
 		
-		$rank=$wpdb->get_row("SELECT rank, points, date, discipline FROM ".$this->table_name." WHERE rider_id = $rider_id ORDER BY date ASC LIMIT 1");
+		if (!is_integer($discipline)) :
+			$_discipline=get_term_by('slug', $discipline, 'discipline');
+	
+			$discipline=$_discipline->term_id;
+		endif;
 		
-		// render discipline
-		$discipline=get_term_by('id', $rank->discipline, 'discipline');
-		$rank->discipline=$discipline->name;
+		$rank=$wpdb->get_row("SELECT rank, points, date, discipline FROM ".$this->table_name." WHERE rider_id = $rider_id AND discipline = $discipline ORDER BY date ASC LIMIT 1");
 		
 		return $rank;
 	}
@@ -454,6 +456,7 @@ class UCIRankings {
 	 * @access public
 	 * @return void
 	 */
+/*
 	public function disciplines() {
 		global $wpdb;
 		
@@ -461,6 +464,7 @@ class UCIRankings {
 		
 		return $results;
 	}
+*/
 
 	/**
 	 * recent_date function.
