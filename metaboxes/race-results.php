@@ -54,8 +54,7 @@ class UCIResultsResultsMetabox {
 		$riders=uci_results_get_race_results($post->ID);
 		$discipline=strtolower(uci_get_first_term($post->ID, 'discipline'));
 	
-		// FILTERS ??? //
-		$rider_output=apply_filters('race_results_metabox_rider_output_'.$discipline, array('result_place', 'name', 'nat', 'result_time', 'result_par', 'result_pcr'), $post->ID);
+		$rider_output=apply_filters('race_results_metabox_rider_output_'.$discipline, array('result_place', 'name', 'nat', 'result_time', 'result_par', 'result_pcr'), $post->ID);       
         ?>
      
         <p>

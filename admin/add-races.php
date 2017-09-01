@@ -266,7 +266,7 @@ class UCIResultsAddRaces {
 		else :
 			$rider_nat='';
 		endif;
-			
+		
 		$rider_id=$this->get_rider_id($result->name, $rider_nat, $args['insert']);
 
 		// bail if no id //
