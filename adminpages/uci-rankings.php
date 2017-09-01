@@ -25,6 +25,7 @@
 						<div class="discipline">
 							<label form="discipline">Discipline</label>
 							<?php wp_dropdown_categories(array(
+								'hide_empty' => 0,
 								'show_option_none'   => 'Select One',
 								'option_none_value'  => '0',
 								'orderby'            => 'name',
