@@ -241,10 +241,10 @@ function uci_results_add_rider($name='', $country='') {
 	if (empty($name))
 		return 0;
 		
-	$rider=get_page_by_title($name, OBJECT, 'riders');
+	$rider=uci_results_search_rider($name);
 
 	// check if we have a rider id, otherwise create one //
-	if ($rider===null || empty($rider->ID)) :
+	if (!$rider) :
 		$rider_insert=array(
 			'post_title' => $name,
 			'post_content' => '',
@@ -260,6 +260,27 @@ function uci_results_add_rider($name='', $country='') {
 	endif;
 	
 	return $rider_id;		
+}
+
+function uci_results_search_rider($name='') {
+	$rider=get_page_by_title($name, OBJECT, 'riders');
+	
+	if ($rider===null || empty($rider->ID)) :
+		$posts=get_posts(array(
+			'post_per_page' => 1,
+			'post_type' => 'riders',
+			's' => $name,
+			'fields' => 'ids',
+		));
+		
+		if (count($posts) && isset($posts[0])) :
+			return $posts[0];
+		endif;
+	else :
+		return $rider;
+	endif;
+	
+	return false;
 }
 
 /**

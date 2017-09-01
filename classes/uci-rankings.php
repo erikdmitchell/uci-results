@@ -110,7 +110,7 @@ class UCIRankings {
 
 		//$this->insert_rankings_into_db($data);
 		
-		// update our option so we know we have a ranking change //
+		// update our option so we know we have a ranking change THIS NEEDS TO CHANGE TO INCLUDE DISCIPLINE //
 		$update_date=$date.' '.date('H:i:s');
 		update_option('uci_rankings_last_update', $update_date);
 		$this->last_update=$date;
