@@ -105,6 +105,9 @@ class racestagesMetabox {
 
 		// build out race stage date info and create posts //
 		foreach ($data['date_name'] as $key => $name) :
+			if (empty($name))
+				continue;
+
 			$existing_post=get_page_by_title($name, OBJECT, 'races');
 			
 			if ($existing_post===null) :
@@ -137,7 +140,7 @@ class racestagesMetabox {
 		endforeach;
 		
 		// re-hook this function
-		add_action('save_post', array($this, 'save'));	
+		add_action('save_post', array($this, 'save'));
     }
  
 	/**
@@ -177,8 +180,12 @@ class racestagesMetabox {
             'orderby'   => 'meta_value_num',
         ));
         
-        if (empty($race_stages))
-        	$race_stages[]='';
+        if (empty($race_stages)) :
+        	$race_stages=array();
+        	$race_stages[0]=new stdClass();
+        	$race_stages[0]->ID=0;
+        	$race_stages[0]->post_title='';
+        endif;
         ?>
         
         <div class="fantasy-cycling-metabox" id="fc-race-stages">
