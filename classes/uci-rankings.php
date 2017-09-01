@@ -403,6 +403,15 @@ class UCIRankings {
 		
 		$rank=$wpdb->get_row("SELECT rank, points, date, discipline FROM ".$this->table_name." WHERE rider_id = $rider_id AND discipline = $discipline ORDER BY date ASC LIMIT 1");
 		
+		if ($rank===null) :
+			$rank=new stdClass();
+			
+			$rank->rank=0;
+			$rank->points=0;
+			$rank->date='';
+			$rank->discipline=$discipline;						
+		endif;
+		
 		return $rank;
 	}
 	
