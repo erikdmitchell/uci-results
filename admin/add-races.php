@@ -228,8 +228,8 @@ class UCIResultsAddRaces {
 
 		// update race results //
 		update_post_meta($race->race_id, '_races_results', 1);
-		
-		do_action('uci_results_updated_results', $race, $results);
+
+		do_action('uci_results_updated_results_'.$race->discipline, $race, $results);
 		
 		return;
 	}
