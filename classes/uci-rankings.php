@@ -32,7 +32,12 @@ class UCIRankings {
      * @return void
      */
     public function admin_scripts_styles($hook) {
-		wp_enqueue_script('uci-rankings-script', UCI_RESULTS_ADMIN_URL.'js/uci-rankings.js', array('jquery'), '0.1.0');
+	    global $wp_scripts; 
+	    
+	    wp_enqueue_script('jquery-ui-datepicker');
+		wp_enqueue_script('uci-rankings-script', UCI_RESULTS_ADMIN_URL.'js/uci-rankings.js', array('jquery-ui-datepicker'), '0.2.0');
+		
+		wp_enqueue_style('jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/'.$wp_scripts->registered['jquery-ui-core']->ver.'/themes/ui-lightness/jquery-ui.min.css');
 		
 		wp_enqueue_media();
     }

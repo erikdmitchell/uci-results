@@ -18,7 +18,7 @@
 
 						<div class="custom-date">
 							<label form="custom-date">Custom Date</label>
-							<input type="text" name="custom-date" id="custom-date" class="date" value="<?php echo date('Y-m-d'); ?>">
+							<input type="text" name="custom-date" id="custom-date" class="date uci-results-datepicker" value="<?php echo date('Y-m-d'); ?>">
 							<p class="description">If empty, current date will be used. <i>Format: YYYY-MM-DD</i></p>
 						</div>
 						

@@ -1,5 +1,11 @@
 jQuery(document).ready(function($) {
 	
+	// datepicker //
+	$('.uci-results-datepicker').datepicker({
+		changeMonth: true,
+		changeYear: true
+    });
+	
 	// add-rider-rankings button - opens media uploader //
 	$('.button.add-rider-rankings').click(function(e) {
 		e.preventDefault();
