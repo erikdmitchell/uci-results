@@ -285,10 +285,12 @@ function uci_race_results_rider_ids($race_id=0) {
  * @return void
  */
 function uci_race_has_results($race_id=0) {
-	$post_meta=get_post_meta($race_id);
-	$keys=array_keys($post_meta);    
-
-	return (int) preg_grep('/_rider_/', $keys);	
+	$meta=get_post_meta($race_id, '_races_results', true);
+	
+	if ($meta===null)
+		return false;
+		
+	return true;
 }
 
 /**
