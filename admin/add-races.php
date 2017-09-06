@@ -213,6 +213,8 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	public function add_race_results_to_db($race='', $results='') {
+		$updated_results=array();
+		
 		if (empty($race))
 			return false;
 			
@@ -222,16 +224,16 @@ class UCIResultsAddRaces {
 		// insert rider results //
 		foreach ($results as $type => $result_list) :			
 			foreach ($result_list as $type_results_list) :
-				$this->insert_rider_result($type_results_list, $race, array('type' => $type));
+				$updated_results[]=$this->insert_rider_result($type_results_list, $race, array('type' => $type));
 			endforeach;
 		endforeach;
 
 		// update race results //
 		update_post_meta($race->race_id, '_races_results', 1);
 
-		do_action('uci_results_updated_results_'.$race->discipline, $race, $results);
+		do_action('uci_results_updated_results_'.$race->discipline, $race, $updated_results, $results);
 		
-		return;
+		return $results;
 	}
 	
 	/**
@@ -244,6 +246,7 @@ class UCIResultsAddRaces {
 	 * @return void
 	 */
 	protected function insert_rider_result($result='', $race='', $args='') {
+		$updated_results=array();
 		$meta_values=array();
 		$default_args=array(
 			'insert' => true,
@@ -278,6 +281,8 @@ class UCIResultsAddRaces {
 		// bail on no meta values //
 		if (empty($meta_values) || $meta_values=='')
 			return;
+			
+		$updated_results=$this->rider_meta_values_to_results($meta_values, $rider_id);
 
 		// input meta values //
 		foreach ($meta_values as $meta_key => $meta_value) :
@@ -285,6 +290,8 @@ class UCIResultsAddRaces {
 
 			update_post_meta($race->race_id, $mk, $meta_value);
 		endforeach;
+		
+		return $updated_results;
 	}
 
 	/**
@@ -323,6 +330,22 @@ class UCIResultsAddRaces {
 		endif;
 		
 		return $rider_id;			
+	}
+	
+	public function rider_meta_values_to_results($meta_values=array(), $rider_id=0) {
+		$clean_arr=array();
+		
+		foreach ($meta_values as $key => $meta_value) :
+			if (strpos($key, 'result')!==false) :
+				$clean_key=str_replace('result_', '', $key);
+				
+				$clean_arr[$clean_key]=$meta_value;
+			endif;
+		endforeach;
+		
+		$clean_arr['rider_id']=$rider_id;
+		
+		return $clean_arr;
 	}
 
 	/**
