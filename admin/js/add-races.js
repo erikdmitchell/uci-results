@@ -80,7 +80,8 @@ jQuery(document).ready(function($) {
 		};
 
 		$.post(ajaxurl, data, function(url) {
-			hideLoader();		
+			hideLoader();
+				
 			window.location.replace(url);
 		});	
 	});
