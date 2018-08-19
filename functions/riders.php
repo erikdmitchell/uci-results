@@ -347,4 +347,18 @@ function uci_rider_country($rider_id=0, $echo=true) {
 		
 	return $country;
 }
+
+/**
+ * uci_results_get_uci_rank function.
+ * 
+ * @access public
+ * @param int $rider_id (default: 0)
+ * @param string $discipline (default: '')
+ * @return void
+ */
+function uci_results_get_uci_rank($rider_id=0, $discipline='') {
+	global $uci_rankings;
+	
+	return $uci_rankings->get_rank($rider_id, $discipline);
+}
 ?>
