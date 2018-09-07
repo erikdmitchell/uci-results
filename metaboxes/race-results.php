@@ -73,7 +73,11 @@ class UCIResultsResultsMetabox {
 		        <?php foreach ($riders as $rider) : ?>
 		        	<tr>
 			        	<?php foreach ($rider_output as $slug) : ?>
-				        	<td class="<?php echo $slug; ?>"><?php echo $rider[$slug]; ?></td>
+			        	    <?php if (isset($rider[$slug])) : ?>
+    				        	<td class="<?php echo $slug; ?>"><?php echo $rider[$slug]; ?></td>
+                            <?php else : ?>
+                                <td class="<?php echo $slug; ?>">&nbsp;</td>
+    				        <?php endif; ?>
 			        	<?php endforeach; ?>
 		        	</tr>
 		        <?php endforeach; ?>

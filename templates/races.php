@@ -1,6 +1,6 @@
 <?php
 /**
- * div e template for races page
+ * The template for races page
  *
  * It can be overriden
  *
